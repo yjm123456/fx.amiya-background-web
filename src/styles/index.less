@@ -1,0 +1,21 @@
+li {
+  list-style: none;
+}
+
+// /deep/ .ivu-table-body{
+//   overflow: hidden;
+// }
+/deep/ .ivu-table-body table{
+  // animation: marquee 3s linear infinite;
+}
+/deep/ .ivu-table-body table:hover {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-30%); 
+  }
+}

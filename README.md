@@ -1,2 +1,19 @@
-# fx.amiya-background-web
-啊美雅后台管理--前端代码-vue.js
+# project
+
+## Project setup
+```
+yarn install
+```
+
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

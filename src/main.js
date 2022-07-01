@@ -24,7 +24,7 @@ VueRouter.prototype.push = function push(location) {  
 }
 
 /**
- * 日期
+ * 日期1
  */
 import moment from "moment";
 Vue.prototype.$moment = moment;

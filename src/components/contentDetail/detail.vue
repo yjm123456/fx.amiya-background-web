@@ -332,7 +332,7 @@ import * as OrderCheckPictureApi from "@/api/OrderCheckPicture.js";
 import { time } from "echarts";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import viewPic from "@/components/viewPic/viewPic";
-import transactionStatus from "@/components/transactionStatus/transactionStatus";
+import transactionStatus from "@/components/transactionStatus/contentTransactionStatus";
 import goodsNews from "@/components/goodsNews/goodsNews.vue";
 
 export default {
@@ -542,14 +542,17 @@ export default {
 
 .line {
   width: 1px;
-  height: 30px;
+  height: 20px;
   border: 2px solid #4381e6;
   background: #4381e6;
   margin-right: 5px;
+  margin-left: 0;
 }
 .message_title {
   font-weight: bold;
   font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 .order_content {
   margin-top: 10px;

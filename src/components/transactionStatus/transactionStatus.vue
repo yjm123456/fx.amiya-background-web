@@ -1,5 +1,6 @@
 <template>
   <div class="content">
+    <!-- 医院端成交情况 -->
     <Modal
       title="成交情况"
       footer-hide

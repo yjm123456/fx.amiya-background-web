@@ -220,6 +220,23 @@ export const BelongEmployeeOrder = (data) => {
         data
     });
 };
+// 根据成交情况编号获取成交情况信息
+export const ContentPlatFormOrderDealInfo = (id) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderDealInfo/byId/${id}`,
+        method: "get",
+    });
+};
+
+// 修改成交情况信息
+export const updateContentPlatFormOrderDealInfo = (data) => {
+    return http({
+        url: "/amiyabg/ContentPlatFormOrderDealInfo/update",
+        method: "put",
+        data
+    });
+};
+
 /**
  * 派单列表
  */

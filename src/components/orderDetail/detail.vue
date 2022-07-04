@@ -18,112 +18,6 @@
           <Step title="订单核销" :content="detailObj.writeOffDate ? this.$moment(detailObj.writeOffDate).format('YYYY-MM-DD HH:mm:ss') : ''"></Step>
       </Steps>
       </div>
-      <!-- <div class="order_message">
-        <div class="message_title"><span class="line"></span>订单信息</div>
-        <div class="order_content">
-          <div class="message_con">
-            <span class="title_bold">下单平台：</span>
-            <span>{{detailObj.appTypeText}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">订单状态：</span>
-            <span>{{detailObj.statusText}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">订单性质：</span>
-            <span>{{detailObj.orderNatureText}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">主播平台：</span>
-            <span>{{detailObj.liveAnchorPlatForm}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">归属主播：</span>
-            <span>{{detailObj.liveAnchor}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">归属客服：</span>
-            <span>{{detailObj.belongEmpName}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">客户昵称：</span>
-            <span>{{detailObj.nickName}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">手机号：</span>
-            <span>{{detailObj.phone}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">预约门店：</span>
-            <span>{{detailObj.appointmentHospital}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">派单门店：</span>
-            <span>{{detailObj.sendOrderHospital}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">核销门店：</span>
-            <span>{{detailObj.finalConsumptionHospital}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">是否已预约：</span>
-            <span>{{detailObj.isAppointment == true ? '已预约' : '未预约'}} </span>
-          </div>
-          
-          <div class="mr_top">
-            <span class="title_bold">实付款：</span>
-            <span>{{detailObj.actualPayment}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">应收款：</span>
-            <span>{{detailObj.accountReceivable}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">交易类型：</span>
-            <span>{{detailObj.exchangeTypeText}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核状态：</span>
-            <span>{{detailObj.checkState}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核金额：</span>
-            <span>{{detailObj.checkPrice}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核日期：</span>
-            <span>{{detailObj.checkDate ? this.$moment(detailObj.checkDate).format("YYYY-MM-DD HH:mm:ss") : ''}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">结算金额：</span>
-            <span>{{detailObj.settlePrice}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核人：</span>
-            <span>{{detailObj.checkByEmpName}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核备注：</span>
-            <span>{{detailObj.checkRemark}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">是否回款：</span>
-            <span>{{detailObj.isReturnBackPrice == true ? '已回款' : '未回款'}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">回款金额：</span>
-            <span>{{detailObj.returnBackPrice}} </span>
-          </div>
-         <div class="mr_top">
-            <span class="title_bold">回款时间：</span>
-            <span>{{detailObj.returnBackDate ? this.$moment(detailObj.returnBackDate).format("YYYY-MM-DD HH:mm:ss") : ''}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">描述：</span>
-            <span>{{detailObj.description }} </span>
-          </div>
-        </div>
-      </div> -->
       <div class="order_message">
         <div class="message_title"><span class="line"></span>客户信息</div>
         <div class="order_content">
@@ -375,14 +269,17 @@ export default {
 
 .line{
   width: 1px;
-  height: 30px;
+  height: 20px;
   border: 2px solid #4381e6;
   background: #4381e6;
   margin-right: 5px;
+  margin-left: 0;
 }
 .message_title{
   font-weight: bold;
   font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 .order_content{
   margin-top: 10px;

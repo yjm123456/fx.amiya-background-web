@@ -1150,7 +1150,7 @@ const ameiyaMange = [{
         title: "公司简介",
         keepAlive: false,
         isTag: true,
-        openName: ['阿美雅'],
+        openName: ['啊美雅'],
     },
     component: () =>
         import ("@/views/ameiyaMange/ameiya/ameiya.vue"),

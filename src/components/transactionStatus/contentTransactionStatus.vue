@@ -309,7 +309,8 @@ export default {
                             this.form.contentPlatFormOrderId = contentPlatFormOrderId;
                             this.form.isDeal = isDeal;
                             this.form.lastDealHospitalId = lastDealHospitalId;
-                            this.form.dealPicture = dealPicture ? [dealPicture] : [];
+                            this.form.dealPicture = dealPicture
+                            this.uploadObj.uploadList = this.form.dealPicture  ? [this.form.dealPicture] : [];
                             this.form.price = price;
                             this.form.remark = remark;
                             this.form.id = id;

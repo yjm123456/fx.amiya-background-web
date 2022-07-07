@@ -203,7 +203,6 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          
         </Row>
         <Row :gutter="30">
           <Col span="8">
@@ -296,19 +295,19 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日面诊卡下单数量"
+              label="今日99面诊卡下单数量"
               prop="consultation"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日面诊卡下单数量',
+                  message: '请输入今日99面诊卡下单数量',
                 },
               ]"
-              key="今日面诊卡下单数量"
+              key="今日99面诊卡下单数量"
             >
               <Input
                 v-model="form.consultation"
-                placeholder="请输入今日面诊卡下单数量"
+                placeholder="请输入今日99面诊卡下单数量"
                 type="number"
                 number
               />
@@ -316,19 +315,59 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日消耗卡数量"
+              label="今日199面诊卡下单数量"
+              prop="consultation2"
+              :rules="[
+                {
+                  required: title === '修改' ? true : false,
+                  message: '请输入今日199面诊卡下单数量',
+                },
+              ]"
+              key="今日199面诊卡下单数量"
+            >
+              <Input
+                v-model="form.consultation2"
+                placeholder="请输入今日199面诊卡下单数量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日99消耗卡数量"
               prop="consultationCardConsumed"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日消耗卡数量',
+                  message: '请输入今日99消耗卡数量',
                 },
               ]"
-              key="今日消耗卡数量"
+              key="今日99消耗卡数量"
             >
               <Input
                 v-model="form.consultationCardConsumed"
-                placeholder="请输入今日消耗卡数量"
+                placeholder="请输入今日99消耗卡数量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日199消耗卡数量"
+              prop="consultationCardConsumed2"
+              :rules="[
+                {
+                  required: title === '修改' ? true : false,
+                  message: '请输入今日199消耗卡数量',
+                },
+              ]"
+              key="今日199消耗卡数量"
+            >
+              <Input
+                v-model="form.consultationCardConsumed2"
+                placeholder="请输入今日199消耗卡数量"
                 type="number"
                 number
               />
@@ -711,7 +750,7 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
-      employeeList:[],
+      employeeList: [],
       // 查询
       query: {
         contentPlatFormId: null,
@@ -804,15 +843,27 @@ export default {
             align: "center",
           },
           {
-            title: "今日面诊卡下单数量",
+            title: "今日99面诊卡下单数量",
             key: "consultation",
+            minWidth: 190,
+            align: "center",
+          },
+          {
+            title: "今日199面诊卡下单数量",
+            key: "consultation2",
+            minWidth: 190,
+            align: "center",
+          },
+          {
+            title: "今日99消耗卡数量",
+            key: "consultationCardConsumed",
             minWidth: 170,
             align: "center",
           },
           {
-            title: "今日消耗卡数量",
-            key: "consultationCardConsumed",
-            minWidth: 150,
+            title: "今日199消耗卡数量",
+            key: "consultationCardConsumed2",
+            minWidth: 170,
             align: "center",
           },
           {
@@ -979,6 +1030,7 @@ export default {
                               cluesNum,
                               livingRoomFlowInvestmentNum,
                               consultation,
+                              consultation2,
                               cargoSettlementCommission,
                               newVisitNum,
                               subsequentVisitNum,
@@ -993,8 +1045,9 @@ export default {
                               miniVanBadReviews,
                               minivanRefund,
                               consultationCardConsumed,
+                              consultationCardConsumed2,
                               activateHistoricalConsultation,
-                              livingTrackingEmployeeId
+                              livingTrackingEmployeeId,
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -1013,6 +1066,7 @@ export default {
                             this.form.cluesNum = cluesNum;
                             this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
                             this.form.consultation = consultation;
+                            this.form.consultation2 = consultation2;
                             this.form.cargoSettlementCommission = cargoSettlementCommission;
                             this.form.newVisitNum = newVisitNum;
                             this.form.subsequentVisitNum = subsequentVisitNum;
@@ -1027,8 +1081,9 @@ export default {
                             this.form.miniVanBadReviews = miniVanBadReviews;
                             this.form.minivanRefund = minivanRefund;
                             this.form.consultationCardConsumed = consultationCardConsumed;
+                            this.form.consultationCardConsumed2 = consultationCardConsumed2;
                             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId
+                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId;
 
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
@@ -1181,8 +1236,10 @@ export default {
         cluesNum: null,
         // 今日直播间投流量
         livingRoomFlowInvestmentNum: null,
-        // 今日面诊卡数量
+        // 今日99面诊卡数量
         consultation: null,
+        // 今日199面诊卡数量
+        consultation2: null,
         // 今日带货结算佣金
         cargoSettlementCommission: null,
         // 新诊上门量
@@ -1209,12 +1266,14 @@ export default {
         miniVanBadReviews: null,
         // 今日小黄车退款量
         minivanRefund: null,
-        // 今日消耗卡数量
+        // 今日99消耗卡数量
         consultationCardConsumed: null,
+        // 今日199消耗卡数量
+        consultationCardConsumed2: null,
         // 今日激活历史面诊数量
         activateHistoricalConsultation: null,
         // 直播中
-        livingTrackingEmployeeId:null
+        livingTrackingEmployeeId: null,
       },
 
       ruleValidate: {
@@ -1222,7 +1281,7 @@ export default {
           {
             required: true,
             message: "请选择直播中人员",
-          }
+          },
         ],
         liveanchorMonthlyTargetId: [
           {
@@ -1294,7 +1353,6 @@ export default {
     };
   },
   methods: {
-
     // 老客成交
     oldCustomerNumChange() {
       this.form.dealNum =
@@ -1369,10 +1427,10 @@ export default {
       this.getLiveAnchorMonthlyTarget();
     },
     // 根据职位获取直播中人员
-    employeeManage(){
+    employeeManage() {
       const data = {
-        positionId:9
-      }
+        positionId: 9,
+      };
       employeeManageApi.getEmployeeByPositionId(data).then((res) => {
         if (res.code === 0) {
           const { employee } = res.data;
@@ -1533,6 +1591,7 @@ export default {
               addFansNum,
               livingRoomFlowInvestmentNum,
               consultation,
+              consultation2,
               cargoSettlementCommission,
               newVisitNum,
               subsequentVisitNum,
@@ -1547,8 +1606,9 @@ export default {
               miniVanBadReviews,
               minivanRefund,
               consultationCardConsumed,
+              consultationCardConsumed2,
               activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              livingTrackingEmployeeId,
             } = this.form;
             const data = {
               id,
@@ -1569,6 +1629,7 @@ export default {
               addFansNum,
               livingRoomFlowInvestmentNum,
               consultation: consultation ? consultation : 0,
+              consultation2: consultation2 ? consultation2 : 0,
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
                 : 0,
@@ -1595,10 +1656,13 @@ export default {
               consultationCardConsumed: consultationCardConsumed
                 ? consultationCardConsumed
                 : 0,
+              consultationCardConsumed2: consultationCardConsumed2
+                ? consultationCardConsumed2
+                : 0,
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
-                livingTrackingEmployeeId
+              livingTrackingEmployeeId,
             };
             if (!netWorkConsultingEmployeeId) {
               this.$Message.error("请选择网咨人员");
@@ -1633,6 +1697,7 @@ export default {
               addFansNum,
               livingRoomFlowInvestmentNum,
               consultation,
+              consultation2,
               cargoSettlementCommission,
               newVisitNum,
               subsequentVisitNum,
@@ -1647,8 +1712,9 @@ export default {
               miniVanBadReviews,
               minivanRefund,
               consultationCardConsumed,
+              consultationCardConsumed2,
               activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              livingTrackingEmployeeId,
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -1670,6 +1736,7 @@ export default {
               addFansNum,
               livingRoomFlowInvestmentNum,
               consultation: consultation ? consultation : 0,
+              consultation2: consultation2 ? consultation2 : 0,
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
                 : 0,
@@ -1696,10 +1763,13 @@ export default {
               consultationCardConsumed: consultationCardConsumed
                 ? consultationCardConsumed
                 : 0,
+              consultationCardConsumed2: consultationCardConsumed2
+                ? consultationCardConsumed2
+                : 0,
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
-              livingTrackingEmployeeId
+              livingTrackingEmployeeId,
             };
             // 添加
             api.AddLiveAnchorDailyTarget(data).then((res) => {
@@ -1740,7 +1810,7 @@ export default {
     this.getCustomerServiceList();
     this.getnetWorkConsultingNameList();
     this.getLiveAnchorMonthlyTarget();
-    this.employeeManage()
+    this.employeeManage();
   },
 };
 </script>

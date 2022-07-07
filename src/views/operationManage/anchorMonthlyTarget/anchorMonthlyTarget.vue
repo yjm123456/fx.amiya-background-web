@@ -64,7 +64,7 @@
               controlModal = true;
               title = '添加';
             "
-            v-if="positionId!=19 && positionId !=9 && positionId !=2"
+            v-if="positionId != 19 && positionId != 9 && positionId != 2"
             >添加</Button
           >
         </div>
@@ -73,7 +73,19 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="positionId ==19 ? query.columns1 : positionId ==9  ?  query.columns2 :  positionId ==2 ?  query.columns3 : query.columns" :data="query.data"></Table>
+        <Table
+          border
+          :columns="
+            positionId == 19
+              ? query.columns1
+              : positionId == 9
+              ? query.columns2
+              : positionId == 2
+              ? query.columns3
+              : query.columns
+          "
+          :data="query.data"
+        ></Table>
       </div>
       <div class="page_wrap">
         <Page
@@ -316,22 +328,22 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="面诊卡下单数量目标"
+              label="99面诊卡下单数量目标"
               prop="consultationTarget"
               :rules="[
                 {
                   required: true,
-                  message: '面诊卡下单数量目标(最小是1)',
+                  message: '99面诊卡下单数量目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="面诊卡下单数量目标"
+              key="99面诊卡下单数量目标"
             >
               <Input
                 v-model="form.consultationTarget"
-                placeholder="请输入面诊卡下单数量目标"
+                placeholder="99面诊卡下单数量目标"
                 type="number"
                 number
               />
@@ -339,22 +351,68 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="消耗卡目标"
-              prop="consultationCardConsumedTarget"
+              label="199面诊卡下单数量目标"
+              prop="consultationTarget2"
               :rules="[
                 {
                   required: true,
-                  message: '消耗卡目标(最小是1)',
+                  message: '199面诊卡下单数量目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="消耗卡目标"
+              key="199面诊卡下单数量目标"
+            >
+              <Input
+                v-model="form.consultationTarget2"
+                placeholder="199面诊卡下单数量目标"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="99消耗卡目标"
+              prop="consultationCardConsumedTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '99消耗卡目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="99消耗卡目标"
             >
               <Input
                 v-model="form.consultationCardConsumedTarget"
-                placeholder="请输入消耗卡目标"
+                placeholder="请输入99消耗卡目标"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="199消耗卡目标"
+              prop="consultationCardConsumedTarget2"
+              :rules="[
+                {
+                  required: true,
+                  message: '199消耗卡目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="199消耗卡目标"
+            >
+              <Input
+                v-model="form.consultationCardConsumedTarget2"
+                placeholder="请输入199消耗卡目标"
                 type="number"
                 number
               />
@@ -560,7 +618,7 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
-      positionId:sessionStorage.getItem("positionId"),
+      positionId: sessionStorage.getItem("positionId"),
       // 查询
       query: {
         contentPlatFormId: null,
@@ -732,45 +790,93 @@ export default {
             },
           },
           {
-            title: "面诊卡下单数量目标",
+            title: "99面诊卡下单数量目标",
             key: "consultationTarget",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "累计面诊卡下单数量",
-            key: "cumulativeConsultation",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "面诊卡下单数量完成率",
-            key: "consultationCompleteRate",
             minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "累计99面诊卡下单数量",
+            key: "cumulativeConsultation",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "99面诊卡下单数量完成率",
+            key: "consultationCompleteRate",
+            minWidth: 200,
             align: "center",
             render: (h, params) => {
               return h("div", params.row.consultationCompleteRate + "%");
             },
           },
           {
-            title: "消耗卡目标",
+            title: "199面诊卡下单数量目标",
+            key: "consultationTarget2",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "累计199面诊卡下单数量",
+            key: "cumulativeConsultation2",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "199面诊卡下单数量完成率",
+            key: "consultationCompleteRate2",
+            minWidth: 210,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.consultationCompleteRate2 + "%");
+            },
+          },
+          {
+            title: "99消耗卡目标",
             key: "consultationCardConsumedTarget",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "累计消耗卡",
+            title: "99累计消耗卡",
             key: "cumulativeConsultationCardConsumed",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "消耗卡完成率",
+            title: "99消耗卡完成率",
             key: "consultationCardConsumedCompleteRate",
             minWidth: 150,
             align: "center",
             render: (h, params) => {
-              return h("div", params.row.consultationCardConsumedCompleteRate + "%");
+              return h(
+                "div",
+                params.row.consultationCardConsumedCompleteRate + "%"
+              );
+            },
+          },
+          {
+            title: "199消耗卡目标",
+            key: "consultationCardConsumedTarget2",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "199累计消耗卡",
+            key: "cumulativeConsultationCardConsumed2",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "199消耗卡完成率",
+            key: "consultationCardConsumedCompleteRate2",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.consultationCardConsumedCompleteRate2 + "%"
+              );
             },
           },
           {
@@ -791,7 +897,10 @@ export default {
             minWidth: 200,
             align: "center",
             render: (h, params) => {
-              return h("div", params.row.activateHistoricalConsultationCompleteRate + "%");
+              return h(
+                "div",
+                params.row.activateHistoricalConsultationCompleteRate + "%"
+              );
             },
           },
           {
@@ -893,7 +1002,7 @@ export default {
             minWidth: 140,
             align: "center",
           },
-          
+
           {
             title: "业绩完成率",
             key: "performanceCompleteRate",
@@ -1015,18 +1124,22 @@ export default {
                               cluesTarget,
                               // 直播间投流目标
                               livingRoomFlowInvestmentTarget,
-                              // 面诊卡目标
+                              // 99面诊卡目标
                               consultationTarget,
+                              // 199面诊卡目标
+                              consultationTarget2,
                               // 带货结算佣金目标
                               cargoSettlementCommissionTarget,
-                              // 消耗卡目标
+                              // 99消耗卡目标
                               consultationCardConsumedTarget,
+                              // 199消耗卡目标
+                              consultationCardConsumedTarget2,
                               // 激活历史面诊数量目标
                               activateHistoricalConsultationTarget,
                               // 小黄车退单量上限
-                              minivanRefundTarget	,
+                              minivanRefundTarget,
                               // 差评总量上限
-                              miniVanBadReviewsTarget
+                              miniVanBadReviewsTarget,
                             } = res.data.liveAnchorMonthlyTargetInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.isEdit = true;
@@ -1046,8 +1159,10 @@ export default {
                             this.form.cluesTarget = cluesTarget;
                             this.form.livingRoomFlowInvestmentTarget = livingRoomFlowInvestmentTarget;
                             this.form.consultationTarget = consultationTarget;
+                            this.form.consultationTarget2 = consultationTarget2;
                             this.form.cargoSettlementCommissionTarget = cargoSettlementCommissionTarget;
                             this.form.consultationCardConsumedTarget = consultationCardConsumedTarget;
+                            this.form.consultationCardConsumedTarget2 = consultationCardConsumedTarget2;
                             this.form.activateHistoricalConsultationTarget = activateHistoricalConsultationTarget;
                             this.form.minivanRefundTarget = minivanRefundTarget;
                             this.form.miniVanBadReviewsTarget = miniVanBadReviewsTarget;
@@ -1227,7 +1342,6 @@ export default {
               );
             },
           },
-        
         ],
         // 直播间（直播中）
         columns2: [
@@ -1261,7 +1375,7 @@ export default {
             minWidth: 190,
             align: "center",
           },
-          
+
           {
             title: "直播间投流目标",
             key: "livingRoomFlowInvestmentTarget",
@@ -1286,29 +1400,49 @@ export default {
               );
             },
           },
-          
+
           {
-            title: "面诊卡下单数量目标",
+            title: "99面诊卡下单数量目标",
             key: "consultationTarget",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "累计面诊卡下单数量",
-            key: "cumulativeConsultation",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "面诊卡下单数量完成率",
-            key: "consultationCompleteRate",
             minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "累计99面诊卡下单数量",
+            key: "cumulativeConsultation",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "99面诊卡下单数量完成率",
+            key: "consultationCompleteRate",
+            minWidth: 200,
             align: "center",
             render: (h, params) => {
               return h("div", params.row.consultationCompleteRate + "%");
             },
           },
-          
+          {
+            title: "199面诊卡下单数量目标",
+            key: "consultationTarget2",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "累计199面诊卡下单数量",
+            key: "cumulativeConsultation2",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "199面诊卡下单数量完成率",
+            key: "consultationCompleteRate2",
+            minWidth: 210,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.consultationCompleteRate2 + "%");
+            },
+          },
           {
             title: "带货结算佣金目标",
             key: "cargoSettlementCommissionTarget",
@@ -1347,7 +1481,6 @@ export default {
               );
             },
           },
-         
         ],
         // 客服（直播后）
         columns3: [
@@ -1381,7 +1514,7 @@ export default {
             minWidth: 190,
             align: "center",
           },
-          
+
           {
             title: "目标加V量",
             key: "addWechatTarget",
@@ -1404,24 +1537,51 @@ export default {
             },
           },
           {
-            title: "消耗卡目标",
+            title: "99消耗卡目标",
             key: "consultationCardConsumedTarget",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "累计消耗卡",
+            title: "99累计消耗卡",
             key: "cumulativeConsultationCardConsumed",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "消耗卡完成率",
+            title: "99消耗卡完成率",
             key: "consultationCardConsumedCompleteRate",
             minWidth: 150,
             align: "center",
             render: (h, params) => {
-              return h("div", params.row.consultationCardConsumedCompleteRate + "%");
+              return h(
+                "div",
+                params.row.consultationCardConsumedCompleteRate + "%"
+              );
+            },
+          },
+          {
+            title: "199消耗卡目标",
+            key: "consultationCardConsumedTarget2",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "199累计消耗卡",
+            key: "cumulativeConsultationCardConsumed2",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "199消耗卡完成率",
+            key: "consultationCardConsumedCompleteRate2",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.consultationCardConsumedCompleteRate2 + "%"
+              );
             },
           },
           {
@@ -1442,7 +1602,10 @@ export default {
             minWidth: 200,
             align: "center",
             render: (h, params) => {
-              return h("div", params.row.activateHistoricalConsultationCompleteRate + "%");
+              return h(
+                "div",
+                params.row.activateHistoricalConsultationCompleteRate + "%"
+              );
             },
           },
           {
@@ -1520,7 +1683,7 @@ export default {
             minWidth: 140,
             align: "center",
           },
-          
+
           {
             title: "业绩完成率",
             key: "performanceCompleteRate",
@@ -1686,18 +1849,22 @@ export default {
         cluesTarget: null,
         // 直播间投流目标
         livingRoomFlowInvestmentTarget: null,
-        // 面诊卡目标
+        // 99面诊卡目标
         consultationTarget: null,
+        // 199面诊卡数量
+        consultationTarget2: null,
         // 带货结算佣金目标
         cargoSettlementCommissionTarget: null,
         // 小黄车退单量上限
-        minivanRefundTarget:null,
+        minivanRefundTarget: null,
         // 差评总量上限
-        miniVanBadReviewsTarget:null,
-        // 消耗卡目标
-        consultationCardConsumedTarget:null,
+        miniVanBadReviewsTarget: null,
+        // 99消耗卡目标
+        consultationCardConsumedTarget: null,
+        // 199消耗卡目标
+        consultationCardConsumedTarget2: null,
         // 激活历史面诊数量目标
-        activateHistoricalConsultationTarget:null
+        activateHistoricalConsultationTarget: null,
       },
 
       ruleValidate: {
@@ -1794,7 +1961,7 @@ export default {
         consultationTarget: [
           {
             required: true,
-            message: "请输入面诊卡目标",
+            message: "请输入99面诊卡目标",
           },
         ],
         cargoSettlementCommissionTarget: [
@@ -1915,10 +2082,11 @@ export default {
               consultationTarget,
               cargoSettlementCommissionTarget,
               consultationCardConsumedTarget,
+              consultationCardConsumedTarget2,
               activateHistoricalConsultationTarget,
               minivanRefundTarget,
-              miniVanBadReviewsTarget
-
+              miniVanBadReviewsTarget,
+              consultationTarget2,
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -1938,9 +2106,11 @@ export default {
               consultationTarget,
               cargoSettlementCommissionTarget,
               consultationCardConsumedTarget,
+              consultationCardConsumedTarget2,
               activateHistoricalConsultationTarget,
               minivanRefundTarget,
-              miniVanBadReviewsTarget
+              miniVanBadReviewsTarget,
+              consultationTarget2,
             };
             // 添加
             api.AddLiveAnchorMonthlyTarget(data).then((res) => {

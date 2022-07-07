@@ -182,10 +182,10 @@
             <span class="title_bold">科室：</span>
             <span>{{ detailObj.hospitalDepartmentName }} </span>
           </div>
-          <div class="mr_top">
+          <!-- <div class="mr_top">
             <span class="title_bold">成交金额：</span>
             <span>{{ detailObj.dealAmount }}</span>
-          </div>
+          </div> -->
           <div class="mr_top">
             <span class="title_bold">咨询内容：</span>
             <span>{{ detailObj.consultingContent }} </span>
@@ -414,12 +414,12 @@ export default {
             minWidth: 120,
             align: "center",
           },
-          {
-            title: "成交金额",
-            key: "dealAmount",
-            minWidth: 120,
-            align: "center",
-          },
+          // {
+          //   title: "成交金额",
+          //   key: "dealAmount",
+          //   minWidth: 120,
+          //   align: "center",
+          // },
         ],
         data: [],
       },

@@ -838,40 +838,40 @@ export default {
               );
             },
           },
-          {
-            title: "成交凭证",
-            key: "dealPictureUrl",
-            minWidth: 120,
-            align: "center",
-            render: (h, params) => {
-              return params.row.dealPictureUrl
-                ? h(
-                    "viewer",
-                    {
-                      props: {
-                        zoomable: false,
-                      },
-                      style: {
-                        display: "flex",
-                      },
-                    },
-                    [
-                      h("img", {
-                        style: {
-                          width: "50px",
-                          height: "50px",
-                          margin: "5px 15px 5px 5px",
-                          verticalAlign: "middle",
-                        },
-                        attrs: {
-                          src: params.row.dealPictureUrl,
-                        },
-                      }),
-                    ]
-                  )
-                : "";
-            },
-          },
+          // {
+          //   title: "成交凭证",
+          //   key: "dealPictureUrl",
+          //   minWidth: 120,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     return params.row.dealPictureUrl
+          //       ? h(
+          //           "viewer",
+          //           {
+          //             props: {
+          //               zoomable: false,
+          //             },
+          //             style: {
+          //               display: "flex",
+          //             },
+          //           },
+          //           [
+          //             h("img", {
+          //               style: {
+          //                 width: "50px",
+          //                 height: "50px",
+          //                 margin: "5px 15px 5px 5px",
+          //                 verticalAlign: "middle",
+          //               },
+          //               attrs: {
+          //                 src: params.row.dealPictureUrl,
+          //               },
+          //             }),
+          //           ]
+          //         )
+          //       : "";
+          //   },
+          // },
           {
             title: "未成交原因",
             key: "unDealReason",

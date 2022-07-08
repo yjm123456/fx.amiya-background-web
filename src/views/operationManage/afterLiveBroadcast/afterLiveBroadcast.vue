@@ -838,6 +838,7 @@ export default {
                               consultationCardConsumed2,
                               activateHistoricalConsultation,
                               livingTrackingEmployeeId,
+                              consultation2
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -873,6 +874,7 @@ export default {
                             this.form.consultationCardConsumed2 = consultationCardConsumed2;
                             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
                             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId;
+                            this.form.consultation2 = consultation2;
 
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
@@ -1061,6 +1063,7 @@ export default {
         activateHistoricalConsultation: null,
         // 直播中
         livingTrackingEmployeeId: null,
+        consultation2:null,
       },
 
       ruleValidate: {
@@ -1395,6 +1398,7 @@ export default {
               consultationCardConsumed2,
               activateHistoricalConsultation,
               livingTrackingEmployeeId,
+              consultation2
             } = this.form;
             const data = {
               id,
@@ -1455,6 +1459,9 @@ export default {
                 : 0,
               livingTrackingEmployeeId: livingTrackingEmployeeId
                 ? livingTrackingEmployeeId
+                : 0,
+              consultation2: consultation2
+                ? consultation2
                 : 0,
             };
             api.editLiveAnchorDailyTarget(data).then((res) => {

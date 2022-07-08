@@ -416,6 +416,7 @@ export default {
                               consultationCardConsumed,
                               activateHistoricalConsultation,
                               livingTrackingEmployeeId,
+                              consultationCardConsumed2
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -451,6 +452,7 @@ export default {
                             this.form.consultationCardConsumed = consultationCardConsumed;
                             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
                             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId;
+                            this.form.consultationCardConsumed2 = consultationCardConsumed2;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -640,6 +642,8 @@ export default {
         activateHistoricalConsultation: null,
         // 直播中人员
         livingTrackingEmployeeId: null,
+        // 
+        consultationCardConsumed2:null,
       },
 
       ruleValidate: {
@@ -907,6 +911,7 @@ export default {
               consultationCardConsumed,
               activateHistoricalConsultation,
               livingTrackingEmployeeId,
+              consultationCardConsumed2
             } = this.form;
             const data = {
               id,
@@ -935,6 +940,7 @@ export default {
                 : 0,
               consultation: consultation ? consultation : 0,
               consultation2: consultation2 ? consultation2 : 0,
+              consultationCardConsumed2: consultationCardConsumed2 ? consultationCardConsumed2 : 0,
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
                 : 0,

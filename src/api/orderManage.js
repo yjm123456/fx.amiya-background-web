@@ -231,7 +231,7 @@ export const ContentPlatFormOrderDealInfo = (id) => {
 // 修改成交情况信息
 export const updateContentPlatFormOrderDealInfo = (data) => {
     return http({
-        url: "/amiyabg/ContentPlatFormOrderDealInfo/update",
+        url: "/amiyabg/ContentPlateFormOrder/updateFinishContentPlateFormOrderByEmployee",
         method: "put",
         data
     });

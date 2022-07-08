@@ -182,10 +182,10 @@
             <span class="title_bold">科室：</span>
             <span>{{ detailObj.hospitalDepartmentName }} </span>
           </div>
-          <!-- <div class="mr_top">
-            <span class="title_bold">成交金额：</span>
-            <span>{{ detailObj.dealAmount }}</span>
-          </div> -->
+          <div class="mr_top">
+            <span class="title_bold">抖店订单号：</span>
+            <span>{{ detailObj.otherContentPlatFormOrderId }}</span>
+          </div>
           <div class="mr_top">
             <span class="title_bold">咨询内容：</span>
             <span>{{ detailObj.consultingContent }} </span>
@@ -220,6 +220,23 @@
                 >生成喜报</Button
               >
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="order_message">
+        <div class="message_title"><span class="line"></span>图片信息</div>
+        <div class="order_content">
+          <div style="display:flex;align-items:center">
+            <span class="title_bold">成交凭证：</span>
+            <viewer v-if="detailObj.dealPictureUrl"  baseLayerPicker ="true">
+              <img :src="detailObj.dealPictureUrl" alt="" class="unImg">
+            </viewer>
+          </div>
+          <div style="display:flex;align-items:center;margin-top:10px">
+            <span class="title_bold">未成交截图：</span>
+            <viewer v-if="detailObj.unDealPictureUrl"  baseLayerPicker ="true" >
+              <img :src="detailObj.unDealPictureUrl" alt="" class="unImg">
+            </viewer>
           </div>
         </div>
       </div>
@@ -586,5 +603,10 @@ export default {
 }
 .order_id {
   color: red;
+}
+.unImg{
+  width: 40px;
+  height: 40px;
+  
 }
 </style>

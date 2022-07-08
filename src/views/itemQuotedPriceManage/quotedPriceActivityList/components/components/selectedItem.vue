@@ -51,12 +51,12 @@ export default {
           },
         },
         {
-          title: "日常价",
+          title: "往期价",
           key: "salePrice",
           minWidth: 100,
         },
         {
-          title: "直播价",
+          title: "采购价",
           key: "salePrice",
           align: "center",
           minWidth: 150,

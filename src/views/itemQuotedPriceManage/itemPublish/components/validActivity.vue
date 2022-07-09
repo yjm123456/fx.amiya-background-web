@@ -428,6 +428,7 @@ export default {
        this.itemInfo.data.map((item,index)=>{
 		  if(item.id==row.id){
 			  item._checked = !item._checked
+        item.isAgreeLivingPrice = true
 		  }
 	  })
 	 
@@ -438,6 +439,7 @@ export default {
 		  if(item.id==row.id){
 			  item._checked = !item._checked
 			  item.isAgreeLivingPrice = false
+        item.isAgreeLivingPrice = false
 		  }
 	  })
     },
@@ -446,6 +448,7 @@ export default {
     handleSelectAllItem(selection) {
      this.itemInfo.data.map((item,index)=>{
 		 item._checked = true
+     item.isAgreeLivingPrice = true
 	 })
     },
 	//取消选择全部项目
@@ -453,6 +456,7 @@ export default {
 		this.itemInfo.data.map((item,index)=>{
 			item._checked = false
 			item.isAgreeLivingPrice = false
+      item.isAgreeLivingPrice = false
 		})
     },
     // 取消提交

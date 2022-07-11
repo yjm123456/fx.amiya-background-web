@@ -198,19 +198,19 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日99消耗卡数量"
+              label="今日照片消耗卡数量"
               prop="consultationCardConsumed"
               :rules="[
                 {
                   required: true,
-                  message: '请输入今日99消耗卡数量',
+                  message: '请输入今日照片消耗卡数量',
                 },
               ]"
-              key="今日99消耗卡数量"
+              key="今日照片消耗卡数量"
             >
               <Input
                 v-model="form.consultationCardConsumed"
-                placeholder="请输入今日99消耗卡数量"
+                placeholder="请输入今日照片消耗卡数量"
                 type="number"
                 number
               />
@@ -218,19 +218,19 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日199消耗卡数量"
+              label="今日视频消耗卡数量"
               prop="consultationCardConsumed2"
               :rules="[
                 {
                   required: true,
-                  message: '请输入今日199消耗卡数量',
+                  message: '请输入今日视频消耗卡数量',
                 },
               ]"
-              key="今日199消耗卡数量"
+              key="今日视频消耗卡数量"
             >
               <Input
                 v-model="form.consultationCardConsumed2"
-                placeholder="请输入今日199消耗卡数量"
+                placeholder="请输入今日视频消耗卡数量"
                 type="number"
                 number
               />
@@ -652,13 +652,13 @@ export default {
             align: "center",
           },
           {
-            title: "今日99消耗卡数量",
+            title: "今日照片消耗卡数量",
             key: "consultationCardConsumed",
             minWidth: 170,
             align: "center",
           },
           {
-            title: "今日199消耗卡数量",
+            title: "今日视频消耗卡数量",
             key: "consultationCardConsumed2",
             minWidth: 180,
             align: "center",
@@ -1055,9 +1055,9 @@ export default {
         miniVanBadReviews: null,
         // 今日小黄车退款量
         minivanRefund: null,
-        // 今日99消耗卡数量
+        // 今日照片消耗卡数量
         consultationCardConsumed: null,
-        // 今日199消耗卡数量
+        // 今日视频消耗卡数量
         consultationCardConsumed2: null,
         // 今日激活历史面诊数量
         activateHistoricalConsultation: null,

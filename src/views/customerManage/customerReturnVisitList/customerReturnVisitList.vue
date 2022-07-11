@@ -323,6 +323,7 @@ export default {
         startDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         employee: [],
+        // 97是线上客服主管id 如登录的是客服、客服管理员、客服主管除外 默认展示是客服主管id 为解决数据量大的问题
         employeeId: sessionStorage.getItem("positionName") == '客服' || sessionStorage.getItem("positionName") == '客服管理员' || sessionStorage.getItem("positionName") == '客服主管' ? sessionStorage.getItem("employeeId") : 97,
         typeList: [
           {

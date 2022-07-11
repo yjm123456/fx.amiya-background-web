@@ -295,19 +295,19 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日99面诊卡下单数量"
+              label="今日照片面诊卡下单数量"
               prop="consultation"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日99面诊卡下单数量',
+                  message: '请输入今日照片面诊卡下单数量',
                 },
               ]"
-              key="今日99面诊卡下单数量"
+              key="今日照片面诊卡下单数量"
             >
               <Input
                 v-model="form.consultation"
-                placeholder="请输入今日99面诊卡下单数量"
+                placeholder="请输入今日照片面诊卡下单数量"
                 type="number"
                 number
               />
@@ -315,19 +315,19 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日199面诊卡下单数量"
+              label="今日视频面诊卡下单数量"
               prop="consultation2"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日199面诊卡下单数量',
+                  message: '请输入今日视频面诊卡下单数量',
                 },
               ]"
-              key="今日199面诊卡下单数量"
+              key="今日视频面诊卡下单数量"
             >
               <Input
                 v-model="form.consultation2"
-                placeholder="请输入今日199面诊卡下单数量"
+                placeholder="请输入今日视频面诊卡下单数量"
                 type="number"
                 number
               />
@@ -335,19 +335,19 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日99消耗卡数量"
+              label="今日照片消耗卡数量"
               prop="consultationCardConsumed"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日99消耗卡数量',
+                  message: '请输入今日照片消耗卡数量',
                 },
               ]"
-              key="今日99消耗卡数量"
+              key="今日照片消耗卡数量"
             >
               <Input
                 v-model="form.consultationCardConsumed"
-                placeholder="请输入今日99消耗卡数量"
+                placeholder="请输入今日照片消耗卡数量"
                 type="number"
                 number
               />
@@ -355,19 +355,19 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日199消耗卡数量"
+              label="今日视频消耗卡数量"
               prop="consultationCardConsumed2"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日199消耗卡数量',
+                  message: '请输入今日视频消耗卡数量',
                 },
               ]"
-              key="今日199消耗卡数量"
+              key="今日视频消耗卡数量"
             >
               <Input
                 v-model="form.consultationCardConsumed2"
-                placeholder="请输入今日199消耗卡数量"
+                placeholder="请输入今日视频消耗卡数量"
                 type="number"
                 number
               />
@@ -843,25 +843,25 @@ export default {
             align: "center",
           },
           {
-            title: "今日99面诊卡下单数量",
+            title: "今日照片面诊卡下单数量",
             key: "consultation",
-            minWidth: 190,
+            minWidth: 200,
             align: "center",
           },
           {
-            title: "今日199面诊卡下单数量",
+            title: "今日视频面诊卡下单数量",
             key: "consultation2",
-            minWidth: 190,
+            minWidth: 200,
             align: "center",
           },
           {
-            title: "今日99消耗卡数量",
+            title: "今日照片消耗卡数量",
             key: "consultationCardConsumed",
-            minWidth: 170,
+            minWidth: 180,
             align: "center",
           },
           {
-            title: "今日199消耗卡数量",
+            title: "今日视频消耗卡数量",
             key: "consultationCardConsumed2",
             minWidth: 170,
             align: "center",
@@ -1236,9 +1236,9 @@ export default {
         cluesNum: null,
         // 今日直播间投流量
         livingRoomFlowInvestmentNum: null,
-        // 今日99面诊卡数量
+        // 今日照片面诊卡数量
         consultation: null,
-        // 今日199面诊卡数量
+        // 今日视频面诊卡数量
         consultation2: null,
         // 今日带货结算佣金
         cargoSettlementCommission: null,
@@ -1266,9 +1266,9 @@ export default {
         miniVanBadReviews: null,
         // 今日小黄车退款量
         minivanRefund: null,
-        // 今日99消耗卡数量
+        // 今日照片消耗卡数量
         consultationCardConsumed: null,
-        // 今日199消耗卡数量
+        // 今日视频消耗卡数量
         consultationCardConsumed2: null,
         // 今日激活历史面诊数量
         activateHistoricalConsultation: null,

@@ -328,22 +328,22 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="99面诊卡下单数量目标"
+              label="照片面诊卡下单数量目标"
               prop="consultationTarget"
               :rules="[
                 {
                   required: true,
-                  message: '99面诊卡下单数量目标(最小是1)',
+                  message: '照片面诊卡下单数量目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="99面诊卡下单数量目标"
+              key="照片面诊卡下单数量目标"
             >
               <Input
                 v-model="form.consultationTarget"
-                placeholder="99面诊卡下单数量目标"
+                placeholder="照片面诊卡下单数量目标"
                 type="number"
                 number
               />
@@ -351,22 +351,22 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="199面诊卡下单数量目标"
+              label="视频面诊卡下单数量目标"
               prop="consultationTarget2"
               :rules="[
                 {
                   required: true,
-                  message: '199面诊卡下单数量目标(最小是1)',
+                  message: '视频面诊卡下单数量目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="199面诊卡下单数量目标"
+              key="视频面诊卡下单数量目标"
             >
               <Input
                 v-model="form.consultationTarget2"
-                placeholder="199面诊卡下单数量目标"
+                placeholder="视频面诊卡下单数量目标"
                 type="number"
                 number
               />
@@ -374,22 +374,22 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="99消耗卡目标"
+              label="照片消耗卡目标"
               prop="consultationCardConsumedTarget"
               :rules="[
                 {
                   required: true,
-                  message: '99消耗卡目标(最小是1)',
+                  message: '照片消耗卡目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="99消耗卡目标"
+              key="照片消耗卡目标"
             >
               <Input
                 v-model="form.consultationCardConsumedTarget"
-                placeholder="请输入99消耗卡目标"
+                placeholder="请输入照片消耗卡目标"
                 type="number"
                 number
               />
@@ -397,22 +397,22 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="199消耗卡目标"
+              label="视频消耗卡目标"
               prop="consultationCardConsumedTarget2"
               :rules="[
                 {
                   required: true,
-                  message: '199消耗卡目标(最小是1)',
+                  message: '视频消耗卡目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="199消耗卡目标"
+              key="视频消耗卡目标"
             >
               <Input
                 v-model="form.consultationCardConsumedTarget2"
-                placeholder="请输入199消耗卡目标"
+                placeholder="请输入视频消耗卡目标"
                 type="number"
                 number
               />
@@ -790,40 +790,40 @@ export default {
             },
           },
           {
-            title: "99面诊卡下单数量目标",
+            title: "照片面诊卡下单数量目标",
             key: "consultationTarget",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "累计99面诊卡下单数量",
-            key: "cumulativeConsultation",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "99面诊卡下单数量完成率",
-            key: "consultationCompleteRate",
             minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "累计照片面诊卡下单数量",
+            key: "cumulativeConsultation",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "照片面诊卡下单数量完成率",
+            key: "consultationCompleteRate",
+            minWidth: 220,
             align: "center",
             render: (h, params) => {
               return h("div", params.row.consultationCompleteRate + "%");
             },
           },
           {
-            title: "199面诊卡下单数量目标",
+            title: "视频面诊卡下单数量目标",
             key: "consultationTarget2",
             minWidth: 200,
             align: "center",
           },
           {
-            title: "累计199面诊卡下单数量",
+            title: "累计视频面诊卡下单数量",
             key: "cumulativeConsultation2",
             minWidth: 200,
             align: "center",
           },
           {
-            title: "199面诊卡下单数量完成率",
+            title: "视频面诊卡下单数量完成率",
             key: "consultationCompleteRate2",
             minWidth: 210,
             align: "center",
@@ -832,19 +832,19 @@ export default {
             },
           },
           {
-            title: "99消耗卡目标",
+            title: "照片消耗卡目标",
             key: "consultationCardConsumedTarget",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "99累计消耗卡",
+            title: "照片累计消耗卡",
             key: "cumulativeConsultationCardConsumed",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "99消耗卡完成率",
+            title: "照片消耗卡完成率",
             key: "consultationCardConsumedCompleteRate",
             minWidth: 150,
             align: "center",
@@ -856,19 +856,19 @@ export default {
             },
           },
           {
-            title: "199消耗卡目标",
+            title: "视频消耗卡目标",
             key: "consultationCardConsumedTarget2",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "199累计消耗卡",
+            title: "视频累计消耗卡",
             key: "cumulativeConsultationCardConsumed2",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "199消耗卡完成率",
+            title: "视频消耗卡完成率",
             key: "consultationCardConsumedCompleteRate2",
             minWidth: 150,
             align: "center",
@@ -1124,15 +1124,15 @@ export default {
                               cluesTarget,
                               // 直播间投流目标
                               livingRoomFlowInvestmentTarget,
-                              // 99面诊卡目标
+                              // 照片面诊卡目标
                               consultationTarget,
-                              // 199面诊卡目标
+                              // 视频面诊卡目标
                               consultationTarget2,
                               // 带货结算佣金目标
                               cargoSettlementCommissionTarget,
-                              // 99消耗卡目标
+                              // 照片消耗卡目标
                               consultationCardConsumedTarget,
-                              // 199消耗卡目标
+                              // 视频消耗卡目标
                               consultationCardConsumedTarget2,
                               // 激活历史面诊数量目标
                               activateHistoricalConsultationTarget,
@@ -1402,19 +1402,19 @@ export default {
           },
 
           {
-            title: "99面诊卡下单数量目标",
+            title: "照片面诊卡下单数量目标",
             key: "consultationTarget",
             minWidth: 180,
             align: "center",
           },
           {
-            title: "累计99面诊卡下单数量",
+            title: "累计照片面诊卡下单数量",
             key: "cumulativeConsultation",
             minWidth: 180,
             align: "center",
           },
           {
-            title: "99面诊卡下单数量完成率",
+            title: "照片面诊卡下单数量完成率",
             key: "consultationCompleteRate",
             minWidth: 200,
             align: "center",
@@ -1423,19 +1423,19 @@ export default {
             },
           },
           {
-            title: "199面诊卡下单数量目标",
+            title: "视频面诊卡下单数量目标",
             key: "consultationTarget2",
             minWidth: 200,
             align: "center",
           },
           {
-            title: "累计199面诊卡下单数量",
+            title: "累计视频面诊卡下单数量",
             key: "cumulativeConsultation2",
             minWidth: 200,
             align: "center",
           },
           {
-            title: "199面诊卡下单数量完成率",
+            title: "视频面诊卡下单数量完成率",
             key: "consultationCompleteRate2",
             minWidth: 210,
             align: "center",
@@ -1537,19 +1537,19 @@ export default {
             },
           },
           {
-            title: "99消耗卡目标",
+            title: "照片消耗卡目标",
             key: "consultationCardConsumedTarget",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "99累计消耗卡",
+            title: "照片累计消耗卡",
             key: "cumulativeConsultationCardConsumed",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "99消耗卡完成率",
+            title: "照片消耗卡完成率",
             key: "consultationCardConsumedCompleteRate",
             minWidth: 150,
             align: "center",
@@ -1561,19 +1561,19 @@ export default {
             },
           },
           {
-            title: "199消耗卡目标",
+            title: "视频消耗卡目标",
             key: "consultationCardConsumedTarget2",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "199累计消耗卡",
+            title: "视频累计消耗卡",
             key: "cumulativeConsultationCardConsumed2",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "199消耗卡完成率",
+            title: "视频消耗卡完成率",
             key: "consultationCardConsumedCompleteRate2",
             minWidth: 150,
             align: "center",
@@ -1849,9 +1849,9 @@ export default {
         cluesTarget: null,
         // 直播间投流目标
         livingRoomFlowInvestmentTarget: null,
-        // 99面诊卡目标
+        // 照片面诊卡目标
         consultationTarget: null,
-        // 199面诊卡数量
+        // 视频面诊卡数量
         consultationTarget2: null,
         // 带货结算佣金目标
         cargoSettlementCommissionTarget: null,
@@ -1859,9 +1859,9 @@ export default {
         minivanRefundTarget: null,
         // 差评总量上限
         miniVanBadReviewsTarget: null,
-        // 99消耗卡目标
+        // 照片消耗卡目标
         consultationCardConsumedTarget: null,
-        // 199消耗卡目标
+        // 视频消耗卡目标
         consultationCardConsumedTarget2: null,
         // 激活历史面诊数量目标
         activateHistoricalConsultationTarget: null,
@@ -1961,7 +1961,7 @@ export default {
         consultationTarget: [
           {
             required: true,
-            message: "请输入99面诊卡目标",
+            message: "请输入照片面诊卡目标",
           },
         ],
         cargoSettlementCommissionTarget: [

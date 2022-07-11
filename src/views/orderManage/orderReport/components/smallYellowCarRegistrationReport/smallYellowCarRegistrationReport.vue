@@ -257,15 +257,15 @@ export default {
           },
           {
             title: "面诊方式",
-            key: "consultationType",
+            key: "consultationTypeText",
             minWidth: 120,
             align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.consultationType == 1 ? "视频" : "图片"
-              );
-            },
+            // render: (h, params) => {
+            //   return h(
+            //     "div",
+            //     params.row.consultationType == 1 ? "视频" : "图片"
+            //   );
+            // },
           },
           {
             title: "是否加V",

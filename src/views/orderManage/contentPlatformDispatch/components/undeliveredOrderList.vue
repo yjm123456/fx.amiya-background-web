@@ -29,7 +29,7 @@
             <Select
               v-model="query.contentPlateFormId"
               style="width: 180px;margin-left: 10px"
-              placeholder="请选择订单(下单)平台"
+              placeholder="请选择(订单)下单平台"
               filterable
             >
               <Option

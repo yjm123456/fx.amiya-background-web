@@ -439,11 +439,23 @@ export default {
                   
                   '私信'
                 );
-              } else {
+              } else if (params.row.consultationType == 4) {
                 return h(
                   "div",
                   
                   '其他'
+                );
+              }else if (params.row.consultationType == 5) {
+                return h(
+                  "div",
+                  
+                  '粉丝群'
+                );
+              }else if (params.row.consultationType == 6) {
+                return h(
+                  "div",
+                  
+                  '短视频'
                 );
               }
             },
@@ -834,6 +846,13 @@ export default {
             {
               id:3,
               name:'私信'
+            },{
+              id:5,
+              name:'粉丝群'
+            },
+            {
+              id:6,
+              name:'短视频'
             },
             {
               id:4,

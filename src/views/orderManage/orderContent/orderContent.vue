@@ -65,11 +65,12 @@
               >
             </Select>
           </div>
+          <!-- 一个是订单平台筛选 一个是主播平台筛选 -->
           <div>
             <Select
               v-model="query.contentPlateFormId"
-              placeholder="请选择下单平台"
-              style="width: 160px;"
+              placeholder="请选择(订单)下单平台"
+              style="width: 180px;"
               filterable
             >
               <Option

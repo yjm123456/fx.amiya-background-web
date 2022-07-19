@@ -109,6 +109,10 @@
             <i-switch v-model="detailObj.isToHospital" disabled />
           </div>
           <div class="mr_top">
+            <span class="title_bold">到院类型：</span>
+            <span>{{ detailObj.toHospitalTypeText }} </span>
+          </div>
+          <div class="mr_top">
             <span class="title_bold">到院时间：</span>
             <span
               >{{

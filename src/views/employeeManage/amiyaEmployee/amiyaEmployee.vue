@@ -105,8 +105,8 @@
         <FormItem label="是否客服" prop="isCustomerService">
           <i-switch v-model="form.isCustomerService" />
         </FormItem>
-        <!-- 客服所属主播 -->
-        <FormItem label="主播" prop="liveAnchorIds" v-if="form.positionId === 2 && form.isCustomerService === true" key="主播">
+        <!-- 客服所属主播 (form.positionId === 2 && form.isCustomerService === true) || (form.positionId === 19 && form.isCustomerService === true)-->
+        <FormItem label="主播" prop="liveAnchorIds" v-if="(title == '修改' && (form.positionId === 2 && form.isCustomerService === true)) || (title == '修改' && form.positionId === 19)" key="主播">
           <Select v-model="form.liveAnchorIds" multiple filterable placeholder="请选择主播">
             <Option
               v-for="item in liveAnchors"
@@ -481,7 +481,8 @@ export default {
               isCustomerService,
               valid,
               email,
-              liveAnchorIds:positionId === 2 && isCustomerService === true ? liveAnchorIds : []
+              // liveAnchorIds:(positionId === 2 || positionId === 19) && isCustomerService === true ? liveAnchorIds : []
+              liveAnchorIds:(positionId === 2 && isCustomerService === true ) || positionId === 19  ? liveAnchorIds : []
             };
             api.updateAmiyaEmployee(data).then((res) => {
               if (res.code === 0) {

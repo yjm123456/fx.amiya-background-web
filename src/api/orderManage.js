@@ -236,6 +236,13 @@ export const updateContentPlatFormOrderDealInfo = (data) => {
         data
     });
 };
+// 获取内容平台订单到院状态
+export const contentPlateFormOrderToHospitalTypeList = () => {
+    return http({
+        url: "/amiyabg/ContentPlateFormOrder/contentPlateFormOrderToHospitalTypeList",
+        method: "get",
+    });
+};
 
 /**
  * 派单列表

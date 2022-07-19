@@ -4,28 +4,75 @@
       <div class="content">
         <div>
           <div class="top">
-            <DatePicker
-              type="date"
-              placeholder="开始日期"
-              style="width: 160px;margin-left: 10px"
-              :value="query.startDate"
-              v-model="query.startDate"
-              transfer
-            ></DatePicker>
-            <DatePicker
-              type="date"
-              placeholder="结束日期"
-              style="width: 160px; margin-left: 10px"
-              :value="query.endDate"
-              v-model="query.endDate"
-              transfer
-            ></DatePicker>
             <Input
               v-model="query.keyword"
               placeholder="请输入关键词"
               style="width:200px;margin-left: 10px"
               @keyup.enter.native="getSendOrderInfo()"
             />
+            <DatePicker
+              type="date"
+              placeholder="派单开始日期"
+              style="width: 140px;margin-left: 10px"
+              :value="query.startDate"
+              v-model="query.startDate"
+              transfer
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="派单结束日期"
+              style="width: 140px; margin-left: 10px"
+              :value="query.endDate"
+              v-model="query.endDate"
+              transfer
+            ></DatePicker>
+            <Select
+              v-model="query.IsToHospital"
+              style="width: 160px;margin-left: 10px"
+              placeholder="请选择到院状态"
+            >
+              <Option
+                v-for="item in query.toTheHospitalList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <DatePicker
+              type="date"
+              placeholder="到院开始日期"
+              style="width: 140px;margin-left: 10px"
+              :value="query.toHospitalStartDate"
+              v-model="query.toHospitalStartDate"
+              transfer
+              :disabled="query.IsToHospital!=true"
+              
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="到院结束日期"
+              style="width: 140px; margin-left: 10px"
+              :value="query.toHospitalEndDate"
+              v-model="query.toHospitalEndDate"
+              transfer
+              :disabled="query.IsToHospital!=true"
+            ></DatePicker>
+            <Select
+              v-model="query.toHospitalType"
+              style="width: 160px;margin-left: 10px"
+              placeholder="请选择到院类型"
+              :disabled="query.IsToHospital!=true"
+              clearable
+              filterable
+            >
+              <Option
+                v-for="item in toHospitalTypeList"
+                :value="item.orderType"
+                :key="item.orderType"
+                >{{ item.orderTypeText }}</Option
+              >
+            </Select>
+            
             <Select
               v-model="query.contentPlatFormId"
               style="width: 180px;margin-left: 10px"
@@ -39,9 +86,13 @@
                 >{{ item.contentPlatformName }}</Option
               >
             </Select>
+            
+            
+          </div>
+          <div>
             <Select
               v-model="query.orderStatus"
-              style="width: 180px;margin-left: 10px"
+              style="width: 150px;margin-left: 10px"
               placeholder="请选择订单状态"
               filterable
             >
@@ -54,7 +105,7 @@
             </Select>
             <Select
               v-model="query.orderSource"
-              style="width: 180px;margin-left: 10px"
+              style="width: 150px;margin-left: 10px"
               placeholder="请选择订单状态"
             >
               <Option
@@ -64,13 +115,11 @@
                 >{{ item.orderSourceText }}</Option
               >
             </Select>
-          </div>
-          <div>
             <Select
               v-model="query.liveAnchorPlatform"
               placeholder="请选择主播平台"
               @on-change="contentPlateChange(query.liveAnchorPlatform)"
-              style="width: 150px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               filterable
             >
               <Option
@@ -83,7 +132,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 150px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               :disabled="query.liveAnchorPlatform === null"
               filterable
             >
@@ -94,6 +143,7 @@
                 >{{ item.hostAccountName }}</Option
               >
             </Select>
+            
             <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
@@ -107,18 +157,7 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Select
-              v-model="query.IsToHospital"
-              style="width: 150px;margin-left: 10px"
-              placeholder="请选择到院状态"
-            >
-              <Option
-                v-for="item in query.toTheHospitalList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
+            
             <Select
               v-model="query.employeeId"
               style="width: 150px;margin-left: 10px"
@@ -288,7 +327,23 @@
           <i-switch
             v-model="confirmForm.isToHospital"
             :disabled="confirmForm.isFinish === true"
+            @on-change="isToHospitalChange"
           />
+        </FormItem>
+        <FormItem label="到院类型" prop="toHospitalType" key="到院类型" v-if="confirmForm.isToHospital === true">
+          <Select
+              v-model="confirmForm.toHospitalType"
+              placeholder="请选择到院类型"
+              clearable
+              filterable
+            >
+              <Option
+                v-for="item in toHospitalTypeList"
+                :value="item.orderType"
+                :key="item.orderType"
+                >{{ item.orderTypeText }}</Option
+              >
+            </Select>
         </FormItem>
         <FormItem label="到院时间" prop="toHospitalDate" key="到院时间" v-if="confirmForm.isToHospital === true">
           <DatePicker
@@ -517,7 +572,9 @@ export default {
         lastDealHospitalId:null,
         toHospitalDate:'',
         // 抖店订单号
-        otherContentPlatFormOrderId:''
+        otherContentPlatFormOrderId:'',
+        // 到院类型
+        toHospitalType:null
       },
       confirmRuleValidate: {
         unDealReason: [
@@ -552,10 +609,19 @@ export default {
             message: "请选择成交医院",
           },
         ],
+        toHospitalType: [
+          {
+            required: true,
+            message: "请选择到院类型",
+          },
+        ],
       },
       employee: [{ name: "全部归属客服", id: -1 }],
       dispatchEmployee:[{ name: "全部派单客服", id: -1 }],
       query: {
+        toHospitalType:-1,
+        toHospitalStartDate:"",
+        toHospitalEndDate:"",
         sendBy:-1,
         consultationEmpId:-1,
         orderSource: -1,
@@ -836,6 +902,26 @@ export default {
                 h("span", { isToHospital: "open" }, "开"),
                 h("span", { isToHospital: "close" }, "关")
               );
+            },
+          },
+          {
+            title: "到院类型",
+            minWidth: 120,
+            key: "toHospitalTypeText",
+            align:'center',
+          },
+          {
+            title: "到院时间",
+            key: "toHospitalDate",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              return params.row.toHospitalDate
+                ? h(
+                    "div",
+                    this.$moment(params.row.toHospitalDate).format("YYYY-MM-DD")
+                  )
+                : "";
             },
           },
           // {
@@ -1238,7 +1324,8 @@ export default {
         data: [],
         statusCode: "",
       },
-
+      // 到院状态
+      toHospitalTypeList:[],
       // 控制 modal
       controlModal: false,
       // 开启所有医院
@@ -1334,6 +1421,15 @@ export default {
     };
   },
   methods: {
+    //   获取订单到院类型
+    getcontentPlateFormOrderToHospitalTypeList() {
+      api.contentPlateFormOrderToHospitalTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderTypes } = res.data;
+          this.toHospitalTypeList = orderTypes
+        }
+      });
+    },
     //   获取内容平台订单来源
     getcontentPlateFormOrderSourceList() {
       api.contentPlateFormOrderSourceList().then((res) => {
@@ -1350,6 +1446,13 @@ export default {
     noDealhandleUploadChange(values) {
       this.confirmForm.unDealPictureUrl = values[0];
     },
+    // 是否到院
+    isToHospitalChange(){
+      if(this.confirmForm.isToHospital == false){
+        this.confirmForm.toHospitalDate = null
+        this.confirmForm.toHospitalType = null
+      }
+    },
     switchChange() {
       if (this.confirmForm.isFinish === true) {
         this.confirmForm.unDealReason = "";
@@ -1358,12 +1461,15 @@ export default {
         this.confirmForm.lastProjectStage = "";
         this.uploadObj.uploadList = [];
         this.confirmForm.DealDate = null;
+        this.confirmForm.lastDealHospitalId = null
       } else {
         this.confirmForm.dealAmount = null;
         this.confirmForm.lastProjectStage = "";
         this.confirmForm.isToHospital = false;
         this.confirmForm.unDealReason = "";
         this.noDealuploadObj.uploadList = [];
+        this.confirmForm.toHospitalDate = null
+        this.confirmForm.toHospitalType = null
       }
     },
     // 图片
@@ -1386,7 +1492,8 @@ export default {
             DealDate,
             lastDealHospitalId,
             toHospitalDate,
-            otherContentPlatFormOrderId
+            otherContentPlatFormOrderId,
+            toHospitalType
           } = this.confirmForm;
           const data = {
             id,
@@ -1405,7 +1512,8 @@ export default {
             toHospitalDate: toHospitalDate
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,
-              otherContentPlatFormOrderId
+              otherContentPlatFormOrderId,
+            toHospitalType:isToHospital == false ? 0 : toHospitalType
           };
           api.finishContentPlateFormOrderByEmployee(data).then((res) => {
             if (res.code === 0) {
@@ -1519,13 +1627,20 @@ export default {
         liveAnchorId,
         orderSource,
         consultationEmpId,
-        sendBy
+        sendBy,
+        toHospitalStartDate,
+        toHospitalEndDate,
+        toHospitalType
+
       } = this.query;
       const data = {
-        startDate: startDate
-          ? this.$moment(startDate).format("YYYY-MM-DD")
-          : null,
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        // toHospitalStartDate: toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null,
+        // toHospitalEndDate: toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null,
+        // IsToHospital != 1的时候是未到院和全部到院状态  传null  等于1的时候是已到院穿时间和状态
+        toHospitalStartDate:IsToHospital != 1 ? null : (toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null),
+        toHospitalEndDate:IsToHospital != 1 ? null : (toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null),
         keyword,
         pageNum,
         pageSize,
@@ -1537,7 +1652,8 @@ export default {
         liveAnchorId,
         orderSource,
         consultationEmpId:consultationEmpId==-1?null:consultationEmpId,
-        sendBy:sendBy==-1?null : sendBy
+        sendBy:sendBy==-1?null : sendBy,
+        toHospitalType:IsToHospital != 1 ? null : (toHospitalType == -1 ? null : toHospitalType)
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -1563,13 +1679,17 @@ export default {
         liveAnchorId,
         orderSource,
         consultationEmpId,
-        sendBy
+        sendBy,
+        toHospitalStartDate,
+        toHospitalEndDate
       } = this.query;
       const data = {
         startDate: startDate
           ? this.$moment(startDate).format("YYYY-MM-DD")
           : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        toHospitalStartDate: toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null,
+        toHospitalEndDate: toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null,
         keyword,
         pageNum,
         pageSize,
@@ -1703,6 +1823,7 @@ export default {
     this.getHospitalInfonameList();
     // this.getOrderPlatform()
     this.getcontentPlateFormOrderSourceList();
+    this.getcontentPlateFormOrderToHospitalTypeList()
   },
 };
 </script>

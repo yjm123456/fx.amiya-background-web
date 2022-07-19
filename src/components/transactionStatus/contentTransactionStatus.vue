@@ -5,7 +5,7 @@
       title="成交情况"
       footer-hide
       v-model="transactionStatusParams.transactionStatusModel"
-      width="80%"
+      width="85%"
       @on-visible-change="handleModalVisibleChange"
     >
       <div>
@@ -47,7 +47,23 @@
           <i-switch
             v-model="confirmForm.isToHospital"
             :disabled="confirmForm.isFinish == true"
+            @on-change="isToHospitalChange"
           />
+        </FormItem>
+        <FormItem label="到院类型" prop="toHospitalType" key="到院类型" v-if="confirmForm.isToHospital === true">
+          <Select
+              v-model="confirmForm.toHospitalType"
+              placeholder="请选择到院类型"
+              clearable
+              filterable
+            >
+              <Option
+                v-for="item in toHospitalTypeList"
+                :value="item.orderType"
+                :key="item.orderType"
+                >{{ item.orderTypeText }}</Option
+              >
+            </Select>
         </FormItem>
         <FormItem
           label="到院时间"
@@ -187,6 +203,8 @@ export default {
   },
   data() {
     return {
+      // 到院状态
+      toHospitalTypeList:[],
       noDealuploadObj: {
         // 是否开启多图
         multiple: false,
@@ -237,6 +255,8 @@ export default {
         toHospitalDate: "",
         // 抖店订单号
         otherContentPlatFormOrderId: "",
+        // 到院类型
+        toHospitalType:null
       },
       confirmRuleValidate: {
         unDealReason: [
@@ -268,6 +288,12 @@ export default {
           {
             required: true,
             message: "请选择成交医院",
+          },
+        ],
+        toHospitalType: [
+          {
+            required: true,
+            message: "请选择到院类型",
           },
         ],
       },
@@ -310,6 +336,11 @@ export default {
             },
           },
           {
+            title: "到院类型",
+            key: "toHospitalTypeText",
+            minWidth: 120,
+          },
+          {
             title: "到院时间",
             key: "tohospitalDate",
             minWidth: 150,
@@ -343,6 +374,7 @@ export default {
               );
             },
           },
+          
           {
             title: "成交时间",
             key: "dealDate",
@@ -429,6 +461,7 @@ export default {
                     on: {
                       click: () => {
                         const { id } = params.row;
+                        this.getcontentPlateFormOrderToHospitalTypeList()
                         api.ContentPlatFormOrderDealInfo(id).then((res) => {
                           if (res.code === 0) {
                             const {
@@ -443,6 +476,7 @@ export default {
                               remark,
                               otherOrderId,
                               dealDate,
+                              toHospitalType
                             } = res.data.contentPlatFormOrderDealInfoInfo;
                             this.isEdit = true;
                             this.confirmForm.toHospitalDate = tohospitalDate
@@ -468,6 +502,7 @@ export default {
                             this.confirmForm.unDealReason = remark;
                             this.confirmForm.lastProjectStage = remark;
                             this.confirmForm.otherContentPlatFormOrderId = otherOrderId;
+                            this.confirmForm.toHospitalType = toHospitalType;
                             this.confirmForm.DealDate = dealDate
                               ? this.$moment(dealDate).format("YYYY-MM-DD")
                               : "";
@@ -488,6 +523,23 @@ export default {
     };
   },
   methods: {
+    //   获取订单到院类型
+    getcontentPlateFormOrderToHospitalTypeList() {
+      api.contentPlateFormOrderToHospitalTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderTypes } = res.data;
+          this.toHospitalTypeList = orderTypes
+        }
+      });
+    },
+    // 是否到院
+    isToHospitalChange(){
+      if(this.confirmForm.isToHospital == false){
+        this.confirmForm.toHospitalDate = null
+        this.confirmForm.toHospitalType = null
+      }
+    },
+    // 是否成交
     switchChange() {
       if (this.confirmForm.isFinish == true) {
         this.confirmForm.unDealReason = "";
@@ -505,6 +557,7 @@ export default {
         this.confirmForm.DealDate = null;
         this.confirmForm.toHospitalDate = null;
         this.confirmForm.lastDealHospitalId = null;
+        this.confirmForm.toHospitalType = null
       }
     },
     submiteChange(name) {
@@ -524,6 +577,7 @@ export default {
             unDealPictureUrl,
             DealDate,
             otherContentPlatFormOrderId,
+            toHospitalType
           } = this.confirmForm;
           const data = {
             id,
@@ -547,6 +601,7 @@ export default {
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,
             otherContentPlatFormOrderId,
+            toHospitalType:isToHospital == false ? 0 : toHospitalType
           };
           api.updateContentPlatFormOrderDealInfo(data).then((res) => {
             if (res.code === 0) {

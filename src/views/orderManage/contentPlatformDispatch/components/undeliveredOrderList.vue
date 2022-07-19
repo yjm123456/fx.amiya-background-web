@@ -2,8 +2,8 @@
   <div>
     <Card>
       <div class="container">
-        <div class="content">
-          <div>
+        <div class="content1">
+          <div class="">
             <DatePicker
               type="date"
               placeholder="开始日期"
@@ -116,12 +116,14 @@
           </Select>
           </div>
         </div>
-        <Button
-          type="primary"
-          style="margin-left: 10px"
-          @click="getUnSendOrderList()"
-          >查询</Button
-        >
+        <div>
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="getUnSendOrderList()"
+            >查询</Button
+          >
+        </div>
       </div>
       <div style="margin-top:10px">
         <Table border :columns="query.columns" :data="query.data"></Table>
@@ -1055,5 +1057,9 @@ export default {
 .container{
   display: flex;
   align-items: center;
+}
+.content1{
+  display: flex;
+  flex-direction: column;
 }
 </style>

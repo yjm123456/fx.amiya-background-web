@@ -114,6 +114,7 @@ export default {
 }
 .name {
   // margin-top: 46%;
+  width: 100%;
   font-size: 26px;
   font-weight: bold;
   text-align: center;

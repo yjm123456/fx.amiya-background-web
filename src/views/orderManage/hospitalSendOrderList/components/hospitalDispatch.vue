@@ -29,6 +29,10 @@
       </div>
       <div style="margin-top: 10px">
         <Table border :columns="query.columns" :data="query.data"></Table>
+        <Spin fix v-if="flag==true">
+          <Icon type="ios-loading" size=18 class="demo-spin-icon-load" ></Icon>
+          <div>Loading</div>
+      </Spin>
       </div>
       <div class="pages">
         <Page
@@ -181,10 +185,16 @@ export default {
                           const data = {
                             orderId,
                           };
+                          this.flag = true
                           api.hospitalSeePhone(data).then((res) => {
                             if (res.code === 0) {
                               params.row.phone = res.data.phone;
                               params.row.bool = true;
+                              this.flag = false
+                            }else{
+                              setTimeout(()=>{
+                                this.flag  = false
+                              },2000)
                             }
                           });
                         },
@@ -238,7 +248,7 @@ export default {
         ],
         data: [],
       },
-
+      flag:false,
       // 控制 modal
       controlModal: false,
 

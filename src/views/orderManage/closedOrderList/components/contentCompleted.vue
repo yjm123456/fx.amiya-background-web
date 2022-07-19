@@ -50,12 +50,26 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            <Select
+              v-model="query.toHospitalType"
+              placeholder="请选择到院类型"
+              clearable
+              style="width: 140px; margin-left: 10px"
+              filterable
+            >
+              <Option
+                v-for="item in toHospitalTypeList"
+                :value="item.orderType"
+                :key="item.orderType"
+                >{{ item.orderTypeText }}</Option
+              >
+            </Select>
           </div>
           <div style="margin-top:10px">
             <Select
               v-model="query.checkState"
               placeholder="审核状态"
-              style="width: 140px;"
+              style="width: 160px;"
             >
               <Option
                 v-for="item in checkStateListAll"
@@ -68,7 +82,7 @@
             <Select
               v-model="query.ReturnBackPriceState"
               placeholder="回款状态"
-              style="width: 140px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
             >
               <Option
                 v-for="item in query.ReturnBackPriceStateList"
@@ -81,7 +95,7 @@
               v-model="query.contentPlatFormId"
               placeholder="请选择主播平台"
               @on-change="contentPlateChange(query.contentPlatFormId)"
-              style="width: 140px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               filterable
             >
               <Option
@@ -94,7 +108,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 150px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               :disabled="query.contentPlatFormId === null"
               filterable
             >
@@ -242,6 +256,8 @@ export default {
   },
   data() {
     return {
+      // 到院状态
+      toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],
       detailList:[],
       detailModel:false,
       // 回款 传给子组件的值
@@ -273,6 +289,7 @@ export default {
       //   审核状态
       checkStateList: [],
       query: {
+        toHospitalType:-1,
         ReturnBackPriceState:'-1',
         ReturnBackPriceStateList:[
             {
@@ -858,6 +875,15 @@ export default {
     };
   },
   methods: {
+    //   获取订单到院类型
+    getcontentPlateFormOrderToHospitalTypeList() {
+      api.contentPlateFormOrderToHospitalTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderTypes } = res.data;
+          this.toHospitalTypeList = [...this.toHospitalTypeList,...orderTypes]
+        }
+      });
+    },
     // 图片
     handleUploadChange(values) {
       this.form.checkPicture = values;
@@ -927,7 +953,8 @@ export default {
         hospitalId,
         liveAnchorId,
         consultationEmpId,
-        ReturnBackPriceState
+        ReturnBackPriceState,
+        toHospitalType
       } = this.query;
       const data = {
         pageNum,
@@ -942,7 +969,8 @@ export default {
         hospitalId: hospitalId == -1 ? null : hospitalId,
         liveAnchorId,
         consultationEmpId:consultationEmpId==-1?null:consultationEmpId,
-        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+        toHospitalType:toHospitalType== -1 ? null : toHospitalType
       };
       api.contentPlateFormOrderDealLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -965,7 +993,8 @@ export default {
         hospitalId,
         liveAnchorId,
         consultationEmpId,
-        ReturnBackPriceState
+        ReturnBackPriceState,
+        toHospitalType
       } = this.query;
       const data = {
         pageNum,
@@ -980,7 +1009,8 @@ export default {
         hospitalId: hospitalId == -1 ? null : hospitalId,
         liveAnchorId,
         consultationEmpId:consultationEmpId==-1?null:consultationEmpId,
-        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+        toHospitalType:toHospitalType== -1 ? null : toHospitalType
       };
       api.contentPlateFormOrderDealLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -1053,6 +1083,7 @@ export default {
     this.getContentValidList();
     this.getHospitalList();
     this.getconsultationNameList()
+    this.getcontentPlateFormOrderToHospitalTypeList()
   },
   watch: {
     activeName: {

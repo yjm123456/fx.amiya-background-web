@@ -3,7 +3,7 @@
   <div>
     <Card :dis-hover="true">
       <div class="head">
-        <div class="content">
+        <div class="content1">
           <div class="left_top">
             <Input
               v-model="query.keyword"
@@ -138,32 +138,37 @@
             </Select>
           </div>
         </div>
-        <Button
-          type="primary"
-          style="margin-left: .625rem"
-          @click="getOrderInfo()"
-          >查询</Button
-        >
-        <Button type="primary" style="margin-left: .625rem" @click="addgoods()"
-          >录单</Button
-        >
-        <Button
-          type="primary"
-          style="margin-left: .625rem"
-          @click="handleExportClick()"
-          >导出</Button
-        >
-        <Button
-          type="primary"
-          @click="adjustCustomerService()"
-          style="margin-left: 10px"
-          v-if="
-            amiyaPositionId == 1 ||
-              amiyaPositionId == 14 ||
-              amiyaPositionId == 16
-          "
-          >调整绑定客服</Button
-        >
+        <div class="button_con">
+          <Button
+            type="primary"
+            style="margin-left: .625rem"
+            @click="getOrderInfo()"
+            >查询</Button
+          >
+          <Button
+            type="primary"
+            style="margin-left: .625rem"
+            @click="addgoods()"
+            >录单</Button
+          >
+          <Button
+            type="primary"
+            style="margin-left: .625rem"
+            @click="handleExportClick()"
+            >导出</Button
+          >
+          <Button
+            type="primary"
+            @click="adjustCustomerService()"
+            style="margin-left: 10px"
+            v-if="
+              amiyaPositionId == 1 ||
+                amiyaPositionId == 14 ||
+                amiyaPositionId == 16
+            "
+            >调整绑定客服</Button
+          >
+        </div>
       </div>
     </Card>
     <Card class="container">
@@ -206,10 +211,9 @@
       >
         <Row :gutter="30">
           <Col span="8" v-if="title === '录单'">
-            <FormItem 
-              label="绑定客服" 
+            <FormItem
+              label="绑定客服"
               prop="belongEmpId"
-              
               :rules="[
                 {
                   required: title === '录单' ? true : false,
@@ -221,12 +225,14 @@
                 v-model="form.belongEmpId"
                 placeholder="请选择绑定客服"
                 filterable
-                
                 :disabled="title === '录单编辑'"
               >
-                <Option v-for="item in employeeList" :value="item.id" :key="item.id">{{
-                  item.name
-                }}</Option>
+                <Option
+                  v-for="item in employeeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
               </Select>
             </FormItem>
           </Col>
@@ -422,7 +428,6 @@
           </Col>
         </Row>
         <Row :gutter="30">
-          
           <Col span="12">
             <FormItem label="咨询内容" prop="consultingContent">
               <Input
@@ -557,9 +562,12 @@
       </div>
     </Modal>
     <!-- 查看顾客照片 -->
-    <viewCustomerPhotos :viewCustomerPhotosModel.sync ="viewCustomerPhotosModel" :contentPlatFormOrderId.sync ="contentPlatFormOrderId"></viewCustomerPhotos>
+    <viewCustomerPhotos
+      :viewCustomerPhotosModel.sync="viewCustomerPhotosModel"
+      :contentPlatFormOrderId.sync="contentPlatFormOrderId"
+    ></viewCustomerPhotos>
     <!-- 订单详情 -->
-    <detail :detailModel.sync ="detailModel" :detailList ="detailList"></detail>
+    <detail :detailModel.sync="detailModel" :detailList="detailList"></detail>
   </div>
 </template>
 
@@ -568,28 +576,28 @@ import * as api from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as hospitalManage from "@/api/hospitalManage";
 import upload from "@/components/upload/upload";
-import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue"
+import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import { download } from "@/utils/util";
-import detail from "@/components/contentDetail/detail.vue"
+import detail from "@/components/contentDetail/detail.vue";
 
 export default {
   components: {
     upload,
     viewCustomerPhotos,
-    detail
+    detail,
   },
   data() {
     return {
-      detailList:[],
-      detailModel:false,
+      detailList: [],
+      detailModel: false,
       hospitallist: [{ id: -1, name: "全部预约医院" }],
       // 面诊人
-      consultationNameList:[],
+      consultationNameList: [],
       // 面诊员
-      consultationNameListAll:[{id:-1,name:'全部面诊员'}],
-      // 查看图片 
-      viewCustomerPhotosModel:false,
-      contentPlatFormOrderId:'',
+      consultationNameListAll: [{ id: -1, name: "全部面诊员" }],
+      // 查看图片
+      viewCustomerPhotosModel: false,
+      contentPlatFormOrderId: "",
       customerUploadObj: {
         // 是否开启多图
         multiple: false,
@@ -704,9 +712,11 @@ export default {
         // 顾客照片（最多上传5张）
         customerPictures: [],
         // 录单人员
-        belongEmpId:Number(sessionStorage.getItem("employeeId"))? Number(sessionStorage.getItem("employeeId")) : '',
+        belongEmpId: Number(sessionStorage.getItem("employeeId"))
+          ? Number(sessionStorage.getItem("employeeId"))
+          : "",
         // 面诊人员
-        consultationEmpId:null
+        consultationEmpId: null,
       },
       controlModal: false,
       ruleValidates: {
@@ -785,8 +795,8 @@ export default {
         ],
       },
       query: {
-        appointmentHospital:-1,
-        consultationEmpId:-1,
+        appointmentHospital: -1,
+        consultationEmpId: -1,
         orderSource: -1,
         contentPlatFormId: null,
         liveAnchorId: null,
@@ -897,7 +907,7 @@ export default {
             minWidth: 120,
             align: "center",
           },
-          
+
           {
             title: "咨询内容",
             key: "consultingContent",
@@ -929,7 +939,7 @@ export default {
             minWidth: 140,
             align: "center",
           },
-          
+
           // {
           //   title: "订单类型",
           //   key: "orderTypeText",
@@ -1275,19 +1285,19 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const {id} = params.row
+                        const { id } = params.row;
                         api.byIdContentPlateForm(id).then((res) => {
                           if (res.code === 0) {
-                            this.detailModel = true
-                            const {orderInfo} = res.data;
-                            this.detailList= [orderInfo]
+                            this.detailModel = true;
+                            const { orderInfo } = res.data;
+                            this.detailList = [orderInfo];
                           }
-                        })
+                        });
                       },
                     },
                   },
                   "订单详情"
-              ),
+                ),
                 // h(
                 //   "Button",
                 //   {
@@ -1314,11 +1324,10 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled:params.row.checkStateText==='审核通过'
+                      disabled: params.row.checkStateText === "审核通过",
                     },
                     style: {
                       marginRight: ".3125rem",
-                      
                     },
                     on: {
                       click: () => {
@@ -1348,7 +1357,7 @@ export default {
                               acceptConsulting,
                               orderSource,
                               unSendReason,
-                              consultationEmpId
+                              consultationEmpId,
                             } = res.data.orderInfo;
                             this.contentPlateChange(contentPlateFormId);
                             this.isEdit = true;
@@ -1370,7 +1379,9 @@ export default {
                             this.form.orderSource = orderSource;
                             this.form.unSendReason = unSendReason;
                             this.form.customerPictures = customerPictures;
-                            this.form.belongEmpId = this.form.belongEmpId ? this.form.belongEmpId : '';
+                            this.form.belongEmpId = this.form.belongEmpId
+                              ? this.form.belongEmpId
+                              : "";
                             this.form.consultationEmpId = consultationEmpId;
                             this.customerUploadObj.uploadList = this.form
                               .customerPictures
@@ -1475,14 +1486,17 @@ export default {
         }
       });
     },
-   
+
     //   获取面诊员
     getconsultationNameList() {
       api.consultationNameList().then((res) => {
         if (res.code === 0) {
           const { employee } = res.data;
-          this.consultationNameList = employee
-          this.consultationNameListAll =  [...this.consultationNameListAll,...employee]
+          this.consultationNameList = employee;
+          this.consultationNameListAll = [
+            ...this.consultationNameListAll,
+            ...employee,
+          ];
         }
       });
     },
@@ -1603,7 +1617,7 @@ export default {
         liveAnchorId,
         orderSource,
         consultationEmpId,
-        appointmentHospital
+        appointmentHospital,
       } = this.query;
       const data = {
         keyword,
@@ -1618,8 +1632,9 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         liveAnchorId,
         orderSource,
-        consultationEmpId:consultationEmpId==-1 ? null :consultationEmpId,
-        appointmentHospital:appointmentHospital == -1 ? null :appointmentHospital
+        consultationEmpId: consultationEmpId == -1 ? null : consultationEmpId,
+        appointmentHospital:
+          appointmentHospital == -1 ? null : appointmentHospital,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1765,7 +1780,7 @@ export default {
               unSendReason,
               acceptConsulting,
               customerPictures,
-              consultationEmpId
+              consultationEmpId,
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1810,7 +1825,7 @@ export default {
               acceptConsulting,
               customerPictures,
               belongEmpId,
-              consultationEmpId
+              consultationEmpId,
             } = this.form;
             const data = {
               orderType,
@@ -1833,7 +1848,7 @@ export default {
               acceptConsulting,
               customerPictures,
               belongEmpId,
-              consultationEmpId
+              consultationEmpId,
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1863,7 +1878,7 @@ export default {
     // 取消
     handleCancel(name) {
       this.isEdit = false;
-      this.title = '录单'
+      this.title = "录单";
       this.controlModal = false;
       this.customerUploadObj.uploadList = [];
       this.$refs[name].resetFields();
@@ -1872,7 +1887,7 @@ export default {
     handleModalVisibleChange(value) {
       if (!value) {
         this.isEdit = false;
-        this.title = '录单'
+        this.title = "录单";
         this.customerUploadObj.uploadList = [];
         this.$refs["form"].resetFields();
         this.$refs["recordingForm"].resetFields();
@@ -1909,7 +1924,7 @@ export default {
     // 取消
     cancelSubmit(name) {
       this.isEdit = false;
-      this.title = '录单'
+      this.title = "录单";
       this.recordingModal = false;
       this.adjustCustomerServiceModal = false;
       this.customerUploadObj.uploadList = [];
@@ -1945,7 +1960,7 @@ export default {
         liveAnchorId,
         orderSource,
         consultationEmpId,
-        appointmentHospital
+        appointmentHospital,
       } = this.query;
       const data = {
         keyword,
@@ -1960,8 +1975,9 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         liveAnchorId,
         orderSource,
-        consultationEmpId:consultationEmpId==-1 ? null :consultationEmpId,
-        appointmentHospital:appointmentHospital == -1 ? null :appointmentHospital
+        consultationEmpId: consultationEmpId == -1 ? null : consultationEmpId,
+        appointmentHospital:
+          appointmentHospital == -1 ? null : appointmentHospital,
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -1985,7 +2001,7 @@ export default {
         liveAnchorId,
         orderSource,
         consultationEmpId,
-        appointmentHospital
+        appointmentHospital,
       } = this.query;
       const data = {
         keyword,
@@ -2000,8 +2016,9 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         liveAnchorId,
         orderSource,
-        consultationEmpId:consultationEmpId==-1 ? null :consultationEmpId,
-        appointmentHospital:appointmentHospital == -1 ? null :appointmentHospital
+        consultationEmpId: consultationEmpId == -1 ? null : consultationEmpId,
+        appointmentHospital:
+          appointmentHospital == -1 ? null : appointmentHospital,
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -2022,8 +2039,8 @@ export default {
     this.getCustomerServiceList();
     this.getAmiyaHospitalDepartmentListChange();
     this.getcontentPlateFormOrderSourceList();
-    this.getconsultationNameList()
-    this.getHospitalInfonameList()
+    this.getconsultationNameList();
+    this.getHospitalInfonameList();
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")
@@ -2069,6 +2086,7 @@ export default {
   margin-top: 1rem;
 }
 .head {
+  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -2077,5 +2095,9 @@ export default {
 }
 .left_top {
   margin-bottom: 10px;
+}
+.content1 {
+  display: flex;
+  flex-direction: column;
 }
 </style>

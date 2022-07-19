@@ -1329,6 +1329,91 @@ export default {
             },
           },
           {
+            title: "目标加V量",
+            key: "addWechatTarget",
+            minWidth: 110,
+            align: "center",
+          },
+          {
+            title: "月加V累计",
+            key: "cumulativeAddWechat",
+            minWidth: 110,
+            align: "center",
+          },
+          {
+            title: "加V完成率",
+            key: "addWechatCompleteRate",
+            minWidth: 110,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.addWechatCompleteRate + "%");
+            },
+          },
+          {
+            title: "派单目标",
+            key: "sendOrderTarget",
+            minWidth: 100,
+            align: "center",
+          },
+          {
+            title: "累计派单",
+            key: "cumulativeSendOrder",
+            minWidth: 100,
+            align: "center",
+          },
+          {
+            title: "派单完成率",
+            key: "sendOrderCompleteRate",
+            minWidth: 110,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.sendOrderCompleteRate + "%");
+            },
+          },
+          {
+            title: "成交人数目标",
+            key: "dealTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "累计成交人数",
+            key: "cumulativeDealTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "成交率",
+            key: "dealRate",
+            minWidth: 100,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.dealRate + "%");
+            },
+          },
+          {
+            title: "业绩目标",
+            key: "performanceTarget",
+            minWidth: 100,
+            align: "center",
+          },
+          {
+            title: "月累计业绩金额",
+            key: "cumulativePerformance",
+            minWidth: 140,
+            align: "center",
+          },
+
+          {
+            title: "业绩完成率",
+            key: "performanceCompleteRate",
+            minWidth: 110,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.performanceCompleteRate + "%");
+            },
+          },
+          {
             title: "创建日期",
             key: "createDate",
             minWidth: 170,

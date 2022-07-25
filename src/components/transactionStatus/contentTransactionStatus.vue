@@ -78,6 +78,11 @@
             v-model="confirmForm.toHospitalDate"
           ></DatePicker>
         </FormItem>
+        <FormItem label="是否陪诊" prop="isAcompanying" key="是否陪诊" v-if="confirmForm.isToHospital === true">
+          <i-switch
+            v-model="confirmForm.isAcompanying"
+          />
+        </FormItem>
         <FormItem label="是否成交" prop="isFinish" key="是否成交">
           <i-switch v-model="confirmForm.isFinish" @on-change="switchChange" />
           <!--  @on-change="switchChange"  -->
@@ -147,6 +152,29 @@
             style="width: 100%"
             v-model="confirmForm.DealDate"
           ></DatePicker>
+        </FormItem>
+        <FormItem
+          label="佣金比例"
+          prop="commissionRatio"
+          key="佣金比例"
+          :rules="[
+            {
+              required: true,
+              message: '佣金比例最小为1，最为为100',
+              trigger: 'change',
+              type: 'number',
+              max: 100,
+              min:1
+            },
+          ]"
+          v-if="confirmForm.isFinish === true"
+        >
+          <Input
+            v-model="confirmForm.commissionRatio"
+            placeholder="请输入佣金比例"
+            type="number"
+            number
+          ></Input>
         </FormItem>
         <FormItem
           label="抖店订单号"
@@ -256,9 +284,19 @@ export default {
         // 抖店订单号
         otherContentPlatFormOrderId: "",
         // 到院类型
-        toHospitalType:null
+        toHospitalType:null,
+        // 是否陪诊
+        isAcompanying:false,
+        // 佣金比例
+        commissionRatio:null
       },
       confirmRuleValidate: {
+        commissionRatio: [
+          {
+            required: true,
+            message: "请输入佣金比例",
+          },
+        ],
         unDealReason: [
           {
             required: true,
@@ -354,6 +392,27 @@ export default {
             },
           },
           {
+            title: "是否陪诊",
+            key: "isAcompanying",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isAcompanying,
+                    size: "default",
+                    disabled:
+                      params.row.isAcompanying === true || params.row.isAcompanying === false,
+                  },
+                },
+                h("span", { isAcompanying: "open" }, "开"),
+                h("span", { isAcompanying: "close" }, "关")
+              );
+            },
+          },
+          {
             title: "是否成交",
             key: "isDeal",
             minWidth: 120,
@@ -393,7 +452,39 @@ export default {
             key: "price",
             minWidth: 140,
           },
-
+          {
+            title: "是否为老客",
+            key: "isOldCustomer",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isOldCustomer,
+                    size: "default",
+                    disabled:
+                      params.row.isOldCustomer === true || params.row.isOldCustomer === false,
+                  },
+                },
+                h("span", { isOldCustomer: "open" }, "开"),
+                h("span", { isOldCustomer: "close" }, "关")
+              );
+            },
+          },
+          {
+            title: "佣金比例",
+            key: "commissionRatio",
+            minWidth: 140,
+            render: (h, params) => {
+              return params.row.commissionRatio ? h(
+                    "div",
+                    params.row.commissionRatio + '%'
+                  )
+                : '';
+            }
+          },
           {
             title: "截图",
             key: "dealPicture",
@@ -476,7 +567,9 @@ export default {
                               remark,
                               otherOrderId,
                               dealDate,
-                              toHospitalType
+                              toHospitalType,
+                              isAcompanying,
+                              commissionRatio
                             } = res.data.contentPlatFormOrderDealInfoInfo;
                             this.isEdit = true;
                             this.confirmForm.toHospitalDate = tohospitalDate
@@ -489,6 +582,8 @@ export default {
                             this.confirmForm.isFinish = isDeal;
                             this.confirmForm.lastDealHospitalId = lastDealHospitalId;
                             this.confirmForm.dealPicture = dealPicture;
+                            this.confirmForm.isAcompanying = isAcompanying;
+                            this.confirmForm.commissionRatio = commissionRatio;
                             this.uploadObj.uploadList = this.confirmForm
                               .dealPicture
                               ? [this.confirmForm.dealPicture]
@@ -537,6 +632,7 @@ export default {
       if(this.confirmForm.isToHospital == false){
         this.confirmForm.toHospitalDate = null
         this.confirmForm.toHospitalType = null
+        this.confirmForm.isAcompanying = false
       }
     },
     // 是否成交
@@ -558,6 +654,8 @@ export default {
         this.confirmForm.toHospitalDate = null;
         this.confirmForm.lastDealHospitalId = null;
         this.confirmForm.toHospitalType = null
+        this.confirmForm.isAcompanying = false
+        this.confirmForm.commissionRatio = null
       }
     },
     submiteChange(name) {
@@ -577,7 +675,9 @@ export default {
             unDealPictureUrl,
             DealDate,
             otherContentPlatFormOrderId,
-            toHospitalType
+            toHospitalType,
+            isAcompanying,
+            commissionRatio
           } = this.confirmForm;
           const data = {
             id,
@@ -601,7 +701,9 @@ export default {
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,
             otherContentPlatFormOrderId,
-            toHospitalType:isToHospital == false ? 0 : toHospitalType
+            toHospitalType:isToHospital == false ? 0 : toHospitalType,
+            isAcompanying,
+            commissionRatio
           };
           api.updateContentPlatFormOrderDealInfo(data).then((res) => {
             if (res.code === 0) {

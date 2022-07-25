@@ -14,7 +14,7 @@
             <DatePicker
               type="date"
               placeholder="下单开始日期"
-              style="width: 150px;margin-left: .625rem"
+              style="width: 160px;margin-left: .625rem"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
@@ -22,14 +22,14 @@
             <DatePicker
               type="date"
               placeholder="下单结束日期"
-              style="width: 150px; margin-left: .625rem"
+              style="width: 160px; margin-left: .625rem"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
             <Select
               v-model="query.orderStatus"
               placeholder="请选择订单状态"
-              style="width: 140px;margin-left: .625rem"
+              style="width: 160px;margin-left: .625rem"
             >
               <Option
                 v-for="item in orderStatus"
@@ -155,6 +155,7 @@
             type="primary"
             style="margin-left: .625rem"
             @click="handleExportClick()"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           >
           <Button
@@ -184,7 +185,7 @@
         ></Table>
       </div>
       <div class="page_wrap">
-        <Page
+        <!-- <Page
           ref="pages"
           :current="query.pageNum"
           :page-size="query.pageSize"
@@ -192,6 +193,17 @@
           show-total
           show-elevator
           @on-change="handlePageChange"
+        /> -->
+        <Page
+          ref="pages"
+          :current="query.pageNum"
+          :page-size="query.pageSize"
+          :total="query.totalCount"
+          show-total
+          show-sizer
+          :page-size-opts="[10,20,30,50,100]"
+          @on-change="handlePageChange"
+          @on-page-size-change="handlePageSizeChange"
         />
       </div>
     </Card>
@@ -260,12 +272,30 @@
                 placeholder="请选择主播IP账号"
                 :disabled="form.contentPlateFormId === ''"
                 filterable
+                @on-change="liveAnchorChange(form.liveAnchorId)"
               >
                 <Option
                   v-for="item in liveAnchors"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.hostAccountName }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="主播微信号" prop="liveAnchorWeChatNo">
+              <Select
+                v-model="form.liveAnchorWeChatNo"
+                placeholder="请选择主播微信号"
+                :disabled="form.liveAnchorId === ''"
+                filterable
+              >
+                <Option
+                  v-for="item in weChatList"
+                  :value="item.weChatNo"
+                  :key="item.weChatNo"
+                  >{{ item.weChatNo }}</Option
                 >
               </Select>
             </FormItem>
@@ -575,6 +605,7 @@
 import * as api from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as hospitalManage from "@/api/hospitalManage";
+import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
 import upload from "@/components/upload/upload";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import { download } from "@/utils/util";
@@ -588,6 +619,7 @@ export default {
   },
   data() {
     return {
+      weChatList:[],
       detailList: [],
       detailModel: false,
       hospitallist: [{ id: -1, name: "全部预约医院" }],
@@ -682,6 +714,8 @@ export default {
         contentPlateFormId: "",
         // 主播账号id
         liveAnchorId: "",
+        // 主播微信号
+        liveAnchorWeChatNo:'',
         // 客户昵称
         customerName: "",
         // 手机号
@@ -750,6 +784,12 @@ export default {
             message: "请选择IP账号",
           },
         ],
+        liveAnchorWeChatNo: [
+          {
+            required: true,
+            message: "请选择主播微信号",
+          },
+        ],
         phone: [
           {
             required: true,
@@ -795,6 +835,7 @@ export default {
         ],
       },
       query: {
+        pageNumEdit:1,
         appointmentHospital: -1,
         consultationEmpId: -1,
         orderSource: -1,
@@ -824,7 +865,7 @@ export default {
           {
             title: "订单号",
             key: "id",
-            minWidth: 180,
+            minWidth: 170,
             align: "center",
           },
 
@@ -847,19 +888,19 @@ export default {
           {
             title: "归属客服",
             key: "belongEmpName",
-            minWidth: 120,
+            minWidth: 110,
             align: "center",
           },
           {
             title: "客户昵称",
             key: "customerName",
-            minWidth: 200,
+            minWidth: 150,
             align: "center",
           },
           {
             title: "电话",
             key: "phone",
-            minWidth: 150,
+            minWidth: 120,
             align: "center",
           },
           {
@@ -904,7 +945,7 @@ export default {
           {
             title: "科室",
             key: "departmentName",
-            minWidth: 120,
+            minWidth: 110,
             align: "center",
           },
 
@@ -916,7 +957,7 @@ export default {
           {
             title: "下单时间",
             key: "createDate",
-            minWidth: 180,
+            minWidth: 170,
             align: "center",
             render: (h, params) => {
               return h(
@@ -930,16 +971,21 @@ export default {
           {
             title: "下单平台",
             key: "contentPlatformName",
-            minWidth: 120,
+            minWidth: 110,
             align: "center",
           },
           {
             title: "主播IP账号",
             key: "liveAnchorName",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "主播微信号",
+            key: "liveAnchorWeChatNo",
             minWidth: 140,
             align: "center",
           },
-
           // {
           //   title: "订单类型",
           //   key: "orderTypeText",
@@ -949,7 +995,7 @@ export default {
           {
             title: "订单状态",
             key: "orderStatusText",
-            minWidth: 140,
+            minWidth: 120,
             align: "center",
             render: (h, params) => {
               if (params.row.orderStatusText == "已成交") {
@@ -1024,7 +1070,7 @@ export default {
           {
             title: "订单来源",
             key: "orderSourceText",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
           },
           // {
@@ -1358,8 +1404,10 @@ export default {
                               orderSource,
                               unSendReason,
                               consultationEmpId,
+                              liveAnchorWeChatNo
                             } = res.data.orderInfo;
                             this.contentPlateChange(contentPlateFormId);
+                            this.liveAnchorChange(liveAnchorId)
                             this.isEdit = true;
                             this.form.appointmentHospitalId = appointmentHospitalId;
                             this.form.id = id;
@@ -1379,6 +1427,7 @@ export default {
                             this.form.orderSource = orderSource;
                             this.form.unSendReason = unSendReason;
                             this.form.customerPictures = customerPictures;
+                            this.form.liveAnchorWeChatNo = liveAnchorWeChatNo
                             this.form.belongEmpId = this.form.belongEmpId
                               ? this.form.belongEmpId
                               : "";
@@ -1653,13 +1702,32 @@ export default {
         download(res, name);
       });
     },
+    // 
     contentPlateChange(value) {
       if (!value) {
         return;
       }
       this.getLiveValidList(value);
     },
-
+    //
+    liveAnchorChange(value){
+      if (!value) {
+        return;
+      }
+      this.getWeChatList(value);
+    },
+    //  根据主播获取主播微信号
+    getWeChatList(value){
+      const data = {
+        liveanchorId: value,
+      };
+      liveAnchorApi.getvalidList(data).then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorWechatInfos } = res.data;
+          this.weChatList = liveAnchorWechatInfos;
+        }
+      });
+    },
     // 订单状态
     getContentPlateFormOrderStatusList() {
       api.contentPlateFormOrderStatusList().then((res) => {
@@ -1758,6 +1826,7 @@ export default {
               acceptConsulting,
               customerPictures,
               consultationEmpId,
+              liveAnchorWeChatNo
             } = this.form;
             const data = {
               orderType,
@@ -1781,6 +1850,7 @@ export default {
               acceptConsulting,
               customerPictures,
               consultationEmpId,
+              liveAnchorWeChatNo
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1793,7 +1863,7 @@ export default {
                   this.isEdit = false;
                   this.flag = false;
                   this.handleCancel("form");
-                  this.getOrderInfo();
+                  this.handlePageChange(sessionStorage.getItem('pageNumEdit') ? sessionStorage.getItem('pageNumEdit') : 1);
                   this.$Message.success({
                     content: "修改成功",
                     duration: 3,
@@ -1826,6 +1896,7 @@ export default {
               customerPictures,
               belongEmpId,
               consultationEmpId,
+              liveAnchorWeChatNo
             } = this.form;
             const data = {
               orderType,
@@ -1849,6 +1920,7 @@ export default {
               customerPictures,
               belongEmpId,
               consultationEmpId,
+              liveAnchorWeChatNo
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1946,7 +2018,7 @@ export default {
     // 获取天猫订单信息列表
     getOrderInfo() {
       this.$nextTick(() => {
-        this.$refs["pages"].currentPage = 1;
+        this.$refs["pages"].currentPage = 1
       });
       const {
         keyword,
@@ -1961,6 +2033,7 @@ export default {
         orderSource,
         consultationEmpId,
         appointmentHospital,
+        
       } = this.query;
       const data = {
         keyword,
@@ -2025,8 +2098,14 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrder;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          // 修改时 保留在当前页面
+          sessionStorage.setItem('pageNumEdit',pageNum)
         }
       });
+    },
+    handlePageSizeChange(pageSize){
+      this.query.pageSize = pageSize
+      this.getOrderInfo()
     },
   },
   created() {

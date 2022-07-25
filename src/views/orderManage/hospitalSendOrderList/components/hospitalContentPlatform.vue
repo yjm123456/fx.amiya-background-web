@@ -43,7 +43,7 @@
           :value="query.toHospitalStartDate"
           v-model="query.toHospitalStartDate"
           transfer
-          :disabled="query.IsToHospital != true"
+          :disabled="query.IsToHospital != 'true'"
         ></DatePicker>
         <DatePicker
           type="date"
@@ -52,13 +52,13 @@
           :value="query.toHospitalEndDate"
           v-model="query.toHospitalEndDate"
           transfer
-          :disabled="query.IsToHospital != true"
+          :disabled="query.IsToHospital != 'true'"
         ></DatePicker>
         <Select
           v-model="query.toHospitalType"
           style="width: 160px;margin-left: 10px"
           placeholder="请选择到院类型"
-          :disabled="query.IsToHospital != true"
+          :disabled="query.IsToHospital != 'true'"
           clearable
           filterable
         >
@@ -155,6 +155,11 @@
             style="width:360px"
             transfer
           ></DatePicker>
+        </FormItem>
+        <FormItem label="是否陪诊" prop="isAcompanying" key="是否陪诊" v-if="form.isToHospital == true">
+          <i-switch
+            v-model="form.isAcompanying"
+          />
         </FormItem>
         <FormItem label="是否成交" prop="isFinish" key="是否成交">
           <i-switch v-model="form.isFinish" @on-change="isFinishChange" />
@@ -425,6 +430,8 @@ export default {
         lastDealHospitalId: null,
         toHospitalDate: "",
         toHospitalType: null,
+        // 是否陪诊
+        isAcompanying:false
       },
       imgForm: {
         id: "",
@@ -705,6 +712,27 @@ export default {
             key: "toHospitalTypeText",
             minWidth: 120,
             
+          },
+          {
+            title: "是否陪诊",
+            key: "isAcompanying",
+            minWidth: 120,
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isAcompanying,
+                    size: "default",
+                    disabled:
+                      params.row.isAcompanying === true ||
+                      params.row.isAcompanying === false,
+                  },
+                },
+                h("span", { isAcompanying: "open" }, "开"),
+                h("span", { isAcompanying: "close" }, "关")
+              );
+            },
           },
           {
             title: "主播IP",
@@ -1003,11 +1031,11 @@ export default {
             name: "全部到院状态",
           },
           {
-            id: 1,
+            id: 'true',
             name: "已到院",
           },
           {
-            id: 0,
+            id: 'false',
             name: "未到院",
           },
         ],
@@ -1105,6 +1133,7 @@ export default {
       if (this.form.isToHospital == false) {
         this.form.toHospitalDate = null;
         this.form.toHospitalType = null;
+        this.form.isAcompanying = false
       }
     },
     isFinishChange() {
@@ -1123,6 +1152,7 @@ export default {
         this.noDealuploadObj.uploadList = [];
         this.form.toHospitalDate = null;
         this.form.toHospitalType = null;
+        this.form.isAcompanying =false
       }
     },
     // 内容平台派单 导出
@@ -1133,25 +1163,10 @@ export default {
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
         
-        IsToHospital,
-        toHospitalStartDate:
-          IsToHospital != 1
-            ? null
-            : toHospitalStartDate
-            ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
-            : null,
-        toHospitalEndDate:
-          IsToHospital != 1
-            ? null
-            : toHospitalEndDate
-            ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
-            : null,
-        toHospitalType:
-          IsToHospital != 1
-            ? null
-            : toHospitalType == -1
-            ? null
-            : toHospitalType,
+        IsToHospital:IsToHospital == -1 ? null : IsToHospital,
+        toHospitalStartDate:IsToHospital != 'true'? null: toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD") : null,
+        toHospitalEndDate:IsToHospital != 'true'? null: toHospitalEndDate? this.$moment(toHospitalEndDate).format("YYYY-MM-DD"): null,
+        toHospitalType:IsToHospital != 'true'? null: toHospitalType == false ? null: toHospitalType,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1210,25 +1225,10 @@ export default {
         keyword,
         pageNum,
         pageSize,
-        IsToHospital,
-        toHospitalStartDate:
-          IsToHospital != 1
-            ? null
-            : toHospitalStartDate
-            ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
-            : null,
-        toHospitalEndDate:
-          IsToHospital != 1
-            ? null
-            : toHospitalEndDate
-            ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
-            : null,
-        toHospitalType:
-          IsToHospital != 1
-            ? null
-            : toHospitalType == -1
-            ? null
-            : toHospitalType,
+        IsToHospital:IsToHospital == -1 ? null : IsToHospital,
+        toHospitalStartDate:IsToHospital != 'true'? null: toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD") : null,
+        toHospitalEndDate:IsToHospital != 'true'? null: toHospitalEndDate? this.$moment(toHospitalEndDate).format("YYYY-MM-DD"): null,
+        toHospitalType:IsToHospital != 'true'? null: toHospitalType == false ? null: toHospitalType,
       };
       api.getHospitalContentPlateFormOrder(data).then((res) => {
         if (res.code === 0) {
@@ -1259,25 +1259,10 @@ export default {
         keyword,
         pageNum,
         pageSize,
-        IsToHospital,
-        toHospitalStartDate:
-          IsToHospital != 1
-            ? null
-            : toHospitalStartDate
-            ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
-            : null,
-        toHospitalEndDate:
-          IsToHospital != 1
-            ? null
-            : toHospitalEndDate
-            ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
-            : null,
-        toHospitalType:
-          IsToHospital != 1
-            ? null
-            : toHospitalType == -1
-            ? null
-            : toHospitalType,
+        IsToHospital:IsToHospital == -1 ? null : IsToHospital,
+        toHospitalStartDate:IsToHospital != 'true'? null: toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD") : null,
+        toHospitalEndDate:IsToHospital != 'true'? null: toHospitalEndDate? this.$moment(toHospitalEndDate).format("YYYY-MM-DD"): null,
+        toHospitalType:IsToHospital != 'true'? null: toHospitalType == false ? null: toHospitalType,
       };
       api.getHospitalContentPlateFormOrder(data).then((res) => {
         if (res.code === 0) {
@@ -1326,6 +1311,7 @@ export default {
             lastDealHospitalId,
             toHospitalDate,
             toHospitalType,
+            isAcompanying
           } = this.form;
           const data = {
             id,
@@ -1345,6 +1331,7 @@ export default {
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,
             toHospitalType: isToHospital == false ? 0 : toHospitalType,
+            isAcompanying
           };
           api.finishContentPlateFormOrder(data).then((res) => {
             if (res.code === 0) {

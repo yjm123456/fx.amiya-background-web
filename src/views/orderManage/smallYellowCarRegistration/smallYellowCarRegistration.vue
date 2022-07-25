@@ -182,11 +182,11 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem label="时分" prop="time">
               <TimePicker type="time" placeholder="请选择时分" :value="form.time" v-model="form.time"></TimePicker>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="8">
             <FormItem label="渠道" prop="contentPlatFormId">
               <Select
@@ -204,9 +204,6 @@
               </Select>
             </FormItem>
           </Col>
-          
-        </Row>
-        <Row :gutter="30">
           <Col span="8">
             <FormItem label="主播IP账号" prop="liveAnchorId">
               <Select
@@ -224,6 +221,9 @@
               </Select>
             </FormItem>
           </Col>
+        </Row>
+        <Row :gutter="30">
+          
           <Col span="8">
             <FormItem label="主播微信号" prop="liveAnchorWechatNo">
               <Input
@@ -240,10 +240,7 @@
               ></Input>
             </FormItem>
           </Col>
-         
-        </Row>
-        <Row :gutter="30">
-           <Col span="8">
+          <Col span="8">
             <FormItem label="客户手机号" prop="phone">
               <Input
                 v-model="form.phone"
@@ -254,17 +251,6 @@
           </Col>
           <Col span="8">
             <FormItem label="下单金额" prop="price">
-              <!-- <Select
-                v-model="form.price"
-                placeholder="请选择下单金额"
-              >
-                <Option
-                  v-for="item in priceList"
-                  :value="item.price"
-                  :key="item.price"
-                  >{{ item.price }}</Option
-                >
-              </Select> -->
               <Input
                 v-model="form.price"
                 placeholder="请输入下单金额"
@@ -286,13 +272,14 @@
               </Select>
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
           <Col span="8">
             <FormItem label="是否加V" prop="IsAddWeChat">
               <i-switch v-model="form.IsAddWeChat" />
             </FormItem>
           </Col>
+        </Row>
+        <Row :gutter="30">
+          
           <Col span="8">
             <FormItem label="是否核销" prop="isWriteOff">
               <i-switch v-model="form.isWriteOff" />
@@ -352,23 +339,23 @@ export default {
         pageNum: 1,
         pageSize: 10,
         columns: [
-          {
-            title: "序号",
-            key: "id",
-            minWidth: 200,
-            align: "center",
-          },
+          // {
+          //   title: "序号",
+          //   key: "id",
+          //   minWidth: 200,
+          //   align: "center",
+          // },
           {
             title: "登记日期",
             key: "recordDate",
-            minWidth: 180,
+            minWidth: 110,
             align: "center",
             render: (h, params) => {
               return h(
                 "div",
                 params.row.recordDate
                   ? this.$moment(params.row.recordDate).format(
-                      "YYYY-MM-DD HH:mm:ss"
+                      "YYYY-MM-DD"
                     )
                   : ""
               );
@@ -377,7 +364,7 @@ export default {
           {
             title: "渠道",
             key: "contentPlatFormName",
-            minWidth: 150,
+            minWidth: 110,
             align: "center",
           },
           {
@@ -389,31 +376,31 @@ export default {
           {
             title: "主播微信号",
             key: "liveAnchorWechatNo",
-            minWidth: 180,
+            minWidth: 150,
             align: "center",
           },
           {
             title: "昵称",
             key: "customerNickName",
-            minWidth: 200,
+            minWidth: 150,
             align: "center",
           },
           {
             title: "联系方式",
             key: "phone",
-            minWidth: 160,
+            minWidth: 130,
             align: "center",
           },
           {
             title: "下单金额",
             key: "price",
-            minWidth: 140,
+            minWidth: 130,
             align: "center",
           },
           {
             title: "面诊方式",
             key: "consultationType",
-            minWidth: 200,
+            minWidth: 110,
             align: "center",
             // render:(h,params)=>{
             //   return h(
@@ -463,7 +450,7 @@ export default {
           {
             title: "是否加V",
             key: "isAddWeChat",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             render: (h, params) => {
               if (params.row.isAddWeChat == true) {
@@ -492,7 +479,7 @@ export default {
           {
             title: "是否核销",
             key: "isWriteOff",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             render: (h, params) => {
               if (params.row.isWriteOff == true) {
@@ -521,7 +508,7 @@ export default {
           {
             title: "是否面诊",
             key: "isConsultation",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             render: (h, params) => {
               if (params.row.isConsultation == true) {
@@ -551,7 +538,7 @@ export default {
           {
             title: "是否退款",
             key: "isReturnBackPrice",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             render: (h, params) => {
               if (params.row.isReturnBackPrice == true) {
@@ -586,13 +573,13 @@ export default {
           {
             title: "创建人",
             key: "createBy",
-            minWidth: 150,
+            minWidth: 120,
             align: "center",
           },
           {
             title: "创建日期",
             key: "createDate",
-            minWidth: 180,
+            minWidth: 170,
             align: "center",
             render: (h, params) => {
               return h(

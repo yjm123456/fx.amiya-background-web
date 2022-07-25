@@ -7,7 +7,7 @@
             <DatePicker
               type="date"
               placeholder="开始日期"
-              style="width: 130px;"
+              style="width: 150px;"
               :value="query.startDate"
               v-model="query.startDate"
               transfer
@@ -15,7 +15,7 @@
             <DatePicker
               type="date"
               placeholder="结束日期"
-              style="width: 130px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               :value="query.endDate"
               v-model="query.endDate"
               transfer
@@ -80,7 +80,7 @@
           </Select>
           <Select
             v-model="query.employeeId"
-            style="width: 150px;margin-left: 10px"
+            style="width: 200px;margin-left: 10px"
             v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
             placeholder="请选择客服"
             filterable
@@ -92,7 +92,7 @@
           <Select
             v-model="query.consultationEmpId"
             placeholder="请选择面诊员"
-            style="width: 160px;margin-left: 10px"
+            style="width: 180px;margin-left: 10px"
             filterable
           >
             <Option
@@ -104,7 +104,7 @@
           </Select>
           <Select
             v-model="query.orderSource"
-            style="width: 160px;margin-left: 10px"
+            style="width: 150px;margin-left: 10px"
             placeholder="请选择订单状态"
           >
             <Option

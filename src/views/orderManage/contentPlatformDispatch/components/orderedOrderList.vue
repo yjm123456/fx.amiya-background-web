@@ -7,13 +7,21 @@
             <Input
               v-model="query.keyword"
               placeholder="请输入关键词"
-              style="width:200px;margin-left: 10px"
+              style="width:200px;"
+              @keyup.enter.native="getSendOrderInfo()"
+            />
+            <Input
+              v-model="query.commissionRatio"
+              placeholder="请输入佣金比例"
+              type="number"
+              number
+              style="width:160px;margin-left: 10px"
               @keyup.enter.native="getSendOrderInfo()"
             />
             <DatePicker
               type="date"
               placeholder="派单开始日期"
-              style="width: 140px;margin-left: 10px"
+              style="width: 160px;margin-left: 10px"
               :value="query.startDate"
               v-model="query.startDate"
               transfer
@@ -21,7 +29,7 @@
             <DatePicker
               type="date"
               placeholder="派单结束日期"
-              style="width: 140px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               :value="query.endDate"
               v-model="query.endDate"
               transfer
@@ -41,27 +49,27 @@
             <DatePicker
               type="date"
               placeholder="到院开始日期"
-              style="width: 140px;margin-left: 10px"
+              style="width: 150px;margin-left: 10px"
               :value="query.toHospitalStartDate"
               v-model="query.toHospitalStartDate"
               transfer
-              :disabled="query.IsToHospital!=true"
+              :disabled="query.IsToHospital!='true'"
               
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="到院结束日期"
-              style="width: 140px; margin-left: 10px"
+              style="width: 150px; margin-left: 10px"
               :value="query.toHospitalEndDate"
               v-model="query.toHospitalEndDate"
               transfer
-              :disabled="query.IsToHospital!=true"
+              :disabled="query.IsToHospital!='true'"
             ></DatePicker>
             <Select
               v-model="query.toHospitalType"
               style="width: 160px;margin-left: 10px"
               placeholder="请选择到院类型"
-              :disabled="query.IsToHospital!=true"
+              :disabled="query.IsToHospital!='true'"
               clearable
               filterable
             >
@@ -72,10 +80,11 @@
                 >{{ item.orderTypeText }}</Option
               >
             </Select>
-            
+          </div>
+          <div>
             <Select
               v-model="query.contentPlatFormId"
-              style="width: 180px;margin-left: 10px"
+              style="width: 200px;"
               placeholder="请选择(订单)下单平台"
               filterable
             >
@@ -86,13 +95,9 @@
                 >{{ item.contentPlatformName }}</Option
               >
             </Select>
-            
-            
-          </div>
-          <div>
             <Select
               v-model="query.orderStatus"
-              style="width: 150px;margin-left: 10px"
+              style="width: 160px;margin-left: 10px"
               placeholder="请选择订单状态"
               filterable
             >
@@ -105,8 +110,7 @@
             </Select>
             <Select
               v-model="query.orderSource"
-              style="width: 150px;margin-left: 10px"
-              placeholder="请选择订单状态"
+              style="width: 160px;margin-left: 10px"
             >
               <Option
                 v-for="item in orderSourcesListAll"
@@ -175,7 +179,7 @@
             </Select>
             <Select
               v-model="query.sendBy"
-              style="width: 150px;margin-left: 10px"
+              style="width: 160px;margin-left: 10px"
               placeholder="请选择派单客服"
               filterable
               transfer
@@ -184,6 +188,32 @@
                 v-for="item in dispatchEmployee"
                 :value="item.id"
                 :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
+          <div style="margin-top:10px">
+            <Select
+              v-model="query.isAcompanying"
+              style="width: 160px"
+              placeholder="请选择陪诊状态"
+            >
+              <Option
+                v-for="item in query.isAcompanyingList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.isOldCustomer"
+              style="width: 160px;margin-left:10px"
+              placeholder="请选择新老客业绩状态"
+            >
+              <Option
+                v-for="item in query.isOldCustomerList"
+                :value="item.type"
+                :key="item.type"
                 >{{ item.name }}</Option
               >
             </Select>
@@ -355,6 +385,11 @@
             transfer
           ></DatePicker>
         </FormItem>
+        <FormItem label="是否陪诊" prop="isAcompanying" key="是否陪诊" v-if="confirmForm.isToHospital === true">
+          <i-switch
+            v-model="confirmForm.isAcompanying"
+          />
+        </FormItem>
         <FormItem label="是否成交" prop="isFinish" key="是否成交">
           <i-switch v-model="confirmForm.isFinish" @on-change="switchChange" />
         </FormItem>
@@ -418,6 +453,29 @@
             style="width: 100%"
             v-model="confirmForm.DealDate"
           ></DatePicker>
+        </FormItem>
+        <FormItem
+          label="佣金比例"
+          prop="commissionRatio"
+          key="佣金比例"
+          v-if="confirmForm.isFinish === true"
+          :rules="[
+            {
+              required: true,
+              message: '佣金比例最小为1，最为为100',
+              trigger: 'change',
+              type: 'number',
+              max: 100,
+              min:1
+            },
+          ]"
+        >
+          <Input
+            v-model="confirmForm.commissionRatio"
+            placeholder="请输入佣金比例"
+            type="number"
+            number
+          ></Input>
         </FormItem>
         <FormItem
           label="抖店订单号"
@@ -574,7 +632,11 @@ export default {
         // 抖店订单号
         otherContentPlatFormOrderId:'',
         // 到院类型
-        toHospitalType:null
+        toHospitalType:null,
+        // 是否陪诊
+        isAcompanying:false,
+        // 佣金比例
+        commissionRatio:null
       },
       confirmRuleValidate: {
         unDealReason: [
@@ -589,6 +651,12 @@ export default {
             required: true,
             message: "请输入成交金额",
             trigger: "blur",
+          },
+        ],
+        commissionRatio: [
+          {
+            required: true,
+            message: "请输入佣金比例",
           },
         ],
         DealDate: [
@@ -619,6 +687,12 @@ export default {
       employee: [{ name: "全部归属客服", id: -1 }],
       dispatchEmployee:[{ name: "全部派单客服", id: -1 }],
       query: {
+        // 陪诊
+        isAcompanying:-1,
+        // 新老客业绩
+        isOldCustomer:-1,
+        // 佣金比例
+        commissionRatio:null,
         toHospitalType:-1,
         toHospitalStartDate:"",
         toHospitalEndDate:"",
@@ -635,13 +709,43 @@ export default {
             name: "全部到院状态",
           },
           {
-            id: 1,
+            id: 'true',
             name: "已到院",
           },
           {
-            id: 0,
+            id: 'false',
             name: "未到院",
           },
+        ],
+        // 是否陪诊
+        isAcompanyingList:[
+          {
+            type:-1,
+            name:'全部陪诊状态'
+          },
+          {
+            type:'true',
+            name:'是'
+          },
+          {
+            type:'false',
+            name:'否'
+          }
+        ],
+        // 是否为老客
+        isOldCustomerList:[
+          {
+            type:-1,
+            name:'全部新老客业绩'
+          },
+          {
+            type:'true',
+            name:'老客'
+          },
+          {
+            type:'false',
+            name:'新客'
+          }
         ],
         IsToHospital: -1,
         // 用于筛选的下拉框
@@ -923,6 +1027,31 @@ export default {
                   )
                 : "";
             },
+          },
+          {
+            title: "是否陪诊",
+            minWidth: 100,
+            key: "isAcompanying",
+            align:'center',
+          },
+          {
+            title: "新老客业绩",
+            minWidth: 120,
+            key: "isOldCustomer",
+            align:'center',
+          },
+          {
+            title: "佣金比例",
+            minWidth: 100,
+            key: "commissionRatio",
+            align:'center',
+            render: (h, params) => {
+              return params.row.commissionRatio ? h(
+                    "div",
+                    params.row.commissionRatio + '%'
+                  )
+                : '';
+            }
           },
           // {
           //   title: "成交凭证",
@@ -1451,6 +1580,7 @@ export default {
       if(this.confirmForm.isToHospital == false){
         this.confirmForm.toHospitalDate = null
         this.confirmForm.toHospitalType = null
+        this.confirmForm.isAcompanying = false
       }
     },
     switchChange() {
@@ -1470,6 +1600,8 @@ export default {
         this.noDealuploadObj.uploadList = [];
         this.confirmForm.toHospitalDate = null
         this.confirmForm.toHospitalType = null
+        this.confirmForm.commissionRatio = ''
+        this.confirmForm.isAcompanying = false
       }
     },
     // 图片
@@ -1493,7 +1625,9 @@ export default {
             lastDealHospitalId,
             toHospitalDate,
             otherContentPlatFormOrderId,
-            toHospitalType
+            toHospitalType,
+            isAcompanying,
+            commissionRatio
           } = this.confirmForm;
           const data = {
             id,
@@ -1513,7 +1647,9 @@ export default {
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,
               otherContentPlatFormOrderId,
-            toHospitalType:isToHospital == false ? 0 : toHospitalType
+            toHospitalType:isToHospital == false ? 0 : toHospitalType,
+            isAcompanying,
+            commissionRatio
           };
           api.finishContentPlateFormOrderByEmployee(data).then((res) => {
             if (res.code === 0) {
@@ -1630,7 +1766,10 @@ export default {
         sendBy,
         toHospitalStartDate,
         toHospitalEndDate,
-        toHospitalType
+        toHospitalType,
+        isAcompanying,
+        isOldCustomer,
+        commissionRatio
 
       } = this.query;
       const data = {
@@ -1639,8 +1778,8 @@ export default {
         // toHospitalStartDate: toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null,
         // toHospitalEndDate: toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null,
         // IsToHospital != 1的时候是未到院和全部到院状态  传null  等于1的时候是已到院穿时间和状态
-        toHospitalStartDate:IsToHospital != 1 ? null : (toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null),
-        toHospitalEndDate:IsToHospital != 1 ? null : (toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null),
+        toHospitalStartDate:IsToHospital != 'true' ? null : (toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null),
+        toHospitalEndDate:IsToHospital != 'true' ? null : (toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null),
         keyword,
         pageNum,
         pageSize,
@@ -1648,12 +1787,15 @@ export default {
         orderStatus,
         contentPlatFormId,
         hospitalId: hospitalIds,
-        IsToHospital,
+        IsToHospital:IsToHospital == -1 ? null : IsToHospital,
         liveAnchorId,
         orderSource,
         consultationEmpId:consultationEmpId==-1?null:consultationEmpId,
         sendBy:sendBy==-1?null : sendBy,
-        toHospitalType:IsToHospital != 1 ? null : (toHospitalType == -1 ? null : toHospitalType)
+        toHospitalType:IsToHospital != 'true' ? null : (toHospitalType == -1 ? null : toHospitalType),
+        isAcompanying:isAcompanying == -1 ? null : isAcompanying,
+        isOldCustomer:isOldCustomer == -1 ? null : isOldCustomer,
+        commissionRatio
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -1681,15 +1823,19 @@ export default {
         consultationEmpId,
         sendBy,
         toHospitalStartDate,
-        toHospitalEndDate
+        toHospitalEndDate,
+        toHospitalType,
+        isAcompanying,
+        isOldCustomer,
+        commissionRatio
+
       } = this.query;
       const data = {
-        startDate: startDate
-          ? this.$moment(startDate).format("YYYY-MM-DD")
-          : null,
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        toHospitalStartDate: toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null,
-        toHospitalEndDate: toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null,
+        // IsToHospital != TRUE的时候是未到院和全部到院状态  传null  等于TRUE的时候是已到院穿时间和状态
+        toHospitalStartDate:IsToHospital != 'true' ? null : (toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null),
+        toHospitalEndDate:IsToHospital != 'true' ? null : (toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null),
         keyword,
         pageNum,
         pageSize,
@@ -1697,11 +1843,15 @@ export default {
         orderStatus,
         contentPlatFormId,
         hospitalId: hospitalIds,
-        IsToHospital,
+        IsToHospital:IsToHospital == -1 ? null : IsToHospital,
         liveAnchorId,
         orderSource,
         consultationEmpId:consultationEmpId==-1?null:consultationEmpId,
-        sendBy:sendBy==-1?null : sendBy
+        sendBy:sendBy==-1?null : sendBy,
+        toHospitalType:IsToHospital != 'true' ? null : (toHospitalType == -1 ? null : toHospitalType),
+        isAcompanying:isAcompanying == -1 ? null : isAcompanying,
+        isOldCustomer:isOldCustomer == -1 ? null : isOldCustomer,
+        commissionRatio
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {

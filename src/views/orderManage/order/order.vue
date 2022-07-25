@@ -96,13 +96,14 @@
         </div>
         <div class="head_right">
           <Button type="primary" style="margin-left: .625rem" @click="getOrderInfo()">查询</Button>
-          <!-- 导出 -->
+          <!-- 导出 
+            v-if="amiyaPositionId==1"-->
           <span
           ><Button
             type="primary"
             style="margin-left: .625rem"
             @click="handleExportClick()"
-            v-if="amiyaPositionId==1"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           ></span>
           <Button type="primary" style="margin-left: .625rem" @click="recordingChange()">录单</Button>

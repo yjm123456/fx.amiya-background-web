@@ -845,7 +845,7 @@ export default {
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
                             this.form.operationEmployeeId = operationEmployeeId;
-                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
+                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId== 0 ? null : netWorkConsultingEmployeeId;
                             this.form.todaySendNum = todaySendNum;
                             this.form.flowInvestmentNum = flowInvestmentNum;
                             this.form.addWechatNum = addWechatNum;
@@ -1067,6 +1067,13 @@ export default {
       },
 
       ruleValidate: {
+        
+        netWorkConsultingEmployeeId: [
+          {
+            required: true,
+            message: "请选择网咨人员",
+          },
+        ],
         livingTrackingEmployeeId: [
           {
             required: true,

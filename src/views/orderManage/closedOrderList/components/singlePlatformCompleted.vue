@@ -466,10 +466,10 @@ export default {
           {
             title: "回款时间",
             key: "returnBackDate",
-            minWidth: 170,
+            minWidth: 110,
             align:'center',
             render: (h, params) => {
-              return params.row.returnBackDate ? h("div",this.$moment(params.row.returnBackDate).format("YYYY-MM-DD HH:mm:ss")) : '';
+              return params.row.returnBackDate ? h("div",this.$moment(params.row.returnBackDate).format("YYYY-MM-DD ")) : '';
             },
           },
           {

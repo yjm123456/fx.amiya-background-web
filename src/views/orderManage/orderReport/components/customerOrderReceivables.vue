@@ -53,7 +53,7 @@
         >
       </Select>
       <Button type="primary" style="margin:0 10px" @click="getcustomerOrderReceivableReports">查询</Button>
-      <Button type="primary" @click="exportsendOrder">导出</Button>
+      <Button type="primary" @click="exportsendOrder"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
       <Card class="container">
         <div>
             <Table border :columns="query.columns" :data="query.data" :span-method="handleSpan" height="700"></Table>

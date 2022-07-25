@@ -75,7 +75,7 @@
             >
           </Select>
       <Button type="primary" style="margin:0 10px" @click="ContentPlatFormOrderDealReport">查询</Button>
-      <Button type="primary" @click="exportsendOrder">导出</Button>
+      <Button type="primary" @click="exportsendOrder"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
       <Card class="container">
         <div>
             <Table border :columns="query.columns" :data="query.data" height="700"></Table>
@@ -195,6 +195,11 @@ export default {
             key: "liveAnchorName",
             minWidth: 130,
           },
+          {
+            title: "主播微信号",
+            key: "liveAnchorWeChatNo",
+            minWidth: 160,
+          },
           
           {
             title: "订单类型",
@@ -277,6 +282,28 @@ export default {
             title: "后期铺垫",
             key: "lateProjectStage",
             minWidth:300,
+          },
+          {
+            title: "新老客业绩",
+            minWidth: 120,
+            key: "isOldCustomer",
+          },
+          {
+            title: "是否陪诊",
+            minWidth: 100,
+            key: "isAcompanying",
+          },
+          {
+            title: "佣金比例",
+            minWidth: 100,
+            key: "commissionRatio",
+            render: (h, params) => {
+              return params.row.commissionRatio ? h(
+                    "div",
+                    params.row.commissionRatio + '%'
+                  )
+                : '';
+            }
           },
           {
             title: "备注",

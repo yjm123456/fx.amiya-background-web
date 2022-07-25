@@ -75,7 +75,7 @@
                   @click="getCustomerServiceDispatchedOrders(1)"
                   >查询</Button
                 >
-                <Button type="primary" @click="exportsendOrder">导出</Button>
+                <Button type="primary" @click="exportsendOrder"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
               </div>
               <Table
                 border
@@ -94,20 +94,28 @@
                       <DatePicker
                         type="date"
                         placeholder="派单开始日期"
-                        style="width: 150px; margin-left: 10px"
+                        style="width: 160px; margin-left: 10px"
                         :value="contentInfo.startDate"
                         v-model="contentInfo.startDate"
                       ></DatePicker>
                       <DatePicker
                         type="date"
                         placeholder="派单结束日期"
-                        style="width: 150px; margin-left: 10px"
+                        style="width: 160px; margin-left: 10px"
                         :value="contentInfo.endDate"
                         v-model="contentInfo.endDate"
                       ></DatePicker>
+                      <Input
+                        v-model="contentInfo.commissionRatio"
+                        placeholder="请输入佣金比例"
+                        type="number"
+                        number
+                        style="width:160px;margin-left: 10px"
+                        @keyup.enter.native="getcustomerunContentPlatFormSendOrderList(2)"
+                      />
                       <Select
                         v-model="contentInfo.employeeId"
-                        style="width: 150px;margin-left: 10px"
+                        style="width: 160px;margin-left: 10px"
                         placeholder="请选择派单客服"
                         filterable
                         :disabled="contentInfo.isDisabled == true"
@@ -121,7 +129,7 @@
                       </Select>
                       <Select
                         v-model="contentInfo.belongEmpId"
-                        style="width: 150px;margin-left: 10px"
+                        style="width: 160px;margin-left: 10px"
                         placeholder="请选择归属客服"
                         filterable
                         :disabled="contentInfo.isDisabled == true"
@@ -163,6 +171,18 @@
                           >{{ item.hostAccountName }}</Option
                         >
                       </Select>
+                      <Select
+                        v-model="contentInfo.orderStatus"
+                        placeholder="请选择订单状态"
+                        style="width:160px;margin-left:10px"
+                      >
+                        <Option
+                          v-for="(item, c) in contentInfo.orderStatusList"
+                          :value="item.orderStatus"
+                          :key="c"
+                          >{{ item.orderStatusText }}</Option
+                        >
+                      </Select>
                     </div>
                     <div>
                       <Select
@@ -180,26 +200,26 @@
                       <DatePicker
                         type="date"
                         placeholder="到院开始日期"
-                        style="width: 140px;margin-left: 10px"
+                        style="width: 160px;margin-left: 10px"
                         :value="contentInfo.toHospitalStartDate"
                         v-model="contentInfo.toHospitalStartDate"
                         transfer
-                        :disabled="contentInfo.IsToHospital != true"
+                        :disabled="contentInfo.IsToHospital != 'true'"
                       ></DatePicker>
                       <DatePicker
                         type="date"
                         placeholder="到院结束日期"
-                        style="width: 140px; margin-left: 10px"
+                        style="width: 160px; margin-left: 10px"
                         :value="contentInfo.toHospitalEndDate"
                         v-model="contentInfo.toHospitalEndDate"
                         transfer
-                        :disabled="contentInfo.IsToHospital != true"
+                        :disabled="contentInfo.IsToHospital != 'true'"
                       ></DatePicker>
                       <Select
                         v-model="contentInfo.toHospitalType"
                         style="width: 160px;margin-left: 10px"
                         placeholder="请选择到院类型"
-                        :disabled="contentInfo.IsToHospital != true"
+                        :disabled="contentInfo.IsToHospital != 'true'"
                         clearable
                         filterable
                       >
@@ -210,7 +230,30 @@
                           >{{ item.orderTypeText }}</Option
                         >
                       </Select>
-
+                      <Select
+                        v-model="contentInfo.isAcompanying"
+                        style="width: 160px;margin-left:10px"
+                        placeholder="请选择陪诊状态"
+                      >
+                        <Option
+                          v-for="item in contentInfo.isAcompanyingList"
+                          :value="item.type"
+                          :key="item.type"
+                          >{{ item.name }}</Option
+                        >
+                      </Select>
+                      <Select
+                        v-model="contentInfo.isOldCustomer"
+                        style="width: 160px;margin-left:10px"
+                        placeholder="请选择新老客业绩状态"
+                      >
+                        <Option
+                          v-for="item in contentInfo.isOldCustomerList"
+                          :value="item.type"
+                          :key="item.type"
+                          >{{ item.name }}</Option
+                        >
+                      </Select>
                       <Select
                         v-model="contentInfo.hospitalId"
                         style="width: 200px;margin-left: 10px"
@@ -224,20 +267,8 @@
                           >{{ item.name }}</Option
                         >
                       </Select>
-
-                      <Select
-                        v-model="contentInfo.orderStatus"
-                        placeholder="请选择订单状态"
-                        style="width:140px;margin-left:10px"
-                      >
-                        <Option
-                          v-for="(item, c) in contentInfo.orderStatusList"
-                          :value="item.orderStatus"
-                          :key="c"
-                          >{{ item.orderStatusText }}</Option
-                        >
-                      </Select>
                     </div>
+                  
                   </div>
                   <div class="content_right">
                     <Button
@@ -246,7 +277,7 @@
                       @click="getcustomerunContentPlatFormSendOrderList(2)"
                       >查询</Button
                     >
-                    <Button type="primary" @click="exportContent">导出</Button>
+                    <Button type="primary" @click="exportContent"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
                   </div>
                 </div>
               </div>
@@ -485,6 +516,12 @@ export default {
       },
       // 内容平台
       contentInfo: {
+        // 是否陪诊
+        isAcompanying:-1,
+        // 新老客业绩
+        isOldCustomer:-1,
+        // 佣金比例
+        commissionRatio:null,
         hospitalId: -1,
         // 是否禁用
         isDisabled: false,
@@ -521,13 +558,43 @@ export default {
             name: "全部到院状态",
           },
           {
-            id: 1,
+            id: 'true',
             name: "已到院",
           },
           {
-            id: 0,
+            id: 'false',
             name: "未到院",
           },
+        ],
+        // 是否陪诊
+        isAcompanyingList:[
+          {
+            type:-1,
+            name:'全部陪诊状态'
+          },
+          {
+            type:'true',
+            name:'是'
+          },
+          {
+            type:'false',
+            name:'否'
+          }
+        ],
+        // 是否为老客
+        isOldCustomerList:[
+          {
+            type:-1,
+            name:'全部新老客业绩'
+          },
+          {
+            type:'true',
+            name:'老客'
+          },
+          {
+            type:'false',
+            name:'新客'
+          }
         ],
         IsToHospital: -1,
         columns: [
@@ -605,15 +672,33 @@ export default {
             align: "center",
           },
           {
+            title: "主播微信号",
+            key: "liveAnchorWeChatNo",
+            minWidth: 160,
+            align: "center",
+          },
+          {
             title: "项目",
             key: "goodsName",
             minWidth: 160,
             align: "center",
           },
           {
+            title: "新老客业绩",
+            key: "isOldCustomer",
+            minWidth: 150,
+            align: "center",
+          },
+          {
             title: "客户姓名",
             key: "customerName",
             minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "是否陪诊",
+            key: "isAcompanying",
+            minWidth: 120,
             align: "center",
           },
           {
@@ -651,6 +736,19 @@ export default {
             key: "dealAmount",
             minWidth: 140,
             align: "center",
+          },
+          {
+            title: "佣金比例",
+            key: "commissionRatio",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return params.row.commissionRatio ? h(
+                    "div",
+                    params.row.commissionRatio + '%'
+                  )
+                : '';
+            }
           },
           // {
           //   title: "成交时间",
@@ -945,6 +1043,9 @@ export default {
         toHospitalEndDate,
         IsToHospital,
         toHospitalType,
+        isAcompanying,
+        isOldCustomer,
+        commissionRatio
       } = this.contentInfo;
       const data = {
         startDate: startDate
@@ -957,25 +1058,28 @@ export default {
         orderStatus,
         belongEmpId,
         hospitalId: hospitalId == -1 ? null : hospitalId,
-        IsToHospital,
+        IsToHospital:IsToHospital== -1 ? null : IsToHospital,
         toHospitalStartDate:
-          IsToHospital != 1
+          IsToHospital != 'true'
             ? null
             : toHospitalStartDate
             ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
             : null,
         toHospitalEndDate:
-          IsToHospital != 1
+          IsToHospital != 'true'
             ? null
             : toHospitalEndDate
             ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
             : null,
         toHospitalType:
-          IsToHospital != 1
+          IsToHospital != 'true'
             ? null
             : toHospitalType == -1
             ? null
             : toHospitalType,
+        isAcompanying: isAcompanying == -1 ? null : isAcompanying,
+        isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
+        commissionRatio
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择派单日期");
@@ -1014,6 +1118,9 @@ export default {
         toHospitalEndDate,
         IsToHospital,
         toHospitalType,
+        isAcompanying,
+        isOldCustomer,
+        commissionRatio
       } = this.contentInfo;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
@@ -1023,25 +1130,28 @@ export default {
         liveAnchorId,
         orderStatus,
         belongEmpId,
-        IsToHospital,
+        IsToHospital:IsToHospital==-1?null:IsToHospital,
         toHospitalStartDate:
-          IsToHospital != 1
+          IsToHospital != 'true'
             ? null
             : toHospitalStartDate
             ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
             : null,
         toHospitalEndDate:
-          IsToHospital != 1
+          IsToHospital != 'true'
             ? null
             : toHospitalEndDate
             ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
             : null,
         toHospitalType:
-          IsToHospital != 1
+          IsToHospital != 'true'
             ? null
             : toHospitalType == -1
             ? null
             : toHospitalType,
+        isAcompanying: isAcompanying == -1 ? null : isAcompanying,
+        isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
+        commissionRatio
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择派单日期");

@@ -48,7 +48,7 @@
                   @click="getCustomerServiceUnDispatch(1)"
                   >查询</Button
                 >
-                <Button type="primary" @click="exportsendOrder">导出</Button>
+                <Button type="primary" @click="exportsendOrder"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
               </div>
               <Table
                 border
@@ -137,7 +137,7 @@
                   @click="getcustomerunContentPlatFormSendOrderList(2)"
                   >查询</Button
                 >
-                <Button type="primary" @click="exportContent">导出</Button>
+                <Button type="primary" @click="exportContent"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
               </div>
               <Table
                 border

@@ -46,6 +46,30 @@ const employeeManage = [{
         component: () =>
             import ("@/views/employeeManage/iPAccount/iPAccount.vue"),
     },
+    {
+        path: "/anchorWechat",
+        name: "anchorWechat",
+        meta: {
+            title: "主播微信号",
+            keepAlive: false,
+            isTag: true,
+            openName: ['员工管理'],
+        },
+        component: () =>
+            import ("@/views/employeeManage/anchorWechat/anchorWechat.vue"),
+    },
+    {
+        path: "/anchor",
+        name: "anchor",
+        meta: {
+            title: "主播",
+            keepAlive: false,
+            isTag: true,
+            openName: ['员工管理'],
+        },
+        component: () =>
+            import ("@/views/employeeManage/anchor/anchor.vue"),
+    },
 ];
 
 /**
@@ -527,6 +551,20 @@ const orderManage = [{
                 "@/views/orderManage/privateDomainOperationData/privateDomainOperationData.vue"
             ),
     },
+    {
+        path: "/hospitalCustomerOrder",
+        name: "hospitalCustomerOrder",
+        meta: {
+            title: "医院客户订单",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/hospitalCustomerOrder/hospitalCustomerOrder.vue"
+            ),
+    },
 ];
 
 /**
@@ -651,6 +689,18 @@ const customerManage = [{
         },
         component: () =>
             import ("@/views/customerManage/assistInfollowUp/assistInfollowUp.vue"),
+    },
+    {
+        path: "/hospitalClients",
+        name: "hospitalClients",
+        meta: {
+            title: "三方医院客户",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/hospitalClients/hospitalClients.vue"),
     },
 ];
 

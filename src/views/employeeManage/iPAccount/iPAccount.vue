@@ -70,7 +70,7 @@
       </div>
     </Card>
 
-    <Modal v-model="controlModal" :title="title" :mask-closable="false" @on-visible-change="handleModalVisibleChange">
+    <Modal v-model="controlModal" :title="title" :mask-closable="false" @on-visible-change="handleModalVisibleChange" >
       <Form
         ref="form"
         :model="form"
@@ -98,6 +98,20 @@
             >
           </Select>
         </FormItem>
+        <FormItem label="绑定主播基础信息" prop="liveAnchorBaseId">
+          <Select
+            v-model="form.liveAnchorBaseId"
+            placeholder="请选择主播"
+            filterable
+          >
+            <Option
+              v-for="item in liveAnchorBaseInfoValidList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
         <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
           <i-switch v-model="form.valid" />
         </FormItem>
@@ -112,6 +126,7 @@
 <script>
 import * as api from "@/api/employeeManage";
 import * as apis from "@/api/baseDataMaintenance";
+import * as anchorApi from "@/api/liveAnchorBaseInfo";
 export default {
   data() {
     return {
@@ -252,6 +267,8 @@ export default {
           name:'无效'
         }
        ],
+      // 主播基础信息
+      liveAnchorBaseInfoValidList:[],
       // 平台
         contentPalteForms:[],
       // 控制 modal
@@ -273,9 +290,17 @@ export default {
         id: "",
         // 是否有效
         valid: true,
+        // 主播基础信息id
+        liveAnchorBaseId:''
       },
 
       ruleValidate: {
+        liveAnchorBaseId: [
+          {
+            required: true,
+            message: "请选择主播",
+          },
+        ],
         name: [
           {
             required: true,
@@ -298,6 +323,15 @@ export default {
     };
   },
   methods: {
+  // 获取主播基础信息（下拉框）
+    getLiveAnchorBaseInfoValidList(){
+      anchorApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorBaseInfos } = res.data;
+          this.liveAnchorBaseInfoValidList = liveAnchorBaseInfos;
+        }
+      });
+    },
     // 获取平台列表（下拉框）
     getProvince(){
       apis.getContentPlatFormValidList().then((res) => {
@@ -358,7 +392,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { id, name, valid , hostAccountName , contentPlateFormId} = this.form;
+          const { id, name, valid , hostAccountName , contentPlateFormId,liveAnchorBaseId} = this.form;
           if (this.isEdit) {
             // 修改
             const data = {
@@ -366,7 +400,8 @@ export default {
               name,
               valid,
               hostAccountName , 
-              contentPlateFormId
+              contentPlateFormId,
+              liveAnchorBaseId
             };
             api.editLiveAnchor(data).then((res) => {
               if (res.code === 0) {
@@ -385,7 +420,8 @@ export default {
               name,
               contentPlateFormId , 
               hostAccountName,
-              valid
+              valid,
+              liveAnchorBaseId
             };
             api.AddLiveAnchor(data).then((res) => {
               if (res.code === 0) {
@@ -412,6 +448,7 @@ export default {
   created() {
     this.getIpAccount();
     this.getProvince()
+    this.getLiveAnchorBaseInfoValidList()
   },
 };
 </script>

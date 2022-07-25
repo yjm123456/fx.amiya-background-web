@@ -8,7 +8,7 @@
               <Input
                   v-model="query.keyword"
                   placeholder="请输入关键字"
-                  style="width: 180px; margin-left: 10px"
+                  style="width: 180px;"
                   @keyup.enter.native="getCustomerHospitalConsume()"
                 />
                 <DatePicker
@@ -65,7 +65,7 @@
             <div style="margin-top:10px">
               <Select
                 v-model="query.buyAgainType"
-                style="width: 140px; margin-left: 10px"
+                style="width: 180px;"
                 placeholder="升单类型"
                 filterable
               >
@@ -78,7 +78,7 @@
               </Select>
               <Select
                 v-model="query.channel"
-                style="width: 180px; margin-left: 10px"
+                style="width: 160px; margin-left: 10px"
                 placeholder="升单渠道"
                 filterable
               >
@@ -91,7 +91,7 @@
               </Select>
               <Select
                 v-model="query.addedBy"
-                style="width: 180px; margin-left: 10px"
+                style="width: 160px; margin-left: 10px"
                 placeholder="跟进人员"
                 filterable
               >
@@ -105,7 +105,7 @@
               <Select
                 v-model="query.liveAnchorId"
                 placeholder="请选择主播IP账号"
-                style="width: 180px; margin-left: 10px"
+                style="width: 160px; margin-left: 10px"
                 filterable
                 >
                 <Option
@@ -409,6 +409,8 @@
     <viewPic :viewPicModel.sync ="viewPicModel" :viewPicList ="viewPicList"></viewPic>
     <!-- 回款 -->
     <paymentCollection :paymentCollectionModel.sync ="paymentCollectionModel" :paymentCollectionObj="paymentCollectionObj" @hanPaymentChange="getCustomerHospitalConsume"></paymentCollection>
+    <!-- 订单详情 -->
+    <upgradeOrderDetail :upgradeOrderDetailModel.sync ="upgradeOrderDetailModel" :upgradeOrderObj="upgradeOrderObj"></upgradeOrderDetail>
   </div>
 </template>
 
@@ -421,7 +423,7 @@ import importFile from "./components/import.vue"
 import toExamine from "./components/toExamine.vue"
 import viewPic from "@/components/viewPic/viewPic"
 import paymentCollection from "@/components/paymentCollection/paymentCollection"
-
+import upgradeOrderDetail from "@/components/upgradeOrderDetail/upgradeOrderDetail"
 
 export default {
   components: {
@@ -429,10 +431,13 @@ export default {
     importFile,
     toExamine,
     viewPic,
-    paymentCollection
+    paymentCollection,
+    upgradeOrderDetail
   },
   data() {
     return {
+      upgradeOrderDetailModel:false,
+      upgradeOrderObj:null,
       isConfirmOrderList:[
         {
           status:-1,
@@ -1211,7 +1216,7 @@ export default {
           {
             title: "操作",
             key: "",
-            minWidth: 430,
+            minWidth: 500,
             align:"center",
             fixed: "right",
             render: (h, params) => {
@@ -1231,6 +1236,30 @@ export default {
                 );
               });
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: ".3125rem",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.upgradeOrderDetailModel = true
+                        api.byCustomerHospitalConsume(id).then((res) => {
+                          if (res.code === 0) {
+                            this.upgradeOrderObj= res.data.CustomerManageUpdateconsume
+                          }
+                        })
+                      },
+                    },
+                  },
+                  "订单详情"
+                ),
                 h(
                   "Button",
                   {

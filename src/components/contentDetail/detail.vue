@@ -146,8 +146,16 @@
         <div class="message_title"><span class="line"></span>主播客服信息</div>
         <div class="order_content">
           <div>
+            <span class="title_bold">主播平台：</span>
+            <span>{{ detailObj.contentPlateFormName }} </span>
+          </div>
+          <div  class="mr_top">
             <span class="title_bold">主播账号：</span>
             <span>{{ detailObj.liveAnchorName }} </span>
+          </div>
+          <div  class="mr_top">
+            <span class="title_bold">主播微信号：</span>
+            <span>{{ detailObj.liveAnchorWeChatNo }} </span>
           </div>
           <div class="mr_top">
             <span class="title_bold">归属客服：</span>
@@ -190,6 +198,18 @@
             <span class="title_bold">抖店订单号：</span>
             <span>{{ detailObj.otherContentPlatFormOrderId }}</span>
           </div>
+          <!-- <div class="mr_top">
+            <span class="title_bold">新老客业绩：</span>
+            <span>{{ detailObj.isOldCustomer == true ? '老客' : '新客' }}</span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">是否陪诊：</span>
+            <i-switch v-model="detailObj.isAcompanying" disabled />
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">佣金比例：</span>
+            <span>{{ detailObj.commissionRatio + '%'}} </span>
+          </div> -->
           <div class="mr_top">
             <span class="title_bold">咨询内容：</span>
             <span>{{ detailObj.consultingContent }} </span>
@@ -461,6 +481,7 @@ export default {
     },
     onError: function(e) {
       console.log("无法复制文本！");
+      this.$Message.error("无法复制文本！");
     },
     // 查看审核图片
     lookCheckImg(id) {

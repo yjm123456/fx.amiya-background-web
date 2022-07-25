@@ -136,6 +136,13 @@
                         <i class="iconfont icon-kuapingtaiyingyong cj_icons"></i>       
                         <div class="item_title">内容平台成交报表</div>
                     </div>
+                    <div class="item" @click="transactionStatementModal=true;$refs.transactionStatement.transactionStatement();">
+                        <!-- <i class="iconfont icon-kuapingtaiyingyong cj_icons"></i>        -->
+                        <div class="item_img">
+                            <img :src="transactionStatus" alt="" srcset="" class="images">
+                        </div>
+                        <div class="item_title">成交情况报表</div>
+                    </div>
                 </div>
             </Card>
             <Card class="list_item">
@@ -199,12 +206,16 @@
         <customerServiceDispatchOrderReport :customerServiceDispatchOrderModel.sync="customerServiceDispatchOrderModel" ref="customerServiceDispatchOrderReport" :dispatchHospital="dispatchHospital"></customerServiceDispatchOrderReport>
         <!-- 小黄车登记报表 -->
         <smallYellowCarRegistrationReport :smallYellowCarRegistrationModel.sync="smallYellowCarRegistrationModel" ref="smallYellowCarRegistrationReport" :contentPalteForms="contentPalteForms"></smallYellowCarRegistrationReport>
+        <!-- 成交情况报表 -->
+        <transactionStatement :transactionStatementModal.sync="transactionStatementModal" ref="transactionStatement" :transactionParams="transactionParams"></transactionStatement>
     </div>
 </template>
 <script>
 import * as api from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance"
 import * as apis from "@/api/customerManage.js";
+
+import transactionStatus from "@/assets/images/report/transactionStatus.png"
 
 import orderDispatch from "./components/orderDispatchs.vue"
 import orderOperation from "./components/orderOperation.vue"
@@ -227,6 +238,7 @@ import orderListReport from "./components/orderListReport/orderList.vue"
 import customerNoDispatchReport from "./components/customerNoDispatchReport/customerNoDispatchReport.vue"
 import customerServiceDispatchOrderReport from "./components/customerServiceDispatchOrderReport/customerServiceDispatchOrderReport.vue"
 import smallYellowCarRegistrationReport from "./components/smallYellowCarRegistrationReport/smallYellowCarRegistrationReport.vue"
+import transactionStatement from "./components/transactionStatement.vue"
 export default {
     components:{
         orderDispatch,
@@ -249,10 +261,13 @@ export default {
         orderListReport,
         customerNoDispatchReport,
         customerServiceDispatchOrderReport,
-        smallYellowCarRegistrationReport
+        smallYellowCarRegistrationReport,
+        transactionStatement
     },
     data(){
         return {
+            // 成交报表图片
+            transactionStatus,
             amiyaPositionId:sessionStorage.getItem('amiyaPositionId'),
             // 是否开启邮箱
             emailNotice:false,
@@ -275,6 +290,7 @@ export default {
             customerNoDispatchModel:false,
             customerServiceDispatchOrderModel:false,
             smallYellowCarRegistrationModel:false,
+            transactionStatementModal:false,
 
             sevenButtonType:'primary',
             thirtyButtonType:'default',
@@ -292,9 +308,35 @@ export default {
             dealHospitalList:[{ name: "全部最终成交医院", id: -1 }],
             checkStateListAll: [{ id: -1, name: "全部审核状态" }],
             dispatchHospital:[{ name: "全部派单医院", id: -1 }],
+            // 成交情况报表参数
+            transactionParams:{
+                employee:[{ id: -1, name: "全部跟进人员" }],
+                dealHospitalList:[{ name: "全部最终成交医院", id: -1 }],
+                 // 到院类型
+                toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],
+            }
+            
         }
     },
     methods:{
+        //   获取订单到院类型
+        getcontentPlateFormOrderToHospitalTypeList() {
+            api.contentPlateFormOrderToHospitalTypeList().then((res) => {
+                if (res.code === 0) {
+                const { orderTypes } = res.data;
+                this.transactionParams.toHospitalTypeList = [...this.transactionParams.toHospitalTypeList,...orderTypes]
+                }
+            });
+        },
+        // 获取客服列表
+        getCustomerServiceList() {
+            api.getCustomerServiceList().then((res) => {
+                if (res.code === 0) {
+                const { employee } = res.data;
+                this.transactionParams.employee = [...this.transactionParams.employee, ...employee];
+                }
+            });
+        },
         // 获取审核情况（下拉框）
         getCheckStateList() {
             apis.getCheckStateList().then((res) => {
@@ -315,6 +357,7 @@ export default {
                 const { hospitalInfo} = res.data
                 this.hospitalNameList = [...this.hospitalNameList,...hospitalInfo];
                 this.dealHospitalList = [...this.dealHospitalList,...hospitalInfo];
+                this.transactionParams.dealHospitalList = [...this.transactionParams.dealHospitalList,...hospitalInfo];
                 this.dispatchHospital = [...this.dispatchHospital,...hospitalInfo];
                 }
             })
@@ -415,6 +458,8 @@ export default {
         this.getContentValidList()
         this.getHospitalList()
         this.getCheckStateList()
+        this.getCustomerServiceList()
+        this.getcontentPlateFormOrderToHospitalTypeList()
     },
     mounted() {
         this.getData();
@@ -548,5 +593,20 @@ list_items{
     color: #D81E06;
     border: 1px solid #D81E06;
     font-size: 60px;
+}
+.images{
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+}
+.item_img{
+    padding:9px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border: 1px solid #1296db;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    border-radius: 5px;
 }
 </style>

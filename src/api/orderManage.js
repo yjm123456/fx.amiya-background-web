@@ -889,6 +889,24 @@ export const GetPrivateDomainOrderDetailsInfo = (params) => {
         params,
     });
 };
+
+// 成交情况报表
+export const contentPlatFormOrderDealInfoReport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/contentPlatFormOrderDealInfo`,
+        method: "get",
+        params,
+    });
+};
+// 成交情况报表导出
+export const exportContentPlatFormOrderDealInfo = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/exportContentPlatFormOrderDealInfo`,
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};
 /**
  * 内容平台列表   （录单模块）
  */

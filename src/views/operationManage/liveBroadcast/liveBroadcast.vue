@@ -451,7 +451,7 @@ export default {
                             this.form.minivanRefund = minivanRefund;
                             this.form.consultationCardConsumed = consultationCardConsumed;
                             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId;
+                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId ? livingTrackingEmployeeId : null;
                             this.form.consultationCardConsumed2 = consultationCardConsumed2;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)

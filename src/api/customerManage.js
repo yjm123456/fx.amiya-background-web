@@ -297,3 +297,40 @@ export const customerReturnBackOrder = (data) => {
         data,
     });
 };
+
+/**
+ * 医院客户接口
+ */
+// 获取医院客户信息列表 分页
+export const getHospitalCustomerInfo = (params) => {
+    return http({
+        url: `/amiyabg/HospitalCustomerInfo/listWithPage`,
+        method: "get",
+        params
+    });
+};
+
+// 根据客户编号获取消费记录分页
+export const getOrderByCustomerIdlistWithPage = (params) => {
+    return http({
+        url: `/amiyabg/HospitalCustomerInfo/getOrderByCustomerIdlistWithPage`,
+        method: "get",
+        params
+    });
+};
+
+// 获取医院客户信息列表分页
+export const getOrderlistWithPage = (params) => {
+    return http({
+        url: `/amiyabg/HospitalCustomerInfo/GetOrderlistWithPage`,
+        method: "get",
+        params
+    });
+};
+// 获取已配置对接订单客户的医院信息
+export const getDockingHospitalInfo = () => {
+    return http({
+        url: `/amiyabg/HospitalCustomerInfo/GetDockingHospitalInfo`,
+        method: "get",
+    });
+};

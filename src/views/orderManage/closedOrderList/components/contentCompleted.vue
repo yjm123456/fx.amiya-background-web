@@ -40,7 +40,7 @@
             <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
-              style="width: 140px; margin-left: 10px"
+              style="width: 130px; margin-left: 10px"
               filterable
             >
               <Option
@@ -54,7 +54,7 @@
               v-model="query.toHospitalType"
               placeholder="请选择到院类型"
               clearable
-              style="width: 140px; margin-left: 10px"
+              style="width: 130px; margin-left: 10px"
               filterable
             >
               <Option
@@ -69,7 +69,7 @@
             <Select
               v-model="query.checkState"
               placeholder="审核状态"
-              style="width: 160px;"
+              style="width: 140px;"
             >
               <Option
                 v-for="item in checkStateListAll"
@@ -82,7 +82,7 @@
             <Select
               v-model="query.ReturnBackPriceState"
               placeholder="回款状态"
-              style="width: 160px; margin-left: 10px"
+              style="width: 140px; margin-left: 10px"
             >
               <Option
                 v-for="item in query.ReturnBackPriceStateList"
@@ -95,7 +95,7 @@
               v-model="query.contentPlatFormId"
               placeholder="请选择主播平台"
               @on-change="contentPlateChange(query.contentPlatFormId)"
-              style="width: 160px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
               filterable
             >
               <Option
@@ -108,7 +108,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 160px; margin-left: 10px"
+              style="width: 170px; margin-left: 10px"
               :disabled="query.contentPlatFormId === null"
               filterable
             >
@@ -122,7 +122,7 @@
             
             <Select
               v-model="query.hospitalId"
-              style="width: 220px; margin-left: 10px"
+              style="width: 270px; margin-left: 10px"
               placeholder="请选择医院"
               filterable
             >
@@ -489,13 +489,13 @@ export default {
           {
             title: "回款时间",
             key: "returnBackDate",
-            minWidth: 180,
+            minWidth: 110,
             align:'center',
             render: (h, params) => {
               return params.row.returnBackDate
                 ? h(
                     "div",
-                    this.$moment(params.row.returnBackDate).format("YYYY-MM-DD HH:mm:ss")
+                    this.$moment(params.row.returnBackDate).format("YYYY-MM-DD")
                   )
                 : "";
             },
@@ -596,7 +596,37 @@ export default {
             minWidth: 130,
             align:'center'
           },
-
+          {
+            title: "主播微信号",
+            key: "liveAnchorWeChatNo",
+            minWidth: 160,
+            align:'center'
+          },
+          {
+            title: "新老客业绩",
+            key: "isOldCustomer",
+            minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "是否陪诊",
+            minWidth: 100,
+            key: "isAcompanying",
+            align:'center',
+          },
+          {
+            title: "佣金比例",
+            minWidth: 100,
+            key: "commissionRatio",
+            align:'center',
+            render: (h, params) => {
+              return params.row.commissionRatio ? h(
+                    "div",
+                    params.row.commissionRatio + '%'
+                  )
+                : '';
+            }
+          },
           {
             title: "订单类型",
             key: "orderTypeText",
@@ -697,7 +727,7 @@ export default {
           {
             title: "操作",
             align: "center",
-            minWidth: 240,
+            minWidth: 140,
             fixed: "right",
             render: (h, params) => {
               const currentRole = JSON.parse(
@@ -742,33 +772,13 @@ export default {
                   },
                   "订单详情"
               ),
-                isFlag ? h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: params.row.checkStateText == "审核通过",
-                    },
-                    style: {
-                      marginRight: ".3125rem",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.controlModal = true;
-                        this.form.id = id;
-                      },
-                    },
-                  },
-                  "审核"
-                ): null,
-                // h(
+                // isFlag ? h(
                 //   "Button",
                 //   {
                 //     props: {
                 //       type: "primary",
                 //       size: "small",
+                //       disabled: params.row.checkStateText == "审核通过",
                 //     },
                 //     style: {
                 //       marginRight: ".3125rem",
@@ -776,53 +786,38 @@ export default {
                 //     on: {
                 //       click: () => {
                 //         const { id } = params.row;
-                //         const data = {
-                //           OrderId:id,
-                //           OrderFrom:2,
-                //           pageNum:1,
-                //           pageSize:10
-                //         }
-                //         OrderCheckPictureApi.OrderCheckPicture(data).then((res) => {
-                //           if (res.code === 0) {
-                //             const { list } = res.data.orderCheckPictureInfo;
-                //             this.viewPicList = list;
-                //             if(this.viewPicList.length>0){
-                //               this.viewPicModel = true
-                //             }else{
-                //               this.$Message.warning('暂无审核图片')
-                //             }
-                //           }
-                //         });
+                //         this.controlModal = true;
+                //         this.form.id = id;
                 //       },
                 //     },
                 //   },
-                //   "查看审核图片"
-                // ),
-                isPayment ? h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: params.row.checkStateText !=='审核通过' || params.row.isReturnBackPrice == true,
-                    },
-                    style: {
-                      marginRight: ".3125rem",
-                    },
-                    on: {
-                      click: () => {
-                        const { id,settlePrice } = params.row;
-                        this.paymentCollectionModel = true
-                        this.paymentCollectionObj = {
-                          orderId:id,
-                          returnBackPrice:settlePrice,
-                          type:'content'
-                        }
-                      },
-                    },
-                  },
-                  "回款"
-                ):null,
+                //   "审核"
+                // ): null,
+                // isPayment ? h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       disabled: params.row.checkStateText !=='审核通过' || params.row.isReturnBackPrice == true,
+                //     },
+                //     style: {
+                //       marginRight: ".3125rem",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { id,settlePrice } = params.row;
+                //         this.paymentCollectionModel = true
+                //         this.paymentCollectionObj = {
+                //           orderId:id,
+                //           returnBackPrice:settlePrice,
+                //           type:'content'
+                //         }
+                //       },
+                //     },
+                //   },
+                //   "回款"
+                // ):null,
               ]);
             },
           },

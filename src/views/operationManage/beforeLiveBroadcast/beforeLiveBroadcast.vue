@@ -412,7 +412,7 @@ export default {
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId;
+                            this.form.operationEmployeeId = operationEmployeeId==0 ?  null : operationEmployeeId ;
                             this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
                             this.form.todaySendNum = todaySendNum;
                             this.form.flowInvestmentNum = flowInvestmentNum;

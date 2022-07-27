@@ -294,15 +294,15 @@ export default {
             key: "isAcompanying",
           },
           {
-            title: "佣金比例",
-            minWidth: 100,
+            title: "佣金比例(%)",
+            minWidth: 120,
             key: "commissionRatio",
             render: (h, params) => {
-              return params.row.commissionRatio ? h(
+              return h(
                     "div",
-                    params.row.commissionRatio + '%'
+                    params.row.commissionRatio  ? params.row.commissionRatio + '%' : '0%'
                   )
-                : '';
+                ;
             }
           },
           {

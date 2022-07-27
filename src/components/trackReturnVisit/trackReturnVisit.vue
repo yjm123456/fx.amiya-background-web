@@ -37,7 +37,7 @@
                   </div>
                 </FormItem>
                 <FormItem label="回访类型" prop="trackTypeId">
-                  <Select v-model="form.trackTypeId" placeholder="请选择回访类型">
+                  <Select v-model="form.trackTypeId" placeholder="请选择回访类型" @on-change="trackTypeChange()">
                     <Option :value="item.id" v-for="item in trackType" :key="item.id">{{item.name}}</Option>
                   </Select>
                 </FormItem>
@@ -70,35 +70,6 @@
             </Row>
           </div>
           <Divider/>
-          <!-- <div class="bottom">
-            <FormItem label="设置下次回访">
-              <i-switch v-model="controlNextReturnVisit" />
-            </FormItem>
-            <FormItem label="下次回访日期" prop="addWaitTrackCustomerObj.planTrackDate" v-if="controlNextReturnVisit">
-              <DatePicker
-                type="date"
-                placeholder="请选择下次回访日期"
-                style="width: 100%"
-                :value="form.addWaitTrackCustomerObj.planTrackDate"
-                @on-change="handlePlanTrackDateChange"
-              ></DatePicker>
-            </FormItem>
-            <FormItem label="回访类型" prop="addWaitTrackCustomerObj.trackTypeId" v-if="controlNextReturnVisit">
-              <Select v-model="form.addWaitTrackCustomerObj.trackTypeId" placeholder="请选择下次回访类型" @on-change="handleNextTimeTrackTypeChange">
-                <Option :value="item.id" v-for="item in trackType" :key="item.id">{{item.name}}</Option>
-              </Select>
-            </FormItem>
-            <FormItem label="回访主题" prop="addWaitTrackCustomerObj.trackThemeId" v-if="controlNextReturnVisit">
-              <Select v-model="form.addWaitTrackCustomerObj.trackThemeId" placeholder="请选择下次回访主题">
-                <Option :value="item.id" v-for="item in nextTimeTrackThemeList" :key="item.id">{{item.name}}</Option>
-              </Select>
-            </FormItem>
-            <FormItem label="其他客服回访" v-if="controlNextReturnVisit">
-              <Select v-model="form.addWaitTrackCustomerObj.otherTrackEmployeeId" placeholder="请选择其他客服回访">
-                <Option :value="item.id" v-for="item in employee" :key="item.id">{{item.name}}</Option>
-              </Select>
-            </FormItem>
-          </div> -->
           <div class="bottom">
             <Row :gutter="30">
               <Col span="12">
@@ -206,6 +177,8 @@
 <script>
 import * as customerManage from "@/api/customerManage";
 import * as api from "@/api/common";
+import * as baseApi from "@/api/baseDataMaintenance";
+
 import trackRetrunVisitRecord from "@/components/trackRetrunVisitRecord/trackRetrunVisitRecord";
 import orderInfo from "@/components/orderInfo/orderInfo";
 import contentOrderInfo from "@/components/contentOrderInfo/contentOrderInfo";
@@ -248,6 +221,8 @@ export default {
   },
   data() {
     return {
+      indexs:0,
+      index:0,
       ind:0,
       // 内容平台订单 弹窗
       controlContentOrderInfoModal:false,
@@ -329,24 +304,6 @@ export default {
             message: "请选择是否有效",
           },
         ],
-        // "addWaitTrackCustomerObj.planTrackDate": [
-        //   {
-        //     required: true,
-        //     message: "请选择下次回访日期",
-        //   },
-        // ],
-        // "addWaitTrackCustomerObj.trackTypeId": [
-        //   {
-        //     required: true,
-        //     message: "请选择下次回访类型",
-        //   },
-        // ],
-        // "addWaitTrackCustomerObj.trackThemeId": [
-        //   {
-        //     required: true,
-        //     message: "请选择下次回访主题",
-        //   },
-        // ],
       },
       query:{
         columns:[
@@ -478,6 +435,8 @@ export default {
         // 其他客服回访
         this.otherTrackEmployeeName = this.employee.find(item=>item.id == otherTrackEmployeeId).name
       }
+      let max =Math.max.apply(Math,this.form.addWaitTrackCustomer.map(item=>{return item.id}))
+      
       this.form.addWaitTrackCustomer.push({
         planTrackDate,
         trackTypeId,
@@ -487,7 +446,7 @@ export default {
         otherTrackEmployeeId,
         otherTrackEmployeeName:otherTrackEmployeeId ? this.otherTrackEmployeeName : null,
         trackPlan,
-        id :this.ind++
+        id :max ? ++max : this.ind++
       })
       this.form.addWaitTrackCustomerObj = {
         // 下次回访日期
@@ -527,11 +486,18 @@ export default {
           this.nextTimeTrackThemeList = res.data.trackTheme;
         }
       })
+      baseApi.byIdTrack(trackTypeId).then((res) => {
+        if(res.code === 0 ){
+          const {hasModel,trackTypeThemeModel} = res.data.giftInfo
+          this.trackReturnVisitComParams.hasModel = hasModel
+          this.trackReturnVisitComParams.trackTypeThemeModel = trackTypeThemeModel
+        }
+      })
     },
+   
 
     // 下次回访日期
     handlePlanTrackDateChange(value) {
-      console.log(value,this.$moment().format("YYYY-MM-DD"))
       // if(value <= this.$moment().format("YYYY-MM-DD")){
       //   this.$Message.error('下次回访时间必须大于今日')
       // }else{
@@ -637,8 +603,20 @@ export default {
         IsRedirectCall: false,
       }
       this.$store.dispatch("callCenter/callOut", data);
+    },
+    //获取n天前或n天后的日期
+    getTime(AddDayCount) {
+        let  dd = new Date();
+        dd.setDate(dd.getDate() + AddDayCount); //获取AddDayCount天后的日期
+        let y = dd.getFullYear();
+        let m = (dd.getMonth() + 1) < 10 ? "0" + (dd.getMonth() + 1) : (dd.getMonth() + 1); //获取当前月份的日期，不足10补0
+        let d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(); //获取当前几号，不足10补0
+        return `${y}-${m}-${d}`;
+    },
+    trackTypeChange(){
+      
     }
-  },
+},
   computed: {
     callSuccessMsg() {
       return this.$store.state.callCenter.callSuccessMsg;
@@ -655,7 +633,7 @@ export default {
   watch:{
     params:{
       handler(params){
-        const {controlTrackReturnVisitDisplay, encryptPhone} = params;
+        const {controlTrackReturnVisitDisplay, encryptPhone,hasModel,trackTypeThemeModel} = params;
         if(controlTrackReturnVisitDisplay) {
           this.controlModal  = controlTrackReturnVisitDisplay;
           this.form.encryptPhone = encryptPhone;
@@ -671,6 +649,24 @@ export default {
           if(params.trackThemeId) {
             this.form.trackThemeId = params.trackThemeId;
           }
+
+        }
+        // 判断基础数据模块添加的模板 如果 hasModel（是否开启模板）为true 
+        if(hasModel == true){
+          // 设置下次回访自动开启
+          this.controlNextReturnVisit = true
+          this.form.addWaitTrackCustomer = trackTypeThemeModel.map((item,index)=>{
+            return{
+              planTrackDate:this.getTime(Number(item.daysLater)),
+              trackTypeId:item.trackTypeId,
+              trackThemeId:item.trackThemeId,
+              otherTrackEmployeeId:null,
+              trackPlan:item.trackPlan,
+              id:index++,
+              trackThemeName:item.trackThemeName,
+              trackTypeName:item.trackTypeName
+            }
+          })
         }
       },
       deep:true
@@ -682,8 +678,32 @@ export default {
         api.byTrackTypeIdGetTrackThemeList(trackTypeId).then(res=>{
           if(res.code === 0) {
             this.trackThemeList = res.data.trackTheme;
+            
           }
         })
+        baseApi.byIdTrack(trackTypeId).then((res) => {
+          if(res.code === 0 ){
+            const {hasModel,trackTypeThemeModel} = res.data.giftInfo
+            // 判断基础数据模块添加的模板 如果 hasModel（是否开启模板）为true 
+            if(hasModel == true){
+              // 设置下次回访自动开启
+              this.controlNextReturnVisit = true
+              this.form.addWaitTrackCustomer = trackTypeThemeModel.map((item,index)=>{
+                return{
+                  planTrackDate:this.getTime(Number(item.daysLater)),
+                  trackTypeId:item.trackTypeId,
+                  trackThemeId:item.trackThemeId,
+                  otherTrackEmployeeId:null,
+                  trackPlan:item.trackPlan,
+                  id:index++,
+                  trackThemeName:item.trackThemeName,
+                  trackTypeName:item.trackTypeName
+                }
+              })
+            }
+          }
+      })
+        // this.$emit('getTtrak',trackTypeId)
       }
     }
   }

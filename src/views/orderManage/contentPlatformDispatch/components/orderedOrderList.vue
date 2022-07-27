@@ -12,7 +12,7 @@
             />
             <Input
               v-model="query.commissionRatio"
-              placeholder="请输入佣金比例"
+              placeholder="请输入佣金比例(%)"
               type="number"
               number
               style="width:160px;margin-left: 10px"
@@ -195,7 +195,7 @@
           <div style="margin-top:10px">
             <Select
               v-model="query.isAcompanying"
-              style="width: 160px"
+              style="width: 200px"
               placeholder="请选择陪诊状态"
             >
               <Option
@@ -455,14 +455,14 @@
           ></DatePicker>
         </FormItem>
         <FormItem
-          label="佣金比例"
+          label="佣金比例(%)"
           prop="commissionRatio"
-          key="佣金比例"
+          key="佣金比例(%)"
           v-if="confirmForm.isFinish === true"
           :rules="[
             {
               required: true,
-              message: '佣金比例最小为1，最为为100',
+              message: '佣金比例(%)最小为1，最为为100',
               trigger: 'change',
               type: 'number',
               max: 100,
@@ -472,7 +472,7 @@
         >
           <Input
             v-model="confirmForm.commissionRatio"
-            placeholder="请输入佣金比例"
+            placeholder="请输入佣金比例(%)"
             type="number"
             number
           ></Input>
@@ -656,7 +656,7 @@ export default {
         commissionRatio: [
           {
             required: true,
-            message: "请输入佣金比例",
+            message: "请输入佣金比例(%)",
           },
         ],
         DealDate: [
@@ -736,7 +736,7 @@ export default {
         isOldCustomerList:[
           {
             type:-1,
-            name:'全部新老客业绩'
+            name:'全部客户业绩'
           },
           {
             type:'true',
@@ -1033,6 +1033,21 @@ export default {
             minWidth: 100,
             key: "isAcompanying",
             align:'center',
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isAcompanying,
+                    size: "default",
+                    disabled:
+                      params.row.isAcompanying === true || params.row.isAcompanying === false,
+                  },
+                },
+                h("span", { isAcompanying: "open" }, "开"),
+                h("span", { isAcompanying: "close" }, "关")
+              );
+            },
           },
           {
             title: "新老客业绩",
@@ -1041,16 +1056,16 @@ export default {
             align:'center',
           },
           {
-            title: "佣金比例",
-            minWidth: 100,
+            title: "佣金比例(%)",
+            minWidth: 120,
             key: "commissionRatio",
             align:'center',
             render: (h, params) => {
-              return params.row.commissionRatio ? h(
+              return h(
                     "div",
-                    params.row.commissionRatio + '%'
+                    params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
                   )
-                : '';
+                ;
             }
           },
           // {

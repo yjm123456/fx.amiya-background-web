@@ -198,11 +198,12 @@ export default {
                         
                         api.byIdLiveAnchor(id).then((res)=>{
                           if(res.code===0){
-                            const {contentPlateFormId,contentPlateFormName,hostAccountName,id,name,valid} = res.data.liveAnchor
+                            const {contentPlateFormId,contentPlateFormName,hostAccountName,id,name,valid,liveAnchorBaseId} = res.data.liveAnchor
                             this.form.id = id;
                             this.form.contentPlateFormId = contentPlateFormId;
                             this.form.contentPlateFormName = contentPlateFormName
                             this.form.hostAccountName = hostAccountName
+                            this.form.liveAnchorBaseId = liveAnchorBaseId
                             this.form.name = name
                             this.form.valid = valid;
                             this.isEdit = true;

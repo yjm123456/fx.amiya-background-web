@@ -135,6 +135,8 @@ export default {
         trackTypeId: "",
         trackThemeId: "",
         controlTrackReturnVisitDisplay: false,
+        trackTypeThemeModel:[],
+        hasModel:false,
       },
     };
   },

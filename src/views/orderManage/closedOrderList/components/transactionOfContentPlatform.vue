@@ -461,13 +461,13 @@ export default {
           {
             title: "编号",
             key: "id",
-            minWidth: 310,
+            minWidth: 170,
             align:'center'
           },
           {
             title: "订单号",
             key: "contentPlatFormOrderId",
-            minWidth: 180,
+            minWidth: 170,
             align:'center'
           },
           {
@@ -626,15 +626,15 @@ export default {
             align:'center'
           },
           {
-            title: "新客/老客",
+            title: "新老客业绩",
             key: "isOldCustomer",
-            minWidth: 120,
+            minWidth: 130,
             align:'center',
             render: (h, params) => {
               return params.row.isOldCustomer
                 ? h(
                     "div",
-                    params.row.isOldCustomer == true ? '老客' : '新客'
+                    params.row.isOldCustomer == true ? '老客业绩' : '新客业绩'
                   )
                 : "";
             },
@@ -661,18 +661,17 @@ export default {
             },
           },
           {
-            title: "佣金比例",
+            title: "佣金比例(%)",
             key: "commissionRatio",
             minWidth: 180,
             align:'center',
             render: (h, params) => {
-              return params.row.commissionRatio
-                ? h(
+              return h(
                     "div",
-                    params.row.commissionRatio + '%'
+                    params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
                   )
-                : "";
-            },
+                ;
+            }
           },
           {
             title: "审核状态",
@@ -821,7 +820,7 @@ export default {
             },
           },
           {
-            title: "创建人",
+            title: "跟进人员",
             key: "createByEmpName",
             minWidth: 120,
             align:'center'
@@ -881,7 +880,7 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: params.row.checkStateText == "审核通过",
+                      disabled:params.row.isDeal == false || params.row.checkStateText == "审核通过",
                     },
                     style: {
                       marginRight: ".3125rem",
@@ -1028,7 +1027,7 @@ export default {
         isOldCustomerList:[
             {
                 type:-1,
-                name:'全部新老客状态'
+                name:'全部客户业绩'
             },
             {
                 type:'true',

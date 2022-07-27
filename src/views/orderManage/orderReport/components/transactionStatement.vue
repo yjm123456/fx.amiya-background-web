@@ -271,17 +271,11 @@ export default {
           {
             title: "编号",
             key: "id",
-            minWidth: 310,
-            align:'center'
-          },
-          {
-            title: "派单编号",
-            key: "contentPlatFormOrderId",
             minWidth: 180,
             align:'center'
           },
           {
-            title: "创建时间",
+            title: "登记时间",
             key: "createDate",
             minWidth: 170,
             align:'center',
@@ -293,6 +287,64 @@ export default {
                   )
                 : "";
             },
+          },
+          {
+            title: "订单编号",
+            key: "contentPlatFormOrderId",
+            minWidth: 180,
+            align:'center'
+          },
+          {
+            title: "下单时间",
+            key: "orderCreateDate",
+            minWidth: 120,
+            align:'center',
+            render: (h, params) => {
+              return params.row.orderCreateDate
+                ? h(
+                    "div",
+                    this.$moment(params.row.orderCreateDate).format("YYYY-MM-DD")
+                  )
+                : "";
+            },
+          },
+          {
+            title: "派单时间",
+            key: "sendOrderDate",
+            minWidth: 120,
+            align:'center',
+            render: (h, params) => {
+              return params.row.sendOrderDate
+                ? h(
+                    "div",
+                    this.$moment(params.row.sendOrderDate).format("YYYY-MM-DD")
+                  )
+                : "";
+            },
+          },
+          {
+            title: "平台",
+            key: "contentPlatFormName",
+            minWidth: 130,
+            align:'center'
+          },
+          {
+            title: "主播",
+            key: "liveAnchorName",
+            minWidth: 130,
+            align:'center'
+          },
+          {
+            title: "项目",
+            key: "goodsName",
+            minWidth: 130,
+            align:'center'
+          },
+          {
+            title: "客户昵称",
+            key: "goodsName",
+            minWidth: 130,
+            align:'center'
           },
           {
             title: "手机号",
@@ -329,17 +381,17 @@ export default {
             },
           },
           {
+            title: "成交医院",
+            key: "lastDealHospital",
+            minWidth: 220,
+            align:'center'
+          },
+          {
             title: "是否成交",
             key: "isDeal",
             minWidth: 120,
             align: "center",
             
-          },
-          {
-            title: "成交医院",
-            key: "lastDealHospital",
-            minWidth: 200,
-            align:'center'
           },
           {
             title: "备注",
@@ -348,9 +400,9 @@ export default {
             align:'center'
           },
           {
-            title: "价格",
+            title: "成交金额",
             key: "price",
-            minWidth: 200,
+            minWidth: 120,
             align:'center'
           },
           {
@@ -374,18 +426,10 @@ export default {
             align:'center'
           },
           {
-            title: "新客/老客",
+            title: "新老客业绩",
             key: "isOldCustomer",
             minWidth: 120,
             align:'center',
-            render: (h, params) => {
-              return params.row.isOldCustomer
-                ? h(
-                    "div",
-                    params.row.isOldCustomer == true ? '老客' : '新客'
-                  )
-                : "";
-            },
           },
           {
             title: "是否陪诊",
@@ -394,18 +438,17 @@ export default {
             align: "center",
           },
           {
-            title: "佣金比例",
+            title: "佣金比例(%)",
             key: "commissionRatio",
             minWidth: 180,
             align:'center',
             render: (h, params) => {
-              return params.row.commissionRatio
-                ? h(
+              return h(
                     "div",
-                    params.row.commissionRatio + '%'
+                    params.row.commissionRatio  ? params.row.commissionRatio + '%' : '0%'
                   )
-                : "";
-            },
+                ;
+            }
           },
           {
             title: "审核状态",
@@ -521,7 +564,13 @@ export default {
             },
           },
           {
-            title: "创建人",
+            title: "面诊员",
+            key: "consultationEmpName",
+            minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "跟进人员",
             key: "createByEmpName",
             minWidth: 120,
             align:'center'
@@ -578,7 +627,7 @@ export default {
             isOldCustomerList:[
                 {
                     type:-1,
-                    name:'全部新老客状态'
+                    name:'全部客户业绩'
                 },
                 {
                     type:'true',

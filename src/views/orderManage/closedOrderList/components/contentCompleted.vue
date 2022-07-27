@@ -613,18 +613,33 @@ export default {
             minWidth: 100,
             key: "isAcompanying",
             align:'center',
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isAcompanying,
+                    size: "default",
+                    disabled:
+                      params.row.isAcompanying === true || params.row.isAcompanying === false,
+                  },
+                },
+                h("span", { isAcompanying: "open" }, "开"),
+                h("span", { isAcompanying: "close" }, "关")
+              );
+            },
           },
           {
-            title: "佣金比例",
-            minWidth: 100,
+            title: "佣金比例(%)",
+            minWidth: 120,
             key: "commissionRatio",
             align:'center',
             render: (h, params) => {
-              return params.row.commissionRatio ? h(
+              return h(
                     "div",
-                    params.row.commissionRatio + '%'
+                    params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
                   )
-                : '';
+                ;
             }
           },
           {

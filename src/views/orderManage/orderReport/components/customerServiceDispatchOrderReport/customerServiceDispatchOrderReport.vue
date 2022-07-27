@@ -107,7 +107,7 @@
                       ></DatePicker>
                       <Input
                         v-model="contentInfo.commissionRatio"
-                        placeholder="请输入佣金比例"
+                        placeholder="请输入佣金比例(%)"
                         type="number"
                         number
                         style="width:160px;margin-left: 10px"
@@ -585,7 +585,7 @@ export default {
         isOldCustomerList:[
           {
             type:-1,
-            name:'全部新老客业绩'
+            name:'全部客户业绩'
           },
           {
             type:'true',
@@ -738,16 +738,16 @@ export default {
             align: "center",
           },
           {
-            title: "佣金比例",
+            title: "佣金比例(%)",
             key: "commissionRatio",
             minWidth: 140,
             align: "center",
             render: (h, params) => {
-              return params.row.commissionRatio ? h(
+              return h(
                     "div",
-                    params.row.commissionRatio + '%'
+                    params.row.commissionRatio  ? params.row.commissionRatio + '%' : '0%'
                   )
-                : '';
+                ;
             }
           },
           // {

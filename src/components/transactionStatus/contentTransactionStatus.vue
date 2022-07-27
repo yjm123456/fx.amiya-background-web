@@ -154,9 +154,9 @@
           ></DatePicker>
         </FormItem>
         <FormItem
-          label="佣金比例"
+          label="佣金比例(%)"
           prop="commissionRatio"
-          key="佣金比例"
+          key="佣金比例(%)"
           :rules="[
             {
               required: true,
@@ -294,7 +294,7 @@ export default {
         commissionRatio: [
           {
             required: true,
-            message: "请输入佣金比例",
+            message: "请输入佣金比例(%)",
           },
         ],
         unDealReason: [
@@ -453,36 +453,28 @@ export default {
             minWidth: 140,
           },
           {
-            title: "是否为老客",
+            title: "新老客业绩",
             key: "isOldCustomer",
-            minWidth: 120,
+            minWidth: 140,
             align: "center",
             render: (h, params) => {
               return h(
-                "i-switch",
-                {
-                  props: {
-                    value: params.row.isOldCustomer,
-                    size: "default",
-                    disabled:
-                      params.row.isOldCustomer === true || params.row.isOldCustomer === false,
-                  },
-                },
-                h("span", { isOldCustomer: "open" }, "开"),
-                h("span", { isOldCustomer: "close" }, "关")
+                "div",
+                params.row.isOldCustomer == true ? '老客业绩': '新客业绩'
+                 
               );
             },
           },
           {
-            title: "佣金比例",
+            title: "佣金比例(%)",
             key: "commissionRatio",
             minWidth: 140,
             render: (h, params) => {
-              return params.row.commissionRatio ? h(
+              return h(
                     "div",
-                    params.row.commissionRatio + '%'
+                    params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
                   )
-                : '';
+                ;
             }
           },
           {

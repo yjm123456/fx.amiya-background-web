@@ -57,11 +57,16 @@
             <span class="title_bold">客户昵称：</span>
             <span>{{ detailObj.customerName }} </span>
           </div>
-          <div class="fl_end">
-            <div class="mr_top">
+          <div class="mr_top">
               <span class="title_bold">手机号：</span>
               <span>{{ detailObj.phone }} </span>
             </div>
+          <div class="fl_end">
+            <div class="mr_top">
+              <span class="title_bold">新老客业绩：</span>
+              <span>{{ detailObj.isOldCustomer == true ? '老客业绩' : '新客业绩'  }} </span>
+            </div>
+            
             <Button type="primary" @click="lookImg(detailObj.id)"
               >查看顾客照片</Button
             >

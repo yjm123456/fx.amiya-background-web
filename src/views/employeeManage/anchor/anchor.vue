@@ -59,14 +59,14 @@
       :title="title"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
-      width="1000"
+      width="1100"
     >
       <Form
         ref="form"
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="110"
+        :label-width="100"
       >
         <Row :gutter="30">
           <Col span="12">
@@ -93,19 +93,7 @@
           </Col>
         </Row>
         <Row :gutter="30">
-          <Col span="12">
-            <FormItem label="合同地址" prop="contractUrl">
-              <Input v-model="form.contractUrl"  placeholder="请输入合同地址"></Input>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="视频地址" prop="videoUrl">
-              <Input v-model="form.videoUrl"  placeholder="请输入视频地址"></Input>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="30">
-          <Col span="12">
+          <Col span="11">
             <FormItem label="到期时间" prop="dueTime">
               <DatePicker
                 type="date"
@@ -116,27 +104,64 @@
               ></DatePicker>
             </FormItem>
           </Col>
+          <Col span="13">
+            <FormItem label="上传合同" prop="contractUrl">
+              <uploadFile
+                :uploadObj="uploadFileObj"
+                @uploadChange="handleUploadFileChange"
+                ref="uploadFile"
+              />
+              <div style="color:red;margin-right:5px">
+                *注：该文件只支持pdf格式<span
+                  style="margin-left:10px;color:#2d8cf0;cursor: pointer;"
+                  @click="jumpHtml"
+                  >请点击进入在线转换地址</span
+                >
+              </div>
+            </FormItem>
+          </Col>
+          
+          <!-- <Col span="12">
+            <FormItem label="合同地址" prop="contractUrl">
+              <Input v-model="form.contractUrl"  placeholder="请输入合同地址"></Input>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="视频地址" prop="videoUrl">
+              <Input v-model="form.videoUrl"  placeholder="请输入视频地址"></Input>
+            </FormItem>
+          </Col> -->
+        </Row>
+        <Row :gutter="30">
+          
           <!-- <Col span="12">
             <FormItem label="是否主推" prop="isMain">
               <i-switch v-model="form.isMain" />
             </FormItem>
           </Col> -->
-          <Col span="12">
-            <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
-            <i-switch v-model="form.valid" />
-          </FormItem>
+          <Col span="8">
+            <FormItem label="视频" prop="videoUrl">
+              <vedioUpload :uploadObj="videouploadObj" @uploadChange="videouploadObjHandleUploadChange" />
+            </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
-          <Col span="12">
+          <Col span="8">
             <FormItem label="头像" prop="thumbPicture">
               <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
             <FormItem label="详情图" prop="detailPicture">
               <upload :uploadObj="detailUploadObj" @uploadChange="detailHandleUploadChange" />
             </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="30">
+          
+          
+          <Col span="12">
+            <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
+            <i-switch v-model="form.valid" />
+          </FormItem>
           </Col>
         </Row>
       </Form>
@@ -150,10 +175,13 @@
 <script>
 import * as api from "@/api/liveAnchorBaseInfo";
 import upload from "@/components/upload/upload";
-
+import uploadFile from "@/components/upload/uploadFile";
+import vedioUpload from "@/components/upload/uploadVedio";
 export default {
   components: {
     upload,
+    uploadFile,
+    vedioUpload
   },
   data() {
     return {
@@ -224,14 +252,6 @@ export default {
               ]);
             },
           },
-          {
-            title: "视频地址",
-            key: "videoUrl",
-          },
-          {
-            title: "合同地址",
-            key: "contractUrl",
-          },
           // {
           //   title: "是否主推",
           //   key: "isMain",
@@ -285,9 +305,37 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 150,
+            width: 240,
+            align:'center',
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        api.byIdGetLiveAnchorBaseInfoInfo(id).then((res) => {
+                          if (res.code === 0) {
+                            if (res.data.liveAnchorBaseInfo.contractUrl) {
+                              window.open(res.data.liveAnchorBaseInfo.contractUrl);
+                            } else {
+                              this.$Message.error("暂无上传合同");
+                            }
+                          }
+                        });
+                      },
+                    },
+                  },
+                  "预览合同"
+                ),
                 h(
                   "Button",
                   {
@@ -316,7 +364,7 @@ export default {
                               liveAnchorName,
                               nickName,
                               videoUrl,
-                              thumbPicture
+                              thumbPicture,
                             } = res.data.liveAnchorBaseInfo;
                             this.isEdit = true;
                             this.form.valid = valid;
@@ -332,6 +380,8 @@ export default {
                             this.form.thumbPicture = thumbPicture;
                             this.uploadObj.uploadList = [this.form.thumbPicture];
                             this.form.videoUrl = videoUrl;
+                            this.videouploadObj.uploadList = [this.form.videoUrl]
+                            this.uploadFileObj.uploadList = this.form.contractUrl ? [this.form.contractUrl] : [];
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -415,6 +465,27 @@ export default {
         // 文件列表
         uploadList: [],
       },
+      // 上传文件
+      uploadFileObj: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+        // 文件名称
+        uploadListName: [],
+      },
+      videouploadObj: {
+        // 是否开启多个视频
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
+      // 接收子组件的文件名称
+      uploadFileName: [],
       form: {
         // 是否有效
         valid: false,
@@ -466,12 +537,12 @@ export default {
             message: "请选择到期时间",
           },
         ],
-        contractUrl: [
-          {
-            required: true,
-            message: "请输入合同地址",
-          },
-        ],
+        // contractUrl: [
+        //   {
+        //     required: true,
+        //     message: "请输入合同地址",
+        //   },
+        // ],
         videoUrl: [
           {
             required: true,
@@ -495,6 +566,19 @@ export default {
     };
   },
   methods: {
+    // 视频
+    videouploadObjHandleUploadChange(values){
+      this.form.videoUrl = values[0];
+    },
+    // PDF转换地址
+    jumpHtml() {
+      window.open("https://smallpdf.com/cn/word-to-pdf");
+    },
+    // 上传文件
+    handleUploadFileChange(values, uploadListName) {
+      this.form.contractUrl = values[0];
+      this.uploadFileName = uploadListName;
+    },
     // 图片
     handleUploadChange(values) {
       this.form.thumbPicture = values[0];
@@ -598,6 +682,7 @@ export default {
       this.controlModal = false;
       this.uploadObj.uploadList = [];
       this.detailUploadObj.uploadList = [];
+      this.uploadFileObj.uploadList = [];
       this.$refs[name].resetFields();
     },
 
@@ -607,6 +692,7 @@ export default {
         this.isEdit = false;
         this.uploadObj.uploadList = [];
         this.detailUploadObj.uploadList = [];
+        this.uploadFileObj.uploadList = [];
         this.$refs["form"].resetFields();
       }
     },

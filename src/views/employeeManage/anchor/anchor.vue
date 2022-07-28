@@ -66,7 +66,7 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="100"
+        :label-width="80"
       >
         <Row :gutter="30">
           <Col span="12">
@@ -93,17 +93,7 @@
           </Col>
         </Row>
         <Row :gutter="30">
-          <Col span="11">
-            <FormItem label="到期时间" prop="dueTime">
-              <DatePicker
-                type="date"
-                style="width:100%"
-                placeholder="请选择到期时间"
-                :value="form.dueTime"
-                v-model="form.dueTime"
-              ></DatePicker>
-            </FormItem>
-          </Col>
+          
           <Col span="13">
             <FormItem label="上传合同" prop="contractUrl">
               <uploadFile
@@ -118,6 +108,17 @@
                   >请点击进入在线转换地址</span
                 >
               </div>
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="到期时间" prop="dueTime">
+              <DatePicker
+                type="date"
+                style="width:100%"
+                placeholder="请选择到期时间"
+                :value="form.dueTime"
+                v-model="form.dueTime"
+              ></DatePicker>
             </FormItem>
           </Col>
           
@@ -140,11 +141,6 @@
             </FormItem>
           </Col> -->
           <Col span="8">
-            <FormItem label="视频" prop="videoUrl">
-              <vedioUpload :uploadObj="videouploadObj" @uploadChange="videouploadObjHandleUploadChange" />
-            </FormItem>
-          </Col>
-          <Col span="8">
             <FormItem label="头像" prop="thumbPicture">
               <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
             </FormItem>
@@ -152,6 +148,11 @@
           <Col span="8">
             <FormItem label="详情图" prop="detailPicture">
               <upload :uploadObj="detailUploadObj" @uploadChange="detailHandleUploadChange" />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="视频" prop="videoUrl">
+              <vedioUpload :uploadObj="videouploadObj" @uploadChange="videouploadObjHandleUploadChange" />
             </FormItem>
           </Col>
         </Row>
@@ -219,19 +220,6 @@ export default {
             },
           },
           {
-            title: "昵称",
-            key: "nickName",
-            width:120
-          },
-          {
-            title: "个性签名",
-            key: "individualitySignature",
-          },
-          {
-            title: "简介",
-            key: "description",
-          },
-          {
             title: "详情图",
             key: "detailPicture",
             align: "center",
@@ -252,6 +240,20 @@ export default {
               ]);
             },
           },
+          {
+            title: "昵称",
+            key: "nickName",
+            width:120
+          },
+          {
+            title: "个性签名",
+            key: "individualitySignature",
+          },
+          {
+            title: "简介",
+            key: "description",
+          },
+          
           // {
           //   title: "是否主推",
           //   key: "isMain",
@@ -305,10 +307,37 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 240,
+            width: 300,
             align:'center',
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        api.byIdGetLiveAnchorBaseInfoInfo(id).then((res) => {
+                          if (res.code === 0) {
+                            if (res.data.liveAnchorBaseInfo.videoUrl) {
+                              window.open(res.data.liveAnchorBaseInfo.videoUrl);
+                            } else {
+                              this.$Message.error("暂无视频");
+                            }
+                          }
+                        });
+                      },
+                    },
+                  },
+                  "查看视频"
+                ),
                 h(
                   "Button",
                   {
@@ -683,6 +712,7 @@ export default {
       this.uploadObj.uploadList = [];
       this.detailUploadObj.uploadList = [];
       this.uploadFileObj.uploadList = [];
+       this.videouploadObj.uploadList = []
       this.$refs[name].resetFields();
     },
 
@@ -693,6 +723,7 @@ export default {
         this.uploadObj.uploadList = [];
         this.detailUploadObj.uploadList = [];
         this.uploadFileObj.uploadList = [];
+        this.videouploadObj.uploadList = []
         this.$refs["form"].resetFields();
       }
     },

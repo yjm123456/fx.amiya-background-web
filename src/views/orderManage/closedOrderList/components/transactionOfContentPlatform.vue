@@ -24,8 +24,7 @@
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
-            
-            <Select
+            <!-- <Select
               v-model="query.contentPlateFormId"
               placeholder="请选择(订单)下单平台"
               style="width: 180px;margin-left: .625rem"
@@ -50,8 +49,8 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select>
-            <Select
+            </Select> -->
+            <!-- <Select
               v-model="query.toHospitalType"
               placeholder="请选择到院类型"
               clearable
@@ -64,7 +63,7 @@
                 :key="item.orderType"
                 >{{ item.orderTypeText }}</Option
               >
-            </Select>
+            </Select> -->
             <Select
               v-model="query.checkState"
               placeholder="审核状态"
@@ -78,6 +77,56 @@
               >
             </Select>
             <Select
+              v-model="query.isOldCustomer"
+              style="width: 180px;margin-left:10px"
+              placeholder="新老客业绩"
+            >
+              <Option
+                v-for="item in query.isOldCustomerList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.customerServiceId"
+              style="width: 180px;margin-left:10px"
+              placeholder="请选择跟进人员"
+            >
+              <Option
+                v-for="item in employee"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.isDeal"
+              style="width: 180px; margin-left: 10px"
+              placeholder="请选择成交状态"
+            >
+              <Option
+                v-for="item in query.dealList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.lastDealHospitalId"
+              style="width: 180px; margin-left: 10px"
+              placeholder="请选择医院"
+              filterable
+              :disabled="query.isDeal!='true'"
+            >
+              <Option
+                v-for="item in query.lastDealHospitalList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <!-- <Select
               v-model="query.ReturnBackPriceState"
               placeholder="回款状态"
               style="width: 180px;margin-left:10px"
@@ -88,7 +137,8 @@
                 :key="item.status"
                 >{{ item.name }}</Option
               >
-            </Select>
+            </Select> -->
+            
           </div>
           <div style="margin:10px 0">
             <Select
@@ -137,57 +187,17 @@
                 >{{ item.orderTypeText }}</Option
               >
             </Select>
+            
+            
             <Select
-              v-model="query.contentPlatFormId"
-              placeholder="请选择主播平台"
-              @on-change="contentPlateChange(query.contentPlatFormId)"
-              style="width: 180px; margin-left: 10px"
-              filterable
+              v-model="query.isAccompanying"
+              style="width: 180px;margin-left:10px"
+              placeholder="是否陪诊"
             >
               <Option
-                v-for="item in contentPalteForms"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.contentPlatformName }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.liveAnchorId"
-              placeholder="请选择主播IP账号"
-              style="width: 180px; margin-left: 10px"
-              :disabled="query.contentPlatFormId === null"
-              filterable
-            >
-              <Option
-                v-for="item in liveAnchors"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.hostAccountName }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.isDeal"
-              style="width: 180px; margin-left: 10px"
-              placeholder="请选择成交状态"
-            >
-              <Option
-                v-for="item in query.dealList"
+                v-for="item in query.isAccompanyingList"
                 :value="item.type"
                 :key="item.type"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.lastDealHospitalId"
-              style="width: 180px; margin-left: 10px"
-              placeholder="请选择医院"
-              filterable
-              :disabled="query.isDeal!='true'"
-            >
-              <Option
-                v-for="item in query.lastDealHospitalList"
-                :value="item.id"
-                :key="item.id"
                 >{{ item.name }}</Option
               >
             </Select>
@@ -204,12 +214,9 @@
                 >{{ item.name }}</Option
               >
             </Select> -->
-          </div>
-          <div>
-            
             <Select
               v-model="query.isReturnBakcPrice"
-              style="width: 180px;"
+              style="width: 180px;margin-left:10px"
               placeholder="是否回款"
             >
               <Option
@@ -235,43 +242,37 @@
               v-model="query.returnBackPriceEndDate"
               :disabled="query.isReturnBakcPrice!='true'"
             ></DatePicker>
+          </div>
+          <!-- <div>
             <Select
-              v-model="query.isAccompanying"
-              style="width: 180px;margin-left:10px"
-              placeholder="是否陪诊"
+              v-model="query.contentPlatFormId"
+              placeholder="请选择主播平台"
+              @on-change="contentPlateChange(query.contentPlatFormId)"
+              style="width: 180px;"
+              filterable
             >
               <Option
-                v-for="item in query.isAccompanyingList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.isOldCustomer"
-              style="width: 180px;margin-left:10px"
-              placeholder="新老客业绩"
-            >
-              <Option
-                v-for="item in query.isOldCustomerList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.customerServiceId"
-              style="width: 180px;margin-left:10px"
-              placeholder="请选择跟进人员"
-            >
-              <Option
-                v-for="item in employee"
+                v-for="item in contentPalteForms"
                 :value="item.id"
                 :key="item.id"
-                >{{ item.name }}</Option
+                >{{ item.contentPlatformName }}</Option
               >
             </Select>
-          </div>
+            <Select
+              v-model="query.liveAnchorId"
+              placeholder="请选择主播IP账号"
+              style="width: 180px; margin-left: 10px"
+              :disabled="query.contentPlatFormId === null"
+              filterable
+            >
+              <Option
+                v-for="item in liveAnchors"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.hostAccountName }}</Option
+              >
+            </Select>
+          </div> -->
         </div>
         <div class="right">
           <Button

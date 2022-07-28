@@ -1664,7 +1664,7 @@ export default {
               otherContentPlatFormOrderId,
             toHospitalType:isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
-            commissionRatio
+            commissionRatio:isFinish == false ? 0 : commissionRatio
           };
           api.finishContentPlateFormOrderByEmployee(data).then((res) => {
             if (res.code === 0) {

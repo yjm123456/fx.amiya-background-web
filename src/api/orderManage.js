@@ -1285,3 +1285,10 @@ export const orderReturnBackOrder = (data) => {
         data,
     });
 };
+// 获取内容平台面诊状态
+export const getOrderConsultationTypeList = () => {
+    return http({
+        url: "/amiyabg/ContentPlateFormOrder/getOrderConsultationTypeList",
+        method: "get",
+    })
+}

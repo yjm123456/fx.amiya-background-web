@@ -7,14 +7,14 @@
           <div class="left_top">
             <Input
               v-model="query.keyword"
-              style="width:11.25rem;"
+              style="width:200px;"
               placeholder="请输入订单号或商品名称"
               @keyup.enter.native="getOrderInfo()"
             />
             <DatePicker
               type="date"
               placeholder="下单开始日期"
-              style="width: 160px;margin-left: .625rem"
+              style="width: 180px;margin-left: .625rem"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
@@ -22,14 +22,14 @@
             <DatePicker
               type="date"
               placeholder="下单结束日期"
-              style="width: 160px; margin-left: .625rem"
+              style="width: 180px; margin-left: .625rem"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
             <Select
               v-model="query.orderStatus"
               placeholder="请选择订单状态"
-              style="width: 160px;margin-left: .625rem"
+              style="width: 180px;margin-left: .625rem"
             >
               <Option
                 v-for="item in orderStatus"
@@ -42,7 +42,7 @@
               v-model="query.orderSource"
               placeholder="请选择订单来源"
               filterable
-              style="width: 140px;margin-left: .625rem"
+              style="width: 180px;margin-left: .625rem"
             >
               <Option
                 v-for="item in orderSourcesListAll"
@@ -54,7 +54,7 @@
             <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
-              style="width: 140px;margin-left: 10px"
+              style="width: 180px;margin-left: 10px"
               filterable
             >
               <Option
@@ -70,7 +70,7 @@
             <Select
               v-model="query.contentPlateFormId"
               placeholder="请选择(订单)下单平台"
-              style="width: 180px;"
+              style="width: 200px;"
               filterable
             >
               <Option
@@ -82,7 +82,7 @@
             </Select>
             <Select
               v-model="query.belongEmpId"
-              style="width: 160px;margin-left: 10px"
+              style="width: 180px;margin-left: 10px"
               placeholder="请选择归属客服"
               filterable
             >
@@ -98,7 +98,7 @@
               v-model="query.contentPlatFormId"
               placeholder="请选择主播平台"
               @on-change="contentPlateChange(query.contentPlatFormId)"
-              style="width: 160px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
               filterable
             >
               <Option
@@ -111,7 +111,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 160px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
               :disabled="query.contentPlatFormId === null"
               filterable
             >
@@ -123,8 +123,21 @@
               >
             </Select>
             <Select
+              v-model="query.consultationType"
+              style="width: 180px;margin-left:10px"
+              placeholder="请选择完成情况"
+              filterable
+            >
+              <Option
+                v-for="item in consultationTypeListAll"
+                :value="item.orderType"
+                :key="item.orderType"
+                >{{ item.orderTypeText }}</Option
+              >
+            </Select>
+            <Select
               v-model="query.appointmentHospital"
-              style="width: 260px;margin-left: 10px"
+              style="width: 220px;margin-left: 10px"
               placeholder="请选择医院"
               filterable
               transfer
@@ -201,7 +214,7 @@
           :total="query.totalCount"
           show-total
           show-sizer
-          :page-size-opts="[10,20,30,50,100]"
+          :page-size-opts="[10, 20, 30, 50, 100]"
           @on-change="handlePageChange"
           @on-page-size-change="handlePageSizeChange"
         />
@@ -248,6 +261,7 @@
               </Select>
             </FormItem>
           </Col>
+          <!-- 客服和客服管理员不能更改（positionId==2 || positionId==4） :disabled="title=='录单编辑' && (positionId==2 || positionId==4)"-->
           <Col span="8">
             <FormItem label="主播平台" prop="contentPlateFormId">
               <Select
@@ -255,6 +269,9 @@
                 placeholder="请选择主播平台"
                 @on-change="contentPlateChange(form.contentPlateFormId)"
                 filterable
+                :disabled="
+                  title == '录单编辑' && (positionId == 2 || positionId == 4)
+                "
               >
                 <Option
                   v-for="item in contentPalteForms"
@@ -270,7 +287,11 @@
               <Select
                 v-model="form.liveAnchorId"
                 placeholder="请选择主播IP账号"
-                :disabled="form.contentPlateFormId === ''"
+                :disabled="
+                  form.contentPlateFormId === '' ||
+                    (title == '录单编辑' &&
+                      (positionId == 2 || positionId == 4))
+                "
                 filterable
                 @on-change="liveAnchorChange(form.liveAnchorId)"
               >
@@ -288,7 +309,11 @@
               <Select
                 v-model="form.liveAnchorWeChatNo"
                 placeholder="请选择主播微信号"
-                :disabled="form.liveAnchorId === ''"
+                :disabled="
+                  form.liveAnchorId === '' ||
+                    (title == '录单编辑' &&
+                      (positionId == 2 || positionId == 4))
+                "
                 filterable
               >
                 <Option
@@ -377,6 +402,9 @@
                 v-model="form.phone"
                 maxlength="11"
                 placeholder="请输入手机号"
+                :disabled="
+                  title == '录单编辑' && (positionId == 2 || positionId == 4)
+                "
               ></Input>
             </FormItem>
           </Col>
@@ -396,7 +424,7 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem label="预约日期" prop="appointmentDate">
               <DatePicker
                 type="date"
@@ -405,13 +433,16 @@
                 v-model="form.appointmentDate"
               ></DatePicker>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="8">
             <FormItem label="订单来源" prop="orderSource">
               <Select
                 v-model="form.orderSource"
                 placeholder="请选择订单来源"
                 filterable
+                :disabled="
+                  title == '录单编辑' && (positionId == 2 || positionId == 4)
+                "
               >
                 <Option
                   v-for="item in orderSourcesList"
@@ -422,7 +453,7 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem label="面诊员" prop="consultationEmpId">
               <Select
                 v-model="form.consultationEmpId"
@@ -445,9 +476,27 @@
                 placeholder="请输入接诊咨询"
               ></Input>
             </FormItem>
+          </Col> -->
+        
+          <Col span="8">
+            <FormItem label="面诊状态" prop="consultationType">
+              <Select
+                v-model="form.consultationType"
+                placeholder="请选择面诊状态"
+                filterable
+                :disabled="
+                  title == '录单编辑' && (positionId == 2 || positionId == 4)
+                "
+              >
+                <Option
+                  v-for="item in consultationTypeList"
+                  :value="item.orderType"
+                  :key="item.orderType"
+                  >{{ item.orderTypeText }}</Option
+                >
+              </Select>
+            </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
           <Col span="20">
             <FormItem label="顾客照片" prop="imageUrl" key="customerPictures">
               <upload
@@ -619,7 +668,8 @@ export default {
   },
   data() {
     return {
-      weChatList:[],
+      positionId: sessionStorage.getItem("positionId"),
+      weChatList: [],
       detailList: [],
       detailModel: false,
       hospitallist: [{ id: -1, name: "全部预约医院" }],
@@ -715,7 +765,7 @@ export default {
         // 主播账号id
         liveAnchorId: "",
         // 主播微信号
-        liveAnchorWeChatNo:'',
+        liveAnchorWeChatNo: "",
         // 客户昵称
         customerName: "",
         // 手机号
@@ -751,9 +801,17 @@ export default {
           : "",
         // 面诊人员
         consultationEmpId: null,
+        // 面诊状态
+        consultationType: -1,
       },
       controlModal: false,
       ruleValidates: {
+        consultationType: [
+          {
+            required: true,
+            message: "请选择面诊状态",
+          },
+        ],
         consultationEmpId: [
           {
             required: true,
@@ -835,7 +893,7 @@ export default {
         ],
       },
       query: {
-        pageNumEdit:1,
+        pageNumEdit: 1,
         appointmentHospital: -1,
         consultationEmpId: -1,
         orderSource: -1,
@@ -855,6 +913,8 @@ export default {
         // 核销时间
         writeOffStartDate: "",
         writeOffEndDate: "",
+        // 面诊状态
+        consultationType: -1,
         columns: [
           {
             type: "selection",
@@ -868,27 +928,16 @@ export default {
             minWidth: 170,
             align: "center",
           },
-
-          // {
-          //   title: "预约时间",
-          //   key: "appointmentDate",
-          //   minWidth: 130,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return h(
-          //       "div",
-          //       params.row.appointmentDate == "未预约时间"
-          //         ? "未预约时间"
-          //         : this.$moment(params.row.appointmentDate).format(
-          //             "YYYY-MM-DD"
-          //           )
-          //     );
-          //   },
-          // },
           {
             title: "归属客服",
             key: "belongEmpName",
             minWidth: 110,
+            align: "center",
+          },
+          {
+            title: "面诊状态",
+            key: "consultationType",
+            minWidth: 120,
             align: "center",
           },
           {
@@ -909,39 +958,7 @@ export default {
             minWidth: 220,
             align: "center",
           },
-          // {
-          //   title: "项目",
-          //   key: "thumbPictureUrl",
-          //   minWidth: 200,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return h(
-          //       "viewer",
-          //       {
-          //         props: {
-          //           zoomable: false,
-          //         },
-          //         style: {
-          //           display: "flex",
-          //         },
-          //       },
-          //       [
-          //         h("img", {
-          //           style: {
-          //             width: "3.125rem",
-          //             height: "3.125rem",
-          //             margin: ".3125rem .9375rem .3125rem .3125rem",
-          //             verticalAlign: "middle",
-          //           },
-          //           attrs: {
-          //             src: params.row.thumbPictureUrl,
-          //           },
-          //         }),
-          //         h("div", params.row.goodsName),
-          //       ]
-          //     );
-          //   },
-          // },
+
           {
             title: "科室",
             key: "departmentName",
@@ -986,12 +1003,7 @@ export default {
             minWidth: 140,
             align: "center",
           },
-          // {
-          //   title: "订单类型",
-          //   key: "orderTypeText",
-          //   minWidth: 140,
-          //   align: "center",
-          // },
+
           {
             title: "订单状态",
             key: "orderStatusText",
@@ -1061,256 +1073,14 @@ export default {
               }
             },
           },
-          // {
-          //   title: "抖店订单号",
-          //   key: "otherContentPlatFormOrderId",
-          //   minWidth: 180,
-          //   align: "center",
-          // },
+
           {
             title: "订单来源",
             key: "orderSourceText",
             minWidth: 100,
             align: "center",
           },
-          // {
-          //   title: "派单人",
-          //   key: "sender",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          // {
-          //   title: "派单时间",
-          //   key: "sendDate",
-          //   minWidth: 180,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return params.row.sendDate
-          //       ? h(
-          //           "div",
-          //           this.$moment(params.row.sendDate).format(
-          //             "YYYY-MM-DD HH:mm:ss"
-          //           )
-          //         )
-          //       : "";
-          //   },
-          // },
-          {
-            title: "面诊员",
-            key: "consultationEmpName",
-            minWidth: 120,
-            align: "center",
-          },
-          // {
-          //   title: "接诊咨询",
-          //   key: "acceptConsulting",
-          //   minWidth: 200,
-          //   align: "center",
-          // },
-          // {
-          //   title: "定金金额",
-          //   key: "depositAmount",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          // {
-          //   title: "是否到院",
-          //   key: "isToHospital",
-          //   minWidth: 100,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     if (params.row.isToHospital == true) {
-          //       return h("Icon", {
-          //         props: {
-          //           type: "md-checkmark",
-          //         },
-          //         style: {
-          //           fontSize: "18px",
-          //           color: "#559DF9",
-          //         },
-          //       });
-          //     } else {
-          //       return h("Icon", {
-          //         props: {
-          //           type: "md-close",
-          //         },
-          //         style: {
-          //           fontSize: "18px",
-          //           color: "red",
-          //         },
-          //       });
-          //     }
-          //   },
-          // },
-          // {
-          //   title: "到院时间",
-          //   key: "toHospitalDate",
-          //   minWidth: 180,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return params.row.toHospitalDate
-          //       ? h(
-          //           "div",
-          //           this.$moment(params.row.toHospitalDate).format(
-          //             "YYYY-MM-DD HH:mm:ss"
-          //           )
-          //         )
-          //       : "";
-          //   },
-          // },
-          // {
-          //   title: "最终成交医院",
-          //   key: "lastDealHospital",
-          //   minWidth: 220,
-          //   align: "center",
-          // },
-          // {
-          //   title: "成交金额",
-          //   key: "dealAmount",
-          //   minWidth: 140,
-          //   align: "center",
-          // },
-          // {
-          //   title: "成交时间",
-          //   key: "sendDate",
-          //   minWidth: 180,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return params.row.dealDate
-          //       ? h(
-          //           "div",
-          //           this.$moment(params.row.dealDate).format(
-          //             "YYYY-MM-DD HH:mm:ss"
-          //           )
-          //         )
-          //       : "";
-          //   },
-          // },
-          // {
-          //   title: "未成交原因",
-          //   key: "unDealReason",
-          //   minWidth: 200,
-          // },
-          // {
-          //   title: "后期铺垫",
-          //   key: "lateProjectStage",
-          //   minWidth: 400,
-          // },
-          // {
-          //   title: "未派单原因",
-          //   key: "unSendReason",
-          //   minWidth: 200,
-          // },
-          // {
-          //   title: "备注",
-          //   key: "remark",
-          //   minWidth: 400,
-          // },
-          // {
-          //   title: "审核状态",
-          //   key: "checkStateText",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          // {
-          //   title: "审核金额",
-          //   key: "checkPrice",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          // {
-          //   title: "结算金额",
-          //   key: "settlePrice",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          // {
-          //   title: "审核日期",
-          //   key: "checkDate",
-          //   minWidth: 180,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return params.row.dealDate
-          //       ? h(
-          //           "div",
-          //           params.row.checkDate ? this.$moment(params.row.checkDate).format(
-          //             "YYYY-MM-DD HH:mm:ss"
-          //           ) : ''
-          //         )
-          //       : "";
-          //   },
-          // },
-          // {
-          //   title: "审核人",
-          //   key: "checkByName",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          // {
-          //   title: "审核备注",
-          //   key: "checkRemark",
-          //   minWidth: 300,
-          //   align: "center",
-          // },
-          // {
-          //   title: "是否回款",
-          //   key: "isReturnBackPrice",
-          //   minWidth: 120,
-          //   align:'center',
-          //   render: (h, params) => {
-          //     if (params.row.isReturnBackPrice == true) {
-          //       return h(
-          //         "div",
-          //         {
-          //           style: {
-          //             color: "#04B05D",
-          //           },
-          //         },
-          //         params.row.isReturnBackPrice == true ? '已回款':'未回款'
-          //       );
-          //     } else if (params.row.isReturnBackPrice == false) {
-          //       return h(
-          //         "div",
-          //         {
-          //           style: {
-          //             color: "red",
-          //           },
-          //         },
-          //         params.row.isReturnBackPrice == true ? '已回款':'未回款'
-          //       );
-          //     }else {
-          //       return h(
-          //         "div",
-          //         {
-          //           style: {
-          //             color: "#515a6e",
-          //           },
-          //         },
-          //         params.row.isReturnBackPrice == true ? '已回款':'未回款'
-          //       );
-          //     }
-          //   },
-          // },
-          // {
-          //   title: "回款金额",
-          //   key: "returnBackPrice",
-          //   minWidth: 120,
-          //   align:'center'
-          // },
-          // {
-          //   title: "回款时间",
-          //   key: "returnBackDate",
-          //   minWidth: 180,
-          //   align:'center',
-          //   render: (h, params) => {
-          //     return params.row.returnBackDate
-          //       ? h(
-          //           "div",
-          //           this.$moment(params.row.returnBackDate).format("YYYY-MM-DD HH:mm:ss")
-          //         )
-          //       : "";
-          //   },
-          // },
+
           {
             title: "操作",
             align: "center",
@@ -1404,10 +1174,11 @@ export default {
                               orderSource,
                               unSendReason,
                               consultationEmpId,
-                              liveAnchorWeChatNo
+                              liveAnchorWeChatNo,
+                              consultationType,
                             } = res.data.orderInfo;
                             this.contentPlateChange(contentPlateFormId);
-                            this.liveAnchorChange(liveAnchorId)
+                            this.liveAnchorChange(liveAnchorId);
                             this.isEdit = true;
                             this.form.appointmentHospitalId = appointmentHospitalId;
                             this.form.id = id;
@@ -1427,7 +1198,7 @@ export default {
                             this.form.orderSource = orderSource;
                             this.form.unSendReason = unSendReason;
                             this.form.customerPictures = customerPictures;
-                            this.form.liveAnchorWeChatNo = liveAnchorWeChatNo
+                            this.form.liveAnchorWeChatNo = liveAnchorWeChatNo;
                             this.form.belongEmpId = this.form.belongEmpId
                               ? this.form.belongEmpId
                               : "";
@@ -1436,6 +1207,7 @@ export default {
                               .customerPictures
                               ? this.form.customerPictures
                               : [];
+                            this.form.consultationType = consultationType;
                           }
                         });
                       },
@@ -1523,9 +1295,28 @@ export default {
         pageSize: 10,
         totalCount: 0,
       },
+      // 面诊状态(搜索用)
+      consultationTypeListAll: [
+        { orderType: -1, orderTypeText: "全部面诊状态" },
+      ],
+      // 面诊状态 录单
+      consultationTypeList: [],
     };
   },
   methods: {
+    //   获取 面诊状态列表（下拉框）
+    getOrderConsultationTypeList() {
+      api.getOrderConsultationTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderConsultationTypes } = res.data;
+          this.consultationTypeListAll = [
+            ...this.consultationTypeListAll,
+            ...orderConsultationTypes,
+          ];
+          this.consultationTypeList = orderConsultationTypes;
+        }
+      });
+    },
     // 获取医院名称列表
     getHospitalInfonameList() {
       hospitalManage.HospitalInfonameList().then((res) => {
@@ -1667,6 +1458,7 @@ export default {
         orderSource,
         consultationEmpId,
         appointmentHospital,
+        consultationType,
       } = this.query;
       const data = {
         keyword,
@@ -1684,6 +1476,7 @@ export default {
         consultationEmpId: consultationEmpId == -1 ? null : consultationEmpId,
         appointmentHospital:
           appointmentHospital == -1 ? null : appointmentHospital,
+        consultationType: consultationType == -1 ? null : consultationType,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1702,7 +1495,7 @@ export default {
         download(res, name);
       });
     },
-    // 
+    //
     contentPlateChange(value) {
       if (!value) {
         return;
@@ -1710,14 +1503,14 @@ export default {
       this.getLiveValidList(value);
     },
     //
-    liveAnchorChange(value){
+    liveAnchorChange(value) {
       if (!value) {
         return;
       }
       this.getWeChatList(value);
     },
     //  根据主播获取主播微信号
-    getWeChatList(value){
+    getWeChatList(value) {
       const data = {
         liveanchorId: value,
       };
@@ -1826,7 +1619,8 @@ export default {
               acceptConsulting,
               customerPictures,
               consultationEmpId,
-              liveAnchorWeChatNo
+              liveAnchorWeChatNo,
+              consultationType,
             } = this.form;
             const data = {
               orderType,
@@ -1849,8 +1643,9 @@ export default {
               unSendReason,
               acceptConsulting,
               customerPictures,
-              consultationEmpId,
-              liveAnchorWeChatNo
+              consultationEmpId: consultationEmpId ? consultationEmpId : 0,
+              liveAnchorWeChatNo,
+              consultationType,
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1863,7 +1658,11 @@ export default {
                   this.isEdit = false;
                   this.flag = false;
                   this.handleCancel("form");
-                  this.handlePageChange(sessionStorage.getItem('pageNumEdit') ? sessionStorage.getItem('pageNumEdit') : 1);
+                  this.handlePageChange(
+                    sessionStorage.getItem("pageNumEdit")
+                      ? sessionStorage.getItem("pageNumEdit")
+                      : 1
+                  );
                   this.$Message.success({
                     content: "修改成功",
                     duration: 3,
@@ -1896,7 +1695,8 @@ export default {
               customerPictures,
               belongEmpId,
               consultationEmpId,
-              liveAnchorWeChatNo
+              liveAnchorWeChatNo,
+              consultationType,
             } = this.form;
             const data = {
               orderType,
@@ -1919,8 +1719,9 @@ export default {
               acceptConsulting,
               customerPictures,
               belongEmpId,
-              consultationEmpId,
-              liveAnchorWeChatNo
+              consultationEmpId: consultationEmpId ? consultationEmpId : 0,
+              liveAnchorWeChatNo,
+              consultationType,
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -2018,7 +1819,7 @@ export default {
     // 获取天猫订单信息列表
     getOrderInfo() {
       this.$nextTick(() => {
-        this.$refs["pages"].currentPage = 1
+        this.$refs["pages"].currentPage = 1;
       });
       const {
         keyword,
@@ -2033,7 +1834,7 @@ export default {
         orderSource,
         consultationEmpId,
         appointmentHospital,
-        
+        consultationType,
       } = this.query;
       const data = {
         keyword,
@@ -2051,6 +1852,7 @@ export default {
         consultationEmpId: consultationEmpId == -1 ? null : consultationEmpId,
         appointmentHospital:
           appointmentHospital == -1 ? null : appointmentHospital,
+        consultationType: consultationType == -1 ? null : consultationType,
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -2075,6 +1877,7 @@ export default {
         orderSource,
         consultationEmpId,
         appointmentHospital,
+        consultationType,
       } = this.query;
       const data = {
         keyword,
@@ -2092,6 +1895,7 @@ export default {
         consultationEmpId: consultationEmpId == -1 ? null : consultationEmpId,
         appointmentHospital:
           appointmentHospital == -1 ? null : appointmentHospital,
+        consultationType: consultationType == -1 ? null : consultationType,
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -2099,13 +1903,13 @@ export default {
           this.query.data = list;
           this.query.totalCount = totalCount;
           // 修改时 保留在当前页面
-          sessionStorage.setItem('pageNumEdit',pageNum)
+          sessionStorage.setItem("pageNumEdit", pageNum);
         }
       });
     },
-    handlePageSizeChange(pageSize){
-      this.query.pageSize = pageSize
-      this.getOrderInfo()
+    handlePageSizeChange(pageSize) {
+      this.query.pageSize = pageSize;
+      this.getOrderInfo();
     },
   },
   created() {
@@ -2120,6 +1924,7 @@ export default {
     this.getcontentPlateFormOrderSourceList();
     this.getconsultationNameList();
     this.getHospitalInfonameList();
+    this.getOrderConsultationTypeList();
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")

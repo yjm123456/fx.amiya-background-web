@@ -36,7 +36,7 @@
                   :disabled="query.positionName == '客服'"
                 >
                   <Option
-                    v-for="(item,index) in query.employee"
+                    v-for="(item, index) in query.employee"
                     :value="item.id"
                     :key="index"
                     >{{ item.name }}</Option
@@ -48,7 +48,12 @@
                   @click="getCustomerServiceUnDispatch(1)"
                   >查询</Button
                 >
-                <Button type="primary" @click="exportsendOrder"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
+                <Button
+                  type="primary"
+                  @click="exportsendOrder"
+                  v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
+                  >导出</Button
+                >
               </div>
               <Table
                 border
@@ -83,7 +88,7 @@
                   :disabled="contentInfo.isDisabled == true"
                 >
                   <Option
-                    v-for="(item,i) in contentInfo.employee"
+                    v-for="(item, i) in contentInfo.employee"
                     :value="item.id"
                     :key="i"
                     >{{ item.name }}</Option
@@ -99,7 +104,7 @@
                   filterable
                 >
                   <Option
-                    v-for="(item,j) in contentInfo.contentPalteForms"
+                    v-for="(item, j) in contentInfo.contentPalteForms"
                     :value="item.id"
                     :key="j"
                     >{{ item.contentPlatformName }}</Option
@@ -113,7 +118,7 @@
                   filterable
                 >
                   <Option
-                    v-for="(item,ind) in contentInfo.liveAnchors"
+                    v-for="(item, ind) in contentInfo.liveAnchors"
                     :value="item.id"
                     :key="ind"
                     >{{ item.hostAccountName }}</Option
@@ -137,7 +142,12 @@
                   @click="getcustomerunContentPlatFormSendOrderList(2)"
                   >查询</Button
                 >
-                <Button type="primary" @click="exportContent"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
+                <Button
+                  type="primary"
+                  @click="exportContent"
+                  v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
+                  >导出</Button
+                >
               </div>
               <Table
                 border
@@ -202,8 +212,10 @@ export default {
         employeeIds: null,
         positionName: "",
         employee: [{ name: "全部归属客服", id: -1 }],
-        startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
-        endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
+        startDate: this.$moment()
+          .startOf("month")
+          .format("YYYY-MM-DD"),
+        endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         employeeId: -1,
         columns: [
           {
@@ -277,7 +289,7 @@ export default {
       },
       // 内容平台
       contentInfo: {
-        isDisabled:false,
+        isDisabled: false,
         orderStatus: null,
         contentPlateFormId: null,
         liveAnchors: [],
@@ -292,8 +304,10 @@ export default {
         employeeIds: null,
         positionName: "",
         employee: [{ name: "全部归属客服", id: -1 }],
-        startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
-        endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
+        startDate: this.$moment()
+          .startOf("month")
+          .format("YYYY-MM-DD"),
+        endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         employeeId: -1,
         // 订单状态
         orderStatusList: [],
@@ -377,22 +391,22 @@ export default {
             minWidth: 220,
             align: "center",
           },
-          {
-            title: "预约时间",
-            key: "appointmentDate",
-            minWidth: 130,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.appointmentDate == "未确认时间"
-                  ? "未确认时间"
-                  : this.$moment(params.row.appointmentDate).format(
-                      "YYYY-MM-DD"
-                    )
-              );
-            },
-          },
+          // {
+          //   title: "预约时间",
+          //   key: "appointmentDate",
+          //   minWidth: 130,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     return h(
+          //       "div",
+          //       params.row.appointmentDate == "未确认时间"
+          //         ? "未确认时间"
+          //         : this.$moment(params.row.appointmentDate).format(
+          //             "YYYY-MM-DD"
+          //           )
+          //     );
+          //   },
+          // },
           {
             title: "备注",
             key: "remark",
@@ -418,7 +432,10 @@ export default {
         this.contentInfo.contentPlateFormId = "";
         this.contentInfo.liveAnchorId = "";
         // this.contentInfo.employeeId = -1;
-         this.query.employeeId = sessionStorage.getItem("positionName") == '客服' ? Number(sessionStorage.getItem("employeeId")) : -1;
+        this.query.employeeId =
+          sessionStorage.getItem("positionName") == "客服"
+            ? Number(sessionStorage.getItem("employeeId"))
+            : -1;
         this.contentInfo.startDate = this.$moment()
           .startOf("month")
           .format("YYYY-MM-DD");
@@ -431,8 +448,12 @@ export default {
         this.getContentValidList();
         this.getContentPlateFormOrderStatusList();
         // this.query.employeeId = -1;
-         this.contentInfo.employeeId = sessionStorage.getItem("positionName") == '客服' ? Number(sessionStorage.getItem("employeeId")) : -1;
-         this.contentInfo.isDisabled = sessionStorage.getItem("positionName") == '客服' ? true : false
+        this.contentInfo.employeeId =
+          sessionStorage.getItem("positionName") == "客服"
+            ? Number(sessionStorage.getItem("employeeId"))
+            : -1;
+        this.contentInfo.isDisabled =
+          sessionStorage.getItem("positionName") == "客服" ? true : false;
         this.query.startDate = this.$moment()
           .startOf("month")
           .format("YYYY-MM-DD");
@@ -445,7 +466,10 @@ export default {
         if (res.code === 0) {
           const { employee } = res.data;
           this.query.employee = [...this.query.employee, ...employee];
-          this.contentInfo.employee = [...this.contentInfo.employee, ...employee];
+          this.contentInfo.employee = [
+            ...this.contentInfo.employee,
+            ...employee,
+          ];
           this.query.employee.map((item) => {
             if (this.query.positionName == "客服") {
               if (item.id == this.query.employeeIds) {
@@ -457,7 +481,10 @@ export default {
             if (this.query.positionName == "客服") {
               if (item.id == this.query.employeeIds) {
                 this.contentInfo.employeeId = item.id;
-                this.contentInfo.isDisabled = sessionStorage.getItem("positionName") == '客服' ? true : false
+                this.contentInfo.isDisabled =
+                  sessionStorage.getItem("positionName") == "客服"
+                    ? true
+                    : false;
               }
             }
           });
@@ -641,7 +668,7 @@ export default {
         this.contentInfo.orderStatus = null;
         this.contentInfo.contentPlateFormId = "";
         this.contentInfo.liveAnchorId = "";
-        this.activeName= "orderDistribution"
+        this.activeName = "orderDistribution";
         this.$emit("update:customerNoDispatchModel", false);
       }
     },
@@ -659,7 +686,7 @@ export default {
       this.contentInfo.orderStatus = null;
       this.contentInfo.contentPlateFormId = "";
       this.contentInfo.liveAnchorId = "";
-      this.activeName= "orderDistribution"
+      this.activeName = "orderDistribution";
       this.$emit("update:customerNoDispatchModel", false);
     },
   },

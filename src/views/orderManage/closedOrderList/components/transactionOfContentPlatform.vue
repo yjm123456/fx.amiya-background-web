@@ -24,6 +24,20 @@
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="派单开始日期"
+              style="width: 180px;margin-left: 10px"
+              :value="query.sendStartDate"
+              v-model="query.sendStartDate"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="派单结束日期"
+              style="width: 180px; margin-left: .625rem"
+              :value="query.sendEndDate"
+              v-model="query.sendEndDate"
+            ></DatePicker>
             <!-- <Select
               v-model="query.contentPlateFormId"
               placeholder="请选择(订单)下单平台"
@@ -76,30 +90,7 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Select
-              v-model="query.isOldCustomer"
-              style="width: 180px;margin-left:10px"
-              placeholder="新老客业绩"
-            >
-              <Option
-                v-for="item in query.isOldCustomerList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.customerServiceId"
-              style="width: 180px;margin-left:10px"
-              placeholder="请选择跟进人员"
-            >
-              <Option
-                v-for="item in employee"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
+            
             <Select
               v-model="query.isDeal"
               style="width: 180px; margin-left: 10px"
@@ -115,7 +106,7 @@
             <Select
               v-model="query.lastDealHospitalId"
               style="width: 180px; margin-left: 10px"
-              placeholder="请选择医院"
+              placeholder="请选择成交医院"
               filterable
               :disabled="query.isDeal!='true'"
             >
@@ -273,6 +264,46 @@
               >
             </Select>
           </div> -->
+          <div>
+            <Select
+              v-model="query.isOldCustomer"
+              style="width: 180px;"
+              placeholder="新老客业绩"
+            >
+              <Option
+                v-for="item in query.isOldCustomerList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.customerServiceId"
+              style="width: 180px;margin-left:10px"
+              placeholder="请选择跟进人员"
+              filterable
+            >
+              <Option
+                v-for="item in employee"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.consultationType"
+              style="width: 180px;margin-left:10px"
+              placeholder="请选择完成情况"
+              filterable
+            >
+              <Option
+                v-for="item in consultationTypeList"
+                :value="item.orderType"
+                :key="item.orderType"
+                >{{ item.orderTypeText }}</Option
+              >
+            </Select>
+          </div>
         </div>
         <div class="right">
           <Button
@@ -443,6 +474,12 @@ export default {
         returnBackPriceEndDate:'',
         // 跟进人员
         customerServiceId:-1,
+        // 派单开始时间
+        sendStartDate:'',
+        // 派单结束时间
+        sendEndDate:'',
+        // 面诊状态
+        consultationType:-1,
         toHospitalType:-1,
         ReturnBackPriceState:'-1',
         consultationEmpId:-1,
@@ -472,7 +509,7 @@ export default {
             align:'center'
           },
           {
-            title: "创建时间",
+            title: "登记时间",
             key: "createDate",
             minWidth: 170,
             align:'center',
@@ -484,6 +521,26 @@ export default {
                   )
                 : "";
             },
+          },
+          {
+            title: "派单时间",
+            key: "sendDate",
+            minWidth: 170,
+            align:'center',
+            render: (h, params) => {
+              return params.row.sendDate
+                ? h(
+                    "div",
+                    this.$moment(params.row.sendDate).format("YYYY-MM-DD HH:mm:ss")
+                  )
+                : "";
+            },
+          },
+          {
+            title: "面诊状态",
+            key: "consultationTypeText",
+            minWidth: 120,
+            align:'center'
           },
           {
             title: "手机号",
@@ -632,12 +689,10 @@ export default {
             minWidth: 130,
             align:'center',
             render: (h, params) => {
-              return params.row.isOldCustomer
-                ? h(
+              return h(
                     "div",
                     params.row.isOldCustomer == true ? '老客业绩' : '新客业绩'
                   )
-                : "";
             },
           },
           {
@@ -732,13 +787,13 @@ export default {
           {
             title: "审核时间",
             key: "checkDate",
-            minWidth: 120,
+            minWidth: 180,
             align:'center',
             render: (h, params) => {
               return params.row.checkDate
                 ? h(
                     "div",
-                    this.$moment(params.row.checkDate).format("YYYY-MM-DD")
+                    this.$moment(params.row.checkDate).format("YYYY-MM-DD :HH:mm:ss")
                   )
                 : "";
             },
@@ -1099,9 +1154,20 @@ export default {
           },
         ],
       },
+      // 面诊状态
+      consultationTypeList:[{orderType:-1,orderTypeText:'全部面诊状态'}]
     };
   },
   methods: {
+    //   获取完成情况列表（下拉框）
+    getOrderConsultationTypeList() {
+      api.getOrderConsultationTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderConsultationTypes } = res.data;
+          this.consultationTypeList = [...this.consultationTypeList,...orderConsultationTypes]
+        }
+      });
+    },
     //   获取订单到院类型
     getcontentPlateFormOrderToHospitalTypeList() {
       api.contentPlateFormOrderToHospitalTypeList().then((res) => {
@@ -1197,7 +1263,10 @@ export default {
         isReturnBakcPrice,
         returnBackPriceStartDate,
         returnBackPriceEndDate,
-        customerServiceId
+        customerServiceId,
+        sendStartDate,
+        sendEndDate,
+        consultationType
       } = this.query;
       const data = {
         pageNum,
@@ -1224,7 +1293,12 @@ export default {
         isReturnBakcPrice : isReturnBakcPrice == -1 ? null : isReturnBakcPrice,
         returnBackPriceStartDate: isReturnBakcPrice =='true' ?  (returnBackPriceStartDate ? this.$moment(returnBackPriceStartDate).format("YYYY-MM-DD") : null) : null ,
         returnBackPriceEndDate: isReturnBakcPrice =='true' ? (returnBackPriceEndDate ? this.$moment(returnBackPriceEndDate).format("YYYY-MM-DD") : null) : null ,
-        customerServiceId: customerServiceId == -1 ?  null : customerServiceId
+        customerServiceId: customerServiceId == -1 ?  null : customerServiceId,
+        sendStartDate: sendStartDate
+          ? this.$moment(sendStartDate).format("YYYY-MM-DD")
+          : "",
+        sendEndDate: sendEndDate ? this.$moment(sendEndDate).format("YYYY-MM-DD") : "",
+        consultationType:consultationType == -1 ? null : consultationType
 
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
@@ -1261,7 +1335,10 @@ export default {
         isReturnBakcPrice,
         returnBackPriceStartDate,
         returnBackPriceEndDate,
-        customerServiceId
+        customerServiceId,
+        sendStartDate,
+        sendEndDate,
+        consultationType
       } = this.query;
       const data = {
         pageNum,
@@ -1288,7 +1365,12 @@ export default {
         isReturnBakcPrice : isReturnBakcPrice == -1 ? null : isReturnBakcPrice,
         returnBackPriceStartDate: isReturnBakcPrice =='true' ?  (returnBackPriceStartDate ? this.$moment(returnBackPriceStartDate).format("YYYY-MM-DD") : null) : null ,
         returnBackPriceEndDate: isReturnBakcPrice =='true' ? (returnBackPriceEndDate ? this.$moment(returnBackPriceEndDate).format("YYYY-MM-DD") : null) : null ,
-        customerServiceId: customerServiceId == -1 ?  null : customerServiceId
+        customerServiceId: customerServiceId == -1 ?  null : customerServiceId,
+        sendStartDate: sendStartDate
+          ? this.$moment(sendStartDate).format("YYYY-MM-DD")
+          : "",
+        sendEndDate: sendEndDate ? this.$moment(sendEndDate).format("YYYY-MM-DD") : "",
+        consultationType:consultationType == -1 ? null :consultationType
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
         if (res.code === 0) {
@@ -1364,6 +1446,7 @@ export default {
     this.getHospitalList();
     this.getconsultationNameList()
     this.getcontentPlateFormOrderToHospitalTypeList()
+    this.getOrderConsultationTypeList()
   },
   watch: {
     activeName: {

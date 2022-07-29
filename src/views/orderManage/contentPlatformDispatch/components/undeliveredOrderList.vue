@@ -89,7 +89,7 @@
               item.name
             }}</Option>
           </Select>
-          <Select
+          <!-- <Select
             v-model="query.consultationEmpId"
             placeholder="请选择面诊员"
             style="width: 180px;margin-left: 10px"
@@ -101,10 +101,10 @@
               :key="item.id"
               >{{ item.name }}</Option
             >
-          </Select>
+          </Select> -->
           <Select
             v-model="query.orderSource"
-            style="width: 150px;margin-left: 10px"
+            style="width: 180px;margin-left: 10px"
             placeholder="请选择订单状态"
           >
             <Option
@@ -184,9 +184,9 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
+        <!-- <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
           <i-switch v-model="form.isUncertainDate" />
-        </FormItem>
+        </FormItem> -->
         <FormItem label="派单人员" prop="sendBy" key="派单人员">
           <Select
             v-model="form.sendBy"
@@ -198,7 +198,7 @@
             }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="接诊咨询">
+        <!-- <FormItem label="接诊咨询">
           <Input
             v-model="form.acceptConsulting"
             :placeholder="
@@ -206,12 +206,11 @@
             "
             disabled
           ></Input>
-          <!-- <div>{{form.acceptConsulting? form.acceptConsulting : '暂无咨询'}}</div> -->
           <div style="color:red">
             如需修改接诊咨询，请在内容平台订单列表修改
           </div>
-        </FormItem>
-        <FormItem
+        </FormItem> -->
+        <!-- <FormItem
           label="预约日期"
           prop="appointmentDate"
           v-if="form.isUncertainDate === false"
@@ -222,7 +221,7 @@
             style="width: 100%"
             v-model="form.appointmentDate"
           ></DatePicker>
-        </FormItem>
+        </FormItem> -->
         <FormItem label="派单留言">
           <Input
             v-model="form.remark"
@@ -363,16 +362,23 @@ export default {
               );
             },
           },
-          {
-            title: "面诊员",
-            minWidth: 120,
-            key: "consultationEmpName",
-            align:'center'
-          },
+          
+          // {
+          //   title: "面诊员",
+          //   minWidth: 120,
+          //   key: "consultationEmpName",
+          //   align:'center'
+          // },
           {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 400,
+          },
+          {
+            title: "面诊状态",
+            key: "consultationTypeText",
+            minWidth: 120,
+            align: "center",
           },
           {
             title: "所属平台",

@@ -1466,6 +1466,7 @@ export default {
                     props: {
                       type: "error",
                       size: "small",
+                      disabled: params.row.checkState =='审核通过'
                     },
                     on: {
                       click: () => {

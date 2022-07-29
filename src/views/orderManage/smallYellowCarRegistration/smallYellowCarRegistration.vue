@@ -3,115 +3,151 @@
     <Card :dis-hover="true">
       <div class="header_wrap">
         <div class="left">
-          <Input
-            v-model="query.keyword"
-            placeholder="请输入关键字"
-            style="width: 180px;"
-            @keyup.enter.native="getSmallCar()"
-          />
-          <DatePicker
-            type="date"
-            placeholder="开始时间"
-            :value="query.startDate"
-            v-model="query.startDate"
-            style="width: 140px; margin-left: 10px"
-          ></DatePicker>
-          <DatePicker
-            type="date"
-            placeholder="结束时间"
-            :value="query.endDate"
-            v-model="query.endDate"
-            style="width: 140px; margin-left: 10px"
-          ></DatePicker>
-          <Select
-            v-model="query.contentPlatFormId"
-            placeholder="请选择渠道"
-            @on-change="contentPlateChange(query.contentPlatFormId)"
-            filterable
-            style="width: 160px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in contentPalteForms"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.contentPlatformName }}</Option
+          <div class="contents">
+            <div>
+              <Input
+                v-model="query.keyword"
+                placeholder="请输入关键字"
+                style="width: 180px;"
+                @keyup.enter.native="getSmallCar()"
+              />
+              <DatePicker
+                type="date"
+                placeholder="开始时间"
+                :value="query.startDate"
+                v-model="query.startDate"
+                style="width: 180px; margin-left: 10px"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="结束时间"
+                :value="query.endDate"
+                v-model="query.endDate"
+                style="width: 180px; margin-left: 10px"
+              ></DatePicker>
+              <Select
+                v-model="query.contentPlatFormId"
+                placeholder="请选择渠道"
+                @on-change="contentPlateChange(query.contentPlatFormId)"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in contentPalteForms"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.contentPlatformName }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.liveAnchorId"
+                placeholder="请选择主播IP账号"
+                :disabled="query.contentPlatFormId === ''"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in liveAnchors"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.hostAccountName }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.isAddWechat"
+                placeholder="请选择加v状态"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in isAddWeChatList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              
+              
+            </div>
+            <div style="margin-top:10px">
+              <Select
+                v-model="query.isWriteOff"
+                placeholder="请选择核销状态"
+                filterable
+                style="width: 180px;"
+              >
+                <Option
+                  v-for="item in isWriteOffList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.isConsultation"
+                placeholder="请选择面诊状态"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in isConsultationList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.isReturnBackPrice"
+                placeholder="请选择退款状态"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in isReturnBackPriceList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.admissionId"
+                placeholder="请选择接诊人员"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in employee"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Input
+                v-model="query.minPrice"
+                placeholder="请输入最小下单金额"
+                style="width: 180px;margin-left:10px"
+                type="number"
+                namber
+              />
+              <span> — </span>
+              <Input
+                v-model="query.maxPrice"
+                placeholder="请输入最大下单金额"
+                style="width: 180px;"
+                type="number"
+                namber
+              />
+              
+            </div>
+          </div>
+          <div>
+            <Button
+              type="primary"
+              style="margin:0 10px"
+              @click="getSmallCar()"
+              >查询</Button
             >
-          </Select>
-          <Select
-            v-model="query.liveAnchorId"
-            placeholder="请选择主播IP账号"
-            :disabled="query.contentPlatFormId === ''"
-            filterable
-            style="width: 160px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in liveAnchors"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.hostAccountName }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.isAddWechat"
-            placeholder="请选择加v状态"
-            filterable
-            style="width: 140px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in isAddWeChatList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.isWriteOff"
-            placeholder="请选择核销状态"
-            filterable
-            style="width: 140px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in isWriteOffList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.isConsultation"
-            placeholder="请选择面诊状态"
-            filterable
-            style="width: 140px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in isConsultationList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.isReturnBackPrice"
-            placeholder="请选择退款状态"
-            filterable
-            style="width: 140px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in isReturnBackPriceList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Button
-            type="primary"
-            style="margin-left: 10px"
-            @click="getSmallCar()"
-            >查询</Button
-          >
-        </div>
-        <div class="right">
-          <Button
+            <Button
             type="primary"
             @click="
               controlModal = true;
@@ -119,6 +155,14 @@
             "
             >添加</Button
           >
+          </div>
+          
+        </div>
+        <div class="right">
+          
+        </div>
+        <div class="containers">
+          
         </div>
       </div>
     </Card>
@@ -188,6 +232,31 @@
             </FormItem>
           </Col> -->
           <Col span="8">
+            <FormItem
+              label="接诊人员"
+              prop="admissionId"
+              :rules="[
+                {
+                  required: true,
+                  message: '请选择接诊人员',
+                },
+              ]"
+            >
+              <Select
+                v-model="form.admissionId"
+                placeholder="请选择接诊人员"
+                filterable
+              >
+                <Option
+                  v-for="item in employeeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="渠道" prop="contentPlatFormId">
               <Select
                 v-model="form.contentPlatFormId"
@@ -204,6 +273,8 @@
               </Select>
             </FormItem>
           </Col>
+        </Row>
+        <Row :gutter="30">
           <Col span="8">
             <FormItem label="主播IP账号" prop="liveAnchorId">
               <Select
@@ -211,6 +282,7 @@
                 placeholder="请选择主播IP账号"
                 :disabled="form.contentPlatFormId === ''"
                 filterable
+                @on-change="liveAnchorChange(form.liveAnchorId)"
               >
                 <Option
                   v-for="item in liveAnchors"
@@ -221,15 +293,30 @@
               </Select>
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
-          
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem label="主播微信号" prop="liveAnchorWechatNo">
               <Input
                 v-model="form.liveAnchorWechatNo"
                 placeholder="请输入主播微信号"
               ></Input>
+            </FormItem>
+          </Col> -->
+          
+          <Col span="8">
+            <FormItem label="主播微信号" prop="liveAnchorWeChatNo" >
+              <Select
+                v-model="form.liveAnchorWeChatNo"
+                placeholder="请选择主播微信号"
+                :disabled="form.liveAnchorId == null"
+                
+              >
+                <Option
+                  v-for="item in weChatList"
+                  :value="item.weChatNo"
+                  :key="item.weChatNo"
+                  >{{ item.weChatNo }}</Option
+                >
+              </Select>
             </FormItem>
           </Col>
           <Col span="8">
@@ -272,14 +359,14 @@
               </Select>
             </FormItem>
           </Col>
+          
+        </Row>
+        <Row :gutter="30">
           <Col span="8">
             <FormItem label="是否加V" prop="IsAddWeChat">
               <i-switch v-model="form.IsAddWeChat" />
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
-          
           <Col span="8">
             <FormItem label="是否核销" prop="isWriteOff">
               <i-switch v-model="form.isWriteOff" />
@@ -292,7 +379,77 @@
           </Col>
           <Col span="8">
             <FormItem label="是否退款" prop="isReturnBackPrice">
-              <i-switch v-model="form.isReturnBackPrice" />
+              <i-switch v-model="form.isReturnBackPrice" @on-change="isReturnBackPriceChange()"/>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isReturnBackPrice == true">
+            <FormItem label="退款时间" prop="refundDate" key="退款时间">
+              <DatePicker
+                type="date"
+                placeholder="退款时间"
+                :value="form.refundDate"
+                v-model="form.refundDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8"  v-if="form.isReturnBackPrice == true">
+            <FormItem label="退款原因" prop="refundReason" key="退款原因">
+              <Input
+                v-model="form.refundReason"
+                placeholder="请输入退款原因"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否差评" prop="isBadReview">
+              <i-switch v-model="form.isBadReview" @on-change="isBadReviewChange()"/>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isBadReview == true">
+            <FormItem label="差评时间" prop="badReviewDate" key="差评时间">
+              <DatePicker
+                type="date"
+                placeholder="差评时间"
+                :value="form.badReviewDate"
+                v-model="form.badReviewDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8"  v-if="form.isBadReview == true">
+            <FormItem label="差评原因" prop="badReviewReason" key="差评原因">
+              <Input
+                v-model="form.badReviewReason"
+                placeholder="请输入差评原因"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8"  v-if="form.isBadReview == true">
+            <FormItem label="差评内容" prop="badReviewContent" key="差评内容">
+              <Input
+                v-model="form.badReviewContent"
+                placeholder="请输入差评内容"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否追评" prop="isReContent">
+              <i-switch v-model="form.isReContent" @on-change="isReContentChange()"/>
+            </FormItem>
+          </Col>
+          <Col span="8"  v-if="form.isReContent == true">
+            <FormItem label="追评原因" prop="reContent" key="追评原因">
+              <Input
+                v-model="form.reContent"
+                placeholder="请输入追评原因"
+                type="textarea"
+                :rows="3"
+              ></Input>
             </FormItem>
           </Col>
           <Col span="12">
@@ -322,11 +479,17 @@
 import * as api from "@/api/shoppingCartRegistration";
 import * as apis from "@/api/baseDataMaintenance";
 import * as orderApi from "@/api/orderManage";
+import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
+
 export default {
   data() {
     return {
       // 查询
       query: {
+        smallpageNumEdit: 1,
+        admissionId:-1,
+        minPrice:null,
+        maxPrice:null,
         isAddWechat:-1,
         isWriteOff:-1,
         isConsultation:-1,
@@ -565,13 +728,128 @@ export default {
             },
           },
           {
+            title: "退款时间",
+            key: "refundDate",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.refundDate
+                  ? this.$moment(params.row.refundDate).format(
+                      "YYYY-MM-DD "
+                    )
+                  : ""
+              );
+            },
+          },
+          {
+            title: "退款原因",
+            key: "refundReason",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "是否差评",
+            key: "isBadReview",
+            minWidth: 100,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isBadReview == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "差评时间",
+            key: "badReviewDate",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.badReviewDate
+                  ? this.$moment(params.row.badReviewDate).format(
+                      "YYYY-MM-DD "
+                    )
+                  : ""
+              );
+            },
+          },
+          {
+            title: "差评原因",
+            key: "badReviewReason",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "差评内容",
+            key: "badReviewContent",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "是否追评",
+            key: "isReContent",
+            minWidth: 100,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isReContent == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+         
+          {
+            title: "追评内容",
+            key: "reContent",
+            minWidth: 200,
+            align: "center",
+          },
+          {
             title: "备注",
             key: "remark",
             minWidth: 200,
             align: "center",
           },
           {
-            title: "创建人",
+            title: "接诊人",
             key: "createBy",
             minWidth: 120,
             align: "center",
@@ -639,15 +917,26 @@ export default {
                               isReturnBackPrice,
                               // 备注
                               remark,
-                              isAddWeChat
+                              isAddWeChat,
+
+                              createByEmpId,
+                              refundDate,
+                              refundReason,
+                              badReviewDate,
+                              badReviewReason,
+                              badReviewContent,
+                              isReContent,
+                              reContent,
+                              isBadReview
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
+                            this.liveAnchorChange(liveAnchorId);
                             this.isEdit = true;
                             this.form.recordDate = recordDate;
                             this.form.contentPlatFormId = contentPlatFormId;
                             this.form.contentPlateFormId = contentPlatFormId;
                             this.form.liveAnchorId = liveAnchorId;
-                            this.form.liveAnchorWechatNo = liveAnchorWechatNo;
+                            this.form.liveAnchorWeChatNo = liveAnchorWechatNo;
                             this.form.customerNickName = customerNickName;
                             this.form.phone = phone;
                             this.form.price = price;
@@ -656,6 +945,16 @@ export default {
                             this.form.IsAddWeChat = isAddWeChat;
                             this.form.isConsultation = isConsultation;
                             this.form.isReturnBackPrice = isReturnBackPrice;
+                            this.form.remark = remark;
+                            this.form.admissionId = createByEmpId;
+                            this.form.refundDate = refundDate;
+                            this.form.refundReason = refundReason;
+                            this.form.badReviewDate = badReviewDate;
+                            this.form.badReviewReason = badReviewReason;
+                            this.form.isReContent = isReContent;
+                            this.form.reContent = reContent;
+                            this.form.isBadReview = isBadReview;
+                            this.form.badReviewContent = badReviewContent;
                             this.form.remark = remark;
                             this.form.id = id;
                             this.controlModal = true;
@@ -752,10 +1051,73 @@ export default {
         // 主播平台
         contentPlateFormId:'',
         id: "",
-        time:''
+        time:'',
+        // 退款时间
+        refundDate:'',
+        // 退款原因
+        refundReason:'',
+        // 是否差评
+        isBadReview:false,
+        // 差评时间
+        badReviewDate:'',
+        // 差评原因
+        badReviewReason:'',
+        // 差评内容
+        badReviewContent:'',
+        // 是否追评,
+        isReContent:false,
+        // 追评内容
+        reContent:'',
+        // 接诊人员
+        admissionId:Number(sessionStorage.getItem("employeeId"))
+          ? Number(sessionStorage.getItem("employeeId"))
+          : null,
       },
 
       ruleValidate: {
+        customerNickName: [
+          {
+            required: true,
+            message: "请输入客户昵称",
+          },
+        ],
+        reContent: [
+          {
+            required: true,
+            message: "请输入追评内容",
+          },
+        ],
+        badReviewContent: [
+          {
+            required: true,
+            message: "请输入差评内容",
+          },
+        ],
+        badReviewReason: [
+          {
+            required: true,
+            message: "请输入差评原因",
+          },
+        ],
+         badReviewDate: [
+          {
+            required: true,
+            message: "请选择差评时间",
+          },
+        ],
+         refundReason: [
+          {
+            required: true,
+            message: "请输入退款原因",
+          },
+        ],
+         refundDate: [
+          {
+            required: true,
+            message: "请选择退款时间",
+          },
+        ],
+        
         recordDate: [
           {
             required: true,
@@ -778,12 +1140,6 @@ export default {
           {
             required: true,
             message: "请选择主播ID",
-          },
-        ],
-        liveAnchorWechatNo: [
-          {
-            required: true,
-            message: "请输入主播微信号",
           },
         ],
         phone: [
@@ -887,10 +1243,66 @@ export default {
           type:'false',
           name:'否'
         }],
+        //接诊人员
+        employeeList:[],
+        employee: [{ name: "全部接诊人员", id: -1 }],
+        // 微信号
+        weChatList: [],
+       
 
     };
   },
   methods: {
+   
+    isReturnBackPriceChange(){
+      const {isReturnBackPrice} = this.form
+      if(isReturnBackPrice == false){
+        this.form.refundDate = null
+        this.form.refundReason = ''
+      }
+    },
+    isBadReviewChange(){
+      const {isBadReview} = this.form
+      if(isBadReview == false){
+        this.form.badReviewDate = null
+        this.form.badReviewReason = ''
+        this.form.badReviewContent = ''
+      }
+    },
+    isReContentChange(){
+      const {isReContent} = this.form
+      if(isReContent == false){
+        this.form.reContent = null
+      }
+    },
+    liveAnchorChange(value) {
+      if (!value) {
+        return;
+      }
+      this.getWeChatList(value);
+    },
+    //  根据主播获取主播微信号
+    getWeChatList(value) {
+      const data = {
+        liveanchorId: value,
+      };
+      liveAnchorApi.getvalidList(data).then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorWechatInfos } = res.data;
+            this.weChatList = liveAnchorWechatInfos;
+        }
+      });
+    },
+    // 获取客服列表
+    getCustomerServiceLists() {
+      orderApi.getCustomerServiceList().then((res) => {
+        if (res.code === 0) {
+          const { employee } = res.data;
+          this.employee = [...this.employee, ...employee];
+          this.employeeList = employee;
+        }
+      });
+    },
     contentPlateChange(value) {
       if (!value) {
         return;
@@ -923,7 +1335,9 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyword , startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice} = this.query;
+      const { pageNum, pageSize, keyword , startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId
+      
+      } = this.query;
       const data = { 
         pageNum, 
         pageSize, 
@@ -935,7 +1349,11 @@ export default {
         isAddWechat:isAddWechat == -1 ? null : isAddWechat,
         isWriteOff:isWriteOff == -1 ? null : isWriteOff,
         isConsultation:isConsultation == -1 ? null : isConsultation,
-        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice
+        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
+        admissionId:admissionId==-1 ? null : admissionId,
+        minPrice,
+        maxPrice
+        
       };
       if(!startDate || !endDate){
         this.$Message.warning('请选择日期')
@@ -952,7 +1370,8 @@ export default {
 
     // 获取小黄车登记列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyword, startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice } = this.query;
+      const { pageSize, keyword, startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId
+       } = this.query;
       const data = { 
         pageNum, 
         pageSize, 
@@ -964,7 +1383,11 @@ export default {
         isAddWechat:isAddWechat == -1 ? null : isAddWechat,
         isWriteOff:isWriteOff == -1 ? null : isWriteOff,
         isConsultation:isConsultation == -1 ? null : isConsultation,
-        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice
+        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
+        admissionId:admissionId==-1 ? null : admissionId,
+        minPrice,
+        maxPrice
+        
       };
       if(!startDate || !endDate){
         this.$Message.warning('请选择日期')
@@ -973,8 +1396,11 @@ export default {
       api.shoppingCartRegistrationList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.shoppingCartRegistrationInfo;
+          
           this.query.data = list;
           this.query.totalCount = totalCount;
+          // 修改时 保留在当前页面
+          sessionStorage.setItem("smallpageNumEdit", pageNum);
         }
       });
     },
@@ -992,12 +1418,15 @@ export default {
                   this.$Message.error("请输入正确的手机号");
                   return false;
                 }else{
-                  const {id,recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat ,time } = this.form;
+                  const {id,recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,
+                  consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat ,time ,
+                  refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId} = this.form;
+                  
                   const data = { 
                     recordDate:time ? this.$moment(recordDate).format("YYYY-MM-DD")+'T' + time : this.$moment(recordDate).format("YYYY-MM-DD") + 'T' + '00:00:00',
                     contentPlatFormId,
                     liveAnchorId,
-                    liveAnchorWechatNo,
+                    liveAnchorWechatNo:this.form.liveAnchorWeChatNo,
                     customerNickName,
                     phone,
                     price,
@@ -1007,14 +1436,32 @@ export default {
                     isReturnBackPrice,
                     remark ,
                     IsAddWeChat,
-                    id
+                    id,
+                    refundDate:refundDate ? this.$moment(refundDate).format("YYYY-MM-DD") : null ,
+                    refundReason,
+                    isBadReview,
+                    badReviewDate:badReviewDate ? this.$moment(badReviewDate).format("YYYY-MM-DD") : null ,
+                    badReviewReason,
+                    badReviewContent,
+                    isReContent,
+                    reContent,
+                    admissionId
                     };
+                    if(!data.liveAnchorWechatNo){
+                        this.$Message.warning('请选择微信号')
+                        return
+                    }
                   // 修改
                   api.editShoppingCartRegistration(data).then((res) => {
                     if (res.code === 0) {
                       this.isEdit = false;
                       this.cancelSubmit("form");
-                      this.getSmallCar();
+                      // this.getSmallCar();
+                      this.handlePageChange(
+                        sessionStorage.getItem("smallpageNumEdit")
+                          ? sessionStorage.getItem("smallpageNumEdit")
+                          : 1
+                      );
                       this.$Message.success({
                         content: "修改成功",
                         duration: 3,
@@ -1024,12 +1471,14 @@ export default {
                 }
               }
           } else {
-            const {recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat,time  } = this.form;
+            const {recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,
+            consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat,time  ,
+            refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId} = this.form;
             const data = { 
               recordDate:time ? this.$moment(recordDate).format("YYYY-MM-DD")+'T' + time : this.$moment(recordDate).format("YYYY-MM-DD") + 'T' + '00:00:00',
               contentPlatFormId,
               liveAnchorId,
-              liveAnchorWechatNo,
+              liveAnchorWechatNo:this.form.liveAnchorWeChatNo,
               customerNickName,
               phone,
               price,
@@ -1038,13 +1487,27 @@ export default {
               isConsultation,
               isReturnBackPrice,
               remark ,
-              IsAddWeChat
+              IsAddWeChat,
+              refundDate:refundDate ? this.$moment(refundDate).format("YYYY-MM-DD") : null ,
+              refundReason,
+              isBadReview,
+              badReviewDate:badReviewDate ? this.$moment(badReviewDate).format("YYYY-MM-DD") : null ,
+              badReviewReason,
+              badReviewContent,
+              isReContent,
+              reContent,
+              admissionId
               };
+
               if (phone) {
                 if (!/^1[3456789]\d{9}$/.test(phone)) {
                   this.$Message.error("请输入正确的手机号");
                   return false;
                 }else{
+                  if(!data.liveAnchorWechatNo){
+                        this.$Message.warning('请选择微信号')
+                        return
+                    }
                   // 添加
                   api.addShoppingCartRegistration(data).then((res) => {
                     if (res.code === 0) {
@@ -1081,7 +1544,7 @@ export default {
   created() {
     this.getSmallCar();
     this.getProvince();
-    // this.getLogisticsCompanyList()
+    this.getCustomerServiceLists()
   },
   
 };
@@ -1098,5 +1561,8 @@ export default {
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.left{
+  display: flex;
 }
 </style>

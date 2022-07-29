@@ -148,7 +148,7 @@
               >
             </Select>
             
-            <Select
+            <!-- <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
               style="width: 150px;margin-left: 10px"
@@ -158,6 +158,18 @@
                 v-for="item in consultationNameList"
                 :value="item.id"
                 :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select> -->
+            <Select
+              v-model="query.isAcompanying"
+              style="width:150px;margin-left:10px"
+              placeholder="请选择陪诊状态"
+            >
+              <Option
+                v-for="item in query.isAcompanyingList"
+                :value="item.type"
+                :key="item.type"
                 >{{ item.name }}</Option
               >
             </Select>
@@ -193,21 +205,10 @@
             </Select>
           </div>
           <div style="margin-top:10px">
-            <Select
-              v-model="query.isAcompanying"
-              style="width: 200px"
-              placeholder="请选择陪诊状态"
-            >
-              <Option
-                v-for="item in query.isAcompanyingList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
-              >
-            </Select>
+            
             <Select
               v-model="query.isOldCustomer"
-              style="width: 160px;margin-left:10px"
+              style="width: 200px;"
               placeholder="请选择新老客业绩状态"
             >
               <Option
@@ -306,7 +307,7 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
+        <!-- <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
           <i-switch v-model="form.isUncertainDate" />
         </FormItem>
         <FormItem
@@ -320,7 +321,7 @@
             style="width: 100%"
             v-model="form.appointmentDate"
           ></DatePicker>
-        </FormItem>
+        </FormItem> -->
 
         <FormItem
           label="留言"
@@ -888,16 +889,22 @@ export default {
               );
             },
           },
-          {
-            title: "面诊员",
-            minWidth: 120,
-            key: "consultationEmpName",
-            align:'center'
-          },
+          // {
+          //   title: "面诊员",
+          //   minWidth: 120,
+          //   key: "consultationEmpName",
+          //   align:'center'
+          // },
           {
             title: "咨询内容",
             minWidth: 400,
             key: "consultingContent",
+          },
+          {
+            title: "面诊状态",
+            key: "consultatioType",
+            minWidth: 120,
+            align: "center",
           },
           {
             title: "所属平台",

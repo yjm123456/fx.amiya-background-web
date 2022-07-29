@@ -77,7 +77,7 @@
       <div class="order_message">
         <div class="message_title"><span class="line"></span>门店信息</div>
         <div class="order_content">
-          <div>
+          <!-- <div>
             <span class="title_bold">预约时间：</span>
             <span
               >{{
@@ -88,8 +88,8 @@
                   : "未预约时间"
               }}
             </span>
-          </div>
-          <div class="mr_top">
+          </div> -->
+          <div >
             <span class="title_bold">预约门店：</span>
             <span>{{ detailObj.appointmentHospitalName }} </span>
           </div>
@@ -166,14 +166,14 @@
             <span class="title_bold">归属客服：</span>
             <span>{{ detailObj.belongEmpName }}</span>
           </div>
-          <div class="mr_top">
+          <!-- <div class="mr_top">
             <span class="title_bold">面诊员：</span>
             <span>{{ detailObj.consultationEmpName }}</span>
-          </div>
-          <div class="mr_top">
+          </div> -->
+          <!-- <div class="mr_top">
             <span class="title_bold">院方接诊人员：</span>
             <span>{{ detailObj.acceptConsulting }}</span>
-          </div>
+          </div> -->
           <div class="mr_top">
             <span class="title_bold">派单人：</span>
             <span>{{ detailObj.sendByName }}</span>

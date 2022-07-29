@@ -7,14 +7,14 @@
             <DatePicker
               type="date"
               placeholder="成交日期（始）"
-              style="width: 140px;"
+              style="width: 180px;"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="成交日期（末）"
-              style="width: 140px; margin-left: .625rem"
+              style="width: 180px; margin-left: .625rem"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
@@ -27,7 +27,7 @@
             <Select
               v-model="query.contentPlateFormId"
               placeholder="请选择(订单)下单平台"
-              style="width: 170px;margin-left: .625rem"
+              style="width: 180px;margin-left: .625rem"
               filterable
             >
               <Option
@@ -37,7 +37,7 @@
                 >{{ item.contentPlatformName }}</Option
               >
             </Select>
-            <Select
+            <!-- <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
               style="width: 130px; margin-left: 10px"
@@ -49,12 +49,12 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select>
+            </Select> -->
             <Select
               v-model="query.toHospitalType"
               placeholder="请选择到院类型"
               clearable
-              style="width: 130px; margin-left: 10px"
+              style="width: 200px; margin-left: 10px"
               filterable
             >
               <Option
@@ -69,7 +69,7 @@
             <Select
               v-model="query.checkState"
               placeholder="审核状态"
-              style="width: 140px;"
+              style="width: 180px;"
             >
               <Option
                 v-for="item in checkStateListAll"
@@ -82,7 +82,7 @@
             <Select
               v-model="query.ReturnBackPriceState"
               placeholder="回款状态"
-              style="width: 140px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
             >
               <Option
                 v-for="item in query.ReturnBackPriceStateList"
@@ -108,7 +108,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 170px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
               :disabled="query.contentPlatFormId === null"
               filterable
             >
@@ -122,7 +122,7 @@
             
             <Select
               v-model="query.hospitalId"
-              style="width: 270px; margin-left: 10px"
+              style="width: 220px; margin-left: 10px"
               placeholder="请选择医院"
               filterable
             >
@@ -325,6 +325,7 @@ export default {
             minWidth: 180,
             align:'center'
           },
+          
           {
             title: "定金金额",
             key: "depositAmount",
@@ -526,12 +527,12 @@ export default {
             minWidth: 220,
             align:'center'
           },
-          {
-            title: "面诊员",
-            key: "consultationEmpName",
-            minWidth: 120,
-            align:'center'
-          },
+          // {
+          //   title: "面诊员",
+          //   key: "consultationEmpName",
+          //   minWidth: 120,
+          //   align:'center'
+          // },
           {
             title: "项目",
             key: "thumbPictureUrl",
@@ -569,6 +570,12 @@ export default {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 300,
+          },
+          {
+            title: "面诊状态",
+            key: "consultationTypeText",
+            minWidth: 120,
+            align: "center",
           },
           {
             title: "下单时间",

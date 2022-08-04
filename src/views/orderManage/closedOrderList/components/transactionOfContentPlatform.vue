@@ -793,7 +793,7 @@ export default {
               return params.row.checkDate
                 ? h(
                     "div",
-                    this.$moment(params.row.checkDate).format("YYYY-MM-DD :HH:mm:ss")
+                    this.$moment(params.row.checkDate).format("YYYY-MM-DD HH:mm:ss")
                   )
                 : "";
             },

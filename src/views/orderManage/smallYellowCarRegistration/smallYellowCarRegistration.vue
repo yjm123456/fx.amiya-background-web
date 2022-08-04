@@ -66,10 +66,6 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              
-              
-            </div>
-            <div style="margin-top:10px">
               <Select
                 v-model="query.isWriteOff"
                 placeholder="请选择核销状态"
@@ -83,11 +79,15 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+              
+            </div>
+            <div style="margin-top:10px">
+              
               <Select
                 v-model="query.isConsultation"
                 placeholder="请选择面诊状态"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 180px;"
               >
                 <Option
                   v-for="item in isConsultationList"
@@ -122,6 +122,32 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+              <Select
+                v-model="query.isCreateOrder"
+                placeholder="请选择录单触达"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in query.isCreateOrderList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.isSendOrder"
+                placeholder="请选择派单触达"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in query.isSendOrderList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
               <Input
                 v-model="query.minPrice"
                 placeholder="请输入最小下单金额"
@@ -148,13 +174,13 @@
               >查询</Button
             >
             <Button
-            type="primary"
-            @click="
-              controlModal = true;
-              title = '添加';
-            "
-            >添加</Button
-          >
+              type="primary"
+              @click="
+                controlModal = true;
+                title = '添加';
+              "
+              >添加</Button
+            >
           </div>
           
         </div>
@@ -486,6 +512,10 @@ export default {
     return {
       // 查询
       query: {
+        // 录单触达
+        isCreateOrder:-1,
+        // 派单触达
+        isSendOrder:-1,
         smallpageNumEdit: 1,
         admissionId:-1,
         minPrice:null,
@@ -607,6 +637,64 @@ export default {
                   
                   '短视频'
                 );
+              }
+            },
+          },
+          {
+            title: "录单触达",
+            key: "isCreateOrder",
+            minWidth: 100,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isCreateOrder == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "派单触达",
+            key: "isSendOrder",
+            minWidth: 100,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isSendOrder == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
               }
             },
           },
@@ -1008,6 +1096,36 @@ export default {
         ],
         data: [],
         totalCount: 0,
+        // 录单触达
+        isCreateOrderList:[
+          {
+            type:-1,
+            name:'全部录单触达状态'
+          },
+          {
+            type:'true',
+            name:'是'
+          },
+          {
+            type:'false',
+            name:'否'
+          }
+        ],
+        // 派单触达
+        isSendOrderList:[
+          {
+            type:-1,
+            name:'全部派单触达状态'
+          },
+          {
+            type:'true',
+            name:'是'
+          },
+          {
+            type:'false',
+            name:'否'
+          }
+        ],
       },
       flag: false,
       // 控制 modal
@@ -1335,7 +1453,9 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyword , startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId
+      const { pageNum, pageSize, keyword , startDate,endDate,liveAnchorId,contentPlatFormId,
+      isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId,
+      isCreateOrder,isSendOrder
       
       } = this.query;
       const data = { 
@@ -1352,7 +1472,9 @@ export default {
         isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
         admissionId:admissionId==-1 ? null : admissionId,
         minPrice,
-        maxPrice
+        maxPrice,
+        isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
+        isSendOrder:isSendOrder == -1 ? null : isSendOrder,
         
       };
       if(!startDate || !endDate){
@@ -1370,7 +1492,9 @@ export default {
 
     // 获取小黄车登记列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyword, startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId
+      const { pageSize, keyword, startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,
+      isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId,
+      isCreateOrder,isSendOrder
        } = this.query;
       const data = { 
         pageNum, 
@@ -1386,7 +1510,9 @@ export default {
         isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
         admissionId:admissionId==-1 ? null : admissionId,
         minPrice,
-        maxPrice
+        maxPrice,
+        isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
+        isSendOrder:isSendOrder == -1 ? null : isSendOrder,
         
       };
       if(!startDate || !endDate){
@@ -1564,5 +1690,7 @@ export default {
 }
 .left{
   display: flex;
+   align-items: center;
 }
+
 </style>

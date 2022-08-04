@@ -926,8 +926,8 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
-        belongEmpId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? null : belongEmpId),
         orderStatus,
       };
       if (!startDate || !endDate) {
@@ -971,8 +971,8 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
-        belongEmpId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? null : belongEmpId),
         orderStatus,
       };
       if (!startDate || !endDate) {
@@ -1052,11 +1052,11 @@ export default {
           ? this.$moment(startDate).format("YYYY-MM-DD")
           : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        employeeId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
         contentPlatFormId: contentPlatFormId ? contentPlatFormId : "",
         liveAnchorId,
         orderStatus,
-        belongEmpId,
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? null : belongEmpId),
         hospitalId: hospitalId == -1 ? null : hospitalId,
         IsToHospital:IsToHospital== -1 ? null : IsToHospital,
         toHospitalStartDate:
@@ -1125,11 +1125,11 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
         contentPlatFormId,
         liveAnchorId,
         orderStatus,
-        belongEmpId,
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? null : belongEmpId),
         IsToHospital:IsToHospital==-1?null:IsToHospital,
         toHospitalStartDate:
           IsToHospital != 'true'

@@ -198,6 +198,23 @@
           ></Input>
         </FormItem>
         <FormItem
+          label="面诊状态"
+          prop="consultatioType"
+          key="面诊状态"
+        >
+          <Input
+            v-model="transactionStatusParams.consultationTypeText"
+            placeholder="请输入面诊状态"
+            disabled
+          ></Input>
+        </FormItem>
+        <FormItem
+          label="邀约凭证"
+          key="邀约凭证"
+        >
+          <upload :uploadObj="invitationDocumentsUploadObj" @uploadChange="invitationDocumentsHandleUploadChange" />
+        </FormItem>
+        <FormItem
           label="成交凭证"
           key="成交凭证"
           v-if="confirmForm.isFinish == true"
@@ -213,16 +230,20 @@
         >
       </div>
     </Modal>
+    <!-- 查看邀约凭证 -->
+    <viewImg :viewCustomerPhotosModel.sync="viewCustomerPhotosModel" :viewImgParams="viewImgParams"></viewImg>
   </div>
 </template>
 <script>
 import * as api from "@/api/orderManage";
 import * as hospitalManage from "@/api/employeeManage";
 import upload from "@/components/upload/upload";
+import viewImg from "./viewImg.vue"
 
 export default {
   components: {
     upload,
+    viewImg
   },
   props: {
     transactionStatusParams: {
@@ -231,8 +252,23 @@ export default {
   },
   data() {
     return {
+      viewCustomerPhotosModel:false,
+      viewImgParams:{
+        contentPlatFormOrderId:'',
+        orderDealId:''
+      },
       // 到院状态
       toHospitalTypeList:[],
+
+      // 邀约凭证
+      invitationDocumentsUploadObj: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 5,
+        // 文件列表
+        uploadList: [],
+      },
       noDealuploadObj: {
         // 是否开启多图
         multiple: false,
@@ -288,7 +324,11 @@ export default {
         // 是否陪诊
         isAcompanying:false,
         // 佣金比例
-        commissionRatio:null
+        commissionRatio:null,
+        // 面诊状态
+        consultatioType:'',
+        // 邀约凭证
+        invitationDocuments:[]
       },
       confirmRuleValidate: {
         commissionRatio: [
@@ -525,7 +565,7 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 120,
+            width:200,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -537,6 +577,8 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
+                      // 审核通过不可编辑
+                      disabled:params.row.checkState == 2
                     },
                     style: {
                       marginRight: "5px",
@@ -561,7 +603,8 @@ export default {
                               dealDate,
                               toHospitalType,
                               isAcompanying,
-                              commissionRatio
+                              commissionRatio,
+                              invitationDocuments
                             } = res.data.contentPlatFormOrderDealInfoInfo;
                             this.isEdit = true;
                             this.confirmForm.toHospitalDate = tohospitalDate
@@ -590,6 +633,8 @@ export default {
                             this.confirmForm.lastProjectStage = remark;
                             this.confirmForm.otherContentPlatFormOrderId = otherOrderId;
                             this.confirmForm.toHospitalType = toHospitalType;
+                            this.confirmForm.invitationDocuments = invitationDocuments;
+                            this.invitationDocumentsUploadObj.uploadList = this.confirmForm.invitationDocuments ? this.confirmForm.invitationDocuments: [];
                             this.confirmForm.DealDate = dealDate
                               ? this.$moment(dealDate).format("YYYY-MM-DD")
                               : "";
@@ -602,6 +647,27 @@ export default {
                   },
                   "编辑"
                 ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id,contentPlatFormOrderId } = params.row;
+                        this.viewCustomerPhotosModel = true
+                        this.viewImgParams.contentPlatFormOrderId = contentPlatFormOrderId
+                        this.viewImgParams.orderDealId = id
+                       }
+                    },
+                  },
+                  "查看邀约凭证"
+                ),
               ]);
             },
           },
@@ -610,6 +676,10 @@ export default {
     };
   },
   methods: {
+    // 邀约凭证
+     invitationDocumentsHandleUploadChange(values) {
+      this.confirmForm.invitationDocuments = values;
+    },
     //   获取订单到院类型
     getcontentPlateFormOrderToHospitalTypeList() {
       api.contentPlateFormOrderToHospitalTypeList().then((res) => {
@@ -669,7 +739,8 @@ export default {
             otherContentPlatFormOrderId,
             toHospitalType,
             isAcompanying,
-            commissionRatio
+            commissionRatio,
+            invitationDocuments
           } = this.confirmForm;
           const data = {
             id,
@@ -695,7 +766,8 @@ export default {
             otherContentPlatFormOrderId,
             toHospitalType:isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
-            commissionRatio
+            commissionRatio,
+            invitationDocuments
           };
           api.updateContentPlatFormOrderDealInfo(data).then((res) => {
             if (res.code === 0) {
@@ -804,6 +876,7 @@ export default {
       this.$refs[name].resetFields();
       this.uploadObj.uploadList = [];
       this.noDealuploadObj.uploadList = [];
+      this.invitationDocumentsUploadObj.uploadList = []
     },
   },
   created() {

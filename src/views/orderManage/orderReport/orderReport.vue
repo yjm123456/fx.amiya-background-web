@@ -310,7 +310,7 @@ export default {
             dispatchHospital:[{ name: "全部派单医院", id: -1 }],
             // 成交情况报表参数
             transactionParams:{
-                employee:[{ id: -1, name: "全部跟进人员" }],
+                employee:[{ id: -1, name: "全部绑定客服" }],
                 dealHospitalList:[{ name: "全部最终成交医院", id: -1 }],
                  // 到院类型
                 toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],

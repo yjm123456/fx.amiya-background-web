@@ -498,7 +498,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -524,7 +524,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -592,7 +592,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
         contentPlateFormId: contentPlateFormId ? contentPlateFormId : "",
         liveAnchorId,
         orderStatus,
@@ -633,7 +633,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
         contentPlateFormId,
         liveAnchorId,
         orderStatus,

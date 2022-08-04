@@ -565,6 +565,20 @@ const orderManage = [{
                 "@/views/orderManage/hospitalCustomerOrder/hospitalCustomerOrder.vue"
             ),
     },
+    {
+        path: "/shakeShopOrderList",
+        name: "shakeShopOrderList",
+        meta: {
+            title: "抖店订单列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/shakeShopOrderList/shakeShopOrderList.vue"
+            ),
+    },
 ];
 
 /**

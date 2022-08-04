@@ -77,7 +77,7 @@
       fullscreen
     >
       <div class="model">
-        <Card>
+        <!-- <Card>
           <Select
             v-model="query.hospitalId"
             placeholder="请选择医院"
@@ -97,7 +97,7 @@
             @click="getHospitalInfo()"
             >查询</Button
           >
-        </Card>
+        </Card> -->
         <Card style="margin-top:10px">
           <Table
             border

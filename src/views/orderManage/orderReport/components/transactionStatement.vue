@@ -78,7 +78,8 @@
             <Select
               v-model="query.customerServiceId"
               style="width: 180px;"
-              placeholder="请选择跟进人员"
+              placeholder="请选择绑定客服"
+              :disabled="positionId == 2 || positionId == 4"
             >
               <Option
                 v-for="item in transactionParams.employee"
@@ -236,27 +237,90 @@
             border
             :columns="query.columns"
             :data="query.data"
-            height="700"
+            height="620"
           ></Table>
         </div>
       </Card>
       <div slot="footer" class=" foot">
-        <div style="display:flex">
-          <div class="num">
-            合计审核金额：
-            <div style="color:red">{{ checkPrice }}</div>
+        <div class="foots">
+          <div class="">
+            <div style="display:flex">
+              <div class="num">
+                合计审核金额：
+                <div style="color:red">{{ checkPrice }}</div>
+              </div>
+              <div class="num">
+                合计结算金额：
+                <div style="color:red">{{ settlePrice }}</div>
+              </div>
+              <div class="num">
+                初诊上门：
+                <div style="color:red">{{ toHospitalTypeText1 }}</div>
+              </div>
+              <div class="num">
+                复诊上门：
+                <div style="color:red">{{ toHospitalTypeText2 }}</div>
+              </div>
+              <div class="num">
+                再消费上门：
+                <div style="color:red">{{ toHospitalTypeText3 }}</div>
+              </div>
+              <div class="num">
+                初诊成交：
+                <div style="color:red">{{ dealNum1 }}</div>
+              </div>
+              <div class="num">
+                复诊成交：
+                <div style="color:red">{{ dealNum2 }}</div>
+              </div>
+              <div class="num">
+                再消费成交：
+                <div style="color:red">{{ dealNum3 }}</div>
+              </div>
+              
+              
+            </div>
+            <div style="display:flex;margin-top:5px">
+              <div class="num">
+                初诊业绩：
+                <div style="color:red">{{ deal1 }}</div>
+              </div>
+              <div class="num">
+                复诊业绩：
+                <div style="color:red">{{ deal2 }}</div>
+              </div>
+              <div class="num">
+                再消费业绩：
+                <div style="color:red">{{ deal3 }}</div>
+              </div>
+              <div class="num">
+                新客业绩：
+                <div style="color:red">{{ newCustomer }}</div>
+              </div>
+              <div class="num">
+                总业绩：
+                <div style="color:red">{{ totalPerformance }}</div>
+              </div>
+              <div class="num">
+                回款总金额：
+                <div style="color:red">{{ paymentCollection }}</div>
+              </div>
+              <div class="num">
+                协作完成：
+                <div style="color:red">{{ cooperation }}</div>
+              </div>
+              <div class="num">
+                独立跟进：
+                <div style="color:red">{{ independent }}</div>
+              </div>
+              <div class="num">
+                总条数：
+                <div style="color:red">{{ pageCount }}</div>
+              </div>
+            </div>
           </div>
-          <div class="num">
-            合计结算金额：
-            <div style="color:red">{{ settlePrice }}</div>
-          </div>
-          <div class="num">
-            总条数：
-            <div style="color:red">{{ pageCount }}</div>
-          </div>
+          <Button @click="cancelSubmits()">关闭页面</Button>
         </div>
-        <Button @click="cancelSubmits()">关闭页面</Button>
-        <!-- <Button type="primary" @click="handleSubmit()">确定</Button> -->
       </div>
     </Modal>
   </div>
@@ -280,6 +344,35 @@ export default {
   },
   data() {
     return {
+      positionId:sessionStorage.getItem('positionId'),
+      // 初诊上门
+      toHospitalTypeText1: 0,
+      // 复诊上门
+      toHospitalTypeText2: 0,
+      // 再消费上门
+      toHospitalTypeText3: 0,
+      // 初诊业绩
+      deal1: 0,
+      // 复诊业绩
+      deal2: 0,
+      // 再消费业绩
+      deal3: 0,
+      // 新客业绩
+      newCustomer: 0,
+      // 总业绩
+      totalPerformance: 0,
+      // 初诊成交
+      dealNum1:0,
+      // 复诊成交
+      dealNum2:0,
+      // 再消费成交
+      dealNum3:0,
+      // 协作完成
+      cooperation:0,
+      // 独立完成
+      independent:0,
+      // 回款总金额
+      paymentCollection:0,
       // 面诊状态
       consultationTypeList: [{ orderType: -1, orderTypeText: "全部面诊状态" }],
       // 主播IP账号
@@ -597,7 +690,7 @@ export default {
           },
           {
             title: "审核人",
-            key: "checkByEmpName",
+            key: "checkBy",
             minWidth: 120,
             align: "center",
           },
@@ -637,7 +730,7 @@ export default {
           },
 
           {
-            title: "跟进人员",
+            title: "绑定客服",
             key: "createByEmpName",
             minWidth: 120,
             align: "center",
@@ -792,6 +885,13 @@ export default {
         sendEndDate,
         consultationType,
       } = this.query;
+      this.transactionParams.employee.map((item) => {
+        if (Number(this.positionId) == 2 || Number(this.positionId) == 4) {
+          if (item.id == sessionStorage.getItem('employeeId')) {
+            this.query.customerServiceId = item.id;
+          }
+        }
+      });
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
@@ -835,7 +935,8 @@ export default {
               ? this.$moment(returnBackPriceEndDate).format("YYYY-MM-DD")
               : null
             : null,
-        customerServiceId: customerServiceId == -1 ? null : customerServiceId,
+        // customerServiceId: customerServiceId == -1 ? null : customerServiceId,
+        customerServiceId: this.positionId == 2 || this.positionId == 4 ? this.query.customerServiceId : (customerServiceId == -1 ? null : customerServiceId),
         keyWord,
         sendStartDate: sendStartDate
           ? this.$moment(sendStartDate).format("YYYY-MM-DD")
@@ -856,10 +957,73 @@ export default {
           this.pageCount = this.query.data.length;
           let checkPrice = 0;
           let settlePrice = 0;
+          let toHospitalTypeText1 = [];
+          let toHospitalTypeText2 = [];
+          let toHospitalTypeText3 = [];
+          let deal1 = 0;
+          let deal2 = 0;
+          let deal3 = 0;
+          let dealNum1 = []
+          let dealNum2 = []
+          let dealNum3 = []
+          let newCustomer = 0;
+          let totalPerformance = 0;
+          let cooperation =[]
+          let independent = []
+          let paymentCollection = 0
+          
           this.query.data.map((item, index) => {
             checkPrice += Number(item.checkPrice);
             settlePrice += Number(item.settlePrice);
+            paymentCollection += Number(item.returnBackPrice);
+            // totalPerformance += Number(item.price);
+            // if (item.isOldCustomer == "新客业绩") {
+            //   newCustomer += Number(item.price);
+            // }
+            if(item.consultationType == '协作完成'){
+              cooperation.push(item)
+            }else if(item.consultationType == '独立跟进'){
+              independent.push(item)
+            }
+            if (item.toHospitalTypeText == "初诊") {
+              deal1 += Number(item.price);
+            } else if (item.toHospitalTypeText == "复诊") {
+              deal2 += Number(item.price);
+            } else if (item.toHospitalTypeText == "再消费") {
+              deal3 += Number(item.price);
+            }
+            // 上门
+            if (item.toHospitalTypeText == "初诊" && item.isToHospital == '是' ) {
+              toHospitalTypeText1.push(item);
+            } else if (item.toHospitalTypeText == "复诊"  && item.isToHospital == '是' ) {
+              toHospitalTypeText2.push(item);
+            } else if (item.toHospitalTypeText == "再消费"  && item.isToHospital == '是' ) {
+              toHospitalTypeText3.push(item);
+            }
+            // 成交
+            if (item.toHospitalTypeText == "初诊" && item.isToHospital == '是' && item.isDeal == '是') {
+              dealNum1.push(item);
+            } else if (item.toHospitalTypeText == "复诊"  && item.isToHospital == '是' && item.isDeal == '是') {
+              dealNum2.push(item);
+            } else if (item.toHospitalTypeText == "再消费"  && item.isToHospital == '是' && item.isDeal == '是') {
+              dealNum3.push(item);
+            }
           });
+          this.toHospitalTypeText1 = toHospitalTypeText1.length;
+          this.toHospitalTypeText2 = toHospitalTypeText2.length;
+          this.toHospitalTypeText3 = toHospitalTypeText3.length;
+          this.dealNum1 = dealNum1.length;
+          this.dealNum2 = dealNum2.length;
+          this.dealNum3 = dealNum3.length;
+          this.independent = independent.length;
+          this.cooperation = cooperation.length;
+          this.deal1 = Math.floor(deal1 * 100) / 100;
+          this.deal2 = Math.floor(deal2 * 100) / 100;
+          this.deal3 = Math.floor(deal3 * 100) / 100;
+          this.newCustomer = Math.floor((deal1+deal2) * 100) / 100;
+          this.totalPerformance = Math.floor((deal1+deal2+deal3) * 100) / 100;
+          this.paymentCollection = Math.floor(paymentCollection * 100) / 100;
+
           this.checkPrice = Math.floor(checkPrice * 100) / 100;
           this.settlePrice = Math.floor(settlePrice * 100) / 100;
         }
@@ -1064,9 +1228,15 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+.foots {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .num {
   margin-right: 20px;
-  font-size: 18px;
+  font-size: 15px;
   display: flex;
 }
 .containers {

@@ -325,7 +325,7 @@
         <Col span="8">
           <FormItem label="商品图片" prop="thumbPictureUrl" key="thumbPictureUrl" style="margin-top:10px">
             <div class="img_con">
-              <img src="https://img.alicdn.com/bao/uploaded/i3/2209451176576/O1CN012tXENx1yRrFEC3u8f_!!0-item_pic.jpg" style="width:60px;height:60px;margin-top:10px" v-if="form.thumbPictureUrl" @click="imageChange(1)">
+              <img :src="form.thumbPictureUrl" style="width:60px;height:60px;margin-top:10px" v-if="form.thumbPictureUrl" @click="imageChange(1)">
               <div class="no_img" v-else @click="imageChange(2)">暂无图片</div>
             </div>
           </FormItem>

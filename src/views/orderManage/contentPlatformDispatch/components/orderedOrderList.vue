@@ -435,11 +435,21 @@
           v-if="confirmForm.isFinish === true"
           prop="dealAmount"
           key="成交金额"
+          :rules="[
+            {
+              required: true,
+              message: '请输入成交金额(最小是1)',
+              trigger: 'change',
+              type: 'number',
+              min: 1,
+            },
+          ]"
         >
           <Input
             v-model="confirmForm.dealAmount"
             placeholder="请输入成交金额"
             type="number"
+            number
           ></Input>
         </FormItem>
         <FormItem
@@ -500,11 +510,28 @@
           ></Input>
         </FormItem>
         <FormItem
+          label="面诊状态"
+          prop="consultatioType"
+          key="面诊状态"
+        >
+          <Input
+            v-model="confirmForm.consultatioType"
+            placeholder="请输入面诊状态"
+            disabled
+          ></Input>
+        </FormItem>
+        <FormItem
           label="成交凭证"
           key="成交凭证"
           v-if="confirmForm.isFinish === true"
         >
           <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
+        </FormItem>
+        <FormItem
+          label="邀约凭证"
+          key="邀约凭证"
+        >
+          <upload :uploadObj="invitationDocumentsUploadObj" @uploadChange="invitationDocumentsHandleUploadChange" />
         </FormItem>
         <!-- <div style="color:red;font-size:3px" v-if="confirmForm.isFinish === true">*注：请上传该手机号客户在贵公司系统的成交凭证截图</div> -->
       </Form>
@@ -585,6 +612,15 @@ export default {
       ],
       // 主播IP
       liveAnchors: [],
+      // 邀约凭证
+      invitationDocumentsUploadObj: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 5,
+        // 文件列表
+        uploadList: [],
+      },
       noDealuploadObj: {
         // 是否开启多图
         multiple: false,
@@ -637,7 +673,11 @@ export default {
         // 是否陪诊
         isAcompanying:false,
         // 佣金比例
-        commissionRatio:null
+        commissionRatio:null,
+        // 面诊状态
+        consultatioType:'',
+        // 邀约凭证
+        invitationDocuments:[]
       },
       confirmRuleValidate: {
         unDealReason: [
@@ -1391,7 +1431,7 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled:params.row.checkState == 2
+                      
                       // disabled: params.row.orderStatusText =='未成交' || params.row.orderStatusText =='已成交',
                     },
                     style: {
@@ -1399,9 +1439,10 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id, orderId } = params.row;
+                        const { id, orderId,consultatioType } = params.row;
                         this.contentConfirmOrderModel = true;
                         this.confirmForm.id = orderId;
+                        this.confirmForm.consultatioType = consultatioType
                       },
                     },
                   },
@@ -1630,6 +1671,10 @@ export default {
     handleUploadChange(values) {
       this.confirmForm.dealPictureUrl = values[0];
     },
+    // 邀约凭证
+     invitationDocumentsHandleUploadChange(values) {
+      this.confirmForm.invitationDocuments = values;
+    },
     // 确认
     confirmSubmit(name) {
       this.$refs[name].validate((valid) => {
@@ -1649,7 +1694,8 @@ export default {
             otherContentPlatFormOrderId,
             toHospitalType,
             isAcompanying,
-            commissionRatio
+            commissionRatio,
+            invitationDocuments
           } = this.confirmForm;
           const data = {
             id,
@@ -1671,7 +1717,8 @@ export default {
               otherContentPlatFormOrderId,
             toHospitalType:isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
-            commissionRatio:isFinish == false ? 0 : commissionRatio
+            commissionRatio:isFinish == false ? 0 : commissionRatio,
+            invitationDocuments
           };
           api.finishContentPlateFormOrderByEmployee(data).then((res) => {
             if (res.code === 0) {
@@ -1960,6 +2007,7 @@ export default {
       this.uploadObj.uploadList = [];
       this.delUploadObj.uploadList = [];
       this.noDealuploadObj.uploadList = [];
+      this.invitationDocumentsUploadObj.uploadList = []
       this.confirmForm.lastProjectStage = "";
       this.confirmForm.dealAmount = null;
       this.confirmForm.DealDate = null;

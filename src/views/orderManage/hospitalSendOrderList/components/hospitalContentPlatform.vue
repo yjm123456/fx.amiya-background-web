@@ -211,11 +211,21 @@
           v-if="form.isFinish === true"
           prop="dealAmount"
           key="成交金额"
+          :rules="[
+            {
+              required: true,
+              message: '请输入成交金额(最小是1)',
+              trigger: 'change',
+              type: 'number',
+              min: 1,
+            },
+          ]"
         >
           <Input
             v-model="form.dealAmount"
             placeholder="请输入成交金额"
             type="number"
+            number
           ></Input>
         </FormItem>
         <FormItem

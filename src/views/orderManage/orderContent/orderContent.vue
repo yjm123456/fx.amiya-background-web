@@ -14,7 +14,7 @@
             <DatePicker
               type="date"
               placeholder="下单开始日期"
-              style="width: 180px;margin-left: .625rem"
+              style="width: 160px;margin-left: .625rem"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
@@ -22,14 +22,14 @@
             <DatePicker
               type="date"
               placeholder="下单结束日期"
-              style="width: 180px; margin-left: .625rem"
+              style="width: 160px; margin-left: .625rem"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
             <Select
               v-model="query.orderStatus"
               placeholder="请选择订单状态"
-              style="width: 180px;margin-left: .625rem"
+              style="width: 160px;margin-left: .625rem"
             >
               <Option
                 v-for="item in orderStatus"
@@ -42,7 +42,7 @@
               v-model="query.orderSource"
               placeholder="请选择订单来源"
               filterable
-              style="width: 180px;margin-left: .625rem"
+              style="width: 160px;margin-left: .625rem"
             >
               <Option
                 v-for="item in orderSourcesListAll"
@@ -64,6 +64,7 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            
           </div>
           <!-- 一个是订单平台筛选 一个是主播平台筛选 -->
           <div>
@@ -82,7 +83,7 @@
             </Select>
             <Select
               v-model="query.belongEmpId"
-              style="width: 180px;margin-left: 10px"
+              style="width: 160px;margin-left: 10px"
               placeholder="请选择归属客服"
               filterable
             >
@@ -98,7 +99,7 @@
               v-model="query.contentPlatFormId"
               placeholder="请选择主播平台"
               @on-change="contentPlateChange(query.contentPlatFormId)"
-              style="width: 180px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               filterable
             >
               <Option
@@ -111,7 +112,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 180px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               :disabled="query.contentPlatFormId === null"
               filterable
             >
@@ -124,7 +125,7 @@
             </Select>
             <Select
               v-model="query.consultationType"
-              style="width: 180px;margin-left:10px"
+              style="width: 160px;margin-left:10px"
               placeholder="请选择完成情况"
               filterable
             >
@@ -149,6 +150,37 @@
                 >{{ item.name }}</Option
               >
             </Select>
+          </div>
+          <div style="margin-top:10px">
+            <Select
+                v-model="query.belongMonth"
+                placeholder="请选择归属月份"
+                filterable
+                style="width:200px;"
+                
+              >
+                <Option
+                  v-for="item in belongMonthList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Input
+                v-model="query.minAddOrderPrice"
+                placeholder="请输入最小下单金额"
+                style="width: 180px;margin-left:10px"
+                type="number"
+                namber
+              />
+              <span> — </span>
+              <Input
+                v-model="query.maxAddOrderPrice"
+                placeholder="请输入最大下单金额"
+                style="width: 180px;"
+                type="number"
+                namber
+              />
           </div>
         </div>
         <div class="button_con">
@@ -497,6 +529,40 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="归属月份" prop="belongMonth">
+              <Select
+                v-model="form.belongMonth"
+                placeholder="请选择归属月份"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in belongMonthList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="下单金额"
+              prop="addOrderPrice"
+              :rules="{
+                required: true,
+                message: '请输入下单金额',
+              }"
+            >
+              <Input
+                v-model="form.addOrderPrice"
+                type="number"
+                number
+                placeholder="请输入下单金额"
+              ></Input>
+            </FormItem>
+          </Col>
           <Col span="20">
             <FormItem label="顾客照片" prop="imageUrl" key="customerPictures">
               <upload
@@ -803,9 +869,19 @@ export default {
         consultationEmpId: null,
         // 面诊状态
         consultationType: -1,
+        // 归属月份
+        belongMonth:null,
+        // 下单金额
+        addOrderPrice:null
       },
       controlModal: false,
       ruleValidates: {
+        belongMonth: [
+          {
+            required: true,
+            message: "请选择归属月份",
+          },
+        ],
         consultationType: [
           {
             required: true,
@@ -893,6 +969,7 @@ export default {
         ],
       },
       query: {
+        belongMonth:null,
         pageNumEdit: 1,
         appointmentHospital: -1,
         consultationEmpId: -1,
@@ -915,6 +992,10 @@ export default {
         writeOffEndDate: "",
         // 面诊状态
         consultationType: -1,
+        // 最小金额
+        minAddOrderPrice:null,
+        // 最大金额
+        maxAddOrderPrice:null,
         columns: [
           {
             type: "selection",
@@ -990,6 +1071,24 @@ export default {
             key: "contentPlatformName",
             minWidth: 110,
             align: "center",
+          },
+          {
+            title: "下单金额",
+            key: "addOrderPrice",
+            minWidth: 100,
+            align: "center",
+          },
+          {
+            title: "归属月份",
+            key: "belongMonth",
+            minWidth: 100,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.belongMonth == 0 ? '当月':'次月'
+              );
+            },
           },
           {
             title: "主播IP账号",
@@ -1176,6 +1275,9 @@ export default {
                               consultationEmpId,
                               liveAnchorWeChatNo,
                               consultationType,
+                              belongMonth,
+                              addOrderPrice
+
                             } = res.data.orderInfo;
                             this.contentPlateChange(contentPlateFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1199,6 +1301,8 @@ export default {
                             this.form.unSendReason = unSendReason;
                             this.form.customerPictures = customerPictures;
                             this.form.liveAnchorWeChatNo = liveAnchorWeChatNo;
+                            this.form.belongMonth = belongMonth;
+                            this.form.addOrderPrice = addOrderPrice;
                             this.form.belongEmpId = this.form.belongEmpId
                               ? this.form.belongEmpId
                               : "";
@@ -1301,6 +1405,17 @@ export default {
       ],
       // 面诊状态 录单
       consultationTypeList: [],
+      // 归属月份
+      belongMonthList:[
+        {
+          id:0,
+          name:'当月'
+        },
+        {
+          id:1,
+          name:'次月'
+        }
+      ]
     };
   },
   methods: {
@@ -1459,6 +1574,9 @@ export default {
         consultationEmpId,
         appointmentHospital,
         consultationType,
+        belongMonth,
+        minAddOrderPrice,
+        maxAddOrderPrice
       } = this.query;
       const data = {
         keyword,
@@ -1477,6 +1595,9 @@ export default {
         appointmentHospital:
           appointmentHospital == -1 ? null : appointmentHospital,
         consultationType: consultationType == -1 ? null : consultationType,
+        belongMonth,
+        minAddOrderPrice,
+        maxAddOrderPrice
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1621,6 +1742,8 @@ export default {
               consultationEmpId,
               liveAnchorWeChatNo,
               consultationType,
+              addOrderPrice,
+              belongMonth
             } = this.form;
             const data = {
               orderType,
@@ -1646,6 +1769,8 @@ export default {
               consultationEmpId: consultationEmpId ? consultationEmpId : 0,
               liveAnchorWeChatNo,
               consultationType,
+              addOrderPirce:addOrderPrice,
+              belongMonth
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1697,6 +1822,8 @@ export default {
               consultationEmpId,
               liveAnchorWeChatNo,
               consultationType,
+              addOrderPrice,
+              belongMonth
             } = this.form;
             const data = {
               orderType,
@@ -1722,6 +1849,8 @@ export default {
               consultationEmpId: consultationEmpId ? consultationEmpId : 0,
               liveAnchorWeChatNo,
               consultationType,
+              addOrderPrice,
+              belongMonth
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1835,6 +1964,9 @@ export default {
         consultationEmpId,
         appointmentHospital,
         consultationType,
+        belongMonth,
+        minAddOrderPrice,
+        maxAddOrderPrice
       } = this.query;
       const data = {
         keyword,
@@ -1853,6 +1985,9 @@ export default {
         appointmentHospital:
           appointmentHospital == -1 ? null : appointmentHospital,
         consultationType: consultationType == -1 ? null : consultationType,
+        belongMonth,
+        minAddOrderPrice,
+        maxAddOrderPrice
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -1878,6 +2013,9 @@ export default {
         consultationEmpId,
         appointmentHospital,
         consultationType,
+        belongMonth,
+        minAddOrderPrice,
+        maxAddOrderPrice
       } = this.query;
       const data = {
         keyword,
@@ -1896,6 +2034,9 @@ export default {
         appointmentHospital:
           appointmentHospital == -1 ? null : appointmentHospital,
         consultationType: consultationType == -1 ? null : consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice,
+        belongMonth
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {

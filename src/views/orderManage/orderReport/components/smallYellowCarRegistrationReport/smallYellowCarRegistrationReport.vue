@@ -99,6 +99,32 @@
               >{{ item.name }}</Option
             >
           </Select>
+          <Select
+                v-model="query.isCreateOrder"
+                placeholder="请选择录单触达"
+                filterable
+                style="width: 150px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in query.isCreateOrderList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.isSendOrder"
+                placeholder="请选择派单触达"
+                filterable
+                style="width: 150px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in query.isSendOrderList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
       <Button
         type="primary"
         style="margin:0 10px"
@@ -192,6 +218,10 @@ export default {
           name:'否'
         }],
       query: {
+        // 录单触达
+        isCreateOrder:-1,
+        // 派单触达
+        isSendOrder:-1,
         isAddWechat:-1,
         isWriteOff:-1,
         isConsultation:-1,
@@ -266,6 +296,20 @@ export default {
             //     params.row.consultationType == 1 ? "视频" : "图片"
             //   );
             // },
+          },
+          {
+            title: "录单触达",
+            key: "isCreateOrder",
+            minWidth: 100,
+            align: "center",
+            
+          },
+          {
+            title: "派单触达",
+            key: "isSendOrder",
+            minWidth: 100,
+            align: "center",
+            
           },
           {
             title: "是否加V",
@@ -414,6 +458,36 @@ export default {
           },
         ],
         data: [],
+        // 录单触达
+        isCreateOrderList:[
+          {
+            type:-1,
+            name:'全部录单触达状态'
+          },
+          {
+            type:'true',
+            name:'是'
+          },
+          {
+            type:'false',
+            name:'否'
+          }
+        ],
+        // 派单触达
+        isSendOrderList:[
+          {
+            type:-1,
+            name:'全部派单触达状态'
+          },
+          {
+            type:'true',
+            name:'是'
+          },
+          {
+            type:'false',
+            name:'否'
+          }
+        ],
       },
     };
   },
@@ -438,7 +512,7 @@ export default {
     },
     // 小黄陈登记报表
     getshoppingCartRegistrationReport() {
-      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice} = this.query;
+      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,isCreateOrder,isSendOrder} = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
@@ -447,7 +521,9 @@ export default {
         isAddWechat:isAddWechat == -1 ? null : isAddWechat,
         isWriteOff:isWriteOff == -1 ? null : isWriteOff,
         isConsultation:isConsultation == -1 ? null : isConsultation,
-        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice
+        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
+        isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
+        isSendOrder:isSendOrder == -1 ? null : isSendOrder,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -468,7 +544,7 @@ export default {
     },
     // 导出
     exportsendOrder() {
-      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice} = this.query;
+      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,isCreateOrder,isSendOrder} = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
@@ -477,7 +553,9 @@ export default {
         isAddWechat:isAddWechat == -1 ? null : isAddWechat,
         isWriteOff:isWriteOff == -1 ? null : isWriteOff,
         isConsultation:isConsultation == -1 ? null : isConsultation,
-        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice
+        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
+        isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
+        isSendOrder:isSendOrder == -1 ? null : isSendOrder,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");

@@ -184,6 +184,10 @@
         <div class="message_title"><span class="line"></span>交易信息</div>
         <div class="order_content">
           <div>
+            <span class="title_bold">归属月份：</span>
+            <span>{{ detailObj.belongMonth == 1 ? '次月' : '当月' }} </span>
+          </div>
+          <div  class="mr_top">
             <span class="title_bold">订单类型：</span>
             <span>{{ detailObj.orderTypeText }} </span>
           </div>
@@ -191,6 +195,7 @@
             <span class="title_bold">订单来源：</span>
             <span>{{ detailObj.orderSourceText }} </span>
           </div>
+
           <div class="mr_top">
             <span class="title_bold">下单平台：</span>
             <span>{{ detailObj.contentPlateFormName }} </span>
@@ -235,7 +240,7 @@
             <div style="display:flex;align-items:flex-end">
               <Button
                 type="primary"
-                @click="transactionStatus(detailObj.id)"
+                @click="transactionStatus(detailObj.id,detailObj.consultationType)"
                 style="margin-right:10px;"
                 >成交情况</Button
               >
@@ -401,6 +406,7 @@ export default {
       transactionStatusParams: {
         contentPlatFormOrderId: "",
         transactionStatusModel: false,
+        consultationTypeText:''
       },
       // 查看审核图片
       viewPicList: [],
@@ -460,6 +466,12 @@ export default {
             minWidth: 120,
             align: "center",
           },
+          {
+            title: "下单金额",
+            key: "addOrderPrice",
+            minWidth: 120,
+            align: "center",
+          },
           // {
           //   title: "成交金额",
           //   key: "dealAmount",
@@ -473,9 +485,10 @@ export default {
   },
 
   methods: {
-    transactionStatus(id) {
+    transactionStatus(id,consultationType) {
       this.transactionStatusParams.contentPlatFormOrderId = id;
       this.transactionStatusParams.transactionStatusModel = true;
+      this.transactionStatusParams.consultationTypeText = consultationType == 0 ? '其他' : consultationType == 1 ? '独立跟进' :consultationType == 2 ? '协作完成' : '' 
     },
     // 成交情况
     transactionStatusChange() {
@@ -485,7 +498,6 @@ export default {
       this.$Message.success("你已复制成功！");
     },
     onError: function(e) {
-      console.log("无法复制文本！");
       this.$Message.error("无法复制文本！");
     },
     // 查看审核图片

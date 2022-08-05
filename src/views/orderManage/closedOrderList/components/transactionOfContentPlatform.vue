@@ -106,9 +106,8 @@
             <Select
               v-model="query.lastDealHospitalId"
               style="width: 180px; margin-left: 10px"
-              placeholder="请选择成交医院"
+              placeholder="请选择到院医院"
               filterable
-              :disabled="query.isDeal!='true'"
             >
               <Option
                 v-for="item in query.lastDealHospitalList"
@@ -460,7 +459,7 @@ export default {
         toHospitalEndDate:'',
         // 是否成交
         isDeal:-1,
-        // 成交医院
+        // 到院医院
         lastDealHospitalId:-1,
         // 是否陪诊
         isAccompanying:-1,
@@ -487,7 +486,7 @@ export default {
         liveAnchorId: null,
         hospitalId: "",
         hospitalList: [{ id: -1, name: "全部医院" }],
-        lastDealHospitalList: [{ id: -1, name: "全部成交医院" }],
+        lastDealHospitalList: [{ id: -1, name: "全部到院医院" }],
         startDate: "",
         endDate: "",
         contentPlateFormId: "",
@@ -612,7 +611,7 @@ export default {
             },
           },
           {
-            title: "成交医院",
+            title: "到院医院",
             key: "dealHospital",
             minWidth: 200,
             align:'center'
@@ -1287,7 +1286,7 @@ export default {
         tohospitalStartDate : isToHospital =='true' ? (tohospitalStartDate ? this.$moment(tohospitalStartDate).format("YYYY-MM-DD") : null)  : null ,
         toHospitalEndDate: isToHospital =='true' ? (toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null) : null ,
         isDeal : isDeal == -1 ? null : isDeal,
-        lastDealHospitalId: isDeal =='true' ? (lastDealHospitalId == -1 ? null : lastDealHospitalId): null  ,
+        lastDealHospitalId: lastDealHospitalId == -1 ? null : lastDealHospitalId,
         isAccompanying:isAccompanying == -1 ? null : isAccompanying,
         isOldCustomer:isOldCustomer == -1 ? null : isOldCustomer,
         isReturnBakcPrice : isReturnBakcPrice == -1 ? null : isReturnBakcPrice,
@@ -1359,7 +1358,7 @@ export default {
         tohospitalStartDate : isToHospital =='true' ? (tohospitalStartDate ? this.$moment(tohospitalStartDate).format("YYYY-MM-DD") : null)  : null ,
         toHospitalEndDate: isToHospital =='true' ? (toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null) : null ,
         isDeal : isDeal == -1 ? null : isDeal,
-        lastDealHospitalId: isDeal =='true' ? lastDealHospitalId : null ,
+        lastDealHospitalId: lastDealHospitalId ==-1 ?  null :  lastDealHospitalId ,
         isAccompanying:isAccompanying == -1 ? null : isAccompanying,
         isOldCustomer:isOldCustomer == -1 ? null : isOldCustomer,
         isReturnBakcPrice : isReturnBakcPrice == -1 ? null : isReturnBakcPrice,

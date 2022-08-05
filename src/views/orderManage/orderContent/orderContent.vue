@@ -1086,7 +1086,7 @@ export default {
             render: (h, params) => {
               return h(
                 "div",
-                params.row.belongMonth == 0 ? '当月':'次月'
+                params.row.belongMonth == 0 ? '当月':'历史'
               );
             },
           },
@@ -1239,7 +1239,7 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: params.row.checkStateText === "审核通过",
+                      // disabled: params.row.checkStateText === "审核通过",
                     },
                     style: {
                       marginRight: ".3125rem",
@@ -1413,7 +1413,7 @@ export default {
         },
         {
           id:1,
-          name:'次月'
+          name:'历史'
         }
       ]
     };

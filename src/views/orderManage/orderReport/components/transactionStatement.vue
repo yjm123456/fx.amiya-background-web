@@ -162,9 +162,8 @@
             <Select
               v-model="query.lastDealHospitalId"
               style="width: 180px; margin-left: 10px"
-              placeholder="请选择成交医院"
+              placeholder="请选择到院医院"
               filterable
-              :disabled="query.isDeal != 'true'"
             >
               <Option
                 v-for="item in transactionParams.dealHospitalList"
@@ -382,7 +381,7 @@ export default {
       pageCount: 0,
       transactionStatementModals: false,
       query: {
-        // 成交医院
+        // 到院医院
         dealHospitalId: -1,
         // 审核状态
         checkState: -1,
@@ -396,7 +395,7 @@ export default {
         toHospitalType: -1,
         // 是否成交
         isDeal: -1,
-        // 成交医院
+        // 到院医院
         lastDealHospitalId: -1,
         // 是否陪诊
         isAccompanying: -1,
@@ -544,7 +543,7 @@ export default {
             },
           },
           {
-            title: "成交医院",
+            title: "到院医院",
             key: "lastDealHospital",
             minWidth: 220,
             align: "center",
@@ -914,12 +913,7 @@ export default {
               : null
             : null,
         isDeal: isDeal == -1 ? null : isDeal,
-        lastDealHospitalId:
-          isDeal == "true"
-            ? lastDealHospitalId == -1
-              ? null
-              : lastDealHospitalId
-            : null,
+        lastDealHospitalId: lastDealHospitalId == -1 ? null: lastDealHospitalId,
         isAccompanying: isAccompanying == -1 ? null : isAccompanying,
         isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
         isReturnBakcPrice: isReturnBakcPrice == -1 ? null : isReturnBakcPrice,
@@ -1076,11 +1070,10 @@ export default {
             : null,
         isDeal: isDeal == -1 ? null : isDeal,
         lastDealHospitalId:
-          isDeal == "true"
-            ? lastDealHospitalId == -1
+          lastDealHospitalId == -1
               ? null
               : lastDealHospitalId
-            : null,
+            ,
         isAccompanying: isAccompanying == -1 ? null : isAccompanying,
         isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
         isReturnBakcPrice: isReturnBakcPrice == -1 ? null : isReturnBakcPrice,

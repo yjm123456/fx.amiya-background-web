@@ -185,7 +185,7 @@
         <div class="order_content">
           <div>
             <span class="title_bold">归属月份：</span>
-            <span>{{ detailObj.belongMonth == 1 ? '次月' : '当月' }} </span>
+            <span>{{ detailObj.belongMonth == 1 ? '历史' : '当月' }} </span>
           </div>
           <div  class="mr_top">
             <span class="title_bold">订单类型：</span>
@@ -207,6 +207,10 @@
           <div class="mr_top">
             <span class="title_bold">抖店订单号：</span>
             <span>{{ detailObj.otherContentPlatFormOrderId }}</span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">成交金额：</span>
+            <span>{{ detailObj.dealAmount }}</span>
           </div>
           <!-- <div class="mr_top">
             <span class="title_bold">新老客业绩：</span>

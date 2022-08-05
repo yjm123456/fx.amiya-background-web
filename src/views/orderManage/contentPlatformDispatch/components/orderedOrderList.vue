@@ -361,6 +361,20 @@
             @on-change="isToHospitalChange"
           />
         </FormItem>
+        <FormItem label="到院医院" prop="lastDealHospitalId" key="到院医院"  v-if="confirmForm.isToHospital === true">
+          <Select
+            v-model="confirmForm.lastDealHospitalId"
+            placeholder="请选择到院医院"
+            filterable
+          >
+            <Option
+              v-for="item in hospitalInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
         <FormItem label="到院类型" prop="toHospitalType" key="到院类型" v-if="confirmForm.isToHospital === true">
           <Select
               v-model="confirmForm.toHospitalType"
@@ -386,6 +400,7 @@
             transfer
           ></DatePicker>
         </FormItem>
+        
         <FormItem label="是否陪诊" prop="isAcompanying" key="是否陪诊" v-if="confirmForm.isToHospital === true">
           <i-switch
             v-model="confirmForm.isAcompanying"
@@ -394,20 +409,7 @@
         <FormItem label="是否成交" prop="isFinish" key="是否成交">
           <i-switch v-model="confirmForm.isFinish" @on-change="switchChange" />
         </FormItem>
-        <FormItem label="成交医院" prop="lastDealHospitalId" key="成交医院"  v-if="confirmForm.isFinish === true">
-          <Select
-            v-model="confirmForm.lastDealHospitalId"
-            placeholder="请选择成交医院"
-            filterable
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-        </FormItem>
+        
         <FormItem
           label="未成交原因"
           prop="unDealReason"
@@ -715,7 +717,7 @@ export default {
         lastDealHospitalId: [
           {
             required: true,
-            message: "请选择成交医院",
+            message: "请选择到院医院",
           },
         ],
         toHospitalType: [
@@ -1644,6 +1646,7 @@ export default {
         this.confirmForm.toHospitalDate = null
         this.confirmForm.toHospitalType = null
         this.confirmForm.isAcompanying = false
+        this.confirmForm.lastDealHospitalId = null
       }
     },
     switchChange() {
@@ -1654,7 +1657,6 @@ export default {
         this.confirmForm.lastProjectStage = "";
         this.uploadObj.uploadList = [];
         this.confirmForm.DealDate = null;
-        this.confirmForm.lastDealHospitalId = null
       } else {
         this.confirmForm.dealAmount = null;
         this.confirmForm.lastProjectStage = "";
@@ -1665,6 +1667,7 @@ export default {
         this.confirmForm.toHospitalType = null
         this.confirmForm.commissionRatio = ''
         this.confirmForm.isAcompanying = false
+        this.confirmForm.lastDealHospitalId = null
       }
     },
     // 图片

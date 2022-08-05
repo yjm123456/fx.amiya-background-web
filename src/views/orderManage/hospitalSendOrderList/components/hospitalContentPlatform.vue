@@ -122,6 +122,26 @@
           />
         </FormItem>
         <FormItem
+          label="成交医院"
+          prop="lastDealHospitalId"
+          key="成交医院"
+          v-if="form.isToHospital == true"
+        >
+          <Select
+            v-model="form.lastDealHospitalId"
+            placeholder="请选择成交医院"
+            filterable
+            disabled
+          >
+            <Option
+              v-for="item in hospitalInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
+        <FormItem
           label="到院类型"
           prop="toHospitalType"
           key="到院类型"
@@ -155,7 +175,9 @@
             style="width:360px"
             transfer
           ></DatePicker>
+          
         </FormItem>
+        
         <FormItem label="是否陪诊" prop="isAcompanying" key="是否陪诊" v-if="form.isToHospital == true">
           <i-switch
             v-model="form.isAcompanying"
@@ -164,26 +186,7 @@
         <FormItem label="是否成交" prop="isFinish" key="是否成交">
           <i-switch v-model="form.isFinish" @on-change="isFinishChange" />
         </FormItem>
-        <FormItem
-          label="成交医院"
-          prop="lastDealHospitalId"
-          key="成交医院"
-          v-if="form.isFinish == true"
-        >
-          <Select
-            v-model="form.lastDealHospitalId"
-            placeholder="请选择成交医院"
-            filterable
-            disabled
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-        </FormItem>
+        
         <FormItem
           label="未成交原因"
           prop="unDealReason"
@@ -1144,6 +1147,10 @@ export default {
         this.form.toHospitalDate = null;
         this.form.toHospitalType = null;
         this.form.isAcompanying = false
+      }else{
+        this.form.lastDealHospitalId = Number(
+          sessionStorage.getItem("hospitalId")
+        );
       }
     },
     isFinishChange() {
@@ -1153,9 +1160,7 @@ export default {
         this.form.lastProjectStage = "";
         this.uploadObj.uploadList = [];
         this.form.DealDate = null;
-        this.form.lastDealHospitalId = Number(
-          sessionStorage.getItem("hospitalId")
-        );
+        
       } else {
         this.form.isToHospital = false;
         this.form.unDealReason = "";
@@ -1336,7 +1341,7 @@ export default {
             DealDate: DealDate
               ? this.$moment(DealDate).format("YYYY-MM-DD")
               : null,
-            lastDealHospitalId: isFinish === true ? lastDealHospitalId : null,
+            lastDealHospitalId: isToHospital == true ? lastDealHospitalId : null,
             toHospitalDate: toHospitalDate
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,

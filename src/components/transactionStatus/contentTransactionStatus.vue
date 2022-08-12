@@ -153,7 +153,7 @@
             v-model="confirmForm.DealDate"
           ></DatePicker>
         </FormItem>
-        <FormItem
+        <!-- <FormItem
           label="佣金比例(%)"
           prop="commissionRatio"
           key="佣金比例(%)"
@@ -175,7 +175,7 @@
             type="number"
             number
           ></Input>
-        </FormItem>
+        </FormItem> -->
         <FormItem
           label="抖店订单号"
           prop="otherContentPlatFormOrderId"
@@ -505,18 +505,18 @@ export default {
               );
             },
           },
-          {
-            title: "佣金比例(%)",
-            key: "commissionRatio",
-            minWidth: 140,
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
-                  )
-                ;
-            }
-          },
+          // {
+          //   title: "佣金比例(%)",
+          //   key: "commissionRatio",
+          //   minWidth: 140,
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
+          //         )
+          //       ;
+          //   }
+          // },
           {
             title: "截图",
             key: "dealPicture",
@@ -766,7 +766,7 @@ export default {
             otherContentPlatFormOrderId,
             toHospitalType:isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
-            commissionRatio,
+            commissionRatio:0,
             invitationDocuments
           };
           api.updateContentPlatFormOrderDealInfo(data).then((res) => {

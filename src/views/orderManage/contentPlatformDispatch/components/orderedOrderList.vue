@@ -10,14 +10,14 @@
               style="width:200px;"
               @keyup.enter.native="getSendOrderInfo()"
             />
-            <Input
+            <!-- <Input
               v-model="query.commissionRatio"
               placeholder="请输入佣金比例(%)"
               type="number"
               number
               style="width:160px;margin-left: 10px"
               @keyup.enter.native="getSendOrderInfo()"
-            />
+            /> -->
             <DatePicker
               type="date"
               placeholder="派单开始日期"
@@ -189,20 +189,7 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Select
-              v-model="query.sendBy"
-              style="width: 160px;margin-left: 10px"
-              placeholder="请选择派单客服"
-              filterable
-              transfer
-            >
-              <Option
-                v-for="item in dispatchEmployee"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
+            
           </div>
           <div style="margin-top:10px">
             
@@ -215,6 +202,20 @@
                 v-for="item in query.isOldCustomerList"
                 :value="item.type"
                 :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.sendBy"
+              style="width: 160px;margin-left: 10px"
+              placeholder="请选择派单客服"
+              filterable
+              transfer
+            >
+              <Option
+                v-for="item in dispatchEmployee"
+                :value="item.id"
+                :key="item.id"
                 >{{ item.name }}</Option
               >
             </Select>
@@ -232,6 +233,7 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            
           </div>
         </div>
         <Button
@@ -467,7 +469,7 @@
             v-model="confirmForm.DealDate"
           ></DatePicker>
         </FormItem>
-        <FormItem
+        <!-- <FormItem
           label="佣金比例(%)"
           prop="commissionRatio"
           key="佣金比例(%)"
@@ -489,7 +491,7 @@
             type="number"
             number
           ></Input>
-        </FormItem>
+        </FormItem> -->
         <FormItem
           label="抖店订单号"
           prop="otherContentPlatFormOrderId"
@@ -1104,19 +1106,19 @@ export default {
             key: "isOldCustomer",
             align:'center',
           },
-          {
-            title: "佣金比例(%)",
-            minWidth: 120,
-            key: "commissionRatio",
-            align:'center',
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
-                  )
-                ;
-            }
-          },
+          // {
+          //   title: "佣金比例(%)",
+          //   minWidth: 120,
+          //   key: "commissionRatio",
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
+          //         )
+          //       ;
+          //   }
+          // },
           // {
           //   title: "成交凭证",
           //   key: "dealPictureUrl",
@@ -1720,7 +1722,7 @@ export default {
               otherContentPlatFormOrderId,
             toHospitalType:isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
-            commissionRatio:isFinish == false ? 0 : commissionRatio,
+            commissionRatio:0,
             invitationDocuments
           };
           api.finishContentPlateFormOrderByEmployee(data).then((res) => {

@@ -51,7 +51,7 @@
                 >{{ item.orderSourceText }}</Option
               >
             </Select>
-            <Select
+            <!-- <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
               style="width: 180px;margin-left: 10px"
@@ -63,7 +63,7 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-            </Select>
+            </Select> -->
             
           </div>
           <!-- 一个是订单平台筛选 一个是主播平台筛选 -->
@@ -136,20 +136,7 @@
                 >{{ item.orderTypeText }}</Option
               >
             </Select>
-            <Select
-              v-model="query.appointmentHospital"
-              style="width: 220px;margin-left: 10px"
-              placeholder="请选择医院"
-              filterable
-              transfer
-            >
-              <Option
-                v-for="item in hospitallist"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
+            
           </div>
           <div style="margin-top:10px">
             <Select
@@ -181,6 +168,20 @@
                 type="number"
                 namber
               />
+              <Select
+              v-model="query.appointmentHospital"
+              style="width: 220px;margin-left: 10px"
+              placeholder="请选择医院"
+              filterable
+              transfer
+            >
+              <Option
+                v-for="item in hospitallist"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
           </div>
         </div>
         <div class="button_con">
@@ -1792,7 +1793,9 @@ export default {
                     content: "修改成功",
                     duration: 3,
                   });
-                } else {
+                } else if (res.code != -1 || res.code !=0){
+                  this.$Message.error('操作失败，请联系管理员')
+                }else {
                   setTimeout(() => {
                     this.flag = false;
                   }, 3000);
@@ -1867,7 +1870,9 @@ export default {
                     content: "添加成功",
                     duration: 3,
                   });
-                } else {
+                } else if (res.code != -1 || res.code !=0){
+                  this.$Message.error('操作失败，请联系管理员')
+                }else {
                   this.flag = false;
                 }
               });
@@ -1994,6 +1999,8 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrder;
           this.query.data = list;
           this.query.totalCount = totalCount;
+        }else if (res.code != -1 || res.code !=0){
+          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },
@@ -2045,6 +2052,8 @@ export default {
           this.query.totalCount = totalCount;
           // 修改时 保留在当前页面
           sessionStorage.setItem("pageNumEdit", pageNum);
+        }else if (res.code != -1 || res.code !=0){
+          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },

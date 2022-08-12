@@ -105,14 +105,14 @@
                         :value="contentInfo.endDate"
                         v-model="contentInfo.endDate"
                       ></DatePicker>
-                      <Input
+                      <!-- <Input
                         v-model="contentInfo.commissionRatio"
                         placeholder="请输入佣金比例(%)"
                         type="number"
                         number
                         style="width:160px;margin-left: 10px"
                         @keyup.enter.native="getcustomerunContentPlatFormSendOrderList(2)"
-                      />
+                      /> -->
                       <Select
                         v-model="contentInfo.employeeId"
                         style="width: 160px;margin-left: 10px"
@@ -737,19 +737,19 @@ export default {
             minWidth: 140,
             align: "center",
           },
-          {
-            title: "佣金比例(%)",
-            key: "commissionRatio",
-            minWidth: 140,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.commissionRatio  ? params.row.commissionRatio + '%' : '0%'
-                  )
-                ;
-            }
-          },
+          // {
+          //   title: "佣金比例(%)",
+          //   key: "commissionRatio",
+          //   minWidth: 140,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.commissionRatio  ? params.row.commissionRatio + '%' : '0%'
+          //         )
+          //       ;
+          //   }
+          // },
           // {
           //   title: "成交时间",
           //   key: "dealDate",

@@ -39,3 +39,10 @@ export const detelShoppingCartRegistration = (id) => {
         method: "delete",
     });
 };
+// 紧急程度列表下拉框
+export const emergencyLevels = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/emergencyLevels",
+        method: "get",
+    });
+};

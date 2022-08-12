@@ -636,19 +636,19 @@ export default {
               );
             },
           },
-          {
-            title: "佣金比例(%)",
-            minWidth: 120,
-            key: "commissionRatio",
-            align:'center',
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
-                  )
-                ;
-            }
-          },
+          // {
+          //   title: "佣金比例(%)",
+          //   minWidth: 120,
+          //   key: "commissionRatio",
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
+          //         )
+          //       ;
+          //   }
+          // },
           {
             title: "订单类型",
             key: "orderTypeText",
@@ -994,6 +994,8 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrder;
           this.query.data = list;
           this.query.totalCount = totalCount;
+        } else if (res.code != -1 || res.code !=0){
+          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },
@@ -1034,6 +1036,8 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrder;
           this.query.data = list;
           this.query.totalCount = totalCount;
+        } else if (res.code != -1 || res.code !=0){
+          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },
@@ -1068,6 +1072,8 @@ export default {
                 content: "提交成功",
                 duration: 3,
               });
+            } else if (res.code != -1 || res.code !=0){
+              this.$Message.error('操作失败，请联系管理员')
             }else{
                setTimeout(() => {
                 this.flag = false;

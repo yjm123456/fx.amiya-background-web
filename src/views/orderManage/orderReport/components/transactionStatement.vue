@@ -211,6 +211,21 @@
                 >{{ item.orderTypeText }}</Option
               >
             </Select>
+            <Input
+                v-model="query.minAddOrderPrice"
+                placeholder="请输入最小下单金额"
+                style="width: 180px;margin-left:10px"
+                type="number"
+                namber
+              />
+              <span> — </span>
+              <Input
+                v-model="query.maxAddOrderPrice"
+                placeholder="请输入最大下单金额"
+                style="width: 180px;"
+                type="number"
+                namber
+              />
           </div>
           <div></div>
         </div>
@@ -265,6 +280,10 @@
                 <div style="color:red">{{ toHospitalTypeText3 }}</div>
               </div>
               <div class="num">
+                其他上门：
+                <div style="color:red">{{ toHospitalTypeText4 }}</div>
+              </div>
+              <div class="num">
                 初诊成交：
                 <div style="color:red">{{ dealNum1 }}</div>
               </div>
@@ -275,6 +294,10 @@
               <div class="num">
                 再消费成交：
                 <div style="color:red">{{ dealNum3 }}</div>
+              </div>
+              <div class="num">
+                其他成交：
+                <div style="color:red">{{ dealNum4 }}</div>
               </div>
               
               
@@ -291,6 +314,10 @@
               <div class="num">
                 再消费业绩：
                 <div style="color:red">{{ deal3 }}</div>
+              </div>
+              <div class="num">
+                其他业绩：
+                <div style="color:red">{{ deal4 }}</div>
               </div>
               <div class="num">
                 新客业绩：
@@ -350,12 +377,16 @@ export default {
       toHospitalTypeText2: 0,
       // 再消费上门
       toHospitalTypeText3: 0,
+      // 其他上门
+      toHospitalTypeText4: 0,
       // 初诊业绩
       deal1: 0,
       // 复诊业绩
       deal2: 0,
       // 再消费业绩
       deal3: 0,
+      // 其他业绩
+      deal4: 0,
       // 新客业绩
       newCustomer: 0,
       // 总业绩
@@ -366,6 +397,8 @@ export default {
       dealNum2:0,
       // 再消费成交
       dealNum3:0,
+      // 其他成交
+      dealNum4:0,
       // 协作完成
       cooperation:0,
       // 独立完成
@@ -381,6 +414,9 @@ export default {
       pageCount: 0,
       transactionStatementModals: false,
       query: {
+        // 最小金额
+        minAddOrderPrice:null,
+        maxAddOrderPrice:null,
         // 到院医院
         dealHospitalId: -1,
         // 审核状态
@@ -464,6 +500,12 @@ export default {
                   )
                 : "";
             },
+          },
+          {
+            title: "下单金额",
+            key: "addOrderPrice",
+            minWidth: 120,
+            align: "center",
           },
           {
             title: "派单时间",
@@ -598,20 +640,20 @@ export default {
             minWidth: 120,
             align: "center",
           },
-          {
-            title: "佣金比例(%)",
-            key: "commissionRatio",
-            minWidth: 180,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.commissionRatio
-                  ? params.row.commissionRatio + "%"
-                  : "0%"
-              );
-            },
-          },
+          // {
+          //   title: "佣金比例(%)",
+          //   key: "commissionRatio",
+          //   minWidth: 180,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     return h(
+          //       "div",
+          //       params.row.commissionRatio
+          //         ? params.row.commissionRatio + "%"
+          //         : "0%"
+          //     );
+          //   },
+          // },
           {
             title: "审核状态",
             key: "checkStateText",
@@ -883,6 +925,8 @@ export default {
         sendStartDate,
         sendEndDate,
         consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice
       } = this.query;
       this.transactionParams.employee.map((item) => {
         if (Number(this.positionId) == 2 || Number(this.positionId) == 4) {
@@ -939,6 +983,8 @@ export default {
           ? this.$moment(sendEndDate).format("YYYY-MM-DD")
           : null,
         consultationType: consultationType == -1 ? null : consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -954,12 +1000,15 @@ export default {
           let toHospitalTypeText1 = [];
           let toHospitalTypeText2 = [];
           let toHospitalTypeText3 = [];
+          let toHospitalTypeText4 = [];
           let deal1 = 0;
           let deal2 = 0;
           let deal3 = 0;
+          let deal4 = 0;
           let dealNum1 = []
           let dealNum2 = []
           let dealNum3 = []
+          let dealNum4 = []
           let newCustomer = 0;
           let totalPerformance = 0;
           let cooperation =[]
@@ -985,6 +1034,8 @@ export default {
               deal2 += Number(item.price);
             } else if (item.toHospitalTypeText == "再消费") {
               deal3 += Number(item.price);
+            } else if (item.toHospitalTypeText == "其他") {
+              deal4 += Number(item.price);
             }
             // 上门
             if (item.toHospitalTypeText == "初诊" && item.isToHospital == '是' ) {
@@ -993,6 +1044,8 @@ export default {
               toHospitalTypeText2.push(item);
             } else if (item.toHospitalTypeText == "再消费"  && item.isToHospital == '是' ) {
               toHospitalTypeText3.push(item);
+            }else if (item.toHospitalTypeText == "其他"  && item.isToHospital == '是' ) {
+              toHospitalTypeText4.push(item);
             }
             // 成交
             if (item.toHospitalTypeText == "初诊" && item.isToHospital == '是' && item.isDeal == '是') {
@@ -1001,19 +1054,24 @@ export default {
               dealNum2.push(item);
             } else if (item.toHospitalTypeText == "再消费"  && item.isToHospital == '是' && item.isDeal == '是') {
               dealNum3.push(item);
+            } else if (item.toHospitalTypeText == "其他"  && item.isToHospital == '是' && item.isDeal == '是') {
+              dealNum4.push(item);
             }
           });
           this.toHospitalTypeText1 = toHospitalTypeText1.length;
           this.toHospitalTypeText2 = toHospitalTypeText2.length;
           this.toHospitalTypeText3 = toHospitalTypeText3.length;
+          this.toHospitalTypeText4 = toHospitalTypeText4.length;
           this.dealNum1 = dealNum1.length;
           this.dealNum2 = dealNum2.length;
           this.dealNum3 = dealNum3.length;
+          this.dealNum4 = dealNum4.length;
           this.independent = independent.length;
           this.cooperation = cooperation.length;
           this.deal1 = Math.floor(deal1 * 100) / 100;
           this.deal2 = Math.floor(deal2 * 100) / 100;
           this.deal3 = Math.floor(deal3 * 100) / 100;
+          this.deal4 = Math.floor(deal4 * 100) / 100;
           this.newCustomer = Math.floor((deal1+deal2) * 100) / 100;
           this.totalPerformance = Math.floor((deal1+deal2+deal3) * 100) / 100;
           this.paymentCollection = Math.floor(paymentCollection * 100) / 100;
@@ -1047,6 +1105,8 @@ export default {
         sendStartDate,
         sendEndDate,
         consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice
       } = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
@@ -1098,6 +1158,8 @@ export default {
           ? this.$moment(sendEndDate).format("YYYY-MM-DD")
           : null,
         consultationType: consultationType == -1 ? null : consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1158,6 +1220,8 @@ export default {
         this.query.sendEndDate = "";
         this.query.consultationType = -1;
         this.query.keyWord = "";
+        this.query.minAddOrderPrice = null
+        this.query.maxAddOrderPrice = null
       }
     },
     // 取消
@@ -1194,6 +1258,8 @@ export default {
       this.query.sendEndDate = "";
       this.query.consultationType = -1;
       this.query.keyWord = "";
+      this.query.minAddOrderPrice = null
+      this.query.maxAddOrderPrice = null
     },
   },
   created() {

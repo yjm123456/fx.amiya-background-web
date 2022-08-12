@@ -70,7 +70,7 @@
                 v-model="query.isWriteOff"
                 placeholder="请选择核销状态"
                 filterable
-                style="width: 180px;"
+                style="width: 180px;margin-left: 10px"
               >
                 <Option
                   v-for="item in isWriteOffList"
@@ -79,9 +79,8 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              
             </div>
-            <div style="margin-top:10px">
+            <div style="margin:10px 0 ">
               
               <Select
                 v-model="query.isConsultation"
@@ -96,19 +95,7 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              <Select
-                v-model="query.isReturnBackPrice"
-                placeholder="请选择退款状态"
-                filterable
-                style="width: 180px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in isReturnBackPriceList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
+              
               <Select
                 v-model="query.admissionId"
                 placeholder="请选择接诊人员"
@@ -148,22 +135,96 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+              <Select
+                v-model="query.emergencyLevel"
+                placeholder="请选择重要程度"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in query.emergencyLevelListAll"
+                  :value="item.emergencyLevel"
+                  :key="item.emergencyLevel"
+                  >{{ item.emergencyLevelText }}</Option
+                >
+              </Select>
+              
               <Input
                 v-model="query.minPrice"
-                placeholder="请输入最小下单金额"
-                style="width: 180px;margin-left:10px"
+                placeholder="最小下单金额"
+                style="width: 170px;margin-left:10px"
                 type="number"
                 namber
               />
               <span> — </span>
               <Input
                 v-model="query.maxPrice"
-                placeholder="请输入最大下单金额"
-                style="width: 180px;"
+                placeholder="最大下单金额"
+                style="width: 170px;"
                 type="number"
                 namber
               />
               
+            </div>
+            <div>
+              <Select
+                v-model="query.isReturnBackPrice"
+                placeholder="请选择退款状态"
+                filterable
+                style="width: 180px;"
+              >
+                <Option
+                  v-for="item in isReturnBackPriceList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <DatePicker
+                type="date"
+                placeholder="退款开始时间"
+                :value="query.startRefundTime"
+                v-model="query.startRefundTime"
+                style="width: 180px; margin-left: 10px"
+                :disabled="query.isReturnBackPrice != 'true'"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="退款结束时间"
+                :value="query.endRefundTime"
+                v-model="query.endRefundTime"
+                style="width: 180px; margin-left: 10px"
+                :disabled="query.isReturnBackPrice != 'true'"
+              ></DatePicker>
+              <Select
+                v-model="query.isBadReview"
+                placeholder="请选择差评状态"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in isBadReviewList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <DatePicker
+                type="date"
+                placeholder="差评开始时间"
+                :value="query.startBadReviewTime"
+                v-model="query.startBadReviewTime"
+                style="width: 180px; margin-left: 10px"
+                :disabled="query.isBadReview != 'true'"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="差评结束时间"
+                :value="query.endBadReviewTime"
+                v-model="query.endBadReviewTime"
+                style="width: 180px; margin-left: 10px"
+                :disabled="query.isBadReview != 'true'"
+              ></DatePicker>
             </div>
           </div>
           <div>
@@ -389,6 +450,21 @@
         </Row>
         <Row :gutter="30">
           <Col span="8">
+            <FormItem label="重要程度" prop="emergencyLevel">
+              <Select
+                v-model="form.emergencyLevel"
+                placeholder="请选择重要程度"
+              >
+                <Option
+                  v-for="item in emergencyLevelsList"
+                  :value="item.emergencyLevel"
+                  :key="item.emergencyLevel"
+                  >{{ item.emergencyLevelText }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="是否加V" prop="IsAddWeChat">
               <i-switch v-model="form.IsAddWeChat" />
             </FormItem>
@@ -506,12 +582,23 @@ import * as api from "@/api/shoppingCartRegistration";
 import * as apis from "@/api/baseDataMaintenance";
 import * as orderApi from "@/api/orderManage";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
-
 export default {
   data() {
     return {
       // 查询
       query: {
+        // 重要程度
+        emergencyLevel:-1,
+        // 退款开始时间
+        startRefundTime:'',
+        // 退款结束时间
+        endRefundTime:'',
+        // 差评开始时间
+        startBadReviewTime:'',
+        // 差评结束时间
+        endBadReviewTime:'',
+        // 是否差评
+        isBadReview:-1,
         // 录单触达
         isCreateOrder:-1,
         // 派单触达
@@ -552,6 +639,75 @@ export default {
                     )
                   : ""
               );
+            },
+          },
+          {
+            title: "重要程度",
+            key: "emergencyLevelText",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.emergencyLevelText == "非常重要") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "重要") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#ff9800",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "一般") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#2098ee",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "轻微") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#009688",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "可忽略") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "blue",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              }
             },
           },
           {
@@ -640,6 +796,8 @@ export default {
               }
             },
           },
+          
+          
           {
             title: "录单触达",
             key: "isCreateOrder",
@@ -1015,7 +1173,8 @@ export default {
                               badReviewContent,
                               isReContent,
                               reContent,
-                              isBadReview
+                              isBadReview,
+                              emergencyLevel
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1029,6 +1188,7 @@ export default {
                             this.form.phone = phone;
                             this.form.price = price;
                             this.form.consultationType = consultationType;
+                            this.form.emergencyLevel = emergencyLevel;
                             this.form.isWriteOff = isWriteOff;
                             this.form.IsAddWeChat = isAddWeChat;
                             this.form.isConsultation = isConsultation;
@@ -1126,6 +1286,8 @@ export default {
             name:'否'
           }
         ],
+        // 重要程度
+        emergencyLevelListAll:[{emergencyLevel:-1,emergencyLevelText:'全部重要程度'}]
       },
       flag: false,
       // 控制 modal
@@ -1190,9 +1352,17 @@ export default {
         admissionId:Number(sessionStorage.getItem("employeeId"))
           ? Number(sessionStorage.getItem("employeeId"))
           : null,
+        // 重要程度
+        emergencyLevel:null
       },
 
       ruleValidate: {
+        emergencyLevel: [
+          {
+            required: true,
+            message: "请选择重要程度",
+          },
+        ],
         customerNickName: [
           {
             required: true,
@@ -1361,17 +1531,38 @@ export default {
           type:'false',
           name:'否'
         }],
+        isBadReviewList:[{
+          type:-1,
+          name:'全部差评状态'
+        },{
+          type:'true',
+          name:'是'
+        },{
+          type:'false',
+          name:'否'
+        }],
         //接诊人员
         employeeList:[],
         employee: [{ name: "全部接诊人员", id: -1 }],
         // 微信号
         weChatList: [],
+        // 紧急程度
+        emergencyLevelsList:[]
        
 
     };
   },
   methods: {
-   
+    // 紧急程度（下拉框）
+    getEmergencyLevels(){
+      api.emergencyLevels().then((res) => {
+        if (res.code === 0) {
+          const { emergencyLevels } = res.data;
+            this.emergencyLevelsList = emergencyLevels;
+            this.query.emergencyLevelListAll = [...this.query.emergencyLevelListAll,...emergencyLevels]
+        }
+      });
+    },
     isReturnBackPriceChange(){
       const {isReturnBackPrice} = this.form
       if(isReturnBackPrice == false){
@@ -1455,7 +1646,8 @@ export default {
       });
       const { pageNum, pageSize, keyword , startDate,endDate,liveAnchorId,contentPlatFormId,
       isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId,
-      isCreateOrder,isSendOrder
+      isCreateOrder,isSendOrder,isBadReview,startRefundTime,endRefundTime,startBadReviewTime,endBadReviewTime,
+      emergencyLevel
       
       } = this.query;
       const data = { 
@@ -1475,17 +1667,45 @@ export default {
         maxPrice,
         isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
         isSendOrder:isSendOrder == -1 ? null : isSendOrder,
-        
+        isBadReview:isBadReview == -1 ? null : isBadReview,
+        startRefundTime:isReturnBackPrice == 'true' ?  (startRefundTime ? this.$moment(startRefundTime).format("YYYY-MM-DD") : null) : null,
+        endRefundTime:isReturnBackPrice == 'true' ?   (endRefundTime ? this.$moment(endRefundTime).format("YYYY-MM-DD") : null) : null,
+        startBadReviewTime:isBadReview == 'true' ?  (startBadReviewTime ? this.$moment(startBadReviewTime).format("YYYY-MM-DD") : null) : null,
+        endBadReviewTime:isBadReview == 'true' ?  (endBadReviewTime ? this.$moment(endBadReviewTime).format("YYYY-MM-DD") : null) : null,
+        emergencyLevel:emergencyLevel == -1 ? null : emergencyLevel
       };
       if(!startDate || !endDate){
         this.$Message.warning('请选择日期')
         return
       }
+      if(isReturnBackPrice == 'true'){
+        if(!startRefundTime){
+          this.$Message.warning('请选择退款开始日期')
+          return
+        }
+        if(!endRefundTime){
+          this.$Message.warning('请选择退款结束日期')
+          return
+        }
+      }
+      if(isBadReview == 'true'){
+        if(!startBadReviewTime){
+          this.$Message.warning('请选择差评开始日期')
+          return
+        }
+        if(!endBadReviewTime){
+          this.$Message.warning('请选择差评结束日期')
+          return
+        }
+      }
+      
       api.shoppingCartRegistrationList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.shoppingCartRegistrationInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
+        }else if (res.code != -1 || res.code !=0){
+          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },
@@ -1494,7 +1714,8 @@ export default {
     handlePageChange(pageNum) {
       const { pageSize, keyword, startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,
       isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId,
-      isCreateOrder,isSendOrder
+      isCreateOrder,isSendOrder,isBadReview,startRefundTime,endRefundTime,startBadReviewTime,endBadReviewTime,
+      emergencyLevel
        } = this.query;
       const data = { 
         pageNum, 
@@ -1513,6 +1734,12 @@ export default {
         maxPrice,
         isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
         isSendOrder:isSendOrder == -1 ? null : isSendOrder,
+        isBadReview:isBadReview == -1 ? null : isBadReview,
+        startRefundTime:isReturnBackPrice == 'true' ?  (startRefundTime ? this.$moment(startRefundTime).format("YYYY-MM-DD") : null) : null,
+        endRefundTime:isReturnBackPrice == 'true' ?   (endRefundTime ? this.$moment(endRefundTime).format("YYYY-MM-DD") : null) : null,
+        startBadReviewTime:isBadReview == 'true' ?  (startBadReviewTime ? this.$moment(startBadReviewTime).format("YYYY-MM-DD") : null) : null,
+        endBadReviewTime:isBadReview == 'true' ?  (endBadReviewTime ? this.$moment(endBadReviewTime).format("YYYY-MM-DD") : null) : null,
+        emergencyLevel: emergencyLevel == -1 ? null :emergencyLevel
         
       };
       if(!startDate || !endDate){
@@ -1527,6 +1754,8 @@ export default {
           this.query.totalCount = totalCount;
           // 修改时 保留在当前页面
           sessionStorage.setItem("smallpageNumEdit", pageNum);
+        }else if (res.code != -1 || res.code !=0){
+          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },
@@ -1546,7 +1775,7 @@ export default {
                 }else{
                   const {id,recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,
                   consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat ,time ,
-                  refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId} = this.form;
+                  refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId,emergencyLevel} = this.form;
                   
                   const data = { 
                     recordDate:time ? this.$moment(recordDate).format("YYYY-MM-DD")+'T' + time : this.$moment(recordDate).format("YYYY-MM-DD") + 'T' + '00:00:00',
@@ -1571,7 +1800,8 @@ export default {
                     badReviewContent,
                     isReContent,
                     reContent,
-                    admissionId
+                    admissionId,
+                    emergencyLevel
                     };
                     if(!data.liveAnchorWechatNo){
                         this.$Message.warning('请选择微信号')
@@ -1592,6 +1822,8 @@ export default {
                         content: "修改成功",
                         duration: 3,
                       });
+                    }else if (res.code != -1 || res.code !=0){
+                      this.$Message.error('操作失败，请联系管理员')
                     }
                   });
                 }
@@ -1599,7 +1831,7 @@ export default {
           } else {
             const {recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,
             consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat,time  ,
-            refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId} = this.form;
+            refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId,emergencyLevel} = this.form;
             const data = { 
               recordDate:time ? this.$moment(recordDate).format("YYYY-MM-DD")+'T' + time : this.$moment(recordDate).format("YYYY-MM-DD") + 'T' + '00:00:00',
               contentPlatFormId,
@@ -1622,7 +1854,8 @@ export default {
               badReviewContent,
               isReContent,
               reContent,
-              admissionId
+              admissionId,
+              emergencyLevel
               };
 
               if (phone) {
@@ -1643,6 +1876,8 @@ export default {
                         content: "添加成功",
                         duration: 3,
                       });
+                    }else if (res.code != -1 || res.code !=0){
+                      this.$Message.error('操作失败，请联系管理员')
                     }
                   });
                 }
@@ -1671,6 +1906,7 @@ export default {
     this.getSmallCar();
     this.getProvince();
     this.getCustomerServiceLists()
+    this.getEmergencyLevels()
   },
   
 };

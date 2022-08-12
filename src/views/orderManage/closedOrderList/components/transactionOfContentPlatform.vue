@@ -302,6 +302,21 @@
                 >{{ item.orderTypeText }}</Option
               >
             </Select>
+            <Input
+                v-model="query.minAddOrderPrice"
+                placeholder="请输入最小下单金额"
+                style="width: 180px;margin-left:10px"
+                type="number"
+                namber
+              />
+              <span> — </span>
+              <Input
+                v-model="query.maxAddOrderPrice"
+                placeholder="请输入最大下单金额"
+                style="width: 180px;"
+                type="number"
+                namber
+              />
           </div>
         </div>
         <div class="right">
@@ -396,6 +411,8 @@
     <paymentCollection :paymentCollectionModel.sync ="paymentCollectionModel" :paymentCollectionObj="paymentCollectionObj" @hanPaymentChange="getContentPlatFormOrderDealInfo"></paymentCollection>
     <!-- 订单详情 -->
     <detail :detailModel.sync ="detailModel" :detailList ="detailList"></detail>
+     <!-- 查看邀约凭证 -->
+    <viewImg :viewCustomerPhotosModel.sync="viewCustomerPhotosModel" :viewImgParams="viewImgParams"></viewImg>
   </div>
 </template>
 <script>
@@ -406,12 +423,13 @@ import * as empApi from "@/api/employeeManage";
 import upload from "@/components/upload/upload";
 import paymentCollection from "@/components/paymentCollection/paymentCollection"
 import detail from "@/components/contentDetail/detail.vue"
-
+import viewImg from "@/components/transactionStatus/viewImg";
 export default {
   components: {
     upload,
     paymentCollection,
-    detail
+    detail,
+    viewImg
   },
   props:{
     activeName:String,
@@ -420,6 +438,11 @@ export default {
   },
   data() {
     return {
+      viewCustomerPhotosModel:false,
+      viewImgParams:{
+        contentPlatFormOrderId:'',
+        orderDealId:''
+      },
       // 到院状态
       toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],
       detailList:[],
@@ -451,6 +474,10 @@ export default {
       //   审核状态
       checkStateList: [],
       query: {
+        // 最小金额
+        minAddOrderPrice:null,
+        // 最大金额
+        maxAddOrderPrice:null,
         //是否到院
         isToHospital:-1,
         // 到院开始时间
@@ -522,18 +549,10 @@ export default {
             },
           },
           {
-            title: "派单时间",
-            key: "sendDate",
-            minWidth: 170,
-            align:'center',
-            render: (h, params) => {
-              return params.row.sendDate
-                ? h(
-                    "div",
-                    this.$moment(params.row.sendDate).format("YYYY-MM-DD HH:mm:ss")
-                  )
-                : "";
-            },
+            title: "下单金额",
+            key: "addOrderPrice",
+            minWidth: 120,
+            align:'center'
           },
           {
             title: "面诊状态",
@@ -547,6 +566,22 @@ export default {
             minWidth: 140,
             align:'center'
           },
+          {
+            title: "派单时间",
+            key: "sendDate",
+            minWidth: 170,
+            align:'center',
+            render: (h, params) => {
+              return params.row.sendDate
+                ? h(
+                    "div",
+                    this.$moment(params.row.sendDate).format("YYYY-MM-DD HH:mm:ss")
+                  )
+                : "";
+            },
+          },
+          
+          
           {
             title: "是否到院",
             key: "isToHospital",
@@ -589,27 +624,7 @@ export default {
                 : "";
             },
           },
-          {
-            title: "是否成交",
-            key: "isDeal",
-            minWidth: 120,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "i-switch",
-                {
-                  props: {
-                    value: params.row.isDeal,
-                    size: "default",
-                    disabled:
-                      params.row.isDeal === true || params.row.isDeal === false,
-                  },
-                },
-                h("span", { isDeal: "open" }, "开"),
-                h("span", { isDeal: "close" }, "关")
-              );
-            },
-          },
+          
           {
             title: "到院医院",
             key: "dealHospital",
@@ -657,11 +672,27 @@ export default {
             align:'center'
           },
           {
-            title: "价格",
-            key: "price",
-            minWidth: 200,
-            align:'center'
+            title: "是否成交",
+            key: "isDeal",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isDeal,
+                    size: "default",
+                    disabled:
+                      params.row.isDeal === true || params.row.isDeal === false,
+                  },
+                },
+                h("span", { isDeal: "open" }, "开"),
+                h("span", { isDeal: "close" }, "关")
+              );
+            },
           },
+          
           {
             title: "成交时间",
             key: "dealDate",
@@ -675,6 +706,12 @@ export default {
                   )
                 : "";
             },
+          },
+          {
+            title: "成交金额",
+            key: "price",
+            minWidth: 120,
+            align:'center'
           },
           {
             title: "三方订单号",
@@ -715,19 +752,19 @@ export default {
               );
             },
           },
-          {
-            title: "佣金比例(%)",
-            key: "commissionRatio",
-            minWidth: 180,
-            align:'center',
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
-                  )
-                ;
-            }
-          },
+          // {
+          //   title: "佣金比例(%)",
+          //   key: "commissionRatio",
+          //   minWidth: 180,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
+          //         )
+          //       ;
+          //   }
+          // },
           {
             title: "审核状态",
             key: "checkStateText",
@@ -884,7 +921,7 @@ export default {
           {
             title: "操作",
             align: "center",
-            minWidth: 140,
+            minWidth: 240,
             fixed: "right",
             render: (h, params) => {
               const currentRole = JSON.parse(
@@ -1013,6 +1050,27 @@ export default {
                   },
                   "回款"
                 ):null,
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id,contentPlatFormOrderId } = params.row;
+                        this.viewCustomerPhotosModel = true
+                        this.viewImgParams.contentPlatFormOrderId = contentPlatFormOrderId
+                        this.viewImgParams.orderDealId = id
+                       }
+                    },
+                  },
+                  "查看邀约凭证"
+                ),
               ]);
             },
           },
@@ -1265,7 +1323,9 @@ export default {
         customerServiceId,
         sendStartDate,
         sendEndDate,
-        consultationType
+        consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice
       } = this.query;
       const data = {
         pageNum,
@@ -1297,7 +1357,9 @@ export default {
           ? this.$moment(sendStartDate).format("YYYY-MM-DD")
           : "",
         sendEndDate: sendEndDate ? this.$moment(sendEndDate).format("YYYY-MM-DD") : "",
-        consultationType:consultationType == -1 ? null : consultationType
+        consultationType:consultationType == -1 ? null : consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice
 
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
@@ -1305,6 +1367,8 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
+        } else if (res.code != -1 || res.code !=0){
+          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },
@@ -1337,7 +1401,9 @@ export default {
         customerServiceId,
         sendStartDate,
         sendEndDate,
-        consultationType
+        consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice
       } = this.query;
       const data = {
         pageNum,
@@ -1369,13 +1435,17 @@ export default {
           ? this.$moment(sendStartDate).format("YYYY-MM-DD")
           : "",
         sendEndDate: sendEndDate ? this.$moment(sendEndDate).format("YYYY-MM-DD") : "",
-        consultationType:consultationType == -1 ? null :consultationType
+        consultationType:consultationType == -1 ? null :consultationType,
+        minAddOrderPrice,
+        maxAddOrderPrice
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
+        } else if (res.code != -1 || res.code !=0){
+          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },
@@ -1412,6 +1482,8 @@ export default {
                 content: "提交成功",
                 duration: 3,
               });
+            } else if (res.code != -1 || res.code !=0){
+              this.$Message.error('操作失败，请联系管理员')
             }else{
                setTimeout(() => {
                 this.flag = false;

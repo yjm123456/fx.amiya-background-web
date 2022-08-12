@@ -11,14 +11,14 @@
       <DatePicker
         type="date"
         placeholder="开始日期"
-        style="width: 160px;"
+        style="width: 140px;"
         :value="query.startDate"
         v-model="query.startDate"
       ></DatePicker>
       <DatePicker
         type="date"
         placeholder="结束日期"
-        style="width: 160px; margin-left: 10px"
+        style="width: 140px; margin-left: 10px"
         :value="query.endDate"
         v-model="query.endDate"
       ></DatePicker>
@@ -27,7 +27,7 @@
         placeholder="请选择渠道"
         @on-change="contentPlateChange(query.contentPlatFormId)"
         filterable
-        style="width: 160px; margin-left: 10px"
+        style="width: 140px; margin-left: 10px"
       >
         <Option
           v-for="item in contentPalteForms"
@@ -41,7 +41,7 @@
         placeholder="请选择主播IP账号"
         :disabled="query.contentPlatFormId === ''"
         filterable
-        style="width: 160px; margin-left: 10px"
+        style="width: 140px; margin-left: 10px"
       >
         <Option v-for="item in liveAnchors" :value="item.id" :key="item.id">{{
           item.hostAccountName
@@ -103,7 +103,7 @@
                 v-model="query.isCreateOrder"
                 placeholder="请选择录单触达"
                 filterable
-                style="width: 150px; margin-left: 10px"
+                style="width: 140px; margin-left: 10px"
               >
                 <Option
                   v-for="item in query.isCreateOrderList"
@@ -116,13 +116,26 @@
                 v-model="query.isSendOrder"
                 placeholder="请选择派单触达"
                 filterable
-                style="width: 150px; margin-left: 10px"
+                style="width: 140px; margin-left: 10px"
               >
                 <Option
                   v-for="item in query.isSendOrderList"
                   :value="item.type"
                   :key="item.type"
                   >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.emergencyLevel"
+                placeholder="请选择重要程度"
+                filterable
+                style="width: 140px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in emergencyLevelListAll"
+                  :value="item.emergencyLevel"
+                  :key="item.emergencyLevel"
+                  >{{ item.emergencyLevelText }}</Option
                 >
               </Select>
       <Button
@@ -168,6 +181,7 @@ export default {
       type: Boolean,
     },
     contentPalteForms: Array,
+    emergencyLevelListAll:Array
   },
   data() {
     return {
@@ -218,6 +232,8 @@ export default {
           name:'否'
         }],
       query: {
+        // 重要程度
+        emergencyLevel:-1,
         // 录单触达
         isCreateOrder:-1,
         // 派单触达
@@ -253,6 +269,75 @@ export default {
                     )
                   : ""
               );
+            },
+          },
+          {
+            title: "重要程度",
+            key: "emergencyLevelText",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.emergencyLevelText == "非常重要") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "重要") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#ff9800",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "一般") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#2098ee",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "轻微") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#009688",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "可忽略") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "blue",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              }
             },
           },
           {
@@ -488,10 +573,12 @@ export default {
             name:'否'
           }
         ],
+        
       },
     };
   },
   methods: {
+    
       contentPlateChange(value) {
       if (!value) {
         return;
@@ -512,7 +599,7 @@ export default {
     },
     // 小黄陈登记报表
     getshoppingCartRegistrationReport() {
-      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,isCreateOrder,isSendOrder} = this.query;
+      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,isCreateOrder,isSendOrder,emergencyLevel} = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
@@ -524,6 +611,7 @@ export default {
         isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
         isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
         isSendOrder:isSendOrder == -1 ? null : isSendOrder,
+        emergencyLevel:emergencyLevel == -1 ? null : emergencyLevel
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -544,7 +632,7 @@ export default {
     },
     // 导出
     exportsendOrder() {
-      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,isCreateOrder,isSendOrder} = this.query;
+      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,isCreateOrder,isSendOrder,emergencyLevel} = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
@@ -556,6 +644,7 @@ export default {
         isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
         isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
         isSendOrder:isSendOrder == -1 ? null : isSendOrder,
+        emergencyLevel:emergencyLevel == -1 ? null : emergencyLevel
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -587,6 +676,8 @@ export default {
         this.query.contentPlatFormId = ''
         this.query.LiveAnchorId = ''
         this.$emit("update:smallYellowCarRegistrationModel", false);
+        this.query.emergencyLevel = -1
+        
       }
     },
     // 取消
@@ -603,6 +694,7 @@ export default {
       this.query.contentPlatFormId = ''
       this.query.LiveAnchorId = ''
       this.$emit("update:smallYellowCarRegistrationModel", false);
+      this.query.emergencyLevel = -1
     },
   },
   created() {

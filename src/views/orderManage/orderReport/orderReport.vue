@@ -205,7 +205,7 @@
         <!-- 客服已派单报表（下单平台、内容平台） -->
         <customerServiceDispatchOrderReport :customerServiceDispatchOrderModel.sync="customerServiceDispatchOrderModel" ref="customerServiceDispatchOrderReport" :dispatchHospital="dispatchHospital"></customerServiceDispatchOrderReport>
         <!-- 小黄车登记报表 -->
-        <smallYellowCarRegistrationReport :smallYellowCarRegistrationModel.sync="smallYellowCarRegistrationModel" ref="smallYellowCarRegistrationReport" :contentPalteForms="contentPalteForms"></smallYellowCarRegistrationReport>
+        <smallYellowCarRegistrationReport :smallYellowCarRegistrationModel.sync="smallYellowCarRegistrationModel" ref="smallYellowCarRegistrationReport" :contentPalteForms="contentPalteForms" :emergencyLevelListAll="emergencyLevelListAll"></smallYellowCarRegistrationReport>
         <!-- 成交情况报表 -->
         <transactionStatement :transactionStatementModal.sync="transactionStatementModal" ref="transactionStatement" :transactionParams="transactionParams"></transactionStatement>
     </div>
@@ -214,6 +214,7 @@
 import * as api from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance"
 import * as apis from "@/api/customerManage.js";
+import * as shopApi from "@/api/shoppingCartRegistration";
 
 import transactionStatus from "@/assets/images/report/transactionStatus.png"
 
@@ -314,11 +315,22 @@ export default {
                 dealHospitalList:[{ name: "全部最终到院医院", id: -1 }],
                  // 到院类型
                 toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],
-            }
+            },
+            // 重要程度
+           emergencyLevelListAll:[{emergencyLevel:-1,emergencyLevelText:'全部重要程度'}]
             
         }
     },
     methods:{
+        // 紧急程度（下拉框）
+        getEmergencyLevels(){
+            shopApi.emergencyLevels().then((res) => {
+                if (res.code === 0) {
+                const { emergencyLevels } = res.data;
+                    this.emergencyLevelListAll = [...this.emergencyLevelListAll,...emergencyLevels]
+                }
+            });
+        },
         //   获取订单到院类型
         getcontentPlateFormOrderToHospitalTypeList() {
             api.contentPlateFormOrderToHospitalTypeList().then((res) => {
@@ -460,6 +472,7 @@ export default {
         this.getCheckStateList()
         this.getCustomerServiceList()
         this.getcontentPlateFormOrderToHospitalTypeList()
+        this.getEmergencyLevels()
     },
     mounted() {
         this.getData();

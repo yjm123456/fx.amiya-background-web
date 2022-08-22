@@ -88,14 +88,14 @@
           <!--  @on-change="switchChange"  -->
         </FormItem>
         <FormItem
-          label="成交医院"
+          label="到院医院"
           prop="lastDealHospitalId"
-          key="成交医院"
+          key="到院医院"
           v-if="confirmForm.isFinish == true"
         >
           <Select
             v-model="confirmForm.lastDealHospitalId"
-            placeholder="请选择成交医院"
+            placeholder="请选择到院医院"
             filterable
           >
             <Option
@@ -365,7 +365,7 @@ export default {
         lastDealHospitalId: [
           {
             required: true,
-            message: "请选择成交医院",
+            message: "请选择到院医院",
           },
         ],
         toHospitalType: [
@@ -430,6 +430,11 @@ export default {
                   : ""
               );
             },
+          },
+          {
+            title: "到院医院",
+            key: "dealHospital",
+            minWidth: 220,
           },
           {
             title: "是否陪诊",

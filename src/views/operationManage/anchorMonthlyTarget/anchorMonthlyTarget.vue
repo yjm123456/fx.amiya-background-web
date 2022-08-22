@@ -535,24 +535,97 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="业绩目标"
-              prop="performanceTarget"
+              label="新诊业绩目标"
+              prop="newCustomerPerformanceTarget"
               :rules="[
                 {
                   required: true,
-                  message: '请输入业绩目标(最小是1)',
+                  message: '请输入新诊业绩目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="业绩目标"
+              key="新诊业绩目标"
+            >
+              <Input
+                v-model="form.newCustomerPerformanceTarget"
+                placeholder="请输入新诊业绩目标"
+                type="number"
+                number
+                @on-change="newCustomerPerformanceTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="复诊业绩目标"
+              prop="subsequentPerformanceTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入复诊业绩目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="复诊业绩目标"
+            >
+              <Input
+                v-model="form.subsequentPerformanceTarget"
+                placeholder="请输入复诊业绩目标"
+                type="number"
+                number
+                @on-change="subsequentPerformanceTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="老客业绩目标"
+              prop="oldCustomerPerformanceTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入老客业绩目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="老客业绩目标"
+            >
+              <Input
+                v-model="form.oldCustomerPerformanceTarget"
+                placeholder="请输入老客业绩目标"
+                type="number"
+                number
+                @on-change="oldCustomerPerformanceTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="总业绩目标"
+              prop="performanceTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入总业绩目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="总业绩目标"
             >
               <Input
                 v-model="form.performanceTarget"
-                placeholder="请输入业绩目标"
+                placeholder="请输入总业绩目标"
                 type="number"
                 number
+                disabled
               />
             </FormItem>
           </Col>
@@ -991,22 +1064,88 @@ export default {
             },
           },
           {
-            title: "业绩目标",
-            key: "performanceTarget",
-            minWidth: 100,
+            title: "新诊业绩目标",
+            key: "newCustomerPerformanceTarget",
+            minWidth: 140,
             align: "center",
           },
           {
-            title: "月累计业绩金额",
-            key: "cumulativePerformance",
-            minWidth: 140,
+            title: "月累计新诊业绩金额",
+            key: "cumulativeNewCustomerPerformance",
+            minWidth: 180,
             align: "center",
           },
 
           {
-            title: "业绩完成率",
+            title: "新诊业绩完成率",
+            key: "newCustomerPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "复诊业绩目标",
+            key: "subsequentPerformanceTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "月累计复诊业绩金额",
+            key: "cumulativeSubsequentPerformance",
+            minWidth: 180,
+            align: "center",
+          },
+
+          {
+            title: "复诊业绩完成率",
+            key: "subsequentPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.subsequentPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "老客业绩目标",
+            key: "oldCustomerPerformanceTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "月累计老客业绩金额",
+            key: "cumulativeOldCustomerPerformance",
+            minWidth: 180,
+            align: "center",
+          },
+
+          {
+            title: "老客业绩完成率",
+            key: "oldCustomerPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "总业绩目标",
+            key: "performanceTarget",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "月累计总业绩金额",
+            key: "cumulativePerformance",
+            minWidth: 160,
+            align: "center",
+          },
+
+          {
+            title: "总业绩完成率",
             key: "performanceCompleteRate",
-            minWidth: 110,
+            minWidth: 130,
             align: "center",
             render: (h, params) => {
               return h("div", params.row.performanceCompleteRate + "%");
@@ -1116,7 +1255,13 @@ export default {
                               visitTarget,
                               // 成交人数目标
                               dealTarget,
-                              // 业绩目标
+                              // 新诊业绩
+                              newCustomerPerformanceTarget,
+                              // 复诊业绩
+                              subsequentPerformanceTarget,
+                              // 老客业绩
+                              oldCustomerPerformanceTarget,
+                              // 总业绩目标
                               performanceTarget,
                               // 涨粉目标
                               addFansTarget,
@@ -1154,6 +1299,9 @@ export default {
                             this.form.sendOrderTarget = sendOrderTarget;
                             this.form.visitTarget = visitTarget;
                             this.form.dealTarget = dealTarget;
+                            this.form.newCustomerPerformanceTarget = newCustomerPerformanceTarget;
+                            this.form.subsequentPerformanceTarget = subsequentPerformanceTarget;
+                            this.form.oldCustomerPerformanceTarget = oldCustomerPerformanceTarget;
                             this.form.performanceTarget = performanceTarget;
                             this.form.addFansTarget = addFansTarget;
                             this.form.cluesTarget = cluesTarget;
@@ -1392,22 +1540,88 @@ export default {
             },
           },
           {
-            title: "业绩目标",
-            key: "performanceTarget",
-            minWidth: 100,
+            title: "新诊业绩目标",
+            key: "newCustomerPerformanceTarget",
+            minWidth: 140,
             align: "center",
           },
           {
-            title: "月累计业绩金额",
-            key: "cumulativePerformance",
-            minWidth: 140,
+            title: "月累计新诊业绩金额",
+            key: "cumulativeNewCustomerPerformance",
+            minWidth: 180,
             align: "center",
           },
 
           {
-            title: "业绩完成率",
+            title: "新诊业绩完成率",
+            key: "newCustomerPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "复诊业绩目标",
+            key: "subsequentPerformanceTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "月累计复诊业绩金额",
+            key: "cumulativeSubsequentPerformance",
+            minWidth: 180,
+            align: "center",
+          },
+
+          {
+            title: "复诊业绩完成率",
+            key: "subsequentPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.subsequentPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "老客业绩目标",
+            key: "oldCustomerPerformanceTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "月累计老客业绩金额",
+            key: "cumulativeOldCustomerPerformance",
+            minWidth: 180,
+            align: "center",
+          },
+
+          {
+            title: "老客业绩完成率",
+            key: "oldCustomerPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "总业绩目标",
+            key: "performanceTarget",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "月累计总业绩金额",
+            key: "cumulativePerformance",
+            minWidth: 160,
+            align: "center",
+          },
+
+          {
+            title: "总业绩完成率",
             key: "performanceCompleteRate",
-            minWidth: 110,
+            minWidth: 130,
             align: "center",
             render: (h, params) => {
               return h("div", params.row.performanceCompleteRate + "%");
@@ -1757,22 +1971,88 @@ export default {
             },
           },
           {
-            title: "业绩目标",
-            key: "performanceTarget",
-            minWidth: 100,
+            title: "新诊业绩目标",
+            key: "newCustomerPerformanceTarget",
+            minWidth: 140,
             align: "center",
           },
           {
-            title: "月累计业绩金额",
-            key: "cumulativePerformance",
-            minWidth: 140,
+            title: "月累计新诊业绩金额",
+            key: "cumulativeNewCustomerPerformance",
+            minWidth: 180,
             align: "center",
           },
 
           {
-            title: "业绩完成率",
+            title: "新诊业绩完成率",
+            key: "newCustomerPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "复诊业绩目标",
+            key: "subsequentPerformanceTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "月累计复诊业绩金额",
+            key: "cumulativeSubsequentPerformance",
+            minWidth: 180,
+            align: "center",
+          },
+
+          {
+            title: "复诊业绩完成率",
+            key: "subsequentPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.subsequentPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "老客业绩目标",
+            key: "oldCustomerPerformanceTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "月累计老客业绩金额",
+            key: "cumulativeOldCustomerPerformance",
+            minWidth: 180,
+            align: "center",
+          },
+
+          {
+            title: "老客业绩完成率",
+            key: "oldCustomerPerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerPerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "总业绩目标",
+            key: "performanceTarget",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "月累计总业绩金额",
+            key: "cumulativePerformance",
+            minWidth: 160,
+            align: "center",
+          },
+
+          {
+            title: "总业绩完成率",
             key: "performanceCompleteRate",
-            minWidth: 110,
+            minWidth: 130,
             align: "center",
             render: (h, params) => {
               return h("div", params.row.performanceCompleteRate + "%");
@@ -1925,7 +2205,13 @@ export default {
         visitTarget: null,
         // 成交人数目标
         dealTarget: null,
-        // 业绩目标
+        // 新诊业绩目标
+        newCustomerPerformanceTarget: null,
+        // 复诊业绩目标
+        subsequentPerformanceTarget: null,
+        // 老客业绩目标
+        oldCustomerPerformanceTarget: null,
+        // 总业绩目标
         performanceTarget: null,
         id: "",
         // 涨粉目标
@@ -2022,7 +2308,7 @@ export default {
         performanceTarget: [
           {
             required: true,
-            message: "请输入业绩目标",
+            message: "请输入总业绩目标",
           },
         ],
         addFansTarget: [
@@ -2059,6 +2345,15 @@ export default {
     };
   },
   methods: {
+    newCustomerPerformanceTargetChange(){
+      this.form.performanceTarget = Number(this.form.newCustomerPerformanceTarget) + Number(this.form.subsequentPerformanceTarget) + Number(this.form.oldCustomerPerformanceTarget)
+    },
+    subsequentPerformanceTargetChange(){
+      this.form.performanceTarget = Number(this.form.newCustomerPerformanceTarget) + Number(this.form.subsequentPerformanceTarget) + Number(this.form.oldCustomerPerformanceTarget)
+    },
+    oldCustomerPerformanceTargetChange(){
+      this.form.performanceTarget = Number(this.form.newCustomerPerformanceTarget) + Number(this.form.subsequentPerformanceTarget) + Number(this.form.oldCustomerPerformanceTarget)
+    },
     //   获取平台（下拉框）
     getContentValidList() {
       contentPlatForm.getContentPlatFormValidList().then((res) => {
@@ -2172,6 +2467,9 @@ export default {
               minivanRefundTarget,
               miniVanBadReviewsTarget,
               consultationTarget2,
+              newCustomerPerformanceTarget,
+              subsequentPerformanceTarget,
+              oldCustomerPerformanceTarget
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -2196,6 +2494,9 @@ export default {
               minivanRefundTarget,
               miniVanBadReviewsTarget,
               consultationTarget2,
+              newCustomerPerformanceTarget,
+              subsequentPerformanceTarget,
+              oldCustomerPerformanceTarget
             };
             // 添加
             api.AddLiveAnchorMonthlyTarget(data).then((res) => {

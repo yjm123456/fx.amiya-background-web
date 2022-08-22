@@ -306,13 +306,13 @@ export default {
             contentPalteForms:[],
             // 医院列表
             hospitalNameList: [{ name: "全部升单医院", id: -1 }],
-            dealHospitalList:[{ name: "全部最终成交医院", id: -1 }],
+            dealHospitalList:[{ name: "全部到院医院", id: -1 }],
             checkStateListAll: [{ id: -1, name: "全部审核状态" }],
             dispatchHospital:[{ name: "全部派单医院", id: -1 }],
             // 成交情况报表参数
             transactionParams:{
                 employee:[{ id: -1, name: "全部绑定客服" }],
-                dealHospitalList:[{ name: "全部最终到院医院", id: -1 }],
+                dealHospitalList:[{ name: "全部到院医院", id: -1 }],
                  // 到院类型
                 toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],
             },

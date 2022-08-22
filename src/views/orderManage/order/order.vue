@@ -896,12 +896,12 @@ export default {
             message: "请输入手机号",
           },
         ],
-        appointmentHospital : [
-          {
-            required: true,
-            message: "请选择预约门店",
-          },
-        ],
+        // appointmentHospital : [
+        //   {
+        //     required: true,
+        //     message: "请选择预约门店",
+        //   },
+        // ],
         statusCode: [
           {
             required: true,
@@ -1572,7 +1572,7 @@ export default {
               thumbPictureUrl,
               goodsId,
               phone,
-              appointmentHospital,
+              appointmentHospital:appointmentHospital ? appointmentHospital : null,
               statusCode,
               actualPayment,
               buyerNick,

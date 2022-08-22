@@ -122,14 +122,14 @@
           />
         </FormItem>
         <FormItem
-          label="成交医院"
+          label="到院医院"
           prop="lastDealHospitalId"
-          key="成交医院"
+          key="到院医院"
           v-if="form.isToHospital == true"
         >
           <Select
             v-model="form.lastDealHospitalId"
-            placeholder="请选择成交医院"
+            placeholder="请选择到院医院"
             filterable
             disabled
           >
@@ -1073,7 +1073,7 @@ export default {
         lastDealHospitalId: [
           {
             required: true,
-            message: "请选择成交医院",
+            message: "请选择到院医院",
             trigger: "blur",
             type: "number",
           },

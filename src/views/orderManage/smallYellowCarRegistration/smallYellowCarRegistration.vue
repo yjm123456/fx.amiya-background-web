@@ -454,6 +454,7 @@
               <Select
                 v-model="form.emergencyLevel"
                 placeholder="请选择重要程度"
+                @on-change="emergencyLevelChange"
               >
                 <Option
                   v-for="item in emergencyLevelsList"
@@ -1553,6 +1554,34 @@ export default {
     };
   },
   methods: {
+    emergencyLevelChange(){
+      if(this.form.emergencyLevel == 2){
+        this.form.IsAddWeChat = false
+        this.form.isConsultation = false
+        this.form.isReturnBackPrice = false
+        this.form.isBadReview = false
+        this.form.refundReason = ''
+        this.form.refundDate = null
+        this.form.badReviewDate = null
+        this.form.badReviewReason = ''  
+        this.form.badReviewContent = ''
+      }else if(this.form.emergencyLevel == 0){
+        this.form.isReturnBackPrice = true
+        this.form.isBadReview = true
+        this.form.IsAddWeChat = false
+        this.form.isConsultation = false
+      }else{
+        this.form.isReturnBackPrice = false
+        this.form.isBadReview = false
+        this.form.refundReason = ''
+        this.form.refundDate = null
+        this.form.badReviewDate = null
+        this.form.badReviewReason = ''  
+        this.form.badReviewContent = ''
+        this.form.IsAddWeChat = false
+        this.form.isConsultation = false
+      }
+    },
     // 紧急程度（下拉框）
     getEmergencyLevels(){
       api.emergencyLevels().then((res) => {
@@ -1698,7 +1727,6 @@ export default {
           return
         }
       }
-      
       api.shoppingCartRegistrationList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.shoppingCartRegistrationInfo;

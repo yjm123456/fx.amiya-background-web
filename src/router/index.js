@@ -1271,6 +1271,22 @@ const stockMange = [{
             import ("@/views/stockMange/issueList/issueList.vue"),
     },
 ];
+// 经营看板
+/**
+ * 阿美雅
+ */
+const businessMange = [{
+    path: "/management",
+    name: "management",
+    meta: {
+        title: "啊美雅业绩看板",
+        keepAlive: false,
+        isTag: true,
+        openName: ['经营看板'],
+    },
+    component: () =>
+        import ("@/views/businessMange/ameya.vue"),
+}];
 
 export const dynamicRouter = [{
     path: "/home",
@@ -1322,7 +1338,8 @@ export const dynamicRouter = [{
         ...operationManage,
         ...financialStatementManage,
         ...ameiyaMange,
-        ...stockMange
+        ...stockMange,
+        ...businessMange
     ],
 }, ];
 

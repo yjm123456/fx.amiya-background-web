@@ -142,7 +142,7 @@
             </span>
           </div>
           <div class="mr_top">
-            <span class="title_bold">最终成交医院：</span>
+            <span class="title_bold">到院医院：</span>
             <span>{{ detailObj.lastDealHospitalName }} </span>
           </div>
         </div>

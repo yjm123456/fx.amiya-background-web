@@ -190,7 +190,7 @@ export default {
             minWidth: 220,
           },
           {
-            title: "最终成交医院",
+            title: "到院医院",
             key: "lastDealHospital",
             minWidth: 220,
           },

@@ -547,7 +547,7 @@ export default {
           },
           {
             title: "客户昵称",
-            key: "goodsName",
+            key: "customerNickName",
             minWidth: 130,
             align: "center",
           },

@@ -1795,6 +1795,9 @@ export default {
                   });
                 } else if (res.code != -1 || res.code !=0){
                   this.$Message.error('操作失败，请联系管理员')
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
                 }else {
                   setTimeout(() => {
                     this.flag = false;
@@ -1872,8 +1875,13 @@ export default {
                   });
                 } else if (res.code != -1 || res.code !=0){
                   this.$Message.error('操作失败，请联系管理员')
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
                 }else {
-                  this.flag = false;
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
                 }
               });
             }

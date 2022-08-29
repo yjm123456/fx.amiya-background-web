@@ -18,7 +18,7 @@
               </div>
             </TabPane>
         </Tabs>
-        <div class="month_con">
+        <!-- <div class="month_con">
           <DatePicker 
             type="month" 
             placeholder="请选择年月" 
@@ -28,7 +28,7 @@
             v-model="month"
           ></DatePicker>
           <Button type="primary" @click="getAchievementClick">查询</Button>
-        </div>
+        </div> -->
       </div>
     </Card>
   </div>
@@ -50,9 +50,9 @@ export default {
     };
   },
   methods: {
-    getAchievementClick(){
-      console.log(this.$moment(this.month).format("YYYY-MM"))
-    }
+    // getAchievementClick(){
+    //   console.log(this.$moment(this.month).format("YYYY-MM"))
+    // }
   },
   created() {
     
@@ -82,6 +82,7 @@ export default {
 }
 .tab_con{
   position: relative;
+  background: #f5f5f5;
 }
 .month_con{
   position: absolute;

@@ -154,7 +154,6 @@ export default {
       }
     },
     detailedList(value){
-      console.log(value)
       this.total = value.length
       let prices=0
       let addOrderPrices=0

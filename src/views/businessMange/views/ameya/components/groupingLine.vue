@@ -115,34 +115,6 @@ export default {
                                     })()}
                                   </span>
                               </div>
-                              <div>
-                                <i class="dot" style="background: ${params[2].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-                                  <span> ${params[2].seriesName}:
-                                    ${(function () {
-                                        if (params[2].data >= 1000 && params[2].data < 10000) {
-                                            return (params[2].data / 1000).toFixed(2) + 'k'
-                                        } else if (params[2].data >= 10000) {
-                                            return (params[2].data / 10000).toFixed(2) + 'w'
-                                        } else if (params[2].data < 1000) {
-                                            return (params[2].data).toFixed(2)
-                                        }
-                                    })()}
-                                  </span>
-                              </div>
-                              <div>
-                                <i class="dot" style="background: ${params[3].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-                                  <span> ${params[3].seriesName}:
-                                    ${(function () {
-                                        if (params[3].data >= 1000 && params[3].data < 10000) {
-                                            return (params[3].data / 1000).toFixed(2) + 'k'
-                                        } else if (params[3].data >= 10000) {
-                                            return (params[3].data / 10000).toFixed(2) + 'w'
-                                        } else if (params[3].data < 1000) {
-                                            return (params[3].data).toFixed(2)
-                                        }
-                                    })()}
-                                  </span>
-                              </div>
                           </div>
                         </div>`
             },
@@ -156,7 +128,7 @@ export default {
         legend: {
           x:'center',
           y:'bottom',
-          data: ['刀刀组业绩', '吉娜组业绩','合作达人业绩','黄V组业绩'],
+          data: ['刀刀组业绩', '吉娜组业绩'],
         },
         series: [
            {
@@ -179,26 +151,26 @@ export default {
                     } 
                 },
             },
-            {
-                name: '合作达人业绩',
-                type: 'line',
-                data: cooperationLiveAnchorPerformanceDatas,
-                itemStyle: { 
-                    normal: { 
-                        color: '#ff9900'  // 折线的颜⾊
-                    } 
-                },
-            },
-            {
-                name: '黄V组业绩',
-                type: 'line',
-                data: groupYellowVPerformanceDatas,
-                itemStyle: { 
-                    normal: { 
-                        color: '#E46CBB'  // 折线的颜⾊
-                    } 
-                },
-            },
+            // {
+            //     name: '合作达人业绩',
+            //     type: 'line',
+            //     data: cooperationLiveAnchorPerformanceDatas,
+            //     itemStyle: { 
+            //         normal: { 
+            //             color: '#ff9900'  // 折线的颜⾊
+            //         } 
+            //     },
+            // },
+            // {
+            //     name: '黄V组业绩',
+            //     type: 'line',
+            //     data: groupYellowVPerformanceDatas,
+            //     itemStyle: { 
+            //         normal: { 
+            //             color: '#E46CBB'  // 折线的颜⾊
+            //         } 
+            //     },
+            // },
         ]
       };
       this.myChart = echarts.init(this.$refs.dom, "tdTheme");

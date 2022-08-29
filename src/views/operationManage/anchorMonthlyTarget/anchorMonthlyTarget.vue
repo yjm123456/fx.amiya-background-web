@@ -466,6 +466,54 @@
           </Col>
           <Col span="8">
             <FormItem
+              label="新客上门目标"
+              prop="newCustomerVisitTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '新客上门目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="新客上门目标"
+            >
+              <Input
+                v-model="form.newCustomerVisitTarget"
+                placeholder="请输入新客上门目标"
+                type="number"
+                number
+                @on-change="newCustomerVisitTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="老客上门目标"
+              prop="oldCustomerVisitTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '老客上门目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="老客上门目标"
+            >
+              <Input
+                v-model="form.oldCustomerVisitTarget"
+                placeholder="请输入老客上门目标"
+                type="number"
+                number
+                @on-change="oldCustomerVisitTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
               label="上门目标"
               prop="visitTarget"
               :rules="[
@@ -484,6 +532,55 @@
                 placeholder="请输入上门目标"
                 type="number"
                 number
+                disabled
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="新客成交人数目标"
+              prop="newCustomerDealTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '新客成交人数(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="新客成交人数目标"
+            >
+              <Input
+                v-model="form.newCustomerDealTarget"
+                placeholder="新客成交人数目标"
+                type="number"
+                number
+                @on-change="newCustomerDealTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="老客成交人数目标"
+              prop="oldCustomerDealTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '老客成交人数(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="老客成交人数目标"
+            >
+              <Input
+                v-model="form.oldCustomerDealTarget"
+                placeholder="老客成交人数目标"
+                type="number"
+                number
+                @on-change="oldCustomerDealTargetChange"
               />
             </FormItem>
           </Col>
@@ -507,6 +604,7 @@
                 placeholder="请输入成交人数目标"
                 type="number"
                 number
+                disabled
               />
             </FormItem>
           </Col>
@@ -998,6 +1096,48 @@ export default {
             },
           },
           {
+            title: "新客上门目标",
+            key: "newCustomerVisitTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "累计新客上门数",
+            key: "cumulativeNewCustomerVisit",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "新客上门完成率",
+            key: "newCustomerVisitCompleteRate",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerVisitCompleteRate + "%");
+            },
+          },
+          {
+            title: "老客上门目标",
+            key: "oldCustomerVisitTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "累计老客上门数",
+            key: "cumulativeOldCustomerVisit",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "老客上门完成率",
+            key: "oldCustomerVisitCompleteRate",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerVisitCompleteRate + "%");
+            },
+          },
+          {
             title: "上门目标",
             key: "visitTarget",
             minWidth: 100,
@@ -1016,6 +1156,48 @@ export default {
             align: "center",
             render: (h, params) => {
               return h("div", params.row.visitCompleteRate + "%");
+            },
+          },
+          {
+            title: "新客成交人数目标",
+            key: "newCustomerDealTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计新客成交人数",
+            key: "cumulativeNewCustomerDealTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "新客成交率",
+            key: "newCustomerDealRate",
+            minWidth: 130,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerDealRate + "%");
+            },
+          },
+          {
+            title: "老客成交人数目标",
+            key: "oldCustomerDealTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计老客成交人数",
+            key: "cumulativeOldCustomerDealTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "老客成交率",
+            key: "oldCustomerDealRate",
+            minWidth: 130,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerDealRate + "%");
             },
           },
           {
@@ -1251,8 +1433,16 @@ export default {
                               addWechatTarget,
                               // 派单目标
                               sendOrderTarget,
+                              // 新客上门目标
+                              newCustomerVisitTarget,
+                              // 老客上门目标
+                              oldCustomerVisitTarget,
                               // 上门目标
                               visitTarget,
+                              // 新客成交
+                              newCustomerDealTarget,
+                              // 老客成交
+                              oldCustomerDealTarget,
                               // 成交人数目标
                               dealTarget,
                               // 新诊业绩
@@ -1297,7 +1487,11 @@ export default {
                             this.form.flowInvestmentTarget = flowInvestmentTarget;
                             this.form.addWechatTarget = addWechatTarget;
                             this.form.sendOrderTarget = sendOrderTarget;
+                            this.form.newCustomerVisitTarget = newCustomerVisitTarget;
+                            this.form.oldCustomerVisitTarget = oldCustomerVisitTarget;
                             this.form.visitTarget = visitTarget;
+                            this.form.newCustomerDealTarget = newCustomerDealTarget;
+                            this.form.oldCustomerDealTarget = oldCustomerDealTarget;
                             this.form.dealTarget = dealTarget;
                             this.form.newCustomerPerformanceTarget = newCustomerPerformanceTarget;
                             this.form.subsequentPerformanceTarget = subsequentPerformanceTarget;
@@ -1929,6 +2123,48 @@ export default {
             },
           },
           {
+            title: "新客上门目标",
+            key: "newCustomerVisitTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "累计新客上门数",
+            key: "cumulativeNewCustomerVisit",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "新客上门完成率",
+            key: "newCustomerVisitCompleteRate",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerVisitCompleteRate + "%");
+            },
+          },
+          {
+            title: "老客上门目标",
+            key: "cumulativeOldCustomerVisit",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "累计老客上门数",
+            key: "oldCustomerVisitTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "老客上门完成率",
+            key: "oldCustomerVisitCompleteRate",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerVisitCompleteRate + "%");
+            },
+          },
+          {
             title: "上门目标",
             key: "visitTarget",
             minWidth: 100,
@@ -1947,6 +2183,48 @@ export default {
             align: "center",
             render: (h, params) => {
               return h("div", params.row.visitCompleteRate + "%");
+            },
+          },
+          {
+            title: "新客成交人数目标",
+            key: "newCustomerDealTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计新客成交人数",
+            key: "cumulativeNewCustomerDealTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "新客成交率",
+            key: "newCustomerDealRate",
+            minWidth: 130,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerDealRate + "%");
+            },
+          },
+          {
+            title: "老客成交人数目标",
+            key: "oldCustomerDealTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计老客成交人数",
+            key: "cumulativeOldCustomerDealTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "老客成交率",
+            key: "oldCustomerDealRate",
+            minWidth: 130,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerDealRate + "%");
             },
           },
           {
@@ -2201,8 +2479,16 @@ export default {
         addWechatTarget: null,
         // 派单目标
         sendOrderTarget: null,
+        // 新客上门目标
+        newCustomerVisitTarget:null,
+        // 老客上门目标
+        oldCustomerVisitTarget:null,
         // 上门目标
         visitTarget: null,
+        // 新客成交
+        newCustomerDealTarget:null,
+        // 老客成交
+        oldCustomerDealTarget:null,
         // 成交人数目标
         dealTarget: null,
         // 新诊业绩目标
@@ -2345,6 +2631,18 @@ export default {
     };
   },
   methods: {
+    newCustomerDealTargetChange(){
+      this.form.dealTarget = Number(this.form.newCustomerDealTarget) + Number(this.form.oldCustomerDealTarget)
+    },
+    oldCustomerDealTargetChange(){
+      this.form.dealTarget = Number(this.form.newCustomerDealTarget) + Number(this.form.oldCustomerDealTarget)
+    },
+    newCustomerVisitTargetChange(){
+      this.form.visitTarget = Number(this.form.newCustomerVisitTarget) + Number(this.form.oldCustomerVisitTarget)
+    },
+    oldCustomerVisitTargetChange(){
+      this.form.visitTarget = Number(this.form.newCustomerVisitTarget) + Number(this.form.oldCustomerVisitTarget)
+    },
     newCustomerPerformanceTargetChange(){
       this.form.performanceTarget = Number(this.form.newCustomerPerformanceTarget) + Number(this.form.subsequentPerformanceTarget) + Number(this.form.oldCustomerPerformanceTarget)
     },
@@ -2453,7 +2751,11 @@ export default {
               flowInvestmentTarget,
               addWechatTarget,
               sendOrderTarget,
+              newCustomerVisitTarget,
+              oldCustomerVisitTarget,
               visitTarget,
+              newCustomerDealTarget,
+              oldCustomerDealTarget,
               dealTarget,
               performanceTarget,
               cluesTarget,
@@ -2480,6 +2782,8 @@ export default {
               flowInvestmentTarget,
               addWechatTarget,
               sendOrderTarget,
+              newCustomerVisitTarget,
+              oldCustomerVisitTarget,
               visitTarget,
               dealTarget,
               performanceTarget,
@@ -2496,7 +2800,10 @@ export default {
               consultationTarget2,
               newCustomerPerformanceTarget,
               subsequentPerformanceTarget,
-              oldCustomerPerformanceTarget
+              oldCustomerPerformanceTarget,
+              newCustomerDealTarget,
+              oldCustomerDealTarget,
+              
             };
             // 添加
             api.AddLiveAnchorMonthlyTarget(data).then((res) => {

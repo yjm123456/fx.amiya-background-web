@@ -477,7 +477,17 @@
           </Col>
           <Col span="8">
             <FormItem label="是否面诊" prop="isConsultation">
-              <i-switch v-model="form.isConsultation" />
+              <i-switch v-model="form.isConsultation" @on-change="consultationChange()"/>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isConsultation == true">
+            <FormItem label="面诊时间" prop="consultationDate" key="面诊时间">
+              <DatePicker
+                type="date"
+                placeholder="面诊时间"
+                :value="form.consultationDate"
+                v-model="form.consultationDate"
+              ></DatePicker>
             </FormItem>
           </Col>
           <Col span="8">
@@ -944,6 +954,22 @@ export default {
               }
             },
           },
+          {
+            title: "面诊时间",
+            key: "consultationDate",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.consultationDate
+                  ? this.$moment(params.row.consultationDate).format(
+                      "YYYY-MM-DD "
+                    )
+                  : ""
+              );
+            },
+          },
 
           {
             title: "是否退款",
@@ -1175,7 +1201,8 @@ export default {
                               isReContent,
                               reContent,
                               isBadReview,
-                              emergencyLevel
+                              emergencyLevel,
+                              consultationDate
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1199,6 +1226,7 @@ export default {
                             this.form.refundDate = refundDate;
                             this.form.refundReason = refundReason;
                             this.form.badReviewDate = badReviewDate;
+                            this.form.consultationDate = consultationDate;
                             this.form.badReviewReason = badReviewReason;
                             this.form.isReContent = isReContent;
                             this.form.reContent = reContent;
@@ -1323,6 +1351,8 @@ export default {
         isWriteOff: false,
         // 是否面诊
         isConsultation: false,
+        // 面诊时间
+        consultationDate:null,
         // 是否退款
         isReturnBackPrice: false,
         // 备注
@@ -1449,6 +1479,12 @@ export default {
             message: "请选择面诊方式",
           },
         ],
+         consultationDate: [
+          {
+            required: true,
+            message: "请选择面诊时间",
+          },
+        ],
       },
       // 平台
       contentPalteForms: [],
@@ -1554,6 +1590,12 @@ export default {
     };
   },
   methods: {
+    // 是否面诊
+    consultationChange(){
+      if(this.form.isConsultation == false){
+        this.form.consultationDate = null
+      }
+    },
     emergencyLevelChange(){
       if(this.form.emergencyLevel == 2){
         this.form.IsAddWeChat = false
@@ -1803,7 +1845,7 @@ export default {
                 }else{
                   const {id,recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,
                   consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat ,time ,
-                  refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId,emergencyLevel} = this.form;
+                  refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId,emergencyLevel,consultationDate} = this.form;
                   
                   const data = { 
                     recordDate:time ? this.$moment(recordDate).format("YYYY-MM-DD")+'T' + time : this.$moment(recordDate).format("YYYY-MM-DD") + 'T' + '00:00:00',
@@ -1829,7 +1871,8 @@ export default {
                     isReContent,
                     reContent,
                     admissionId,
-                    emergencyLevel
+                    emergencyLevel,
+                    consultationDate:consultationDate ? this.$moment(consultationDate).format("YYYY-MM-DD") : null
                     };
                     if(!data.liveAnchorWechatNo){
                         this.$Message.warning('请选择微信号')
@@ -1859,7 +1902,7 @@ export default {
           } else {
             const {recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,
             consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat,time  ,
-            refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId,emergencyLevel} = this.form;
+            refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId,emergencyLevel,consultationDate} = this.form;
             const data = { 
               recordDate:time ? this.$moment(recordDate).format("YYYY-MM-DD")+'T' + time : this.$moment(recordDate).format("YYYY-MM-DD") + 'T' + '00:00:00',
               contentPlatFormId,
@@ -1883,7 +1926,8 @@ export default {
               isReContent,
               reContent,
               admissionId,
-              emergencyLevel
+              emergencyLevel,
+              consultationDate:consultationDate ? this.$moment(consultationDate).format("YYYY-MM-DD") : null
               };
 
               if (phone) {

@@ -68,7 +68,7 @@
               </div>
               <div class="scroll_top">
                 <div class="scroll_left2">
-                  <div class="l_h3">新诊业绩</div>
+                  <div class="l_h3">新客业绩</div>
                   <div class="l_h4">{{performance.newPerformance ? (performance.newPerformance).toFixed(2) : 0.00}}</div>
                 </div>
                 <div class="scroll_right">
@@ -164,7 +164,7 @@
                 <Button type="primary" @click="groupPerformance">查询</Button>
               </div>
             </div>
-            <div class="s_content">
+            <div class="s_content2">
               <div class="scroll_top">
                 <div class="scroll_left2">
                   <div class="l_h3">刀刀组业绩</div>
@@ -211,7 +211,7 @@
                   </div>
                 </div>
               </div>
-              <div class="scroll_top">
+              <!-- <div class="scroll_top">
                 <div class="scroll_left4">
                   <div class="l_h3">合作达人业绩</div>
                   <div class="l_h4">{{grouping.cooperationLiveAnchorPerformance ? (grouping.cooperationLiveAnchorPerformance).toFixed(2) : 0.00 }}</div>
@@ -256,7 +256,7 @@
                     <span v-else>-</span>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="chart_content">
               <div class="chart_left">
@@ -388,17 +388,19 @@ export default {
       detailedModel:false,
       isGrouping:false,
       isdispatchDeal:false,
-      isperformance:false
+      isperformance:false,
+
+      
     };
   },
   methods: {
     // 明细
     detailedClick(value){
-      let str= String(this.$moment(this.month3).format("MM"))
-      let month3 = str.substr(str.length - 1, 1)
+      let str= String(this.$moment(this.month2).format("MM"))
+      let month2 = str.substr(str.length - 1, 1)
       const data = {
-        year:this.$moment(this.month3).format("YYYY") ? this.$moment(this.month3).format("YYYY") : null,
-        month:Number(this.$moment(this.month3).format("MM")) >= 10 ? this.$moment(this.month3).format("MM") : month3,
+        year:this.$moment(this.month2).format("YYYY") ? this.$moment(this.month2).format("YYYY") : null,
+        month:Number(this.$moment(this.month2).format("MM")) >= 10 ? this.$moment(this.month2).format("MM") : month2,
         isHistorySendOrder:value
       }
       api.getSendAndDealPerformanceDetailList(data).then((res) => {
@@ -502,24 +504,39 @@ export default {
       }
     },
   },
-  mounted() {
-    if(this.isperformance == true){
-      this.performance = JSON.parse(sessionStorage.getItem('performance'))
-    }
-    if(this.isdispatchDeal == true){
-      this.dispatchDeal = JSON.parse(sessionStorage.getItem('dispatchDeal'))
-    }
-    if(this.isGrouping == true){
-      this.grouping = JSON.parse(sessionStorage.getItem('grouping'))
-    }
+  created() {
+    // if(this.isperformance == true){
+    //   this.performance = JSON.parse(sessionStorage.getItem('performance'))
+    // }
+    // if(this.isdispatchDeal == true){
+    //   this.dispatchDeal = JSON.parse(sessionStorage.getItem('dispatchDeal'))
+    // }
+    // if(this.isGrouping == true){
+    //   this.grouping = JSON.parse(sessionStorage.getItem('grouping'))
+    // }
+    // if(!sessionStorage.getItem('performance')){
+    //  this.getAchievementClick()
+    // }else{
+    //    this.performance = JSON.parse(sessionStorage.getItem('performance'))
+    // }
+    // if(!sessionStorage.getItem('dispatchDeal')){
+    //   this.dispatchDealChange()
+    // }else{
+    //   this.dispatchDeal = JSON.parse(sessionStorage.getItem('dispatchDeal'))
+    // }
+    // if(!sessionStorage.getItem('grouping')){
+    //   this.groupPerformance()
+    // }else{
+    //   this.grouping = JSON.parse(sessionStorage.getItem('grouping'))
+    // }
   },
   watch: {
     activeName: {
       handler(value) {
         if (value === "ameya") {
-          this.getAchievementClick()
-          this.dispatchDealChange()
-          this.groupPerformance()
+          // this.getAchievementClick()
+          // this.dispatchDealChange()
+          // this.groupPerformance()
           // if(!sessionStorage.getItem('performance')){
           //  this.getAchievementClick()
           // }
@@ -529,6 +546,23 @@ export default {
           // if(!sessionStorage.getItem('grouping')){
           //   this.groupPerformance()
           // }
+
+          if(this.isperformance == true){
+            this.performance = JSON.parse(sessionStorage.getItem('performance'))
+          }else{
+            this.getAchievementClick()
+          }
+          if(this.isdispatchDeal == true){
+            this.dispatchDeal = JSON.parse(sessionStorage.getItem('dispatchDeal'))
+          }else{
+            this.dispatchDealChange()
+          }
+          if(this.isGrouping == true){
+             this.grouping = JSON.parse(sessionStorage.getItem('grouping'))
+          }else{
+            this.groupPerformance()
+          }
+
         }
       },
       immediate: true,

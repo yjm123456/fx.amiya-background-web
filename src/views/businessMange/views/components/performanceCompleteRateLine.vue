@@ -76,49 +76,49 @@ export default {
         },
         tooltip: {
             trigger: 'axis',
-            formatter: params => {
-                return `<div style="border:0;color:#666;text-align: left;width:180px">
-                          <p style="color:#000"> ${params[0].axisValue}</p>
-                          <div class="flex justify-content-space-between">
-                            <div>
-                                <i class="dot" style="background: ${params[0].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-                                  <span> ${params[0].seriesName }: ${params[0].data ? params[0].data + '%' :'0%' }
+            // formatter: params => {
+            //     return `<div style="border:0;color:#666;text-align: left;width:180px">
+            //               <p style="color:#000"> ${params[0].axisValue}</p>
+            //               <div class="flex justify-content-space-between">
+            //                 <div>
+            //                     <i class="dot" style="background: ${params[0].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
+            //                       <span> ${params[0].seriesName }: ${params[0].data ? params[0].data + '%' :'0%' }
                                     
-                                  </span>
-                              </div>
-                              <div>
-                                <i class="dot" style="background: ${params[1].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-                                  <span> ${params[1].seriesName }: ${params[1].data ? params[1].data + '%' :'0%' }
+            //                       </span>
+            //                   </div>
+            //                   <div>
+            //                     <i class="dot" style="background: ${params[1].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
+            //                       <span> ${params[1].seriesName }: ${params[1].data ? params[1].data + '%' :'0%' }
                                     
-                                  </span>
-                              </div>
-                              <div>
-                                <i class="dot" style="background: ${params[2].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-                                  <span> ${params[2].seriesName }:${params[2].data ? params[2].data + '%' :'0%' }
+            //                       </span>
+            //                   </div>
+            //                   <div>
+            //                     <i class="dot" style="background: ${params[2].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
+            //                       <span> ${params[2].seriesName }:${params[2].data ? params[2].data + '%' :'0%' }
                                   
-                                  </span>
-                              </div>
-                              <div>
-                                <i class="dot" style="background: ${params[3].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-                                  <span> ${params[3].seriesName }: ${params[3].data ? params[3].data + '%' :'0%' }
+            //                       </span>
+            //                   </div>
+            //                   <div>
+            //                     <i class="dot" style="background: ${params[3].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
+            //                       <span> ${params[3].seriesName }: ${params[3].data ? params[3].data + '%' :'0%' }
                                     
-                                  </span>
-                              </div>
-                              <div>
-                                <i class="dot" style="background: ${params[4].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-                                  <span> ${params[4].seriesName }: ${params[4].data ? params[4].data + '%' :'0%' }
+            //                       </span>
+            //                   </div>
+            //                   <div>
+            //                     <i class="dot" style="background: ${params[4].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
+            //                       <span> ${params[4].seriesName }: ${params[4].data ? params[4].data + '%' :'0%' }
                                    
-                                  </span>
-                              </div>
-                              <div>
-                                <i class="dot" style="background: ${params[5].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-                                  <span> ${params[5].seriesName }: ${params[5].data ? params[5].data + '%' :'0%' }
+            //                       </span>
+            //                   </div>
+            //                   <div>
+            //                     <i class="dot" style="background: ${params[5].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
+            //                       <span> ${params[5].seriesName }: ${params[5].data ? params[5].data + '%' :'0%' }
                                    
-                                  </span>
-                              </div>
-                          </div>
-                        </div>`
-            },
+            //                       </span>
+            //                   </div>
+            //               </div>
+            //             </div>`
+            // },
           },
         
         
@@ -129,11 +129,11 @@ export default {
         legend: {
           x:'center',
           y:'bottom',
-          data: ['加v率', '下单面诊卡消耗率','派单率','新客上门率','新客成交率','当月面诊卡退单率','历史面诊卡退单率'],
+          data: ['加v', '下单面诊卡消耗','派单','新客上门','新客成交','当月面诊卡退单','历史面诊卡退单'],
         },
         series: [
            {
-                name: '加v率',
+                name: '加v',
                 type: 'line',
                 data: addWeChatCompleteRateBrokenLines,
                 itemStyle: { 
@@ -143,7 +143,7 @@ export default {
                 },
             },
             {
-                name: '下单面诊卡消耗率',
+                name: '下单面诊卡消耗',
                 type: 'line',
                 data: consulationCardUsedCompleteRateBrokenLines,
                 itemStyle: { 
@@ -153,7 +153,7 @@ export default {
                 },
             },
             {
-                name: '派单率',
+                name: '派单',
                 type: 'line',
                 data: sendOrderCompleteRateBrokenLines,
                 itemStyle: { 
@@ -163,7 +163,7 @@ export default {
                 },
             },
             {
-                name: '新客上门率',
+                name: '新客上门',
                 type: 'line',
                 data: newCustomerVisitCompleteRateBrokenLines,
                 itemStyle: { 
@@ -173,7 +173,7 @@ export default {
                 },
             },
             {
-                name: '新客成交率',
+                name: '新客成交',
                 type: 'line',
                 data: newCustomerDealCompleteRateBrokenLines,
                 itemStyle: { 
@@ -183,7 +183,7 @@ export default {
                 },
             },
             {
-                name: '当月面诊卡退单率',
+                name: '当月面诊卡退单',
                 type: 'line',
                 data: thisMonthConsulationCardRefundCompleteRateBrokenLines,
                 itemStyle: { 
@@ -193,7 +193,7 @@ export default {
                 },
             },
             {
-                name: '历史面诊卡退单率',
+                name: '历史面诊卡退单',
                 type: 'line',
                 data: historyConsulationCardRefundCompleteRateBrokenLines,
                 itemStyle: { 

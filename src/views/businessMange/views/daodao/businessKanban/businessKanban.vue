@@ -776,10 +776,20 @@ export default {
       var items = document.querySelectorAll(".scroll-item3");
       for (var i = 0; i < items.length; i++) {
         if (index === i) {
+          // console.log(index,i)
           items[i].scrollIntoView({
             block: "start", //默认跳转到顶部
             behavior: "smooth", //滚动的速度
           });
+          // if(i==0){
+          //   console.log(0)
+          // }else if(i==1){
+          //   console.log(1)
+          // }else if(i==2){
+          //   console.log(2)
+          // }else if(i==3){
+          //   console.log(3)
+          // }
         }
       }
     },
@@ -792,8 +802,21 @@ export default {
           scrollItems[i].offsetTop - scrollItems[0].offsetTop;
         if (judge) {
           this.activeStep = i;
+          // if(this.activeStep == i){
+          //   if(i==0){
+          //     console.log(0)
+          //   }else if(i==1){
+          //     console.log(1)
+          //   }else if(i==2){
+          //     console.log(2)
+          //   }else if(i==3){
+          //     console.log(3)
+          //   }
+          // }
           break;
         }
+        
+       
       }
     },
   },

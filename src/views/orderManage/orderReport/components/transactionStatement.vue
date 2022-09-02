@@ -1019,6 +1019,8 @@ export default {
             checkPrice += Number(item.checkPrice);
             settlePrice += Number(item.settlePrice);
             paymentCollection += Number(item.returnBackPrice);
+            totalPerformance += Number(item.price);
+
             // totalPerformance += Number(item.price);
             // if (item.isOldCustomer == "新客业绩") {
             //   newCustomer += Number(item.price);
@@ -1073,8 +1075,9 @@ export default {
           this.deal3 = Math.floor(deal3 * 100) / 100;
           this.deal4 = Math.floor(deal4 * 100) / 100;
           this.newCustomer = Math.floor((deal1+deal2) * 100) / 100;
-          this.totalPerformance = Math.floor((deal1+deal2+deal3) * 100) / 100;
+          // this.totalPerformance = Math.floor((deal1+deal2+deal3) * 100) / 100;
           this.paymentCollection = Math.floor(paymentCollection * 100) / 100;
+          this.totalPerformance = Math.floor(totalPerformance * 100) / 100;
 
           this.checkPrice = Math.floor(checkPrice * 100) / 100;
           this.settlePrice = Math.floor(settlePrice * 100) / 100;

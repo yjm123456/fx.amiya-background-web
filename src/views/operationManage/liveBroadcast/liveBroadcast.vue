@@ -188,7 +188,14 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="今日直播间投流" prop="livingRoomFlowInvestmentNum">
+            <FormItem 
+              label="今日直播间投流" 
+              prop="livingRoomFlowInvestmentNum"
+              :rules="[
+                { required: true, message: '请输入今日直播间投流',},
+                { message: '直播间投流只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
               <Input
                 v-model="form.livingRoomFlowInvestmentNum"
                 placeholder="请输入今日直播间投流"

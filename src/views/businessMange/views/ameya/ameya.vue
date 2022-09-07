@@ -730,11 +730,11 @@ export default {
   margin-left: 2%;
 }
 .red{
-  color: red;
+  color: green;
   margin-right: 4px;
 }
 .green{
-  color: green;
+  color: red;
   margin-right: 4px;
 }
 </style>

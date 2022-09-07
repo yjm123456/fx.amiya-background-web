@@ -66,7 +66,7 @@
                       </div>
                       <div class="scroll_top">
                         <div class="scroll_left2">
-                          <div class="l_h3">新诊业绩</div>
+                          <div class="l_h3">新客业绩</div>
                           <div class="l_h4">{{jinaTotalPerformance.currentMonthNewCustomerPerformance ? (jinaTotalPerformance.currentMonthNewCustomerPerformance).toFixed(2) : 0.00}}</div>
                         </div>
                         <div class="scroll_right">
@@ -804,11 +804,11 @@ export default {
   margin-left: 2%;
 }
 .red{
-  color: red;
+  color: green;
   margin-right: 4px;
 }
 .green{
-  color: green;
+  color: red;
   margin-right: 4px;
 }
 </style>

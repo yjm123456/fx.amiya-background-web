@@ -1052,11 +1052,11 @@ export default {
           ? this.$moment(startDate).format("YYYY-MM-DD")
           : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? -1 : employeeId),
         contentPlatFormId: contentPlatFormId ? contentPlatFormId : "",
         liveAnchorId,
         orderStatus,
-        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? null : belongEmpId),
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? -1 : belongEmpId),
         hospitalId: hospitalId == -1 ? null : hospitalId,
         IsToHospital:IsToHospital== -1 ? null : IsToHospital,
         toHospitalStartDate:
@@ -1125,11 +1125,11 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? -1 : employeeId),
         contentPlatFormId,
         liveAnchorId,
         orderStatus,
-        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? null : belongEmpId),
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? -1 : belongEmpId),
         IsToHospital:IsToHospital==-1?null:IsToHospital,
         toHospitalStartDate:
           IsToHospital != 'true'

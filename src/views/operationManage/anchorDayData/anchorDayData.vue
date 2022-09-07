@@ -78,9 +78,9 @@
             >查询</Button
           >
         </div>
-        <div class="right">
+        <!-- <div class="right">
           <Button type="primary" @click="controlModal = true">添加</Button>
-        </div>
+        </div> -->
       </div>
     </Card>
 
@@ -806,6 +806,24 @@ export default {
             align: "center",
           },
           {
+            title: "知乎今日发布量",
+            key: "zhihuSendNum",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "小红书今日发布量",
+            key: "xiaoHongShuSendNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "微博今日发布量",
+            key: "sinaWeiBoSendNum",
+            minWidth: 140,
+            align: "center",
+          },
+          {
             title: "今日发布量",
             key: "todaySendNum",
             minWidth: 110,
@@ -991,110 +1009,110 @@ export default {
           {
             title: "操作",
             key: "",
-            minWidth: 200,
+            minWidth: 120,
             align: "center",
             fixed: "right",
             render: (h, params) => {
               return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.title = "修改";
-                        this.flag = true;
-                        api.byIdLiveAnchorDailyTarget(id).then((res) => {
-                          if (res.code === 0) {
-                            const {
-                              id,
-                              liveanchorMonthlyTargetId,
-                              operationEmployeeId,
-                              netWorkConsultingEmployeeId,
-                              todaySendNum,
-                              flowInvestmentNum,
-                              addWechatNum,
-                              sendOrderNum,
-                              visitNum,
-                              dealNum,
-                              performanceNum,
-                              recordDate,
-                              addFansNum,
-                              cluesNum,
-                              livingRoomFlowInvestmentNum,
-                              consultation,
-                              consultation2,
-                              cargoSettlementCommission,
-                              newVisitNum,
-                              subsequentVisitNum,
-                              oldCustomerVisitNum,
-                              newDealNum,
-                              subsequentDealNum,
-                              newPerformanceNum,
-                              subsequentPerformanceNum,
-                              oldCustomerPerformanceNum,
-                              newCustomerPerformanceCountNum,
-                              oldCustomerDealNum,
-                              miniVanBadReviews,
-                              minivanRefund,
-                              consultationCardConsumed,
-                              consultationCardConsumed2,
-                              activateHistoricalConsultation,
-                              livingTrackingEmployeeId,
-                            } = res.data.liveAnchorDailyTargetInfo;
-                            this.isEdit = true;
-                            this.form.id = id;
-                            this.controlModal = true;
-                            this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId;
-                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
-                            this.form.todaySendNum = todaySendNum;
-                            this.form.flowInvestmentNum = flowInvestmentNum;
-                            this.form.addWechatNum = addWechatNum;
-                            this.form.sendOrderNum = sendOrderNum;
-                            this.form.visitNum = visitNum;
-                            this.form.dealNum = dealNum;
-                            this.form.performanceNum = performanceNum;
-                            this.form.addFansNum = addFansNum;
-                            this.form.cluesNum = cluesNum;
-                            this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
-                            this.form.consultation = consultation;
-                            this.form.consultation2 = consultation2;
-                            this.form.cargoSettlementCommission = cargoSettlementCommission;
-                            this.form.newVisitNum = newVisitNum;
-                            this.form.subsequentVisitNum = subsequentVisitNum;
-                            this.form.oldCustomerVisitNum = oldCustomerVisitNum;
-                            this.form.newDealNum = newDealNum;
-                            this.form.subsequentDealNum = subsequentDealNum;
-                            this.form.newPerformanceNum = newPerformanceNum;
-                            this.form.subsequentPerformanceNum = subsequentPerformanceNum;
-                            this.form.oldCustomerPerformanceNum = oldCustomerPerformanceNum;
-                            this.form.newCustomerPerformanceCountNum = newCustomerPerformanceCountNum;
-                            this.form.oldCustomerDealNum = oldCustomerDealNum;
-                            this.form.miniVanBadReviews = miniVanBadReviews;
-                            this.form.minivanRefund = minivanRefund;
-                            this.form.consultationCardConsumed = consultationCardConsumed;
-                            this.form.consultationCardConsumed2 = consultationCardConsumed2;
-                            this.form.activateHistoricalConsultation = activateHistoricalConsultation;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId;
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { id } = params.row;
+                //         this.title = "修改";
+                //         this.flag = true;
+                //         api.byIdLiveAnchorDailyTarget(id).then((res) => {
+                //           if (res.code === 0) {
+                //             const {
+                //               id,
+                //               liveanchorMonthlyTargetId,
+                //               operationEmployeeId,
+                //               netWorkConsultingEmployeeId,
+                //               todaySendNum,
+                //               flowInvestmentNum,
+                //               addWechatNum,
+                //               sendOrderNum,
+                //               visitNum,
+                //               dealNum,
+                //               performanceNum,
+                //               recordDate,
+                //               addFansNum,
+                //               cluesNum,
+                //               livingRoomFlowInvestmentNum,
+                //               consultation,
+                //               consultation2,
+                //               cargoSettlementCommission,
+                //               newVisitNum,
+                //               subsequentVisitNum,
+                //               oldCustomerVisitNum,
+                //               newDealNum,
+                //               subsequentDealNum,
+                //               newPerformanceNum,
+                //               subsequentPerformanceNum,
+                //               oldCustomerPerformanceNum,
+                //               newCustomerPerformanceCountNum,
+                //               oldCustomerDealNum,
+                //               miniVanBadReviews,
+                //               minivanRefund,
+                //               consultationCardConsumed,
+                //               consultationCardConsumed2,
+                //               activateHistoricalConsultation,
+                //               livingTrackingEmployeeId,
+                //             } = res.data.liveAnchorDailyTargetInfo;
+                //             this.isEdit = true;
+                //             this.form.id = id;
+                //             this.controlModal = true;
+                //             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
+                //             this.form.operationEmployeeId = operationEmployeeId;
+                //             this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
+                //             this.form.todaySendNum = todaySendNum;
+                //             this.form.flowInvestmentNum = flowInvestmentNum;
+                //             this.form.addWechatNum = addWechatNum;
+                //             this.form.sendOrderNum = sendOrderNum;
+                //             this.form.visitNum = visitNum;
+                //             this.form.dealNum = dealNum;
+                //             this.form.performanceNum = performanceNum;
+                //             this.form.addFansNum = addFansNum;
+                //             this.form.cluesNum = cluesNum;
+                //             this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
+                //             this.form.consultation = consultation;
+                //             this.form.consultation2 = consultation2;
+                //             this.form.cargoSettlementCommission = cargoSettlementCommission;
+                //             this.form.newVisitNum = newVisitNum;
+                //             this.form.subsequentVisitNum = subsequentVisitNum;
+                //             this.form.oldCustomerVisitNum = oldCustomerVisitNum;
+                //             this.form.newDealNum = newDealNum;
+                //             this.form.subsequentDealNum = subsequentDealNum;
+                //             this.form.newPerformanceNum = newPerformanceNum;
+                //             this.form.subsequentPerformanceNum = subsequentPerformanceNum;
+                //             this.form.oldCustomerPerformanceNum = oldCustomerPerformanceNum;
+                //             this.form.newCustomerPerformanceCountNum = newCustomerPerformanceCountNum;
+                //             this.form.oldCustomerDealNum = oldCustomerDealNum;
+                //             this.form.miniVanBadReviews = miniVanBadReviews;
+                //             this.form.minivanRefund = minivanRefund;
+                //             this.form.consultationCardConsumed = consultationCardConsumed;
+                //             this.form.consultationCardConsumed2 = consultationCardConsumed2;
+                //             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
+                //             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId;
 
-                            this.form.recordDate = this.$moment(
-                              new Date(recordDate)
-                            ).format("YYYY-MM-DD");
-                          }
-                        });
-                      },
-                    },
-                  },
-                  "修改"
-                ),
+                //             this.form.recordDate = this.$moment(
+                //               new Date(recordDate)
+                //             ).format("YYYY-MM-DD");
+                //           }
+                //         });
+                //       },
+                //     },
+                //   },
+                //   "修改"
+                // ),
                 h(
                   "Button",
                   {

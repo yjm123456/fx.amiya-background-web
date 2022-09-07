@@ -127,7 +127,7 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="月份选择" prop="year">
+            <FormItem label="月份选择" prop="month">
               <Select
                 v-model="form.month"
                 placeholder="请选择生日月份"
@@ -392,74 +392,22 @@ export default {
                             const {
                               id,
                               liveanchorMonthlyTargetId,
-                              operationEmployeeId,
-                              netWorkConsultingEmployeeId,
-                              todaySendNum,
-                              flowInvestmentNum,
-                              addWechatNum,
-                              sendOrderNum,
-                              visitNum,
-                              dealNum,
-                              performanceNum,
-                              recordDate,
-                              addFansNum,
-                              cluesNum,
                               livingRoomFlowInvestmentNum,
                               consultation,
                               consultation2,
                               cargoSettlementCommission,
-                              newVisitNum,
-                              subsequentVisitNum,
-                              oldCustomerVisitNum,
-                              newDealNum,
-                              subsequentDealNum,
-                              newPerformanceNum,
-                              subsequentPerformanceNum,
-                              oldCustomerPerformanceNum,
-                              newCustomerPerformanceCountNum,
-                              oldCustomerDealNum,
-                              miniVanBadReviews,
-                              minivanRefund,
-                              consultationCardConsumed,
-                              activateHistoricalConsultation,
                               livingTrackingEmployeeId,
-                              consultationCardConsumed2
+                              recordDate
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId;
-                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
-                            this.form.todaySendNum = todaySendNum;
-                            this.form.flowInvestmentNum = flowInvestmentNum;
-                            this.form.addWechatNum = addWechatNum;
-                            this.form.sendOrderNum = sendOrderNum;
-                            this.form.visitNum = visitNum;
-                            this.form.dealNum = dealNum;
-                            this.form.performanceNum = performanceNum;
-                            this.form.addFansNum = addFansNum;
-                            this.form.cluesNum = cluesNum;
                             this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
                             this.form.consultation = consultation;
                             this.form.consultation2 = consultation2;
                             this.form.cargoSettlementCommission = cargoSettlementCommission;
-                            this.form.newVisitNum = newVisitNum;
-                            this.form.subsequentVisitNum = subsequentVisitNum;
-                            this.form.oldCustomerVisitNum = oldCustomerVisitNum;
-                            this.form.newDealNum = newDealNum;
-                            this.form.subsequentDealNum = subsequentDealNum;
-                            this.form.newPerformanceNum = newPerformanceNum;
-                            this.form.subsequentPerformanceNum = subsequentPerformanceNum;
-                            this.form.oldCustomerPerformanceNum = oldCustomerPerformanceNum;
-                            this.form.newCustomerPerformanceCountNum = newCustomerPerformanceCountNum;
-                            this.form.oldCustomerDealNum = oldCustomerDealNum;
-                            this.form.miniVanBadReviews = miniVanBadReviews;
-                            this.form.minivanRefund = minivanRefund;
-                            this.form.consultationCardConsumed = consultationCardConsumed;
-                            this.form.activateHistoricalConsultation = activateHistoricalConsultation;
                             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId ? livingTrackingEmployeeId : null;
-                            this.form.consultationCardConsumed2 = consultationCardConsumed2;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -583,34 +531,12 @@ export default {
       form: {
         // 主播月目标关联id
         liveanchorMonthlyTargetId: "",
-        // 运营人员Id
-        operationEmployeeId: "",
-        // 网咨人员Id
-        netWorkConsultingEmployeeId: "",
-        // 今日发布量
-        todaySendNum: null,
-        // 今日投流量
-        flowInvestmentNum: null,
-        // 今日加V量
-        addWechatNum: null,
-        // 今日派单量
-        sendOrderNum: "",
-        // 今日上门人数
-        visitNum: "",
-        // 今日成交人数
-        dealNum: "",
-        // 今日业绩
-        performanceNum: "",
         // 填报日期
         recordDate: "",
         //年度
         year: this.$moment(new Date()).format("yyyy"),
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
-        // 今日涨粉量
-        addFansNum: null,
-        // 今日线索量
-        cluesNum: null,
         // 今日直播间投流量
         livingRoomFlowInvestmentNum: null,
         // 今日照片面诊卡数量
@@ -619,38 +545,9 @@ export default {
         consultation2: null,
         // 今日带货结算佣金
         cargoSettlementCommission: null,
-        // 新诊上门量
-        newVisitNum: null,
-        // 复诊上门
-        subsequentVisitNum: null,
-        // 老客上门
-        oldCustomerVisitNum: null,
-        // 今日新客成交人数
-        newDealNum: null,
-        // 今日复诊成交人数
-        subsequentDealNum: null,
-        // 今日新诊业绩
-        newPerformanceNum: null,
-        // 今日复诊业绩
-        subsequentPerformanceNum: null,
-        // 今日老客业绩
-        oldCustomerPerformanceNum: null,
-        // 老客成交
-        oldCustomerDealNum: null,
-        // 总新客业绩
-        newCustomerPerformanceCountNum: null,
-        // 今日小黄车差评量
-        miniVanBadReviews: null,
-        // 今日小黄车退款量
-        minivanRefund: null,
-        // 今日消耗卡数量
-        consultationCardConsumed: null,
-        // 今日激活历史面诊数量
-        activateHistoricalConsultation: null,
         // 直播中人员
         livingTrackingEmployeeId: null,
-        // 
-        consultationCardConsumed2:null,
+        
       },
 
       ruleValidate: {
@@ -672,24 +569,6 @@ export default {
             message: "请选择运营人员",
           },
         ],
-        todaySendNum: [
-          {
-            required: true,
-            message: "请输入今日发布量",
-          },
-        ],
-        flowInvestmentNum: [
-          {
-            required: true,
-            message: "请输入今日投流量",
-          },
-        ],
-        addWechatNum: [
-          {
-            required: true,
-            message: "请输入今日加V量",
-          },
-        ],
         recordDate: [
           {
             required: true,
@@ -706,18 +585,6 @@ export default {
           {
             required: true,
             message: "请选择月",
-          },
-        ],
-        cluesNum: [
-          {
-            required: true,
-            message: "请输入今日线索量",
-          },
-        ],
-        addFansNum: [
-          {
-            required: true,
-            message: "请输入今日涨粉量",
           },
         ],
         livingRoomFlowInvestmentNum: [
@@ -887,101 +754,32 @@ export default {
             const {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              netWorkConsultingEmployeeId,
-              todaySendNum,
-              flowInvestmentNum,
-              addWechatNum,
-              sendOrderNum,
-              visitNum,
-              dealNum,
-              performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
               livingRoomFlowInvestmentNum,
               consultation,
               consultation2,
-              cargoSettlementCommission,
-              newVisitNum,
-              subsequentVisitNum,
-              oldCustomerVisitNum,
-              newDealNum,
-              subsequentDealNum,
-              newPerformanceNum,
-              subsequentPerformanceNum,
-              oldCustomerPerformanceNum,
-              newCustomerPerformanceCountNum,
-              oldCustomerDealNum,
-              miniVanBadReviews,
-              minivanRefund,
-              consultationCardConsumed,
-              activateHistoricalConsultation,
               livingTrackingEmployeeId,
-              consultationCardConsumed2
+              cargoSettlementCommission
             } = this.form;
             const data = {
               id,
               liveanchorMonthlyTargetId,
-              // 网咨和运营人员传0
-              operationEmployeeId: operationEmployeeId
-                ? operationEmployeeId
-                : 0,
-              netWorkConsultingEmployeeId: netWorkConsultingEmployeeId
-                ? netWorkConsultingEmployeeId
-                : 0,
-              todaySendNum: todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum: flowInvestmentNum ? flowInvestmentNum : 0,
-              addWechatNum: addWechatNum ? addWechatNum : 0,
-              sendOrderNum: sendOrderNum ? sendOrderNum : 0,
-              visitNum: visitNum ? visitNum : 0,
-              dealNum: dealNum ? dealNum : 0,
-              performanceNum: performanceNum ? performanceNum : 0,
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum: cluesNum ? cluesNum : 0,
-              addFansNum: addFansNum ? addFansNum : 0,
               livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum
                 ? livingRoomFlowInvestmentNum
                 : 0,
               consultation: consultation ? consultation : 0,
               consultation2: consultation2 ? consultation2 : 0,
-              consultationCardConsumed2: consultationCardConsumed2 ? consultationCardConsumed2 : 0,
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
-                : 0,
-              newVisitNum: newVisitNum ? newVisitNum : 0,
-              subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
-              oldCustomerVisitNum: oldCustomerVisitNum
-                ? oldCustomerVisitNum
-                : 0,
-              newDealNum: newDealNum ? newDealNum : 0,
-              subsequentDealNum: subsequentDealNum ? subsequentDealNum : 0,
-              newPerformanceNum: newPerformanceNum ? newPerformanceNum : 0,
-              subsequentPerformanceNum: subsequentPerformanceNum
-                ? subsequentPerformanceNum
-                : 0,
-              oldCustomerPerformanceNum: oldCustomerPerformanceNum
-                ? oldCustomerPerformanceNum
-                : 0,
-              newCustomerPerformanceCountNum: newCustomerPerformanceCountNum
-                ? newCustomerPerformanceCountNum
-                : 0,
-              oldCustomerDealNum: oldCustomerDealNum ? oldCustomerDealNum : 0,
-              miniVanBadReviews: miniVanBadReviews ? miniVanBadReviews : 0,
-              minivanRefund: minivanRefund ? minivanRefund : 0,
-              consultationCardConsumed: consultationCardConsumed
-                ? consultationCardConsumed
-                : 0,
-              activateHistoricalConsultation: activateHistoricalConsultation
-                ? activateHistoricalConsultation
                 : 0,
               livingTrackingEmployeeId: livingTrackingEmployeeId
                 ? livingTrackingEmployeeId
                 : 0,
             };
-            api.editLiveAnchorDailyTarget(data).then((res) => {
+            api.livingUpdate(data).then((res) => {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
@@ -995,58 +793,18 @@ export default {
           } else {
             const {
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              netWorkConsultingEmployeeId,
-              todaySendNum,
-              flowInvestmentNum,
-              addWechatNum,
-              sendOrderNum,
-              visitNum,
-              dealNum,
-              performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
               livingRoomFlowInvestmentNum,
               consultation,
               consultation2,
               cargoSettlementCommission,
-              newVisitNum,
-              subsequentVisitNum,
-              oldCustomerVisitNum,
-              newDealNum,
-              subsequentDealNum,
-              newPerformanceNum,
-              subsequentPerformanceNum,
-              oldCustomerPerformanceNum,
-              newCustomerPerformanceCountNum,
-              oldCustomerDealNum,
-              miniVanBadReviews,
-              minivanRefund,
-              consultationCardConsumed,
-              activateHistoricalConsultation,
               livingTrackingEmployeeId,
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
-              operationEmployeeId: operationEmployeeId
-                ? operationEmployeeId
-                : 0,
-              netWorkConsultingEmployeeId: netWorkConsultingEmployeeId
-                ? netWorkConsultingEmployeeId
-                : 0,
-              todaySendNum: todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum: flowInvestmentNum ? flowInvestmentNum : 0,
-              addWechatNum: addWechatNum ? addWechatNum : 0,
-              sendOrderNum: sendOrderNum ? sendOrderNum : 0,
-              visitNum: visitNum ? visitNum : 0,
-              dealNum: dealNum ? dealNum : 0,
-              performanceNum: performanceNum ? performanceNum : 0,
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum: cluesNum ? cluesNum : 0,
-              addFansNum: addFansNum ? addFansNum : 0,
               livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum
                 ? livingRoomFlowInvestmentNum
                 : 0,
@@ -1055,36 +813,10 @@ export default {
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
                 : 0,
-              newVisitNum: newVisitNum ? newVisitNum : 0,
-              subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
-              oldCustomerVisitNum: oldCustomerVisitNum
-                ? oldCustomerVisitNum
-                : 0,
-              newDealNum: newDealNum ? newDealNum : 0,
-              subsequentDealNum: subsequentDealNum ? subsequentDealNum : 0,
-              newPerformanceNum: newPerformanceNum ? newPerformanceNum : 0,
-              subsequentPerformanceNum: subsequentPerformanceNum
-                ? subsequentPerformanceNum
-                : 0,
-              oldCustomerPerformanceNum: oldCustomerPerformanceNum
-                ? oldCustomerPerformanceNum
-                : 0,
-              newCustomerPerformanceCountNum: newCustomerPerformanceCountNum
-                ? newCustomerPerformanceCountNum
-                : 0,
-              oldCustomerDealNum: oldCustomerDealNum ? oldCustomerDealNum : 0,
-              miniVanBadReviews: miniVanBadReviews ? miniVanBadReviews : 0,
-              minivanRefund: minivanRefund ? minivanRefund : 0,
-              consultationCardConsumed: consultationCardConsumed
-                ? consultationCardConsumed
-                : 0,
-              activateHistoricalConsultation: activateHistoricalConsultation
-                ? activateHistoricalConsultation
-                : 0,
               livingTrackingEmployeeId,
             };
             // 添加
-            api.AddLiveAnchorDailyTarget(data).then((res) => {
+            api.livingAdd(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();

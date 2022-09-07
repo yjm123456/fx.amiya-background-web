@@ -412,7 +412,7 @@
                       </div>
                       <div class="scroll_top">
                         <div class="scroll_left3">
-                          <div class="l_h3">新诊客单价</div>
+                          <div class="l_h3">新客客单价</div>
                           <div class="l_h4">{{jinaGuestUnitPricePerformance.newGuestUnitPricePerformance ? (jinaGuestUnitPricePerformance.newGuestUnitPricePerformance).toFixed(2) : 0.00}}</div>
                         </div>
                         <div class="scroll_right">
@@ -430,7 +430,7 @@
                       </div>
                       <div class="scroll_top">
                         <div class="scroll_left4">
-                          <div class="l_h3">复诊客单价</div>
+                          <div class="l_h3">老客客单价</div>
                           <div class="l_h4">{{jinaGuestUnitPricePerformance.oldGuestUnitPricePerformance ? (jinaGuestUnitPricePerformance.oldGuestUnitPricePerformance).toFixed(2) : 0.00}}</div>
                         </div>
                         <div class="scroll_right">
@@ -1043,11 +1043,11 @@ export default {
   margin-left: 2%;
 }
 .red{
-  color: red;
+  color: green;
   margin-right: 4px;
 }
 .green{
-  color: green;
+  color: red;
   margin-right: 4px;
 }
 </style>

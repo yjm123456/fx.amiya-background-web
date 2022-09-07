@@ -128,7 +128,7 @@ export default {
         legend: {
           x:'center',
           y:'bottom',
-          data: ['总客单价', '新诊客单价','复诊客单价'],
+          data: ['总客单价', '新客客单价','老客客单价'],
         },
         series: [
            {
@@ -142,7 +142,7 @@ export default {
                 },
             },
             {
-                name: '新诊客单价',
+                name: '新客客单价',
                 type: 'line',
                 data: newGuestUnitPricePerformanceBrokenLines,
                 itemStyle: { 
@@ -152,7 +152,7 @@ export default {
                 },
             },
             {
-                name: '复诊客单价',
+                name: '老客客单价',
                 type: 'line',
                 data: oldGuestUnitPricePerformanceBrokenLines,
                 itemStyle: { 

@@ -127,7 +127,7 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="月份选择" prop="year">
+            <FormItem label="月份选择" prop="month">
               <Select
                 v-model="form.month"
                 placeholder="请选择生日月份"
@@ -149,6 +149,7 @@
                 v-model="form.liveanchorMonthlyTargetId"
                 placeholder="请选择月目标名称"
                 filterable
+                @on-change ="liveanchorMonthlyTargetIdChange(form.liveanchorMonthlyTargetId)"
               >
                 <Option
                   v-for="item in liveAnchorMonthlyTarget"
@@ -589,6 +590,7 @@
         </Row>
       </Form>
       <div slot="footer">
+        <Button type="primary" @click="autoFillSubmit">自动填写</Button>
         <Button @click="cancelSubmit('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
@@ -807,21 +809,13 @@ export default {
                             const {
                               id,
                               liveanchorMonthlyTargetId,
-                              operationEmployeeId,
                               netWorkConsultingEmployeeId,
-                              todaySendNum,
-                              flowInvestmentNum,
                               addWechatNum,
                               sendOrderNum,
                               visitNum,
                               dealNum,
                               performanceNum,
                               recordDate,
-                              addFansNum,
-                              cluesNum,
-                              livingRoomFlowInvestmentNum,
-                              consultation,
-                              cargoSettlementCommission,
                               newVisitNum,
                               subsequentVisitNum,
                               oldCustomerVisitNum,
@@ -837,27 +831,17 @@ export default {
                               consultationCardConsumed,
                               consultationCardConsumed2,
                               activateHistoricalConsultation,
-                              livingTrackingEmployeeId,
-                              consultation2
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId;
                             this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId== 0 ? null : netWorkConsultingEmployeeId;
-                            this.form.todaySendNum = todaySendNum;
-                            this.form.flowInvestmentNum = flowInvestmentNum;
                             this.form.addWechatNum = addWechatNum;
                             this.form.sendOrderNum = sendOrderNum;
                             this.form.visitNum = visitNum;
                             this.form.dealNum = dealNum;
                             this.form.performanceNum = performanceNum;
-                            this.form.addFansNum = addFansNum;
-                            this.form.cluesNum = cluesNum;
-                            this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
-                            this.form.consultation = consultation;
-                            this.form.cargoSettlementCommission = cargoSettlementCommission;
                             this.form.newVisitNum = newVisitNum;
                             this.form.subsequentVisitNum = subsequentVisitNum;
                             this.form.oldCustomerVisitNum = oldCustomerVisitNum;
@@ -873,12 +857,11 @@ export default {
                             this.form.consultationCardConsumed = consultationCardConsumed;
                             this.form.consultationCardConsumed2 = consultationCardConsumed2;
                             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId;
-                            this.form.consultation2 = consultation2;
-
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
+                            this.liveanchorMonthlyTargetIdChange(this.form.liveanchorMonthlyTargetId)
+
                           }
                         });
                       },
@@ -997,14 +980,8 @@ export default {
       form: {
         // 主播月目标关联id
         liveanchorMonthlyTargetId: "",
-        // 运营人员Id
-        operationEmployeeId: "",
         // 网咨人员Id
         netWorkConsultingEmployeeId: "",
-        // 今日发布量
-        todaySendNum: null,
-        // 今日投流量
-        flowInvestmentNum: null,
         // 今日加V量
         addWechatNum: null,
         // 今日派单量
@@ -1021,16 +998,6 @@ export default {
         year: this.$moment(new Date()).format("yyyy"),
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
-        // 今日涨粉量
-        addFansNum: null,
-        // 今日线索量
-        cluesNum: null,
-        // 今日直播间投流量
-        livingRoomFlowInvestmentNum: null,
-        // 今日面诊卡数量
-        consultation: null,
-        // 今日带货结算佣金
-        cargoSettlementCommission: null,
         // 新诊上门量
         newVisitNum: null,
         // 复诊上门
@@ -1061,9 +1028,9 @@ export default {
         consultationCardConsumed2: null,
         // 今日激活历史面诊数量
         activateHistoricalConsultation: null,
-        // 直播中
-        livingTrackingEmployeeId: null,
-        consultation2:null,
+        // 主播IP(自动填写用的字段)
+        liveAnchorId:null,
+       
       },
 
       ruleValidate: {
@@ -1150,6 +1117,60 @@ export default {
     };
   },
   methods: {
+    // 根据月名称获取主播id
+    liveanchorMonthlyTargetIdChange(value){
+      if(value){
+        api.byIdLiveAnchorMonthlyTargets(this.form.liveanchorMonthlyTargetId).then((res) => {
+          if (res.code === 0) {
+            this.form.liveAnchorId = res.data.liveAnchorMonthlyTargetInfo.liveAnchorId
+          }
+        })
+      }
+    },
+    // 自动填写
+    autoFillSubmit(){
+      const {liveanchorMonthlyTargetId , netWorkConsultingEmployeeId , recordDate,liveAnchorId} = this.form
+      if(!liveanchorMonthlyTargetId){
+        this.$Message.warning('请选择月目标名称')
+        return
+      } 
+      if(!netWorkConsultingEmployeeId){
+        this.$Message.warning('请选择网咨人员')
+        return
+      } 
+      if(!recordDate){
+        this.$Message.warning('请选择填报日期')
+        return
+      } 
+      const data = {
+        liveAnchorId:liveAnchorId,
+        recordDate:this.$moment(new Date(recordDate)).format("YYYY-MM-DD")
+      }
+      api.getLiveAnchorPerformance(data).then((res) => {
+       
+        this.form.addWechatNum = res.addWechatNum
+        this.form.sendOrderNum = res.sendOrderNum
+        this.form.visitNum = res.visitNum
+        this.form.dealNum = res.dealNum
+        this.form.performanceNum = res.performanceNum
+        this.form.newVisitNum = res.newVisitNum
+        this.form.subsequentVisitNum = res.subsequentVisitNum
+        this.form.oldCustomerVisitNum = res.oldCustomerVisitNum
+        this.form.newDealNum = res.newDealNum
+        this.form.subsequentDealNum = res.subsequentDealNum
+        this.form.newPerformanceNum = res.newPerformanceNum
+        this.form.subsequentPerformanceNum = res.subsequentPerformanceNum
+        this.form.oldCustomerPerformanceNum = res.oldCustomerPerformanceNum
+        this.form.newCustomerPerformanceCountNum = res.newCustomerPerformanceCountNum
+        this.form.oldCustomerDealNum = res.oldCustomerDealNum
+        this.form.miniVanBadReviews = res.miniVanBadReviews
+        this.form.minivanRefund = res.minivanRefund
+        this.form.consultationCardConsumed = res.consultationCardConsumed
+        this.form.consultationCardConsumed2 = res.consultationCardConsumed2
+        this.form.activateHistoricalConsultation = res.activateHistoricalConsultation
+      })
+
+    },
     // 老客成交
     oldCustomerNumChange() {
       this.form.dealNum =
@@ -1374,21 +1395,13 @@ export default {
             const {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
               netWorkConsultingEmployeeId,
-              todaySendNum,
-              flowInvestmentNum,
               addWechatNum,
               sendOrderNum,
               visitNum,
               dealNum,
               performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
-              livingRoomFlowInvestmentNum,
-              consultation,
-              cargoSettlementCommission,
               newVisitNum,
               subsequentVisitNum,
               oldCustomerVisitNum,
@@ -1404,20 +1417,13 @@ export default {
               consultationCardConsumed,
               consultationCardConsumed2,
               activateHistoricalConsultation,
-              livingTrackingEmployeeId,
-              consultation2
             } = this.form;
             const data = {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId: operationEmployeeId
-                ? operationEmployeeId
-                : 0,
               netWorkConsultingEmployeeId: netWorkConsultingEmployeeId
                 ? netWorkConsultingEmployeeId
                 : 0,
-              todaySendNum: todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum: flowInvestmentNum ? flowInvestmentNum : 0,
               addWechatNum: addWechatNum ? addWechatNum : 0,
               sendOrderNum: sendOrderNum ? sendOrderNum : 0,
               visitNum: visitNum ? visitNum : 0,
@@ -1426,15 +1432,6 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum: cluesNum ? cluesNum : 0,
-              addFansNum: addFansNum ? addFansNum : 0,
-              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum
-                ? livingRoomFlowInvestmentNum
-                : 0,
-              consultation: consultation ? consultation : 0,
-              cargoSettlementCommission: cargoSettlementCommission
-                ? cargoSettlementCommission
-                : 0,
               newVisitNum: newVisitNum ? newVisitNum : 0,
               subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
               oldCustomerVisitNum: oldCustomerVisitNum
@@ -1464,14 +1461,8 @@ export default {
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
-              livingTrackingEmployeeId: livingTrackingEmployeeId
-                ? livingTrackingEmployeeId
-                : 0,
-              consultation2: consultation2
-                ? consultation2
-                : 0,
             };
-            api.editLiveAnchorDailyTarget(data).then((res) => {
+            api.afterLivingUpdate(data).then((res) => {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
@@ -1485,21 +1476,13 @@ export default {
           } else {
             const {
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
               netWorkConsultingEmployeeId,
-              todaySendNum,
-              flowInvestmentNum,
               addWechatNum,
               sendOrderNum,
               visitNum,
               dealNum,
               performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
-              livingRoomFlowInvestmentNum,
-              consultation,
-              cargoSettlementCommission,
               newVisitNum,
               subsequentVisitNum,
               oldCustomerVisitNum,
@@ -1515,16 +1498,10 @@ export default {
               consultationCardConsumed,
               consultationCardConsumed2,
               activateHistoricalConsultation,
-              livingTrackingEmployeeId,
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
-              operationEmployeeId: operationEmployeeId
-                ? operationEmployeeId
-                : 0,
               netWorkConsultingEmployeeId,
-              todaySendNum: todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum: flowInvestmentNum ? flowInvestmentNum : 0,
               addWechatNum: addWechatNum ? addWechatNum : 0,
               sendOrderNum: sendOrderNum ? sendOrderNum : 0,
               visitNum: visitNum ? visitNum : 0,
@@ -1533,15 +1510,6 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum: cluesNum ? cluesNum : 0,
-              addFansNum: addFansNum ? addFansNum : 0,
-              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum
-                ? livingRoomFlowInvestmentNum
-                : 0,
-              consultation: consultation ? consultation : 0,
-              cargoSettlementCommission: cargoSettlementCommission
-                ? cargoSettlementCommission
-                : 0,
               newVisitNum: newVisitNum ? newVisitNum : 0,
               subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
               oldCustomerVisitNum: oldCustomerVisitNum
@@ -1571,12 +1539,9 @@ export default {
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
-              livingTrackingEmployeeId: livingTrackingEmployeeId
-                ? livingTrackingEmployeeId
-                : 0,
             };
             // 添加
-            api.AddLiveAnchorDailyTarget(data).then((res) => {
+            api.afterLivingAdd(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();

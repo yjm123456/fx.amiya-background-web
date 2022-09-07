@@ -186,6 +186,104 @@
           </Col>
           <Col span="8">
             <FormItem
+              label="知乎发布目标"
+              prop="zhihuReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入月度目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="知乎发布目标"
+            >
+              <Input
+                v-model="form.zhihuReleaseTarget"
+                placeholder="请输入知乎发布目标"
+                type="number"
+                number
+                @on-change="zhihuReleaseTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="抖音发布目标"
+              prop="tikTokReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入月度目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="抖音发布目标"
+            >
+              <Input
+                v-model="form.tikTokReleaseTarget"
+                placeholder="请输入抖音发布目标"
+                type="number"
+                number
+                @on-change="tikTokReleaseTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="小红书发布目标"
+              prop="xiaoHongShuReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入月度目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="小红书发布目标"
+            >
+              <Input
+                v-model="form.xiaoHongShuReleaseTarget"
+                placeholder="请输入小红书发布目标"
+                type="number"
+                number
+                @on-change="xiaoHongShuReleaseTargetChange"
+                
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="微博发布目标"
+              prop="sinaWeiBoReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入月度目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="微博发布目标"
+            >
+              <Input
+                v-model="form.sinaWeiBoReleaseTarget"
+                placeholder="请输入微博发布目标"
+                type="number"
+                number
+                @on-change="sinaWeiBoReleaseTargetChange"
+              />
+            </FormItem>
+          </Col>
+          
+          <Col span="8">
+            <FormItem
               label="月发布目标"
               prop="releaseTarget"
               :rules="[
@@ -204,6 +302,8 @@
                 placeholder="请输入月发布目标"
                 type="number"
                 number
+                disabled
+
               />
             </FormItem>
           </Col>
@@ -832,6 +932,90 @@ export default {
             align: "center",
           },
           {
+            title: "知乎发布目标",
+            key: "zhihuReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计知乎发布条数",
+            key: "cumulativeZhihuRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "知乎发布目标完成率",
+            key: "zhihuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.zhihuReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "抖音发布目标",
+            key: "tikTokReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计抖音发布条数",
+            key: "cumulativeTikTokRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "抖音发布目标完成率",
+            key: "tikTokReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.tikTokReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "小红书发布目标",
+            key: "xiaoHongShuReleaseTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "月累计小红书发布条数",
+            key: "cumulativeXiaoHongShuRelease",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "小红书发布目标完成率",
+            key: "xiaoHongShuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.xiaoHongShuReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "微博发布目标",
+            key: "sinaWeiBoReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计微博发布条数",
+            key: "cumulativeSinaWeiBoRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博发布目标完成率",
+            key: "sinaWeiBoReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.sinaWeiBoReleaseCompleteRate + "%");
+            },
+          },
+          {
             title: "月发布目标",
             key: "releaseTarget",
             minWidth: 110,
@@ -1425,6 +1609,14 @@ export default {
                               contentPlatFormId,
                               // 主播ID,
                               liveAnchorId,
+                              // 知乎发布目标
+                              zhihuReleaseTarget,
+                              // 抖音发布目标
+                              tikTokReleaseTarget,
+                              // 小红书发布目标
+                              xiaoHongShuReleaseTarget,
+                              // 微博发布目标
+                              sinaWeiBoReleaseTarget,
                               // 月发布目标
                               releaseTarget,
                               // 投流目标
@@ -1483,6 +1675,10 @@ export default {
                             this.form.monthlyTargetName = monthlyTargetName;
                             this.form.contentPlatFormId = contentPlatFormId;
                             this.form.liveAnchorId = liveAnchorId;
+                            this.form.zhihuReleaseTarget = zhihuReleaseTarget;
+                            this.form.tikTokReleaseTarget = tikTokReleaseTarget;
+                            this.form.xiaoHongShuReleaseTarget = xiaoHongShuReleaseTarget;
+                            this.form.sinaWeiBoReleaseTarget = sinaWeiBoReleaseTarget;
                             this.form.releaseTarget = releaseTarget;
                             this.form.flowInvestmentTarget = flowInvestmentTarget;
                             this.form.addWechatTarget = addWechatTarget;
@@ -1585,6 +1781,90 @@ export default {
             key: "monthlyTargetName",
             minWidth: 190,
             align: "center",
+          },
+          {
+            title: "知乎发布目标",
+            key: "zhihuReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计知乎发布条数",
+            key: "cumulativeZhihuRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "知乎发布目标完成率",
+            key: "zhihuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.zhihuReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "抖音发布目标",
+            key: "tikTokReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计抖音发布条数",
+            key: "cumulativeTikTokRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "抖音发布目标完成率",
+            key: "tikTokReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.tikTokReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "小红书发布目标",
+            key: "xiaoHongShuReleaseTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "月累计小红书发布条数",
+            key: "cumulativeXiaoHongShuRelease",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "小红书发布目标完成率",
+            key: "xiaoHongShuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.xiaoHongShuReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "微博发布目标",
+            key: "sinaWeiBoReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计微博发布条数",
+            key: "cumulativeSinaWeiBoRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博发布目标完成率",
+            key: "sinaWeiBoReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.sinaWeiBoReleaseCompleteRate + "%");
+            },
           },
           {
             title: "月发布目标",
@@ -2471,6 +2751,14 @@ export default {
         contentPlatFormId: "",
         // 主播ID,
         liveAnchorId: "",
+        // 知乎发布目标
+        zhihuReleaseTarget:null,
+        // 抖音发布目标
+        tikTokReleaseTarget:null,
+        // 小红书发布目标
+        xiaoHongShuReleaseTarget:null,
+        // 微博发布目标
+        sinaWeiBoReleaseTarget:null,
         // 月发布目标
         releaseTarget: null,
         // 投流目标
@@ -2631,6 +2919,18 @@ export default {
     };
   },
   methods: {
+    tikTokReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)+Number(this.form.tikTokReleaseTarget)
+    },
+    zhihuReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)+Number(this.form.tikTokReleaseTarget)
+    },
+    xiaoHongShuReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)+Number(this.form.tikTokReleaseTarget)
+    },
+    sinaWeiBoReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)+Number(this.form.tikTokReleaseTarget)
+    },
     newCustomerDealTargetChange(){
       this.form.dealTarget = Number(this.form.newCustomerDealTarget) + Number(this.form.oldCustomerDealTarget)
     },
@@ -2747,6 +3047,10 @@ export default {
               month,
               monthlyTargetName,
               liveAnchorId,
+              zhihuReleaseTarget,
+              tikTokReleaseTarget,
+              xiaoHongShuReleaseTarget,
+              sinaWeiBoReleaseTarget,
               releaseTarget,
               flowInvestmentTarget,
               addWechatTarget,
@@ -2778,6 +3082,10 @@ export default {
               month,
               monthlyTargetName,
               liveAnchorId: Number(liveAnchorId),
+              zhihuReleaseTarget,
+              tikTokReleaseTarget,
+              xiaoHongShuReleaseTarget,
+              sinaWeiBoReleaseTarget,
               releaseTarget,
               flowInvestmentTarget,
               addWechatTarget,

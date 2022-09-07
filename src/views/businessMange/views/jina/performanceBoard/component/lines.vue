@@ -127,11 +127,11 @@ export default {
         legend: {
           x:'center',
           y:'bottom',
-          data: ['新诊业绩', '老客业绩','带货业绩'],
+          data: ['新客业绩', '老客业绩','带货业绩'],
         },
         series: [
            {
-                name: '新诊业绩',
+                name: '新客业绩',
                 type: 'line',
                 data: newPerformanceDatas,
                 itemStyle: { 

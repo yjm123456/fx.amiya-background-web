@@ -103,3 +103,68 @@ export const netWorkConsultingNameList = () => {
         method: "get",
     });
 };
+/**
+ * 直播前
+ */
+// 添加直播前数据
+export const AddBeforeLivingAdd = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeLivingAdd`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播前数据
+export const editBeforeLivingUpdate = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeLivingUpdate`,
+        method: "put",
+        data,
+    });
+};
+/**
+ * 直播中
+ */
+// 添加直播中数据
+export const livingAdd = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/livingAdd`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播中数据
+export const livingUpdate = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/livingUpdate`,
+        method: "put",
+        data,
+    });
+};
+/**
+ * 直播后
+ */
+// 添加直播后数据
+export const afterLivingAdd = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/afterLivingAdd`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播后数据
+export const afterLivingUpdate = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/afterLivingUpdate`,
+        method: "put",
+        data,
+    });
+};
+// 根据主播id自动生成业绩
+export const getLiveAnchorPerformance = (params) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/getLiveAnchorPerformance`,
+        method: "get",
+        params
+    });
+};

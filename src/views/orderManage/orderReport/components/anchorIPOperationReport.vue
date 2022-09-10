@@ -74,34 +74,70 @@ export default {
                 align:'center'
             },
             {
-            title: "今日抖音发布量",
-            key: "tikTokSendNum",
-            minWidth: 160,
-            align: "center",
-          },
-          {
-            title: "月抖音发布目标",
-            key: "tikTokReleaseTarget",
-            minWidth: 160,
-            align: "center",
-          },
-          {
-            title: "月累计抖音发布条数",
-            key: "tikTokCumulativeRelease",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "抖音发布目标完成率",
-            key: "tikTokReleaseCompleteRate",
-            minWidth: 180,
-            align: "center",
+                title: "抖音运营人员",
+                key: "tikTokOperationEmployeeName",
+                minWidth: 160,
+                align:'center'
+            },
+            {
+              title: "今日抖音发布量",
+              key: "tikTokSendNum",
+              minWidth: 160,
+              align: "center",
+            },
+            {
+              title: "月抖音发布目标",
+              key: "tikTokReleaseTarget",
+              minWidth: 160,
+              align: "center",
+            },
+            {
+              title: "月累计抖音发布条数",
+              key: "tikTokCumulativeRelease",
+              minWidth: 180,
+              align: "center",
+            },
+            {
+              title: "抖音发布目标完成率",
+              key: "tikTokReleaseCompleteRate",
+              minWidth: 180,
+              align: "center",
+            },
+            {
+              title: "抖音今日投流费用",
+              key: "tikTokFlowInvestmentNum",
+              minWidth: 160,
+              align: "center",
+            },
+            {
+              title: "抖音投流费用目标",
+              key: "tikTokFlowinvestmentTarget",
+              minWidth: 160,
+              align: "center",
+            },
+            {
+              title: "累计抖音投流费用",
+              key: "cumulativeTikTokFlowinvestment",
+              minWidth: 180,
+              align: "center",
+            },
+            {
+              title: "抖音投流费用完成率",
+              key: "tikTokFlowinvestmentCompleteRate",
+              minWidth: 180,
+              align: "center",
+            },
+            {
+              title: "小红书运营人员",
+              key: "xiaoHongShuOperationEmployeeName",
+              minWidth: 160,
+              align: "center",
           },
             {
-            title: "今日小红书发布量",
-            key: "xiaoHongShuSendNum",
-            minWidth: 160,
-            align: "center",
+              title: "今日小红书发布量",
+              key: "xiaoHongShuSendNum",
+              minWidth: 160,
+              align: "center",
           },
           {
             title: "月小红书发布目标",
@@ -119,6 +155,36 @@ export default {
             title: "小红书发布目标完成率",
             key: "xiaoHongShuReleaseCompleteRate",
             minWidth: 180,
+            align: "center",
+          },
+          {
+              title: "小红书今日投流费用",
+              key: "xiaoHongShuFlowInvestmentNum",
+              minWidth: 170,
+              align: "center",
+          },
+          {
+            title: "小红书投流费用目标",
+            key: "xiaoHongShuFlowinvestmentTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计小红书投流费用",
+            key: "cumulativeXiaoHongShuFlowinvestment",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "小红书投流费用完成率",
+            key: "xiaoHongShuFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "微博运营人员",
+            key: "sinaWeiBoOperationEmployeeName",
+            minWidth: 150,
             align: "center",
           },
           {
@@ -146,6 +212,90 @@ export default {
             align: "center",
           },
           {
+            title: "微博今日投流费用",
+            key: "sinaWeiBoFlowInvestmentNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "微博投流费用目标",
+            key: "sinaWeiBoFlowinvestmentTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计微博投流费用",
+            key: "cumulativeSinaWeiBoFlowinvestment",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博投流费用完成率",
+            key: "sinaWeiBoFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "视频号运营人员",
+            key: "videoOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日视频号发布量",
+            key: "videoSendNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月视频号发布目标",
+            key: "videoReleaseTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月累计视频号发布条数",
+            key: "videoCumulativeRelease",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "视频号发布目标完成率",
+            key: "videoReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "视频号今日投流费用",
+            key: "videoFlowInvestmentNum",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "视频号投流费用目标",
+            key: "videoFlowinvestmentTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计视频号投流费用",
+            key: "cumulativeVideoFlowinvestment",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "视频号投流费用完成率",
+            key: "videoFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎运营人员",
+            key: "zhihuOperationEmployeeName",
+            minWidth: 180,
+            align: "center",
+          },
+          {
             title: "今日知乎发布量",
             key: "zhihuSendNum",
             minWidth: 180,
@@ -166,6 +316,30 @@ export default {
           {
             title: "知乎发布目标完成率",
             key: "zhihuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎今日投流费用",
+            key: "zhihuFlowInvestmentNum",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎投流费用目标",
+            key: "zhihuFlowinvestmentTarget",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "累计知乎投流费用",
+            key: "cumulativeZhihuFlowinvestment",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎投流费用完成率",
+            key: "zhihuFlowinvestmentCompleteRate",
             minWidth: 180,
             align: "center",
           },
@@ -194,51 +368,51 @@ export default {
                 align:'center'
             },
             {
-                title: "今日视频号投流量",
+                title: "今日运营渠道投流费用",
                 key: "flowInvestmentNum",
-                minWidth: 150,
-                align:'center'
-            },
-            {
-                title: "视频号投流目标",
-                key: "flowInvestmentTarget",
-                minWidth: 150,
-                align:'center'
-            },
-            {
-                title: "月累计视频号投流数量",
-                key: "cumulativeFlowInvestment",
                 minWidth: 180,
                 align:'center'
             },
             {
-                title: "视频号投流完成率",
+                title: "运营渠道投流费用目标",
+                key: "flowInvestmentTarget",
+                minWidth: 180,
+                align:'center'
+            },
+            {
+                title: "月累计运营渠道投流费用数",
+                key: "cumulativeFlowInvestment",
+                minWidth: 210,
+                align:'center'
+            },
+            {
+                title: "运营渠道投流费用完成率",
                 key: "flowInvestmentCompleteRate",
-                minWidth: 160,
+                minWidth: 200,
                 align:'center'
             },
             {
-                title: "今日直播间投流量",
+                title: "今日直播间投流费用",
                 key: "livingRoomFlowInvestmentNum",
-                minWidth: 150,
+                minWidth: 190,
                 align:'center'
             },
             {
-                title: "直播间投流目标",
+                title: "直播间投流费用目标",
                 key: "livingRoomFlowInvestmentTarget",
-                minWidth: 150,
+                minWidth: 190,
                 align:'center'
             },
             {
-                title: "月累计直播间投流数量",
+                title: "月累计直播间投流费用",
                 key: "livingRoomCumulativeFlowInvestment",
                 minWidth: 180,
                 align:'center'
             },
             {
-                title: "直播间投流完成率",
+                title: "直播间投流费用完成率",
                 key: "livingRoomFlowInvestmentCompleteRate",
-                minWidth: 160,
+                minWidth: 200,
                 align:'center'
             },
             {
@@ -660,12 +834,6 @@ export default {
             {
                 title: "小黄车差评率",
                 key: "miniVanBadReviewsCompleteRate",
-                minWidth: 140,
-                align:'center',
-            },
-            {
-                title: "运营人员",
-                key: "operationEmployeeName",
                 minWidth: 140,
                 align:'center',
             },

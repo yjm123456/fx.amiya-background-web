@@ -1119,13 +1119,61 @@ const operationManage = [{
         path: "/beforeLiveBroadcast",
         name: "beforeLiveBroadcast",
         meta: {
-            title: "直播前",
+            title: "直播前抖音数据",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
         },
         component: () =>
             import ("@/views/operationManage/beforeLiveBroadcast/beforeLiveBroadcast.vue"),
+    },
+    {
+        path: "/beforeZhihuLiving",
+        name: "beforeZhihuLiving",
+        meta: {
+            title: "直播前知乎数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/beforeZhihuLiving/beforeZhihuLiving.vue"),
+    },
+    {
+        path: "/beforeSinaWeiBoLiving",
+        name: "beforeSinaWeiBoLiving",
+        meta: {
+            title: "直播前微博数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/beforeSinaWeiBoLiving/beforeSinaWeiBoLiving.vue"),
+    },
+    {
+        path: "/beforeXiaoHongShuLiving",
+        name: "beforeXiaoHongShuLiving",
+        meta: {
+            title: "直播前小红书数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/beforeXiaoHongShuLiving/beforeXiaoHongShuLiving.vue"),
+    },
+    {
+        path: "/beforeVideoLiving",
+        name: "beforeVideoLiving",
+        meta: {
+            title: "直播前视频号数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/beforeVideoLiving/beforeVideoLiving.vue"),
     },
     {
         path: "/liveBroadcast",

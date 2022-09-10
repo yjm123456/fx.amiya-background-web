@@ -162,10 +162,10 @@
         </Row>
         <Row :gutter="30">
           <Col span="8">
-            <FormItem label="运营人员" prop="operationEmployeeId">
+            <FormItem label="抖音运营人员" prop="tikTokOperationEmployeeId">
               <Select
-                v-model="form.operationEmployeeId"
-                placeholder="请选择运营人员"
+                v-model="form.tikTokOperationEmployeeId"
+                placeholder="请选择抖音运营人员"
                 filterable
               >
                 <Option
@@ -188,17 +188,6 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="知乎今日发布量" prop="zhihuSendNum">
-              <Input
-                v-model="form.zhihuSendNum"
-                placeholder="请输入知乎今日发布量"
-                type="number"
-                number
-                @on-change="zhihuSendNumChange"
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
             <FormItem label="抖音今日发布量" prop="tikTokSendNum">
               <Input
                 v-model="form.tikTokSendNum"
@@ -210,67 +199,13 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="小红书今日发布量" prop="xiaoHongShuSendNum">
+            <FormItem label="抖音今日投流费用" prop="tikTokFlowInvestmentNum">
               <Input
-                v-model="form.xiaoHongShuSendNum"
-                placeholder="请输入小红书今日发布量"
+                v-model="form.tikTokFlowInvestmentNum"
+                placeholder="请输入抖音今日投流费用"
                 type="number"
                 number
-                @on-change="xiaoHongShuSendNumChange"
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="微博今日发布量" prop="sinaWeiBoSendNum">
-              <Input
-                v-model="form.sinaWeiBoSendNum"
-                placeholder="请输入微博今日发布量"
-                type="number"
-                number
-                @on-change="sinaWeiBoSendNumChange"
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="今日发布量" prop="todaySendNum">
-              <Input
-                v-model="form.todaySendNum"
-                placeholder="请输入今日发布量"
-                type="number"
-                number
-                disabled
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="30">
-          <Col span="8">
-            <FormItem label="今日视频号投流量" prop="flowInvestmentNum">
-              <Input
-                v-model="form.flowInvestmentNum"
-                placeholder="请输入今日视频号投流量"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="今日线索量" prop="cluesNum">
-              <Input
-                v-model="form.cluesNum"
-                placeholder="请输入今日线索量"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="今日涨粉量" prop="addFansNum">
-              <Input
-                v-model="form.addFansNum"
-                placeholder="请输入今日涨粉量"
-                type="number"
-                number
+                @on-change="tikTokFlowInvestmentNumChange"
               />
             </FormItem>
           </Col>
@@ -326,15 +261,9 @@ export default {
             align: "center",
           },
           {
-            title: "运营人员",
-            key: "operationEmployeeName",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "知乎今日发布量",
-            key: "zhihuSendNum",
-            minWidth: 140,
+            title: "抖音运营人员",
+            key: "tikTokOperationEmployeeName",
+            minWidth: 170,
             align: "center",
           },
           {
@@ -344,15 +273,9 @@ export default {
             align: "center",
           },
           {
-            title: "小红书今日发布量",
-            key: "xiaoHongShuSendNum",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "微博今日发布量",
-            key: "sinaWeiBoSendNum",
-            minWidth: 140,
+            title: "抖音今日投流费用",
+            key: "tikTokFlowInvestmentNum",
+            minWidth: 170,
             align: "center",
           },
           {
@@ -363,21 +286,9 @@ export default {
           },
 
           {
-            title: "今日视频号投流量",
+            title: "今日运营渠道投流费用",
             key: "flowInvestmentNum",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "今日线索量",
-            key: "cluesNum",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "今日涨粉量",
-            key: "addFansNum",
-            minWidth: 110,
+            minWidth: 180,
             align: "center",
           },
           {
@@ -446,30 +357,35 @@ export default {
                             const {
                               id,
                               liveanchorMonthlyTargetId,
-                              operationEmployeeId,
-                              zhihuSendNum,
+                              tikTokOperationEmployeeId,
                               tikTokSendNum,
-                              xiaoHongShuSendNum,
-                              sinaWeiBoSendNum,
+                              tikTokFlowInvestmentNum,
                               todaySendNum,
                               flowInvestmentNum,
                               recordDate,
-                              addFansNum,
-                              cluesNum,
+
+                              zhihuSendNum,
+                              xiaoHongShuSendNum,
+                              sinaWeiBoSendNum,
+                              videoSendNum,
+
+                              zhihuFlowInvestmentNum,
+                              xiaoHongShuFlowInvestmentNum,
+                              sinaWeiBoFlowInvestmentNum,
+                              videoFlowInvestmentNum
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId==0 ?  null : operationEmployeeId ;
-                            this.form.zhihuSendNum = zhihuSendNum;
+                            this.form.tikTokOperationEmployeeId = tikTokOperationEmployeeId==0 ?  null : tikTokOperationEmployeeId ;
                             this.form.tikTokSendNum = tikTokSendNum;
-                            this.form.xiaoHongShuSendNum = xiaoHongShuSendNum;
-                            this.form.sinaWeiBoSendNum = sinaWeiBoSendNum;
-                            this.form.todaySendNum = todaySendNum;
-                            this.form.flowInvestmentNum = flowInvestmentNum;
-                            this.form.addFansNum = addFansNum;
-                            this.form.cluesNum = cluesNum;
+                            this.form.tikTokFlowInvestmentNum = tikTokFlowInvestmentNum;
+                            this.form.todaySendNum = Number(zhihuSendNum)+Number(xiaoHongShuSendNum)+Number(sinaWeiBoSendNum)+Number(videoSendNum)
+                            this.form.alltodaySendNum = Math.floor(this.form.todaySendNum * 100) / 100;
+                            this.form.flowInvestmentNum = Number(zhihuFlowInvestmentNum)+Number(xiaoHongShuFlowInvestmentNum)
+                            +Number(sinaWeiBoFlowInvestmentNum)+Number(videoFlowInvestmentNum)
+                            this.form.allflowInvestmentNum = Math.floor(this.form.flowInvestmentNum * 100) / 100;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -592,18 +508,14 @@ export default {
         // 主播月目标关联id
         liveanchorMonthlyTargetId: "",
         // 运营人员Id
-        operationEmployeeId: "",
-        // 知乎今日发布量
-        zhihuSendNum:null,
+        tikTokOperationEmployeeId: "",
         // 抖音今日发布量
         tikTokSendNum:null,
-        // 小红书今日发布量
-        xiaoHongShuSendNum:null,
-        // 微博今日发布量
-        sinaWeiBoSendNum:null,
+        // 抖音今日投流费用
+        tikTokFlowInvestmentNum:null,
         // 今日发布量
         todaySendNum: null,
-        // 今日投流量
+        // 今日运营渠道投流费用
         flowInvestmentNum: null,
         // 填报日期
         recordDate: "",
@@ -611,10 +523,8 @@ export default {
         year: this.$moment(new Date()).format("yyyy"),
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
-        // 今日涨粉量
-        addFansNum: null,
-        // 今日线索量
-        cluesNum: null,
+        allflowInvestmentNum:null,
+        alltodaySendNum:null
       },
 
       ruleValidate: {
@@ -624,16 +534,10 @@ export default {
             message: "请选择月目标名称",
           },
         ],
-        operationEmployeeId: [
+        tikTokOperationEmployeeId: [
           {
             required: true,
             message: "请选择运营人员",
-          },
-        ],
-        zhihuSendNum: [
-          {
-            required: true,
-            message: "请输入知乎今日发布量",
           },
         ],
         tikTokSendNum: [
@@ -642,16 +546,10 @@ export default {
             message: "请输入抖音今日发布量",
           },
         ],
-        xiaoHongShuSendNum: [
+        tikTokFlowInvestmentNum: [
           {
             required: true,
-            message: "请输入小红书今日发布量",
-          },
-        ],
-        sinaWeiBoSendNum: [
-          {
-            required: true,
-            message: "请输入微博今日发布量",
+            message: "请输入抖音今日投流费用",
           },
         ],
         todaySendNum: [
@@ -664,12 +562,6 @@ export default {
           {
             required: true,
             message: "请输入今日投流量",
-          },
-        ],
-        addWechatNum: [
-          {
-            required: true,
-            message: "请输入今日加V量",
           },
         ],
         recordDate: [
@@ -690,39 +582,15 @@ export default {
             message: "请选择月",
           },
         ],
-        cluesNum: [
-          {
-            required: true,
-            message: "请输入今日线索量",
-          },
-        ],
-        addFansNum: [
-          {
-            required: true,
-            message: "请输入今日涨粉量",
-          },
-        ],
-        livingRoomFlowInvestmentNum: [
-          {
-            required: true,
-            message: "请输入今日直播间投流",
-          },
-        ],
       },
     };
   },
   methods: {
     tikTokSendNumChange(){
-      this.form.todaySendNum = Number(this.form.zhihuSendNum) + Number(this.form.xiaoHongShuSendNum) +  Number(this.form.sinaWeiBoSendNum)+  Number(this.form.tikTokSendNum)
+      this.form.todaySendNum = Number(this.form.tikTokSendNum) 
     },
-    zhihuSendNumChange(){
-      this.form.todaySendNum = Number(this.form.zhihuSendNum) + Number(this.form.xiaoHongShuSendNum) +  Number(this.form.sinaWeiBoSendNum)+  Number(this.form.tikTokSendNum)
-    },
-    xiaoHongShuSendNumChange(){
-      this.form.todaySendNum = Number(this.form.zhihuSendNum) + Number(this.form.xiaoHongShuSendNum) +  Number(this.form.sinaWeiBoSendNum)+  Number(this.form.tikTokSendNum)
-    },
-    sinaWeiBoSendNumChange(){
-      this.form.todaySendNum = Number(this.form.zhihuSendNum) + Number(this.form.xiaoHongShuSendNum) +  Number(this.form.sinaWeiBoSendNum)+  Number(this.form.tikTokSendNum)
+    tikTokFlowInvestmentNumChange(){
+      this.form.flowInvestmentNum = Number(this.form.tikTokFlowInvestmentNum)
     },
     yearChange() {
       this.getLiveAnchorMonthlyTarget();
@@ -869,36 +737,30 @@ export default {
             const {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              zhihuSendNum,
+              tikTokOperationEmployeeId,
               tikTokSendNum,
-              xiaoHongShuSendNum,
-              sinaWeiBoSendNum,
+              tikTokFlowInvestmentNum,
               todaySendNum,
               flowInvestmentNum,
               recordDate,
-              cluesNum,
-              addFansNum,
+              allflowInvestmentNum,
+              alltodaySendNum
             } = this.form;
             const data = {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId: operationEmployeeId
-                ? operationEmployeeId
+              tikTokOperationEmployeeId: tikTokOperationEmployeeId
+                ? tikTokOperationEmployeeId
                 : 0,
-              zhihuSendNum: zhihuSendNum ? zhihuSendNum : 0,
               tikTokSendNum: tikTokSendNum ? tikTokSendNum : 0,
-              xiaoHongShuSendNum: xiaoHongShuSendNum ? xiaoHongShuSendNum : 0,
-              sinaWeiBoSendNum: sinaWeiBoSendNum ? sinaWeiBoSendNum : 0,
-              todaySendNum: todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum: flowInvestmentNum ? flowInvestmentNum : 0,
+              tikTokFlowInvestmentNum: tikTokFlowInvestmentNum ? tikTokFlowInvestmentNum : 0,
+              todaySendNum:Number(alltodaySendNum)+Number(tikTokSendNum),
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum: cluesNum ? cluesNum : 0,
-              addFansNum: addFansNum ? addFansNum : 0,
+              flowInvestmentNum:Math.floor((allflowInvestmentNum + tikTokFlowInvestmentNum) * 100) /100,
             };
-            api.editBeforeLivingUpdate(data).then((res) => {
+            api.BeforeLivingTikTokUpdate(data).then((res) => {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
@@ -912,34 +774,27 @@ export default {
           } else {
             const {
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              zhihuSendNum,
+              tikTokOperationEmployeeId,
               tikTokSendNum,
-              xiaoHongShuSendNum,
-              sinaWeiBoSendNum,
+              tikTokFlowInvestmentNum,
               todaySendNum,
               flowInvestmentNum	,
               recordDate,
-              cluesNum,
-              addFansNum,
+             
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              zhihuSendNum: zhihuSendNum ? zhihuSendNum : 0,
+              tikTokOperationEmployeeId,
               tikTokSendNum: tikTokSendNum ? tikTokSendNum : 0,
-              xiaoHongShuSendNum: xiaoHongShuSendNum ? xiaoHongShuSendNum : 0,
-              sinaWeiBoSendNum: sinaWeiBoSendNum ? sinaWeiBoSendNum : 0,
-              todaySendNum: todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum	: flowInvestmentNum	 ? flowInvestmentNum	 : 0,
+              tikTokFlowInvestmentNum	: tikTokFlowInvestmentNum	 ? tikTokFlowInvestmentNum	 : 0,
+              todaySendNum,
+              flowInvestmentNum	,
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum: cluesNum ? cluesNum : 0,
-              addFansNum: addFansNum ? addFansNum : 0,
             };
             // 添加
-            api.AddBeforeLivingAdd(data).then((res) => {
+            api.BeforeTikTokLivingAdd(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();

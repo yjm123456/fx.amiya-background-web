@@ -786,13 +786,6 @@ export default {
             minWidth: 160,
             align: "center",
           },
-
-          {
-            title: "运营人员",
-            key: "operationEmployeeName",
-            minWidth: 150,
-            align: "center",
-          },
           {
             title: "直播中人员",
             key: "livingTrackingEmployeeName",
@@ -806,14 +799,80 @@ export default {
             align: "center",
           },
           {
+            title: "知乎运营人员",
+            key: "zhihuOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
             title: "知乎今日发布量",
             key: "zhihuSendNum",
             minWidth: 140,
             align: "center",
           },
           {
+            title: "知乎今日投流费用",
+            key: "zhihuFlowInvestmentNum",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "抖音运营人员",
+            key: "tikTokOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "抖音今日发布量",
+            key: "tikTokSendNum",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "抖音今日投流费",
+            key: "tikTokFlowInvestmentNum",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "小红书运营人员",
+            key: "xiaoHongShuOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
             title: "小红书今日发布量",
             key: "xiaoHongShuSendNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "小红书今日投流费用",
+            key: "xiaoHongShuFlowInvestmentNum",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "视频号运营人员",
+            key: "videoOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "视频号今日发布量",
+            key: "videoSendNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "视频号今日投流费用",
+            key: "videoFlowInvestmentNum",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博运营人员",
+            key: "sinaWeiBoOperationEmployeeName",
             minWidth: 150,
             align: "center",
           },
@@ -824,22 +883,27 @@ export default {
             align: "center",
           },
           {
+            title: "微博今日投流费用",
+            key: "sinaWeiBoFlowInvestmentNum",
+            minWidth: 160,
+            align: "center",
+          },
+          {
             title: "今日发布量",
             key: "todaySendNum",
             minWidth: 110,
             align: "center",
           },
-
           {
-            title: "今日视频号投流量",
+            title: "今日运营渠道投流费用",
             key: "flowInvestmentNum",
-            minWidth: 150,
+            minWidth: 180,
             align: "center",
           },
           {
-            title: "今日直播间投流量",
+            title: "今日直播间投流费用",
             key: "livingRoomFlowInvestmentNum",
-            minWidth: 150,
+            minWidth: 170,
             align: "center",
           },
           {

@@ -162,14 +162,14 @@
         </Row>
         <Row :gutter="30">
           <Col span="8">
-            <FormItem label="直播中人员" prop="livingTrackingEmployeeId">
+            <FormItem label="知乎运营人员" prop="zhihuOperationEmployeeId">
               <Select
-                v-model="form.livingTrackingEmployeeId"
-                placeholder="请选择直播中人员"
+                v-model="form.zhihuOperationEmployeeId"
+                placeholder="请选择知乎运营人员"
                 filterable
               >
                 <Option
-                  v-for="item in employeeList"
+                  v-for="item in employee"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.name }}</Option
@@ -188,81 +188,24 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem 
-              label="今日直播间投流费用" 
-              prop="livingRoomFlowInvestmentNum"
-              :rules="[
-                { required: true, message: '请输入今日直播间投流费用',},
-                { message: '直播间投流只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
-              ]"
-            >
+            <FormItem label="知乎今日发布量" prop="zhihuSendNum">
               <Input
-                v-model="form.livingRoomFlowInvestmentNum"
-                placeholder="请输入今日直播间投流费用"
+                v-model="form.zhihuSendNum"
+                placeholder="请输入知乎今日发布量"
                 type="number"
                 number
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="30">
-          <Col span="8">
-            <FormItem
-              label="今日照片面诊卡下单数量"
-              prop="consultation"
-              :rules="[
-                {
-                  required: title === '修改' ? true : false,
-                  message: '请输入今日照片面诊卡下单数量',
-                },
-              ]"
-              key="今日照片面诊卡下单数量"
-            >
-              <Input
-                v-model="form.consultation"
-                placeholder="请输入今日照片面诊卡下单数量"
-                type="number"
-                number
+                @on-change="zhihuSendNumChange"
               />
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem
-              label="今日视频面诊卡下单数量"
-              prop="consultation2"
-              :rules="[
-                {
-                  required: title === '修改' ? true : false,
-                  message: '请输入视频今日面诊卡下单数量',
-                },
-              ]"
-              key="今日视频面诊卡下单数量"
-            >
+            <FormItem label="知乎今日投流费用" prop="zhihuFlowInvestmentNum">
               <Input
-                v-model="form.consultation2"
-                placeholder="请输入今日视频面诊卡下单数量"
+                v-model="form.zhihuFlowInvestmentNum"
+                placeholder="请输入知乎今日投流费用"
                 type="number"
                 number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="今日带货结算佣金"
-              prop="cargoSettlementCommission"
-              key="今日带货结算佣金"
-              :rules="[
-                {
-                  required: title === '修改' ? true : false,
-                  message: '请输入今日带货结算佣金',
-                },
-              ]"
-            >
-              <Input
-                v-model="form.cargoSettlementCommission"
-                placeholder="请输入今日带货结算佣金"
-                type="number"
-                number
+                @on-change="zhihuFlowInvestmentNumChange"
               />
             </FormItem>
           </Col>
@@ -278,12 +221,10 @@
 <script>
 import * as api from "@/api/operationManage";
 import * as orderApi from "@/api/orderManage";
-import * as employeeManageApi from "@/api/employeeManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
-      employeeList: [],
       // 查询
       query: {
         contentPlatFormId: null,
@@ -320,36 +261,60 @@ export default {
             align: "center",
           },
           {
-            title: "直播中人员",
-            key: "livingTrackingEmployeeName",
-            minWidth: 150,
+            title: "知乎运营人员",
+            key: "zhihuOperationEmployeeName",
+            minWidth: 170,
             align: "center",
           },
           {
-            title: "今日直播间投流费用",
-            key: "livingRoomFlowInvestmentNum",
-            minWidth: 160,
+            title: "知乎今日发布量",
+            key: "zhihuSendNum",
+            minWidth: 140,
             align: "center",
           },
           {
-            title: "今日照片面诊卡下单数量",
-            key: "consultation",
-            minWidth: 190,
+            title: "知乎今日投流费用",
+            key: "zhihuFlowInvestmentNum",
+            minWidth: 170,
             align: "center",
           },
           {
-            title: "今日视频面诊卡下单数量",
-            key: "consultation2",
-            minWidth: 190,
-            align: "center",
-          },
-          {
-            title: "今日带货结算佣金",
-            key: "cargoSettlementCommission",
-            minWidth: 160,
+            title: "今日发布量",
+            key: "todaySendNum",
+            minWidth: 110,
             align: "center",
           },
 
+          {
+            title: "今日运营渠道投流费用",
+            key: "flowInvestmentNum",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "今日加V人数",
+            key: "addWechatNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日派单人数",
+            key: "sendOrderNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日成交人数",
+            key: "dealNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日总业绩",
+            key: "performanceNum",
+            minWidth: 120,
+            align: "center",
+          },
           {
             title: "创建日期",
             key: "createDate",
@@ -392,22 +357,33 @@ export default {
                             const {
                               id,
                               liveanchorMonthlyTargetId,
-                              livingRoomFlowInvestmentNum,
-                              consultation,
-                              consultation2,
-                              cargoSettlementCommission,
-                              livingTrackingEmployeeId,
-                              recordDate
+                              zhihuOperationEmployeeId,
+                              zhihuSendNum,
+                              zhihuFlowInvestmentNum,
+                              todaySendNum,
+                              flowInvestmentNum,
+                              recordDate,
+                              tikTokSendNum,
+                              xiaoHongShuSendNum,
+                              sinaWeiBoSendNum,
+                              videoSendNum,
+
+                              xiaoHongShuFlowInvestmentNum,
+                              sinaWeiBoFlowInvestmentNum,
+                              videoFlowInvestmentNum,
+                              tikTokFlowInvestmentNum
+
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
-                            this.form.consultation = consultation;
-                            this.form.consultation2 = consultation2;
-                            this.form.cargoSettlementCommission = cargoSettlementCommission;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId ? livingTrackingEmployeeId : null;
+                            this.form.zhihuOperationEmployeeId = zhihuOperationEmployeeId==0 ?  null : zhihuOperationEmployeeId ;
+                            this.form.zhihuSendNum = zhihuSendNum;
+                            this.form.zhihuFlowInvestmentNum = zhihuFlowInvestmentNum;
+                            this.form.alltodaySendNum = Number(tikTokSendNum)+Number(xiaoHongShuSendNum)+Number(sinaWeiBoSendNum)+Number(videoSendNum)
+                            this.form.allflowInvestmentNum = Math.floor((Number(tikTokFlowInvestmentNum)+Number(xiaoHongShuFlowInvestmentNum)+Number(sinaWeiBoFlowInvestmentNum)
+                            +Number(videoFlowInvestmentNum) ) * 100) / 100;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -506,8 +482,6 @@ export default {
           name: "十二月",
         },
       ],
-      // 直播中
-      employeeList: [],
       //   下单平台
       contentPalteForms: [],
       // ip账号
@@ -531,42 +505,62 @@ export default {
       form: {
         // 主播月目标关联id
         liveanchorMonthlyTargetId: "",
+        // 运营人员Id
+        zhihuOperationEmployeeId: "",
+        // 知乎今日发布量
+        zhihuSendNum:null,
+        // 知乎今日投流费用
+        zhihuFlowInvestmentNum:null,
+        // 今日发布量
+        todaySendNum: null,
+        // 今日运营渠道投流费用
+        flowInvestmentNum: null,
         // 填报日期
         recordDate: "",
         //年度
         year: this.$moment(new Date()).format("yyyy"),
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
-        // 今日直播间投流费用量
-        livingRoomFlowInvestmentNum: null,
-        // 今日照片面诊卡数量
-        consultation: null,
-        // 今日视频面诊卡数量
-        consultation2: null,
-        // 今日带货结算佣金
-        cargoSettlementCommission: null,
-        // 直播中人员
-        livingTrackingEmployeeId: null,
-        
+        // 合计投流费用
+        allflowInvestmentNum:null,
+        alltodaySendNum:null
       },
 
       ruleValidate: {
-        livingTrackingEmployeeId: [
-          {
-            required: true,
-            message: "请选择直播中人员",
-          },
-        ],
         liveanchorMonthlyTargetId: [
           {
             required: true,
             message: "请选择月目标名称",
           },
         ],
-        operationEmployeeId: [
+        zhihuOperationEmployeeId: [
           {
             required: true,
             message: "请选择运营人员",
+          },
+        ],
+        zhihuSendNum: [
+          {
+            required: true,
+            message: "请输入知乎今日发布量",
+          },
+        ],
+        zhihuFlowInvestmentNum: [
+          {
+            required: true,
+            message: "请输入知乎今日投流费用",
+          },
+        ],
+        todaySendNum: [
+          {
+            required: true,
+            message: "请输入今日发布量",
+          },
+        ],
+        flowInvestmentNum: [
+          {
+            required: true,
+            message: "请输入今日投流量",
           },
         ],
         recordDate: [
@@ -587,16 +581,16 @@ export default {
             message: "请选择月",
           },
         ],
-        livingRoomFlowInvestmentNum: [
-          {
-            required: true,
-            message: "请输入今日直播间投流费用",
-          },
-        ],
       },
     };
   },
   methods: {
+    zhihuSendNumChange(){
+      this.form.todaySendNum = Number(this.form.zhihuSendNum) 
+    },
+    zhihuFlowInvestmentNumChange(){
+      this.form.flowInvestmentNum = Number(this.form.zhihuFlowInvestmentNum)
+    },
     yearChange() {
       this.getLiveAnchorMonthlyTarget();
     },
@@ -733,19 +727,7 @@ export default {
         }
       });
     },
-    // 根据职位获取直播中人员
-    employeeManage() {
-      const data = {
-        positionId: 9,
-      };
-      employeeManageApi.getEmployeeByPositionId(data).then((res) => {
-        if (res.code === 0) {
-          const { employee } = res.data;
-          this.employeeList = employee;
-        }
-      });
-    },
-    // 确认
+
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
@@ -754,32 +736,30 @@ export default {
             const {
               id,
               liveanchorMonthlyTargetId,
+              zhihuOperationEmployeeId,
+              zhihuSendNum,
+              zhihuFlowInvestmentNum,
+              todaySendNum,
+              flowInvestmentNum,
               recordDate,
-              livingRoomFlowInvestmentNum,
-              consultation,
-              consultation2,
-              livingTrackingEmployeeId,
-              cargoSettlementCommission
+              allflowInvestmentNum,
+              alltodaySendNum
             } = this.form;
             const data = {
               id,
               liveanchorMonthlyTargetId,
+              zhihuOperationEmployeeId: zhihuOperationEmployeeId
+                ? zhihuOperationEmployeeId
+                : 0,
+              zhihuSendNum: zhihuSendNum ? zhihuSendNum : 0,
+              zhihuFlowInvestmentNum: zhihuFlowInvestmentNum ? zhihuFlowInvestmentNum : 0,
+              todaySendNum:Number(alltodaySendNum) + Number(zhihuSendNum),
+              flowInvestmentNum:Math.floor((allflowInvestmentNum + zhihuFlowInvestmentNum) * 100) /100,
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum
-                ? livingRoomFlowInvestmentNum
-                : 0,
-              consultation: consultation ? consultation : 0,
-              consultation2: consultation2 ? consultation2 : 0,
-              cargoSettlementCommission: cargoSettlementCommission
-                ? cargoSettlementCommission
-                : 0,
-              livingTrackingEmployeeId: livingTrackingEmployeeId
-                ? livingTrackingEmployeeId
-                : 0,
             };
-            api.livingUpdate(data).then((res) => {
+            api.BeforeLivingZhihuUpdate(data).then((res) => {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
@@ -793,30 +773,27 @@ export default {
           } else {
             const {
               liveanchorMonthlyTargetId,
+              zhihuOperationEmployeeId,
+              zhihuSendNum,
+              zhihuFlowInvestmentNum,
+              todaySendNum,
+              flowInvestmentNum	,
               recordDate,
-              livingRoomFlowInvestmentNum,
-              consultation,
-              consultation2,
-              cargoSettlementCommission,
-              livingTrackingEmployeeId,
+             
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
+              zhihuOperationEmployeeId,
+              zhihuSendNum: zhihuSendNum ? zhihuSendNum : 0,
+              zhihuFlowInvestmentNum	: zhihuFlowInvestmentNum	 ? zhihuFlowInvestmentNum	 : 0,
+              todaySendNum,
+              flowInvestmentNum	,
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum
-                ? livingRoomFlowInvestmentNum
-                : 0,
-              consultation: consultation ? consultation : 0,
-              consultation2: consultation2 ? consultation2 : 0,
-              cargoSettlementCommission: cargoSettlementCommission
-                ? cargoSettlementCommission
-                : 0,
-              livingTrackingEmployeeId,
             };
             // 添加
-            api.livingAdd(data).then((res) => {
+            api.BeforeZhihuLivingAdd(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
@@ -854,7 +831,6 @@ export default {
     this.getCustomerServiceList();
     this.getnetWorkConsultingNameList();
     this.getLiveAnchorMonthlyTarget();
-    this.employeeManage();
   },
 };
 </script>

@@ -168,3 +168,83 @@ export const getLiveAnchorPerformance = (params) => {
         params
     });
 };
+// 添加直播前抖音数据
+export const BeforeTikTokLivingAdd = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeTikTokLivingAdd`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播前抖音数据
+export const BeforeLivingTikTokUpdate = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeLivingTikTokUpdate`,
+        method: "put",
+        data,
+    });
+};
+// 添加直播前知乎数据
+export const BeforeZhihuLivingAdd = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeZhihuLivingAdd`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播前知乎数据
+export const BeforeLivingZhihuUpdate = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeLivingZhihuUpdate`,
+        method: "put",
+        data,
+    });
+};
+// 添加直播前微博数据
+export const BeforeSinaWeiBoLivingAdd = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeSinaWeiBoLivingAdd`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播前微博数据
+export const BeforeLivingSinaWeiBoUpdate = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeLivingSinaWeiBoUpdate`,
+        method: "put",
+        data,
+    });
+};
+// 添加直播前小红书数据
+export const BeforeXiaoHongShuLivingAdd = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeXiaoHongShuLivingAdd`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播前小红书数据
+export const BeforeLivingXiaoHongShuUpdate = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeLivingXiaoHongShuUpdate`,
+        method: "put",
+        data,
+    });
+};
+// 添加直播前微博数据
+export const BeforeVideoLivingAdd = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeVideoLivingAdd`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播前微博数据
+export const BeforeLivingVideoUpdate = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorDailyTarget/BeforeLivingVideoUpdate`,
+        method: "put",
+        data,
+    });
+};

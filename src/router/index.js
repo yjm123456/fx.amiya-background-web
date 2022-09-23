@@ -1179,7 +1179,7 @@ const operationManage = [{
         path: "/liveBroadcast",
         name: "liveBroadcast",
         meta: {
-            title: "直播中",
+            title: "直播中经营数据",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
@@ -1191,13 +1191,25 @@ const operationManage = [{
         path: "/afterLiveBroadcast",
         name: "afterLiveBroadcast",
         meta: {
-            title: "直播后",
+            title: "直播后经营数据",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
         },
         component: () =>
             import ("@/views/operationManage/afterLiveBroadcast/afterLiveBroadcast.vue"),
+    },
+    {
+        path: "/videoClips",
+        name: "videoClips",
+        meta: {
+            title: "拍剪组数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/videoClips/videoClips.vue"),
     },
 ];
 /**

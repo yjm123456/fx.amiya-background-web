@@ -147,3 +147,17 @@ export const getHospitalnameList = () => {
         method: "get"
     });
 };
+// 会员等级
+export const MemberRankInfo = () => {
+    return http({
+        url: "/amiyabg/MemberRankInfo/nameList",
+        method: "get"
+    });
+};
+// 抵用券
+export const ConsumptionVoucher = () => {
+    return http({
+        url: "/amiyabg/api/ConsumptionVoucher/nameList",
+        method: "get"
+    });
+};

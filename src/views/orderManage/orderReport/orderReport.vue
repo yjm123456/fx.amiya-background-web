@@ -132,15 +132,19 @@
                         <i class="iconfont icon-IPyunying zb_icons"></i>       
                         <div class="item_title">主播IP运营报表</div>
                     </div>
+                    <div class="item" @click="beatingAndCuttingGroupModel=true;$refs.beatingAndCuttingGroup.getbeatingAndCuttingGroup()">
+                        <i class="iconfont icon-shipinbofang pj_icons"></i>       
+                        <div class="item_title">拍剪组数据报表</div>
+                    </div>
                     <div class="item" @click="contentDealModal=true;$refs.contentPlatformTransactionReport.ContentPlatFormOrderDealReport();">
                         <i class="iconfont icon-kuapingtaiyingyong cj_icons"></i>       
                         <div class="item_title">内容平台成交报表</div>
                     </div>
                     <div class="item" @click="transactionStatementModal=true;$refs.transactionStatement.transactionStatement();">
-                        <!-- <i class="iconfont icon-kuapingtaiyingyong cj_icons"></i>        -->
-                        <div class="item_img">
+                        <i class="iconfont icon-chengjiaokehu qk_icons"></i>       
+                        <!-- <div class="item_img">
                             <img :src="transactionStatus" alt="" srcset="" class="images">
-                        </div>
+                        </div> -->
                         <div class="item_title">成交情况报表</div>
                     </div>
                 </div>
@@ -208,6 +212,8 @@
         <smallYellowCarRegistrationReport :smallYellowCarRegistrationModel.sync="smallYellowCarRegistrationModel" ref="smallYellowCarRegistrationReport" :contentPalteForms="contentPalteForms" :emergencyLevelListAll="emergencyLevelListAll"></smallYellowCarRegistrationReport>
         <!-- 成交情况报表 -->
         <transactionStatement :transactionStatementModal.sync="transactionStatementModal" ref="transactionStatement" :transactionParams="transactionParams"></transactionStatement>
+        <!-- 拍剪组数据报表 -->
+        <beatingAndCuttingGroup :beatingAndCuttingGroupModel.sync="beatingAndCuttingGroupModel" ref="beatingAndCuttingGroup" :contentPalteForms.sync = "contentPalteForms"></beatingAndCuttingGroup>
     </div>
 </template>
 <script>
@@ -240,6 +246,7 @@ import customerNoDispatchReport from "./components/customerNoDispatchReport/cust
 import customerServiceDispatchOrderReport from "./components/customerServiceDispatchOrderReport/customerServiceDispatchOrderReport.vue"
 import smallYellowCarRegistrationReport from "./components/smallYellowCarRegistrationReport/smallYellowCarRegistrationReport.vue"
 import transactionStatement from "./components/transactionStatement.vue"
+import beatingAndCuttingGroup from "./components/beatingAndCuttingGroup/beatingAndCuttingGroup.vue"
 export default {
     components:{
         orderDispatch,
@@ -263,7 +270,8 @@ export default {
         customerNoDispatchReport,
         customerServiceDispatchOrderReport,
         smallYellowCarRegistrationReport,
-        transactionStatement
+        transactionStatement,
+        beatingAndCuttingGroup
     },
     data(){
         return {
@@ -292,6 +300,7 @@ export default {
             customerServiceDispatchOrderModel:false,
             smallYellowCarRegistrationModel:false,
             transactionStatementModal:false,
+            beatingAndCuttingGroupModel:false,
 
             sevenButtonType:'primary',
             thirtyButtonType:'default',
@@ -519,7 +528,7 @@ list_items{
   align-items: center;
   margin: 20px 30px 0;
 }
-.frist_icons,.second_icons2,.thir_icons,.hos_icons2,.four_icons,.second_icons2_pad,.five_icons,.zb_icons,.cj_icons,.car_icon{
+.frist_icons,.second_icons2,.thir_icons,.hos_icons2,.four_icons,.second_icons2_pad,.five_icons,.zb_icons,.cj_icons,.car_icon,.pj_icons,.qk_icons{
   border-radius: 5px;
   width: 60px;
   height: 60px;
@@ -560,6 +569,12 @@ list_items{
   font-size: 40px;
 
 }
+.qk_icons{
+  color: #D81E06;
+  border: 1px solid #D81E06;
+  font-size: 40px;
+
+}
 .second_icons2_pad{
     color: #13227A;
     border: 1px solid #13227A;
@@ -591,10 +606,16 @@ list_items{
     font-size: 40px;
 }
 .cj_icons{
+    color: #1296db;
+    border: 1px solid #1296db;
+    font-size: 40px;
+    padding-left: 27px;
+    box-sizing: border-box;
+}
+.pj_icons{
     color: #ea8c4e;
     border: 1px solid #ea8c4e;
     font-size: 40px;
-    padding-left: 27px;
     box-sizing: border-box;
 }
 .five_icons{

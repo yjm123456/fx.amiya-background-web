@@ -163,7 +163,6 @@
           </Row>
           <!--  -->
           <Row :gutter="30">
-            
             <Col span="8">
               <FormItem label="缩略图" prop="thumbPicUrl">
                 <upload
@@ -181,16 +180,27 @@
               </FormItem>
             </Col>
             <Col span="8">
-             <Button type="primary" @click="addHispital()" style="margin-left:15%" v-if="form.exchangeType === 1 && form.isMaterial ==false">添加医院</Button>
-            </Col>
-          </Row>
-          
-          <Row :gutter="30">
-            <Col span="8">
               <FormItem label="是否实物" prop="isMaterial">
                 <i-switch v-model="form.isMaterial" />
               </FormItem>
             </Col>
+            
+            
+            <Col span="8">
+             <Button type="primary" @click="addMember()" style="margin-left:15%;margin-bottom:20px" v-if="form.exchangeType != 0">添加会员价格</Button>
+            </Col>
+            <Col span="8">
+             <Button type="primary" @click="addVoucher()" style="margin-left:15%;margin-bottom:20px" v-if="form.exchangeType != 0">添加抵用券</Button>
+            </Col>
+            <Col span="8">
+             <Button type="primary" @click="addHispital()" style="margin-left:15%;margin-bottom:20px" v-if="form.exchangeType == 1 && form.isMaterial ==false">添加医院</Button>
+            </Col>
+            
+          </Row>
+          
+          <Row :gutter="30">
+            
+            
             <Col span="8" v-show="form.isEdit">
               <FormItem label="是否有效" prop="valid">
                 <i-switch v-model="form.valid" />
@@ -239,6 +249,20 @@
         @addHospitalPrice = "addHospitalPrice" 
         ref="hospitalModel"
       />
+      <member 
+        :memberModel.sync="memberModel"
+        :memberRankNames ="memberRankNames"
+        :goodsInfo.sync = "goodsInfo" 
+        @addmemberPrice = "addmemberPrice" 
+        ref="memberModel"
+      />
+      <voucher 
+        :voucherModel.sync="voucherModel"
+        :consumptionVoucherNames ="consumptionVoucherNames"
+        :goodsInfo.sync = "goodsInfo" 
+        @addVoucherPrice = "addVoucherPrice" 
+        ref="voucherModel"
+      />
     </Modal>
 
   </div>
@@ -248,6 +272,8 @@
 import upload from "@/components/upload/upload";
 import editor from "@/components/editor/editor";
 import hospitalModel from "./addhospital.vue"
+import voucher from "./voucher.vue"
+import member from "./member.vue"
 import * as api from "@/api/goodsManage";
 export default {
   props: {
@@ -258,10 +284,20 @@ export default {
   components: {
     editor,
     upload,
-    hospitalModel
+    hospitalModel,
+    member,
+    voucher
   },
   data() {
     return {
+      // 抵用券弹窗
+      voucherModel:false,
+      // 抵用券
+      consumptionVoucherNames:[],
+      //添加会员价格
+      memberModel:false,
+      // 会员等级列表
+      memberRankNames:[],
       // 添加医院弹窗
       addHispitalModel:false,
       // 医院名字列表
@@ -336,7 +372,9 @@ export default {
         // 接受医院和价格
         addHispitalPrice:[],
         // 修改医院和价格
-        updateGoodsHospitalPrice:[]
+        updateGoodsHospitalPrice:[],
+        // 接受会员等级和价格
+        addmemberPrice:[]
       },
 
       ruleValidate: {
@@ -416,6 +454,27 @@ export default {
     };
   },
   methods: {
+    // 添加会员价格
+    addMember(){
+       this.memberModel = true
+      // 会员等级
+      api.MemberRankInfo().then((res) => {
+        if(res.code === 0){
+          this.memberRankNames = res.data.memberRankNames
+        }
+      })
+    },
+     
+    // 添加抵用券
+    addVoucher(){
+      this.voucherModel = true
+      // 抵用券
+      api.ConsumptionVoucher().then((res) => {
+        if(res.code === 0){
+          this.consumptionVoucherNames = res.data.consumptionVoucherNames
+        }
+      })
+    },
     // 交易类型
     checkedExchangeType(data){
       if(!data) return
@@ -426,6 +485,20 @@ export default {
       if(data){
         this.form.addGoodsHospitalPrice = data
         this.form.updateGoodsHospitalPrice = data
+      }
+    },
+    // 接受子组件添加会员等级和价格的参数
+    addmemberPrice(data){
+      if(data){
+        this.form.addGoodsMemberRankPrice = data
+        this.form.updateGoodsMemberRankPrice = data
+      }
+    },
+    // 接受子组件添加抵用券
+    addVoucherPrice(data){
+      if(data){
+        this.form.addGoodsConsumptionVoucher = data
+        this.form.updateGoodsConsumptionVoucher = data
       }
     },
     // 添加医院弹出框
@@ -515,7 +588,11 @@ export default {
             // 交易类型
             exchangeType,
             // 编辑 接受医院和价格
-            updateGoodsHospitalPrice
+            updateGoodsHospitalPrice,
+            // 会员等级和价格
+            addGoodsMemberRankPrice,
+            // 抵用券
+            addGoodsConsumptionVoucher
           } = this.form;
           if (isEdit) {
             // 修改
@@ -547,7 +624,9 @@ export default {
               showSaleCount:parseInt(showSaleCount),
               detailsDescription,
               updateGoodsHospitalPrice:this.form.exchangeType ===1 && this.form.isMaterial == false ? (this.form.goodsHospitalPrice ? this.form.goodsHospitalPrice : []) :[],
-              exchangeType
+              exchangeType,
+              updateGoodsMemberRankPrice: this.form.goodsMemberRankPrices ? this.form.goodsMemberRankPrices : [],
+              updateGoodsConsumptionVoucher: this.form.goodsConsumptionVoucher ? this.form.goodsConsumptionVoucher : []
             };
             if(this.form.exchangeType===1 && this.form.isMaterial == false){
               if(!this.form.goodsHospitalPrice.length){
@@ -595,8 +674,11 @@ export default {
               showSaleCount:parseInt(showSaleCount),
               detailsDescription,
               addGoodsHospitalPrice: addGoodsHospitalPrice ? addGoodsHospitalPrice : [],
-              exchangeType
+              exchangeType,
+              addGoodsMemberRankPrice: addGoodsMemberRankPrice ? addGoodsMemberRankPrice : [],
+              addGoodsConsumptionVoucher: addGoodsConsumptionVoucher ? addGoodsConsumptionVoucher : []
             };
+            console.log(data)
             if(this.form.exchangeType===1 && this.form.isMaterial == false){
               if(!addGoodsHospitalPrice){
                 this.$Message.error('请选择医院')

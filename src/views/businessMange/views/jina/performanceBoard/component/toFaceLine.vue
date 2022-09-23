@@ -1,7 +1,7 @@
 
 <template>
   <div class="wrapper">
-    <div ref="dom" :style="{ width: '100%', height: '410px' }" ></div>
+    <div ref="dom" :style="{ width: '100%', height: '350px' }" ></div>
   </div>
 </template>
 

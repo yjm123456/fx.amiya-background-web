@@ -781,7 +781,23 @@ export const customerunContentPlatFormSendOrderListExport = (params) => {
         responseType: 'blob'
     });
 };
-
+// 拍摄组数据报表
+export const shootingAndClipReport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/shootingAndClipReport`,
+        method: "get",
+        params,
+    });
+};
+// 拍摄组数据报表导出
+export const shootingAndClipReportExport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/shootingAndClipReportExport`,
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};
 // 客服下单平台已派单报表
 export const customerSendOrderReport = (params) => {
     return http({

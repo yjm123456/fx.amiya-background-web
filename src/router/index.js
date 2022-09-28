@@ -254,6 +254,62 @@ const hospitalManage = [{
                 "@/views/hospitalManage/hospitalComplaintFeedback/hospitalComplaintFeedback.vue"
             ),
     },
+    {
+        path: "/institutionalIndicators",
+        name: "institutionalIndicators",
+        meta: {
+            title: "机构运营指标数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/institutionalIndicators/institutionalIndicators.vue"
+            ),
+    },
+    {
+        path: "/hospitalIndicatorsSummary",
+        name: "hospitalIndicatorsSummary",
+        meta: {
+            title: "医院指标数据汇总",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/hospitalIndicatorsSummary/hospitalIndicatorsSummary.vue"
+            ),
+    },
+    {
+        path: "/hospitalIndicators",
+        name: "hospitalIndicators",
+        meta: {
+            title: "医院指标数据填报",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/hospitalIndicators/hospitalIndicators.vue"
+            ),
+    },
+    {
+        path: "/excellentInstitutions",
+        name: "excellentInstitutions",
+        meta: {
+            title: "优秀机构健康指标",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/excellentInstitutions/excellentInstitutions.vue"
+            ),
+    },
 ];
 
 /**
@@ -1336,18 +1392,46 @@ const stockMange = [{
  * 阿美雅
  */
 const businessMange = [{
-    path: "/management",
-    name: "management",
-    meta: {
-        title: "啊美雅业绩看板",
-        keepAlive: false,
-        isTag: true,
-        openName: ['经营看板'],
+        path: "/management",
+        name: "management",
+        meta: {
+            title: "啊美雅业绩看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/ameya.vue"),
     },
-    component: () =>
-        import ("@/views/businessMange/ameya.vue"),
-}];
+    {
+        path: "/mechanismKanBan",
+        name: "mechanismKanBan",
+        meta: {
+            title: "机构看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/mechanismKanBan.vue"),
+    }
+];
 
+/**
+ * 合作医院业绩看板
+ */
+// const cooperativeHospitalKanBan = [{
+//     path: "/mechanismKanBan",
+//     name: "mechanismKanBan",
+//     meta: {
+//         title: "机构看板",
+//         keepAlive: false,
+//         isTag: true,
+//         openName: ['合作医院业绩看板'],
+//     },
+//     component: () =>
+//         import ("@/views/mechanismManage/mechanismKanBan.vue"),
+// }];
 export const dynamicRouter = [{
     path: "/home",
     name: "home",
@@ -1399,7 +1483,7 @@ export const dynamicRouter = [{
         ...financialStatementManage,
         ...ameiyaMange,
         ...stockMange,
-        ...businessMange
+        ...businessMange,
     ],
 }, ];
 

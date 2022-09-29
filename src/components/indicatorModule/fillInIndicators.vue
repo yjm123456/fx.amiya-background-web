@@ -2,7 +2,7 @@
   <div>
     <Modal
       v-model="controlModels"
-      title="填写指标"
+      :title="detailTitle"
       :mask-closable="false"
       fullscreen
       @on-visible-change="handleModalVisibleChange"
@@ -31,6 +31,8 @@
             <div>
             <networkConsultingOperation
                 :active="active"
+                :indicatorsId="indicatorsId"
+                :hospitalId="hospitalId"
             ></networkConsultingOperation>
             </div>
         </TabPane>
@@ -38,6 +40,8 @@
             <div>
             <consultantOperations
                 :active="active"
+                :indicatorsId="indicatorsId"
+                :hospitalId="hospitalId"
             ></consultantOperations>
             </div>
         </TabPane>
@@ -45,6 +49,8 @@
             <div>
             <doctorOperation
                 :active="active"
+                :indicatorsId="indicatorsId"
+                :hospitalId="hospitalId"
             ></doctorOperation>
             </div>
         </TabPane>
@@ -52,6 +58,8 @@
             <div>
             <finishedProductAppearance
                 :active="active"
+                :indicatorsId="indicatorsId"
+                :hospitalId="hospitalId"
             ></finishedProductAppearance>
             </div>
         </TabPane>
@@ -59,13 +67,15 @@
             <div>
             <operationImprovement
                 :active="active"
+                :indicatorsId="indicatorsId"
+                :hospitalId="hospitalId"
             ></operationImprovement>
             </div>
         </TabPane>
         </Tabs>
       
       <div slot="footer">
-        <Button @click="handleCancelClick()">取消</Button>
+        <Button @click="handleCancelClick()">关闭</Button>
       </div>
     </Modal>
    
@@ -85,7 +95,8 @@ export default {
   props: {
     controlModal: Boolean,
     indicatorsId:String,
-    hospitalId:Number
+    hospitalId:Number,
+    detailTitle:String
   },
   components: {
     goodHospitalTarget,
@@ -127,12 +138,16 @@ export default {
     handleModalVisibleChange(value) {
       if (!value) {
         this.handleCancelClick();
-        this.$emit("update:controlModal", false);
+        // this.$emit("update:controlModal", false);
+        // this.$emit("HospitalIndicatorFill");
+        // this.active = 'goodHospitalTarget'
       }
     },
     // 取消
     handleCancelClick(name) {
-      this.$emit("update:controlModal", false);
+        this.$emit("update:controlModal", false);
+        this.$emit("HospitalIndicatorFill");
+        this.active = 'goodHospitalTarget' 
     },
   },
   created(){
@@ -142,6 +157,7 @@ export default {
   watch: {
     controlModal(value) {
       this.controlModels = value;
+      this.indicatorsId = this.indicatorsId
     },
   },
 };

@@ -198,7 +198,7 @@ export default {
           {
             title: "新客成交",
             key: "newCustomerDealNum",
-            width:140,
+            width:100,
             align:'center',
             render: (h, params) => {
               return h("div", [
@@ -233,7 +233,7 @@ export default {
             title: "新客成交率",
             key: "newCustomerDealRate",
             align:'center',
-            wdith:110,
+            wdith:100,
             render: (h, params) => {
               return h("div", [
                     h(
@@ -300,7 +300,7 @@ export default {
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
-            width:110,
+            width:120,
             align:'center',
             
             render: (h, params) => {
@@ -369,7 +369,7 @@ export default {
           {
             title: "老客业绩",
             key: "oldCustomerAchievement",
-            width:110,
+            width:140,
             align:'center',
             render: (h, params) => {
               return h("div", [
@@ -403,7 +403,7 @@ export default {
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
-            width:110,
+            width:120,
             align:'center',
             render: (h, params) => {
               return h("div", [
@@ -436,7 +436,7 @@ export default {
           },
           {
             title: "总业绩",
-            width:140,
+            width:150,
             align:'center',
             key: "totalAchievement",
             // render: (h, params) => {
@@ -601,7 +601,7 @@ export default {
           {
             title: "新客成交",
             key: "newCustomerDealNum",
-            width:140,
+            width:100,
             align:'center',
             render: (h, params) => {
               return h("div", [
@@ -636,7 +636,7 @@ export default {
             title: "新客成交率",
             key: "newCustomerDealRate",
             align:'center',
-            wdith:110,
+            wdith:100,
             render: (h, params) => {
               return h("div", [
                     h(
@@ -703,7 +703,7 @@ export default {
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
-            width:110,
+            width:120,
             align:'center',
             
             render: (h, params) => {
@@ -772,7 +772,7 @@ export default {
           {
             title: "老客业绩",
             key: "oldCustomerAchievement",
-            width:110,
+            width:140,
             align:'center',
             render: (h, params) => {
               return h("div", [
@@ -806,7 +806,7 @@ export default {
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
-            width:110,
+            width:120,
             align:'center',
             render: (h, params) => {
               return h("div", [
@@ -839,16 +839,44 @@ export default {
           },
           {
             title: "总业绩",
-            width:140,
+            width:150,
             align:'center',
             key: "totalAchievement",
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
-                  )
+            // render: (h, params) => {
+            //   return h(
+            //         "div",
+            //         params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
+            //       )
                 
-            },
+            // },
+            render: (h, params) => {
+              return h("div", [
+                    h(
+                    "div",
+                    {
+                        props: {
+                        type: "primary",
+                        size: "small",
+                        },
+                        style: {
+                        
+                        cursor:'pointer'
+                        },
+                        on: {
+                        click: () => {
+                            const {hospitalId} = params.row
+                            // 判断是最后一行总计的时候不弹窗
+                            if(params.index !== (this.query.rowIndex-1)){
+                               this.totalPerformanceModel = true
+                               this.getHospitalTotalPriceBrokenLine(hospitalId)
+                            }
+                        },
+                        },
+                    },
+                    params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
+                ),
+              ])
+             }
           },
           {
             title: "新老客占比",
@@ -900,14 +928,14 @@ export default {
           {
             title: "新客成交",
             key: "newCustomerDealNum",
-            width:140,
+            width:100,
             align:'center',
           },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
             align:'center',
-            wdith:110,
+            wdith:100,
             render: (h, params) => {
               return h(
                     "div",
@@ -932,7 +960,7 @@ export default {
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
-            width:110,
+            width:120,
             align:'center',
             render: (h, params) => {
               return h(
@@ -951,7 +979,7 @@ export default {
           {
             title: "老客业绩",
             key: "oldCustomerAchievement",
-            width:110,
+            width:140,
             align:'center',
             render: (h, params) => {
               return h(
@@ -964,7 +992,7 @@ export default {
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
-            width:110,
+            width:120,
             align:'center',
             render: (h, params) => {
               return h(
@@ -976,7 +1004,7 @@ export default {
           },
           {
             title: "总业绩",
-            width:140,
+            width:150,
             align:'center',
             key: "totalAchievement",
             render: (h, params) => {

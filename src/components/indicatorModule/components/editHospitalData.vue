@@ -90,10 +90,18 @@ export default {
   methods: {
     beforeMonthDataChange(){
         const {lastMonthData,beforeMonthData} = this.form
+        if(lastMonthData == 0 || beforeMonthData == 0){
+          this.form.chainRatio = 0
+          return
+        }
         this.form.chainRatio = (((lastMonthData-beforeMonthData) / beforeMonthData ) * 100).toFixed(2)
     },
     lastMonthDataChange(){
         const {lastMonthData,beforeMonthData} = this.form
+        if(lastMonthData == 0 || beforeMonthData == 0){
+          this.form.chainRatio = 0
+          return
+        }
         this.form.chainRatio = (((lastMonthData-beforeMonthData) / beforeMonthData ) * 100).toFixed(2)
     },
     // 确认

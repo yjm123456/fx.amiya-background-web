@@ -16,7 +16,7 @@
         />
       </div>
       <!-- 填写指标 -->
-      <fillInIndicators :controlModal.sync="controlModal" :indicatorsId="indicatorsId"></fillInIndicators>
+      <fillInIndicators :controlModal.sync="controlModal" :indicatorsId="indicatorsId" :detailTitle="detailTitle" @HospitalIndicatorFill="HospitalIndicatorFill" :hospitalId="hospitalId"></fillInIndicators>
     </Card>
   </div>
 </template>
@@ -75,6 +75,7 @@ export default {
             title: "操作",
             key: "",
             width: 150,
+            align:'center',
             render: (h, params) => {
               return h("div", [
                 h(
@@ -89,9 +90,11 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { indicatorId } = params.row;
+                        const { indicatorId,hospitalId } = params.row;
                         this.controlModal = true;
                         this.indicatorsId=indicatorId
+                        this.hospitalId=hospitalId
+                        this.detailTitle ='填写指标'
                       },
                     },
                   },
@@ -106,7 +109,9 @@ export default {
         totalCount: 0,
       },
       controlModal:false,
-      indicatorsId:''
+      indicatorsId:'',
+      hospitalId:null,
+      detailTitle:''
     };
   },
   methods: {

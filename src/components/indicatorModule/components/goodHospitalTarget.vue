@@ -2,7 +2,18 @@
   <div>
     <Card class="container">
       <div>
-        <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" ></Table>
+        <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="500"></Table>
+        <div>
+        <div class="h1">啊美雅批注</div>
+        <Input
+            v-model="query.remark"
+            placeholder="请输入啊美雅批注"
+            style="width: 100%; "
+            type="textarea"
+            :rows="4"
+            disabled
+        />
+        </div>
       </div>
     </Card>
   </div>
@@ -19,6 +30,7 @@ export default {
     return {
       // 查询
       query: {
+        remark:'',
         keyword: "",
         valid:'true',
         pageNum: 1,
@@ -36,27 +48,45 @@ export default {
           {
             title: "前月新客上门率",
             key: "lastNewCustomerVisitRate",
+            render: (h, params) => {
+              return h("div", params.row.lastNewCustomerVisitRate + "%");
+            },
           },
           {
             title: "上月新客上门率",
             key: "thisNewCustomerVisitRate",
+            render: (h, params) => {
+              return h("div", params.row.thisNewCustomerVisitRate + "%");
+            },
           },
           {
             title: "新客上门率环比",
             key: "newCustomerVisitChainRatio",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerVisitChainRatio + "%");
+            },
           },
           {
             title: "前月新客成交率",
             key: "lastNewCustomerDealRate",
+            render: (h, params) => {
+              return h("div", params.row.lastNewCustomerDealRate + "%");
+            },
           },
           {
             title: "上月新客成交率",
             key: "thisNewCustomerDealRate",
+            render: (h, params) => {
+              return h("div", params.row.thisNewCustomerDealRate + "%");
+            },
           },
 
           {
             title: "新客成交率环比",
             key: "newCustomerDealChainRatio",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerDealChainRatio + "%");
+            },
           },
           {
             title: "前月新客客单价",
@@ -70,6 +100,9 @@ export default {
           {
             title: "新客客单价环比",
             key: "newCustomerUnitPriceChainRatio",
+            render: (h, params) => {
+              return h("div", params.row.newCustomerUnitPriceChainRatio + "%");
+            },
           },
         ],
         data: [],
@@ -79,6 +112,14 @@ export default {
     };
   },
   methods: {
+    byIdRemark(){
+      const data = {
+        indicatorId:this.indicatorsId
+      }
+      api.getAmiyaRemark(data).then((res) => {
+        this.query.remark = res.data.amiyaRemark.amiyaRemark
+      })
+    },
     rowClassName (row, index) {
         if (index === 0) {
             return 'one';
@@ -125,6 +166,7 @@ export default {
       handler(value) {
           if (value === "goodHospitalTarget") {
               this.getGreatHospitalOperationHealth();
+              this.byIdRemark()
           }
       },
       immediate: true,
@@ -153,5 +195,11 @@ export default {
 }
 .ivu-table .three td{
     color: orange;
+}
+.h1{
+  font-size: 20px;
+  color: #000;
+  font-weight: bold;
+  margin: 15px 0;
 }
 </style>

@@ -15,13 +15,18 @@
           @on-change="handlePageChange"
         />
       </div>
+      <!-- 查看详情 -->
+    <fillInIndicators :controlModal.sync="controlModal" :indicatorsId="indicatorsId" :hospitalId="hospitalId" :detailTitle="detailTitle"></fillInIndicators>
     </Card>
   </div>
 </template>
 <script>
 import * as api from "@/api/GreatHospitalOperationHealth";
+import fillInIndicators from "@/components/indicatorModule/fillInIndicators.vue";
+
 export default {
   components:{
+    fillInIndicators
   },
   props:{
     activeName:String
@@ -67,11 +72,46 @@ export default {
               );
             },
           },
+          {
+            title: "操作",
+            key: "",
+            width: 150,
+            align:'center',
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { indicatorId,hospitalId } = params.row;
+                        this.controlModal = true
+                        this.indicatorsId = indicatorId
+                        this.hospitalId = hospitalId
+                        this.detailTitle = '查看详情'
+                      },
+                    },
+                  },
+                  "查看详情"
+                ),
+              ]);
+            },
+          },
         ],
         data: [],
         totalCount: 0,
       },
-      controlModal:false
+      controlModal:false,
+      indicatorsId:'',
+      hospitalId:null,
+      detailTitle:''
     };
   },
   methods: {

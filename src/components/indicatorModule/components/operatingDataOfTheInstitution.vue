@@ -57,8 +57,27 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data"></Table>
+        <Table border :columns="query.columns" :data="query.data" height="390"></Table>
       </div>
+      <div class="h1">机构分析</div>
+        <Input
+            v-model="query.hospitalOperationRemark"
+            placeholder="请输入机构分析"
+            style="width: 100%; "
+            type="textarea"
+            :rows="3"
+            :disabled="employeeType != 'hospitalEmployee'"
+        />
+        <div class="h1">阿美雅批注</div>
+        <Input
+            v-model="query.amiyaOperationRemark"
+            placeholder="请输入阿美雅批注"
+            style="width: 100%; "
+            type="textarea"
+            :rows="3"
+            :disabled="employeeType== 'hospitalEmployee'"
+        />
+        <div class="button"><Button type="primary" @click="submitClick">提交</Button></div>
     </Card>
 
     <Modal
@@ -949,7 +968,7 @@ export default {
         indicatorsId:String,
         indicatorNameList:Array,
         hospitalInfo:Array,
-        hospitalId:Number
+        hospitalId:Number,
     },
     components:{
       editHospitalData
@@ -959,6 +978,8 @@ export default {
        
       // 查询
       query: {
+        amiyaOperationRemark:'',
+        hospitalOperationRemark:'',
         keyword: "",
         indicatorsId:'',
         hospitalId:-1,
@@ -1001,7 +1022,7 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: employeeType !='hospitalEmployee',
+                      disabled: sessionStorage.getItem('employeeType') == 'amiyaEmployee',
                     },
                     style: {
                       marginRight: "5px",
@@ -1240,20 +1261,51 @@ export default {
     
   },
   methods: {
+    getHospitalOperationRemark(){
+      const data = { 
+        indicatorId:this.indicatorsId,
+        hospitalId:this.hospitalId
+      };
+      api.getHospitalOperationRemark(data).then((res) => {
+        if (res.code === 0) {
+          const {hospitalOperationRemark } = res.data;
+          this.query.amiyaOperationRemark = hospitalOperationRemark.amiyaOperationRemark;
+          this.query.hospitalOperationRemark = hospitalOperationRemark.hospitalOperationRemark
+        }
+      });
+    },
+    submitClick(){
+      const {amiyaOperationRemark,hospitalOperationRemark} = this.query
+      const data = {
+        indicatorId:this.indicatorsId,
+        hospitalId:this.hospitalId,
+        hospitalOperationRemark,
+        amiyaOperationRemark
+      }
+      api.addHospitalOperationRemark(data).then((res) => {
+        if (res.code === 0) {
+          this.$Message.success('已提交')
+          this.getHospitalOperationRemark()
+        }
+      });
+    },
     addClick(){
       if(this.query.data.length == 0){
         this.controlModal = true;
         this.title = '添加';
         
       }else{
-        this.$Message.warning('当月指标数据已添加,请勿重复添加')
+        this.$Message.warning('当前指标数据已添加,请勿重复添加')
         return
       }
-      
     },
     // 派单数
     dispatchNum2Change(){
         const {dispatchNum1,dispatchNum2} = this.form
+        if(dispatchNum1 == 0 || dispatchNum2 == 0){
+          this.form.dispatchNum3 = 0
+          return
+        }
         // 前月1 上月2 环比3
         this.form.dispatchNum3 = (((dispatchNum2-dispatchNum1)/dispatchNum1)*100).toFixed(2)
         this.dispatchNumlist1 = [
@@ -1270,6 +1322,10 @@ export default {
     // 新客上门人数
     newVisitNum2Change(){
         const {newVisitNum1,newVisitNum2} = this.form
+        if(newVisitNum1 == 0 || newVisitNum2 == 0){
+          this.form.newVisitNum3 = 0
+          return
+        }
         // 前月1 上月2 环比3
         this.form.newVisitNum3 = (((newVisitNum2-newVisitNum1)/newVisitNum1)*100).toFixed(2)
         this.dispatchNumlist2 = [
@@ -1286,6 +1342,10 @@ export default {
     // 新客上门率
     newVisitNumRate2Change(){
         const {newVisitNumRate1,newVisitNumRate2} = this.form
+        if(newVisitNumRate1 == 0 || newVisitNumRate2 == 0){
+          this.form.newVisitNumRate3 = 0
+          return
+        }
         this.form.newVisitNumRate3 = (((newVisitNumRate2-newVisitNumRate1)/newVisitNumRate1)*100).toFixed(2)
         this.dispatchNumlist3 = [
             {
@@ -1301,6 +1361,10 @@ export default {
     // 新客成交人数
     newDealNum2Change(){
         const {newDealNum1,newDealNum2} = this.form
+        if(newDealNum1 == 0 || newDealNum2 == 0){
+          this.form.newDealNum3 = 0
+          return
+        }
         this.form.newDealNum3 = (((newDealNum2-newDealNum1)/newDealNum1)*100).toFixed(2)
         this.dispatchNumlist4 = [
             {
@@ -1316,6 +1380,10 @@ export default {
     // 新客成交率
     newDealRate2Change(){
         const {newDealRate1,newDealRate2} = this.form
+        if(newDealRate1 == 0 || newDealRate2 == 0){
+          this.form.newDealRate3 = 0
+          return
+        }
         this.form.newDealRate3 = (((newDealRate2-newDealRate1)/newDealRate1)*100).toFixed(2)
         this.dispatchNumlist5 = [
             {
@@ -1331,6 +1399,10 @@ export default {
     // 新客业绩
     newAchievementNum2Change(){
         const {newAchievementNum1,newAchievementNum2} = this.form
+        if(newAchievementNum1 == 0 || newAchievementNum2 == 0){
+          this.form.newAchievementNum3 = 0
+          return
+        }
         this.form.newAchievementNum3 = (((newAchievementNum2-newAchievementNum1)/newAchievementNum1)*100).toFixed(2)
         this.dispatchNumlist6 = [
             {
@@ -1346,6 +1418,10 @@ export default {
     // 新客客单价
     newPrice2Change(){
         const {newPrice1,newPrice2} = this.form
+        if(newPrice1 == 0 || newPrice2 == 0){
+          this.form.newPrice3 = 0
+          return
+        }
         this.form.newPrice3 = (((newPrice2-newPrice1)/newPrice1)*100).toFixed(2)
         this.dispatchNumlist7 = [
             {
@@ -1361,6 +1437,10 @@ export default {
     // 老客上门人数
     oldVisitNum2Change(){
         const {oldVisitNum1,oldVisitNum2} = this.form
+        if(oldVisitNum1 == 0 || oldVisitNum2 == 0){
+          this.form.oldVisitNum3 = 0
+          return
+        }
         this.form.oldVisitNum3 = (((oldVisitNum2-oldVisitNum1)/oldVisitNum1)*100).toFixed(2)
         this.dispatchNumlist8 = [
             {
@@ -1376,6 +1456,10 @@ export default {
     // 老客成交人数
     oldDealNum2Change(){
         const {oldDealNum1,oldDealNum2} = this.form
+        if(oldDealNum1 == 0 || oldDealNum2 == 0){
+          this.form.oldDealNum3 = 0
+          return
+        }
         this.form.oldDealNum3 = (((oldDealNum2-oldDealNum1)/oldDealNum1)*100).toFixed(2)
         this.dispatchNumlist9 = [
             {
@@ -1391,6 +1475,10 @@ export default {
     // 老客成交率
     oldDealRate2Change(){
         const {oldDealRate1,oldDealRate2} = this.form
+        if(oldDealRate1 == 0 || oldDealRate2 == 0){
+          this.form.oldDealRate3 = 0
+          return
+        }
         this.form.oldDealRate3 = (((oldDealRate2-oldDealRate1)/oldDealRate1)*100).toFixed(2)
         this.dispatchNumlist10 = [
             {
@@ -1406,6 +1494,10 @@ export default {
     // 老客业绩
     oldAchievementNum2Change(){
         const {oldAchievementNum1,oldAchievementNum2} = this.form
+        if(oldAchievementNum1 == 0 || oldAchievementNum2 == 0){
+          this.form.oldAchievementNum3 = 0
+          return
+        }
         this.form.oldAchievementNum3 = (((oldAchievementNum2-oldAchievementNum1)/oldAchievementNum1)*100).toFixed(2)
         this.dispatchNumlist11 = [
             {
@@ -1421,6 +1513,10 @@ export default {
     // 老客客单价
     oldPrice2Change(){
         const {oldPrice1,oldPrice2} = this.form
+        if(oldPrice1 == 0 || oldPrice2 == 0){
+          this.form.oldPrice3 = 0
+          return
+        }
         this.form.oldPrice3 = (((oldPrice2-oldPrice1)/oldPrice1)*100).toFixed(2)
         this.dispatchNumlist12 = [
             {
@@ -1436,6 +1532,10 @@ export default {
     // 老客业绩占比
     oldAchievementProportion2Change(){
         const {oldAchievementProportion1,oldAchievementProportion2} = this.form
+        if(oldAchievementProportion1 == 0 || oldAchievementProportion2 == 0){
+          this.form.oldAchievementProportion3 = 0
+          return
+        }
         this.form.oldAchievementProportion3 = (((oldAchievementProportion2-oldAchievementProportion1)/oldAchievementProportion1)*100).toFixed(2)
         this.dispatchNumlist13 = [
             {
@@ -1451,6 +1551,10 @@ export default {
     // 总业绩
     totalPerformance2Change(){
         const {totalPerformance1,totalPerformance2} = this.form
+        if(totalPerformance1 == 0 || totalPerformance2 == 0){
+          this.form.totalPerformance3 = 0
+          return
+        }
         this.form.totalPerformance3 = (((totalPerformance2-totalPerformance1)/totalPerformance1)*100).toFixed(2)
         this.totalPerformance14 = [
             {
@@ -1542,6 +1646,7 @@ export default {
                 this.query.hospitalId = this.hospitalId
               }
                 this.getHospitalOperationData();
+                this.getHospitalOperationRemark()
             }
         },
         immediate: true,
@@ -1566,5 +1671,16 @@ export default {
 }
 .line {
   display: flex;
+}
+.h1{
+  font-size: 20px;
+  color: #000;
+  font-weight: bold;
+  margin: 5px 0;
+}
+.button{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 </style>

@@ -54,8 +54,8 @@
         />
       </div>
     </Card>
-    <!-- 填写指标 -->
-      <fillInIndicators :controlModal.sync="controlModal" :indicatorsId="indicatorsId" :hospitalId="hospitalId"></fillInIndicators>
+    <!-- 查看详情 -->
+    <fillInIndicators :controlModal.sync="controlModal" :indicatorsId="indicatorsId" :hospitalId="hospitalId" :detailTitle="detailTitle"></fillInIndicators>
   </div>
 </template>
 <script>
@@ -70,7 +70,7 @@ export default {
     return {
       // 查询
       query: {
-        indicatorId:'',
+        indicatorId:sessionStorage.getItem('goodindicatorsId'),
         hospitalId:-1,
         pageNum: 1,
         pageSize: 10,
@@ -119,6 +119,7 @@ export default {
             title: "操作",
             key: "",
             width: 150,
+            align:'center',
             render: (h, params) => {
               return h("div", [
                 h(
@@ -137,6 +138,7 @@ export default {
                         this.controlModal = true
                         this.indicatorsId = indicatorId
                         this.hospitalId = hospitalId
+                        this.detailTitle = '查看详情'
                       },
                     },
                   },
@@ -155,7 +157,8 @@ export default {
       indicatorsId:'',
       hospitalId:null,
       hospitalInfo:[{id:-1,name:'全部医院'}],
-      indicatorNameList:[]
+      indicatorNameList:[],
+      detailTitle:''
     };
   },
   methods: {
@@ -165,6 +168,7 @@ export default {
         if (res.code === 0) {
           const {indicatorNameList} = res.data
           this.indicatorNameList = indicatorNameList;
+          sessionStorage.setItem('goodindicatorsId',indicatorNameList[0].id)
           
         }
       });

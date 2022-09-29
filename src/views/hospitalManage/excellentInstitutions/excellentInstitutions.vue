@@ -44,7 +44,18 @@
 
     <Card class="container">
       <div>
-        <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data"></Table>
+        <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="500"></Table>
+      </div>
+      <div>
+        <div class="h1">啊美雅批注</div>
+        <Input
+            v-model="query.remark"
+            placeholder="请输入啊美雅批注"
+            style="width: 100%; "
+            type="textarea"
+            :rows="4"
+        />
+        <div class="button"><Button type="primary" @click="amyButton">提交</Button></div>
       </div>
       <!-- <div class="page_wrap">
         <Page
@@ -144,6 +155,7 @@ export default {
     return {
       // 查询
       query: {
+        remark:'',
         keyword: "",
         indicatorsId:sessionStorage.getItem('indicatorsId'),
         pageNum: 1,
@@ -152,53 +164,65 @@ export default {
           {
             title: "医院",
             key: "hospitalName",
+            width:220
           },
           {
             title: "指标名称",
             key: "indicatorsName",
+            width:200
           },
           {
             title: "前月新客上门率",
             key: "lastNewCustomerVisitRate",
+            width:140
           },
           {
             title: "上月新客上门率",
             key: "thisNewCustomerVisitRate",
+            width:140
           },
           {
             title: "新客上门率环比",
             key: "newCustomerVisitChainRatio",
+            width:140
           },
           {
             title: "前月新客成交率",
             key: "lastNewCustomerDealRate",
+            width:140
           },
           {
             title: "上月新客成交率",
             key: "thisNewCustomerDealRate",
+            width:140
           },
 
           {
             title: "新客成交率环比",
             key: "newCustomerDealChainRatio",
+            width:140
           },
           {
             title: "前月新客客单价",
             key: "lastNewCustomerUnitPrice",
+            width:140
           },
           {
             title: "上月新客客单价",
             key: "thisNewCustomerUnitPrice",
+            width:140
           },
 
           {
             title: "新客客单价环比",
             key: "newCustomerUnitPriceChainRatio",
+            width:140
           },
           {
             title: "操作",
             key: "",
             width: 150,
+            "fixed": "right",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -401,6 +425,27 @@ export default {
     };
   },
   methods: {
+    byIdRemark(){
+      const {indicatorsId} = this.query
+      const data = {
+        indicatorId:indicatorsId,
+      }
+      api.getAmiyaRemark(data).then((res) => {
+        this.query.remark = res.data.amiyaRemark.amiyaRemark
+      })
+    },
+    // 阿美雅批注
+    amyButton(){
+      const {indicatorsId,remark} = this.query
+      const data = {
+        indicatorId:indicatorsId,
+        remark:remark
+      }
+      api.addAmiyaRemark(data).then((res) => {
+        this.$Message.success('已提交')
+        this.byIdRemark()
+      })
+    },
     rowClassName (row, index) {
         if (index === 0) {
             return 'one';
@@ -561,10 +606,11 @@ export default {
     this.getGreatHospitalOperationHealth();
     this.getHospitalInfonameList()
     this.getHospitalOperationIndicatorNameList()
+    this.byIdRemark()
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="less" >
 .header_wrap {
   display: flex;
   align-items: center;
@@ -585,5 +631,16 @@ export default {
 }
 .ivu-table .three td{
     color: orange;
+}
+.h1{
+  font-size: 20px;
+  color: #000;
+  font-weight: bold;
+  margin: 15px 0;
+}
+.button{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 </style>

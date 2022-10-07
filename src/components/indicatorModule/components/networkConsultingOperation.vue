@@ -53,7 +53,7 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="110"
+        :label-width="130"
       >
         <FormItem label="咨询师" prop="consulationName">
           <Input v-model="form.consulationName" placeholder="请输入咨询师"></Input>
@@ -64,7 +64,7 @@
         <FormItem label="新客上门数" prop="newCustomerVisitNum">
           <Input v-model="form.newCustomerVisitNum" placeholder="请输入新客上门数" type="number" number></Input>
         </FormItem>
-        <FormItem label="新客上门率" prop="newCustomerVisitRate">
+        <FormItem label="新客上门率(%)" prop="newCustomerVisitRate">
           <Input v-model="form.newCustomerVisitRate" placeholder="请输入新客上门率" type="number" number></Input>
         </FormItem>
       </Form>

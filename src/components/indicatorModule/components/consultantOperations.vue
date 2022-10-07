@@ -54,7 +54,7 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="110"
+        :label-width="130"
       >
         <Row :gutter="30">
           <Col span="8">
@@ -86,7 +86,7 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="新客上门率" prop="newCustomerVisitRate">
+            <FormItem label="新客上门率(%)" prop="newCustomerVisitRate">
               <Input
                 v-model="form.newCustomerVisitRate"
                 placeholder="请输入新客上门率"
@@ -106,7 +106,7 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="新客成交率" prop="newCustomerDealRate">
+            <FormItem label="新客成交率(%)" prop="newCustomerDealRate">
               <Input
                 v-model="form.newCustomerDealRate"
                 placeholder="请输入新客成交率"
@@ -157,7 +157,7 @@
           </Col>
 
           <Col span="8">
-            <FormItem label="老客成交率" prop="oldCustomerDealRate">
+            <FormItem label="老客成交率(%)" prop="oldCustomerDealRate">
               <Input
                 v-model="form.oldCustomerDealRate"
                 placeholder="请输入老客成交率"
@@ -189,7 +189,7 @@
           </Col>
 
           <Col span="8">
-            <FormItem label="老客业绩占比" prop="oldCustomerAchievementRate">
+            <FormItem label="老客业绩占比(%)" prop="oldCustomerAchievementRate">
               <Input
                 v-model="form.oldCustomerAchievementRate"
                 placeholder="请输入老客业绩占比"

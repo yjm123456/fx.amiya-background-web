@@ -92,7 +92,7 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="110"
+        :label-width="130"
       >
         <div class="title">前月</div>
         <Divider style="margin-top:4px" />
@@ -145,7 +145,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="新客上门率"
+              label="新客上门率(%)"
               prop="newVisitNumRate1"
               :rules="[
                 {
@@ -191,7 +191,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="新客成交率"
+              label="新客成交率(%)"
               prop="newDealRate1"
               :rules="[
                 {
@@ -306,7 +306,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="老客成交率"
+              label="老客成交率(%)"
               prop="oldDealRate1"
               :rules="[
                 {
@@ -375,7 +375,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="老客业绩占比"
+              label="老客业绩占比(%)"
               prop="oldAchievementProportion1"
               :rules="[
                 {
@@ -472,7 +472,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="新客上门率"
+              label="新客上门率(%)"
               prop="newVisitNumRate2"
               :rules="[
                 {
@@ -518,7 +518,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="新客成交率"
+              label="新客成交率(%)"
               prop="newDealRate2"
               :rules="[
                 {
@@ -633,7 +633,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="老客成交率"
+              label="老客成交率(%)"
               prop="oldDealRate2"
               :rules="[
                 {
@@ -702,7 +702,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="老客业绩占比"
+              label="老客业绩占比(%)"
               prop="oldAchievementProportion2"
               :rules="[
                 {
@@ -781,7 +781,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="新客上门率"
+              label="新客上门率(%)"
               prop="newVisitNumRate3"
             >
               <Input
@@ -809,7 +809,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="新客成交率"
+              label="新客成交率(%)"
               prop="newDealRate3"
             >
               <Input
@@ -879,7 +879,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="老客成交率"
+              label="老客成交率(%)"
               prop="oldDealRate3"
             >
               <Input
@@ -921,7 +921,7 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="老客业绩占比"
+              label="老客业绩占比(%)"
               prop="oldAchievementProportion3"
             >
               <Input

@@ -530,6 +530,7 @@ export default {
         if (res.code === 0) {
           const { greatHospitalOperationHealthInfo } = res.data
           this.query.data = greatHospitalOperationHealthInfo;
+          this.byIdRemark()
         }
       });
     },

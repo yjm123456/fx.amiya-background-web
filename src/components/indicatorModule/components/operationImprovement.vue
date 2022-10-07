@@ -5,6 +5,7 @@
             <Card :dis-hover="true">
                 <div>
                     <div class="h1">本机构运营提升计划(机构)</div>
+                    <div class="h3">本机构</div>
                     <div>
                         <div class="h2">提升措施与计划：</div>
                         <Input
@@ -12,7 +13,7 @@
                             placeholder="请输入提升措施与计划"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                         />
                         <div class="h2">分享本机构成功案例分享：</div>
                         <Input
@@ -20,15 +21,16 @@
                             placeholder="请输入分享本机构成功案例分享"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                         />
+                        <div class="h3">对啊美雅</div>
                         <div class="h2">提升建议：</div>
                         <Input
                             v-model="form.improveSuggestionToAmiya"
                             placeholder="请输入提升建议"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                         />
                         <div class="h2">提升需求：</div>
                         <Input
@@ -36,7 +38,7 @@
                             placeholder="请输入提升需求"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                         />
                     </div>
                     <div class="button"><Button type="primary" @click="handleSubmit('form')">提交</Button></div>
@@ -49,40 +51,40 @@
                 <div>
                     <div class="h1">啊美雅批注</div>
                     <div>
-                        <div class="h2">提升措施与计划：</div>
+                        <div class="h2">提升措施与计划批注：</div>
                         <Input
                             v-model="form.amiyaImprovePlanRemark"
                             placeholder="请输入提升措施与计划"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             disabled
                         />
-                        <div class="h2">分享本机构成功案例分享：</div>
+                        <div class="h2">分享本机构成功案例批注：</div>
                         <Input
                             v-model="form.amiyaShareSuccessCase"
                             placeholder="请输入分享本机构成功案例分享"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             disabled
                         />
-                        <div class="h2">提升建议：</div>
+                        <div class="h2">提升建议批注：</div>
                         <Input
                             v-model="form.amiyaImproveSuggestionRemark"
                             placeholder="请输入提升建议"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             disabled
                         />
-                        <div class="h2">提升需求：</div>
+                        <div class="h2">提升需求批注：</div>
                         <Input
                             v-model="form.amiyaImproveDemandRemark"
                             placeholder="请输入提升需求"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             disabled
                         />
                     </div>
@@ -95,38 +97,39 @@
             <Card :dis-hover="true">
                 <div>
                     <div class="h1">啊美雅批注</div>
+                    
                     <div>
-                        <div class="h2">提升措施与计划：</div>
+                        <div class="h2">提升措施与计划批注：</div>
                         <Input
                             v-model="form.amiyaImprovePlanRemark"
                             placeholder="请输入提升措施与计划"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                         />
-                        <div class="h2">分享本机构成功案例分享：</div>
+                        <div class="h2">分享本机构成功案例批注：</div>
                         <Input
                             v-model="form.amiyaShareSuccessCase"
-                            placeholder="请输入分享本机构成功案例分享"
+                            placeholder="请输入分享本机构成功案例批注"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                         />
-                        <div class="h2">提升建议：</div>
+                        <div class="h2">提升建议批注：</div>
                         <Input
                             v-model="form.amiyaImproveSuggestionRemark"
                             placeholder="请输入提升建议"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                         />
-                        <div class="h2">提升需求：</div>
+                        <div class="h2">提升需求批注：</div>
                         <Input
                             v-model="form.amiyaImproveDemandRemark"
                             placeholder="请输入提升需求"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             
                         />
                         <div class="button"><Button type="primary" @click="handleSubmit('form')">提交</Button></div>
@@ -138,6 +141,7 @@
             <Card >
                 <div>
                     <div class="h1">本机构运营提升计划(机构)</div>
+                    <div class="h3">本机构</div>
                     <div>
                         <div class="h2">提升措施与计划：</div>
                         <Input
@@ -145,7 +149,7 @@
                             placeholder="请输入提升措施与计划"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             disabled
                         />
                         <div class="h2">分享本机构成功案例分享：</div>
@@ -154,16 +158,17 @@
                             placeholder="请输入分享本机构成功案例分享"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             disabled
                         />
+                        <div class="h3">对啊美雅</div>
                         <div class="h2">提升建议：</div>
                         <Input
                             v-model="form.improveSuggestionToAmiya"
                             placeholder="请输入提升建议"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             disabled
                         />
                         <div class="h2">提升需求：</div>
@@ -172,7 +177,7 @@
                             placeholder="请输入提升需求"
                             style="width: 100%; "
                             type="textarea"
-                            :rows="4"
+                            :rows="3"
                             disabled
                         />
                     </div>
@@ -307,10 +312,20 @@ export default {
     color: #000;
 }
 .h2{
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    margin: 10px 0;
+}
+.h3{
     font-size: 18px;
     font-weight: bold;
     color: #000;
-    margin: 15px 0;
+    background: #DEC350;
+    margin: 10px 0;
+    width: 40%;
+    padding: 5px;
+    box-sizing: border-box;
 }
 .button{
     display: flex;

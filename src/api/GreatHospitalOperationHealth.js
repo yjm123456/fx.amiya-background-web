@@ -390,3 +390,121 @@ export const getHospitalConsultRemark = (params) => {
         params,
     });
 };
+
+
+// 获取医生运营数据分析列表
+export const getHospitalDoctorOperation = (params) => {
+    return http({
+        url: `/amiyabg/HospitalDoctorOperation/list`,
+        method: "get",
+        params,
+    });
+};
+// 添加医生运营数据分析  post
+export const addHospitalDoctorOperation = (data) => {
+    return http({
+        url: `/amiyabg/HospitalDoctorOperation`,
+        method: "post",
+        data,
+    });
+};
+
+// 根据主题编号回去医生运营数据分析信息
+export const byIdHospitalDoctorOperation = (id) => {
+    return http({
+        url: `/amiyabg/HospitalDoctorOperation/byId/${id}`,
+        method: "get",
+    });
+};
+
+// 修改医生运营数据分析   put
+export const editHospitalDoctorOperation = (data) => {
+    return http({
+        url: `/amiyabg/HospitalDoctorOperation`,
+        method: "put",
+        data,
+    });
+};
+
+// 删除医生运营数据分析   delete
+export const deleteHospitalDoctorOperation = (id) => {
+    return http({
+        url: `/amiyabg/HospitalDoctorOperation/${id}`,
+        method: "delete",
+    });
+};
+// 添加医生运营数据分析批注
+export const addHospitalDoctorRemark = (data) => {
+    return http({
+        url: `/amiyabg/api/Remark/addHospitalDoctorRemark`,
+        method: "post",
+        data,
+    });
+};
+// 获取医生运营数据分析批注
+export const getHospitalDoctorRemark = (params) => {
+    return http({
+        url: `/amiyabg/api/Remark/getHospitalDoctorRemark`,
+        method: "get",
+        params,
+    });
+};
+
+
+// 获取成交品项分析列表
+export const getHospitalDealItemOperation = (params) => {
+    return http({
+        url: `/amiyabg/HospitalDealItemOperation/list`,
+        method: "get",
+        params,
+    });
+};
+// 添加成交品项分析  post
+export const addHospitalDealItemOperation = (data) => {
+    return http({
+        url: `/amiyabg/HospitalDealItemOperation`,
+        method: "post",
+        data,
+    });
+};
+
+// 根据主题编号回去成交品项分析信息
+export const byIdHospitalDealItemOperation = (id) => {
+    return http({
+        url: `/amiyabg/HospitalDealItemOperation/byId/${id}`,
+        method: "get",
+    });
+};
+
+// 修改成交品项分析   put
+export const editHospitalDealItemOperation = (data) => {
+    return http({
+        url: `/amiyabg/HospitalDealItemOperation`,
+        method: "put",
+        data,
+    });
+};
+
+// 删除成交品项分析   delete
+export const deleteHospitalDealItemOperation = (id) => {
+    return http({
+        url: `/amiyabg/HospitalDealItemOperation/${id}`,
+        method: "delete",
+    });
+};
+// 添加成交品项分析批注
+export const addHospitalDealRemark = (data) => {
+    return http({
+        url: `/amiyabg/api/Remark/addHospitalDealRemark`,
+        method: "post",
+        data,
+    });
+};
+// 获取成交品项分析批注
+export const getHospitalDealRemark = (params) => {
+    return http({
+        url: `/amiyabg/api/Remark/getHospitalDealRemark`,
+        method: "get",
+        params,
+    });
+};

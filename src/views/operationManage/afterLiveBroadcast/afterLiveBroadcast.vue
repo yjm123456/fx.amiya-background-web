@@ -648,6 +648,18 @@ export default {
             align: "center",
           },
           {
+            title: "更新时间",
+            key: "afterLivingUpdateDate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.afterLivingUpdateDate ? this.$moment(params.row.afterLivingUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+              );
+            },
+          },
+          {
             title: "今日加V量",
             key: "addWechatNum",
             minWidth: 110,

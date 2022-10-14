@@ -7,11 +7,11 @@
             <TabPane label="医院" name="医院">
               <login-form @on-success-valid="handleSubmit"></login-form>
             </TabPane>
-            <TabPane label="阿美雅" name="阿美雅">
+            <TabPane label="啊美雅" name="啊美雅">
               <login-form @on-success-valid="handleSubmit"></login-form>
             </TabPane>
           </Tabs>
-          <p class="login-tip">阿美技术支持</p>
+          <p class="login-tip">啊美技术支持</p>
         </div>
       </Card>
     </div>
@@ -40,7 +40,7 @@ export default {
       };
       try {
         // 登录
-        if (this.mode === "阿美雅") {
+        if (this.mode === "啊美雅") {
           const res = await amiyaEmployeeLogin(data);
           const {
             amiyaPositionId,

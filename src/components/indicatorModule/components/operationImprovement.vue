@@ -54,7 +54,6 @@
                         <div class="h2">提升措施与计划批注：</div>
                         <Input
                             v-model="form.amiyaImprovePlanRemark"
-                            placeholder="请输入提升措施与计划"
                             style="width: 100%; "
                             type="textarea"
                             :rows="3"
@@ -63,7 +62,6 @@
                         <div class="h2">分享本机构成功案例批注：</div>
                         <Input
                             v-model="form.amiyaShareSuccessCase"
-                            placeholder="请输入分享本机构成功案例分享"
                             style="width: 100%; "
                             type="textarea"
                             :rows="3"
@@ -72,7 +70,6 @@
                         <div class="h2">提升建议批注：</div>
                         <Input
                             v-model="form.amiyaImproveSuggestionRemark"
-                            placeholder="请输入提升建议"
                             style="width: 100%; "
                             type="textarea"
                             :rows="3"
@@ -81,7 +78,6 @@
                         <div class="h2">提升需求批注：</div>
                         <Input
                             v-model="form.amiyaImproveDemandRemark"
-                            placeholder="请输入提升需求"
                             style="width: 100%; "
                             type="textarea"
                             :rows="3"
@@ -146,7 +142,6 @@
                         <div class="h2">提升措施与计划：</div>
                         <Input
                             v-model="form.hospitalImprovePlan"
-                            placeholder="请输入提升措施与计划"
                             style="width: 100%; "
                             type="textarea"
                             :rows="3"
@@ -155,7 +150,6 @@
                         <div class="h2">分享本机构成功案例分享：</div>
                         <Input
                             v-model="form.hospitalShareSuccessCase"
-                            placeholder="请输入分享本机构成功案例分享"
                             style="width: 100%; "
                             type="textarea"
                             :rows="3"
@@ -165,7 +159,6 @@
                         <div class="h2">提升建议：</div>
                         <Input
                             v-model="form.improveSuggestionToAmiya"
-                            placeholder="请输入提升建议"
                             style="width: 100%; "
                             type="textarea"
                             :rows="3"
@@ -174,7 +167,6 @@
                         <div class="h2">提升需求：</div>
                         <Input
                             v-model="form.improveDemandToAmiya"
-                            placeholder="请输入提升需求"
                             style="width: 100%; "
                             type="textarea"
                             :rows="3"

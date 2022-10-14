@@ -267,6 +267,18 @@ export default {
             align: "center",
           },
           {
+            title: "更新时间",
+            key: "tikTokUpdateDate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.tikTokUpdateDate ? this.$moment(params.row.tikTokUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+              );
+            },
+          },
+          {
             title: "抖音今日发布量",
             key: "tikTokSendNum",
             minWidth: 140,

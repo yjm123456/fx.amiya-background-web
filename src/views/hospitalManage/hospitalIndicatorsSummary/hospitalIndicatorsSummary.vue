@@ -20,6 +20,7 @@
             v-model="query.hospitalId"
             placeholder="请选择医院"
             style="width: 200px; margin-left: 10px"
+            filterable
           >
             <Option
               v-for="item in hospitalInfo"
@@ -55,16 +56,20 @@
       </div>
     </Card>
     <!-- 查看详情 -->
-    <fillInIndicators :controlModal.sync="controlModal" :indicatorsId="indicatorsId" :hospitalId="hospitalId" :detailTitle="detailTitle"></fillInIndicators>
+    <fillInIndicators :controlModal.sync="controlModal" :indicatorsId="indicatorsId" :hospitalId="hospitalId"  :detailTitle="detailTitle"></fillInIndicators>
+    <!-- 生成打印数据 -->
+    <generatePrintDatas :generatePrintDataModal.sync="generatePrintDataModal" :indicatorsId="indicatorsId" :hospitalId="hospitalId"></generatePrintDatas>
   </div>
 </template>
 <script>
 import * as api from "@/api/GreatHospitalOperationHealth";
 import * as hospitalManage from "@/api/hospitalManage";
 import fillInIndicators from "@/components/indicatorModule/fillInIndicators.vue";
+import generatePrintDatas from "@/components/generatePrintDatas/generatePrintDatas.vue";
 export default {
     components:{
-        fillInIndicators
+        fillInIndicators,
+        generatePrintDatas
     },
   data() {
     return {
@@ -90,6 +95,7 @@ export default {
           {
             title: "是否提报",
             key: "isSubmit",
+            width:100,
             align: "center",
             render: (h, params) => {
               if (params.row.isSubmit == true) {
@@ -116,12 +122,64 @@ export default {
             },
           },
           {
+            title: "是否批注",
+            key: "isRemark",
+            align: "center",
+            width:100,
+            render: (h, params) => {
+              if (params.row.isRemark == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
             title: "操作",
             key: "",
-            width: 150,
+            width: 220,
             align:'center',
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled: params.row.isRemark ==false || params.row.isSubmit ==false,
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { indicatorId,hospitalId } = params.row;
+                        this.generatePrintDataModal = true
+                        this.indicatorsId = indicatorId
+                        this.hospitalId = hospitalId 
+
+                      },
+                    },
+                  },
+                  "生成打印数据"
+                ),
                 h(
                   "Button",
                   {
@@ -134,10 +192,10 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { indicatorId,hospitalId } = params.row;
+                        const { indicatorId,hospitalId,hospitalName } = params.row;
                         this.controlModal = true
                         this.indicatorsId = indicatorId
-                        this.hospitalId = hospitalId
+                        this.hospitalId = hospitalId 
                         this.detailTitle = '查看详情'
                       },
                     },
@@ -156,9 +214,12 @@ export default {
       controlModal: false,
       indicatorsId:'',
       hospitalId:null,
+      hospitalName:'',
       hospitalInfo:[{id:-1,name:'全部医院'}],
       indicatorNameList:[],
-      detailTitle:''
+      detailTitle:'',
+      generatePrintDataTitle:'',
+      generatePrintDataModal:false
     };
   },
   methods: {

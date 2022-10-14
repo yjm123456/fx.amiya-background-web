@@ -22,16 +22,16 @@
       <div class="h1">机构分析</div>
       <Input
         v-model="query.hospitalConsultRemark"
-        placeholder="请输入机构分析"
+        :placeholder="employeeType != 'hospitalEmployee' ? '' :'请输入机构分析'"
         style="width: 100%; "
         type="textarea"
         :rows="3"
         :disabled="employeeType != 'hospitalEmployee'"
       />
-      <div class="h1">阿美雅批注</div>
+      <div class="h1">啊美雅批注</div>
       <Input
         v-model="query.amiyaConsultRemark"
-        placeholder="请输入阿美雅批注"
+        :placeholder="employeeType == 'hospitalEmployee' ? '' :'请输入啊美雅批注'"
         style="width: 100%; "
         type="textarea"
         :rows="3"

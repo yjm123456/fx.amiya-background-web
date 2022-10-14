@@ -326,9 +326,21 @@ export default {
             align: "center",
           },
           {
+            title: "更新时间",
+            key: "livingUpdateDate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.livingUpdateDate ? this.$moment(params.row.livingUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+              );
+            },
+          },
+          {
             title: "今日直播间投流费用",
             key: "livingRoomFlowInvestmentNum",
-            minWidth: 160,
+            minWidth: 170,
             align: "center",
           },
           {

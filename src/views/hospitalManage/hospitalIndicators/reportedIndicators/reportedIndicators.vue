@@ -73,6 +73,35 @@ export default {
             },
           },
           {
+            title: "是否批注",
+            key: "isRemark",
+            align: "center",
+            width:100,
+            render: (h, params) => {
+              if (params.row.isRemark == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
             title: "操作",
             key: "",
             width: 150,

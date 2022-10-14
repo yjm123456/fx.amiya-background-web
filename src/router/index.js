@@ -310,6 +310,20 @@ const hospitalManage = [{
                 "@/views/hospitalManage/excellentInstitutions/excellentInstitutions.vue"
             ),
     },
+    {
+        path: "/goodHospitalDataFilling",
+        name: "goodHospitalDataFilling",
+        meta: {
+            title: "优秀机构数据填报",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/goodHospitalDataFilling/goodHospitalDataFilling.vue"
+            ),
+    },
 ];
 
 /**

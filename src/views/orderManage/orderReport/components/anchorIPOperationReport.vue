@@ -80,6 +80,18 @@ export default {
                 align:'center'
             },
             {
+                title: "抖音直播前运营数据更新时间",
+                key: "tikTokUpdateDate",
+                minWidth: 250,
+                align:'center',
+                render: (h, params) => {
+                    return h(
+                        "div",
+                        params.row.tikTokUpdateDate ? this.$moment(params.row.tikTokUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+                    );
+                },
+            },
+            {
               title: "今日抖音发布量",
               key: "tikTokSendNum",
               minWidth: 160,
@@ -844,10 +856,34 @@ export default {
                 align: "center",
             },    
             {
+                title: "直播中运营数据更新时间",
+                key: "livingUpdateDate",
+                minWidth: 200,
+                align:'center',
+                render: (h, params) => {
+                    return h(
+                        "div",
+                        params.row.livingUpdateDate ? this.$moment(params.row.livingUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+                    );
+                },
+            },
+            {
                 title: "网咨人员",
                 key: "netWorkConsultingEmployeeName",
                 align:'center',
                 minWidth: 140,
+            },
+            {
+                title: "直播后运营数据更新时间",
+                key: "afterLivingUpdateDate",
+                minWidth: 200,
+                align:'center',
+                render: (h, params) => {
+                    return h(
+                        "div",
+                        params.row.afterLivingUpdateDate ? this.$moment(params.row.afterLivingUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+                    );
+                },
             },
             {
                 title: "创建日期",

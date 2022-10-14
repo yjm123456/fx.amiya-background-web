@@ -88,6 +88,7 @@
             v-model="form.hospitalId"
             placeholder="请选择医院"
             @on-change="hospitalIdChange"
+            filterable
           >
             <Option
               v-for="item in hospitalInfo"

@@ -508,3 +508,47 @@ export const getHospitalDealRemark = (params) => {
         params,
     });
 };
+
+
+
+// 获取优秀机构数据填报列表
+export const getHGreatHospitalDataWrite = (params) => {
+    return http({
+        url: `/amiyabg/GreatHospitalDataWrite/list`,
+        method: "get",
+        params,
+    });
+};
+// 添加优秀机构数据填报  post
+export const addGreatHospitalDataWrite = (data) => {
+    return http({
+        url: `/amiyabg/GreatHospitalDataWrite`,
+        method: "post",
+        data,
+    });
+};
+
+// 根据主题编号回去优秀机构数据填报信息
+export const byIdGreatHospitalDataWrite = (id) => {
+    return http({
+        url: `/amiyabg/GreatHospitalDataWrite/byId/${id}`,
+        method: "get",
+    });
+};
+
+// 修改优秀机构数据填报   put
+export const editGreatHospitalDataWrite = (data) => {
+    return http({
+        url: `/amiyabg/GreatHospitalDataWrite`,
+        method: "put",
+        data,
+    });
+};
+
+// 删除优秀机构数据填报   delete
+export const deleteHGreatHospitalDataWrite = (id) => {
+    return http({
+        url: `/amiyabg/GreatHospitalDataWrite/${id}`,
+        method: "delete",
+    });
+};

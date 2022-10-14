@@ -62,16 +62,16 @@
       <div class="h1">机构分析</div>
         <Input
             v-model="query.hospitalOperationRemark"
-            placeholder="请输入机构分析"
+            :placeholder="employeeType != 'hospitalEmployee' ? '' :'请输入机构分析'"
             style="width: 100%; "
             type="textarea"
             :rows="3"
             :disabled="employeeType != 'hospitalEmployee'"
         />
-        <div class="h1">阿美雅批注</div>
+        <div class="h1">啊美雅批注</div>
         <Input
             v-model="query.amiyaOperationRemark"
-            placeholder="请输入阿美雅批注"
+            :placeholder="employeeType == 'hospitalEmployee' ? '' :'请输入啊美雅批注'"
             style="width: 100%; "
             type="textarea"
             :rows="3"
@@ -1008,6 +1008,11 @@ export default {
           {
             title: "优秀机构",
             key: "greatHospital",
+            renderHeader:(h,params)=>{
+              return h('div',[
+                h('strong',this.hospitalName),
+              ])
+            }
           },
           {
             title: "操作",
@@ -1315,7 +1320,8 @@ export default {
                 operationName:'派单数',
                 lastMonthData:dispatchNum2,
                 beforeMonthData:dispatchNum1,
-                chainRatio: this.form.dispatchNum3
+                chainRatio: this.form.dispatchNum3,
+                sort:1,
             }
         ]
     },
@@ -1335,7 +1341,8 @@ export default {
                 operationName:'新客上门人数',
                 lastMonthData:newVisitNum2,
                 beforeMonthData:newVisitNum1,
-                chainRatio: this.form.newVisitNum3
+                chainRatio: this.form.newVisitNum3,
+                sort:2
             }
         ]
     },
@@ -1354,7 +1361,8 @@ export default {
                 operationName:'新客上门率',
                 lastMonthData:newVisitNumRate2,
                 beforeMonthData:newVisitNumRate1,
-                chainRatio: this.form.newVisitNumRate3
+                chainRatio: this.form.newVisitNumRate3,
+                sort:3
             }
         ]
     },
@@ -1373,7 +1381,8 @@ export default {
                 operationName:'新客成交人数',
                 lastMonthData:newDealNum2,
                 beforeMonthData:newDealNum1,
-                chainRatio: this.form.newDealNum3
+                chainRatio: this.form.newDealNum3,
+                sort:4
             }
         ]
     },
@@ -1392,7 +1401,8 @@ export default {
                 operationName:'新客成交率',
                 lastMonthData:newDealRate2,
                 beforeMonthData:newDealRate1,
-                chainRatio: this.form.newDealRate3
+                chainRatio: this.form.newDealRate3,
+                sort:5
             }
         ]
     },
@@ -1411,7 +1421,8 @@ export default {
                 operationName:'新客业绩',
                 lastMonthData:newAchievementNum2,
                 beforeMonthData:newAchievementNum1,
-                chainRatio: this.form.newAchievementNum3
+                chainRatio: this.form.newAchievementNum3,
+                sort:6
             }
         ]
     },
@@ -1430,7 +1441,8 @@ export default {
                 operationName:'新客客单价',
                 lastMonthData:newPrice2,
                 beforeMonthData:newPrice1,
-                chainRatio: this.form.newPrice3
+                chainRatio: this.form.newPrice3,
+                sort:7
             }
         ]
     },
@@ -1449,7 +1461,8 @@ export default {
                 operationName:'老客上门人数',
                 lastMonthData:oldVisitNum2,
                 beforeMonthData:oldVisitNum1,
-                chainRatio: this.form.oldVisitNum3
+                chainRatio: this.form.oldVisitNum3,
+                sort:8
             }
         ]
     },
@@ -1468,7 +1481,8 @@ export default {
                 operationName:'老客成交人数',
                 lastMonthData:oldDealNum2,
                 beforeMonthData:oldDealNum1,
-                chainRatio: this.form.oldDealNum3
+                chainRatio: this.form.oldDealNum3,
+                sort:9
             }
         ]
     },
@@ -1487,7 +1501,8 @@ export default {
                 operationName:'老客成交率',
                 lastMonthData:oldDealRate2,
                 beforeMonthData:oldDealRate1,
-                chainRatio: this.form.oldDealRate3
+                chainRatio: this.form.oldDealRate3,
+                sort:10
             }
         ]
     },
@@ -1506,7 +1521,8 @@ export default {
                 operationName:'老客业绩',
                 lastMonthData:oldAchievementNum2,
                 beforeMonthData:oldAchievementNum1,
-                chainRatio: this.form.oldAchievementNum3
+                chainRatio: this.form.oldAchievementNum3,
+                sort:11
             }
         ]
     },
@@ -1525,7 +1541,8 @@ export default {
                 operationName:'老客客单价',
                 lastMonthData:oldPrice2,
                 beforeMonthData:oldPrice1,
-                chainRatio: this.form.oldPrice3
+                chainRatio: this.form.oldPrice3,
+                sort:12
             }
         ]
     },
@@ -1544,7 +1561,8 @@ export default {
                 operationName:'老客业绩占比',
                 lastMonthData:oldAchievementProportion2,
                 beforeMonthData:oldAchievementProportion1,
-                chainRatio: this.form.oldAchievementProportion3
+                chainRatio: this.form.oldAchievementProportion3,
+                sort:13
             }
         ]
     },
@@ -1556,14 +1574,15 @@ export default {
           return
         }
         this.form.totalPerformance3 = (((totalPerformance2-totalPerformance1)/totalPerformance1)*100).toFixed(2)
-        this.totalPerformance14 = [
+        this.dispatchNumlist14 = [
             {
                 hospitalId:Number(sessionStorage.getItem('hospitalId')),
                 indicatorsId:this.indicatorsId,
                 operationName:'总业绩',
                 lastMonthData:totalPerformance2,
                 beforeMonthData:totalPerformance1,
-                chainRatio: this.form.totalPerformance3
+                chainRatio: this.form.totalPerformance3,
+                sort:14
             }
         ]
     },
@@ -1575,6 +1594,15 @@ export default {
         if (res.code === 0) {
           const {hospitalOperationDataInfo } = res.data;
           this.query.data = hospitalOperationDataInfo;
+        }
+      });
+    },
+    // 根据ID获取
+    getbyIdHospitalOperationIndicator() {
+      
+      api.byIdHospitalOperationIndicator(this.indicatorsId).then((res) => {
+        if (res.code === 0) {
+          this.hospitalName= res.data.hospitalOperationIndicatorInfo.excellentHospital;
         }
       });
     },
@@ -1648,6 +1676,8 @@ export default {
                 this.getHospitalOperationData();
                 this.getHospitalOperationRemark()
             }
+            this.getbyIdHospitalOperationIndicator()
+
         },
         immediate: true,
     },

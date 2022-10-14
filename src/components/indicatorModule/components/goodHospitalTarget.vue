@@ -7,7 +7,6 @@
         <div class="h1">啊美雅批注</div>
         <Input
             v-model="query.remark"
-            placeholder="请输入啊美雅批注"
             style="width: 100%; "
             type="textarea"
             :rows="4"

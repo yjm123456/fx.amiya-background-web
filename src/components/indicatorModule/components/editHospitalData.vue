@@ -17,7 +17,7 @@
         :label-width="130"
       >
       <FormItem label="运营维度" prop="operationName">
-            <Input v-model="form.operationName" placeholder="请输入运营维度" ></Input>
+            <Input v-model="form.operationName" placeholder="请输入运营维度" disabled></Input>
        </FormItem>
        <FormItem label="前月数据" prop="beforeMonthData">
             <Input v-model="form.beforeMonthData" placeholder="请输入前月数据" type="number" number @on-change="beforeMonthDataChange"></Input>

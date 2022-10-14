@@ -5,7 +5,7 @@
         <div class="left">
           <Input
             v-model="query.keyword"
-            placeholder="请输入阿美雅员工名称"
+            placeholder="请输入啊美雅员工名称"
             style="width: 200px"
             @keyup.enter.native="getAmiyaEmployeeList()"
           />

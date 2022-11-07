@@ -1303,8 +1303,15 @@ export const orderReturnBackOrder = (data) => {
 };
 // 获取内容平台面诊状态
 export const getOrderConsultationTypeList = () => {
+        return http({
+            url: "/amiyabg/ContentPlateFormOrder/getOrderConsultationTypeList",
+            method: "get",
+        })
+    }
+    // 获取内容平台订单类型
+export const getcontentPlateFormOrderTypeList = () => {
     return http({
-        url: "/amiyabg/ContentPlateFormOrder/getOrderConsultationTypeList",
+        url: "/amiyabg/ContentPlateFormOrder/contentPlateFormOrderTypeList",
         method: "get",
-    })
-}
+    });
+};

@@ -843,6 +843,8 @@ export default {
         // 交易类型
         exchangeType:1,
         remark:'',
+        // 下单时间
+        createDate:null
         
 
       },
@@ -931,13 +933,13 @@ export default {
             type: "selection",
             key: "_checked",
             align: "center",
-            minWidth: 80,
+            minWidth: 60,
             
           },
           {
             title: "订单编号",
             key: "id",
-            minWidth: 170,
+            minWidth: 200,
             align:'center',
           },
           {
@@ -1067,7 +1069,25 @@ export default {
           {
             title: "手机号",
             key: "phone",
-            minWidth: 140,
+            minWidth: 120,
+            align:'center',
+          },
+          {
+            title: "预约时间",
+            key: "appointmentDate",
+            minWidth: 120,
+            align:'center',
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.appointmentDate ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") : ''
+              );
+            },
+          },
+          {
+            title: "预约城市",
+            key: "appointmentCity",
+            minWidth: 120,
             align:'center',
           },
           {
@@ -1326,6 +1346,10 @@ export default {
             value: "WAIT_BUYER_PAY",
           },
           {
+            name: "买家已付款",
+            value: "TRADE_BUYER_PAID",
+          },
+          {
             name: "等待卖家发货",
             value: "WAIT_SELLER_SEND_GOODS",
           },
@@ -1349,6 +1373,7 @@ export default {
             name: "买家已签收,货到付款专用",
             value: "TRADE_BUYER_SIGNED",
           },
+          
         ],
         statusCode: null,
         appTypeList:[
@@ -1536,6 +1561,7 @@ export default {
           this.form.quantity= orderData.quantity
           this.form.accountReceivable = orderData.accountReceivable
           this.form.exchangeType= 1
+          this.form.createDate = orderData.createDate
 
         }
       })
@@ -1564,7 +1590,8 @@ export default {
               quantity,
               exchangeType,
               remark,
-              accountReceivable
+              accountReceivable,
+              createDate
             } = this.form
             const data = {
               orderId,
@@ -1583,7 +1610,8 @@ export default {
               quantity,
               exchangeType,
               remark,
-              accountReceivable
+              accountReceivable,
+              createDate:createDate ? this.$moment(createDate).format("YYYY-MM-DD HH:mm:ss") : null
             }
             api.supplement(data).then((res) => {
               if(res.code ===0 ){

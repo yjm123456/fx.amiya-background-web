@@ -841,6 +841,18 @@ const itemQuotedPriceManage = [{
         component: () =>
             import ("@/views/itemQuotedPriceManage/hospitalBrandRegistration/hospitalBrandRegistration.vue"),
     },
+    {
+        path: "/courseRegistration",
+        name: "courseRegistration",
+        meta: {
+            title: "课程报名",
+            keepAlive: false,
+            isTag: true,
+            openName: ['项目报价管理'],
+        },
+        component: () =>
+            import ("@/views/itemQuotedPriceManage/courseRegistration/courseRegistration.vue"),
+    },
 ];
 
 /**

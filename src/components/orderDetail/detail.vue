@@ -21,7 +21,7 @@
       <div class="order_message">
         <div class="message_title"><span class="line"></span>客户信息</div>
         <div class="order_content">
-          <div class="mr_top">
+          <div class="message_con">
             <span class="title_bold">客户昵称：</span>
             <span>{{detailObj.nickName}} </span>
           </div>
@@ -34,6 +34,14 @@
       <div class="order_message">
         <div class="message_title"><span class="line"></span>门店信息</div>
         <div class="order_content">
+          <div class="message_con">
+            <span class="title_bold">预约时间：</span>
+            <span>{{detailObj.appointmentDate ? this.$moment(detailObj.appointmentDate).format("YYYY-MM-DD ") : ''}} </span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">预约城市：</span>
+            <span>{{detailObj.appointmentCity}} </span>
+          </div>
           <div class="mr_top">
             <span class="title_bold">预约门店：</span>
             <span>{{detailObj.appointmentHospital}} </span>

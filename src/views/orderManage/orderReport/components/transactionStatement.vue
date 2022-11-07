@@ -320,6 +320,10 @@
                 <div style="color:red">{{ deal4 }}</div>
               </div>
               <div class="num">
+                退款业绩：
+                <div style="color:red">{{ deal5 }}</div>
+              </div>
+              <div class="num">
                 新客业绩：
                 <div style="color:red">{{ newCustomer }}</div>
               </div>
@@ -387,6 +391,8 @@ export default {
       deal3: 0,
       // 其他业绩
       deal4: 0,
+      // 退款业绩
+      deal5: 0,
       // 新客业绩
       newCustomer: 0,
       // 总业绩
@@ -1005,6 +1011,7 @@ export default {
           let deal2 = 0;
           let deal3 = 0;
           let deal4 = 0;
+          let deal5 = 0;
           let dealNum1 = []
           let dealNum2 = []
           let dealNum3 = []
@@ -1038,6 +1045,8 @@ export default {
               deal3 += Number(item.price);
             } else if (item.toHospitalTypeText == "其他") {
               deal4 += Number(item.price);
+            }else if (item.toHospitalTypeText == "退款") {
+              deal5 += Number(item.price);
             }
             // 上门
             if (item.toHospitalTypeText == "初诊" && item.isToHospital == '是' ) {
@@ -1074,6 +1083,7 @@ export default {
           this.deal2 = Math.floor(deal2 * 100) / 100;
           this.deal3 = Math.floor(deal3 * 100) / 100;
           this.deal4 = Math.floor(deal4 * 100) / 100;
+          this.deal5 = Math.floor(deal5 * 100) / 100;
           this.newCustomer = Math.floor((deal1+deal2) * 100) / 100;
           // this.totalPerformance = Math.floor((deal1+deal2+deal3) * 100) / 100;
           this.paymentCollection = Math.floor(paymentCollection * 100) / 100;

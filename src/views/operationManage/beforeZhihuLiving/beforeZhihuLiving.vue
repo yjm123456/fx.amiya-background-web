@@ -79,7 +79,7 @@
           >
         </div>
         <div class="right">
-          <Button type="primary" @click="controlModal = true">添加</Button>
+          <Button type="primary" @click="controlModal = true;getLiveAnchorMonthlyTarget()">添加</Button>
         </div>
       </div>
     </Card>
@@ -374,6 +374,7 @@ export default {
                               tikTokFlowInvestmentNum
 
                             } = res.data.liveAnchorDailyTargetInfo;
+                            this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
@@ -657,6 +658,13 @@ export default {
       api.getLiveAnchorMonthlyTarget(data).then((res) => {
         if (res.code === 0) {
           const { liveAnchorMonthlyTarget } = res.data;
+          if(liveAnchorMonthlyTarget.length == 0 || !liveAnchorMonthlyTarget){
+            this.$Message.warning({
+              content: "主播IP月目标暂未生成，无法填写数据，请联系管理员进行月目标数据完善！",
+              duration: 3,
+            });
+            return
+          }
           this.liveAnchorMonthlyTarget = liveAnchorMonthlyTarget;
         }
       });
@@ -830,7 +838,7 @@ export default {
     this.getLiveAnchorDayList();
     this.getCustomerServiceList();
     this.getnetWorkConsultingNameList();
-    this.getLiveAnchorMonthlyTarget();
+    // this.getLiveAnchorMonthlyTarget();
   },
 };
 </script>

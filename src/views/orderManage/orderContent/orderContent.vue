@@ -396,10 +396,10 @@
             <FormItem label="订单类型" prop="orderType">
               <Select v-model="form.orderType" placeholder="请选择订单类型">
                 <Option
-                  v-for="item in statusCodeArr"
+                  v-for="item in statusCodeArr2"
                   :value="item.orderType"
                   :key="item.orderType"
-                  >{{ item.name }}</Option
+                  >{{ item.orderTypeText }}</Option
                 >
               </Select>
             </FormItem>
@@ -410,14 +410,14 @@
               prop="depositAmount"
               ref="depositAmount"
               :rules="{
-                required: form.orderType !== 1,
+                required: form.orderType == 2,
                 message: '请输入定金金额',
               }"
             >
               <Input
                 v-model="form.depositAmount"
                 type="number"
-                :disabled="form.orderType === 1"
+                :disabled="form.orderType == 1 || form.orderType == 3"
               ></Input>
             </FormItem>
           </Col>
@@ -812,6 +812,7 @@ export default {
           name: "定金",
         },
       ],
+      statusCodeArr2:[],
       // 获取商品名称和id
       AmiyaHospitalDepartmentList: [],
       //   下单平台
@@ -944,12 +945,12 @@ export default {
             message: "请选择需求",
           },
         ],
-        depositAmount: [
-          {
-            required: true,
-            message: "请输入付款金额",
-          },
-        ],
+        // depositAmount: [
+        //   {
+        //     required: true,
+        //     message: "请输入付款金额",
+        //   },
+        // ],
         orderType: [
           {
             required: true,
@@ -1420,6 +1421,14 @@ export default {
     };
   },
   methods: {
+    //  获取内容平台订单类型
+    getcontentPlateFormOrderTypeList() {
+      api.getcontentPlateFormOrderTypeList().then((res) => {
+        if (res.code === 0) {
+          this.statusCodeArr2 = res.data.orderTypes;
+        }
+      });
+    },
     //   获取 面诊状态列表（下拉框）
     getOrderConsultationTypeList() {
       api.getOrderConsultationTypeList().then((res) => {
@@ -2083,6 +2092,7 @@ export default {
     this.getconsultationNameList();
     this.getHospitalInfonameList();
     this.getOrderConsultationTypeList();
+    this.getcontentPlateFormOrderTypeList()
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")
@@ -2091,7 +2101,7 @@ export default {
   },
   watch: {
     "form.orderType"(value) {
-      if (value === 1) {
+      if (value == 1 || value == 3) {
         this.form.depositAmount = "";
         this.$refs.depositAmount.validateMessage = "";
         this.$refs.depositAmount.validateState = "";

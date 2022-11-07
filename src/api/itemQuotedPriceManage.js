@@ -271,3 +271,13 @@ export const exportHospitalBrandApply = (params) => {
         responseType: 'blob'
     });
 };
+/**
+ * 课程报名
+ */
+export const AmiyaLessonApply = (params) => {
+    return http({
+        url: `/amiyabg/AmiyaLessonApply/infoList`,
+        method: "get",
+        params,
+    });
+};

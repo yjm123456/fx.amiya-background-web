@@ -12,6 +12,7 @@
           v-model="query.appType"
           style="width: 200px;margin-left: 10px"
           placeholder="请选择下单平台"
+          filterable
         >
           <Option
             v-for="item in query.orderAppTypes"
@@ -25,6 +26,7 @@
           style="width: 200px;margin-left: 10px"
           v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
           placeholder="请选择客服"
+          filterable
         >
           <Option
             v-for="item in employee"

@@ -376,6 +376,10 @@ export default {
             status: "WAIT_BUYER_PAY",
           },
           {
+            statusText: "买家已付款",
+            status: "TRADE_BUYER_PAID",
+          },
+          {
             statusText: "等待卖家发货",
             status: "WAIT_SELLER_SEND_GOODS",
           },

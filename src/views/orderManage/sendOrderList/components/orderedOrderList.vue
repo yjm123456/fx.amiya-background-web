@@ -26,6 +26,7 @@
           v-model="query.appType"
           style="width: 180px;margin-left: 10px"
           placeholder="请选择下单平台"
+          filterable
         >
           <Option
             v-for="item in query.orderAppTypes"
@@ -39,6 +40,7 @@
           style="width: 180px;margin-left: 10px"
           v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
           placeholder="请选择客服"
+          filterable
         >
           <Option
             v-for="item in employee"
@@ -51,6 +53,7 @@
           v-model="query.statusCode"
           style="width: 180px;margin-left: 10px"
           placeholder="请选择订单状态"
+          filterable
         >
           <Option
             v-for="item in query.statusCodeList"
@@ -512,6 +515,10 @@ export default {
           {
             name:"全部状态",
             value:"all"
+          },
+          {
+            name: "买家已付款",
+            value: "TRADE_BUYER_PAID",
           },
           {
             name:"等待卖家发货",

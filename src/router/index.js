@@ -649,6 +649,21 @@ const orderManage = [{
                 "@/views/orderManage/shakeShopOrderList/shakeShopOrderList.vue"
             ),
     },
+    {
+        path: "/orderRefund",
+        name: "orderRefund",
+        meta: {
+            title: "订单退款",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/orderRefund/orderRefund.vue"
+            ),
+    },
+
 ];
 
 /**
@@ -1168,6 +1183,18 @@ const beautifulManage = [{
         },
         component: () =>
             import ("@/views/beautifulManage/beautyDiaryManage/beautyDiaryManage.vue"),
+    },
+    {
+        path: "/articleManagement",
+        name: "articleManagement",
+        meta: {
+            title: "文章管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['美丽日记'],
+        },
+        component: () =>
+            import ("@/views/beautifulManage/articleManagement/articleManagement.vue"),
     },
 ];
 /**

@@ -2,7 +2,7 @@
   <div>
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" height="390"></Table>
+        <Table border :columns="query.columns" :data="query.data" height="600"></Table>
       </div>
       <div class="h1">机构分析</div>
         <Input
@@ -43,18 +43,22 @@ export default {
           {
             title: "咨询师",
             key: "consulationName",
+            width:'370px',
           },
           {
             title: "派单数",
             key: "sendOrderNum",
+            width:'380px',
           },
           {
             title: "新客上门数",
             key: "newCustomerVisitNum",
+            width:'390px',
           },
           {
             title: "新客上门率",
             key: "newCustomerVisitRate",
+            width:'390px',
             render: (h, params) => {
               return h("div", params.row.newCustomerVisitRate + "%");
             },

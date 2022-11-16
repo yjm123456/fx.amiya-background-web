@@ -1,19 +1,33 @@
 <template>
   <div>
-      <div class="header_wrap">
-        <div class="left"></div>
-        <div class="right">
-          <Button
-            type="primary"
-            @click="
-              controlModal = true;
-              title = '添加';
-            "
-            v-if="employeeType=='hospitalEmployee'"
-            >添加</Button
-          >
-        </div>
+    <div class="header_wrap">
+      <div class="left"></div>
+      <div class="right">
+        <Button
+          type="primary"
+          @click="
+            controlModal = true;
+            title = '添加';
+          "
+          v-if="employeeType == 'hospitalEmployee'"
+          >添加</Button
+        >
+        <Button
+          type="primary"
+          @click="exportHospitalConsulationOperationDataClick"
+          v-if="employeeType == 'hospitalEmployee'"
+          style="margin-left: 10px"
+          >导出模板</Button
+        >
+        <Button
+          type="primary"
+          style="margin-left: 10px"
+          @click="importControlModal = true"
+          v-if="employeeType == 'hospitalEmployee'"
+          >导入</Button
+        >
       </div>
+    </div>
 
     <Card class="container">
       <div>
@@ -22,7 +36,9 @@
       <div class="h1">机构分析</div>
       <Input
         v-model="query.hospitalConsultRemark"
-        :placeholder="employeeType != 'hospitalEmployee' ? '' :'请输入机构分析'"
+        :placeholder="
+          employeeType != 'hospitalEmployee' ? '' : '请输入机构分析'
+        "
         style="width: 100%; "
         type="textarea"
         :rows="3"
@@ -31,7 +47,9 @@
       <div class="h1">啊美雅批注</div>
       <Input
         v-model="query.amiyaConsultRemark"
-        :placeholder="employeeType == 'hospitalEmployee' ? '' :'请输入啊美雅批注'"
+        :placeholder="
+          employeeType == 'hospitalEmployee' ? '' : '请输入啊美雅批注'
+        "
         style="width: 100%; "
         type="textarea"
         :rows="3"
@@ -215,18 +233,33 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 导入 -->
+    <importFile
+      :importControlModal.sync="importControlModal"
+      @handleRefreshCustomerTrackList="getHospitalInfo()"
+      title="本机构咨询师运营数据分析"
+    ></importFile>
   </div>
 </template>
 <script>
 import * as api from "@/api/GreatHospitalOperationHealth";
+import { download } from "@/utils/util";
+import importFile from "./import/importModel.vue";
+
+
 export default {
   props: {
     active: String,
     hospitalId: Number,
     indicatorsId: String,
   },
+  components:{
+    importFile
+  },
   data() {
     return {
+      // 导入 model
+      importControlModal: false,
       // 查询
       query: {
         amiyaConsultRemark: "",
@@ -238,22 +271,22 @@ export default {
           {
             title: "咨询师",
             key: "consulationName",
-            width:150
+            width: 150,
           },
           {
             title: "派单数",
             key: "sendOrderNum",
-            width:100
+            width: 100,
           },
           {
             title: "新客上门数",
             key: "newCustomerVisitNum",
-            width:120
+            width: 120,
           },
           {
             title: "新客上门率",
             key: "newCustomerVisitRate",
-            width:140,
+            width: 140,
             render: (h, params) => {
               return h("div", params.row.newCustomerVisitRate + "%");
             },
@@ -261,12 +294,12 @@ export default {
           {
             title: "新客成交数",
             key: "newCustomerDealNum",
-            width:120
+            width: 120,
           },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
-            width:120,
+            width: 120,
             render: (h, params) => {
               return h("div", params.row.newCustomerDealRate + "%");
             },
@@ -274,27 +307,27 @@ export default {
           {
             title: "新客业绩",
             key: "newCustomerDealPrice",
-            width:140
+            width: 140,
           },
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
-            width:120
+            width: 120,
           },
           {
             title: "老客上门数",
             key: "oldCustomerVisitNum",
-            width:120
+            width: 120,
           },
           {
             title: "老客成交数",
             key: "oldCustomerDealNum",
-            width:120
+            width: 120,
           },
           {
             title: "老客成交率",
             key: "oldCustomerDealRate",
-            width:140,
+            width: 140,
             render: (h, params) => {
               return h("div", params.row.oldCustomerDealRate + "%");
             },
@@ -303,17 +336,17 @@ export default {
           {
             title: "老客业绩",
             key: "oldCustomerDealPrice",
-            width:150
+            width: 150,
           },
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
-            width:120
+            width: 120,
           },
           {
             title: "老客业绩占比",
             key: "oldCustomerAchievementRate",
-            width:150,
+            width: 150,
             render: (h, params) => {
               return h("div", params.row.oldCustomerAchievementRate + "%");
             },
@@ -322,12 +355,12 @@ export default {
           {
             title: "总业绩",
             key: "lasttMonthTotalAchievement",
-            width:150
+            width: 150,
           },
           {
             title: "操作",
             key: "",
-            fixed:'right',
+            fixed: "right",
             width: 150,
             align: "center",
             render: (h, params) => {
@@ -338,7 +371,9 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: sessionStorage.getItem('employeeType') == 'amiyaEmployee',
+                      disabled:
+                        sessionStorage.getItem("employeeType") ==
+                        "amiyaEmployee",
                     },
                     style: {
                       marginRight: "5px",
@@ -370,7 +405,7 @@ export default {
                                 oldCustomerDealPrice,
                                 oldCustomerUnitPrice,
                                 oldCustomerAchievementRate,
-                                lasttMonthTotalAchievement
+                                lasttMonthTotalAchievement,
                               } = res.data.hospitalOperationDataInfo;
                               this.isEdit = true;
                               this.form.indicatorId = indicatorId;
@@ -405,7 +440,9 @@ export default {
                     props: {
                       type: "error",
                       size: "small",
-                      disabled: sessionStorage.getItem('employeeType') == 'amiyaEmployee',
+                      disabled:
+                        sessionStorage.getItem("employeeType") ==
+                        "amiyaEmployee",
                     },
                     on: {
                       click: () => {
@@ -580,11 +617,16 @@ export default {
             message: "请输入总业绩",
           },
         ],
-
       },
     };
   },
   methods: {
+    exportHospitalConsulationOperationDataClick() {
+      api.exportHospitalConsulationOperationData().then((res) => {
+        let name = "机构咨询师运营数据分析模板";
+        download(res, name);
+      });
+    },
     getHospitalConsultRemark() {
       const data = {
         indicatorId: this.indicatorsId,
@@ -653,7 +695,7 @@ export default {
               oldCustomerDealPrice,
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
-              lasttMonthTotalAchievement
+              lasttMonthTotalAchievement,
             } = this.form;
             const data = {
               consulationName,
@@ -673,7 +715,7 @@ export default {
               oldCustomerDealPrice,
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
-              lasttMonthTotalAchievement
+              lasttMonthTotalAchievement,
             };
             // 修改
             api.editHospitalConsulationOperationData(data).then((res) => {
@@ -705,7 +747,7 @@ export default {
               oldCustomerDealPrice,
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
-              lasttMonthTotalAchievement
+              lasttMonthTotalAchievement,
             } = this.form;
             const data = {
               consulationName,
@@ -724,7 +766,7 @@ export default {
               oldCustomerDealPrice,
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
-              lasttMonthTotalAchievement
+              lasttMonthTotalAchievement,
             };
             // 添加
             api.addHospitalConsulationOperationData(data).then((res) => {

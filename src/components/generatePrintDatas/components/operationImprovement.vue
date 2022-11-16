@@ -5,7 +5,6 @@
             <Card :dis-hover="true">
                 <div>
                     <div class="h1">啊美雅批注</div>
-                    
                     <div>
                         <div class="h2">提升措施与计划批注：</div>
                         <Input

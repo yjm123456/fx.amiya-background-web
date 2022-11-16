@@ -2,7 +2,7 @@
   <div>
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" height="390"></Table>
+        <Table border :columns="query.columns" :data="query.data" height="600"></Table>
       </div>
       <div class="h1">机构分析</div>
         <Input
@@ -44,18 +44,22 @@ export default {
           {
             title: "成交品项",
             key: "dealItemName",
+            width:'380px',
           },
           {
             title: "成交数量",
             key: "dealCount",
+            width:'380px',
           },
           {
             title: "成交金额",
             key: "dealPrice",
+            width:'380px',
           },
           {
             title: "业绩占比",
             key: "performanceRatio",
+            width:'390px',
             render: (h, params) => {
               return h("div", params.row.performanceRatio + "%");
             },

@@ -840,6 +840,24 @@ export const customerSendContentPlatFormOrderExport = (params) => {
         responseType: 'blob'
     });
 };
+
+// 客户订单应收款统计 买家已付款订单报表
+export const customerPaidOrderReceivableReport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/customerPaidOrderReceivableReport`,
+        method: "get",
+        params,
+    });
+};
+// 买家已付款订单报表导出
+export const customerPaidOrderReceivableExport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/customerPaidOrderReceivableExport`,
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};
 // 成交量折线图
 export const OrderDealLine = (params) => {
     return http({

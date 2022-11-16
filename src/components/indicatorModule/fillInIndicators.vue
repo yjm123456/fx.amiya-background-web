@@ -7,6 +7,7 @@
       fullscreen
       @on-visible-change="handleModalVisibleChange"
     >
+      <div class="title" v-if="employeeType == 'hospitalEmployee'">指标编号：<p  class="p">{{indicatorsId}}</p>医院编号： <p class="p">{{hospitalId}}</p></div>
       <Tabs ref="tabss" v-model="active" v-if="controlModels==true">
         <TabPane label="优秀机构运营健康指标" name="goodHospitalTarget">
             <div>
@@ -113,6 +114,8 @@ export default {
       active:'goodHospitalTarget',
       hospitalInfo:[{id:-1,name:'全部医院'}],
       indicatorNameList:[],
+      detailTitles:'',
+      employeeType:sessionStorage.getItem('employeeType')
     };
   },
 
@@ -163,5 +166,11 @@ export default {
 };
 </script>
 <style scoped>
-
+.p{
+  color: red;
+  margin-right: 20px;
+}
+.title{
+  display: flex;
+}
 </style>

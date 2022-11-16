@@ -2,7 +2,7 @@
   <div>
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" height="390"></Table>
+        <Table border :columns="query.columns" :data="query.data" height="600"></Table>
       </div>
       <div class="h1">机构分析</div>
       <Input
@@ -43,22 +43,22 @@ export default {
           {
             title: "医生",
             key: "doctorName",
-            width:150
+            width:'90px',
           },
           {
             title: "新客接诊人数",
             key: "newCustomerAcceptNum",
-            width:140
+            width:'130px',
           },
           {
             title: "新客成交人数",
             key: "newCustomerDealNum",
-            width:140
+            width:'130px',
           },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
-            width:140,
+            width:'110px',
             render: (h, params) => {
               return h("div", params.row.newCustomerDealRate + "%");
             },
@@ -66,17 +66,17 @@ export default {
           {
             title: "新客业绩",
             key: "newCustomerAchievement",
-            width:120
+            width:'100px',
           },
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
-            width:130
+            width:'110px',
           },
           {
             title: "新客业绩占比",
             key: "newCustomerAchievementRate",
-            width:140,
+            width:'130px',
             render: (h, params) => {
               return h("div", params.row.newCustomerAchievementRate + "%");
             },
@@ -84,17 +84,17 @@ export default {
           {
             title: "老客接诊人数",
             key: "oldCustomerAcceptNum",
-            width:140
+            width:'130px',
           },
           {
             title: "老客成交人数",
             key: "oldCustomerDealNum",
-            width:140
+            width:'130px',
           },
           {
             title: "老客成交率",
             key: "oldCustomerDealRate",
-            width:140,
+            width:'120px',
             render: (h, params) => {
               return h("div", params.row.oldCustomerDealRate + "%");
             },
@@ -103,17 +103,17 @@ export default {
           {
             title: "老客业绩",
             key: "oldCustomerAchievement",
-            width:150
+            width:'100px',
           },
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
-            width:130
+            width:'120px',
           },
           {
             title: "老客业绩占比",
             key: "oldCustomerAchievementRate",
-            width:150,
+           width:'130px',
             render: (h, params) => {
               return h("div", params.row.oldCustomerAchievementRate + "%");
             },

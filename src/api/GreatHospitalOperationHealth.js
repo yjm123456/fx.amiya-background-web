@@ -552,3 +552,68 @@ export const deleteHGreatHospitalDataWrite = (id) => {
         method: "delete",
     });
 };
+
+// 机构网咨运营数据分析模板导出
+export const exportHospitalNetWorkConsulationOperationData = () => {
+    return http({
+        url: "/amiyabg/HospitalNetWorkConsulationOperationData/exportHospitalNetWorkConsulationOperationData",
+        method: "get",
+        responseType: 'blob'
+    });
+};
+// 机构咨询师运营数据分析模板导出
+export const exportHospitalConsulationOperationData = () => {
+    return http({
+        url: "/amiyabg/HospitalConsulationOperationData/exportHospitalConsulationOperationData",
+        method: "get",
+        responseType: 'blob'
+    });
+};
+// 机构医生运营数据分析模板导出
+export const exportHospitaDoctorOperationOperationData = () => {
+    return http({
+        url: "/amiyabg/HospitalDoctorOperation/exportHospitaDoctorOperationOperationData",
+        method: "get",
+        responseType: 'blob'
+    });
+};
+// 机构成交品相运营数据分析模板导出
+export const exportHospitalDealItemOperationData = () => {
+    return http({
+        url: "/amiyabg/HospitalDealItemOperation/exportHospitalDealItemOperationData",
+        method: "get",
+        responseType: 'blob'
+    });
+};
+//导入机构网咨运营数据分析
+export const hospitalNetWorkConsulationOperationDataInPort = (data) => {
+    return http({
+        url: `/amiyabg/HospitalNetWorkConsulationOperationData/hospitalNetWorkConsulationOperationDataInPort`,
+        method: "put",
+        data,
+    });
+};
+//导入机构咨询师运营数据分析
+export const hospitalConsulationOperationDataInPort = (data) => {
+    return http({
+        url: `/amiyabg/HospitalConsulationOperationData/hospitalConsulationOperationDataInPort`,
+        method: "put",
+        data,
+    });
+};
+//导入机构医生运营数据分析
+export const hospitalDoctorOperationDataInPort = (data) => {
+    return http({
+        url: `/amiyabg/HospitalDoctorOperation/hospitalDoctorOperationDataInPort`,
+        method: "put",
+        data,
+    });
+};
+//导入机构成交品相运营数据分析
+export const hospitalDealItemOperationDataInPort = (data) => {
+    return http({
+        url: `/amiyabg/HospitalDealItemOperation/hospitalDealItemOperationDataInPort`,
+        method: "put",
+        data,
+    });
+};

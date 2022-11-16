@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="a">
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" ></Table>
+        <Table border :columns="query.columns" :data="query.data" height="730"></Table>
       </div>
       <div class="h1">机构分析</div>
         <Input
@@ -52,18 +52,22 @@ export default {
           {
             title: "运营维度",
             key: "operationName",
+            width:'300px',
           },
           {
             title: "上月数据",
             key: "lastMonthData",
+            width:'300px',
           },
           {
             title: "前月数据",
             key: "beforeMonthData",
+            width:'300px',
           },
           {
             title: "环比",
             key: "chainRatio",
+            width:'310px',
             render: (h, params) => {
               return h("div", params.row.chainRatio + "%");
             },
@@ -71,13 +75,13 @@ export default {
           {
             title: "优秀机构",
             key: "greatHospital",
+            width:'310px',
             renderHeader:(h,params)=>{
               return h('div',[
                 h('strong',this.hospitalName),
               ])
             }
           },
-         
         ],
         data: [],
         totalCount: 0,
@@ -165,13 +169,13 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-.container {
-  margin-top: 16px;
-}
-.page_wrap {
-  margin-top: 16px;
-  text-align: right;
-}
+// .container {
+//   margin-top: 16px;
+// }
+// .page_wrap {
+//   margin-top: 16px;
+//   text-align: right;
+// }
 .line {
   display: flex;
 }
@@ -181,9 +185,9 @@ export default {
   font-weight: bold;
   margin: 5px 0;
 }
-.button{
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
+// .button{
+//   display: flex;
+//   justify-content: center;
+//   margin-top: 10px;
+// }
 </style>

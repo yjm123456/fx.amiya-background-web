@@ -53,23 +53,59 @@
       <div class="order_message">
         <div class="message_title"><span class="line"></span>客户信息</div>
         <div class="order_content">
-          <div>
-            <span class="title_bold">客户昵称：</span>
-            <span>{{ detailObj.customerName }} </span>
-          </div>
-          <div class="mr_top">
-              <span class="title_bold">手机号：</span>
-              <span>{{ detailObj.phone }} </span>
+          <div  class="item_list">
+            <div class="items">
+              <span class="title_bold">客户昵称：</span>
+              <span>{{ detailObj.customerName }} </span>
             </div>
+            <div class="items">
+                <span class="title_bold">手机号：</span>
+                <span>{{ detailObj.phone }} </span>
+            </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+                <span class="title_bold">性别：</span>
+                <span>{{ detailObj.sex }} </span>
+            </div>
+            <div class="mr_top items">
+                <span class="title_bold">生日：</span>
+                <span
+                >{{
+                  detailObj.birthday
+                    ? this.$moment(detailObj.birthday).format(
+                        "YYYY-MM-DD"
+                      )
+                    : ""
+                }}
+              </span>
+            </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+                <span class="title_bold">职业：</span>
+                <span>{{ detailObj.occupation }} </span>
+            </div>
+            <div class="mr_top items">
+                <span class="title_bold">微信号：</span>
+                <span>{{ detailObj.wechatNumber }} </span>
+            </div>
+          </div>
+          <div  class="item_list">
+          <div class="mr_top items">
+              <span class="title_bold">城市：</span>
+              <span>{{ detailObj.city }} </span>
+          </div>
+          
           <div class="fl_end">
-            <div class="mr_top">
+            <div class="mr_top items">
               <span class="title_bold">新老客业绩：</span>
               <span>{{ detailObj.isOldCustomer == true ? '老客业绩' : '新客业绩'  }} </span>
             </div>
-            
             <Button type="primary" @click="lookImg(detailObj.id)"
-              >查看顾客照片</Button
+               style="margin-left:220px">查看顾客照片</Button
             >
+          </div>
           </div>
         </div>
         <div></div>
@@ -89,82 +125,94 @@
               }}
             </span>
           </div> -->
-          <div >
-            <span class="title_bold">预约门店：</span>
-            <span>{{ detailObj.appointmentHospitalName }} </span>
+          <div  class="item_list">
+            <div class="items">
+              <span class="title_bold">预约门店：</span>
+              <span>{{ detailObj.appointmentHospitalName }} </span>
+            </div>
+            <div class="items">
+              <span class="title_bold">派单时间：</span>
+              <span
+                >{{
+                  detailObj.sendDate
+                    ? this.$moment(detailObj.sendDate).format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      )
+                    : "未预约时间"
+                }}
+              </span>
+            </div>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">派单时间：</span>
-            <span
-              >{{
-                detailObj.sendDate
-                  ? this.$moment(detailObj.sendDate).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )
-                  : "未预约时间"
-              }}
-            </span>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">派单医院：</span>
+              <span>{{ detailObj.sendHospitalName }} </span>
+            </div>
+            <div class="mr_top">
+              <span class="title_bold">是否到院：</span>
+              <i-switch v-model="detailObj.isToHospital" disabled />
+            </div>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">派单医院：</span>
-            <span>{{ detailObj.sendHospitalName }} </span>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">到院类型：</span>
+              <span>{{ detailObj.toHospitalTypeText }} </span>
+            </div>
+            <div class="mr_top">
+              <span class="title_bold">到院时间：</span>
+              <span
+                >{{
+                  detailObj.toHospitalDate
+                    ? this.$moment(detailObj.toHospitalDate).format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      )
+                    : ""
+                }}
+              </span>
+            </div>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">是否到院：</span>
-            <i-switch v-model="detailObj.isToHospital" disabled />
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">到院类型：</span>
-            <span>{{ detailObj.toHospitalTypeText }} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">到院时间：</span>
-            <span
-              >{{
-                detailObj.toHospitalDate
-                  ? this.$moment(detailObj.toHospitalDate).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )
-                  : ""
-              }}
-            </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">成交时间：</span>
-            <span
-              >{{
-                detailObj.dealDate
-                  ? this.$moment(detailObj.dealDate).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )
-                  : ""
-              }}
-            </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">到院医院：</span>
-            <span>{{ detailObj.lastDealHospitalName }} </span>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">成交时间：</span>
+              <span
+                >{{
+                  detailObj.dealDate
+                    ? this.$moment(detailObj.dealDate).format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      )
+                    : ""
+                }}
+              </span>
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">到院医院：</span>
+              <span>{{ detailObj.lastDealHospitalName }} </span>
+            </div>
           </div>
         </div>
       </div>
       <div class="order_message">
         <div class="message_title"><span class="line"></span>主播客服信息</div>
         <div class="order_content">
-          <div>
-            <span class="title_bold">主播平台：</span>
-            <span>{{ detailObj.contentPlateFormName }} </span>
+          <div  class="item_list">
+            <div class="items">
+              <span class="title_bold">主播平台：</span>
+              <span>{{ detailObj.contentPlateFormName }} </span>
+            </div>
+            <div  class="items">
+              <span class="title_bold">主播账号：</span>
+              <span>{{ detailObj.liveAnchorName }} </span>
+            </div>
           </div>
-          <div  class="mr_top">
-            <span class="title_bold">主播账号：</span>
-            <span>{{ detailObj.liveAnchorName }} </span>
-          </div>
-          <div  class="mr_top">
-            <span class="title_bold">主播微信号：</span>
-            <span>{{ detailObj.liveAnchorWeChatNo }} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">归属客服：</span>
-            <span>{{ detailObj.belongEmpName }}</span>
+          <div  class="item_list">
+            <div  class="mr_top items">
+              <span class="title_bold">主播微信号：</span>
+              <span>{{ detailObj.liveAnchorWeChatNo }} </span>
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">归属客服：</span>
+              <span>{{ detailObj.belongEmpName }}</span>
+            </div>
           </div>
           <!-- <div class="mr_top">
             <span class="title_bold">面诊员：</span>
@@ -183,47 +231,42 @@
       <div class="order_message">
         <div class="message_title"><span class="line"></span>交易信息</div>
         <div class="order_content">
-          <div>
-            <span class="title_bold">归属月份：</span>
-            <span>{{ detailObj.belongMonth == 1 ? '历史' : '当月' }} </span>
+          <div  class="item_list">
+            <div class="items">
+              <span class="title_bold">归属月份：</span>
+              <span>{{ detailObj.belongMonth == 1 ? '历史' : '当月' }} </span>
+            </div>
+            <div  class="items">
+              <span class="title_bold">订单类型：</span>
+              <span>{{ detailObj.orderTypeText }} </span>
+            </div>
           </div>
-          <div  class="mr_top">
-            <span class="title_bold">订单类型：</span>
-            <span>{{ detailObj.orderTypeText }} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">订单来源：</span>
-            <span>{{ detailObj.orderSourceText }} </span>
-          </div>
+           <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">订单来源：</span>
+              <span>{{ detailObj.orderSourceText }} </span>
+            </div>
 
-          <div class="mr_top">
-            <span class="title_bold">下单平台：</span>
-            <span>{{ detailObj.contentPlateFormName }} </span>
+            <div class="mr_top items">
+              <span class="title_bold">下单平台：</span>
+              <span>{{ detailObj.contentPlateFormName }} </span>
+            </div>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">科室：</span>
-            <span>{{ detailObj.hospitalDepartmentName }} </span>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">科室：</span>
+              <span>{{ detailObj.hospitalDepartmentName }} </span>
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">成交金额：</span>
+              <span>{{ detailObj.dealAmount }}</span>
+            </div>
           </div>
           <div class="mr_top">
             <span class="title_bold">抖店订单号：</span>
             <span>{{ detailObj.otherContentPlatFormOrderId }}</span>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">成交金额：</span>
-            <span>{{ detailObj.dealAmount }}</span>
-          </div>
-          <!-- <div class="mr_top">
-            <span class="title_bold">新老客业绩：</span>
-            <span>{{ detailObj.isOldCustomer == true ? '老客' : '新客' }}</span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">是否陪诊：</span>
-            <i-switch v-model="detailObj.isAcompanying" disabled />
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">佣金比例：</span>
-            <span>{{ detailObj.commissionRatio + '%'}} </span>
-          </div> -->
+          
           <div class="mr_top">
             <span class="title_bold">咨询内容：</span>
             <span>{{ detailObj.consultingContent }} </span>
@@ -263,14 +306,14 @@
       </div>
       <div class="order_message">
         <div class="message_title"><span class="line"></span>图片信息</div>
-        <div class="order_content">
-          <div style="display:flex;align-items:center">
+        <div class="order_content2">
+          <div style="display:flex;align-items:center;width:50%">
             <span class="title_bold">成交凭证：</span>
             <viewer v-if="detailObj.dealPictureUrl"  baseLayerPicker ="true">
               <img :src="detailObj.dealPictureUrl" alt="" class="unImg">
             </viewer>
           </div>
-          <div style="display:flex;align-items:center;margin-top:10px">
+          <div style="display:flex;align-items:center;margin-top:10px;width:50%">
             <span class="title_bold">未成交截图：</span>
             <viewer v-if="detailObj.unDealPictureUrl"  baseLayerPicker ="true" >
               <img :src="detailObj.unDealPictureUrl" alt="" class="unImg">
@@ -281,58 +324,67 @@
       <div class="order_message">
         <div class="message_title"><span class="line"></span>财务信息</div>
         <div class="order_content">
-          <div>
-            <span class="title_bold">审核时间：</span>
-            <span
-              >{{
-                detailObj.checkDate
-                  ? this.$moment(detailObj.checkDate).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )
-                  : ""
-              }}
-            </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核人：</span>
-            <span>{{ detailObj.checkByName }} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核状态：</span>
-            <span>{{ detailObj.checkStateText }} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核金额：</span>
-            <span>{{ detailObj.checkPrice }} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">结算金额：</span>
-            <span>{{ detailObj.settlePrice }} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">是否回款：</span>
-            <i-switch v-model="detailObj.isReturnBackPrice" disabled />
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">回款时间：</span>
-            <span
-              >{{
-                detailObj.returnBackDate
-                  ? this.$moment(detailObj.returnBackDate).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )
-                  : ""
-              }}
-            </span>
-          </div>
-          <div class="fl_end">
-            <div class="mr_top">
-              <span class="title_bold">回款金额：</span>
-              <span>{{ detailObj.returnBackPrice }} </span>
+          <div  class="item_list">
+            <div class="items">
+              <span class="title_bold">审核时间：</span>
+              <span
+                >{{
+                  detailObj.checkDate
+                    ? this.$moment(detailObj.checkDate).format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      )
+                    : ""
+                }}
+              </span>
             </div>
-            <Button type="primary" @click="lookCheckImg(detailObj.id)"
-              >查看审核图片</Button
-            >
+            <div class="items">
+              <span class="title_bold">审核人：</span>
+              <span>{{ detailObj.checkByName }} </span>
+            </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">审核状态：</span>
+              <span>{{ detailObj.checkStateText }} </span>
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">审核金额：</span>
+              <span>{{ detailObj.checkPrice }} </span>
+            </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">结算金额：</span>
+              <span>{{ detailObj.settlePrice }} </span>
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">是否回款：</span>
+              <i-switch v-model="detailObj.isReturnBackPrice" disabled />
+            </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">回款时间：</span>
+              <span
+                >{{
+                  detailObj.returnBackDate
+                    ? this.$moment(detailObj.returnBackDate).format(
+                        "YYYY-MM-DD HH:mm:ss"
+                      )
+                    : ""
+                }}
+              </span>
+            </div>
+            <div class="fl_item">
+              <div class="mr_top items2">
+                <span class="title_bold">回款金额：</span>
+                <span> {{ detailObj.returnBackPrice }}</span>
+                <!--  -->
+              </div>
+              <Button type="primary" @click="lookCheckImg(detailObj.id)"
+                >查看审核图片</Button
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -617,12 +669,15 @@ export default {
   display: flex;
   align-items: center;
 }
-.order_content {
+.order_content ,.order_content2{
   margin-top: 10px;
   padding: 10px 5px;
   box-sizing: border-box;
   border: 1px solid #dad0d0;
   margin-bottom: 20px;
+}
+.order_content2{
+  display: flex;
 }
 .title_bold {
   font-weight: bold;
@@ -639,7 +694,7 @@ export default {
 .mr {
   margin: 20px 0 10px;
 }
-.fl_end {
+.fl_end,.fl_end2 {
   display: flex;
   justify-content: space-between;
 }
@@ -654,5 +709,18 @@ export default {
   width: 40px;
   height: 40px;
   
+}
+.item_list{
+  display: flex;
+  /* justify-content: space-between; */
+}
+.items{
+  width: 50%;
+}
+.fl_item{
+  display: flex;
+}
+.items2{
+  width: 360px;
 }
 </style>

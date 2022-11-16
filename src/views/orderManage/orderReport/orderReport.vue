@@ -120,7 +120,8 @@
             <Card class="list_item">
                 <div class="title">财务报表</div>      
                 <div class="list">
-                    <div class="item" @click="moneyReportModel=true;$refs.customerOrderReceivables.getcustomerOrderReceivableReports();">
+                    <!-- <div class="item" @click="moneyReportModel=true;$refs.customerOrderReceivables.getcustomerOrderReceivableReports();"> -->
+                    <div class="item" @click="moneyReportModel2=true;$refs.customerOrderReceivables2.getcustomerOrderReceivableReports();">
                         <i class="iconfont icon-shoukuan frist_icons"></i>       
                         <div class="item_title">客户订单应收款统计</div>
                     </div>
@@ -179,7 +180,9 @@
         <!-- 客户预约报表 -->
         <customerAppointmentCom :customerAppointmentModal.sync="customerAppointmentModal" ref="customerAppointmentCom"></customerAppointmentCom>
         <!-- 客户订单应收款统计 -->
-        <customerOrderReceivables :moneyReportModel.sync = "moneyReportModel" ref="customerOrderReceivables" :checkStateListAll="checkStateListAll"></customerOrderReceivables>
+        <!-- <customerOrderReceivables :moneyReportModel.sync = "moneyReportModel" ref="customerOrderReceivables" :checkStateListAll="checkStateListAll"></customerOrderReceivables> -->
+        <!-- 客户订单应收款统计(已完成，买家已付款) -->
+        <customerOrderReceivables2 :moneyReportModel2.sync = "moneyReportModel2" ref="customerOrderReceivables2" :checkStateListAll="checkStateListAll"></customerOrderReceivables2>
         <!-- 医院订单量报表 -->
         <hospitalOrderQuantity :hospitalOrderQuantityModel.sync="hospitalOrderQuantityModel" ref="hospitalOrderQuantity"></hospitalOrderQuantity>
         <!-- 医院预约量报表 -->
@@ -231,6 +234,7 @@ import orderWriteOff from "./components/orderWriteOff.vue"
 import dispatchReport from "./components/dispatchReport.vue"
 import customerAppointmentCom from "./components/customerAppointment.vue"
 import customerOrderReceivables from "./components/customerOrderReceivables.vue"
+import customerOrderReceivables2 from "./components/customerOrderReceivables2.vue"
 import hospitalOrderQuantity from "./components/hospitalOrderQuantity.vue"
 import hospitalAppointments from "./components/hospitalAppointments.vue"
 import customerServiceOrder from "./components/customerServiceOrder.vue"
@@ -256,6 +260,7 @@ export default {
         dispatchReport,
         customerAppointmentCom,
         customerOrderReceivables,
+        customerOrderReceivables2,
         hospitalOrderQuantity,
         hospitalAppointments,
         customerServiceOrder,
@@ -286,6 +291,7 @@ export default {
             dispatchReportModal:false,
             customerAppointmentModal:false,
             moneyReportModel:false,
+            moneyReportModel2:false,
             hospitalOrderQuantityModel:false,
             hospitalAppointmentsModel:false,
             customerServiceOrderModel:false,

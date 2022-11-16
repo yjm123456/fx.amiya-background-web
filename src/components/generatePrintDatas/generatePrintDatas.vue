@@ -9,53 +9,58 @@
     >
       <div>
           <div style="color:orange">打印参数标注参考：目标打印机-另存为pdf；布局：纵向；纸张尺寸：A0；缩放：75%</div>
-        <Card class="container">
-          <div class="list">
-            <div class="h2">优秀机构运营健康指标</div>
-            <div>
-              <goodHospitalTarget
-                :indicatorsId="indicatorsId"
-                ref="goodHospitalTarget"
-              ></goodHospitalTarget>
-            </div>
+          <div class="container_list">
+            <Card class="container">
+              <div class="list">
+                <div class="h2">优秀机构运营健康指标</div>
+                <div>
+                  <goodHospitalTarget
+                    :indicatorsId="indicatorsId"
+                    ref="goodHospitalTarget"
+                  ></goodHospitalTarget>
+                </div>
+              </div>
+            </Card>
+            <Card class="container">
+              <div class="list">
+                <div class="h2">本机构运营数据分析</div>
+                <div>
+                  <operatingDataOfTheInstitution
+                    :indicatorsId="indicatorsId"
+                    :hospitalId="hospitalId"
+                    ref="operatingDataOfTheInstitution"
+                  ></operatingDataOfTheInstitution>
+                </div>
+              </div>
+            </Card>
           </div>
-        </Card>
-        <Card class="container">
-          <div class="list">
-            <div class="h2">本机构运营数据分析</div>
-            <div>
-              <operatingDataOfTheInstitution
-                :indicatorsId="indicatorsId"
-                :hospitalId="hospitalId"
-                ref="operatingDataOfTheInstitution"
-              ></operatingDataOfTheInstitution>
+        <div class="container_list">
+          <Card class="container">
+            <div class="list">
+              <div class="h2">本机构网咨运营数据分析</div>
+              <div>
+                <networkConsultingOperation
+                  :indicatorsId="indicatorsId"
+                  :hospitalId="hospitalId"
+                  ref="networkConsultingOperation"
+                ></networkConsultingOperation>
+              </div>
             </div>
-          </div>
-        </Card>
-        <Card class="container">
-          <div class="list">
-            <div class="h2">本机构网咨运营数据分析</div>
-            <div>
-              <networkConsultingOperation
-                :indicatorsId="indicatorsId"
-                :hospitalId="hospitalId"
-                ref="networkConsultingOperation"
-              ></networkConsultingOperation>
+          </Card>
+          <Card class="container">
+            <div class="list">
+              <div class="h2">本机构咨询师运营数据分析</div>
+              <div>
+                <consultantOperations
+                  :indicatorsId="indicatorsId"
+                  :hospitalId="hospitalId"
+                  ref="consultantOperations"
+                ></consultantOperations>
+              </div>
             </div>
-          </div>
-        </Card>
-        <Card class="container">
-          <div class="list">
-            <div class="h2">本机构咨询师运营数据分析</div>
-            <div>
-              <consultantOperations
-                :indicatorsId="indicatorsId"
-                :hospitalId="hospitalId"
-                ref="consultantOperations"
-              ></consultantOperations>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
+        <div class="container_list">
         <Card class="container">
           <div class="list">
             <div class="h2">本机构医生运营数据分析</div>
@@ -80,7 +85,8 @@
             </div>
           </div>
         </Card>
-        <Card class="container" >
+        </div>
+        <Card class="container2" >
           <div class="list">
             <div class="h2">本机构运营提升计划</div>
             <div>
@@ -229,5 +235,17 @@ export default {
 }
 .list {
   margin-bottom: 20px;
+}
+.container_list{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.container{
+  width: 49%;
+  
+}
+.container2{
+  width: 100%;
 }
 </style>

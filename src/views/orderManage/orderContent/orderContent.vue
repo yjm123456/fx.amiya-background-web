@@ -421,26 +421,7 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="客户昵称" prop="customerName">
-              <Input
-                v-model="form.customerName"
-                placeholder="请输入客户昵称"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="手机号" prop="phone">
-              <Input
-                v-model="form.phone"
-                maxlength="11"
-                placeholder="请输入手机号"
-                :disabled="
-                  title == '录单编辑' && (positionId == 2 || positionId == 4)
-                "
-              ></Input>
-            </FormItem>
-          </Col>
+          
           <Col span="8">
             <FormItem label="预约门店" prop="appointmentHospitalId">
               <Select
@@ -562,6 +543,74 @@
                 number
                 placeholder="请输入下单金额"
               ></Input>
+            </FormItem>
+          </Col>
+          
+        </Row>
+        <div class="h3">客户信息</div>
+        <Row :gutter="30">
+          <Col span="8">
+            <FormItem label="客户昵称" prop="customerName">
+              <Input
+                v-model="form.customerName"
+                placeholder="请输入客户昵称"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="手机号" prop="phone">
+              <Input
+                v-model="form.phone"
+                maxlength="11"
+                placeholder="请输入手机号"
+                :disabled="
+                  title == '录单编辑' && (positionId == 2 || positionId == 4)
+                "
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="性别" prop="sex">
+              <div >
+                <Radio-group v-model="form.sex">
+                    <Radio label="男">男</Radio>
+                    <Radio label="女">女</Radio>
+                </Radio-group>
+              </div>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="生日" prop="birthday">
+              <DatePicker
+                type="date"
+                placeholder="选择日期"
+                :value="form.birthday"
+                v-model="form.birthday"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="职业" prop="occupation">
+              <Input
+                  v-model="form.occupation"
+                  placeholder="请输入职业"
+                />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="微信号" prop="wechatNumber">
+              <Input
+                v-model="form.wechatNumber"
+                placeholder="请输入微信号"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="城市" prop="city">
+              <Input
+                v-model="form.city"
+                placeholder="请输入城市"
+              />
             </FormItem>
           </Col>
           <Col span="20">
@@ -874,10 +923,26 @@ export default {
         // 归属月份
         belongMonth:null,
         // 下单金额
-        addOrderPrice:null
+        addOrderPrice:null,
+        // 性别
+        sex:"",
+        // 生日
+        birthday:null,
+        // 职业
+        occupation:"",
+        // 微信号
+        wechatNumber:"",
+        // 城市
+        city:""
       },
       controlModal: false,
       ruleValidates: {
+        city: [
+          {
+            required: true,
+            message: "请输入城市",
+          },
+        ],
         belongMonth: [
           {
             required: true,
@@ -1032,6 +1097,12 @@ export default {
           {
             title: "电话",
             key: "phone",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "城市",
+            key: "city",
             minWidth: 120,
             align: "center",
           },
@@ -1278,7 +1349,12 @@ export default {
                               liveAnchorWeChatNo,
                               consultationType,
                               belongMonth,
-                              addOrderPrice
+                              addOrderPrice,
+                              sex,
+                              city,
+                              occupation,
+                              wechatNumber,
+                              birthday
 
                             } = res.data.orderInfo;
                             this.contentPlateChange(contentPlateFormId);
@@ -1287,6 +1363,11 @@ export default {
                             this.form.appointmentHospitalId = appointmentHospitalId;
                             this.form.id = id;
                             this.form.consultingContent = consultingContent;
+                            this.form.sex = sex;
+                            this.form.city = city;
+                            this.form.occupation = occupation;
+                            this.form.wechatNumber = wechatNumber;
+                            this.form.birthday = birthday;
                             this.form.phone = phone;
                             this.form.customerName = customerName;
                             this.form.depositAmount = depositAmount;
@@ -1753,7 +1834,12 @@ export default {
               liveAnchorWeChatNo,
               consultationType,
               addOrderPrice,
-              belongMonth
+              belongMonth,
+              sex,
+              birthday,
+              occupation,
+              wechatNumber,
+              city
             } = this.form;
             const data = {
               orderType,
@@ -1780,7 +1866,12 @@ export default {
               liveAnchorWeChatNo,
               consultationType,
               addOrderPirce:addOrderPrice,
-              belongMonth
+              belongMonth,
+              sex , 
+              birthday : birthday? this.$moment(birthday).format("YYYY-MM-DD") : null,
+              occupation ,
+              wechatNumber ,
+              city,
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1838,7 +1929,12 @@ export default {
               liveAnchorWeChatNo,
               consultationType,
               addOrderPrice,
-              belongMonth
+              belongMonth,
+              sex,
+              birthday,
+              occupation,
+              wechatNumber,
+              city
             } = this.form;
             const data = {
               orderType,
@@ -1865,7 +1961,12 @@ export default {
               liveAnchorWeChatNo,
               consultationType,
               addOrderPrice,
-              belongMonth
+              belongMonth,
+              sex , 
+              birthday : birthday? this.$moment(birthday).format("YYYY-MM-DD") : null,
+              occupation ,
+              wechatNumber ,
+              city,
             };
             if (phone) {
               if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -2151,5 +2252,11 @@ export default {
 .content1 {
   display: flex;
   flex-direction: column;
+}
+.h3{
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 20px;
 }
 </style>

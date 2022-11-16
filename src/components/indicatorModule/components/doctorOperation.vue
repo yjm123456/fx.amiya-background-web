@@ -1,19 +1,33 @@
 <template>
   <div>
-      <div class="header_wrap">
-        <div class="left"></div>
-        <div class="right">
-          <Button
-            type="primary"
-            @click="
-              controlModal = true;
-              title = '添加';
-            "
-            v-if="employeeType=='hospitalEmployee'"
-            >添加</Button
-          >
-        </div>
+    <div class="header_wrap">
+      <div class="left"></div>
+      <div class="right">
+        <Button
+          type="primary"
+          @click="
+            controlModal = true;
+            title = '添加';
+          "
+          v-if="employeeType == 'hospitalEmployee'"
+          >添加</Button
+        >
+        <Button
+          type="primary"
+          @click="exportHospitaDoctorOperationOperationDataClick"
+          v-if="employeeType == 'hospitalEmployee'"
+          style="margin-left: 10px"
+          >导出模板</Button
+        >
+        <Button
+          type="primary"
+          style="margin-left: 10px"
+          @click="importControlModal = true"
+          v-if="employeeType == 'hospitalEmployee'"
+          >导入</Button
+        >
       </div>
+    </div>
 
     <Card class="container">
       <div>
@@ -22,7 +36,9 @@
       <div class="h1">机构分析</div>
       <Input
         v-model="query.hospitalConsultRemark"
-        :placeholder="employeeType != 'hospitalEmployee' ? '' :'请输入机构分析'"
+        :placeholder="
+          employeeType != 'hospitalEmployee' ? '' : '请输入机构分析'
+        "
         style="width: 100%; "
         type="textarea"
         :rows="3"
@@ -31,7 +47,9 @@
       <div class="h1">啊美雅批注</div>
       <Input
         v-model="query.amiyaConsultRemark"
-        :placeholder="employeeType == 'hospitalEmployee' ? '' :'请输入啊美雅批注'"
+        :placeholder="
+          employeeType == 'hospitalEmployee' ? '' : '请输入啊美雅批注'
+        "
         style="width: 100%; "
         type="textarea"
         :rows="3"
@@ -59,10 +77,7 @@
         <Row :gutter="30">
           <Col span="8">
             <FormItem label="医生" prop="doctorName">
-              <Input
-                v-model="form.doctorName"
-                placeholder="请输入医生"
-              ></Input>
+              <Input v-model="form.doctorName" placeholder="请输入医生"></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -156,7 +171,6 @@
             </FormItem>
           </Col>
 
-        
           <Col span="8">
             <FormItem label="老客业绩" prop="oldCustomerAchievement">
               <Input
@@ -189,7 +203,6 @@
               ></Input>
             </FormItem>
           </Col>
-         
         </Row>
       </Form>
       <div slot="footer">
@@ -197,18 +210,31 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 导入 -->
+    <importFile
+      :importControlModal.sync="importControlModal"
+      @handleRefreshCustomerTrackList="getHospitalInfo()"
+      title="本机构医生运营数据分析"
+    ></importFile>
   </div>
 </template>
 <script>
 import * as api from "@/api/GreatHospitalOperationHealth";
+import { download } from "@/utils/util";
+import importFile from "./import/importModel.vue";
 export default {
   props: {
     active: String,
     hospitalId: Number,
     indicatorsId: String,
   },
+  components: {
+    importFile,
+  },
   data() {
     return {
+      // 导入 model
+      importControlModal: false,
       // 查询
       query: {
         amiyaConsultRemark: "",
@@ -220,22 +246,22 @@ export default {
           {
             title: "医生",
             key: "doctorName",
-            width:150
+            width: 150,
           },
           {
             title: "新客接诊人数",
             key: "newCustomerAcceptNum",
-            width:140
+            width: 140,
           },
           {
             title: "新客成交人数",
             key: "newCustomerDealNum",
-            width:140
+            width: 140,
           },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
-            width:140,
+            width: 140,
             render: (h, params) => {
               return h("div", params.row.newCustomerDealRate + "%");
             },
@@ -243,17 +269,17 @@ export default {
           {
             title: "新客业绩",
             key: "newCustomerAchievement",
-            width:120
+            width: 120,
           },
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
-            width:130
+            width: 130,
           },
           {
             title: "新客业绩占比",
             key: "newCustomerAchievementRate",
-            width:140,
+            width: 140,
             render: (h, params) => {
               return h("div", params.row.newCustomerAchievementRate + "%");
             },
@@ -261,17 +287,17 @@ export default {
           {
             title: "老客接诊人数",
             key: "oldCustomerAcceptNum",
-            width:140
+            width: 140,
           },
           {
             title: "老客成交人数",
             key: "oldCustomerDealNum",
-            width:140
+            width: 140,
           },
           {
             title: "老客成交率",
             key: "oldCustomerDealRate",
-            width:140,
+            width: 140,
             render: (h, params) => {
               return h("div", params.row.oldCustomerDealRate + "%");
             },
@@ -280,27 +306,26 @@ export default {
           {
             title: "老客业绩",
             key: "oldCustomerAchievement",
-            width:150
+            width: 150,
           },
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
-            width:130
+            width: 130,
           },
           {
             title: "老客业绩占比",
             key: "oldCustomerAchievementRate",
-            width:150,
+            width: 150,
             render: (h, params) => {
               return h("div", params.row.oldCustomerAchievementRate + "%");
             },
           },
 
-         
           {
             title: "操作",
             key: "",
-            fixed:'right',
+            fixed: "right",
             width: 150,
             align: "center",
             render: (h, params) => {
@@ -311,7 +336,9 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: sessionStorage.getItem('employeeType') == 'amiyaEmployee',
+                      disabled:
+                        sessionStorage.getItem("employeeType") ==
+                        "amiyaEmployee",
                     },
                     style: {
                       marginRight: "5px",
@@ -320,48 +347,46 @@ export default {
                       click: () => {
                         const { id } = params.row;
                         this.title = "修改";
-                        api
-                          .byIdHospitalDoctorOperation(id)
-                          .then((res) => {
-                            if (res.code === 0) {
-                              const {
-                                id,
-                                indicatorId,
-                                hospitalId,
-                                doctorName,
-                                newCustomerAcceptNum,
-                                newCustomerDealNum,
-                                newCustomerDealRate,
-                                newCustomerAchievement,
-                                newCustomerUnitPrice,
-                                newCustomerAchievementRate,
-                                oldCustomerAcceptNum,
-                                oldCustomerDealNum,
-                                oldCustomerDealRate,
-                                oldCustomerAchievement,
-                                oldCustomerUnitPrice,
-                                oldCustomerAchievementRate
-                              } = res.data.hospitalDoctorOperationInfo;
-                              this.isEdit = true;
-                              this.form.indicatorId = indicatorId;
-                              this.form.hospitalId = hospitalId;
-                              this.form.doctorName = doctorName;
-                              this.form.newCustomerAcceptNum = newCustomerAcceptNum;
-                              this.form.newCustomerDealNum = newCustomerDealNum;
-                              this.form.newCustomerAchievement = newCustomerAchievement;
-                              this.form.newCustomerDealRate = newCustomerDealRate;
-                              this.form.newCustomerAchievementRate = newCustomerAchievementRate;
-                              this.form.newCustomerUnitPrice = newCustomerUnitPrice;
-                              this.form.oldCustomerDealNum = oldCustomerDealNum;
-                              this.form.oldCustomerAcceptNum = oldCustomerAcceptNum;
-                              this.form.oldCustomerDealRate = oldCustomerDealRate;
-                              this.form.oldCustomerAchievement = oldCustomerAchievement;
-                              this.form.oldCustomerUnitPrice = oldCustomerUnitPrice;
-                              this.form.oldCustomerAchievementRate = oldCustomerAchievementRate;
-                              this.form.id = id;
-                              this.controlModal = true;
-                            }
-                          });
+                        api.byIdHospitalDoctorOperation(id).then((res) => {
+                          if (res.code === 0) {
+                            const {
+                              id,
+                              indicatorId,
+                              hospitalId,
+                              doctorName,
+                              newCustomerAcceptNum,
+                              newCustomerDealNum,
+                              newCustomerDealRate,
+                              newCustomerAchievement,
+                              newCustomerUnitPrice,
+                              newCustomerAchievementRate,
+                              oldCustomerAcceptNum,
+                              oldCustomerDealNum,
+                              oldCustomerDealRate,
+                              oldCustomerAchievement,
+                              oldCustomerUnitPrice,
+                              oldCustomerAchievementRate,
+                            } = res.data.hospitalDoctorOperationInfo;
+                            this.isEdit = true;
+                            this.form.indicatorId = indicatorId;
+                            this.form.hospitalId = hospitalId;
+                            this.form.doctorName = doctorName;
+                            this.form.newCustomerAcceptNum = newCustomerAcceptNum;
+                            this.form.newCustomerDealNum = newCustomerDealNum;
+                            this.form.newCustomerAchievement = newCustomerAchievement;
+                            this.form.newCustomerDealRate = newCustomerDealRate;
+                            this.form.newCustomerAchievementRate = newCustomerAchievementRate;
+                            this.form.newCustomerUnitPrice = newCustomerUnitPrice;
+                            this.form.oldCustomerDealNum = oldCustomerDealNum;
+                            this.form.oldCustomerAcceptNum = oldCustomerAcceptNum;
+                            this.form.oldCustomerDealRate = oldCustomerDealRate;
+                            this.form.oldCustomerAchievement = oldCustomerAchievement;
+                            this.form.oldCustomerUnitPrice = oldCustomerUnitPrice;
+                            this.form.oldCustomerAchievementRate = oldCustomerAchievementRate;
+                            this.form.id = id;
+                            this.controlModal = true;
+                          }
+                        });
                       },
                     },
                   },
@@ -373,7 +398,9 @@ export default {
                     props: {
                       type: "error",
                       size: "small",
-                      disabled: sessionStorage.getItem('employeeType') == 'amiyaEmployee',
+                      disabled:
+                        sessionStorage.getItem("employeeType") ==
+                        "amiyaEmployee",
                     },
                     on: {
                       click: () => {
@@ -518,7 +545,7 @@ export default {
             message: "请输入老客业绩",
           },
         ],
-      
+
         oldCustomerUnitPrice: [
           {
             required: true,
@@ -531,12 +558,16 @@ export default {
             message: "请输入老客业绩占比",
           },
         ],
-       
-
       },
     };
   },
   methods: {
+    exportHospitaDoctorOperationOperationDataClick() {
+      api.exportHospitaDoctorOperationOperationData().then((res) => {
+        let name = "本机构医生运营数据分析模板";
+        download(res, name);
+      });
+    },
     getHospitalConsultRemark() {
       const data = {
         indicatorId: this.indicatorsId,
@@ -557,8 +588,8 @@ export default {
       const data = {
         indicatorId: this.indicatorsId,
         hospitalId: this.hospitalId,
-        hospitalDoctorRemark:hospitalConsultRemark,
-        amiyaDoctorRemark:amiyaConsultRemark,
+        hospitalDoctorRemark: hospitalConsultRemark,
+        amiyaDoctorRemark: amiyaConsultRemark,
       };
       api.addHospitalDoctorRemark(data).then((res) => {
         if (res.code === 0) {
@@ -603,7 +634,7 @@ export default {
               oldCustomerDealRate,
               oldCustomerAchievement,
               oldCustomerUnitPrice,
-              oldCustomerAchievementRate
+              oldCustomerAchievementRate,
             } = this.form;
             const data = {
               id,
@@ -621,7 +652,7 @@ export default {
               oldCustomerDealRate,
               oldCustomerAchievement,
               oldCustomerUnitPrice,
-              oldCustomerAchievementRate
+              oldCustomerAchievementRate,
             };
             // 修改
             api.editHospitalDoctorOperation(data).then((res) => {
@@ -650,7 +681,7 @@ export default {
               oldCustomerDealRate,
               oldCustomerAchievement,
               oldCustomerUnitPrice,
-              oldCustomerAchievementRate
+              oldCustomerAchievementRate,
             } = this.form;
             const data = {
               indicatorId: indicatorsId,
@@ -667,7 +698,7 @@ export default {
               oldCustomerDealRate,
               oldCustomerAchievement,
               oldCustomerUnitPrice,
-              oldCustomerAchievementRate
+              oldCustomerAchievementRate,
             };
             // 添加
             api.addHospitalDoctorOperation(data).then((res) => {

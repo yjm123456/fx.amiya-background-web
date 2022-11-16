@@ -2,7 +2,7 @@
   <div>
     <Card class="container">
       <div>
-        <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="400"></Table>
+        <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="800"></Table>
         <div>
         <div class="h1">啊美雅批注</div>
         <Input
@@ -38,17 +38,17 @@ export default {
           {
             title: "医院",
             key: "hospitalName",
-            width:220
+            width:'140px'
           },
           {
             title: "指标名称",
             key: "indicatorsName",
-            width:160
+            width:'130px'
           },
           {
             title: "前月新客上门率",
             key: "lastNewCustomerVisitRate",
-            width:160,
+            width:'140px',
             render: (h, params) => {
               return h("div", params.row.lastNewCustomerVisitRate + "%");
             },
@@ -56,7 +56,7 @@ export default {
           {
             title: "上月新客上门率",
             key: "thisNewCustomerVisitRate",
-            width:160,
+            width:'140px',
             render: (h, params) => {
               return h("div", params.row.thisNewCustomerVisitRate + "%");
             },
@@ -64,7 +64,7 @@ export default {
           {
             title: "新客上门率环比",
             key: "newCustomerVisitChainRatio",
-            width:160,
+            width:'140px',
             render: (h, params) => {
               return h("div", params.row.newCustomerVisitChainRatio + "%");
             },
@@ -72,7 +72,7 @@ export default {
           {
             title: "前月新客成交率",
             key: "lastNewCustomerDealRate",
-            width:160,
+            width:'140px',
             render: (h, params) => {
               return h("div", params.row.lastNewCustomerDealRate + "%");
             },
@@ -80,7 +80,7 @@ export default {
           {
             title: "上月新客成交率",
             key: "thisNewCustomerDealRate",
-            width:160,
+            width:'140px',
             render: (h, params) => {
               return h("div", params.row.thisNewCustomerDealRate + "%");
             },
@@ -89,7 +89,7 @@ export default {
           {
             title: "新客成交率环比",
             key: "newCustomerDealChainRatio",
-            width:160,
+            width:'140px',
             render: (h, params) => {
               return h("div", params.row.newCustomerDealChainRatio + "%");
             },
@@ -97,18 +97,18 @@ export default {
           {
             title: "前月新客客单价",
             key: "lastNewCustomerUnitPrice",
-            width:160,
+            width:'140px',
           },
           {
             title: "上月新客客单价",
             key: "thisNewCustomerUnitPrice",
-            width:160,
+            width:'140px',
           },
 
           {
             title: "新客客单价环比",
             key: "newCustomerUnitPriceChainRatio",
-            width:160,
+            width:'140px',
             render: (h, params) => {
               return h("div", params.row.newCustomerUnitPriceChainRatio + "%");
             },

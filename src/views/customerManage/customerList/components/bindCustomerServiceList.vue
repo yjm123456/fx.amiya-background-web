@@ -190,6 +190,8 @@
         <Button type="primary" @click="handleEditSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!--客户信息  -->
+    <customerMessage :customerMessageModel.sync="customerMessageModel" :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
   </div>
 </template>
 
@@ -197,6 +199,7 @@
 import * as api from "@/api/customerManage";
 import customerInfo from "@/components/customerInfo/customerInfo";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import customerMessage from "@/components/customerMessage/customerMessage"
 export default {
   props: {
     activeName: String,
@@ -204,9 +207,18 @@ export default {
   components: {
     customerInfo,
     trackReturnVisit,
+    customerMessage
   },
   data() {
     return {
+      customerMessageModel:false,
+      // 客户信息组件参数
+      customerInfoComParams2: {
+        userId: "",
+        encryptPhone: "",
+        tabGlag:false
+      },
+      customerMessageObj:{},
       phone:"",
       // 客户列表
       query: {
@@ -267,12 +279,12 @@ export default {
             key: "phone",
           },
           {
-            title: "省份",
-            key: "province",
+            title: "客户昵称",
+            key: "nickName",
           },
           {
-            title: "城市",
-            key: "city",
+            title: "绑定客服",
+            key: "customerServiceName",
           },
           {
             title: "用户状态",
@@ -287,7 +299,7 @@ export default {
           },
           {
             title: "操作",
-            width: 300,
+            width: 220,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -304,15 +316,47 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { userId, encryptPhone } = params.row;
-                        this.customerInfoComParams.userId = userId;
-                        this.customerInfoComParams.encryptPhone = encryptPhone;
-                        this.customerInfoComParams.controlCustomerInfoDisplay = true;
+                        const { encryptPhone,userId } = params.row;
+                        // 
+                        let data = {
+                          encryptPhone:encryptPhone
+                        }
+                        
+                        api.getBaseAndBindCustomerInfoByEncryptPhone(data).then((res) => {
+                          if(res.code === 0){
+                            this.customerInfoComParams2.userId = userId;
+                            this.customerInfoComParams2.encryptPhone = encryptPhone;
+                            this.customerInfoComParams2.tabGlag = true;
+                            this.customerMessageModel = true
+                            this.customerMessageObj = res.data.customer
+                          }
+                        })
                       },
                     },
                   },
-                  "客户详情"
+                  "客户信息"
                 ),
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { userId, encryptPhone } = params.row;
+                //         this.customerInfoComParams.userId = userId;
+                //         this.customerInfoComParams.encryptPhone = encryptPhone;
+                //         this.customerInfoComParams.controlCustomerInfoDisplay = true;
+                //       },
+                //     },
+                //   },
+                //   "客户详情"
+                // ),
                 h(
                   "Button",
                   {
@@ -333,28 +377,28 @@ export default {
                   },
                   "追踪回访"
                 ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { encryptPhone } = params.row;
-                        this.editCustomerForm.encryptPhone = encryptPhone;
-                        this.phone = encryptPhone
-                        this.editCustomerForm.editCustomerModel = true
-                        this.getBaseInfoByEncryptPhone(encryptPhone)
-                      },
-                    },
-                  },
-                  "编辑信息"
-                ),
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { encryptPhone } = params.row;
+                //         this.editCustomerForm.encryptPhone = encryptPhone;
+                //         this.phone = encryptPhone
+                //         this.editCustomerForm.editCustomerModel = true
+                //         this.getBaseInfoByEncryptPhone(encryptPhone)
+                //       },
+                //     },
+                //   },
+                //   "编辑信息"
+                // ),
               ]);
             },
           },
@@ -544,7 +588,6 @@ export default {
         }
       });
     },
-
     resetControlCustomerInfoDisplay() {
       this.customerInfoComParams.controlCustomerInfoDisplay = false;
     },

@@ -102,9 +102,14 @@
               <span class="title_bold">新老客业绩：</span>
               <span>{{ detailObj.isOldCustomer == true ? '老客业绩' : '新客业绩'  }} </span>
             </div>
-            <Button type="primary" @click="lookImg(detailObj.id)"
-               style="margin-left:220px">查看顾客照片</Button
-            >
+            <div style="margin-left:120px;display:flex">
+              <Button type="primary" @click="customerClick(detailObj)"
+                style="margin-right:10px">顾客信息</Button
+              >
+              <Button type="primary" @click="lookImg(detailObj.id)"
+                >查看顾客照片</Button
+              >
+            </div>
           </div>
           </div>
         </div>
@@ -431,16 +436,22 @@
     />
     <!-- 生成喜报 -->
     <goodsNews :goodsNewsModel.sync="goodsNewsModel" :id="id"></goodsNews>
+    <!--客户信息  -->
+    <customerMessage :customerMessageModel.sync="customerMessageModel" 
+    :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
   </div>
 </template>
 <script>
 import * as api from "@/api/orderManage";
 import * as OrderCheckPictureApi from "@/api/OrderCheckPicture.js";
+import * as customerManageApi from "@/api/customerManage";
 import { time } from "echarts";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import viewPic from "@/components/viewPic/viewPic";
 import transactionStatus from "@/components/transactionStatus/contentTransactionStatus";
 import goodsNews from "@/components/goodsNews/goodsNews.vue";
+import customerMessage from "@/components/customerMessage/customerMessage"
+
 
 export default {
   props: {
@@ -452,9 +463,18 @@ export default {
     viewPic,
     transactionStatus,
     goodsNews,
+    customerMessage
   },
   data() {
     return {
+      customerMessageModel:false,
+      // 客户信息组件参数
+      customerInfoComParams2: {
+        userId: "",
+        encryptPhone: "",
+        tabGlag:false
+      },
+      customerMessageObj:{},
       // 生成喜报
       goodsNewsModel: false,
       id: "",
@@ -541,6 +561,21 @@ export default {
   },
 
   methods: {
+    customerClick(value){
+      const {userId,encryptPhone} = value
+      let data = {
+            encryptPhone:encryptPhone
+          }
+      customerManageApi.getBaseAndBindCustomerInfoByEncryptPhone(data).then((res) => {
+        if(res.code === 0){
+          this.customerInfoComParams2.userId = userId;
+          this.customerInfoComParams2.encryptPhone = encryptPhone;
+          this.customerInfoComParams2.tabGlag = true;
+          this.customerMessageModel = true
+          this.customerMessageObj = res.data.customer
+        }
+      })
+    },
     transactionStatus(id,consultationType) {
       this.transactionStatusParams.contentPlatFormOrderId = id;
       this.transactionStatusParams.transactionStatusModel = true;

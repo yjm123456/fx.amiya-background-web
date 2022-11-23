@@ -57,9 +57,9 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" height="390"></Table>
+        <Table border :columns="query.columns" :data="query.data" ></Table>
       </div>
-      <div class="h1">机构分析</div>
+      <!-- <div class="h1">机构分析</div>
         <Input
             v-model="query.hospitalOperationRemark"
             :placeholder="employeeType != 'hospitalEmployee' ? '' :'请输入机构分析'"
@@ -77,354 +77,365 @@
             :rows="3"
             :disabled="employeeType== 'hospitalEmployee'"
         />
-        <div class="button"><Button type="primary" @click="submitClick">提交</Button></div>
+        <div class="button"><Button type="primary" @click="submitClick">提交</Button></div> -->
+        <div class="bottom">
+          <div class="company">本表单位为：千元（K）</div>
+          <div class="bottom_memo">本表数据取自啊美雅CRM系统，对账结算以财务数据为准。</div>
+        </div>
+        <div>
+
+        </div>
     </Card>
 
     <Modal
       v-model="controlModal"
       :title="title"
       :mask-closable="false"
-      width="1000"
       @on-visible-change="handleModalVisibleChange"
+      fullscreen
     >
       <Form
         ref="form"
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="130"
+        :label-width="120"
       >
         <div class="title">前月</div>
         <Divider style="margin-top:4px" />
-        <Row :gutter="30">
-          <Col span="8">
+        <div class="list">
+          <div class="item">
             <FormItem
-              label="派单数"
-              prop="dispatchNum1"
-              :rules="[
-                {
-                  required: true,
-                  message: '派单数(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.dispatchNum1"
-                type="number"
-                number
-                placeholder="请输入派单数"
-                @on-change="dispatchNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
+                  label="派单数"
+                  prop="dispatchNum1"
+                  :rules="[
+                    {
+                      required: true,
+                      message: '派单数(最小是0)',
+                      trigger: 'change',
+                      type: 'number',
+                      min: 0,
+                    },
+                  ]"
+                >
+                  <Input
+                    v-model="form.dispatchNum1"
+                    type="number"
+                    number
+                    placeholder="请输入派单数"
+                    @on-change="dispatchNum2Change"
+                    style="width:100%"
+                  ></Input>
+                </FormItem>
+          </div>
+          <div class="item">
             <FormItem
-              label="新客上门人数"
-              prop="newVisitNum1"
-              :rules="[
-                {
-                  required: true,
-                  message: '新客上门人数(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.newVisitNum1"
-                type="number"
-                number
-                placeholder="请输入新客上门人数"
-                @on-change="newVisitNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
+                label="新客上门人数"
+                prop="newVisitNum1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '新客上门人数(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.newVisitNum1"
+                  type="number"
+                  number
+                  placeholder="请输入新客上门人数"
+                  @on-change="newVisitNum2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
+              <FormItem
+                label="新客上门率(%)"
+                prop="newVisitNumRate1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '新客上门率(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.newVisitNumRate1"
+                  type="number"
+                  number
+                  placeholder="请输入新客上门率"
+                  @on-change="newVisitNumRate2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
+              <FormItem
+                label="新客成交人数"
+                prop="newDealNum1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '新客成交人数(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.newDealNum1"
+                  type="number"
+                  number
+                  placeholder="请输入新客成交人数"
+                  @on-change="newDealNum2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
+              <FormItem
+                label="新客成交率(%)"
+                prop="newDealRate1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '新客成交率(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.newDealRate1"
+                  type="number"
+                  number
+                  placeholder="请输入新客成交率"
+                  @on-change="newDealRate2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
+              <FormItem
+                label="新客业绩"
+                prop="newAchievementNum1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '新客业绩(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.newAchievementNum1"
+                  type="number"
+                  number
+                  placeholder="请输入新客业绩"
+                  @on-change="newAchievementNum2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
+              <FormItem
+                label="新客客单价"
+                prop="newPrice1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '新客客单价(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.newPrice1"
+                  type="number"
+                  number
+                  placeholder="请输入新客客单价"
+                  @on-change="newPrice2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          
+        </div>
+        <div class="list">
+          <div class="item">
+              <FormItem
+                label="老客上门人数"
+                prop="oldVisitNum1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '老客上门人数(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.oldVisitNum1"
+                  type="number"
+                  number
+                  placeholder="请输入老客上门人数"
+                  @on-change="oldVisitNum2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
             <FormItem
-              label="新客上门率(%)"
-              prop="newVisitNumRate1"
-              :rules="[
-                {
-                  required: true,
-                  message: '新客上门率(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.newVisitNumRate1"
-                type="number"
-                number
-                placeholder="请输入新客上门率"
-                @on-change="newVisitNumRate2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
+                label="老客成交人数"
+                prop="oldDealNum1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '老客成交人数(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.oldDealNum1"
+                  type="number"
+                  number
+                  placeholder="请输入老客成交人数"
+                  @on-change="oldDealNum2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
             <FormItem
-              label="新客成交人数"
-              prop="newDealNum1"
-              :rules="[
-                {
-                  required: true,
-                  message: '新客成交人数(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.newDealNum1"
-                type="number"
-                number
-                placeholder="请输入新客成交人数"
-                @on-change="newDealNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
+                label="老客成交率(%)"
+                prop="oldDealRate1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '老客成交率(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.oldDealRate1"
+                  type="number"
+                  number
+                  placeholder="请输入老客成交率"
+                  @on-change="oldDealRate2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
             <FormItem
-              label="新客成交率(%)"
-              prop="newDealRate1"
-              :rules="[
-                {
-                  required: true,
-                  message: '新客成交率(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.newDealRate1"
-                type="number"
-                number
-                placeholder="请输入新客成交率"
-                @on-change="newDealRate2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
+                label="老客业绩"
+                prop="oldAchievementNum1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '老客业绩(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.oldAchievementNum1"
+                  type="number"
+                  number
+                  placeholder="请输入老客业绩"
+                  @on-change="oldAchievementNum2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
             <FormItem
-              label="新客业绩"
-              prop="newAchievementNum1"
-              :rules="[
-                {
-                  required: true,
-                  message: '新客业绩(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.newAchievementNum1"
-                type="number"
-                number
-                placeholder="请输入新客业绩"
-                @on-change="newAchievementNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
+                label="老客客单价"
+                prop="oldPrice1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '老客客单价(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.oldPrice1"
+                  type="number"
+                  number
+                  placeholder="请输入老客客单价"
+                  @on-change="oldPrice2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
             <FormItem
-              label="新客客单价"
-              prop="newPrice1"
-              :rules="[
-                {
-                  required: true,
-                  message: '新客客单价(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.newPrice1"
-                type="number"
-                number
-                placeholder="请输入新客客单价"
-                @on-change="newPrice2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
+                label="总业绩"
+                prop="totalPerformance1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '总业绩(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.totalPerformance1"
+                  type="number"
+                  number
+                  placeholder="请输入总业绩"
+                  @on-change="totalPerformance2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          <div class="item">
             <FormItem
-              label="老客上门人数"
-              prop="oldVisitNum1"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客上门人数(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldVisitNum1"
-                type="number"
-                number
-                placeholder="请输入老客上门人数"
-                @on-change="oldVisitNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客成交人数"
-              prop="oldDealNum1"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客成交人数(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldDealNum1"
-                type="number"
-                number
-                placeholder="请输入老客成交人数"
-                @on-change="oldDealNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客成交率(%)"
-              prop="oldDealRate1"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客成交率(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldDealRate1"
-                type="number"
-                number
-                placeholder="请输入老客成交率"
-                @on-change="oldDealRate2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客业绩"
-              prop="oldAchievementNum1"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客业绩(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldAchievementNum1"
-                type="number"
-                number
-                placeholder="请输入老客业绩"
-                @on-change="oldAchievementNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客客单价"
-              prop="oldPrice1"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客客单价(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldPrice1"
-                type="number"
-                number
-                placeholder="请输入老客客单价"
-                @on-change="oldPrice2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客业绩占比(%)"
-              prop="oldAchievementProportion1"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客业绩占比(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldAchievementProportion1"
-                type="number"
-                number
-                placeholder="请输入老客业绩占比"
-                @on-change="oldAchievementProportion2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="总业绩"
-              prop="totalPerformance1"
-              :rules="[
-                {
-                  required: true,
-                  message: '总业绩(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.totalPerformance1"
-                type="number"
-                number
-                placeholder="请输入总业绩"
-                @on-change="totalPerformance2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-        </Row>
-
+                label="老客业绩占比(%)"
+                prop="oldAchievementProportion1"
+                :rules="[
+                  {
+                    required: true,
+                    message: '老客业绩占比(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.oldAchievementProportion1"
+                  type="number"
+                  number
+                  placeholder="请输入老客业绩占比"
+                  @on-change="oldAchievementProportion2Change"
+                ></Input>
+              </FormItem>
+          </div>
+          
+        </div>
         <div class="title">上月</div>
         <Divider style="margin-top:4px" />
-        <Row :gutter="30">
-          <Col span="8">
+        <div class="list">
+          <div class="item">
             <FormItem
               label="派单数"
               prop="dispatchNum2"
@@ -446,8 +457,8 @@
                 @on-change="dispatchNum2Change"
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客上门人数"
               prop="newVisitNum2"
@@ -469,8 +480,8 @@
                 @on-change="newVisitNum2Change"
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客上门率(%)"
               prop="newVisitNumRate2"
@@ -492,8 +503,8 @@
                 @on-change="newVisitNumRate2Change"
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客成交人数"
               prop="newDealNum2"
@@ -515,8 +526,8 @@
                 @on-change="newDealNum2Change"
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客成交率(%)"
               prop="newDealRate2"
@@ -538,8 +549,8 @@
                 @on-change="newDealRate2Change"
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客业绩"
               prop="newAchievementNum2"
@@ -561,8 +572,9 @@
                 @on-change="newAchievementNum2Change"
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          
+          <div class="item">
             <FormItem
               label="新客客单价"
               prop="newPrice2"
@@ -584,174 +596,177 @@
                 @on-change="newPrice2Change"
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客上门人数"
-              prop="oldVisitNum2"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客上门人数(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldVisitNum2"
-                type="number"
-                number
-                placeholder="请输入老客上门人数"
-                @on-change="oldVisitNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客成交人数"
-              prop="oldDealNum2"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客成交人数(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldDealNum2"
-                type="number"
-                number
-                placeholder="请输入老客成交人数"
-                @on-change="oldDealNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客成交率(%)"
-              prop="oldDealRate2"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客成交率(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldDealRate2"
-                type="number"
-                number
-                placeholder="请输入老客成交率"
-                @on-change="oldDealRate2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客业绩"
-              prop="oldAchievementNum2"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客业绩(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldAchievementNum2"
-                type="number"
-                number
-                placeholder="请输入老客业绩"
-                @on-change="oldAchievementNum2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客客单价"
-              prop="oldPrice2"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客客单价(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldPrice2"
-                type="number"
-                number
-                placeholder="请输入老客客单价"
-                @on-change="oldPrice2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客业绩占比(%)"
-              prop="oldAchievementProportion2"
-              :rules="[
-                {
-                  required: true,
-                  message: '老客业绩占比(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.oldAchievementProportion2"
-                type="number"
-                number
-                placeholder="请输入老客业绩占比"
-                @on-change="oldAchievementProportion2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="总业绩"
-              prop="totalPerformance2"
-              :rules="[
-                {
-                  required: true,
-                  message: '总业绩(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="form.totalPerformance2"
-                type="number"
-                number
-                placeholder="请输入总业绩"
-                @on-change="totalPerformance2Change"
-              ></Input>
-            </FormItem>
-          </Col>
-        </Row>
+          </div>
+        </div>
+        <div class="list">
+        <div class="item">
+          <FormItem
+            label="老客上门人数"
+            prop="oldVisitNum2"
+            :rules="[
+              {
+                required: true,
+                message: '老客上门人数(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldVisitNum2"
+              type="number"
+              number
+              placeholder="请输入老客上门人数"
+              @on-change="oldVisitNum2Change"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客成交人数"
+            prop="oldDealNum2"
+            :rules="[
+              {
+                required: true,
+                message: '老客成交人数(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldDealNum2"
+              type="number"
+              number
+              placeholder="请输入老客成交人数"
+              @on-change="oldDealNum2Change"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客成交率(%)"
+            prop="oldDealRate2"
+            :rules="[
+              {
+                required: true,
+                message: '老客成交率(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldDealRate2"
+              type="number"
+              number
+              placeholder="请输入老客成交率"
+              @on-change="oldDealRate2Change"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客业绩"
+            prop="oldAchievementNum2"
+            :rules="[
+              {
+                required: true,
+                message: '老客业绩(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldAchievementNum2"
+              type="number"
+              number
+              placeholder="请输入老客业绩"
+              @on-change="oldAchievementNum2Change"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客客单价"
+            prop="oldPrice2"
+            :rules="[
+              {
+                required: true,
+                message: '老客客单价(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldPrice2"
+              type="number"
+              number
+              placeholder="请输入老客客单价"
+              @on-change="oldPrice2Change"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="总业绩"
+            prop="totalPerformance2"
+            :rules="[
+              {
+                required: true,
+                message: '总业绩(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.totalPerformance2"
+              type="number"
+              number
+              placeholder="请输入总业绩"
+              @on-change="totalPerformance2Change"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客业绩占比(%)"
+            prop="oldAchievementProportion2"
+            :rules="[
+              {
+                required: true,
+                message: '老客业绩占比(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldAchievementProportion2"
+              type="number"
+              number
+              placeholder="请输入老客业绩占比"
+              @on-change="oldAchievementProportion2Change"
+            ></Input>
+          </FormItem>
+        </div>
+        
+        </div>
 
         <div class="title">环比</div>
         <Divider style="margin-top:4px" />
-        <Row :gutter="30">
-          <Col span="8">
+        <div class="list">
+          <div class="item">
             <FormItem
               label="派单数"
               prop="dispatchNum3"
@@ -764,8 +779,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客上门人数"
               prop="newVisitNum3"
@@ -778,8 +793,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客上门率(%)"
               prop="newVisitNumRate3"
@@ -792,8 +807,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客成交人数"
               prop="newDealNum3"
@@ -806,8 +821,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客成交率(%)"
               prop="newDealRate3"
@@ -820,8 +835,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客业绩"
               prop="newAchievementNum3"
@@ -834,8 +849,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="新客客单价"
               prop="newPrice3"
@@ -848,8 +863,10 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+        </div>
+        <div class="list">
+          <div class="item">
             <FormItem
               label="老客上门人数"
               prop="oldVisitNum3"
@@ -862,8 +879,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="老客成交人数"
               prop="oldDealNum3"
@@ -876,8 +893,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="老客成交率(%)"
               prop="oldDealRate3"
@@ -890,8 +907,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="老客业绩"
               prop="oldAchievementNum3"
@@ -904,8 +921,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="老客客单价"
               prop="oldPrice3"
@@ -918,22 +935,8 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="老客业绩占比(%)"
-              prop="oldAchievementProportion3"
-            >
-              <Input
-                v-model="form.oldAchievementProportion3"
-                type="number"
-                number
-                placeholder="请输入老客业绩占比"
-                disabled
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
+          </div>
+          <div class="item">
             <FormItem
               label="总业绩"
               prop="totalPerformance3"
@@ -946,8 +949,339 @@
                 disabled
               ></Input>
             </FormItem>
-          </Col>
-        </Row>
+          </div>
+          <div class="item">
+            <FormItem
+              label="老客业绩占比(%)"
+              prop="oldAchievementProportion3"
+            >
+              <Input
+                v-model="form.oldAchievementProportion3"
+                type="number"
+                number
+                placeholder="请输入老客业绩占比"
+                disabled
+              ></Input>
+            </FormItem>
+          </div>
+          
+        </div>
+        <div class="title">按健康指标推算</div>
+        <Divider style="margin-top:4px" />
+        <div class="list">
+          <div class="item">
+            <FormItem
+              label="派单数"
+              prop="dispatchNum4"
+              :rules="[
+                {
+                  required: true,
+                  message: '派单数(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.dispatchNum4"
+                type="number"
+                number
+                placeholder="请输入派单数"
+              ></Input>
+            </FormItem>
+          </div>
+          <div class="item">
+            <FormItem
+              label="新客上门人数"
+              prop="newVisitNum4"
+              :rules="[
+                {
+                  required: true,
+                  message: '新客上门人数(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.newVisitNum4"
+                type="number"
+                number
+                placeholder="请输入新客上门人数"
+              ></Input>
+            </FormItem>
+          </div>
+          <div class="item">
+            <FormItem
+              label="新客上门率(%)"
+              prop="newVisitNumRate4"
+              :rules="[
+                {
+                  required: true,
+                  message: '新客上门率(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.newVisitNumRate4"
+                type="number"
+                number
+                placeholder="请输入新客上门率"
+              ></Input>
+            </FormItem>
+          </div>
+          <div class="item">
+            <FormItem
+              label="新客成交人数"
+              prop="newDealNum4"
+              :rules="[
+                {
+                  required: true,
+                  message: '新客成交人数(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.newDealNum4"
+                type="number"
+                number
+                placeholder="请输入新客成交人数"
+              ></Input>
+            </FormItem>
+          </div>
+          <div class="item">
+            <FormItem
+              label="新客成交率(%)"
+              prop="newDealRate4"
+              :rules="[
+                {
+                  required: true,
+                  message: '新客成交率(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.newDealRate4"
+                type="number"
+                number
+                placeholder="请输入新客成交率"
+              ></Input>
+            </FormItem>
+          </div>
+          <div class="item">
+            <FormItem
+              label="新客业绩"
+              prop="newAchievementNum4"
+              :rules="[
+                {
+                  required: true,
+                  message: '新客业绩(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.newAchievementNum4"
+                type="number"
+                number
+                placeholder="请输入新客业绩"
+              ></Input>
+            </FormItem>
+          </div>
+          
+          <div class="item">
+            <FormItem
+              label="新客客单价"
+              prop="newPrice4"
+              :rules="[
+                {
+                  required: true,
+                  message: '新客客单价(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.newPrice4"
+                type="number"
+                number
+                placeholder="请输入新客客单价"
+              ></Input>
+            </FormItem>
+          </div>
+        </div>
+        <div class="list">
+        <div class="item">
+          <FormItem
+            label="老客上门人数"
+            prop="oldVisitNum4"
+            :rules="[
+              {
+                required: true,
+                message: '老客上门人数(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldVisitNum4"
+              type="number"
+              number
+              placeholder="请输入老客上门人数"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客成交人数"
+            prop="oldDealNum4"
+            :rules="[
+              {
+                required: true,
+                message: '老客成交人数(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldDealNum4"
+              type="number"
+              number
+              placeholder="请输入老客成交人数"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客成交率(%)"
+            prop="oldDealRate4"
+            :rules="[
+              {
+                required: true,
+                message: '老客成交率(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldDealRate4"
+              type="number"
+              number
+              placeholder="请输入老客成交率"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客业绩"
+            prop="oldAchievementNum4"
+            :rules="[
+              {
+                required: true,
+                message: '老客业绩(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldAchievementNum4"
+              type="number"
+              number
+              placeholder="请输入老客业绩"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客客单价"
+            prop="oldPrice4"
+            :rules="[
+              {
+                required: true,
+                message: '老客客单价(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldPrice4"
+              type="number"
+              number
+              placeholder="请输入老客客单价"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="总业绩"
+            prop="totalPerformance4"
+            :rules="[
+              {
+                required: true,
+                message: '总业绩(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.totalPerformance4"
+              type="number"
+              number
+              placeholder="请输入总业绩"
+            ></Input>
+          </FormItem>
+        </div>
+        <div class="item">
+          <FormItem
+            label="老客业绩占比(%)"
+            prop="oldAchievementProportion4"
+            :rules="[
+              {
+                required: true,
+                message: '老客业绩占比(最小是0)',
+                trigger: 'change',
+                type: 'number',
+                min: 0,
+              },
+            ]"
+          >
+            <Input
+              v-model="form.oldAchievementProportion4"
+              type="number"
+              number
+              placeholder="请输入老客业绩占比"
+            ></Input>
+          </FormItem>
+        </div>
+        
+        </div>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -1102,58 +1436,72 @@ export default {
         dispatchNum1: null,
         dispatchNum2: null,
         dispatchNum3: null,
+        dispatchNum4: null,
         // 新客上门
         newVisitNum1: null,
         newVisitNum2: null,
         newVisitNum3: null,
+        newVisitNum4: null,
         // 新客上门率
         newVisitNumRate1: null,
         newVisitNumRate2: null,
         newVisitNumRate3: null,
+        newVisitNumRate4: null,
         // 新客成交人数
         newDealNum1: null,
         newDealNum2: null,
         newDealNum3: null,
+        newDealNum4: null,
         // 新客成交率
         newDealRate1: null,
         newDealRate2: null,
         newDealRate3: null,
+        newDealRate4: null,
         // 新客业绩
         newAchievementNum1: null,
         newAchievementNum2: null,
         newAchievementNum3: null,
+        newAchievementNum4: null,
         // 新客客单价
         newPrice1: null,
         newPrice2: null,
         newPrice3: null,
+        newPrice4: null,
         // 老客上门人数
         oldVisitNum1: null,
         oldVisitNum2: null,
         oldVisitNum3: null,
+        oldVisitNum4: null,
         // 老客成交人数
         oldDealNum1: null,
         oldDealNum2: null,
         oldDealNum3: null,
+        oldDealNum4: null,
         // 老客成交率
         oldDealRate1: null,
         oldDealRate2: null,
         oldDealRate3: null,
+        oldDealRate4: null,
         // 老客业绩
         oldAchievementNum1: null,
         oldAchievementNum2: null,
         oldAchievementNum3: null,
+        oldAchievementNum4: null,
         // 老客客单价
         oldPrice1: null,
         oldPrice2: null,
         oldPrice3: null,
+        oldPrice4: null,
         // 老客业绩占比
         oldAchievementProportion1: null,
         oldAchievementProportion2: null,
         oldAchievementProportion3: null,
+        oldAchievementProportion4: null,
         // 总业绩
         totalPerformance1: null,
         totalPerformance2: null,
         totalPerformance3: null,
+        totalPerformance4: null,
       },
 
       ruleValidate: {
@@ -1562,7 +1910,7 @@ export default {
                 lastMonthData:oldAchievementProportion2,
                 beforeMonthData:oldAchievementProportion1,
                 chainRatio: this.form.oldAchievementProportion3,
-                sort:13
+                sort:14
             }
         ]
     },
@@ -1582,7 +1930,7 @@ export default {
                 lastMonthData:totalPerformance2,
                 beforeMonthData:totalPerformance1,
                 chainRatio: this.form.totalPerformance3,
-                sort:14
+                sort:13
             }
         ]
     },
@@ -1624,10 +1972,189 @@ export default {
               }
             });
           } else {
-            
+           this.dispatchNumlist1 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'派单数',
+                lastMonthData:this.form.dispatchNum2,
+                beforeMonthData:this.form.dispatchNum1,
+                chainRatio: this.form.dispatchNum3,
+                sort:1,
+                indicatorCalculation:this.form.dispatchNum4
+            }
+        ]
+        this.dispatchNumlist2 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'新客上门人数',
+                lastMonthData:this.form.newVisitNum2,
+                beforeMonthData:this.form.newVisitNum1,
+                chainRatio: this.form.newVisitNum3,
+                sort:2,
+                indicatorCalculation:this.form.newVisitNum4
+            }
+        ]
+        this.dispatchNumlist3 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'新客上门率',
+                lastMonthData:this.form.newVisitNumRate2,
+                beforeMonthData:this.form.newVisitNumRate1,
+                chainRatio: this.form.newVisitNumRate3,
+                sort:3,
+                indicatorCalculation:this.form.newVisitNumRate4
+
+            }
+        ]
+        this.dispatchNumlist4 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'新客成交人数',
+                lastMonthData:this.form.newDealNum2,
+                beforeMonthData:this.form.newDealNum1,
+                chainRatio: this.form.newDealNum3,
+                sort:4,
+                indicatorCalculation:this.form.newDealNum4
+
+            }
+        ]
+        this.dispatchNumlist5 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'新客成交率',
+                lastMonthData:this.form.newDealRate2,
+                beforeMonthData:this.form.newDealRate1,
+                chainRatio: this.form.newDealRate3,
+                sort:5,
+                indicatorCalculation:this.form.newDealRate4
+
+            }
+        ]
+        this.dispatchNumlist6 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'新客业绩',
+                lastMonthData:this.form.newAchievementNum2,
+                beforeMonthData:this.form.newAchievementNum1,
+                chainRatio: this.form.newAchievementNum3,
+                sort:6,
+                indicatorCalculation:this.form.newAchievementNum4
+
+            }
+        ]
+        this.dispatchNumlist7 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'新客客单价',
+                lastMonthData:this.form.newPrice2,
+                beforeMonthData:this.form.newPrice1,
+                chainRatio: this.form.newPrice3,
+                sort:7,
+                indicatorCalculation:this.form.newPrice4
+
+            }
+        ]
+        this.dispatchNumlist8 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'老客上门人数',
+                lastMonthData:this.form.oldVisitNum2,
+                beforeMonthData:this.form.oldVisitNum1,
+                chainRatio: this.form.oldVisitNum3,
+                sort:8,
+                indicatorCalculation:this.form.oldVisitNum4
+
+            }
+        ]
+         this.dispatchNumlist9 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'老客成交人数',
+                lastMonthData:this.form.oldDealNum2,
+                beforeMonthData:this.form.oldDealNum1,
+                chainRatio: this.form.oldDealNum3,
+                sort:9,
+                indicatorCalculation:this.form.oldDealNum4
+
+            }
+        ]
+        this.dispatchNumlist10 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'老客成交率',
+                lastMonthData:this.form.oldDealRate2,
+                beforeMonthData:this.form.oldDealRate1,
+                chainRatio: this.form.oldDealRate3,
+                sort:10,
+                indicatorCalculation:this.form.oldDealRate4
+
+            }
+        ]
+        this.dispatchNumlist11 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'老客业绩',
+                lastMonthData:this.form.oldAchievementNum2,
+                beforeMonthData:this.form.oldAchievementNum1,
+                chainRatio: this.form.oldAchievementNum3,
+                sort:11,
+                indicatorCalculation:this.form.oldAchievementNum4
+
+            }
+        ]
+        this.dispatchNumlist12 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'老客客单价',
+                lastMonthData:this.form.oldPrice2,
+                beforeMonthData:this.form.oldPrice1,
+                chainRatio: this.form.oldPrice3,
+                sort:12,
+                indicatorCalculation:this.form.oldPrice4
+
+            }
+        ]
+        this.dispatchNumlist13 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'老客业绩占比',
+                lastMonthData:this.form.oldAchievementProportion2,
+                beforeMonthData:this.form.oldAchievementProportion1,
+                chainRatio: this.form.oldAchievementProportion3,
+                sort:14,
+                indicatorCalculation:this.form.oldAchievementProportion4
+
+            }
+        ]
+        this.dispatchNumlist14 = [
+            {
+                hospitalId:Number(sessionStorage.getItem('hospitalId')),
+                indicatorsId:this.indicatorsId,
+                operationName:'总业绩',
+                lastMonthData:this.form.totalPerformance2,
+                beforeMonthData:this.form.totalPerformance1,
+                chainRatio: this.form.totalPerformance3,
+                sort:13,
+                indicatorCalculation:this.form.totalPerformance4
+
+            }
+        ]
            const HospitalOperationDataList = this.dispatchNumlist1.concat(...this.dispatchNumlist2,...this.dispatchNumlist3,...this.dispatchNumlist4,...this.dispatchNumlist5,
            ...this.dispatchNumlist6,...this.dispatchNumlist7,...this.dispatchNumlist8,...this.dispatchNumlist9,...this.dispatchNumlist10,...this.dispatchNumlist11,
-           ...this.dispatchNumlist12,...this.dispatchNumlist13,...this.dispatchNumlist14
+           ...this.dispatchNumlist12,...this.dispatchNumlist14,...this.dispatchNumlist13
            )
             // 添加
             api.addHospitalOperationData(HospitalOperationDataList).then((res) => {
@@ -1712,5 +2239,31 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.list{
+  display: flex;
+  justify-content: space-between;
+}
+.item{
+  width:14%;
+  margin:0 10px
+}
+.title{
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 20px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+}
+.bottom_memo{
+  font-size: 16px;
+  margin-top: 5px;
 }
 </style>

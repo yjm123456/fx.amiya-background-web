@@ -25,9 +25,16 @@
             <span class="title_bold">客户昵称：</span>
             <span>{{detailObj.nickName}} </span>
           </div>
+          <div class="dis_con">
+
+          
           <div class="mr_top">
             <span class="title_bold">手机号：</span>
             <span>{{detailObj.phone}} </span>
+          </div>
+          <Button type="primary" @click="customerClick(detailObj)"
+                style="margin-right:10px">顾客信息</Button
+              >
           </div>
         </div>
       </div>
@@ -161,6 +168,9 @@
         height="102"
         style="margin-top:10px"
       ></Table>
+      <!--客户信息  -->
+    <customerMessage :customerMessageModel.sync="customerMessageModel" 
+    :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
       <div slot="footer">
         <Button @click="handleCancelClick()">取消</Button>
       </div>
@@ -168,14 +178,28 @@
   </div>
 </template>
 <script>
+import customerMessage from "@/components/customerMessage/customerMessage"
+import * as customerManageApi from "@/api/customerManage";
+
 import { time } from 'echarts';
 export default {
   props: {
     detailModel: Boolean,
     detailList: Array,
   },
+  components:{
+    customerMessage
+  },
   data() {
     return {
+      customerMessageModel:false,
+      // 客户信息组件参数
+      customerInfoComParams2: {
+        userId: "",
+        encryptPhone: "",
+        tabGlag:false
+      },
+      customerMessageObj:{},
       time:null,
       detailObj:{},
       controlModel: false,
@@ -238,6 +262,21 @@ export default {
   },
 
   methods: {
+    customerClick(value){
+      const {userId,encryptPhone} = value
+      let data = {
+            encryptPhone:encryptPhone
+          }
+      customerManageApi.getBaseAndBindCustomerInfoByEncryptPhone(data).then((res) => {
+        if(res.code === 0){
+          this.customerInfoComParams2.userId = userId;
+          this.customerInfoComParams2.encryptPhone = encryptPhone;
+          this.customerInfoComParams2.tabGlag = true;
+          this.customerMessageModel = true
+          this.customerMessageObj = res.data.customer
+        }
+      })
+    },
     handleModalVisibleChange(value) {
       if (!value) {
         this.handleCancelClick();
@@ -310,5 +349,9 @@ export default {
 }
 .mr{
   margin: 20px 0 10px;
+}
+.dis_con{
+  display: flex;
+  justify-content: space-between;
 }
 </style>

@@ -2,16 +2,21 @@
   <div>
     <Card class="container">
       <div>
+        <div class="title">啊美雅健康参考值：新客上门率20% 新客成交率80% 新客客单价50K 老客复购率30% 老客客单价40K</div>
         <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="500"></Table>
         <div>
-        <div class="h1">啊美雅批注</div>
+          <div class="bottom">
+            <div class="bottom_memo">（说明：数据统计时间11月1日-11月30日，机构展现不以业绩为导向）</div>
+            <div class="company">本表单位为：千元（K）</div>
+          </div>
+        <!-- <div class="h1">啊美雅批注</div>
         <Input
             v-model="query.remark"
             style="width: 100%; "
             type="textarea"
             :rows="4"
             disabled
-        />
+        /> -->
         </div>
       </div>
     </Card>
@@ -200,5 +205,21 @@ export default {
   color: #000;
   font-weight: bold;
   margin: 15px 0;
+}
+.title{
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: red;
+}
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 10px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+  margin-top:5px
 }
 </style>

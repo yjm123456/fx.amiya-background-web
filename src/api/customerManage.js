@@ -334,3 +334,19 @@ export const getDockingHospitalInfo = () => {
         method: "get",
     });
 };
+// 根据加密电话查询客户资料
+export const getBaseAndBindCustomerInfoByEncryptPhone = (params) => {
+    return http({
+        url: `/amiyabg/Customer/getBaseAndBindCustomerInfoByEncryptPhone`,
+        method: "get",
+        params
+    });
+};
+// 根据id编辑客户基础信息
+export const updateById = (data) => {
+    return http({
+        url: `/amiyabg/Customer/updateById`,
+        method: "put",
+        data,
+    });
+};

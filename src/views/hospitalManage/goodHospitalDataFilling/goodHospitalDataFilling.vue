@@ -410,10 +410,7 @@ export default {
         keyword: "",
         indicatorsId:sessionStorage.getItem('indicatorsId'),
         columns: [
-          {
-            title: "优秀机构",
-            key: "greatHospitalName",
-          },
+         
           {
             title: "指标名称",
             key: "indicatorName",
@@ -421,12 +418,10 @@ export default {
           {
             title: "运营维度名称",
             key: "operationName",
-            width:250
           },
           {
             title: "运营维度值",
             key: "operationValue",
-            width:200
           },
           
           {

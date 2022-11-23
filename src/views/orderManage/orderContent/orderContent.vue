@@ -598,10 +598,10 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="微信号" prop="wechatNumber">
+            <FormItem label="微信备注" prop="wechatNumber">
               <Input
                 v-model="form.wechatNumber"
-                placeholder="请输入微信号"
+                placeholder="请输入微信备注"
               />
             </FormItem>
           </Col>

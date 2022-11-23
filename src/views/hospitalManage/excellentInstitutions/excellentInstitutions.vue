@@ -75,6 +75,7 @@
       :title="title"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
+      width="1000"
     >
       <Form
         ref="form"
@@ -83,62 +84,122 @@
         label-position="left"
         :label-width="130"
       >
-        <FormItem label="医院" prop="hospitalId">
-          <Select
-            v-model="form.hospitalId"
-            placeholder="请选择医院"
-            @on-change="hospitalIdChange"
-            filterable
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+      <Row :gutter="30">
+        <Col span="8">
+          <FormItem label="医院" prop="hospitalId">
+            <Select
+              v-model="form.hospitalId"
+              placeholder="请选择医院"
+              @on-change="hospitalIdChange"
+              filterable
             >
-          </Select>
-        </FormItem>
-        <FormItem label="前月新客上门率" prop="lastNewCustomerVisitRate">
-          <Input v-model="form.lastNewCustomerVisitRate" placeholder="请输入前月新客上门率" type="number" number @on-change="lastNewCustomerVisitRateChange"></Input>
-        </FormItem>
-        <FormItem label="上月新客上门率" prop="thisNewCustomerVisitRate">
-          <Input v-model="form.thisNewCustomerVisitRate" placeholder="请输入上月新客上门率" type="number" number @on-change="thisNewCustomerVisitRateChange"></Input>
-        </FormItem>
-        <FormItem label="新客上门环比" prop="newCustomerVisitChainRatio">
-          <Input v-model="form.newCustomerVisitChainRatio" placeholder="请输入新客上门环比" type="number" number disabled></Input>
-        </FormItem>
-        <FormItem label="前月新客成交率" prop="lastNewCustomerDealRate">
-          <Input v-model="form.lastNewCustomerDealRate" placeholder="请输入前月新客成交率" type="number" number @on-change="lastNewCustomerDealRateChange"></Input>
-        </FormItem>
-        <FormItem label="上月新客成交率" prop="thisNewCustomerDealRate">
-          <Input v-model="form.thisNewCustomerDealRate" placeholder="请输入上月新客成交率" type="number" number @on-change="thisNewCustomerDealRateChange"></Input>
-        </FormItem>
-        <FormItem label="新客成交率环比" prop="newCustomerDealChainRatio">
-          <Input v-model="form.newCustomerDealChainRatio" placeholder="请输入新客成交率环比" type="number" number disabled></Input>
-        </FormItem>
-        <FormItem label="前月新客客单价" prop="lastNewCustomerUnitPrice">
-          <Input v-model="form.lastNewCustomerUnitPrice" placeholder="请输入前月新客客单价" type="number" number @on-change="lastNewCustomerUnitPriceChange"></Input>
-        </FormItem>
-        <FormItem label="上月新客客单价" prop="thisNewCustomerUnitPrice">
-          <Input v-model="form.thisNewCustomerUnitPrice" placeholder="请输入上月新客客单价" type="number" number @on-change="thisNewCustomerUnitPriceChange"></Input>
-        </FormItem>
-        <FormItem label="新客客单价环比" prop="newCustomerUnitPriceChainRatio">
-          <Input v-model="form.newCustomerUnitPriceChainRatio" placeholder="请输入新客客单价环比" type="number" number disabled></Input>
-        </FormItem>
-        <FormItem label="指标名称" prop="indicatorsId">
-          <Select
-            v-model="form.indicatorsId"
-            placeholder="请选择指标名称"
-            filterable
-          >
-            <Option
-              v-for="item in indicatorNameList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in hospitalInfo"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="指标名称" prop="indicatorsId">
+            <Select
+              v-model="form.indicatorsId"
+              placeholder="请选择指标名称"
+              filterable
             >
-          </Select>
-        </FormItem>
+              <Option
+                v-for="item in indicatorNameList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </FormItem>
+        </Col>
+        <Col span="8">
+
+        </Col>
+        <Col span="8">
+          <FormItem label="前月新客上门率" prop="lastNewCustomerVisitRate">
+            <Input v-model="form.lastNewCustomerVisitRate" placeholder="请输入前月新客上门率" type="number" number @on-change="lastNewCustomerVisitRateChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="上月新客上门率" prop="thisNewCustomerVisitRate">
+            <Input v-model="form.thisNewCustomerVisitRate" placeholder="请输入上月新客上门率" type="number" number @on-change="thisNewCustomerVisitRateChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="新客上门环比" prop="newCustomerVisitChainRatio">
+            <Input v-model="form.newCustomerVisitChainRatio" placeholder="请输入新客上门环比" type="number" number disabled></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="前月新客成交率" prop="lastNewCustomerDealRate">
+            <Input v-model="form.lastNewCustomerDealRate" placeholder="请输入前月新客成交率" type="number" number @on-change="lastNewCustomerDealRateChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="上月新客成交率" prop="thisNewCustomerDealRate">
+            <Input v-model="form.thisNewCustomerDealRate" placeholder="请输入上月新客成交率" type="number" number @on-change="thisNewCustomerDealRateChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="新客成交率环比" prop="newCustomerDealChainRatio">
+            <Input v-model="form.newCustomerDealChainRatio" placeholder="请输入新客成交率环比" type="number" number disabled></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="前月新客客单价" prop="lastNewCustomerUnitPrice">
+            <Input v-model="form.lastNewCustomerUnitPrice" placeholder="请输入前月新客客单价" type="number" number @on-change="lastNewCustomerUnitPriceChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="上月新客客单价" prop="thisNewCustomerUnitPrice">
+            <Input v-model="form.thisNewCustomerUnitPrice" placeholder="请输入上月新客客单价" type="number" number @on-change="thisNewCustomerUnitPriceChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="新客客单价环比" prop="newCustomerUnitPriceChainRatio">
+            <Input v-model="form.newCustomerUnitPriceChainRatio" placeholder="请输入新客客单价环比" type="number" number disabled></Input>
+          </FormItem>
+        </Col>
+         
+
+        <Col span="8">
+          <FormItem label="前月老客复购率" prop="lastOldCustomerRepurchaseRate">
+            <Input v-model="form.lastOldCustomerRepurchaseRate" placeholder="请输入前月老客复购率" type="number" number @on-change="lastOldCustomerRepurchaseRateChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="上月老客复购率" prop="thisOldCustomerRepurchaseRate">
+            <Input v-model="form.thisOldCustomerRepurchaseRate" placeholder="请输入上月老客复购率" type="number" number @on-change="thisOldCustomerRepurchaseRateChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="老客复购率环比" prop="oldCustomerRepurchaseChainRatio">
+            <Input v-model="form.oldCustomerRepurchaseChainRatio " placeholder="请输入老客复购率环比" type="number" number disabled></Input>
+          </FormItem>
+        </Col>
+
+        <Col span="8">
+          <FormItem label="前月老客客单价" prop="lastOldCustomerUnitPrice">
+            <Input v-model="form.lastOldCustomerUnitPrice" placeholder="请输入前月老客客单价" type="number" number @on-change="lastOldCustomerUnitPriceChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="上月老客客单价" prop="thisOldCustomerUnitPrice">
+            <Input v-model="form.thisOldCustomerUnitPrice" placeholder="请输入上月老客客单价" type="number" number @on-change="thisOldCustomerUnitPriceChange"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="老客客单价环比" prop="oldCustomerUnitPriceChainRatio">
+            <Input v-model="form.oldCustomerUnitPriceChainRatio " placeholder="请输入老客客单价环比" type="number" number disabled></Input>
+          </FormItem>
+        </Col>
+      </Row>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -213,10 +274,42 @@ export default {
             key: "thisNewCustomerUnitPrice",
             width:140
           },
-
           {
             title: "新客客单价环比",
             key: "newCustomerUnitPriceChainRatio",
+            width:140
+          },
+          
+          {
+            title: "前月老客复购率",
+            key: "lastOldCustomerRepurchaseRate",
+            width:140
+          },
+          {
+            title: "上月老客复购率",
+            key: "thisOldCustomerRepurchaseRate",
+            width:140
+          },
+
+          {
+            title: "老客复购率环比",
+            key: "oldCustomerRepurchaseChainRatio",
+            width:140
+          },
+          {
+            title: "前月老客客单价",
+            key: "lastOldCustomerUnitPrice",
+            width:140
+          },
+          {
+            title: "上月老客客单价",
+            key: "thisOldCustomerUnitPrice",
+            width:140
+          },
+
+          {
+            title: "老客客单价环比",
+            key: "oldCustomerUnitPriceChainRatio",
             width:140
           },
           {
@@ -254,7 +347,13 @@ export default {
                               newCustomerDealChainRatio,
                               lastNewCustomerUnitPrice,
                               thisNewCustomerUnitPrice,
-                              newCustomerUnitPriceChainRatio
+                              newCustomerUnitPriceChainRatio,
+                              lastOldCustomerRepurchaseRate,
+                              thisOldCustomerRepurchaseRate ,
+                              oldCustomerRepurchaseChainRatio ,
+                              lastOldCustomerUnitPrice  ,
+                              thisOldCustomerUnitPrice  ,
+                              oldCustomerUnitPriceChainRatio  
                             } = res.data.greatHospitalOperationHealthInfo;
                             this.isEdit = true;
                             this.form.hospitalId = hospitalId;
@@ -268,6 +367,12 @@ export default {
                             this.form.lastNewCustomerUnitPrice = lastNewCustomerUnitPrice;
                             this.form.thisNewCustomerUnitPrice = thisNewCustomerUnitPrice;
                             this.form.newCustomerUnitPriceChainRatio = newCustomerUnitPriceChainRatio;
+                            this.form.lastOldCustomerRepurchaseRate = lastOldCustomerRepurchaseRate;
+                            this.form.thisOldCustomerRepurchaseRate = thisOldCustomerRepurchaseRate;
+                            this.form.oldCustomerRepurchaseChainRatio = oldCustomerRepurchaseChainRatio;
+                            this.form.lastOldCustomerUnitPrice = lastOldCustomerUnitPrice;
+                            this.form.thisOldCustomerUnitPrice = thisOldCustomerUnitPrice;
+                            this.form.oldCustomerUnitPriceChainRatio = oldCustomerUnitPriceChainRatio;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -348,7 +453,19 @@ export default {
         // 上月新客客单价
         thisNewCustomerUnitPrice:null,
         // 新客客单价环比
-        newCustomerUnitPriceChainRatio:null
+        newCustomerUnitPriceChainRatio:null,
+        // 前月老客复购率
+        lastOldCustomerRepurchaseRate :null,
+        // 上月老客复购率
+        thisOldCustomerRepurchaseRate  :null,
+        // 老客复购率环比
+        oldCustomerRepurchaseChainRatio  :null,
+        //  前月老客客单价
+        lastOldCustomerUnitPrice  :null,
+        // 上月老客客单价
+        thisOldCustomerUnitPrice  :null,
+        //  老客客单价环比
+        oldCustomerUnitPriceChainRatio  :null
       },
 
       ruleValidate: {
@@ -417,6 +534,44 @@ export default {
           {
             required: true,
             message: "请输入新客客单价环比",
+          },
+        ],
+
+        lastOldCustomerRepurchaseRate : [
+          {
+            required: true,
+            message: "请输入前月老客复购率",
+          },
+        ],
+        thisOldCustomerRepurchaseRate  : [
+          {
+            required: true,
+            message: "请输入上月老客复购率",
+          },
+        ],
+        oldCustomerRepurchaseChainRatio : [
+          {
+            required: true,
+            message: "请输入老客复购率环比",
+          },
+        ],
+
+        lastOldCustomerUnitPrice: [
+          {
+            required: true,
+            message: "请输入前月老客客单价",
+          },
+        ],
+        thisOldCustomerUnitPrice: [
+          {
+            required: true,
+            message: "请输入上月老客客单价",
+          },
+        ],
+        oldCustomerUnitPriceChainRatio : [
+          {
+            required: true,
+            message: "请输入老客客单价环比",
           },
         ],
 
@@ -520,6 +675,22 @@ export default {
         const {lastNewCustomerUnitPrice,thisNewCustomerUnitPrice} =  this.form
         this.form.newCustomerUnitPriceChainRatio = (((Number(thisNewCustomerUnitPrice)-Number(lastNewCustomerUnitPrice)) / Number(lastNewCustomerUnitPrice)).toFixed(2))*100
     },
+    thisOldCustomerRepurchaseRateChange(){
+        const {lastOldCustomerRepurchaseRate,thisOldCustomerRepurchaseRate} =  this.form
+        this.form.oldCustomerRepurchaseChainRatio = (((Number(thisOldCustomerRepurchaseRate)-Number(lastOldCustomerRepurchaseRate)) / Number(lastOldCustomerRepurchaseRate)).toFixed(2))*100
+    },
+    lastOldCustomerRepurchaseRateChange(){
+        const {lastOldCustomerRepurchaseRate,thisOldCustomerRepurchaseRate} =  this.form
+        this.form.oldCustomerRepurchaseChainRatio = (((Number(thisOldCustomerRepurchaseRate)-Number(lastOldCustomerRepurchaseRate)) / Number(lastOldCustomerRepurchaseRate)).toFixed(2))*100
+    },
+    lastOldCustomerUnitPriceChange(){
+        const {lastOldCustomerUnitPrice,thisOldCustomerUnitPrice} =  this.form
+        this.form.oldCustomerUnitPriceChainRatio = (((Number(thisOldCustomerUnitPrice)-Number(lastOldCustomerUnitPrice)) / Number(lastOldCustomerUnitPrice)).toFixed(2))*100
+    },
+    thisOldCustomerUnitPriceChange(){
+        const {lastOldCustomerUnitPrice,thisOldCustomerUnitPrice} =  this.form
+        this.form.oldCustomerUnitPriceChainRatio = (((Number(thisOldCustomerUnitPrice)-Number(lastOldCustomerUnitPrice)) / Number(lastOldCustomerUnitPrice)).toFixed(2))*100
+    },
     // 获取优秀健康指标列表
     getGreatHospitalOperationHealth() {
       const { keyword,indicatorsId} = this.query;
@@ -552,12 +723,12 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-             const {id, hospitalId, indicatorsId, lastNewCustomerVisitRate,thisNewCustomerVisitRate,newCustomerVisitChainRatio,lastNewCustomerDealRate,
-            thisNewCustomerDealRate,newCustomerDealChainRatio,lastNewCustomerUnitPrice,thisNewCustomerUnitPrice,newCustomerUnitPriceChainRatio } = this.form;
-            const  data = { id,hospitalId ,indicatorsId,lastNewCustomerVisitRate,thisNewCustomerVisitRate,newCustomerVisitChainRatio,lastNewCustomerDealRate,
-            thisNewCustomerDealRate,newCustomerDealChainRatio,lastNewCustomerUnitPrice,thisNewCustomerUnitPrice,newCustomerUnitPriceChainRatio} 
+            //  const {id, hospitalId, indicatorsId, lastNewCustomerVisitRate,thisNewCustomerVisitRate,newCustomerVisitChainRatio,lastNewCustomerDealRate,
+            // thisNewCustomerDealRate,newCustomerDealChainRatio,lastNewCustomerUnitPrice,thisNewCustomerUnitPrice,newCustomerUnitPriceChainRatio } = this.form;
+            // const  data = { id,hospitalId ,indicatorsId,lastNewCustomerVisitRate,thisNewCustomerVisitRate,newCustomerVisitChainRatio,lastNewCustomerDealRate,
+            // thisNewCustomerDealRate,newCustomerDealChainRatio,lastNewCustomerUnitPrice,thisNewCustomerUnitPrice,newCustomerUnitPriceChainRatio} 
             // 修改
-            api.editGreatHospitalOperationHealth(data).then((res) => {
+            api.editGreatHospitalOperationHealth(this.form).then((res) => {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
@@ -570,9 +741,15 @@ export default {
             });
           } else {
             const { hospitalId, indicatorsId, lastNewCustomerVisitRate,thisNewCustomerVisitRate,newCustomerVisitChainRatio,lastNewCustomerDealRate,
-            thisNewCustomerDealRate,newCustomerDealChainRatio,lastNewCustomerUnitPrice,thisNewCustomerUnitPrice,newCustomerUnitPriceChainRatio } = this.form;
+            thisNewCustomerDealRate,newCustomerDealChainRatio,lastNewCustomerUnitPrice,thisNewCustomerUnitPrice,newCustomerUnitPriceChainRatio,
+            lastOldCustomerRepurchaseRate,thisOldCustomerRepurchaseRate ,oldCustomerRepurchaseChainRatio ,
+            lastOldCustomerUnitPrice  ,thisOldCustomerUnitPrice  ,oldCustomerUnitPriceChainRatio  
+             } = this.form;
             const  data = { hospitalId ,indicatorsId,lastNewCustomerVisitRate,thisNewCustomerVisitRate,newCustomerVisitChainRatio,lastNewCustomerDealRate,
-            thisNewCustomerDealRate,newCustomerDealChainRatio,lastNewCustomerUnitPrice,thisNewCustomerUnitPrice,newCustomerUnitPriceChainRatio} 
+            thisNewCustomerDealRate,newCustomerDealChainRatio,lastNewCustomerUnitPrice,thisNewCustomerUnitPrice,newCustomerUnitPriceChainRatio,
+            lastOldCustomerRepurchaseRate,thisOldCustomerRepurchaseRate ,oldCustomerRepurchaseChainRatio ,
+            lastOldCustomerUnitPrice  ,thisOldCustomerUnitPrice  ,oldCustomerUnitPriceChainRatio  
+            } 
             // 添加
             api.addGreatHospitalOperationHealth(data).then((res) => {
               if (res.code === 0) {

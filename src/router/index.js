@@ -801,6 +801,18 @@ const customerManage = [{
         component: () =>
             import ("@/views/customerManage/hospitalClients/hospitalClients.vue"),
     },
+    {
+        path: "/customerLabel",
+        name: "customerLabel",
+        meta: {
+            title: "客户标签",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/customerLabel/customerLabel.vue"),
+    },
 ];
 
 /**

@@ -57,6 +57,18 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+              <Select
+                v-model="query.appType"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="请选择下单平台"
+              >
+                <Option
+                  v-for="item in appTypeList"
+                  :value="item.orderType"
+                  :key="item.orderType"
+                  >{{ item.appTypeText }}</Option
+                >
+              </Select>
               <Button
                 type="primary"
                 style="margin:0 10px"
@@ -190,7 +202,8 @@ export default {
     },
     checkStateListAll:{
       type:Array
-    }
+    },
+    appTypeList:Array
   },
   data() {
     return {
@@ -204,6 +217,7 @@ export default {
         pageCount:0,
         // 交易完成订单
         query:{
+          appType:-1,
           checkState:-1,
           ReturnBackPriceState:'-1',
           ReturnBackPriceStateList:[
@@ -733,13 +747,14 @@ export default {
     },
     // 获取交易完成订单
     getcustomerOrderReceivableReports(val) {
-      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState} = this.query;
+      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState,appType} = this.query;
       const data = { 
             startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
             endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
             customerName,
             checkState: checkState == -1 ? null : checkState,
-            ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+            ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+            appType:appType == -1 ? null :appType
         };
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -772,13 +787,14 @@ export default {
     },
     // 交易完成订单导出
     exportsendOrder() {
-      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState} = this.query;
+      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState,appType} = this.query;
       const data = { 
         startDate: this.$moment(startDate).format("YYYY-MM-DD")  ,
         endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         customerName,
         checkState: checkState == -1 ? null : checkState,
-        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+        appType:appType == -1 ? null :appType
       };
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')

@@ -32,7 +32,9 @@
         <div slot="footer" class=" foot">
           <div style="display:flex">
             <div class="num">总条数：<div style="color:red">{{pageCount}}</div></div>
+            <div class="bottom_title">往期数据已存储，请进行新数据填写，若需要更早期数据可联系研发部</div>
           </div>
+          
           <Button @click="cancelSubmits()">关闭页面</Button>
           <!-- <Button type="primary" @click="handleSubmit()">确定</Button> -->
         </div>
@@ -885,18 +887,6 @@ export default {
                     );
                 },
             },
-            {
-                title: "创建日期",
-                key: "createDate",
-                minWidth: 200,
-                align:'center',
-                render: (h, params) => {
-                    return h(
-                        "div",
-                        this.$moment(params.row.createDate).format("YYYY-MM-DD HH:mm:ss")
-                    );
-                },
-            },
           ],
           data: [],
         }
@@ -991,5 +981,11 @@ export default {
   margin-right: 20px ;
   font-size: 18px;
   display: flex;
+}
+.bottom_title{
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  margin: 3px 0 0 10px;
 }
 </style>

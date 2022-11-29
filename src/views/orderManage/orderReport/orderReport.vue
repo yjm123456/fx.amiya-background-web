@@ -182,7 +182,7 @@
         <!-- 客户订单应收款统计 -->
         <!-- <customerOrderReceivables :moneyReportModel.sync = "moneyReportModel" ref="customerOrderReceivables" :checkStateListAll="checkStateListAll"></customerOrderReceivables> -->
         <!-- 客户订单应收款统计(已完成，买家已付款) -->
-        <customerOrderReceivables2 :moneyReportModel2.sync = "moneyReportModel2" ref="customerOrderReceivables2" :checkStateListAll="checkStateListAll"></customerOrderReceivables2>
+        <customerOrderReceivables2 :moneyReportModel2.sync = "moneyReportModel2" ref="customerOrderReceivables2" :checkStateListAll="checkStateListAll" :appTypeList="appTypeList"></customerOrderReceivables2>
         <!-- 医院订单量报表 -->
         <hospitalOrderQuantity :hospitalOrderQuantityModel.sync="hospitalOrderQuantityModel" ref="hospitalOrderQuantity"></hospitalOrderQuantity>
         <!-- 医院预约量报表 -->
@@ -332,11 +332,24 @@ export default {
                 toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],
             },
             // 重要程度
-           emergencyLevelListAll:[{emergencyLevel:-1,emergencyLevelText:'全部重要程度'}]
-            
+           emergencyLevelListAll:[{emergencyLevel:-1,emergencyLevelText:'全部重要程度'}],
+            appTypeList:[
+                {
+                    appTypeText: "全部平台",
+                    orderType: -1,
+                }
+            ],
         }
     },
     methods:{
+    // 获取下单平台列表
+    getAppTypeList() {
+      api.getAppTypeList().then(res=>{
+        if(res.code === 0) {
+          this.appTypeList = [...this.appTypeList,...res.data.orderAppTypes]
+        }
+      })
+    },
         // 紧急程度（下拉框）
         getEmergencyLevels(){
             shopApi.emergencyLevels().then((res) => {
@@ -488,6 +501,7 @@ export default {
         this.getCustomerServiceList()
         this.getcontentPlateFormOrderToHospitalTypeList()
         this.getEmergencyLevels()
+        this.getAppTypeList()
     },
     mounted() {
         this.getData();

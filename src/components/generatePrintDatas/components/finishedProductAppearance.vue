@@ -3,8 +3,11 @@
     <Card class="container">
       <div>
         <Table border :columns="query.columns" :data="query.data" height="600"></Table>
+        <div class="bottom">
+            <div class="company">本表单位为：千元（K）</div>
+          </div>
       </div>
-      <div class="h1">机构分析</div>
+      <!-- <div class="h1">机构分析</div>
         <Input
             v-model="query.hospitalDealRemark"
             style="width: 100%; "
@@ -19,7 +22,7 @@
             type="textarea"
             :rows="3"
             disabled
-        />
+        /> -->
     </Card>
   </div>
 </template>
@@ -42,19 +45,24 @@ export default {
         hospitalId: null,
         columns: [
           {
-            title: "成交品项",
+            title: "执行品项",
             key: "dealItemName",
-            width:'380px',
+            width:'280px',
           },
           {
-            title: "成交数量",
+            title: "执行数量",
             key: "dealCount",
-            width:'380px',
+            width:'280px',
           },
           {
-            title: "成交金额",
+            title: "执行单价",
+            key: "dealUnitPrice",
+            width:'280px',
+          },
+          {
+            title: "执行金额",
             key: "dealPrice",
-            width:'380px',
+            width:'280px',
           },
           {
             title: "业绩占比",
@@ -132,5 +140,16 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 10px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+  margin-top:5px
 }
 </style>

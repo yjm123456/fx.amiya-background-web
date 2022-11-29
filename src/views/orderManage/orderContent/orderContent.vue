@@ -208,11 +208,7 @@
             type="primary"
             @click="adjustCustomerService()"
             style="margin-left: 10px"
-            v-if="
-              amiyaPositionId == 1 ||
-                amiyaPositionId == 14 ||
-                amiyaPositionId == 16
-            "
+            v-has="{ role: ['fx.amiya.permission.CHANGE_BIND_SERVICE'] }"
             >调整绑定客服</Button
           >
         </div>

@@ -59,6 +59,30 @@ export const getLiveAnchorDailyTarget = (params) => {
         params
     });
 };
+// 获取直播前列表数据
+export const getBeforeListWithPage = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorDailyTarget/beforeListWithPage",
+        method: "get",
+        params
+    });
+};
+// 获取直播中列表数据
+export const livingListWithPage = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorDailyTarget/livingListWithPage",
+        method: "get",
+        params
+    });
+};
+// 获取直播后列表数据
+export const afterLivingListWithPage = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorDailyTarget/afterLivingListWithPage",
+        method: "get",
+        params
+    });
+};
 // 添加主播日运营目标情况
 export const AddLiveAnchorDailyTarget = (data) => {
     return http({
@@ -76,10 +100,11 @@ export const editLiveAnchorDailyTarget = (data) => {
     });
 };
 //   根据id获取主播日运营目标情况
-export const byIdLiveAnchorDailyTarget = (id) => {
+export const byIdLiveAnchorDailyTarget = (params) => {
     return http({
-        url: `/amiyabg/LiveAnchorDailyTarget/byId/${id}`,
+        url: `/amiyabg/LiveAnchorDailyTarget/getByIdAndType`,
         method: "get",
+        params
     });
 };
 // 删除主播月度运营目标情况  delete

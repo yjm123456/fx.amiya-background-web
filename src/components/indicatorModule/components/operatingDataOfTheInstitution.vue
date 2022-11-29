@@ -3,45 +3,6 @@
     <!-- <Card :dis-hover="true"> -->
       <div class="header_wrap" >
         <div class="left">
-         <!--  <Input
-            v-model="query.keyword"
-            placeholder="请输入关键字"
-            style="width: 200px; margin-left: 10px"
-            @keyup.enter.native="getHospitalOperationData()"
-          />
-          <Select
-            v-model="query.indicatorsId"
-            placeholder="请选择指标名称"
-            style="width: 200px; margin-left: 10px"
-            filterable
-            :disabled="employeeType=='hospitalEmployee'"
-          >
-            <Option
-              v-for="item in indicatorNameList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.hospitalId"
-            placeholder="请选择医院"
-            style="width: 200px; margin-left: 10px"
-            :disabled="employeeType=='hospitalEmployee'"
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Button
-            type="primary"
-            style="margin-left: 10px"
-            @click="getHospitalOperationData()"
-            >查询</Button
-          >-->
         </div> 
         <div class="right">
           <Button
@@ -57,7 +18,7 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" ></Table>
+        <Table border :columns="query.columns" :data="query.data" height="550"></Table>
       </div>
       <!-- <div class="h1">机构分析</div>
         <Input
@@ -124,6 +85,7 @@
                     number
                     placeholder="请输入派单数"
                     @on-change="dispatchNum2Change"
+                    disabled
                     style="width:100%"
                   ></Input>
                 </FormItem>
@@ -148,6 +110,7 @@
                   number
                   placeholder="请输入新客上门人数"
                   @on-change="newVisitNum2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -171,6 +134,7 @@
                   number
                   placeholder="请输入新客上门率"
                   @on-change="newVisitNumRate2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -194,6 +158,7 @@
                   number
                   placeholder="请输入新客成交人数"
                   @on-change="newDealNum2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -217,6 +182,7 @@
                   number
                   placeholder="请输入新客成交率"
                   @on-change="newDealRate2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -240,6 +206,7 @@
                   number
                   placeholder="请输入新客业绩"
                   @on-change="newAchievementNum2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -263,6 +230,7 @@
                   number
                   placeholder="请输入新客客单价"
                   @on-change="newPrice2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -289,6 +257,7 @@
                   number
                   placeholder="请输入老客上门人数"
                   @on-change="oldVisitNum2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -312,6 +281,7 @@
                   number
                   placeholder="请输入老客成交人数"
                   @on-change="oldDealNum2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -335,6 +305,7 @@
                   number
                   placeholder="请输入老客成交率"
                   @on-change="oldDealRate2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -358,6 +329,7 @@
                   number
                   placeholder="请输入老客业绩"
                   @on-change="oldAchievementNum2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -381,6 +353,7 @@
                   number
                   placeholder="请输入老客客单价"
                   @on-change="oldPrice2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -404,6 +377,7 @@
                   number
                   placeholder="请输入总业绩"
                   @on-change="totalPerformance2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -427,6 +401,7 @@
                   number
                   placeholder="请输入老客业绩占比"
                   @on-change="oldAchievementProportion2Change"
+                  disabled
                 ></Input>
               </FormItem>
           </div>
@@ -455,6 +430,7 @@
                 number
                 placeholder="请输入派单数"
                 @on-change="dispatchNum2Change"
+                disabled
               ></Input>
             </FormItem>
           </div>
@@ -478,6 +454,7 @@
                 number
                 placeholder="请输入新客上门人数"
                 @on-change="newVisitNum2Change"
+                disabled
               ></Input>
             </FormItem>
           </div>
@@ -501,6 +478,7 @@
                 number
                 placeholder="请输入新客上门率"
                 @on-change="newVisitNumRate2Change"
+                disabled
               ></Input>
             </FormItem>
           </div>
@@ -524,6 +502,7 @@
                 number
                 placeholder="请输入新客成交人数"
                 @on-change="newDealNum2Change"
+                disabled
               ></Input>
             </FormItem>
           </div>
@@ -547,6 +526,7 @@
                 number
                 placeholder="请输入新客成交率"
                 @on-change="newDealRate2Change"
+                disabled
               ></Input>
             </FormItem>
           </div>
@@ -570,6 +550,7 @@
                 number
                 placeholder="请输入新客业绩"
                 @on-change="newAchievementNum2Change"
+                disabled
               ></Input>
             </FormItem>
           </div>
@@ -594,6 +575,7 @@
                 number
                 placeholder="请输入新客客单价"
                 @on-change="newPrice2Change"
+                disabled
               ></Input>
             </FormItem>
           </div>
@@ -619,6 +601,7 @@
               number
               placeholder="请输入老客上门人数"
               @on-change="oldVisitNum2Change"
+              disabled
             ></Input>
           </FormItem>
         </div>
@@ -642,6 +625,7 @@
               number
               placeholder="请输入老客成交人数"
               @on-change="oldDealNum2Change"
+              disabled
             ></Input>
           </FormItem>
         </div>
@@ -665,6 +649,7 @@
               number
               placeholder="请输入老客成交率"
               @on-change="oldDealRate2Change"
+              disabled
             ></Input>
           </FormItem>
         </div>
@@ -688,6 +673,7 @@
               number
               placeholder="请输入老客业绩"
               @on-change="oldAchievementNum2Change"
+              disabled
             ></Input>
           </FormItem>
         </div>
@@ -711,6 +697,7 @@
               number
               placeholder="请输入老客客单价"
               @on-change="oldPrice2Change"
+              disabled
             ></Input>
           </FormItem>
         </div>
@@ -734,6 +721,7 @@
               number
               placeholder="请输入总业绩"
               @on-change="totalPerformance2Change"
+              disabled
             ></Input>
           </FormItem>
         </div>
@@ -757,6 +745,7 @@
               number
               placeholder="请输入老客业绩占比"
               @on-change="oldAchievementProportion2Change"
+              disabled
             ></Input>
           </FormItem>
         </div>
@@ -1349,6 +1338,10 @@ export default {
             }
           },
           {
+            title: "健康指标推算",
+            key: "indicatorCalculation",
+          },
+          {
             title: "操作",
             key: "",
             width: 120,
@@ -1646,7 +1639,61 @@ export default {
       if(this.query.data.length == 0){
         this.controlModal = true;
         this.title = '添加';
-        
+        const data = {
+          indicatorsId:this.indicatorsId,
+           hospitalId:this.hospitalId,
+        }
+        api.getHHospitalOperationData(data).then((res) => {
+          if(res.code == 0){
+            const {data} = res.data
+            // 前月
+            this.form.dispatchNum1 = data.lastMonthSendOrderCount
+            this.form.newVisitNum1 = data.lastMonthNewCustomerToHospitalCount
+            this.form.newVisitNumRate1 = data.lastMonthNewCustomerToHospitalRate
+            this.form.newDealNum1 = data.lastMonthNewCustomerDealCount
+            this.form.newDealRate1 = data.lastMonthNewCustomerDealRate
+            this.form.newAchievementNum1 = data.lastMonthNewCustomerPerformance
+            this.form.newPrice1 = data.lastMonthNewCustomerUnitPrice
+            this.form.oldVisitNum1 = data.lastMonthOldCustomerToHospitalCount
+            this.form.oldDealNum1 = data.lastMonthOldCustomerDealCount
+            this.form.oldDealRate1 = data.lastMonthOldCustomerDealRate
+            this.form.oldAchievementNum1 = data.lastMonthOldCustomerPerformance
+            this.form.oldPrice1 = data.lastMonthOldCustomerUnitPrice
+            this.form.totalPerformance1 = data.lastMonthTotalPerformance
+            this.form.oldAchievementProportion1 = data.lastMonthOldCustomerPerformanceRatio
+            // 上月
+            this.form.dispatchNum2 = data.thisMonthSendOrderCount
+            this.form.newVisitNum2 = data.thisMonthNewCustomerToHospitalCount
+            this.form.newVisitNumRate2 = data.thisMonthNewCustomerToHospitalRate
+            this.form.newDealNum2 = data.thisMonthNewCustomerDealCount
+            this.form.newDealRate2 = data.thisMonthNewCustomerDealRate
+            this.form.newAchievementNum2 = data.thisMonthNewCustomerPerformance
+            this.form.newPrice2 = data.thisMonthNewCustomerUnitPrice
+            this.form.oldVisitNum2 = data.thisMonthOldCustomerToHospitalCount
+            this.form.oldDealNum2 = data.thisMonthOldCustomerDealCount
+            this.form.oldDealRate2 = data.thisMonthOldCustomerDealRate
+            this.form.oldAchievementNum2 = data.thisMonthOldCustomerPerformance
+            this.form.oldPrice2 = data.thisMonthOldCustomerUnitPrice
+            this.form.totalPerformance2 = data.thisMonthTotalPerformance
+            this.form.oldAchievementProportion2 = data.thisMonthOldCustomerPerformanceRatio
+            // 环比
+            this.form.dispatchNum3 = data.sendOrderCountChainRatio
+            this.form.newVisitNum3 = data.newCustomerToHospitalCountChainRatio
+            this.form.newVisitNumRate3 = data.newCustomerToHospitalRateChainRatio
+            this.form.newDealNum3 = data.newCustomerDealCountChainRatio
+            this.form.newDealRate3 = data.newCustomerDealRateChainRatio
+            this.form.newAchievementNum3 = data.newCustomerPerformanceChainRatio
+            this.form.newPrice3 = data.newCustomerUnitPriceChainRatio
+            this.form.oldVisitNum3 = data.oldCustomerToHospitalCountChainRatio
+            this.form.oldDealNum3 = data.oldCustomerDealCountChainRatio
+            this.form.oldDealRate3 = data.oldCustomerDealRateChainRatio
+            this.form.oldAchievementNum3 = data.oldCustomerPerformanceChainRatio
+            this.form.oldPrice3 = data.oldCustomerUnitPriceChainRatio
+            this.form.totalPerformance3 = data.totalPerformanceChainRatio
+            this.form.oldAchievementProportion3 = data.oldCustomerPerformanceRatioChainRatio
+            // this.ringRatio()
+          }
+        })
       }else{
         this.$Message.warning('当前指标数据已添加,请勿重复添加')
         return
@@ -2201,7 +2248,8 @@ export default {
                 this.query.hospitalId = this.hospitalId
               }
                 this.getHospitalOperationData();
-                this.getHospitalOperationRemark()
+                // this.getHospitalOperationRemark()
+                
             }
             this.getbyIdHospitalOperationIndicator()
 

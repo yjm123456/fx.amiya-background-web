@@ -617,3 +617,60 @@ export const hospitalDealItemOperationDataInPort = (data) => {
         data,
     });
 };
+// 获取机构运营数据列表
+export const getHHospitalOperationData = (params) => {
+    return http({
+        url: `/amiyabg/HospitalOperationData/data`,
+        method: "get",
+        params,
+    });
+};
+// 添加基础信息
+export const addIndicatorOrderData = (data) => {
+    return http({
+        url: `/amiyabg/IndicatorOrderData/add`,
+        method: "post",
+        data,
+    });
+};
+// 获取基础信息
+export const getIndicatorOrderData = (params) => {
+    return http({
+        url: `/amiyabg/IndicatorOrderData/getSendOrderInfo`,
+        method: "get",
+        params,
+    });
+};
+
+// 获取阿美雅批注
+export const getsAmiyaRemark = (params) => {
+    return http({
+        url: `/amiyabg/api/AmiyaRemark`,
+        method: "get",
+        params,
+    });
+};
+// 添加阿美雅批注
+export const addsAmiyaRemark = (data) => {
+    return http({
+        url: `/amiyabg/api/AmiyaRemark`,
+        method: "post",
+        data,
+    });
+};
+// 获取医院端批注
+export const getImprovePlanAndRemark = (params) => {
+    return http({
+        url: `/amiyabg/api/ImprovePlanAndRemark`,
+        method: "get",
+        params,
+    });
+};
+// 添加医院端批注
+export const addImprovePlanAndRemark = (data) => {
+    return http({
+        url: `/amiyabg/api/ImprovePlanAndRemark`,
+        method: "post",
+        data,
+    });
+};

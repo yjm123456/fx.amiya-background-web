@@ -3,15 +3,19 @@
     <Card class="container">
       <div>
         <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="800"></Table>
+        <div class="bottom">
+            <div class="company">本表单位为：千元（K）</div>
+            <div class="bottom_memo">（说明：数据统计时间上月与前月，机构展现不以业绩为导向）</div>
+          </div>
         <div>
-        <div class="h1">啊美雅批注</div>
+        <!-- <div class="h1">啊美雅批注</div>
         <Input
             v-model="query.remark"
             style="width: 100%; "
             type="textarea"
             :rows="4"
             disabled
-        />
+        /> -->
         </div>
       </div>
     </Card>
@@ -38,17 +42,17 @@ export default {
           {
             title: "医院",
             key: "hospitalName",
-            width:'140px'
+            width:'90px'
           },
           {
             title: "指标名称",
             key: "indicatorsName",
-            width:'130px'
+            width:'90px'
           },
           {
             title: "前月新客上门率",
             key: "lastNewCustomerVisitRate",
-            width:'140px',
+            width:'90px',
             render: (h, params) => {
               return h("div", params.row.lastNewCustomerVisitRate + "%");
             },
@@ -56,7 +60,7 @@ export default {
           {
             title: "上月新客上门率",
             key: "thisNewCustomerVisitRate",
-            width:'140px',
+            width:'90px',
             render: (h, params) => {
               return h("div", params.row.thisNewCustomerVisitRate + "%");
             },
@@ -64,7 +68,7 @@ export default {
           {
             title: "新客上门率环比",
             key: "newCustomerVisitChainRatio",
-            width:'140px',
+            width:'90px',
             render: (h, params) => {
               return h("div", params.row.newCustomerVisitChainRatio + "%");
             },
@@ -72,7 +76,7 @@ export default {
           {
             title: "前月新客成交率",
             key: "lastNewCustomerDealRate",
-            width:'140px',
+            width:'90px',
             render: (h, params) => {
               return h("div", params.row.lastNewCustomerDealRate + "%");
             },
@@ -80,7 +84,7 @@ export default {
           {
             title: "上月新客成交率",
             key: "thisNewCustomerDealRate",
-            width:'140px',
+            width:'90px',
             render: (h, params) => {
               return h("div", params.row.thisNewCustomerDealRate + "%");
             },
@@ -89,7 +93,7 @@ export default {
           {
             title: "新客成交率环比",
             key: "newCustomerDealChainRatio",
-            width:'140px',
+            width:'90px',
             render: (h, params) => {
               return h("div", params.row.newCustomerDealChainRatio + "%");
             },
@@ -97,20 +101,70 @@ export default {
           {
             title: "前月新客客单价",
             key: "lastNewCustomerUnitPrice",
-            width:'140px',
+            width:'90px',
           },
           {
             title: "上月新客客单价",
             key: "thisNewCustomerUnitPrice",
-            width:'140px',
+            width:'90px',
           },
 
           {
             title: "新客客单价环比",
             key: "newCustomerUnitPriceChainRatio",
-            width:'140px',
+            width:'90px',
             render: (h, params) => {
               return h("div", params.row.newCustomerUnitPriceChainRatio + "%");
+            },
+          },
+          {
+            title: "前月老客复购率",
+            key: "lastOldCustomerRepurchaseRate",
+            width:'90px',
+            align:'center',
+            render: (h, params) => {
+              return h("div", params.row.lastOldCustomerRepurchaseRate + "%");
+            },
+          },
+          {
+            title: "上月老客复购率",
+            key: "thisOldCustomerRepurchaseRate",
+            width:'90px',
+            align:'center',
+            render: (h, params) => {
+              return h("div", params.row.thisOldCustomerRepurchaseRate + "%");
+            },
+          },
+
+          {
+            title: "老客复购率环比",
+            key: "oldCustomerRepurchaseChainRatio",
+            width:'90px',
+            align:'center',
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerRepurchaseChainRatio + "%");
+            },
+          },
+          {
+            title: "前月老客客单价",
+            key: "lastOldCustomerUnitPrice",
+            width:'90px',
+            align:'center',
+          },
+          {
+            title: "上月老客客单价",
+            key: "thisOldCustomerUnitPrice",
+            width:'90px',
+            align:'center',
+          },
+
+          {
+            title: "老客客单价环比",
+            key: "oldCustomerUnitPriceChainRatio",
+            width:'90px',
+            align:'center',
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerUnitPriceChainRatio + "%");
             },
           },
         ],
@@ -210,5 +264,21 @@ export default {
   color: #000;
   font-weight: bold;
   margin: 15px 0;
+}
+.title{
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: red;
+}
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 10px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+  margin-top:5px
 }
 </style>

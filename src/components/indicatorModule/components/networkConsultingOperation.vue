@@ -1,31 +1,85 @@
 <template>
   <div>
     <div class="header_wrap">
-      <div class="left"></div>
-      <div class="right">
-        <Button
-          type="primary"
-          @click="
-            controlModal = true;
-            title = '添加';
-          "
-          v-if="employeeType == 'hospitalEmployee'"
-          >添加</Button
-        >
-        <Button
-          type="primary"
-          @click="exportHospitalNetWorkConsulationOperationDataClick"
-          v-if="employeeType == 'hospitalEmployee'"
-          style="margin-left: 10px"
-          >导出模板</Button
-        >
-        <Button
-          type="primary"
-          style="margin-left: 10px"
-          @click="importControlModal = true"
-          v-if="employeeType == 'hospitalEmployee'"
-          >导入</Button
-        >
+      <div class="left">
+        <span>总派单数：</span>
+        <Input
+          v-model="indicatorOrderForm.allSendorderCount"
+          placeholder="请输入总派单数"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>本地派单：</span>
+        <Input
+          v-model="indicatorOrderForm.localSendorderCount"
+          placeholder="请输入本地派单"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>外地派单：</span>
+        <Input
+          v-model="indicatorOrderForm.otherPlaceSendorderCount"
+          placeholder="请输入外地派单"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>无效派单：</span>
+        <Input
+          v-model="indicatorOrderForm.invalidSendorderCount"
+          placeholder="请输入无效派单"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>疫情影响：</span>
+        <Input
+          v-model="indicatorOrderForm.epidemicCount"
+          placeholder="请输入疫情影响"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>其他问题：</span>
+        <Input
+          v-model="indicatorOrderForm.otherQuestion"
+          placeholder="请输入其他问题"
+          style="width:160px;margin-right:10px"
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <Button type="primary" @click="messageSubmite" v-if="employeeType == 'hospitalEmployee'">提交</Button>
+        <div class="button_con">
+          <Button
+            type="primary"
+            @click="
+              controlModal = true;
+              title = '添加';
+            "
+            v-if="employeeType == 'hospitalEmployee'"
+            >添加</Button
+          >
+          <Button
+            type="primary"
+            @click="exportHospitalNetWorkConsulationOperationDataClick"
+            v-if="employeeType == 'hospitalEmployee'"
+            style="margin-left: 10px"
+            >导出模板</Button
+          >
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="importControlModal = true"
+            v-if="employeeType == 'hospitalEmployee'"
+            >导入</Button
+          >
+        </div>
       </div>
     </div>
 
@@ -33,7 +87,8 @@
       <div>
         <Table border :columns="query.columns" :data="query.data"></Table>
       </div>
-      <div class="h1">机构分析</div>
+      <div class="buttom">说明：如现场咨询师负责邀约，本页不用填写</div>
+      <!-- <div class="h1">机构分析</div>
       <Input
         v-model="query.hospitalOnlineConsultRemark"
         :placeholder="
@@ -57,7 +112,7 @@
       />
       <div class="button">
         <Button type="primary" @click="submitClick">提交</Button>
-      </div>
+      </div> -->
     </Card>
 
     <Modal
@@ -133,6 +188,26 @@ export default {
   },
   data() {
     return {
+      indicatorOrderForm:{
+        // 指标id
+        indicatorId:'',
+        // 医院id
+        hospitalId:null,
+        // 总派单数
+        allSendorderCount:null,
+        // 本地派单数
+        localSendorderCount:null,
+        // 外地派单数
+        otherPlaceSendorderCount:null,
+        // 无效派单数
+        invalidSendorderCount:null,
+        // 疫情影响
+        epidemicCount:null,
+        // 其他问题
+        otherQuestion:'',
+        // 判断是否填写基本信息
+        isFlag:false
+      },
       // 导入 model
       importControlModal: false,
       // 查询
@@ -316,6 +391,71 @@ export default {
     };
   },
   methods: {
+    // 基本信息提交
+    messageSubmite() {
+      const {indicatorId,hospitalId,allSendorderCount,localSendorderCount,otherPlaceSendorderCount,
+      invalidSendorderCount,epidemicCount,otherQuestion} = this.indicatorOrderForm
+      const data = {
+        indicatorId:this.indicatorsId,
+        hospitalId:this.hospitalId,
+        allSendorderCount,
+        localSendorderCount,
+        otherPlaceSendorderCount,
+        invalidSendorderCount,
+        epidemicCount,
+        otherQuestion,
+      }
+      if(!allSendorderCount){
+        this.$Message.warning('请输入总派单数')
+        return
+      }
+      if(!localSendorderCount){
+        this.$Message.warning('请输入本地派单数')
+        return
+      }
+      if(!otherPlaceSendorderCount){
+        this.$Message.warning('请输入外地派单数')
+        return
+      }
+      if(!invalidSendorderCount){
+        this.$Message.warning('请输入无效派单数')
+        return
+      }
+      if(!epidemicCount){
+        this.$Message.warning('请输入疫情影响')
+        return
+      }
+      api.addIndicatorOrderData(data).then((res) => {
+        if(res.code === 0){
+          this.$Message.success('提交成功')
+          this.getIdMessage()
+        }
+      })
+    },
+    // 获取基本信息
+    getIdMessage(){
+      const data = {
+        indicatorId: this.indicatorsId,
+        hospitaiId: this.hospitalId,
+      };
+      api.getIndicatorOrderData(data).then((res) => {
+        if (res.code === 0) {
+          const { sendOrderData } = res.data;
+          if(sendOrderData.indicatorId){
+            this.indicatorOrderForm.isFlag = false
+          }else { 
+            this.indicatorOrderForm.isFlag = true
+          }
+          this.indicatorOrderForm.allSendorderCount = sendOrderData.allSendorderCount
+          this.indicatorOrderForm.localSendorderCount = sendOrderData.localSendorderCount
+          this.indicatorOrderForm.otherPlaceSendorderCount = sendOrderData.otherPlaceSendorderCount
+          this.indicatorOrderForm.invalidSendorderCount = sendOrderData.invalidSendorderCount
+          this.indicatorOrderForm.epidemicCount = sendOrderData.epidemicCount
+          this.indicatorOrderForm.otherQuestion = sendOrderData.otherQuestion
+          this.indicatorOrderForm.otherQuestion = sendOrderData.otherQuestion
+        }
+      });
+    },
     exportHospitalNetWorkConsulationOperationDataClick() {
       api.exportHospitalNetWorkConsulationOperationData().then((res) => {
         let name = "机构网咨运营数据分析模板";
@@ -464,7 +604,8 @@ export default {
       handler(value) {
         if (value === "networkConsultingOperation") {
           this.getHospitalInfo();
-          this.getHospitalOnlineConsultRemark();
+          this.getIdMessage()
+          // this.getHospitalOnlineConsultRemark();
         }
       },
       immediate: true,
@@ -495,5 +636,25 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.left {
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  margin: 10px 0;
+}
+.button_con {
+  display: flex;
+  position: absolute;
+  right: 10px;
+}
+.buttom {
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>

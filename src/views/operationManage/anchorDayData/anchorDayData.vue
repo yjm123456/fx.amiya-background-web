@@ -18,32 +18,6 @@
             v-model="query.endDate"
           ></DatePicker>
           <Select
-            v-model="query.operationEmpId"
-            placeholder="请选择运营人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in employeeAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.netWorkConEmpId"
-            placeholder="请选择网咨人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in netWorkConsultingNameListAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
             v-model="query.contentPlatFormId"
             placeholder="请选择主播平台"
             @on-change="contentPlateChange(query.contentPlatFormId)"
@@ -755,10 +729,6 @@ export default {
       query: {
         contentPlatFormId: null,
         liveAnchorId: null,
-        // 运营人员
-        operationEmpId: "",
-        // 网咨人员
-        netWorkConEmpId: "",
         startDate: this.$moment()
           .subtract(1, "days")
           .format("YYYY-MM-DD"),
@@ -1055,20 +1025,6 @@ export default {
             key: "miniVanBadReviews",
             minWidth: 150,
             align: "center",
-          },
-          {
-            title: "创建日期",
-            key: "createDate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
-              );
-            },
           },
           {
             title: "操作",
@@ -1593,8 +1549,6 @@ export default {
         pageNum,
         pageSize,
         day,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -1605,8 +1559,6 @@ export default {
         // day: this.$moment(new Date(day)).format("YYYY-MM-DD"),
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
       if (!startDate || !endDate) {
@@ -1627,8 +1579,6 @@ export default {
     handlePageChange(pageNum) {
       const {
         pageSize,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -1638,8 +1588,6 @@ export default {
         pageSize,
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
       api.getLiveAnchorDailyTarget(data).then((res) => {

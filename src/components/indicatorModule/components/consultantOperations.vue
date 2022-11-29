@@ -1,39 +1,105 @@
 <template>
   <div>
     <div class="header_wrap">
-      <div class="left"></div>
-      <div class="right">
-        <Button
-          type="primary"
-          @click="
-            controlModal = true;
-            title = '添加';
-          "
-          v-if="employeeType == 'hospitalEmployee'"
-          >添加</Button
-        >
-        <Button
-          type="primary"
-          @click="exportHospitalConsulationOperationDataClick"
-          v-if="employeeType == 'hospitalEmployee'"
-          style="margin-left: 10px"
-          >导出模板</Button
-        >
-        <Button
-          type="primary"
-          style="margin-left: 10px"
-          @click="importControlModal = true"
-          v-if="employeeType == 'hospitalEmployee'"
-          >导入</Button
-        >
+      <div class="left">
+        <span>总派单数：</span>
+        <Input
+          v-model="indicatorOrderForm.allSendorderCount"
+          placeholder="请输入总派单数"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>本地派单：</span>
+        <Input
+          v-model="indicatorOrderForm.localSendorderCount"
+          placeholder="请输入本地派单"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>外地派单：</span>
+        <Input
+          v-model="indicatorOrderForm.otherPlaceSendorderCount"
+          placeholder="请输入外地派单"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>无效派单：</span>
+        <Input
+          v-model="indicatorOrderForm.invalidSendorderCount"
+          placeholder="请输入无效派单"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>疫情影响：</span>
+        <Input
+          v-model="indicatorOrderForm.epidemicCount"
+          placeholder="请输入疫情影响"
+          style="width:160px;margin-right:10px"
+          type="number"
+          number
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <span>其他问题：</span>
+        <Input
+          v-model="indicatorOrderForm.otherQuestion"
+          placeholder="请输入其他问题"
+          style="width:160px;margin-right:10px"
+          :disabled="employeeType == 'amiyaEmployee'"
+        ></Input>
+        <Button type="primary" @click="messageSubmite" v-if="employeeType == 'hospitalEmployee'">提交</Button>
+        <div class="button_con">
+          <Button
+            type="primary"
+            @click="
+              controlModal = true;
+              title = '添加';
+            "
+            v-if="employeeType == 'hospitalEmployee'"
+            >添加</Button
+          >
+          <Button
+            type="primary"
+            @click="exportHospitalConsulationOperationDataClick"
+            v-if="employeeType == 'hospitalEmployee'"
+            style="margin-left: 10px"
+            >导出模板</Button
+          >
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="importControlModal = true"
+            v-if="employeeType == 'hospitalEmployee'"
+            >导入</Button
+          >
+        </div>
       </div>
+      <div class="right"></div>
     </div>
 
     <Card class="container">
       <div>
         <Table border :columns="query.columns" :data="query.data"></Table>
+        <div class="price_con">
+          <div class="num">新客业绩总额：<span>{{query.newCustomerDealPriceNum}}</span></div>    
+          <div class="num">新客客单价总额：<span>{{query.newCustomerUnitPriceNum}}</span></div>
+          <div class="num">老客业绩总额：<span>{{query.oldCustomerDealPriceNum}}</span></div>
+          <div class="num">老客客单价总额：<span>{{query.oldCustomerUnitPriceNum}}</span></div>
+          <div class="num">总业绩总额：<span>{{query.lasttMonthTotalAchievementNum}}</span></div>
+          <div class="num">总条数：<span>{{query.totalNum}}</span></div>
+        </div>
+        <div class="bottom">
+            <div class="company">本表单位为：千元（K）</div>
+          </div>
       </div>
-      <div class="h1">机构分析</div>
+      <!-- <div class="h1">机构分析</div>
       <Input
         v-model="query.hospitalConsultRemark"
         :placeholder="
@@ -57,7 +123,7 @@
       />
       <div class="button">
         <Button type="primary" @click="submitClick">提交</Button>
-      </div>
+      </div> -->
     </Card>
 
     <Modal
@@ -81,6 +147,22 @@
                 v-model="form.consulationName"
                 placeholder="请输入咨询师"
               ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="科室" prop="sectionOffice">
+              <Select
+                v-model="form.sectionOffice"
+                placeholder="请选择科室"
+                filterable
+              >
+                <Option
+                  v-for="item in AmiyaHospitalDepartmentListDepartment"
+                  :value="item.departmentName"
+                  :key="item.departmentName"
+                  >{{ item.departmentName }}</Option
+                >
+              </Select>
             </FormItem>
           </Col>
           <Col span="8">
@@ -134,20 +216,20 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="新客业绩" prop="newCustomerDealPrice">
+            <FormItem label="新客业绩（k）" prop="newCustomerDealPrice">
               <Input
                 v-model="form.newCustomerDealPrice"
-                placeholder="请输入新客业绩"
+                placeholder="请输入新客业绩（k）"
                 type="number"
                 number
               ></Input>
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="新客客单价" prop="newCustomerUnitPrice">
+            <FormItem label="新客客单价（k）" prop="newCustomerUnitPrice">
               <Input
                 v-model="form.newCustomerUnitPrice"
-                placeholder="请输入新客客单价"
+                placeholder="请输入新客客单价（k）"
                 type="number"
                 number
               ></Input>
@@ -185,10 +267,10 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="老客业绩" prop="oldCustomerDealPrice">
+            <FormItem label="老客业绩（k）" prop="oldCustomerDealPrice">
               <Input
                 v-model="form.oldCustomerDealPrice"
-                placeholder="请输入老客业绩"
+                placeholder="请输入老客业绩（k）"
                 type="number"
                 number
               ></Input>
@@ -196,31 +278,30 @@
           </Col>
 
           <Col span="8">
-            <FormItem label="老客客单价" prop="oldCustomerUnitPrice">
+            <FormItem label="老客客单价（k）" prop="oldCustomerUnitPrice">
               <Input
                 v-model="form.oldCustomerUnitPrice"
-                placeholder="请输入老客客单价"
+                placeholder="请输入老客客单价（k）"
                 type="number"
                 number
               ></Input>
             </FormItem>
           </Col>
-
+          <Col span="8">
+            <FormItem label="总业绩（k）" prop="lasttMonthTotalAchievement">
+              <Input
+                v-model="form.lasttMonthTotalAchievement"
+                placeholder="请输入总业绩（k）"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem label="老客业绩占比(%)" prop="oldCustomerAchievementRate">
               <Input
                 v-model="form.oldCustomerAchievementRate"
                 placeholder="请输入老客业绩占比"
-                type="number"
-                number
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="总业绩" prop="lasttMonthTotalAchievement">
-              <Input
-                v-model="form.lasttMonthTotalAchievement"
-                placeholder="请输入总业绩"
                 type="number"
                 number
               ></Input>
@@ -243,9 +324,10 @@
 </template>
 <script>
 import * as api from "@/api/GreatHospitalOperationHealth";
+import * as orderApi from "@/api/orderManage";
+
 import { download } from "@/utils/util";
 import importFile from "./import/importModel.vue";
-
 
 export default {
   props: {
@@ -253,11 +335,33 @@ export default {
     hospitalId: Number,
     indicatorsId: String,
   },
-  components:{
-    importFile
+  components: {
+    importFile,
   },
   data() {
     return {
+      indicatorOrderForm:{
+        // 指标id
+        indicatorId:'',
+        // 医院id
+        hospitalId:null,
+        // 总派单数
+        allSendorderCount:null,
+        // 本地派单数
+        localSendorderCount:null,
+        // 外地派单数
+        otherPlaceSendorderCount:null,
+        // 无效派单数
+        invalidSendorderCount:null,
+        // 疫情影响
+        epidemicCount:null,
+        // 其他问题
+        otherQuestion:'',
+        // 判断是否填写基本信息
+        isFlag:false
+      },
+      // 科室
+      AmiyaHospitalDepartmentListDepartment: [],
       // 导入 model
       importControlModal: false,
       // 查询
@@ -269,10 +373,16 @@ export default {
         hospitalId: null,
         columns: [
           {
+            title: "科室",
+            key: "sectionOffice",
+            width: 150,
+          },
+          {
             title: "咨询师",
             key: "consulationName",
             width: 150,
           },
+          
           {
             title: "派单数",
             key: "sendOrderNum",
@@ -344,18 +454,17 @@ export default {
             width: 120,
           },
           {
+            title: "总业绩",
+            key: "lasttMonthTotalAchievement",
+            width: 150,
+          },
+          {
             title: "老客业绩占比",
             key: "oldCustomerAchievementRate",
             width: 150,
             render: (h, params) => {
               return h("div", params.row.oldCustomerAchievementRate + "%");
             },
-          },
-
-          {
-            title: "总业绩",
-            key: "lasttMonthTotalAchievement",
-            width: 150,
           },
           {
             title: "操作",
@@ -406,6 +515,7 @@ export default {
                                 oldCustomerUnitPrice,
                                 oldCustomerAchievementRate,
                                 lasttMonthTotalAchievement,
+                                sectionOffice
                               } = res.data.hospitalOperationDataInfo;
                               this.isEdit = true;
                               this.form.indicatorId = indicatorId;
@@ -425,6 +535,7 @@ export default {
                               this.form.oldCustomerAchievementRate = oldCustomerAchievementRate;
                               this.form.lasttMonthTotalAchievement = lasttMonthTotalAchievement;
                               this.form.newCustomerVisitRate = newCustomerVisitRate;
+                              this.form.sectionOffice = sectionOffice;
                               this.form.id = id;
                               this.controlModal = true;
                             }
@@ -476,6 +587,12 @@ export default {
         ],
         data: [],
         totalCount: 0,
+        newCustomerDealPriceNum:0, 
+        newCustomerUnitPriceNum:0, 
+        oldCustomerDealPriceNum:0, 
+        oldCustomerUnitPriceNum:0, 
+        lasttMonthTotalAchievementNum:0,
+        totalNum:0
       },
       employeeType: sessionStorage.getItem("employeeType"),
       // 控制 modal
@@ -521,9 +638,17 @@ export default {
         oldCustomerAchievementRate: null,
         // 总业绩
         lasttMonthTotalAchievement: null,
+        // 科室
+        sectionOffice: "",
       },
 
       ruleValidate: {
+        sectionOffice: [
+          {
+            required: true,
+            message: "请选择科室",
+          },
+        ],
         consulationName: [
           {
             required: true,
@@ -621,6 +746,81 @@ export default {
     };
   },
   methods: {
+    
+    // 基本信息提交
+    messageSubmite() {
+      const {indicatorId,hospitalId,allSendorderCount,localSendorderCount,otherPlaceSendorderCount,
+      invalidSendorderCount,epidemicCount,otherQuestion} = this.indicatorOrderForm
+      const data = {
+        indicatorId:this.indicatorsId,
+        hospitalId:this.hospitalId,
+        allSendorderCount,
+        localSendorderCount,
+        otherPlaceSendorderCount,
+        invalidSendorderCount,
+        epidemicCount,
+        otherQuestion,
+      }
+      if(!allSendorderCount){
+        this.$Message.warning('请输入总派单数')
+        return
+      }
+      if(!localSendorderCount){
+        this.$Message.warning('请输入本地派单数')
+        return
+      }
+      if(!otherPlaceSendorderCount){
+        this.$Message.warning('请输入外地派单数')
+        return
+      }
+      if(!invalidSendorderCount){
+        this.$Message.warning('请输入无效派单数')
+        return
+      }
+      if(!epidemicCount){
+        this.$Message.warning('请输入疫情影响')
+        return
+      }
+      api.addIndicatorOrderData(data).then((res) => {
+        if(res.code === 0){
+          this.$Message.success('提交成功')
+          this.getIdMessage()
+        }
+      })
+    },
+    // 获取基本信息
+    getIdMessage(){
+      const data = {
+        indicatorId: this.indicatorsId,
+        hospitaiId: this.hospitalId,
+      };
+      api.getIndicatorOrderData(data).then((res) => {
+        if (res.code === 0) {
+          const { sendOrderData } = res.data;
+          if(sendOrderData.indicatorId){
+            this.indicatorOrderForm.isFlag = false
+          }else { 
+            this.indicatorOrderForm.isFlag = true
+          }
+          this.indicatorOrderForm.allSendorderCount = sendOrderData.allSendorderCount
+          this.indicatorOrderForm.localSendorderCount = sendOrderData.localSendorderCount
+          this.indicatorOrderForm.otherPlaceSendorderCount = sendOrderData.otherPlaceSendorderCount
+          this.indicatorOrderForm.invalidSendorderCount = sendOrderData.invalidSendorderCount
+          this.indicatorOrderForm.epidemicCount = sendOrderData.epidemicCount
+          this.indicatorOrderForm.otherQuestion = sendOrderData.otherQuestion
+          this.indicatorOrderForm.otherQuestion = sendOrderData.otherQuestion
+        }
+      });
+    },
+    //   获取科室
+    getAmiyaHospitalDepartmentListChange() {
+      orderApi.getAmiyaHospitalDepartmentList().then((res) => {
+        if (res.code === 0) {
+          const { AmiyaHospitalDepartmentList } = res.data;
+          this.AmiyaHospitalDepartmentListDepartment = AmiyaHospitalDepartmentList;
+        }
+      });
+    },
     exportHospitalConsulationOperationDataClick() {
       api.exportHospitalConsulationOperationData().then((res) => {
         let name = "机构咨询师运营数据分析模板";
@@ -669,6 +869,24 @@ export default {
         if (res.code === 0) {
           const { hospitalOperationDataInfo } = res.data;
           this.query.data = hospitalOperationDataInfo;
+          this.query.totalNum = this.query.data.length
+          let newCustomerDealPriceNums = 0 
+          let newCustomerUnitPriceNums = 0 
+          let oldCustomerDealPriceNums = 0 
+          let oldCustomerUnitPriceNums = 0 
+          let lasttMonthTotalAchievementNums = 0 
+          this.query.data.map(item=>{
+            newCustomerDealPriceNums +=Number(item.newCustomerDealPrice)
+            newCustomerUnitPriceNums +=Number(item.newCustomerUnitPrice)
+            oldCustomerDealPriceNums +=Number(item.oldCustomerDealPrice)
+            oldCustomerUnitPriceNums +=Number(item.oldCustomerUnitPrice)
+            lasttMonthTotalAchievementNums +=Number(item.lasttMonthTotalAchievement)
+          })
+          this.query.newCustomerDealPriceNum  =   Math.floor(newCustomerDealPriceNums * 100) / 100;
+          this.query.newCustomerUnitPriceNum  =   Math.floor(newCustomerUnitPriceNums * 100) / 100;
+          this.query.oldCustomerDealPriceNum  =   Math.floor(oldCustomerDealPriceNums * 100) / 100;
+          this.query.oldCustomerUnitPriceNum  =   Math.floor(oldCustomerUnitPriceNums * 100) / 100;
+          this.query.lasttMonthTotalAchievementNum  =   Math.floor(lasttMonthTotalAchievementNums * 100) / 100;
         }
       });
     },
@@ -696,6 +914,7 @@ export default {
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
               lasttMonthTotalAchievement,
+              sectionOffice
             } = this.form;
             const data = {
               consulationName,
@@ -716,6 +935,7 @@ export default {
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
               lasttMonthTotalAchievement,
+              sectionOffice
             };
             // 修改
             api.editHospitalConsulationOperationData(data).then((res) => {
@@ -748,6 +968,7 @@ export default {
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
               lasttMonthTotalAchievement,
+              sectionOffice
             } = this.form;
             const data = {
               consulationName,
@@ -767,6 +988,7 @@ export default {
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
               lasttMonthTotalAchievement,
+              sectionOffice
             };
             // 添加
             api.addHospitalConsulationOperationData(data).then((res) => {
@@ -807,7 +1029,9 @@ export default {
       handler(value) {
         if (value === "consultantOperations") {
           this.getHospitalInfo();
-          this.getHospitalConsultRemark();
+          // this.getHospitalConsultRemark();
+          this.getIdMessage()
+          this.getAmiyaHospitalDepartmentListChange();
         }
       },
       immediate: true,
@@ -838,5 +1062,39 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.left {
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  margin: 10px 0;
+}
+.button_con {
+  display: flex;
+  position: absolute;
+  right: 10px;
+}
+.price_con{
+  display: flex;
+  margin-top: 20px;
+}
+.num{
+  font-size: 16px;
+  margin-right: 20px;
+}
+.num span{
+  color: red;
+}
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 10px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+  margin-top:5px
 }
 </style>

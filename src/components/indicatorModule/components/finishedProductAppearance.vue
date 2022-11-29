@@ -31,9 +31,17 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data"></Table>
+        <Table border :columns="query.columns" :data="query.data"></Table> 
+        <div class="price_con">
+          <div class="num">执行单价总额：<span>{{query.dealUnitPriceNum}}</span></div>    
+          <div class="num">执行金额总额：<span>{{query.dealPriceNum}}</span></div>
+          <div class="num">总条数：<span>{{query.totalNum}}</span></div>
+        </div>
+        <div class="bottom">
+            <div class="company">本表单位为：千元（K）</div>
+          </div>
       </div>
-      <div class="h1">机构分析</div>
+      <!-- <div class="h1">机构分析</div>
       <Input
         v-model="query.hospitalDealRemark"
         :placeholder="
@@ -57,7 +65,7 @@
       />
       <div class="button">
         <Button type="primary" @click="submitClick">提交</Button>
-      </div>
+      </div> -->
     </Card>
 
     <Modal
@@ -73,24 +81,32 @@
         label-position="left"
         :label-width="130"
       >
-        <FormItem label="成交品项名称" prop="dealItemName">
+        <FormItem label="执行品项名称" prop="dealItemName">
           <Input
             v-model="form.dealItemName"
-            placeholder="请输入成交品项名称"
+            placeholder="请输入执行品项名称"
           ></Input>
         </FormItem>
-        <FormItem label="成交数量" prop="dealCount">
+        <FormItem label="执行数量" prop="dealCount">
           <Input
             v-model="form.dealCount"
-            placeholder="请输入成交数量"
+            placeholder="请输入执行数量"
             type="number"
             number
           ></Input>
         </FormItem>
-        <FormItem label="成交金额" prop="dealPrice">
+        <FormItem label="执行单价（k）" prop="dealUnitPrice">
+          <Input
+            v-model="form.dealUnitPrice"
+            placeholder="请输入执行单价（k）"
+            type="number"
+            number
+          ></Input>
+        </FormItem>
+        <FormItem label="执行金额（k）" prop="dealPrice">
           <Input
             v-model="form.dealPrice"
-            placeholder="请输入成交金额"
+            placeholder="请输入执行金额（k）"
             type="number"
             number
           ></Input>
@@ -144,15 +160,19 @@ export default {
         hospitalId: null,
         columns: [
           {
-            title: "成交品项",
+            title: "执行品项",
             key: "dealItemName",
           },
           {
-            title: "成交数量",
+            title: "执行数量",
             key: "dealCount",
           },
           {
-            title: "成交金额",
+            title: "执行单价",
+            key: "dealUnitPrice",
+          },
+          {
+            title: "执行金额",
             key: "dealPrice",
           },
           {
@@ -197,12 +217,14 @@ export default {
                               dealCount,
                               dealPrice,
                               performanceRatio,
+                              dealUnitPrice
                             } = res.data.hospitalDealItemOperationInfo;
                             this.isEdit = true;
                             this.form.indicatorId = indicatorId;
                             this.form.hospitalId = hospitalId;
                             this.form.dealItemName = dealItemName;
                             this.form.dealCount = dealCount;
+                            this.form.dealUnitPrice = dealUnitPrice;
                             this.form.dealPrice = dealPrice;
                             this.form.performanceRatio = performanceRatio;
                             this.form.id = id;
@@ -256,6 +278,9 @@ export default {
         ],
         data: [],
         totalCount: 0,
+        dealUnitPriceNum:0, 
+        dealPriceNum:0,
+        totalNum:0
       },
       employeeType: sessionStorage.getItem("employeeType"),
       // 控制 modal
@@ -273,33 +298,35 @@ export default {
         id: "",
         indicatorId: "",
         hospitalId: null,
-        // 成交品项名称
+        // 执行品项名称
         dealItemName: "",
-        // 成交数量
+        // 执行数量
         dealCount: null,
-        // 成交金额
+        // 执行金额
         dealPrice: null,
         // 业绩占比
         performanceRatio: null,
+        // 执行单价
+        dealUnitPrice:null
       },
 
       ruleValidate: {
         dealItemName: [
           {
             required: true,
-            message: "请输入成交品项名称",
+            message: "请输入执行品项名称",
           },
         ],
         dealCount: [
           {
             required: true,
-            message: "请输入成交数量",
+            message: "请输入执行数量",
           },
         ],
         dealPrice: [
           {
             required: true,
-            message: "请输入成交金额",
+            message: "请输入执行金额",
           },
         ],
         performanceRatio: [
@@ -308,13 +335,19 @@ export default {
             message: "请输入业绩占比",
           },
         ],
+        dealUnitPrice: [
+          {
+            required: true,
+            message: "请输入执行单价",
+          },
+        ],
       },
     };
   },
   methods: {
     exportHospitalDealItemOperationDataClick() {
       api.exportHospitalDealItemOperationData().then((res) => {
-        let name = "机构成交品相运营数据分析模板";
+        let name = "机构执行品相运营数据分析模板";
         download(res, name);
       });
     },
@@ -359,6 +392,15 @@ export default {
         if (res.code === 0) {
           const { hospitalDealItemData } = res.data;
           this.query.data = hospitalDealItemData;
+          this.query.totalNum = this.query.data.length
+          let dealUnitPriceNums = 0 
+          let dealPriceNums = 0 
+          this.query.data.map(item=>{
+            dealUnitPriceNums +=Number(item.dealUnitPrice) 
+            dealPriceNums +=Number(item.dealPrice)
+          })
+          this.query.dealUnitPriceNum  =   Math.floor(dealUnitPriceNums * 100) / 100;
+          this.query.dealPriceNum  =   Math.floor(dealPriceNums * 100) / 100;
         }
       });
     },
@@ -375,6 +417,7 @@ export default {
               dealPrice,
               performanceRatio,
               id,
+              dealUnitPrice
             } = this.form;
             const data = {
               dealItemName,
@@ -384,6 +427,7 @@ export default {
               indicatorId: indicatorsId,
               hospitalId: this.hospitalId,
               id,
+              dealUnitPrice
             };
             // 修改
             api.editHospitalDealItemOperation(data).then((res) => {
@@ -404,6 +448,7 @@ export default {
               dealCount,
               dealPrice,
               performanceRatio,
+              dealUnitPrice
             } = this.form;
             const data = {
               dealItemName,
@@ -412,6 +457,7 @@ export default {
               performanceRatio,
               indicatorId: indicatorsId,
               hospitalId: this.hospitalId,
+              dealUnitPrice
             };
             // 添加
             api.addHospitalDealItemOperation(data).then((res) => {
@@ -452,7 +498,7 @@ export default {
       handler(value) {
         if (value === "finishedProductAppearance") {
           this.getHospitalInfo();
-          this.gethospitalDealRemark();
+          // this.gethospitalDealRemark();
         }
       },
       immediate: true,
@@ -483,5 +529,27 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.price_con{
+  display: flex;
+  margin-top: 20px;
+}
+.num{
+  font-size: 16px;
+  margin-right: 20px;
+}
+.num span{
+  color: red;
+}
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 10px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+  margin-top:5px
 }
 </style>

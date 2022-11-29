@@ -3,8 +3,12 @@
     <Card class="container">
       <div>
         <Table border :columns="query.columns" :data="query.data" height="730"></Table>
+        <div class="bottom">
+          <div class="company">本表单位为：千元（K）</div>
+          <div class="bottom_memo">本表数据取自啊美雅CRM系统，对账结算以财务数据为准。</div>
+        </div>
       </div>
-      <div class="h1">机构分析</div>
+      <!-- <div class="h1">机构分析</div>
         <Input
             v-model="query.hospitalOperationRemark"
             style="width: 100%; "
@@ -19,7 +23,7 @@
             type="textarea"
             :rows="3"
             disabled
-        />
+        /> -->
     </Card>
   </div>
 </template>
@@ -52,22 +56,22 @@ export default {
           {
             title: "运营维度",
             key: "operationName",
-            width:'300px',
+            width:'255px',
           },
           {
             title: "上月数据",
             key: "lastMonthData",
-            width:'300px',
+            width:'255px',
           },
           {
             title: "前月数据",
             key: "beforeMonthData",
-            width:'300px',
+            width:'255px',
           },
           {
             title: "环比",
             key: "chainRatio",
-            width:'310px',
+            width:'255px',
             render: (h, params) => {
               return h("div", params.row.chainRatio + "%");
             },
@@ -75,12 +79,17 @@ export default {
           {
             title: "优秀机构",
             key: "greatHospital",
-            width:'310px',
+            width:'255px',
             renderHeader:(h,params)=>{
               return h('div',[
                 h('strong',this.hospitalName),
               ])
             }
+          },
+          {
+            title: "健康指标推算",
+            key: "indicatorCalculation",
+            width:'255px',
           },
         ],
         data: [],
@@ -190,4 +199,18 @@ export default {
 //   justify-content: center;
 //   margin-top: 10px;
 // }
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 20px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+}
+.bottom_memo{
+  font-size: 14px;
+  margin-top: 5px;
+}
 </style>

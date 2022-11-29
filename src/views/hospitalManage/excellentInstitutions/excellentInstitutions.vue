@@ -44,9 +44,9 @@
 
     <Card class="container">
       <div>
-        <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="500"></Table>
+        <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="650"></Table>
       </div>
-      <div>
+      <!-- <div>
         <div class="h1">啊美雅批注</div>
         <Input
             v-model="query.remark"
@@ -56,7 +56,7 @@
             :rows="4"
         />
         <div class="button"><Button type="primary" @click="amyButton">提交</Button></div>
-      </div>
+      </div> -->
       <!-- <div class="page_wrap">
         <Page
           ref="pages"
@@ -628,6 +628,12 @@ export default {
           this.form.lastNewCustomerUnitPrice = hospitalNewCustomerAchievement.lastNewCustomerUnitPrice
           this.form.thisNewCustomerUnitPrice = hospitalNewCustomerAchievement.thisNewCustomerUnitPrice
           this.form.newCustomerUnitPriceChainRatio = hospitalNewCustomerAchievement.newCustomerUnitPriceChainRatio
+          this.form.lastOldCustomerRepurchaseRate = hospitalNewCustomerAchievement.lastOldCustomerRepurchaseRate
+          this.form.thisOldCustomerRepurchaseRate = hospitalNewCustomerAchievement.thisOldCustomerRepurchaseRate
+          this.form.oldCustomerRepurchaseChainRatio = hospitalNewCustomerAchievement.oldCustomerRepurchaseChainRatio
+          this.form.lastOldCustomerUnitPrice = hospitalNewCustomerAchievement.lastOldCustomerUnitPrice
+          this.form.thisOldCustomerUnitPrice = hospitalNewCustomerAchievement.thisOldCustomerUnitPrice
+          this.form.oldCustomerUnitPriceChainRatio = hospitalNewCustomerAchievement.oldCustomerUnitPriceChainRatio
         }
       });
     },
@@ -653,43 +659,53 @@ export default {
     lastNewCustomerVisitRateChange(){
         // （上月-前月）/前月*100
         const {lastNewCustomerVisitRate,thisNewCustomerVisitRate} =  this.form
-        this.form.newCustomerVisitChainRatio = (((Number(thisNewCustomerVisitRate)-Number(lastNewCustomerVisitRate)) / Number(lastNewCustomerVisitRate)).toFixed(2))*100
+        this.form.newCustomerVisitChainRatio = ((thisNewCustomerVisitRate - lastNewCustomerVisitRate)/lastNewCustomerVisitRate*100).toFixed(2)
+        // this.form.newCustomerVisitChainRatio = (((Number(thisNewCustomerVisitRate)-Number(lastNewCustomerVisitRate)) / Number(lastNewCustomerVisitRate)).toFixed(2))*100
     },
     thisNewCustomerVisitRateChange(){
         const {lastNewCustomerVisitRate,thisNewCustomerVisitRate} =  this.form
-        this.form.newCustomerVisitChainRatio = (((Number(thisNewCustomerVisitRate)-Number(lastNewCustomerVisitRate)) / Number(lastNewCustomerVisitRate)).toFixed(2))*100
+        this.form.newCustomerVisitChainRatio = ((thisNewCustomerVisitRate - lastNewCustomerVisitRate)/lastNewCustomerVisitRate*100).toFixed(2)
+        // this.form.newCustomerVisitChainRatio = (((Number(thisNewCustomerVisitRate)-Number(lastNewCustomerVisitRate)) / Number(lastNewCustomerVisitRate)).toFixed(2))*100
     },
     lastNewCustomerDealRateChange(){
         const {lastNewCustomerDealRate,thisNewCustomerDealRate} =  this.form
-        this.form.newCustomerDealChainRatio = (((Number(thisNewCustomerDealRate)-Number(lastNewCustomerDealRate)) / Number(lastNewCustomerDealRate)).toFixed(2))*100
+        this.form.newCustomerDealChainRatio = ((thisNewCustomerDealRate - lastNewCustomerDealRate)/lastNewCustomerDealRate*100).toFixed(2)
+        // this.form.newCustomerDealChainRatio = (((Number(thisNewCustomerDealRate)-Number(lastNewCustomerDealRate)) / Number(lastNewCustomerDealRate)).toFixed(2))*100
     },
     thisNewCustomerDealRateChange(){
         const {lastNewCustomerDealRate,thisNewCustomerDealRate} =  this.form
-        this.form.newCustomerDealChainRatio = (((Number(thisNewCustomerDealRate)-Number(lastNewCustomerDealRate)) / Number(lastNewCustomerDealRate)).toFixed(2))*100
+        this.form.newCustomerDealChainRatio = ((thisNewCustomerDealRate - lastNewCustomerDealRate)/lastNewCustomerDealRate*100).toFixed(2)
+        // this.form.newCustomerDealChainRatio = (((Number(thisNewCustomerDealRate)-Number(lastNewCustomerDealRate)) / Number(lastNewCustomerDealRate)).toFixed(2))*100
     },
     lastNewCustomerUnitPriceChange(){
         const {lastNewCustomerUnitPrice,thisNewCustomerUnitPrice} =  this.form
-        this.form.newCustomerUnitPriceChainRatio = (((Number(thisNewCustomerUnitPrice)-Number(lastNewCustomerUnitPrice)) / Number(lastNewCustomerUnitPrice)).toFixed(2))*100
+        this.form.newCustomerUnitPriceChainRatio = ((thisNewCustomerUnitPrice - lastNewCustomerUnitPrice)/lastNewCustomerUnitPrice*100).toFixed(2)
+        // this.form.newCustomerUnitPriceChainRatio = (((Number(thisNewCustomerUnitPrice)-Number(lastNewCustomerUnitPrice)) / Number(lastNewCustomerUnitPrice)).toFixed(2))*100
     },
     thisNewCustomerUnitPriceChange(){
         const {lastNewCustomerUnitPrice,thisNewCustomerUnitPrice} =  this.form
-        this.form.newCustomerUnitPriceChainRatio = (((Number(thisNewCustomerUnitPrice)-Number(lastNewCustomerUnitPrice)) / Number(lastNewCustomerUnitPrice)).toFixed(2))*100
+        this.form.newCustomerUnitPriceChainRatio = ((thisNewCustomerUnitPrice - lastNewCustomerUnitPrice)/lastNewCustomerUnitPrice*100).toFixed(2)
+        // this.form.newCustomerUnitPriceChainRatio = (((Number(thisNewCustomerUnitPrice)-Number(lastNewCustomerUnitPrice)) / Number(lastNewCustomerUnitPrice)).toFixed(2))*100
     },
     thisOldCustomerRepurchaseRateChange(){
         const {lastOldCustomerRepurchaseRate,thisOldCustomerRepurchaseRate} =  this.form
-        this.form.oldCustomerRepurchaseChainRatio = (((Number(thisOldCustomerRepurchaseRate)-Number(lastOldCustomerRepurchaseRate)) / Number(lastOldCustomerRepurchaseRate)).toFixed(2))*100
+        this.form.oldCustomerRepurchaseChainRatio = ((thisOldCustomerRepurchaseRate - lastOldCustomerRepurchaseRate)/lastOldCustomerRepurchaseRate*100).toFixed(2)
+        // this.form.oldCustomerRepurchaseChainRatio = (((Number(thisOldCustomerRepurchaseRate)-Number(lastOldCustomerRepurchaseRate)) / Number(lastOldCustomerRepurchaseRate)).toFixed(2))*100
     },
     lastOldCustomerRepurchaseRateChange(){
         const {lastOldCustomerRepurchaseRate,thisOldCustomerRepurchaseRate} =  this.form
-        this.form.oldCustomerRepurchaseChainRatio = (((Number(thisOldCustomerRepurchaseRate)-Number(lastOldCustomerRepurchaseRate)) / Number(lastOldCustomerRepurchaseRate)).toFixed(2))*100
+        this.form.oldCustomerRepurchaseChainRatio = ((thisOldCustomerRepurchaseRate - lastOldCustomerRepurchaseRate)/lastOldCustomerRepurchaseRate*100).toFixed(2)
+        // this.form.oldCustomerRepurchaseChainRatio = (((Number(thisOldCustomerRepurchaseRate)-Number(lastOldCustomerRepurchaseRate)) / Number(lastOldCustomerRepurchaseRate)).toFixed(2))*100
     },
     lastOldCustomerUnitPriceChange(){
         const {lastOldCustomerUnitPrice,thisOldCustomerUnitPrice} =  this.form
-        this.form.oldCustomerUnitPriceChainRatio = (((Number(thisOldCustomerUnitPrice)-Number(lastOldCustomerUnitPrice)) / Number(lastOldCustomerUnitPrice)).toFixed(2))*100
+        this.form.oldCustomerUnitPriceChainRatio = ((thisOldCustomerUnitPrice - lastOldCustomerUnitPrice)/lastOldCustomerUnitPrice*100).toFixed(2)
+        // this.form.oldCustomerUnitPriceChainRatio = (((Number(thisOldCustomerUnitPrice)-Number(lastOldCustomerUnitPrice)) / Number(lastOldCustomerUnitPrice)).toFixed(2))*100
     },
     thisOldCustomerUnitPriceChange(){
         const {lastOldCustomerUnitPrice,thisOldCustomerUnitPrice} =  this.form
-        this.form.oldCustomerUnitPriceChainRatio = (((Number(thisOldCustomerUnitPrice)-Number(lastOldCustomerUnitPrice)) / Number(lastOldCustomerUnitPrice)).toFixed(2))*100
+        this.form.oldCustomerUnitPriceChainRatio = ((thisOldCustomerUnitPrice - lastOldCustomerUnitPrice)/lastOldCustomerUnitPrice*100).toFixed(2)
+        // this.form.oldCustomerUnitPriceChainRatio = (((Number(thisOldCustomerUnitPrice)-Number(lastOldCustomerUnitPrice)) / Number(lastOldCustomerUnitPrice)).toFixed(2))*100
     },
     // 获取优秀健康指标列表
     getGreatHospitalOperationHealth() {

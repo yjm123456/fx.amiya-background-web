@@ -9,7 +9,7 @@
     >
       <div class="title" v-if="employeeType == 'hospitalEmployee'">指标编号：<p  class="p">{{indicatorsId}}</p>医院编号： <p class="p">{{hospitalId}}</p></div>
       <Tabs ref="tabss" v-model="active" v-if="controlModels==true">
-        <TabPane label="优秀机构运营健康指标" name="goodHospitalTarget">
+        <TabPane label="全国优秀机构运营健康指标" name="goodHospitalTarget">
             <div>
             <goodHospitalTarget
                 :active="active"
@@ -28,7 +28,7 @@
             ></operatingDataOfTheInstitution>
             </div>
         </TabPane>
-        <TabPane label="本机构网咨运营数据分析" name="networkConsultingOperation">
+        <TabPane label="本机构线上咨询师数据分析" name="networkConsultingOperation">
             <div>
             <networkConsultingOperation
                 :active="active"
@@ -37,7 +37,7 @@
             ></networkConsultingOperation>
             </div>
         </TabPane>
-        <TabPane label="本机构咨询师运营数据分析" name="consultantOperations">
+        <TabPane label="本机构现场咨询师数据分析" name="consultantOperations">
             <div>
             <consultantOperations
                 :active="active"
@@ -46,7 +46,7 @@
             ></consultantOperations>
             </div>
         </TabPane>
-        <TabPane label="本机构医生运营数据分析" name="doctorOperation">
+        <TabPane label="本机构科室数据分析" name="doctorOperation">
             <div>
             <doctorOperation
                 :active="active"
@@ -55,7 +55,7 @@
             ></doctorOperation>
             </div>
         </TabPane>
-        <TabPane label="本机构成交品相数据分析" name="finishedProductAppearance">
+        <TabPane label="本机构执行品项数据分析" name="finishedProductAppearance">
             <div>
             <finishedProductAppearance
                 :active="active"

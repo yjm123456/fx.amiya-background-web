@@ -96,7 +96,7 @@
             ></DatePicker>
         </FormItem>
         <FormItem label="优秀机构" prop="excellentHospital">
-          <Input v-model="form.excellentHospital" placeholder="请输入优秀机构"></Input>
+          <Input v-model="form.excellentHospital" placeholder="请输入优秀机构" disabled></Input>
         </FormItem>
         <FormItem label="指派医院" prop="indicatorIds">
           <Select
@@ -382,7 +382,7 @@ export default {
         // 结束时间
         endDateLnull:null,
         // 优秀机构
-        excellentHospital:'',
+        excellentHospital:'健康参考值',
         // 提报状态
         submitStatus:false,
         // 批注状态

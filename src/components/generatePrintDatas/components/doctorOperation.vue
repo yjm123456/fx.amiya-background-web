@@ -2,9 +2,12 @@
   <div>
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" height="600"></Table>
+        <Table border :columns="query.columns" :data="query.data" height="600" :span-method="handleSpan"></Table>
+        <div class="bottom">
+            <div class="company">本表单位为：千元（K）</div>
+          </div>
       </div>
-      <div class="h1">机构分析</div>
+      <!-- <div class="h1">机构分析</div>
       <Input
         v-model="query.hospitalConsultRemark"
         style="width: 100%; "
@@ -19,7 +22,7 @@
         type="textarea"
         :rows="3"
         disabled
-      />
+      /> -->
     </Card>
   </div>
 </template>
@@ -41,6 +44,11 @@ export default {
         hospitalId: null,
         columns: [
           {
+            title: "科室",
+            key: "sectionOffice",
+            width: '100px',
+          },
+          {
             title: "医生",
             key: "doctorName",
             width:'90px',
@@ -48,17 +56,17 @@ export default {
           {
             title: "新客接诊人数",
             key: "newCustomerAcceptNum",
-            width:'130px',
+            width:'100',
           },
           {
             title: "新客成交人数",
             key: "newCustomerDealNum",
-            width:'130px',
+            width:'100',
           },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
-            width:'110px',
+            width:'100px',
             render: (h, params) => {
               return h("div", params.row.newCustomerDealRate + "%");
             },
@@ -71,12 +79,12 @@ export default {
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
-            width:'110px',
+            width:'100px',
           },
           {
             title: "新客业绩占比",
             key: "newCustomerAchievementRate",
-            width:'130px',
+            width:'100px',
             render: (h, params) => {
               return h("div", params.row.newCustomerAchievementRate + "%");
             },
@@ -84,17 +92,17 @@ export default {
           {
             title: "老客接诊人数",
             key: "oldCustomerAcceptNum",
-            width:'130px',
+            width:'100px',
           },
           {
             title: "老客成交人数",
             key: "oldCustomerDealNum",
-            width:'130px',
+            width:'100px',
           },
           {
             title: "老客成交率",
             key: "oldCustomerDealRate",
-            width:'120px',
+            width:'100px',
             render: (h, params) => {
               return h("div", params.row.oldCustomerDealRate + "%");
             },
@@ -108,12 +116,17 @@ export default {
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
-            width:'120px',
+            width:'110px',
+          },
+          {
+            title: "总业绩",
+            key: "totalPerformance",
+            width: '110px',
           },
           {
             title: "老客业绩占比",
             key: "oldCustomerAchievementRate",
-           width:'130px',
+           width:'110px',
             render: (h, params) => {
               return h("div", params.row.oldCustomerAchievementRate + "%");
             },
@@ -128,6 +141,51 @@ export default {
     };
   },
   methods: {
+    // 被整理的数组中相同nickName的元素需放在一块，否则还要再整理数据（暂未处理）
+    integratedData(data) {
+        let that = this;
+        // 获取所有的不同年龄值
+        let arrId = [];
+        data.forEach(i => {
+            !arrId.includes(i.sectionOffice) ? arrId.push(i.sectionOffice) : arrId;
+        });
+        // 提前为每个年龄值设置跨行数为0
+        let arrObj = [];
+        arrId.forEach(j => {
+            arrObj.push({
+                id: j,
+                num: 0
+            })
+        })
+        // 计算每个年龄的可跨行数
+        data.forEach(k => {
+            arrObj.forEach(l => {
+                k.sectionOffice === l.id ? l.num ++ : l.num;
+            })
+        })
+        data.forEach(m => {
+            arrObj.forEach((n,index) => {
+                if(m.sectionOffice === n.id){
+                    if(arrId.includes(m.sectionOffice)){
+                        m.mergeCol = n.num;
+                        arrId.splice(arrId.indexOf(m.sectionOffice),1);
+                    }else{
+                        m.mergeCol = 0;
+                    }
+                }
+            })
+        })
+        return data;
+    },
+    // 只针对相同sectionOffice字段合并列，sectionOffice位于第一列，columnIndex为0
+    handleSpan ({ row, column, rowIndex, columnIndex }) {
+        if (columnIndex === 0) {
+            return {
+                rowspan: row.mergeCol === 0 ? 0:row.mergeCol,
+                colspan: row.mergeCol === 0 ? 0:1
+            };
+        }
+    },
     getHospitalConsultRemark(val1,val2) {
       const data = {
         indicatorId: val1,
@@ -155,6 +213,7 @@ export default {
         if (res.code === 0) {
           const { hospitalDoctorOperationData } = res.data;
           this.query.data = hospitalDoctorOperationData;
+          this.integratedData(this.query.data)
         }
       });
     },
@@ -205,5 +264,16 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 10px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+  margin-top:5px
 }
 </style>

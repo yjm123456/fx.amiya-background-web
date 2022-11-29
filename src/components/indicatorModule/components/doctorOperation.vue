@@ -31,9 +31,20 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data"></Table>
+        <Table border :columns="query.columns" :data="query.data" ></Table>
+        <div class="price_con">
+          <div class="num">新客业绩总额：<span>{{query.newCustomerDealPriceNum}}</span></div>    
+          <div class="num">新客客单价总额：<span>{{query.newCustomerUnitPriceNum}}</span></div>
+          <div class="num">老客业绩总额：<span>{{query.oldCustomerDealPriceNum}}</span></div>
+          <div class="num">老客客单价总额：<span>{{query.oldCustomerUnitPriceNum}}</span></div>
+          <div class="num">总业绩总额：<span>{{query.lasttMonthTotalAchievementNum}}</span></div>
+          <div class="num">总条数：<span>{{query.totalNum}}</span></div>
+        </div>
+        <div class="bottom">
+            <div class="company">本表单位为：千元（K）</div>
+          </div>
       </div>
-      <div class="h1">机构分析</div>
+      <!-- <div class="h1">机构分析</div>
       <Input
         v-model="query.hospitalConsultRemark"
         :placeholder="
@@ -57,7 +68,7 @@
       />
       <div class="button">
         <Button type="primary" @click="submitClick">提交</Button>
-      </div>
+      </div> -->
     </Card>
 
     <Modal
@@ -78,6 +89,22 @@
           <Col span="8">
             <FormItem label="医生" prop="doctorName">
               <Input v-model="form.doctorName" placeholder="请输入医生"></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="科室" prop="sectionOffice">
+              <Select
+                v-model="form.sectionOffice"
+                placeholder="请选择科室"
+                filterable
+              >
+                <Option
+                  v-for="item in AmiyaHospitalDepartmentListDepartment"
+                  :value="item.departmentName"
+                  :key="item.departmentName"
+                  >{{ item.departmentName }}</Option
+                >
+              </Select>
             </FormItem>
           </Col>
           <Col span="8">
@@ -111,20 +138,20 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="新客业绩" prop="newCustomerAchievement">
+            <FormItem label="新客业绩（k）" prop="newCustomerAchievement">
               <Input
                 v-model="form.newCustomerAchievement"
-                placeholder="请输入新客业绩"
+                placeholder="请输入新客业绩（k）"
                 type="number"
                 number
               ></Input>
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="新客客单价" prop="newCustomerUnitPrice">
+            <FormItem label="新客客单价（k）" prop="newCustomerUnitPrice">
               <Input
                 v-model="form.newCustomerUnitPrice"
-                placeholder="请输入新客客单价"
+                placeholder="请输入新客客单价（k）"
                 type="number"
                 number
               ></Input>
@@ -172,10 +199,10 @@
           </Col>
 
           <Col span="8">
-            <FormItem label="老客业绩" prop="oldCustomerAchievement">
+            <FormItem label="老客业绩（k）" prop="oldCustomerAchievement">
               <Input
                 v-model="form.oldCustomerAchievement"
-                placeholder="请输入老客业绩"
+                placeholder="请输入老客业绩（k）"
                 type="number"
                 number
               ></Input>
@@ -183,16 +210,25 @@
           </Col>
 
           <Col span="8">
-            <FormItem label="老客客单价" prop="oldCustomerUnitPrice">
+            <FormItem label="老客客单价（k）" prop="oldCustomerUnitPrice">
               <Input
                 v-model="form.oldCustomerUnitPrice"
-                placeholder="请输入老客客单价"
+                placeholder="请输入老客客单价（k）"
                 type="number"
                 number
               ></Input>
             </FormItem>
           </Col>
-
+          <Col span="8">
+            <FormItem label="总业绩（k）" prop="totalPerformance">
+              <Input
+                v-model="form.totalPerformance"
+                placeholder="请输入总业绩（k）"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem label="老客业绩占比(%)" prop="oldCustomerAchievementRate">
               <Input
@@ -220,6 +256,7 @@
 </template>
 <script>
 import * as api from "@/api/GreatHospitalOperationHealth";
+import * as orderApi from "@/api/orderManage";
 import { download } from "@/utils/util";
 import importFile from "./import/importModel.vue";
 export default {
@@ -244,10 +281,16 @@ export default {
         hospitalId: null,
         columns: [
           {
+            title: "科室",
+            key: "sectionOffice",
+            width: 150,
+          },
+          {
             title: "医生",
             key: "doctorName",
             width: 150,
           },
+          
           {
             title: "新客接诊人数",
             key: "newCustomerAcceptNum",
@@ -314,6 +357,11 @@ export default {
             width: 130,
           },
           {
+            title: "总业绩",
+            key: "totalPerformance",
+            width: 130,
+          },
+          {
             title: "老客业绩占比",
             key: "oldCustomerAchievementRate",
             width: 150,
@@ -366,6 +414,8 @@ export default {
                               oldCustomerAchievement,
                               oldCustomerUnitPrice,
                               oldCustomerAchievementRate,
+                              totalPerformance,
+                              sectionOffice
                             } = res.data.hospitalDoctorOperationInfo;
                             this.isEdit = true;
                             this.form.indicatorId = indicatorId;
@@ -383,6 +433,8 @@ export default {
                             this.form.oldCustomerAchievement = oldCustomerAchievement;
                             this.form.oldCustomerUnitPrice = oldCustomerUnitPrice;
                             this.form.oldCustomerAchievementRate = oldCustomerAchievementRate;
+                            this.form.totalPerformance = totalPerformance;
+                            this.form.sectionOffice = sectionOffice;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -434,6 +486,12 @@ export default {
         ],
         data: [],
         totalCount: 0,
+        newCustomerDealPriceNum:0, 
+        newCustomerUnitPriceNum:0, 
+        oldCustomerDealPriceNum:0, 
+        oldCustomerUnitPriceNum:0, 
+        lasttMonthTotalAchievementNum:0,
+        totalNum:0
       },
       employeeType: sessionStorage.getItem("employeeType"),
       // 控制 modal
@@ -444,7 +502,8 @@ export default {
 
       // 是否是编辑
       isEdit: false,
-
+      // 科室
+      AmiyaHospitalDepartmentListDepartment: [],
       form: {
         id: "",
         indicatorId: "",
@@ -475,9 +534,19 @@ export default {
         oldCustomerUnitPrice: null,
         // 老客业绩占比
         oldCustomerAchievementRate: null,
+        // 科室
+        sectionOffice:'',
+        // 总业绩
+        totalPerformance:null
       },
 
       ruleValidate: {
+        sectionOffice: [
+          {
+            required: true,
+            message: "请选择科室",
+          },
+        ],
         doctorName: [
           {
             required: true,
@@ -558,10 +627,25 @@ export default {
             message: "请输入老客业绩占比",
           },
         ],
+        totalPerformance: [
+          {
+            required: true,
+            message: "请输入总业绩",
+          },
+        ],
       },
     };
   },
   methods: {
+    //   获取科室
+    getAmiyaHospitalDepartmentListChange() {
+      orderApi.getAmiyaHospitalDepartmentList().then((res) => {
+        if (res.code === 0) {
+          const { AmiyaHospitalDepartmentList } = res.data;
+          this.AmiyaHospitalDepartmentListDepartment = AmiyaHospitalDepartmentList;
+        }
+      });
+    },
     exportHospitaDoctorOperationOperationDataClick() {
       api.exportHospitaDoctorOperationOperationData().then((res) => {
         let name = "本机构医生运营数据分析模板";
@@ -610,6 +694,24 @@ export default {
         if (res.code === 0) {
           const { hospitalDoctorOperationData } = res.data;
           this.query.data = hospitalDoctorOperationData;
+          this.query.totalNum = this.query.data.length
+          let newCustomerDealPriceNums = 0 
+          let newCustomerUnitPriceNums = 0 
+          let oldCustomerDealPriceNums = 0 
+          let oldCustomerUnitPriceNums = 0 
+          let lasttMonthTotalAchievementNums = 0 
+          this.query.data.map(item=>{
+            newCustomerDealPriceNums +=Number(item.newCustomerAchievement)
+            newCustomerUnitPriceNums +=Number(item.newCustomerUnitPrice)
+            oldCustomerDealPriceNums +=Number(item.oldCustomerAchievement)
+            oldCustomerUnitPriceNums +=Number(item.oldCustomerUnitPrice)
+            lasttMonthTotalAchievementNums +=Number(item.totalPerformance)
+          })
+          this.query.newCustomerDealPriceNum  =   Math.floor(newCustomerDealPriceNums * 100) / 100;
+          this.query.newCustomerUnitPriceNum  =   Math.floor(newCustomerUnitPriceNums * 100) / 100;
+          this.query.oldCustomerDealPriceNum  =   Math.floor(oldCustomerDealPriceNums * 100) / 100;
+          this.query.oldCustomerUnitPriceNum  =   Math.floor(oldCustomerUnitPriceNums * 100) / 100;
+          this.query.lasttMonthTotalAchievementNum  =   Math.floor(lasttMonthTotalAchievementNums * 100) / 100;
         }
       });
     },
@@ -635,6 +737,8 @@ export default {
               oldCustomerAchievement,
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
+              sectionOffice,
+              totalPerformance
             } = this.form;
             const data = {
               id,
@@ -653,6 +757,8 @@ export default {
               oldCustomerAchievement,
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
+              sectionOffice,
+              totalPerformance
             };
             // 修改
             api.editHospitalDoctorOperation(data).then((res) => {
@@ -682,6 +788,8 @@ export default {
               oldCustomerAchievement,
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
+              sectionOffice,
+              totalPerformance
             } = this.form;
             const data = {
               indicatorId: indicatorsId,
@@ -699,6 +807,8 @@ export default {
               oldCustomerAchievement,
               oldCustomerUnitPrice,
               oldCustomerAchievementRate,
+              sectionOffice,
+              totalPerformance
             };
             // 添加
             api.addHospitalDoctorOperation(data).then((res) => {
@@ -739,7 +849,8 @@ export default {
       handler(value) {
         if (value === "doctorOperation") {
           this.getHospitalInfo();
-          this.getHospitalConsultRemark();
+          this.getAmiyaHospitalDepartmentListChange()
+          // this.getHospitalConsultRemark();
         }
       },
       immediate: true,
@@ -770,5 +881,16 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+.bottom{
+  text-align: end;
+  display: block;
+  color: red;
+  margin-top: 10px;
+}
+.company{
+  font-size: 14px;
+  font-weight: bold;
+  margin-top:5px
 }
 </style>

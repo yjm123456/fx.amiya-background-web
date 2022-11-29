@@ -12,7 +12,7 @@
           <div class="container_list">
             <Card class="container">
               <div class="list">
-                <div class="h2">优秀机构运营健康指标</div>
+                <div class="h2">全国优秀机构运营健康指标</div>
                 <div>
                   <goodHospitalTarget
                     :indicatorsId="indicatorsId"
@@ -37,7 +37,7 @@
         <div class="container_list">
           <Card class="container">
             <div class="list">
-              <div class="h2">本机构网咨运营数据分析</div>
+              <div class="h2">本机构线上咨询师数据分析</div>
               <div>
                 <networkConsultingOperation
                   :indicatorsId="indicatorsId"
@@ -49,7 +49,7 @@
           </Card>
           <Card class="container">
             <div class="list">
-              <div class="h2">本机构咨询师运营数据分析</div>
+              <div class="h2">本机构现场咨询师数据分析</div>
               <div>
                 <consultantOperations
                   :indicatorsId="indicatorsId"
@@ -63,7 +63,7 @@
         <div class="container_list">
         <Card class="container">
           <div class="list">
-            <div class="h2">本机构医生运营数据分析</div>
+            <div class="h2">本机构科室数据分析</div>
             <div>
               <doctorOperation
                 :indicatorsId="indicatorsId"
@@ -75,7 +75,7 @@
         </Card>
         <Card class="container">
           <div class="list">
-            <div class="h2">本机构成交品相数据分析</div>
+            <div class="h2">本机构执行品项数据分析</div>
             <div>
               <finishedProductAppearance
                 :indicatorsId="indicatorsId"
@@ -157,61 +157,74 @@ export default {
             this.indicatorsId
           );
           // 
-          this.$refs.goodHospitalTarget.byIdRemark(this.indicatorsId);
+          // this.$refs.goodHospitalTarget.byIdRemark(this.indicatorsId);
           this.$refs.operatingDataOfTheInstitution.getHospitalOperationData(
             this.indicatorsId,
             this.hospitalId
           );
-          this.$refs.operatingDataOfTheInstitution.getHospitalOperationRemark(
-            this.indicatorsId,
-            this.hospitalId
-          );
+          // this.$refs.operatingDataOfTheInstitution.getHospitalOperationRemark(
+          //   this.indicatorsId,
+          //   this.hospitalId
+          // );
           this.$refs.operatingDataOfTheInstitution.getbyIdHospitalOperationIndicator(
             this.indicatorsId,
             this.hospitalId
           );
           // 网咨
-          this.$refs.networkConsultingOperation.getHospitalOnlineConsultRemark(
-            this.indicatorsId,
-            this.hospitalId
-          );
+          // this.$refs.networkConsultingOperation.getHospitalOnlineConsultRemark(
+          //   this.indicatorsId,
+          //   this.hospitalId
+          // );
           this.$refs.networkConsultingOperation.getHospitalInfo(
             this.indicatorsId,
             this.hospitalId
           );
           // 咨询
-          this.$refs.consultantOperations.getHospitalConsultRemark(
-            this.indicatorsId,
-            this.hospitalId
-          );
+          // this.$refs.consultantOperations.getHospitalConsultRemark(
+          //   this.indicatorsId,
+          //   this.hospitalId
+          // );
           this.$refs.consultantOperations.getHospitalInfo(
             this.indicatorsId,
             this.hospitalId
           );
           // 医生
-          this.$refs.doctorOperation.getHospitalConsultRemark(
-            this.indicatorsId,
-            this.hospitalId
-          );
+          // this.$refs.doctorOperation.getHospitalConsultRemark(
+          //   this.indicatorsId,
+          //   this.hospitalId
+          // );
           this.$refs.doctorOperation.getHospitalInfo(
             this.indicatorsId,
             this.hospitalId
           );
           // 成交品相
-          this.$refs.finishedProductAppearance.gethospitalDealRemark(
-            this.indicatorsId,
-            this.hospitalId
-          );
+          // this.$refs.finishedProductAppearance.gethospitalDealRemark(
+          //   this.indicatorsId,
+          //   this.hospitalId
+          // );
           this.$refs.finishedProductAppearance.getHospitalInfo(
             this.indicatorsId,
             this.hospitalId
           );
-          //
-          this.$refs.operationImprovement.getbyIdHospitalImprovePlan(
+          //医院批注
+          this.$refs.operationImprovement.getHospitalHandleSubmit(
             this.indicatorsId,
             this.hospitalId
           );
-          
+          //阿美雅批注
+          this.$refs.operationImprovement.getsAmiyaRemark(
+            this.indicatorsId,
+            this.hospitalId
+          );
+          // 
+          this.$refs.networkConsultingOperation.getIdMessage(
+            this.indicatorsId,
+            this.hospitalId
+          );
+          this.$refs.consultantOperations.getIdMessage(
+            this.indicatorsId,
+            this.hospitalId
+          );
         }
       },
       deep: true,
@@ -247,5 +260,6 @@ export default {
 }
 .container2{
   width: 100%;
+  margin-top: 10px;
 }
 </style>

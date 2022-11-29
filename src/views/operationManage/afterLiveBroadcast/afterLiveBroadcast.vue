@@ -18,32 +18,6 @@
             v-model="query.endDate"
           ></DatePicker>
           <Select
-            v-model="query.operationEmpId"
-            placeholder="请选择运营人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in employeeAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.netWorkConEmpId"
-            placeholder="请选择网咨人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in netWorkConsultingNameListAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
             v-model="query.contentPlatFormId"
             placeholder="请选择主播平台"
             @on-change="contentPlateChange(query.contentPlatFormId)"
@@ -99,6 +73,7 @@
           @on-change="handlePageChange"
         />
       </div>
+      <div class="bottom_title">往期数据已存储，请进行新数据填写，若需要更早期数据可联系研发部</div>
     </Card>
 
     <Modal
@@ -610,10 +585,6 @@ export default {
       query: {
         contentPlatFormId: null,
         liveAnchorId: null,
-        // 运营人员
-        operationEmpId: "",
-        // 网咨人员
-        netWorkConEmpId: "",
         startDate: this.$moment()
           .subtract(1, "days")
           .format("YYYY-MM-DD"),
@@ -643,19 +614,19 @@ export default {
           },
           {
             title: "网咨人员",
-            key: "netWorkConsultingEmployeeName",
+            key: "operationEmpName",
             minWidth: 100,
             align: "center",
           },
           {
             title: "更新时间",
-            key: "afterLivingUpdateDate",
+            key: "updateDate",
             minWidth: 180,
             align: "center",
             render: (h, params) => {
               return h(
                 "div",
-                params.row.afterLivingUpdateDate ? this.$moment(params.row.afterLivingUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+                params.row.updateDate ? this.$moment(params.row.updateDate).format("YYYY-MM-DD HH:mm:ss") : ''
               );
             },
           },
@@ -780,20 +751,6 @@ export default {
             align: "center",
           },
           {
-            title: "创建日期",
-            key: "createDate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
-              );
-            },
-          },
-          {
             title: "操作",
             key: "",
             width: 120,
@@ -816,7 +773,11 @@ export default {
                         const { id } = params.row;
                         this.title = "修改";
                         this.flag = true;
-                        api.byIdLiveAnchorDailyTarget(id).then((res) => {
+                        const data = {
+                          id:id,
+                          type:7
+                        }
+                        api.byIdLiveAnchorDailyTarget(data).then((res) => {
                           if (res.code === 0) {
                             const {
                               id,
@@ -1349,8 +1310,6 @@ export default {
         pageNum,
         pageSize,
         day,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -1361,15 +1320,13 @@ export default {
         // day: this.$moment(new Date(day)).format("YYYY-MM-DD"),
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
         return;
       } else {
-        api.getLiveAnchorDailyTarget(data).then((res) => {
+        api.afterLivingListWithPage(data).then((res) => {
           if (res.code === 0) {
             const { list, totalCount } = res.data.liveAnchorDailyTargetInfo;
             this.query.data = list;
@@ -1383,8 +1340,6 @@ export default {
     handlePageChange(pageNum) {
       const {
         pageSize,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -1394,11 +1349,9 @@ export default {
         pageSize,
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
-      api.getLiveAnchorDailyTarget(data).then((res) => {
+      api.afterLivingListWithPage(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.liveAnchorDailyTargetInfo;
           this.query.data = list;
@@ -1615,5 +1568,12 @@ export default {
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.bottom_title{
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  text-align: end;
+  margin-top: 10px;
 }
 </style>

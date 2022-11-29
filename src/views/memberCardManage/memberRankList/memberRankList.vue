@@ -43,6 +43,7 @@
             v-model="form.rankCode"
             placeholder="请输入级别代码"
             style="width: 100%"
+            :disabled="title == '修改'"
           ></Input>
         </FormItem>
         <FormItem label="缩略图" prop="imageUrl" key="imageUrl">

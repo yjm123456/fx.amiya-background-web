@@ -4,10 +4,17 @@
       <div>
         <div class="title">啊美雅健康参考值：新客上门率20% 新客成交率80% 新客客单价50K 老客复购率30% 老客客单价40K</div>
         <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="500"></Table>
+        <div class="price_con">
+          <div class="num">前月新客客单价总额：<span>{{query.lastNewCustomerUnitPriceNum}}</span></div>
+          <div class="num">上月新客客单价总额：<span>{{query.thisNewCustomerUnitPriceNum}}</span></div>
+          <div class="num">前月老客客单价总额：<span>{{query.lastOldCustomerUnitPriceNum}}</span></div>
+          <div class="num">上月老客客单价总额：<span>{{query.thisOldCustomerUnitPriceNum}}</span></div>
+          <div class="num">总条数：<span>{{query.totalNum}}</span></div>
+        </div>
         <div>
           <div class="bottom">
-            <div class="bottom_memo">（说明：数据统计时间11月1日-11月30日，机构展现不以业绩为导向）</div>
             <div class="company">本表单位为：千元（K）</div>
+            <div class="bottom_memo">（说明：数据统计时间上月与前月，机构展现不以业绩为导向）</div>
           </div>
         <!-- <div class="h1">啊美雅批注</div>
         <Input
@@ -48,6 +55,7 @@ export default {
           {
             title: "指标名称",
             key: "indicatorsName",
+            width:180,
           },
           {
             title: "前月新客上门率",
@@ -55,6 +63,8 @@ export default {
             render: (h, params) => {
               return h("div", params.row.lastNewCustomerVisitRate + "%");
             },
+            width:140,
+            align:'center'
           },
           {
             title: "上月新客上门率",
@@ -62,6 +72,8 @@ export default {
             render: (h, params) => {
               return h("div", params.row.thisNewCustomerVisitRate + "%");
             },
+            width:140,
+            align:'center'
           },
           {
             title: "新客上门率环比",
@@ -69,6 +81,8 @@ export default {
             render: (h, params) => {
               return h("div", params.row.newCustomerVisitChainRatio + "%");
             },
+            width:140,
+            align:'center'
           },
           {
             title: "前月新客成交率",
@@ -76,6 +90,8 @@ export default {
             render: (h, params) => {
               return h("div", params.row.lastNewCustomerDealRate + "%");
             },
+            width:140,
+            align:'center'
           },
           {
             title: "上月新客成交率",
@@ -83,6 +99,9 @@ export default {
             render: (h, params) => {
               return h("div", params.row.thisNewCustomerDealRate + "%");
             },
+            width:140,
+            align:'center',
+            
           },
 
           {
@@ -91,26 +110,89 @@ export default {
             render: (h, params) => {
               return h("div", params.row.newCustomerDealChainRatio + "%");
             },
+            width:140,
+            align:'center'
           },
           {
             title: "前月新客客单价",
             key: "lastNewCustomerUnitPrice",
+            width:140,
+            align:'center'
           },
           {
             title: "上月新客客单价",
             key: "thisNewCustomerUnitPrice",
+            width:140,
+            align:'center'
           },
 
           {
             title: "新客客单价环比",
+            width:140,
             key: "newCustomerUnitPriceChainRatio",
             render: (h, params) => {
               return h("div", params.row.newCustomerUnitPriceChainRatio + "%");
+            },
+            align:'center'
+          },
+          {
+            title: "前月老客复购率",
+            key: "lastOldCustomerRepurchaseRate",
+            width:140,
+            align:'center',
+            render: (h, params) => {
+              return h("div", params.row.lastOldCustomerRepurchaseRate + "%");
+            },
+          },
+          {
+            title: "上月老客复购率",
+            key: "thisOldCustomerRepurchaseRate",
+            width:140,
+            align:'center',
+            render: (h, params) => {
+              return h("div", params.row.thisOldCustomerRepurchaseRate + "%");
+            },
+          },
+
+          {
+            title: "老客复购率环比",
+            key: "oldCustomerRepurchaseChainRatio",
+            width:140,
+            align:'center',
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerRepurchaseChainRatio + "%");
+            },
+          },
+          {
+            title: "前月老客客单价",
+            key: "lastOldCustomerUnitPrice",
+            width:140,
+            align:'center',
+          },
+          {
+            title: "上月老客客单价",
+            key: "thisOldCustomerUnitPrice",
+            width:140,
+            align:'center',
+          },
+
+          {
+            title: "老客客单价环比",
+            key: "oldCustomerUnitPriceChainRatio",
+            width:140,
+            align:'center',
+            render: (h, params) => {
+              return h("div", params.row.oldCustomerUnitPriceChainRatio + "%");
             },
           },
         ],
         data: [],
         totalCount: 0,
+        lastNewCustomerUnitPriceNum:0,  
+        thisNewCustomerUnitPriceNum:0,
+        lastOldCustomerUnitPriceNum:0,
+        thisOldCustomerUnitPriceNum:0,
+        totalNum:0,
       },
 
     };
@@ -142,8 +224,23 @@ export default {
        };
       api.getGreatHospitalOperationHealth(data).then((res) => {
         if (res.code === 0) {
+          let lastNewCustomerUnitPriceNums= 0
+          let thisNewCustomerUnitPriceNums= 0
+          let lastOldCustomerUnitPriceNums= 0
+          let thisOldCustomerUnitPriceNums= 0
           const { greatHospitalOperationHealthInfo } = res.data
           this.query.data = greatHospitalOperationHealthInfo;
+          this.query.totalNum = this.query.data.length
+          this.query.data.map(item=>{
+            lastNewCustomerUnitPriceNums +=Number(item.lastNewCustomerUnitPrice)
+            thisNewCustomerUnitPriceNums +=Number(item.thisNewCustomerUnitPrice)
+            lastOldCustomerUnitPriceNums +=Number(item.lastOldCustomerUnitPrice)
+            thisOldCustomerUnitPriceNums +=Number(item.thisOldCustomerUnitPrice)
+          })
+          this.query.lastNewCustomerUnitPriceNum  =   Math.floor(lastNewCustomerUnitPriceNums * 100) / 100;
+          this.query.thisNewCustomerUnitPriceNum  =   Math.floor(thisNewCustomerUnitPriceNums * 100) / 100;
+          this.query.lastOldCustomerUnitPriceNum  =   Math.floor(lastOldCustomerUnitPriceNums * 100) / 100;
+          this.query.thisOldCustomerUnitPriceNum  =   Math.floor(thisOldCustomerUnitPriceNums * 100) / 100;
         }
       });
     },
@@ -221,5 +318,16 @@ export default {
   font-size: 14px;
   font-weight: bold;
   margin-top:5px
+}
+.price_con{
+  display: flex;
+  margin-top: 20px;
+}
+.num{
+  font-size: 16px;
+  margin-right: 20px;
+}
+.num span{
+  color: red;
 }
 </style>

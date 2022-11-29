@@ -20,13 +20,16 @@
             <Input v-model="form.operationName" placeholder="请输入运营维度" disabled></Input>
        </FormItem>
        <FormItem label="前月数据" prop="beforeMonthData">
-            <Input v-model="form.beforeMonthData" placeholder="请输入前月数据" type="number" number @on-change="beforeMonthDataChange"></Input>
+            <Input v-model="form.beforeMonthData" placeholder="请输入前月数据" type="number" disabled number @on-change="beforeMonthDataChange"></Input>
        </FormItem>
        <FormItem label="上月数据" prop="lastMonthData">
-            <Input v-model="form.lastMonthData" placeholder="请输入上月数据" type="number" number @on-change="lastMonthDataChange"></Input>
+            <Input v-model="form.lastMonthData" placeholder="请输入上月数据" type="number" disabled number @on-change="lastMonthDataChange"></Input>
        </FormItem>
        <FormItem label="环比(%)" prop="chainRatio">
             <Input v-model="form.chainRatio" placeholder="请输入环比" type="number" number disabled></Input>
+       </FormItem>
+       <FormItem label="健康指标推算" prop="indicatorCalculation">
+            <Input v-model="form.indicatorCalculation" placeholder="请输入健康指标推算" type="number" number></Input>
        </FormItem>
        </Form>
       <div class="footer" >
@@ -57,6 +60,7 @@ export default {
         lastMonthData:null,
         beforeMonthData:null,
         chainRatio:null,
+        indicatorCalculation:null
       },
       ruleValidate: {
         operationName: [
@@ -81,6 +85,12 @@ export default {
           {
             required: true,
             message: "请输入环比",
+          },
+        ],
+        indicatorCalculation: [
+          {
+            required: true,
+            message: "请输入健康指标推算",
           },
         ],
 
@@ -108,7 +118,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-            const {id,hospitalId,indicatorsId,operationName,lastMonthData,beforeMonthData,chainRatio} = this.form
+            const {id,hospitalId,indicatorsId,operationName,lastMonthData,beforeMonthData,chainRatio,indicatorCalculation} = this.form
             const data = {
                 id,
                 hospitalId,
@@ -117,6 +127,7 @@ export default {
                 lastMonthData,
                 beforeMonthData,
                 chainRatio:Number(chainRatio),
+                indicatorCalculation
             }
             // 修改
             api.editHospitalOperationData(data).then((res) => {
@@ -166,6 +177,7 @@ export default {
            this.form.lastMonthData = value.lastMonthData
            this.form.beforeMonthData = value.beforeMonthData
            this.form.chainRatio = value.chainRatio
+           this.form.indicatorCalculation = value.indicatorCalculation
            this.form.greatHospital = value.greatHospital
        }
     

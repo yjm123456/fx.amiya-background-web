@@ -350,3 +350,11 @@ export const updateById = (data) => {
         data,
     });
 };
+// 客户赠送积分
+export const addCustomerIntergration = (data) => {
+    return http({
+        url: `/amiyabg/Customer/addCustomerIntergration`,
+        method: "put",
+        data,
+    });
+};

@@ -44,31 +44,6 @@
             <div class="company">本表单位为：千元（K）</div>
           </div>
       </div>
-      <!-- <div class="h1">机构分析</div>
-      <Input
-        v-model="query.hospitalConsultRemark"
-        :placeholder="
-          employeeType != 'hospitalEmployee' ? '' : '请输入机构分析'
-        "
-        style="width: 100%; "
-        type="textarea"
-        :rows="3"
-        :disabled="employeeType != 'hospitalEmployee'"
-      />
-      <div class="h1">啊美雅批注</div>
-      <Input
-        v-model="query.amiyaConsultRemark"
-        :placeholder="
-          employeeType == 'hospitalEmployee' ? '' : '请输入啊美雅批注'
-        "
-        style="width: 100%; "
-        type="textarea"
-        :rows="3"
-        :disabled="employeeType == 'hospitalEmployee'"
-      />
-      <div class="button">
-        <Button type="primary" @click="submitClick">提交</Button>
-      </div> -->
     </Card>
 
     <Modal
@@ -274,8 +249,6 @@ export default {
       importControlModal: false,
       // 查询
       query: {
-        amiyaConsultRemark: "",
-        hospitalConsultRemark: "",
         keyword: "",
         indicatorsId: "",
         hospitalId: null,
@@ -652,36 +625,7 @@ export default {
         download(res, name);
       });
     },
-    getHospitalConsultRemark() {
-      const data = {
-        indicatorId: this.indicatorsId,
-        hospitalId: this.hospitalId,
-      };
-      api.getHospitalDoctorRemark(data).then((res) => {
-        if (res.code === 0) {
-          const { hospitalDoctorRemark } = res.data;
-          this.query.amiyaConsultRemark =
-            hospitalDoctorRemark.amiyaDoctorRemark;
-          this.query.hospitalConsultRemark =
-            hospitalDoctorRemark.hospitalDoctorRemark;
-        }
-      });
-    },
-    submitClick() {
-      const { amiyaConsultRemark, hospitalConsultRemark } = this.query;
-      const data = {
-        indicatorId: this.indicatorsId,
-        hospitalId: this.hospitalId,
-        hospitalDoctorRemark: hospitalConsultRemark,
-        amiyaDoctorRemark: amiyaConsultRemark,
-      };
-      api.addHospitalDoctorRemark(data).then((res) => {
-        if (res.code === 0) {
-          this.$Message.success("已提交");
-          this.getHospitalConsultRemark();
-        }
-      });
-    },
+    
     // 获取本机构医生运营数据列表
     getHospitalInfo() {
       const { indicatorsId, hospitalId, keyword } = this.query;
@@ -842,7 +786,6 @@ export default {
     },
   },
   created() {
-    // this.getLogisticsCompanyList()
   },
   watch: {
     active: {
@@ -850,7 +793,6 @@ export default {
         if (value === "doctorOperation") {
           this.getHospitalInfo();
           this.getAmiyaHospitalDepartmentListChange()
-          // this.getHospitalConsultRemark();
         }
       },
       immediate: true,

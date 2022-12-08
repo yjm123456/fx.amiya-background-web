@@ -1611,7 +1611,7 @@ export default {
               exchangeType,
               remark,
               accountReceivable,
-              createDate:createDate ? this.$moment(createDate).format("YYYY-MM-DD HH:mm:ss") : null
+              createDate:createDate ? createDate : null
             }
             api.supplement(data).then((res) => {
               if(res.code ===0 ){

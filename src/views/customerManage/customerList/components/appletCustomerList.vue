@@ -251,6 +251,8 @@
         <Button type="primary" @click="handleEditSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 客户赠送积分 -->
+    <bonusPoint :bonusPointsParams="bonusPointsParams" :bonusPointsControlModal.sync="bonusPointsControlModal" @getWeChatCustomerList="getWeChatCustomerList"/>
   </div>
 </template>
 
@@ -259,6 +261,7 @@ import * as api from "@/api/customerManage";
 import customerInfo from "@/components/customerInfo/customerInfo";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
 import customerMessage from "@/components/customerMessage/customerMessage"
+import bonusPoint from "./bonusPoints.vue"
 
 export default {
   props: {
@@ -267,7 +270,8 @@ export default {
   components: {
     customerInfo,
     trackReturnVisit,
-    customerMessage
+    customerMessage,
+    bonusPoint
   },
   data() {
     return {
@@ -278,6 +282,13 @@ export default {
         encryptPhone: "",
         tabGlag:false
       },
+      // 客户赠送积分
+      bonusPointsParams:{
+        encryptPhone:'',
+        orderId:'',
+        actualPayment:null,
+      },
+      bonusPointsControlModal:false,
       customerMessageObj:{},
       amiyaPositionId:sessionStorage.getItem("amiyaPositionId"),
       monthList:[
@@ -524,6 +535,26 @@ export default {
                   "发会员卡"
                 )
                 : null,
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { encryptPhone } = params.row;
+                        this.bonusPointsParams.encryptPhone = encryptPhone;
+                        this.bonusPointsControlModal = true;
+                      },
+                    },
+                  },
+                  "赠送积分"
+                )
                 // h(
                 //   "Button",
                 //   {

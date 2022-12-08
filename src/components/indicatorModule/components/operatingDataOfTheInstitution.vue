@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <Card :dis-hover="true"> -->
       <div class="header_wrap" >
         <div class="left">
         </div> 
@@ -14,31 +13,10 @@
           >
         </div>
       </div>
-    <!-- </Card> -->
-
     <Card class="container">
       <div>
         <Table border :columns="query.columns" :data="query.data" height="550"></Table>
       </div>
-      <!-- <div class="h1">机构分析</div>
-        <Input
-            v-model="query.hospitalOperationRemark"
-            :placeholder="employeeType != 'hospitalEmployee' ? '' :'请输入机构分析'"
-            style="width: 100%; "
-            type="textarea"
-            :rows="3"
-            :disabled="employeeType != 'hospitalEmployee'"
-        />
-        <div class="h1">啊美雅批注</div>
-        <Input
-            v-model="query.amiyaOperationRemark"
-            :placeholder="employeeType == 'hospitalEmployee' ? '' :'请输入啊美雅批注'"
-            style="width: 100%; "
-            type="textarea"
-            :rows="3"
-            :disabled="employeeType== 'hospitalEmployee'"
-        />
-        <div class="button"><Button type="primary" @click="submitClick">提交</Button></div> -->
         <div class="bottom">
           <div class="company">本表单位为：千元（K）</div>
           <div class="bottom_memo">本表数据取自啊美雅CRM系统，对账结算以财务数据为准。</div>
@@ -1301,8 +1279,6 @@ export default {
        
       // 查询
       query: {
-        amiyaOperationRemark:'',
-        hospitalOperationRemark:'',
         keyword: "",
         indicatorsId:'',
         hospitalId:-1,
@@ -1607,34 +1583,6 @@ export default {
     
   },
   methods: {
-    getHospitalOperationRemark(){
-      const data = { 
-        indicatorId:this.indicatorsId,
-        hospitalId:this.hospitalId
-      };
-      api.getHospitalOperationRemark(data).then((res) => {
-        if (res.code === 0) {
-          const {hospitalOperationRemark } = res.data;
-          this.query.amiyaOperationRemark = hospitalOperationRemark.amiyaOperationRemark;
-          this.query.hospitalOperationRemark = hospitalOperationRemark.hospitalOperationRemark
-        }
-      });
-    },
-    submitClick(){
-      const {amiyaOperationRemark,hospitalOperationRemark} = this.query
-      const data = {
-        indicatorId:this.indicatorsId,
-        hospitalId:this.hospitalId,
-        hospitalOperationRemark,
-        amiyaOperationRemark
-      }
-      api.addHospitalOperationRemark(data).then((res) => {
-        if (res.code === 0) {
-          this.$Message.success('已提交')
-          this.getHospitalOperationRemark()
-        }
-      });
-    },
     addClick(){
       if(this.query.data.length == 0){
         this.controlModal = true;
@@ -2248,8 +2196,6 @@ export default {
                 this.query.hospitalId = this.hospitalId
               }
                 this.getHospitalOperationData();
-                // this.getHospitalOperationRemark()
-                
             }
             this.getbyIdHospitalOperationIndicator()
 

@@ -909,6 +909,18 @@ const giftManage = [{
         component: () =>
             import ("@/views/giftManage/receiveGiftList/receiveGiftList.vue"),
     },
+    {
+        path: "/transactionVoucher",
+        name: "transactionVoucher",
+        meta: {
+            title: "已领取礼品列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['礼品管理'],
+        },
+        component: () =>
+            import ("@/views/giftManage/transactionVoucher/transactionVoucher.vue"),
+    },
 ];
 
 /**

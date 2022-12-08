@@ -141,9 +141,6 @@ export default {
     handleModalVisibleChange(value) {
       if (!value) {
         this.handleCancelClick();
-        // this.$emit("update:controlModal", false);
-        // this.$emit("HospitalIndicatorFill");
-        // this.active = 'goodHospitalTarget'
       }
     },
     // 取消

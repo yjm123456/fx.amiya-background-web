@@ -562,6 +562,10 @@
               />
             </FormItem>
           </Col>
+          <Spin fix v-if="isflag==true">
+              <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+              <div>加载中...</div>
+          </Spin>
         </Row>
       </Form>
       <div slot="footer">
@@ -580,6 +584,7 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
+      isflag:false,
       employeeList: [],
       // 查询
       query: {
@@ -1435,8 +1440,10 @@ export default {
                 ? activateHistoricalConsultation
                 : 0,
             };
+            this.isflag = true
             api.afterLivingUpdate(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false
                 this.isEdit = false;
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
@@ -1444,7 +1451,11 @@ export default {
                   content: "修改成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           } else {
             const {
@@ -1513,16 +1524,22 @@ export default {
                 ? activateHistoricalConsultation
                 : 0,
             };
+            this.isflag = true
             // 添加
             api.afterLivingAdd(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           }
         }

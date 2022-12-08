@@ -46,28 +46,6 @@
       <div>
         <Table :row-class-name="rowClassName" border :columns="query.columns" :data="query.data" height="650"></Table>
       </div>
-      <!-- <div>
-        <div class="h1">啊美雅批注</div>
-        <Input
-            v-model="query.remark"
-            placeholder="请输入啊美雅批注"
-            style="width: 100%; "
-            type="textarea"
-            :rows="4"
-        />
-        <div class="button"><Button type="primary" @click="amyButton">提交</Button></div>
-      </div> -->
-      <!-- <div class="page_wrap">
-        <Page
-          ref="pages"
-          :current="query.pageNum"
-          :page-size="query.pageSize"
-          :total="query.totalCount"
-          show-total
-          show-elevator
-          @on-change="handlePageChange"
-        />
-      </div> -->
     </Card>
 
     <Modal
@@ -217,7 +195,6 @@ export default {
     return {
       // 查询
       query: {
-        remark:'',
         keyword: "",
         indicatorsId:sessionStorage.getItem('indicatorsId'),
         pageNum: 1,
@@ -581,27 +558,6 @@ export default {
     };
   },
   methods: {
-    byIdRemark(){
-      const {indicatorsId} = this.query
-      const data = {
-        indicatorId:indicatorsId,
-      }
-      api.getAmiyaRemark(data).then((res) => {
-        this.query.remark = res.data.amiyaRemark.amiyaRemark
-      })
-    },
-    // 阿美雅批注
-    amyButton(){
-      const {indicatorsId,remark} = this.query
-      const data = {
-        indicatorId:indicatorsId,
-        remark:remark
-      }
-      api.addAmiyaRemark(data).then((res) => {
-        this.$Message.success('已提交')
-        this.byIdRemark()
-      })
-    },
     rowClassName (row, index) {
         if (index === 0) {
             return 'one';
@@ -718,7 +674,6 @@ export default {
         if (res.code === 0) {
           const { greatHospitalOperationHealthInfo } = res.data
           this.query.data = greatHospitalOperationHealthInfo;
-          this.byIdRemark()
         }
       });
     },
@@ -801,7 +756,6 @@ export default {
     this.getGreatHospitalOperationHealth();
     this.getHospitalInfonameList()
     this.getHospitalOperationIndicatorNameList()
-    this.byIdRemark()
   },
 };
 </script>

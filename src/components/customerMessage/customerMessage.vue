@@ -55,6 +55,11 @@
                         </FormItem>
                     </Col>
                     <Col span="6">
+                        <FormItem label="客户昵称" prop="name">
+                            <Input v-model="form.name" placeholder="请输入客户昵称"  ></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span="6">
                         <FormItem label="姓名" prop="realName">
                             <Input v-model="form.realName" placeholder="请输入姓名"  ></Input>
                         </FormItem>
@@ -320,6 +325,8 @@ export default {
         createDate:'',
         // 姓名
         realName:'',
+        // 客户昵称
+        name:'',
         // 年龄
         age:null,
         // 微信昵称
@@ -429,7 +436,7 @@ export default {
     // 确认
     handleSubmit(name) {
       const {id,personalWechat,businessWeChat,wechatMiniProgram,officialAccounts,realName,wechatNumber,
-      sex,birthday,city,occupation,otherPhone,detailAddress,isSendNote,isCall,isSendWeChat,unTrackReason,remark,phone
+      sex,birthday,city,occupation,otherPhone,detailAddress,isSendNote,isCall,isSendWeChat,unTrackReason,remark,phone,
       } = this.form
       const data = {
         id,
@@ -451,7 +458,8 @@ export default {
         isSendWeChat,
         unTrackReason,
         remark,
-        phone:this.customerMessageObjs.phone
+        phone:this.customerMessageObjs.phone,
+        name:this.form.name
       }
       if(!this.customerMessageObjs.phone){
         this.$Message.warning('无法提交')
@@ -504,6 +512,7 @@ export default {
         }
         this.form.createDate = value.createDate == "0001-01-01T00:00:00" ? '' : this.$moment(value.createDate).format("YYYY-MM-DD HH:mm:ss")
         this.form.realName = value.realName
+        this.form.name = value.name
         this.form.age = value.age
         this.form.wechatNumber = value.wechatNumber
         this.form.sex = value.sex

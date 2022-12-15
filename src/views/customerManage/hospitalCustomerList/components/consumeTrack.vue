@@ -60,7 +60,7 @@
                 filterable
               >
                 <Option
-                  v-for="item in buyAgainType"
+                  v-for="item in buyAgainTypes"
                   :value="item.type"
                   :key="item.type"
                   >{{ item.typeText }}</Option
@@ -169,6 +169,7 @@ export default {
   props: {
     controlModal: Boolean,
     encryptPhone: String,
+    buyAgainTypes:Array
   },
   data() {
     return {
@@ -367,7 +368,7 @@ export default {
     },
   },
   created(){
-    this.getAppTypeList()
+    // this.getAppTypeList()
   }
 };
 </script>

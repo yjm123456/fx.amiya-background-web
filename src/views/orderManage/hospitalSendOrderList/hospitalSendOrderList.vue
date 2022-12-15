@@ -1,40 +1,96 @@
 <template>
   <div>
-    <Tabs ref="tabs" v-model="activeName">
-      <TabPane label="下单平台派单" name="hospitalDispatch">
+    <Tabs ref="tabs" v-model="activeName" type="card">
+      <TabPane label="全部" name="allOrder">
         <div>
-          <hospitalDispatch
+          <allOrder
             :activeName="activeName"
-          ></hospitalDispatch>
+            :toHospitalTypeList = "toHospitalTypeList"
+          ></allOrder>
         </div>
       </TabPane>
-      <TabPane label="内容平台派单" name="hospitalContentPlatform">
+      <TabPane label="未处理" name="unhandled">
         <div>
-          <hospitalContentPlatform
+          <unhandled
             :activeName="activeName"
-          ></hospitalContentPlatform>
+            :toHospitalTypeList = "toHospitalTypeList"
+          ></unhandled>
+        </div>
+      </TabPane>
+      <TabPane label="跟进中" name="followingUp">
+        <div>
+          <followingUp
+            :activeName="activeName"
+            :toHospitalTypeList = "toHospitalTypeList"
+          ></followingUp>
+        </div>
+      </TabPane>
+      <TabPane label="已到院" name="arrived">
+        <div>
+          <arrived
+            :activeName="activeName"
+            :toHospitalTypeList = "toHospitalTypeList"
+          ></arrived>
+        </div>
+      </TabPane>
+      <TabPane label="已成交" name="closed">
+        <div>
+          <closed
+            :activeName="activeName"
+            :toHospitalTypeList = "toHospitalTypeList"
+          ></closed>
+        </div>
+      </TabPane>
+      <TabPane label="重单" name="duplicateOrder">
+        <div>
+          <duplicateOrder
+            :activeName="activeName"
+            :toHospitalTypeList = "toHospitalTypeList"
+          ></duplicateOrder>
         </div>
       </TabPane>
     </Tabs>
   </div>
 </template>
 <script>
-import hospitalDispatch from "./components/hospitalDispatch.vue"
-import hospitalContentPlatform from "./components/hospitalContentPlatform.vue"
+import * as api from "@/api/orderManage";
+import allOrder from "./components/allOrder.vue"
+import unhandled from "./components/unhandled.vue"
+import followingUp from "./components/followingUp.vue"
+import arrived from "./components/arrived.vue"
+import closed from "./components/closed.vue"
+import duplicateOrder from "./components/duplicateOrder.vue"
 
 export default {
   components:{
-    hospitalDispatch,
-    hospitalContentPlatform
+    allOrder,
+    unhandled,
+    followingUp,
+    arrived,
+    closed,
+    duplicateOrder
   },
   data(){
     return {
-      activeName: "hospitalDispatch",
+      activeName: "allOrder",
+      // 到院类型
+      toHospitalTypeList:[]
     }
   },
   methods:{
-    
+     //   获取订单到院类型
+    getcontentPlateFormOrderToHospitalTypeList() {
+      api.contentPlateFormOrderToHospitalTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderTypes } = res.data;
+          this.toHospitalTypeList = orderTypes;
+        }
+      });
+    },
   },
+  created(){
+    this.getcontentPlateFormOrderToHospitalTypeList()
+  }
   
 }
 </script>

@@ -551,12 +551,6 @@
       @transactionStatusChange="transactionStatusChange"
       :transactionStatusParams="transactionStatusParams"
     />
-
-    <!-- 留言板 -->
-    <messageBoard
-      @messageBoardChange="messageBoardChange"
-      :messageBoardParams="messageBoardParams"
-    />
      <!-- 查看顾客照片 -->
     <viewCustomerPhotos :viewCustomerPhotosModel.sync ="viewCustomerPhotosModel" :contentPlatFormOrderId.sync ="contentPlatFormOrderId"></viewCustomerPhotos>
     <!-- 订单详情 -->
@@ -577,6 +571,8 @@
         <Button @click="handleModalVisibleChange()">关闭页面</Button>
       </div>
     </Modal>
+    <!-- 留言板 -->
+    <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
   </div>
 </template>
 
@@ -584,7 +580,7 @@
 import * as api from "@/api/orderManage";
 import * as hospitalManage from "@/api/hospitalManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
-import messageBoard from "@/components/messageBoard/messageBoard.vue";
+import messageBoard from "@/components/contentMessageBoard/contentMessageBoard.vue";
 import transactionStatus from "@/components/transactionStatus/transactionStatus";
 import upload from "@/components/upload/upload";
 import trackReturnVisitVue from "../../../../components/trackReturnVisit/trackReturnVisit.vue";
@@ -1071,12 +1067,11 @@ export default {
             minWidth: 120,
             align: "center",
             render: (h, params) => {
-              return params.row.toHospitalDate
-                ? h(
+              return h(
                     "div",
-                    this.$moment(params.row.toHospitalDate).format("YYYY-MM-DD")
+                    this.$moment(params.row.toHospitalDate).format("YYYY-MM-DD") == '0001-01-01' ? '' : params.row.toHospitalDate ? this.$moment(params.row.toHospitalDate).format("YYYY-MM-DD") : null
                   )
-                : "";
+                ;
             },
           },
           {
@@ -1278,29 +1273,32 @@ export default {
           },
           {
             title: "操作",
-            width: 350,
+            width: 390,
             align: "center",
             fixed: "right",
             render: (h, params) => {
               return h("div", [
-                // h(
-                //   "Button",
-                //   {
-                //     props: {
-                //       type: "primary",
-                //       size: "small",
-                //     },
-                //     on: {
-                //       click: () => {
-                //         const { hospitalId , id} = params.row;
-                //         this.messageBoardParams.hospitalId = hospitalId
-                //         this.messageBoardParams.id = id
-                //         this.messageBoardParams.messageBoard = true
-                //       },
-                //     },
-                //   },
-                //   "留言板"
-                // ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: ".3125rem",
+                    },
+                    on: {
+                      click: () => {
+                        const { hospitalId , id,orderId} = params.row;
+                        this.messageBoardParams.hospitalId = hospitalId
+                        this.messageBoardParams.id = orderId
+                        this.messageBoardParams.messageBoard = true
+                      },
+                    },
+                  },
+                  "留言板"
+                ),
                 h(
                   "Button",
                   {
@@ -1604,8 +1602,8 @@ export default {
       },
       // 客户信息组件参数 留言板
       messageBoardParams: {
-        hospitalId: 0,
-        id: 0,
+        hospitalId: null,
+        id: null,
         content: "",
         messageBoard: false,
       },

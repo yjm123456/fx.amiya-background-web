@@ -8,7 +8,7 @@
       @on-visible-change="handleModalVisibleChange"
     >
       <div>
-        <Tabs ref="tabs" v-model="activeName" @on-click="handleTabsSwitch">
+        <Tabs ref="tabs" v-model="active" @on-click="handleTabsSwitch" v-if="isTable">
           <TabPane label="订单列表" name="orderList">
             <orderList :encryptPhone="encryptPhone" ref="orderList"></orderList>
           </TabPane>
@@ -35,21 +35,22 @@ export default {
   props: {
     encryptPhone: String,
     controlModal: Boolean,
+    isTable:Boolean
   },
   data() {
     return {
       control: false,
 
-      activeName: "orderList",
+      active: "orderList",
     };
   },
   watch: {
     controlModal: {
       handler(controlModal) {
-        this.activeName = "orderList"
-        this.$refs.orderList.hospitalByEncryptPhoneGetSendHospitalOrders(
-          this.encryptPhone
-        );
+        this.active = "orderList"
+        this.$nextTick(()=>{
+          this.$refs.orderList.hospitalByEncryptPhoneGetSendHospitalOrders(this.encryptPhone);
+        })
         this.control = controlModal;
       },
     },

@@ -354,3 +354,55 @@ export const detailsById = (id) => {
         method: "get",
     });
 };
+// 医院获取派单未处理信息条数
+export const getNotRepeatedSendOrder = () => {
+    return http({
+        url: "/amiyabg/ContentPlateFormSendOrder/getNotRepeatedSendOrder",
+        method: "get",
+    });
+};
+// 医院获取今日未处理数据
+export const getTodayNotRepeatedSendOrder = () => {
+    return http({
+        url: "/amiyabg/HospitalIndexData/getTodayNotRepeatedSendOrder",
+        method: "get",
+    });
+};
+// 首页机构数据
+export const getHospitalIndexDataHospitalData = () => {
+    return http({
+        url: "/amiyabg/HospitalIndexData/hospitalData",
+        method: "get",
+    });
+};
+// 首页机构数据比例数据
+export const gethospitalDataRatio = () => {
+    return http({
+        url: "/amiyabg/HospitalIndexData/hospitalDataRatio",
+        method: "get",
+    });
+};
+// 
+// 修改医生在职状态
+export const updateDoctorStatus = (data) => {
+    return http({
+        url: `/amiyabg/Doctor/updateDoctorStatus`,
+        method: "put",
+        data
+    });
+};
+// 获取接收消息信息
+export const getHospitalMessageRecieve = () => {
+    return http({
+        url: "/amiyabg/api/HospitalMessageRecieve",
+        method: "get",
+    });
+};
+// 修改接收消息信息
+export const updateHospitalMessageRecieve = (data) => {
+    return http({
+        url: `/amiyabg/api/HospitalMessageRecieve`,
+        method: "put",
+        data
+    });
+};

@@ -35,6 +35,12 @@
         <FormItem label="名称" prop="name">
           <Input v-model="form.name" placeholder="请输入名称"></Input>
         </FormItem>
+        <FormItem label="最小成长值" prop="minAmount">
+          <InputNumber v-model="form.minAmount" style="width:100%;" placeholder="请输入最小成长值" min="0"></InputNumber>
+        </FormItem>
+        <FormItem label="最大成长值" prop="maxAmount">
+          <InputNumber v-model="form.maxAmount" style="width:100%;" placeholder="请输入最大成长值" min="1"></InputNumber>
+        </FormItem>
         <FormItem label="本人产生积分比例" prop="generateIntegrationPercent">
           <InputNumber v-model="form.generateIntegrationPercent" style="width:100%;" placeholder="请输入本人产生积分比例"></InputNumber>
         </FormItem>
@@ -106,9 +112,20 @@ export default {
             key: "rankCode",
           },
           {
+            title: "成长值",
+            key: "generateIntegrationPercent",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.maxAmount > 0 ? (params.row.minAmount + ' - ' + params.row.maxAmount) : ''
+              );
+            },
+          },
+          {
             title: "本人产生积分比例",
             key: "generateIntegrationPercent",
           },
+          
           {
             title: "图片",
             key: "imageUrl",
@@ -272,6 +289,10 @@ export default {
       form: {
         // 名称
         name: "",
+        // 最小成长值
+        minAmount:null,
+        // 最大成长值
+        maxAmount:null,
         // 本人产生积分比例
         generateIntegrationPercent:null,
         // 级别代码
@@ -292,6 +313,18 @@ export default {
           {
             required: true,
             message: "请输入名称",
+          },
+        ],
+        minAmount: [
+          {
+            required: true,
+            message: "请输入最小成长值",
+          },
+        ],
+        maxAmount: [
+          {
+            required: true,
+            message: "请输入最大成长值",
           },
         ],
         generateIntegrationPercent: [
@@ -344,6 +377,8 @@ export default {
             isDefault,
             valid,
             id,
+            minAmount,
+            maxAmount
           } = this.form;
           if (this.isEdit) {
             // 修改
@@ -356,6 +391,8 @@ export default {
               default: isDefault,
               valid,
               id,
+              minAmount,
+              maxAmount
             };
             api.updateMemberRankInfo(data).then((res) => {
               if (res.code === 0) {
@@ -378,7 +415,9 @@ export default {
               imageUrl,
               description,
               default: isDefault,
-              valid
+              valid,
+              minAmount,
+              maxAmount
             };
             api.addMemberRankInfo(data).then((res) => {
               if (res.code === 0) {

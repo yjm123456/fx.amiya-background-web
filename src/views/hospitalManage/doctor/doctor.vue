@@ -9,12 +9,14 @@
             style="width: 200px"
             @keyup.enter.native="getDoctor()"
           />
+            
+          <!--:disabled="employeeType == 'hospitalEmployee'"  -->
           <Select
             v-model="query.hospitalId"
             placeholder="请选择医院"
             filterable
-            :disabled="employeeType == 'hospitalEmployee'"
             style="width: 240px;margin-left:10px"
+            v-if="employeeType != 'hospitalEmployee'"
           >
             <Option
               v-for="item in hospitalInfo"
@@ -23,9 +25,25 @@
               >{{ item.name }}</Option
             >
           </Select>
-          <Button type="primary" style="margin-left: 10px" @click="getDoctor()"
-            >查询</Button
-          >
+          <div class="type_con">
+            <span class="type">在职状态</span>
+            <RadioGroup v-model="query.isLeaveOffice" style="margin-bottom:2px">
+              <Radio label="全部">
+                  <span>全部</span>
+              </Radio>
+              <Radio label="在职">
+                  <span>在职</span>
+              </Radio>
+              <Radio label="离职">
+                  <span>离职</span>
+              </Radio>
+          </RadioGroup>
+          </div>
+          <div class="type_con">
+            <span class="type">仅主推</span>
+            <Checkbox v-model="query.isMain" style="border-radius:50%">主推</Checkbox>
+          </div>
+          <Button type="primary" style="margin-left: 10px" @click="getDoctor()">查询</Button>
         </div>
         <div class="right">
           <Button
@@ -42,30 +60,34 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data"></Table>
-        <!-- <div class="list">
-          <div class="item">
-            <div class="item_con">
-              <div class="item_top">
-                <img
-                  src="https://ameiya.oss-cn-hangzhou.aliyuncs.com/c9b3d310546a4b70abbd1eb9973c7c9f.jpg"
-                  alt=""
-                  class="item_img"
-                />
-                <div>
-                  <div class="item_name">马康</div>
-                  <div class="item_position">担任职务：医师</div>
+        <!-- <Table border :columns="query.columns" :data="query.data"></Table> -->
+        <div class="list" >
+          <div v-for="(item,index) in query.data" :key="index">
+            <div class="item">
+              <div class="item_con">
+                <div class="item_top">
+                  <viewer>
+                  <img
+                    :src="item.picUrl"
+                    alt=""
+                    class="item_img"
+                  />
+                  </viewer>
+                  <div>
+                    <div class="item_name">{{item.name}}</div>
+                    <div class="item_position">担任职务：{{item.position}}</div>
+                  </div>
+                  <div class="item_type green">{{item.isMain == 1 ? '主推' : ''}}</div>
+                  <div class="item_job " :class="item.isLeaveOffice == 1 ? 'green' : 'position_orange'">{{item.isLeaveOffice == 1 ? '在职' : '离职'}}</div>
                 </div>
-                <div class="item_job green">在职</div>
-                <div class="item_type green">已审核</div>
-              </div>
-              <div class="item_bottom">
-                <div class="edit_data">修改资料</div>
-                <div class="edit_type">修改在职状态</div>
+                <div class="item_bottom">
+                  <div class="edit_data"  @click="editDoctorMessage(item.id)">修改资料</div>
+                  <div class="edit_type" @click="editDoctorType(item.id)">修改在职状态</div>
+                </div>
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
       <div class="page_wrap">
         <Page
@@ -157,6 +179,9 @@
         <FormItem label="是否主推" prop="isMain">
           <i-switch v-model="form.isMain" />
         </FormItem>
+        <FormItem label="是否在职" prop="isLeaveOffice">
+          <i-switch v-model="form.isLeaveOffice" />
+        </FormItem>
         <FormItem label="医生详情图" prop="projectPicture">
           <upload
             :uploadObj="mainUploadObj"
@@ -174,18 +199,24 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 修改在职状态 -->
+    <editDoctorType :editDoctorTypeModel.sync="editDoctorTypeModel" :id="id" @getDoctor="getDoctor"></editDoctorType>
   </div>
 </template>
 <script>
 import * as api from "@/api/hospitalManage";
 import * as orderApi from "@/api/orderManage";
 import upload from "@/components/upload/upload";
+import editDoctorType from "./components/editDoctorStatus.vue"
 export default {
   components: {
     upload,
+    editDoctorType
   },
   data() {
     return {
+      id:null,
+      editDoctorTypeModel:false,
       flag: false,
       employeeType: sessionStorage.getItem("employeeType"),
       hospitalId: sessionStorage.getItem("hospitalId"),
@@ -212,10 +243,12 @@ export default {
 
       // 查询
       query: {
+        isMain:null,
+        isLeaveOffice:'全部',
         hospitalId: null,
         keyword: "",
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 20,
         columns: [
           {
             title: "医生姓名",
@@ -460,6 +493,8 @@ export default {
         isMain: false,
         // 主推项目图
         projectPicture: "",
+        // 是否在职
+        isLeaveOffice:true
       },
 
       ruleValidate: {
@@ -509,6 +544,59 @@ export default {
     };
   },
   methods: {
+    // 编辑医生信息
+    editDoctorMessage(id){
+      this.title = '编辑'
+      api.byIdGetDoctor(id).then((res) => {
+        if (res.code === 0) {
+          this.isEdit = true;
+          const {
+            hosptalName,
+            obtainEmploymentYear,
+            hospitalId,
+            isMain,
+            isLeaveOffice,
+            ...data
+          } = res.data.doctorInfo;
+          data.obtainEmploymentYear = String(
+            obtainEmploymentYear
+          );
+          this.form = data;
+          // this.hospitalInfo.map((item=>{
+          if (this.employeeType == "hospitalEmployee") {
+            if (hospitalId == this.hospitalId) {
+              this.form.hospitalId = hospitalId;
+            }
+          } else {
+            this.form.hospitalId = hospitalId;
+          }
+          // }))
+          if (isMain == 1) {
+            this.form.isMain = true;
+          } else {
+            this.form.isMain = false;
+          }
+          if (isLeaveOffice == 1) {
+            this.form.isLeaveOffice = true;
+          } else {
+            this.form.isLeaveOffice = false;
+          }
+          this.uploadObj.uploadList = this.form.picUrl
+            ? [this.form.picUrl]
+            : "";
+          this.mainUploadObj.uploadList = this.form
+            .projectPicture
+            ? [this.form.projectPicture]
+            : "";
+          this.controlModal = true;
+        }
+      });
+    },
+    // 修改在职状态
+    editDoctorType(value){
+      this.editDoctorTypeModel = true
+      this.id = value
+    },
     //   获取科室
     getAmiyaHospitalDepartmentListChange() {
       orderApi.getAmiyaHospitalDepartmentList().then((res) => {
@@ -523,7 +611,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { keyword, pageNum, pageSize, hospitalId } = this.query;
+      const { keyword, pageNum, pageSize, hospitalId ,isLeaveOffice,isMain} = this.query;
       const data = {
         keyword,
         pageNum,
@@ -531,6 +619,9 @@ export default {
         hospitalId: sessionStorage.getItem("hospitalId")
           ? sessionStorage.getItem("hospitalId")
           : hospitalId,
+        // isLeaveOffice:isLeaveOffice == '离职' ? 0 : 1,
+        isLeaveOffice:isLeaveOffice == '全部' ? '' :  isLeaveOffice == '离职' ? 0 : 1,
+        isMain:isMain == true ? 1 :  null
       };
       api.Doctor(data).then((res) => {
         if (res.code === 0) {
@@ -543,7 +634,7 @@ export default {
 
     // 医生信息列表分页
     handlePageChange(pageNum) {
-      const { keyword, pageSize, hospitalId } = this.query;
+      const { keyword, pageSize, hospitalId ,isLeaveOffice,isMain } = this.query;
       const data = {
         keyword,
         pageNum,
@@ -551,6 +642,8 @@ export default {
         hospitalId: sessionStorage.getItem("hospitalId")
           ? sessionStorage.getItem("hospitalId")
           : hospitalId,
+        isLeaveOffice:isLeaveOffice == '全部' ? '' :  isLeaveOffice == '离职' ? 0 : 1,
+        isMain:isMain == true ? 1 :  null
       };
       api.Doctor(data).then((res) => {
         if (res.code === 0) {
@@ -595,6 +688,7 @@ export default {
             const {
               obtainEmploymentYear,
               isMain,
+              isLeaveOffice,
               hospitalId,
               ...data
             } = this.form;
@@ -603,6 +697,7 @@ export default {
                 this.$moment(obtainEmploymentYear).format("YYYY")
               ),
               isMain: isMain == true ? 1 : 0,
+              isLeaveOffice: isLeaveOffice == true ? 1 : 0,
               hospitalId:
                 sessionStorage.getItem("employeeType") == "amiyaEmployee"
                   ? hospitalId
@@ -632,6 +727,7 @@ export default {
               id,
               obtainEmploymentYear,
               isMain,
+              isLeaveOffice,
               hospitalId,
               ...data
             } = this.form;
@@ -641,6 +737,7 @@ export default {
                 this.$moment(obtainEmploymentYear).format("YYYY")
               ),
               isMain: isMain == true ? 1 : 0,
+              isLeaveOffice: isLeaveOffice == true ? 1 : 0,
               hospitalId:
                 sessionStorage.getItem("employeeType") == "amiyaEmployee"
                   ? hospitalId
@@ -696,6 +793,19 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
+.left{
+  display: flex;
+  align-items: center;
+}
+.type_con{
+  margin-left: 30px;
+}
+.type{
+  font-weight: bold;
+  font-size: 14px;
+  color: #000;
+  margin-right: 10px;
+}
 .container {
   margin-top: 16px;
 }
@@ -704,14 +814,20 @@ export default {
   text-align: right;
 }
 .list {
+  width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  padding-left:20px;
+  box-sizing: border-box;
 }
 .item {
   border: 1px solid #ccc;
   width: 300px;
   height: 140px;
   position: relative;
-  margin-right: 20px;
+  margin-right: 25px;
+  margin-bottom: 20px;
+  
   .item_top {
     position: relative;
     display: flex;
@@ -736,7 +852,7 @@ export default {
   }
   .item_job {
     position: absolute;
-    right: 80px;
+    right: 10px;
     top: 0;
     padding: 2px 7px;
     box-sizing: border-box;
@@ -746,9 +862,13 @@ export default {
     color: green;
     background: #edf8f3;
   }
+  .position_orange{
+    color: #ebbb74;
+    background: #fff1e4;
+  }
   .item_type {
     position: absolute;
-    right: 10px;
+    right: 60px;
     top: 0;
     font-size: 10px;
     padding: 2px 7px;
@@ -757,6 +877,10 @@ export default {
   .item_position {
     font-size: 10px;
     color: #898588;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
   .edit_data {
     width: 50%;

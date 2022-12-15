@@ -155,7 +155,30 @@ export const byEncryptPhoneGetCustomerConsumptionTrackList = (params) => {
         params,
     });
 };
-
+// 医院端 医院客户列表 接单客户（所有客户）
+export const allCustomerListWithPage = (params) => {
+    return http({
+        url: "/amiyabg/HospitalCustomer/allCustomerListWithPage",
+        method: "get",
+        params,
+    });
+};
+// 医院端 医院客户列表 我的客户
+export const myFollowListWithPage = (params) => {
+    return http({
+        url: "/amiyabg/HospitalCustomer/myFollowListWithPage",
+        method: "get",
+        params,
+    });
+};
+// 医院端 医院客户列表 （待查重客户，重单客户）
+export const waitingConfirmCustomerHospital = (params) => {
+    return http({
+        url: "/amiyabg/ContentPlateFormSendOrder/waitingConfirmCustomerHospital",
+        method: "get",
+        params,
+    });
+};
 /**
  * 客户消费追踪
  */

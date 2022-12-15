@@ -1170,6 +1170,14 @@ export const getHospitalContentPlateFormOrder = (params) => {
             params
         })
     }
+    // 医院内容平台派单列表(跟进中、已到院)
+export const getFollowingListOfHospital = (params) => {
+        return http({
+            url: "/amiyabg/ContentPlateFormSendOrder/followingListOfHospital",
+            method: "get",
+            params
+        })
+    }
     // 医院完成订单
 export const finishContentPlateFormOrder = (data) => {
     return http({
@@ -1331,5 +1339,36 @@ export const getcontentPlateFormOrderTypeList = () => {
     return http({
         url: "/amiyabg/ContentPlateFormOrder/contentPlateFormOrderTypeList",
         method: "get",
+    });
+};
+// 解密手机号
+export const decryptoPhone = (encryptPhone) => {
+    return http({
+        url: `/amiyabg/Customer/decryptoPhone/${encryptPhone}`,
+        method: "get",
+    });
+};
+// 内容平台留言板
+export const allCustomerListWithPage = (params) => {
+        return http({
+            url: "/amiyabg/OrderRemark/getByOrderListWithPage",
+            method: "get",
+            params
+        })
+    }
+    // 内容平台 管理员端 添加留言
+export const internalAdd = (data) => {
+    return http({
+        url: `/amiyabg/OrderRemark/internalAdd`,
+        method: "post",
+        data
+    });
+};
+// 内容平台 医院端 添加留言
+export const tenantAdd = (data) => {
+    return http({
+        url: `/amiyabg/OrderRemark/tenantAdd`,
+        method: "post",
+        data
     });
 };

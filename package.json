@@ -5,12 +5,14 @@
     "scripts": {
         "serve": "vue-cli-service serve --mode=dev",
         "build:prod_amiya": "vue-cli-service build --mode=prod_amiya",
-        "build:prod_hs": "vue-cli-service build --mode=prod_hs"
+        "build:prod_hs": "vue-cli-service  build --mode=prod_hs"
     },
     "dependencies": {
         "axios": "^0.19.2",
         "core-js": "^3.6.4",
+        "cross-env": "^7.0.3",
         "echarts": "^5.0.0",
+        "increase-memory-limit": "^1.0.7",
         "less": "^2.7.3",
         "less-loader": "^5.0.0",
         "moment": "^2.29.1",

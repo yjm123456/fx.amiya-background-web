@@ -14,7 +14,7 @@ const employeeManage = [{
         path: "/amiyaEmployee",
         name: "amiyaEmployee",
         meta: {
-            title: "阿美雅员工",
+            title: "啊美雅员工",
             keepAlive: false,
             isTag: true,
             openName: ['员工管理'],
@@ -95,7 +95,7 @@ const positionManage = [{
         path: "/amiyaPosition",
         name: "amiyaPosition",
         meta: {
-            title: "阿美雅职列表",
+            title: "啊美雅职列表",
             keepAlive: false,
             isTag: true,
             openName: ['组织结构'],
@@ -663,6 +663,20 @@ const orderManage = [{
                 "@/views/orderManage/orderRefund/orderRefund.vue"
             ),
     },
+    {
+        path: "/onlineRetailersPlatformOrder",
+        name: "onlineRetailersPlatformOrder",
+        meta: {
+            title: "电商平台订单",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/onlineRetailersPlatformOrder/onlineRetailersPlatformOrder.vue"
+            ),
+    },
 
 ];
 
@@ -709,7 +723,7 @@ const customerManage = [{
         path: "/hospitalCustomerList",
         name: "hospitalCustomerList",
         meta: {
-            title: "医院获取客户列表",
+            title: "医院客户列表",
             keepAlive: false,
             isTag: true,
             openName: ['客户管理'],
@@ -812,6 +826,18 @@ const customerManage = [{
         },
         component: () =>
             import ("@/views/customerManage/customerLabel/customerLabel.vue"),
+    },
+    {
+        path: "/chatRoom",
+        name: "chatRoom",
+        meta: {
+            title: "聊天室",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/chatRoom/chatRoom.vue"),
     },
 ];
 
@@ -1407,10 +1433,21 @@ const ameiyaMange = [{
         title: "公司简介",
         keepAlive: false,
         isTag: true,
-        openName: ['啊美雅'],
+        openName: ['首页'],
     },
     component: () =>
         import ("@/views/ameiyaMange/ameiya/ameiya.vue"),
+}, {
+    path: "/home",
+    name: "home",
+    meta: {
+        title: "首页",
+        keepAlive: false,
+        isTag: true,
+        openName: ['首页'],
+    },
+    component: () =>
+        import ("@/views/ameiyaMange/home/home.vue"),
 }];
 /**
  * 库存管理

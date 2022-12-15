@@ -36,10 +36,10 @@
           <Input v-model="form.name" placeholder="请输入名称"></Input>
         </FormItem>
         <FormItem label="最小成长值" prop="minAmount">
-          <InputNumber v-model="form.minAmount" style="width:100%;" placeholder="请输入最小成长值" min="0"></InputNumber>
+          <InputNumber v-model="form.minAmount" style="width:100%;" placeholder="请输入最小成长值" :min="0"></InputNumber>
         </FormItem>
         <FormItem label="最大成长值" prop="maxAmount">
-          <InputNumber v-model="form.maxAmount" style="width:100%;" placeholder="请输入最大成长值" min="1"></InputNumber>
+          <InputNumber v-model="form.maxAmount" style="width:100%;" placeholder="请输入最大成长值" :min="1"></InputNumber>
         </FormItem>
         <FormItem label="本人产生积分比例" prop="generateIntegrationPercent">
           <InputNumber v-model="form.generateIntegrationPercent" style="width:100%;" placeholder="请输入本人产生积分比例"></InputNumber>
@@ -247,13 +247,17 @@ export default {
                               rankCode,
                               imageUrl,
                               description,
-                              valid
+                              valid,
+                              minAmount,
+                              maxAmount
                             } = res.data.memberRankInfo;
                             this.isEdit = true;
                             this.form.id = id;
                             this.form.name = name;
                             this.form.generateIntegrationPercent = generateIntegrationPercent;
                             this.form.rankCode = rankCode;
+                            this.form.minAmount = minAmount;
+                            this.form.maxAmount = maxAmount;
                             this.form.imageUrl = imageUrl;
                             this.uploadObj.uploadList = [this.form.imageUrl];
                             this.form.description = description;

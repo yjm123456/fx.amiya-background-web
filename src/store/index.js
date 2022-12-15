@@ -13,11 +13,11 @@ import callCenter from "./modules/callCenter"
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  modules: {
-    home,
-    tag,
-    addRoute,
-    chat,
-    callCenter
-  },
+    modules: {
+        home,
+        tag,
+        addRoute,
+        chat,
+        callCenter
+    },
 });

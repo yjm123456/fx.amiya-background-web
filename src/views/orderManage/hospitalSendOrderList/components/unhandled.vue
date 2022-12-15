@@ -579,6 +579,15 @@ export default {
                       marginTop: "6px",
                     },
                   },
+                  "主播：" + params.row.liveAnchor
+                ),
+                h(
+                  "div",
+                  {
+                    style: {
+                      marginTop: "6px",
+                    },
+                  },
                   "项目名称：" + params.row.goodsName
                 ),
                 h(

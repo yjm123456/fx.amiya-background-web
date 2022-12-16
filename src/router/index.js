@@ -1177,6 +1177,17 @@ const memberCardManage = [{
     },
     component: () =>
         import ("@/views/memberCardManage/memberRankList/memberRankList.vue"),
+}, {
+    path: "/listOfVouchers",
+    name: "listOfVouchers",
+    meta: {
+        title: "抵用券列表",
+        keepAlive: false,
+        isTag: true,
+        openName: ['会员卡管理'],
+    },
+    component: () =>
+        import ("@/views/memberCardManage/listOfVouchers/listOfVouchers.vue"),
 }];
 
 /**

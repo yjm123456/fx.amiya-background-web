@@ -708,6 +708,7 @@ export default {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 400,
+            tooltip:true
           },
           {
             title: "订单状态",

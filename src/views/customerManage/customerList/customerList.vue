@@ -15,7 +15,9 @@
         name="appletCustomerList"
         tab="customerList"
       >
-        <appletCustomerList :activeName="activeName"></appletCustomerList>
+        <appletCustomerList 
+          :activeName="activeName"
+        ></appletCustomerList>
       </TabPane>
     </Tabs>
   </div>

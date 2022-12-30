@@ -370,18 +370,18 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="审核金额" prop="checkPrice">
+        <FormItem label="对账金额" prop="checkPrice">
           <Input
             v-model="form.checkPrice"
-            placeholder="请输入审核金额"
+            placeholder="请输入对账金额"
             type="number"
             number
           />
         </FormItem>
-        <FormItem label="结算金额" prop="settlePrice">
+        <FormItem label="服务费合计" prop="settlePrice">
           <Input
             v-model="form.settlePrice"
-            placeholder="请输入结算金额"
+            placeholder="请输入服务费合计"
             type="number"
             number
           />
@@ -752,76 +752,22 @@ export default {
               );
             },
           },
-          // {
-          //   title: "佣金比例(%)",
-          //   key: "commissionRatio",
-          //   minWidth: 180,
-          //   align:'center',
-          //   render: (h, params) => {
-          //     return h(
-          //           "div",
-          //           params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
-          //         )
-          //       ;
-          //   }
-          // },
+         
+         
           {
-            title: "审核状态",
-            key: "checkStateText",
-            minWidth: 120,
-            align:'center',
-            render: (h, params) => {
-              if (params.row.checkStateText == "审核通过") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "#04B05D",
-                    },
-                  },
-                  params.row.checkStateText
-                );
-              } else if (params.row.checkStateText == "未审核") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "red",
-                    },
-                  },
-                  params.row.checkStateText
-                );
-              } else if (params.row.checkStateText == "审核不通过") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "blue",
-                    },
-                  },
-                  params.row.checkStateText
-                );
-              } else {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "#515a6e",
-                    },
-                  },
-                  params.row.checkStateText
-                );
-              }
-            },
-          },
-          {
-            title: "审核金额",
+            title: "对账金额",
             key: "checkPrice",
             minWidth: 120,
             align:'center'
           },
           {
-            title: "审核时间",
+            title: "服务费合计",
+            key: "settlePrice",
+            minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "对账时间",
             key: "checkDate",
             minWidth: 180,
             align:'center',
@@ -833,69 +779,6 @@ export default {
                   )
                 : "";
             },
-          },
-          {
-            title: "结算金额",
-            key: "settlePrice",
-            minWidth: 120,
-            align:'center'
-          },
-          {
-            title: "审核人",
-            key: "checkByEmpName",
-            minWidth: 120,
-            align:'center'
-          },
-          {
-            title: "审核备注",
-            key: "checkRemark",
-            minWidth: 200,
-            align:'center'
-          },
-          {
-            title: "是否回款",
-            key: "isReturnBackPrice",
-            minWidth: 120,
-            align:'center',
-            render: (h, params) => {
-              if (params.row.isReturnBackPrice == true) {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "#04B05D",
-                    },
-                  },
-                  params.row.isReturnBackPrice == true ? '已回款':'未回款'
-                );
-              } else if (params.row.isReturnBackPrice == false) {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "red",
-                    },
-                  },
-                  params.row.isReturnBackPrice == true ? '已回款':'未回款'
-                );
-              }else {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "#515a6e",
-                    },
-                  },
-                  params.row.isReturnBackPrice == true ? '已回款':'未回款'
-                );
-              }
-            },
-          },
-          {
-            title: "回款金额",
-            key: "returnBackPrice",
-            minWidth: 120,
-            align:'center'
           },
           {
             title: "回款时间",
@@ -911,6 +794,25 @@ export default {
                 : "";
             },
           },
+          {
+            title: "对账人",
+            key: "checkByEmpName",
+            minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "审核备注",
+            key: "checkRemark",
+            minWidth: 200,
+            align:'center'
+          },
+          {
+            title: "回款金额",
+            key: "returnBackPrice",
+            minWidth: 120,
+            align:'center'
+          },
+          
           {
             title: "跟进人员",
             key: "createByEmpName",
@@ -1178,9 +1080,9 @@ export default {
         id: null,
         // 审核状态
         checkState: "",
-        // 审核金额
+        // 对账金额
         checkPrice: null,
-        // 结算金额
+        // 服务费合计
         settlePrice: null,
         // 审核备注
         checkRemark: "",
@@ -1201,13 +1103,13 @@ export default {
         checkPrice: [
           {
             required: true,
-            message: "请输入审核金额",
+            message: "请输入对账金额",
           },
         ],
         settlePrice: [
           {
             required: true,
-            message: "请输入结算金额",
+            message: "请输入服务费合计",
           },
         ],
       },

@@ -188,11 +188,11 @@
             <span>{{ upgradeOrderObjs.checkState }} </span>
           </div>
           <div class="mr_top">
-            <span class="title_bold">审核金额：</span>
+            <span class="title_bold">对账金额：</span>
             <span>{{ upgradeOrderObjs.checkSettlePrice }} </span>
           </div>
           <!-- <div class="mr_top">
-            <span class="title_bold">结算金额：</span>
+            <span class="title_bold">服务费合计：</span>
             <span>{{ upgradeOrderObjs.settlePrice }} </span>
           </div> -->
           <div class="mr_top">

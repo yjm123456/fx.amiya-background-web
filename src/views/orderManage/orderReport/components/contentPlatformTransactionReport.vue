@@ -95,11 +95,11 @@
       <div slot="footer" class=" foot">
         <div style="display:flex">
           <div class="num">
-            合计审核金额：
+            合计对账金额：
             <div style="color:red">{{ checkPrice }}</div>
           </div>
           <div class="num">
-            合计结算金额：
+            服务费合计：
             <div style="color:red">{{ settlePrice }}</div>
           </div>
           <div class="num">
@@ -439,12 +439,12 @@ export default {
             },
           },
           {
-            title: "审核金额",
+            title: "对账金额",
             key: "checkPrice",
             minWidth: 120,
           },
           {
-            title: "结算金额",
+            title: "服务费合计",
             key: "settlePrice",
             minWidth: 120,
           },

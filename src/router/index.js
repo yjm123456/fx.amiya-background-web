@@ -340,6 +340,17 @@ const appointment = [{
     },
     component: () =>
         import ("@/views/appointment/appointmentList.vue"),
+}, {
+    path: "/appointmentCall",
+    name: "appointmentCall",
+    meta: {
+        title: "预约叫车",
+        keepAlive: false,
+        isTag: true,
+        openName: ['预约'],
+    },
+    component: () =>
+        import ("@/views/appointment/appointmentCall/appointmentCall.vue"),
 }, ];
 
 
@@ -1108,6 +1119,18 @@ const baseDataMaintenance = [{
         component: () =>
             import ("@/views/baseDataMaintenance/warehouseName/warehouseName.vue"),
     },
+    {
+        path: "/corporateManagement",
+        name: "corporateManagement",
+        meta: {
+            title: "公司管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/corporateManagement/corporateManagement.vue"),
+    },
 ];
 
 /**
@@ -1392,7 +1415,7 @@ const financialStatementManage = [{
             title: "医院对账单",
             keepAlive: false,
             isTag: true,
-            openName: ['财务对账单'],
+            openName: ['财务管理'],
         },
         component: () =>
             import ("@/views/financialStatementManage/hospitalFinancialStatement/hospitalFinancialStatement.vue"),
@@ -1404,7 +1427,7 @@ const financialStatementManage = [{
             title: "主播IP日经营数据",
             keepAlive: false,
             isTag: true,
-            openName: ['财务对账单'],
+            openName: ['财务管理'],
         },
         component: () =>
             import ("@/views/financialStatementManage/amyFinancialStatement/amyFinancialStatement.vue"),
@@ -1416,7 +1439,7 @@ const financialStatementManage = [{
             title: "对账单记录",
             keepAlive: false,
             isTag: true,
-            openName: ['财务对账单'],
+            openName: ['财务管理'],
         },
         component: () =>
             import ("@/views/financialStatementManage/statementRecord/statementRecord.vue"),
@@ -1428,10 +1451,22 @@ const financialStatementManage = [{
             title: "对账单记录",
             keepAlive: false,
             isTag: true,
-            openName: ['财务对账单'],
+            openName: ['财务管理'],
         },
         component: () =>
             import ("@/views/financialStatementManage/lTMAccountStatement/lTMAccountStatement.vue"),
+    },
+    {
+        path: "/accountStatement",
+        name: "accountStatement",
+        meta: {
+            title: "对账单列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/accountStatement/accountStatement.vue"),
     },
 ];
 /**

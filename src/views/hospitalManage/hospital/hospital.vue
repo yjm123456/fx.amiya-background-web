@@ -183,6 +183,15 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="归属公司" prop="belongCompany">
+              <Select v-model="form.belongCompany" placeholder="请选择归属公司" filterable>
+                <Option v-for="item in nameList" :value="item.name" :key="item.name">{{
+                  item.name
+                }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="医院logo" prop="thumbPicUrl">
               <upload
                 :uploadObj="uploadObj"
@@ -228,6 +237,7 @@
 </template>
 <script>
 import * as api from "@/api/hospitalManage";
+import * as corApi from "@/api/corporateManagement";
 import upload from "@/components/upload/upload";
 import uploadFile from "@/components/upload/uploadFile";
 import { download } from "@/utils/util";
@@ -239,6 +249,8 @@ export default {
   },
   data() {
     return {
+      // 归属公司
+      nameList:[],
       flag: false,
       uploadObj: {
         // 是否开启多图
@@ -539,9 +551,17 @@ export default {
         contractUrl: "",
         // 到期时间
         dueTime: null,
+        // 归属公司
+        belongCompany:''
       },
 
       ruleValidate: {
+        belongCompany: [
+          {
+            required: true,
+            message: "请选择归属公司",
+          },
+        ],
         name: [
           {
             required: true,
@@ -624,6 +644,15 @@ export default {
     };
   },
   methods: {
+    // 获取公司列表
+    getCompanyBaseInfoNameList() {
+      corApi.getCompanyBaseInfoNameList().then((res) => {
+        if (res.code === 0) {
+          const { nameList} = res.data;
+          this.nameList= nameList;
+        }
+      });
+    },
     // PDF转换地址
     jumpHtml() {
       window.open("https://smallpdf.com/cn/word-to-pdf");
@@ -798,6 +827,7 @@ export default {
     this.getScaleTagList();
     this.getFacilityTagList();
     this.getCityList();
+    this.getCompanyBaseInfoNameList()
   },
 };
 </script>

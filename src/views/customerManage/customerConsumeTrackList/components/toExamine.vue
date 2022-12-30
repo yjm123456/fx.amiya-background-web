@@ -29,8 +29,8 @@
         <FormItem label="升单金额"  prop="checkBuyAgainPrice">
           <Input v-model="form.checkBuyAgainPrice" placeholder="请输入升单金额" type="number" number/>
         </FormItem>
-        <FormItem label="结算金额"  prop="checkSettlePrice">
-          <Input v-model="form.checkSettlePrice" placeholder="请输入结算金额"  type="number" number/>
+        <FormItem label="服务费合计"  prop="checkSettlePrice">
+          <Input v-model="form.checkSettlePrice" placeholder="请输入服务费合计"  type="number" number/>
         </FormItem>
         <FormItem label="审核图片" prop="checkPicture" key="checkPicture">
           <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
@@ -86,7 +86,7 @@ export default {
         checkState:'',
         // 审核升单金额
         checkBuyAgainPrice:null,
-        // 结算金额
+        // 服务费合计
         checkSettlePrice:null,
         // 审核备注
         checkRemark:'',
@@ -109,7 +109,7 @@ export default {
         checkSettlePrice: [
           {
             required: true,
-            message: "请输入结算金额",
+            message: "请输入服务费合计",
           },
         ],
       },

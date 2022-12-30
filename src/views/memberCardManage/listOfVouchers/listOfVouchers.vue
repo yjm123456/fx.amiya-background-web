@@ -55,15 +55,7 @@
         <FormItem label="抵扣量" prop="deductMoney">
           <Input v-model="form.deductMoney" type="number" number placeholder="请输入抵扣量"></Input>
         </FormItem> 
-        <FormItem label="是否用于指定商品" prop="isSpecifyProduct" >
-          <i-switch v-model="form.isSpecifyProduct" />
-        </FormItem>
-        <FormItem label="是否可累加使用" prop="isAccumulate" >
-          <i-switch v-model="form.isAccumulate" />
-        </FormItem>
-        <FormItem label="是否可分享" prop="isShare" >
-          <i-switch v-model="form.isShare" />
-        </FormItem>
+        
         <FormItem label="抵用券类型" prop="type" >
           <Select
             v-model="form.type"
@@ -80,9 +72,45 @@
         <FormItem label="抵用券编码" prop="consumptionVoucherCode">
           <Input v-model="form.consumptionVoucherCode" placeholder="请输入抵用券编码"></Input>
         </FormItem>
+        <FormItem label="是否用于指定商品" prop="isSpecifyProduct" >
+          <i-switch v-model="form.isSpecifyProduct" />
+        </FormItem>
+        <FormItem label="是否可累加使用" prop="isAccumulate" >
+          <i-switch v-model="form.isAccumulate" />
+        </FormItem>
+        <FormItem label="是否可分享" prop="isShare" >
+          <i-switch v-model="form.isShare" />
+        </FormItem>
         <FormItem label="是否有效" prop="isValid" v-show="isEdit === true">
           <i-switch v-model="form.isValid" />
         </FormItem>
+        <FormItem label="是否有最小支付金额限制" prop="isNeedMinPrice" >
+          <i-switch v-model="form.isNeedMinPrice" />
+        </FormItem>
+        <FormItem 
+          label="最小限制金额" 
+          prop="minPrice"
+          :rules="{
+                required: form.isNeedMinPrice == true,
+                message: '请输入最小限制金额',
+              }"
+        >
+          <Input v-model="form.minPrice" placeholder="请输入最小限制金额" :disabled="form.isNeedMinPrice==false" type="number" number></Input>
+        </FormItem>
+        <FormItem 
+          label="有效天数" 
+          prop="effectiveTime"
+          :rules="{
+                required: true,
+                message: '请输入有效天数',
+              }"
+        >
+          <Input v-model="form.effectiveTime" placeholder="请输入有效天数" type="number" number></Input>
+        </FormItem>
+        <FormItem label="备注" prop="remark">
+          <Input v-model="form.remark" placeholder="请输入备注" type="textarea" :rows="3"></Input>
+        </FormItem>
+        
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -104,21 +132,26 @@ export default {
           {
             title: "抵用券名称",
             key: "name",
+            width:180,
+            align:'center'
           },
           {
             title: "抵用券类型",
             key: "typeText",
-            width:150
+            width:150,
+            align:'center'
           },
           {
             title: "抵扣量",
             key: "deductMoney",
-            width:120
+            width:120,
+            align:'center'
           },
           {
             title: "是否用于指定商品",
             key: "isSpecifyProduct",
             width:150,
+            align:'center',
             render: (h, params) => {
               if (params.row.isSpecifyProduct == true) {
                 return h("Icon", {
@@ -146,6 +179,7 @@ export default {
           {
             title: "是否可累加使用",
             width:140,
+            align:'center',
             key: "isAccumulate",
             render: (h, params) => {
               if (params.row.isAccumulate == true) {
@@ -175,6 +209,7 @@ export default {
             title: "是否可分享",
             key: "isShare",
             width:120,
+            align:'center',
             render: (h, params) => {
               if (params.row.isShare == true) {
                 return h("Icon", {
@@ -203,6 +238,7 @@ export default {
             title: "是否有效",
             key: "isValid",
             width:120,
+            align:'center',
             render: (h, params) => {
               if (params.row.isValid == true) {
                 return h("Icon", {
@@ -230,11 +266,61 @@ export default {
           {
             title: "抵用券编码",
             key: "consumptionVoucherCode",
+            align:'center',
+            width:180
+          },
+          {
+            title: "是否有最小支付金额限制",
+            key: "isNeedMinPrice",
+            width:200,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isNeedMinPrice == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "最小限制金额",
+            key: "minPrice",
+            width:140,
+            align:'center'
+          },
+          {
+            title: "有效期时长",
+            key: "effectiveTime",
+            width:140,
+            align:'center'
+          },
+          {
+            title: "备注",
+            key: "remark",
+            width:300,
           },
           {
             title: "操作",
             key: "",
-            width: 150,
+            width: 100,
+            align:'center',
+            fixed:'right',
             render: (h, params) => {
               return h("div", [
                 h(
@@ -254,7 +340,8 @@ export default {
                         api.byIdConsumptionVoucher(id ).then((res) => {
                           if (res.code === 0) {
                              const {
-                             id ,name ,deductMoney,isSpecifyProduct,isAccumulate,isShare,type,isValid,consumptionVoucherCode
+                             id ,name ,deductMoney,isSpecifyProduct,isAccumulate,isShare,type,isValid,consumptionVoucherCode,
+                             isNeedMinPrice,minPrice,remark,effectiveTime
                             } = res.data.consumptionVoucherInfo;
                             console.log(type)
                             this.isEdit = true;
@@ -266,6 +353,10 @@ export default {
                             this.form.type =String(type);
                             this.form.isValid = isValid;
                             this.form.consumptionVoucherCode = consumptionVoucherCode;
+                            this.form.isNeedMinPrice = isNeedMinPrice;
+                            this.form.minPrice = minPrice;
+                            this.form.remark = remark;
+                            this.form.effectiveTime = effectiveTime;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -274,37 +365,6 @@ export default {
                     },
                   },
                   "修改"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "error",
-                      size: "small",
-                    },
-                    on: {
-                      click: () => {
-                        this.$Modal.confirm({
-                          title: "删除提示",
-                          content: "是否确认删除？",
-                          onOk: () => {
-                            const { id } = params.row;
-                            api.deleteExpressManage(id).then((res) => {
-                              if (res.code === 0) {
-                                this.getHospitalInfo();
-                                this.$Message.success({
-                                  content: "删除成功",
-                                  duration: 3,
-                                });
-                              }
-                            });
-                          },
-                          onCancel: () => {},
-                        });
-                      },
-                    },
-                  },
-                  "删除"
                 ),
               ]);
             },
@@ -341,7 +401,15 @@ export default {
         // 是否只能用于指定商品
         isValid:false,
         // 抵用券编码
-        consumptionVoucherCode:''
+        consumptionVoucherCode:'',
+        // 是否有最小支付金额限制
+        isNeedMinPrice:false,
+        // 最小金额
+        minPrice:null,
+        // 有效天数
+        effectiveTime:null,
+        // 备注
+        remark:''
       },
 
       ruleValidate: {
@@ -414,8 +482,22 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const { id,deductMoney, isSpecifyProduct,isAccumulate ,isShare,type,isValid,consumptionVoucherCode} = this.form;
-            const  data = { id,name :this.form.name,deductMoney,isSpecifyProduct,isAccumulate ,isShare,type:Number(type),isValid,consumptionVoucherCode} 
+            const { id,deductMoney, isSpecifyProduct,isAccumulate ,isShare,type,isValid,consumptionVoucherCode,
+            isNeedMinPrice,minPrice,remark,effectiveTime} = this.form;
+            const  data = { 
+              id,
+              name :this.form.name,
+              deductMoney,
+              isSpecifyProduct,
+              isAccumulate ,
+              isShare,type:Number(type),
+              isValid,
+              consumptionVoucherCode,
+              isNeedMinPrice,
+              minPrice: isNeedMinPrice == false ? 0 : minPrice,
+              remark,
+              effectiveTime
+            } 
             // 修改
             api.EditConsumptionVoucher(data).then((res) => {
               if (res.code === 0) {
@@ -429,8 +511,22 @@ export default {
               }
             });
           } else {
-            const { name, deductMoney, isSpecifyProduct,isAccumulate ,isShare,type,isValid,consumptionVoucherCode} = this.form;
-            const  data = { name ,deductMoney,isSpecifyProduct,isAccumulate ,isShare,type:Number(type),isValid,consumptionVoucherCode} 
+            const { name, deductMoney, isSpecifyProduct,isAccumulate ,isShare,type,isValid,consumptionVoucherCode,
+            isNeedMinPrice,minPrice,remark,effectiveTime} = this.form;
+            const  data = { 
+              name ,
+              deductMoney,
+              isSpecifyProduct,
+              isAccumulate ,
+              isShare,
+              type:Number(type),
+              isValid,
+              consumptionVoucherCode,
+              isNeedMinPrice,
+              minPrice: isNeedMinPrice == false ? 0 : minPrice,
+              remark,
+              effectiveTime
+            } 
             // 添加
             api.AddConsumptionVoucher(data).then((res) => {
               if (res.code === 0) {
@@ -465,6 +561,15 @@ export default {
   created() {
     this.getHospitalInfo();
     this.getConsumptionVoucherTypeList()
+  },
+  watch: {
+    // "form.isNeedMinPrice"(value) {
+    //   if (value == false) {
+    //     this.form.minPrice = "";
+    //     this.$refs.minPrice.validateMessage = "";
+    //     this.$refs.minPrice.validateState = "";
+    //   }
+    // },
   },
 };
 </script>

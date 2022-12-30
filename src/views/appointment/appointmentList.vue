@@ -156,6 +156,8 @@
         <Button type="primary" @click="remarkHandleSubmit('remarkForm')">确定</Button>
       </div>
     </Modal>
+    <!-- 修改预约状态 -->
+    <status :statusControlModal.sync="statusControlModal" :statusList="statusList" :id="id" @getAppointment="getAppointment"/>
   </div>
 </template>
 
@@ -164,9 +166,16 @@ import * as api from "@/api/appointment";
 import * as apis from "@/api/goodsManage";
 import * as orderapi from "@/api/orderManage";
 import { color } from 'echarts';
+import status from "./components/status.vue"
 export default {
+  components:{
+    status
+  },
   data() {
     return {
+      statusList:[],
+      id:null,
+      statusControlModal:false,
       employeeType:sessionStorage.getItem("employeeType"),
       remarkForm:{
         id:"",
@@ -349,11 +358,10 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 300,
+            width: 260,
             align: "center",
             fixed:"right",
             render: (h, params) => {
-              const {statusText } = params.row
               return h("div", [
                 h(
                   "Button",
@@ -361,7 +369,8 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: statusText !='待完成',
+                      // disabled: statusText !='待完成',
+                      disabled:(params.row.statusText == '预约成功' || params.row.statusText == '未知' ) 
                     },
                     style: {
                       marginRight: "5px",
@@ -404,6 +413,28 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
+                      disabled:(params.row.statusText == '预约成功' || params.row.statusText == '未知' )
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.statusControlModal = true;
+                        this.id = id
+                        
+                      },
+                    },
+                  },
+                  "修改预约状态"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
                       disabled:this.amiyaPositionId != 1
                     },
                     style: {
@@ -419,66 +450,67 @@ export default {
                   },
                   "备注"
                 ),
-                this.employeeType == 'amiyaEmployee' ? h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: statusText !='待完成',
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.isEdit = false;
-                        this.distributeLeafletsModal = true
-                        this.distributeLeafletsid = id
-                        this.getHospital()
-                      },
-                    },
-                  },
-                  "派单"
-                ):"",
                 
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: statusText =='已完成',
-                    },
+                // this.employeeType == 'amiyaEmployee' ? h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       disabled: statusText !='待完成',
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { id } = params.row;
+                //         this.isEdit = false;
+                //         this.distributeLeafletsModal = true
+                //         this.distributeLeafletsid = id
+                //         this.getHospital()
+                //       },
+                //     },
+                //   },
+                //   "派单"
+                // ):"",
+                
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       disabled: statusText =='已完成',
+                //     },
                     
-                    on: {
-                      click: () => {
-                        this.$Modal.confirm({
-                          title: "订单完成提示",
-                          content: "是否确认完成订单？",
-                          onOk: () => {
-                            const { id } = params.row;
-                            const data = {
-                              id
-                            }
-                            api.editconfirmFinish(data).then((res) => {
-                              if (res.code === 0) {
-                                this.getAppointment();
-                                this.$Message.success({
-                                  content: "已确认成功",
-                                  duration: 3,
-                                });
-                              }
-                            });
-                          },
-                          onCancel: () => {},
-                        });
-                      },
-                    },
-                  },
-                  "订单完成"
-                ),
+                //     on: {
+                //       click: () => {
+                //         this.$Modal.confirm({
+                //           title: "订单完成提示",
+                //           content: "是否确认完成订单？",
+                //           onOk: () => {
+                //             const { id } = params.row;
+                //             const data = {
+                //               id
+                //             }
+                //             api.editconfirmFinish(data).then((res) => {
+                //               if (res.code === 0) {
+                //                 this.getAppointment();
+                //                 this.$Message.success({
+                //                   content: "已确认成功",
+                //                   duration: 3,
+                //                 });
+                //               }
+                //             });
+                //           },
+                //           onCancel: () => {},
+                //         });
+                //       },
+                //     },
+                //   },
+                //   "订单完成"
+                // ),
                 
               ]);
             },
@@ -563,143 +595,143 @@ export default {
             key: "remark",
             width: 200,
           },
-          {
-            title: "操作",
-            key: "",
-            width: 300,
-            align: "center",
-            fixed:"right",
-            render: (h, params) => {
-              const {statusText } = params.row
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: statusText !='待完成',
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.isEdit = false;
-                        this.controlModal = true
-                        api.byIdAppointment(id).then((res) => {
-                          if (res.code === 0) {
-                             const {
-                              appointmentDate,
-                              createDate,
-                              itemName,
-                              phone,
-                              time,
-                              week,
-                              id
-                            } = res.data.appointment;
-                            this.isEdit = true;
-                            this.form.appointmentDate = this.$moment(appointmentDate).format("YYYY-MM-DD");
-                            this.form.phone = phone;
-                            this.form.itemName = itemName;
-                            this.form.time = time;
-                            this.form.week = week;
-                            this.form.id = id;
-                            // this.controlModal = true
+          // {
+          //   title: "操作",
+          //   key: "",
+          //   width: 300,
+          //   align: "center",
+          //   fixed:"right",
+          //   render: (h, params) => {
+          //     const {statusText } = params.row
+          //     return h("div", [
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       disabled: statusText !='待完成',
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { id } = params.row;
+                //         this.isEdit = false;
+                //         this.controlModal = true
+                //         api.byIdAppointment(id).then((res) => {
+                //           if (res.code === 0) {
+                //              const {
+                //               appointmentDate,
+                //               createDate,
+                //               itemName,
+                //               phone,
+                //               time,
+                //               week,
+                //               id
+                //             } = res.data.appointment;
+                //             this.isEdit = true;
+                //             this.form.appointmentDate = this.$moment(appointmentDate).format("YYYY-MM-DD");
+                //             this.form.phone = phone;
+                //             this.form.itemName = itemName;
+                //             this.form.time = time;
+                //             this.form.week = week;
+                //             this.form.id = id;
+                //             // this.controlModal = true
 
-                          }
-                        });
-                      },
-                    },
-                  },
-                  "修改"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled:this.amiyaPositionId != 1
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.remarkForm.id = id
-                        this.remarkModel = true
-                      },
-                    },
-                  },
-                  "备注"
-                ),
-                this.employeeType == 'amiyaEmployee' ? h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: statusText !='待完成',
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.isEdit = false;
-                        this.distributeLeafletsModal = true
-                        this.distributeLeafletsid = id
-                        this.getHospital()
-                      },
-                    },
-                  },
-                  "派单"
-                ):"",
+                //           }
+                //         });
+                //       },
+                //     },
+                //   },
+                //   "修改"
+                // ),
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       disabled:this.amiyaPositionId != 1
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { id } = params.row;
+                //         this.remarkForm.id = id
+                //         this.remarkModel = true
+                //       },
+                //     },
+                //   },
+                //   "备注"
+                // ),
+                // this.employeeType == 'amiyaEmployee' ? h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       disabled: statusText !='待完成',
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { id } = params.row;
+                //         this.isEdit = false;
+                //         this.distributeLeafletsModal = true
+                //         this.distributeLeafletsid = id
+                //         this.getHospital()
+                //       },
+                //     },
+                //   },
+                //   "派单"
+                // ):"",
                 
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: statusText =='已完成',
-                    },
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       disabled: statusText =='已完成',
+                //     },
                     
-                    on: {
-                      click: () => {
-                        this.$Modal.confirm({
-                          title: "订单完成提示",
-                          content: "是否确认完成订单？",
-                          onOk: () => {
-                            const { id } = params.row;
-                            const data = {
-                              id
-                            }
-                            api.editconfirmFinish(data).then((res) => {
-                              if (res.code === 0) {
-                                this.getAppointment();
-                                this.$Message.success({
-                                  content: "已确认成功",
-                                  duration: 3,
-                                });
-                              }
-                            });
-                          },
-                          onCancel: () => {},
-                        });
-                      },
-                    },
-                  },
-                  "订单完成"
-                ),
+                //     on: {
+                //       click: () => {
+                //         this.$Modal.confirm({
+                //           title: "订单完成提示",
+                //           content: "是否确认完成订单？",
+                //           onOk: () => {
+                //             const { id } = params.row;
+                //             const data = {
+                //               id
+                //             }
+                //             api.editconfirmFinish(data).then((res) => {
+                //               if (res.code === 0) {
+                //                 this.getAppointment();
+                //                 this.$Message.success({
+                //                   content: "已确认成功",
+                //                   duration: 3,
+                //                 });
+                //               }
+                //             });
+                //           },
+                //           onCancel: () => {},
+                //         });
+                //       },
+                //     },
+                //   },
+                //   "订单完成"
+                // ),
                 
-              ]);
-            },
-          },
+            //   ]);
+            // },
+          // },
         ],
         data: [],
         totalCount: 0,
@@ -707,6 +739,15 @@ export default {
     };
   },
   methods: {
+    // 获取预约状态列表（select）
+    getStatusList(){
+      api.getStatusList().then((res) => {
+        if(res.code === 0){
+          const {statusList} = res.data
+          this.statusList = statusList
+        }
+      })
+    },
     // 根据年月日获取星期
     getweekday(){
       const  {appointmentDate} =  this.form 
@@ -884,6 +925,7 @@ export default {
   
   
   created() {
+    this.getStatusList()
     this.getAppointment();
     this.getgetAmiyaHospitalDepartmentList()
     const amiyaPositionId = JSON.parse(

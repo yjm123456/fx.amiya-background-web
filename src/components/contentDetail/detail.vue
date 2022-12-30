@@ -353,13 +353,13 @@
               <span>{{ detailObj.checkStateText }} </span>
             </div>
             <div class="mr_top items">
-              <span class="title_bold">审核金额：</span>
+              <span class="title_bold">对账金额：</span>
               <span>{{ detailObj.checkPrice }} </span>
             </div>
           </div>
           <div  class="item_list">
             <div class="mr_top items">
-              <span class="title_bold">结算金额：</span>
+              <span class="title_bold">服务费合计：</span>
               <span>{{ detailObj.settlePrice }} </span>
             </div>
             <div class="mr_top items">

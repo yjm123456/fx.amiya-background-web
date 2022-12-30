@@ -1,0 +1,611 @@
+<template>
+  <div>
+    <Card :dis-hover="true">
+      <div class="content">
+        <div class="left">
+          <Input
+            v-model="query.keyword"
+            placeholder="请输入关键字"
+            style="width: 200px; "
+            @keyup.enter.native="getHospitalInfo()"
+          />
+          <Select
+            v-model="query.hospitalId"
+            placeholder="请选择医院"
+            filterable
+            style="width: 240px;margin-left:10px"
+            v-if="employeeType == 'amiyaEmployee'"
+          >
+            <Option
+              v-for="item in hospitalInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Select
+            v-model="query.reconciliationState"
+            style="margin-left: 10px; width: 200px"
+            
+          >
+            <Option v-for="item in typeList" :value="item.id" :key="item.id" >{{
+              item.name
+            }}</Option>
+          </Select>
+          <DatePicker
+            type="date"
+            placeholder="创建开始日期"
+            style="width: 180px; margin-left: .625rem"
+            :value="query.startDate"
+            v-model="query.startDate"
+          ></DatePicker>
+          <DatePicker
+            type="date"
+            placeholder="创建结束时间"
+            style="width: 180px;margin-left: .625rem;"
+            :value="query.endDate"
+            v-model="query.endDate"
+          ></DatePicker>
+          <DatePicker
+            type="date"
+            placeholder="成交开始日期"
+            style="width: 180px; margin-left: .625rem"
+            :value="query.startDealDate"
+            v-model="query.startDealDate"
+          ></DatePicker>
+          <DatePicker
+            type="date"
+            placeholder="成交结束时间"
+            style="width: 180px;margin-left: .625rem;"
+            :value="query.endDealDate"
+            v-model="query.endDealDate"
+          ></DatePicker>
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="getHospitalInfo()"
+            >查询</Button
+          >
+          <Button
+            type="primary"
+            @click="collection"
+            style="margin-left: 10px"
+            v-if="employeeType == 'amiyaEmployee' && query.reconciliationState == 3"
+            >回款</Button
+          >
+          <!-- <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="exportChange()"
+            >下载模版</Button
+          >
+          <Button
+          type="primary"
+          style="margin-left: 10px"
+          @click="importControlModal = true"
+          >导入</Button
+        > -->
+        </div>
+        <!-- <div class="right">
+          <Button
+            type="primary"
+            @click="
+              controlModal = true;
+              title = '添加';
+            "
+            v-if="employeeType== 'hospitalEmployee'"
+            >添加</Button
+          >
+        </div> -->
+      </div>
+    </Card>
+
+    <Card class="container">
+      <div>
+        <Table
+          border
+          :columns="query.columns"
+          :data="query.data"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancels"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"
+          height="540"
+        ></Table>
+      </div>
+      <div class="page_wrap">
+        <div class="bottom_title">服务费合计: <span style="color:red;font-weight:bold">{{collectionNum == 0 ? 0 : collectionNum.toFixed(2)}}</span></div>
+        <Page
+          ref="pages"
+          :current="query.pageNum"
+          :page-size="query.pageSize"
+          :total="query.totalCount"
+           show-total
+          show-sizer
+          :page-size-opts="[10,50,100,200]"
+          @on-change="handlePageChange"
+          @on-page-size-change="handlePageSizeChange"
+        />
+      </div>
+    </Card>
+
+    <Modal
+      v-model="controlModal"
+      title="回款"
+      :mask-closable="false"
+      @on-visible-change="handleModalVisibleChange"
+      width="25%"
+    >
+      <Form
+        ref="form"
+        :model="form"
+        :rules="ruleValidate"
+        label-position="left"
+        :label-width="140"
+      >
+        <FormItem label="回款时间" prop="returnBackDate">
+          <DatePicker
+            type="date"
+            placeholder="回款时间"
+            style="width: 100%"
+            :value="form.returnBackDate"
+            v-model="form.returnBackDate"
+          ></DatePicker>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button @click="cancelSubmit('form')">取消</Button>
+        <Button type="primary" @click="handleSubmit('form')">确定</Button>
+      </div>
+    </Modal>
+    <!-- 导入 -->
+    <importFile
+      :importControlModal.sync="importControlModal"
+      @handleRefreshCustomerTrackList="getHospitalInfo()"
+    ></importFile>
+    <!-- 成交单 -->
+    <viewTransactionOrder
+      :viewTransactionOrderModel.sync="viewTransactionOrderModel"
+      :viewTransactionOrderParams="viewTransactionOrderParams"
+      ref="viewTransactionOrder"
+    />
+  </div>
+</template>
+<script>
+import * as api from "@/api/reconciliationDocuments";
+import { download } from "@/utils/util";
+import importFile from "../../components/import/importModel.vue";
+import viewTransactionOrder from "../../components/viewTransactionOrder.vue";
+
+export default {
+  components: {
+    importFile,
+    viewTransactionOrder,
+  },
+  props: {
+    activeName: String,
+    hospitalInfo:Array
+  },
+  data() {
+    return {
+      collectionNum:0,
+      viewTransactionOrderModel: false,
+      viewTransactionOrderParams: {
+        id: "",
+      },
+      typeList: [
+        {
+          id: 3,
+          name: "已对账",
+        },
+        {
+          id: 4,
+          name: "已回款",
+        },
+      ],
+      // 查询
+      query: {
+        hospitalId:null,
+        reconciliationState: 3,
+        keyword: "",
+        startDate: this.$moment()
+          .startOf("year")
+          .format("YYYY-MM-DD"),
+        endDate: this.$moment()
+          .endOf("year")
+          .format("YYYY-MM-DD"),
+        startDealDate: null,
+        endDealDate: null,
+        pageNum: 1,
+        pageSize: 10,
+        columns: [
+          {
+            type: "selection",
+            key: "_checked",
+            align: "center",
+            minWidth: 60,
+          },
+          {
+            title: "医院",
+            key: "hospitalName",
+            width: 220,
+          },
+          {
+            title: "客户姓名",
+            key: "customerName",
+            width: 160,
+          },
+          {
+            title: "客户电话",
+            key: "customerPhone",
+            width: 160,
+            align: "center",
+          },
+          {
+            title: "成交项目",
+            key: "dealGoods",
+            width: 160,
+            align: "center",
+          },
+          {
+            title: "成交时间",
+            key: "dealDate",
+            width: 140,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.dealDate
+                  ? this.$moment(params.row.dealDate).format("YYYY-MM-DD")
+                  : ""
+              );
+            },
+          },
+          {
+            title: "总成交金额",
+            key: "totalDealPrice",
+            width: 140,
+            align: "center",
+          },
+          {
+            title: "对账状态",
+            key: "reconciliationStateText",
+            width: 140,
+            align: "center",
+          },
+          {
+            title: "信息服务费比例（%）",
+            key: "returnBackPricePercent",
+            width: 180,
+            align: "center",
+          },
+          {
+            title: "信息服务费金额",
+            key: "returnBackPrice",
+            width: 150,
+            align: "center",
+          },
+          {
+            title: "系统维护费比例（%）",
+            key: "systemUpdatePricePercent",
+            width: 200,
+            align: "center",
+          },
+          {
+            title: "系统维护金额",
+            key: "systemUpdatePrice",
+            width: 140,
+            align: "center",
+          },
+          {
+            title: "服务费合计",
+            key: "returnBackTotalPrice",
+            width: 140,
+            align: "center",
+          },
+
+          {
+            title: "问题原因",
+            key: "questionReason",
+            width: 220,
+          },
+          {
+            title: "备注",
+            key: "remark",
+            width: 220,
+          },
+          {
+            title: "创建人",
+            key: "createByName",
+            width: 140,
+          },
+          {
+            title: "操作",
+            key: "",
+            fixed: "right",
+            width: 140,
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled: this.employeeType == "hospitalEmployee",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.viewTransactionOrderParams.id = id;
+                        this.viewTransactionOrderModel = true;
+                        this.$refs.viewTransactionOrder.getContentPlatFormOrderDealInfo();
+                      },
+                    },
+                  },
+                  "查看成交单"
+                ),
+              ]);
+            },
+          },
+        ],
+        data: [],
+        totalCount: 0,
+      },
+      importControlModal: false,
+      markStatementList: [
+        {
+          id: 1,
+          name: "待确认",
+        },
+      ],
+      markStatementList2: [
+        {
+          id: 2,
+          name: "问题账单",
+        },
+        {
+          id: 3,
+          name: "对账完成",
+        },
+      ],
+      // 控制 modal
+      controlModal: false,
+      // 标记对账单弹窗
+      markStatementModel: false,
+      // modal title
+      title: "添加",
+
+      // 是否是编辑
+      isEdit: false,
+
+      form: {
+        // 回款时间
+        returnBackDate: "",
+        // 回款id集合
+        reconciliationDocumentsIdList: new Set(),
+      },
+      ruleValidate: {
+        returnBackDate: [
+          {
+            required: true,
+            message: "请选择回款时间",
+          },
+        ],
+      },
+      employeeType: sessionStorage.getItem("employeeType"),
+    };
+  },
+  methods: {
+    handlePageSizeChange(pageSize){
+      this.query.pageSize = pageSize
+      this.getHospitalInfo()
+    },
+    // 回款
+    collection() {
+      if (![...this.form.reconciliationDocumentsIdList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.controlModal = true;
+    },
+    handleSelect(selection, row) {
+      this.collectionNum += row.returnBackTotalPrice
+      // 回款
+      this.form.reconciliationDocumentsIdList.add(row.id);
+    },
+    handleCancels(selection, row) {
+      // 回款
+      this.form.reconciliationDocumentsIdList.delete(row.id);
+      this.collectionNum = this.collectionNum - row.returnBackTotalPrice
+    },
+
+    handleSelectAll(selection) {
+      if (selection && selection.length === 0) {
+        this.form.reconciliationDocumentsIdList.clear();
+        this.collectionNum = 0
+      } else {
+        selection.forEach((item) => {
+          this.form.reconciliationDocumentsIdList.add(item.id);
+          this.collectionNum += item.returnBackTotalPrice
+        });
+      }
+    },
+    // 导出模版
+    exportChange() {
+      api.exportReconciliationDocuments().then((res) => {
+        let name = "财务对账单";
+        download(res, name);
+      });
+    },
+    // 获取对账单列表
+    getHospitalInfo() {
+      this.$nextTick(() => {
+        this.$refs["pages"].currentPage = 1;
+      });
+      const {
+        pageNum,
+        pageSize,
+        keyword,
+        startDealDate,
+        endDealDate,
+        startDate,
+        endDate,
+        reconciliationState,
+        hospitalId
+      } = this.query;
+      const data = {
+        pageNum,
+        pageSize,
+        keyword,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        startDealDate: startDealDate
+          ? this.$moment(startDealDate).format("YYYY-MM-DD")
+          : null,
+        endDealDate: endDealDate
+          ? this.$moment(endDealDate).format("YYYY-MM-DD")
+          : null,
+        reconciliationState,
+        hospitalId:this.employeeType == 'amiyaEmployee' ? hospitalId : sessionStorage.getItem('hospitalId')
+      };
+      api.getReconciliationDocuments(data).then((res) => {
+        if (res.code === 0) {
+          this.collectionNum = 0
+          this.form.reconciliationDocumentsIdList.clear();
+          const { list, totalCount } = res.data.reconciliationDocumentsInfo;
+          this.query.data = list;
+          this.query.totalCount = totalCount;
+        }
+      });
+    },
+
+    // 获取对账单列表分页
+    handlePageChange(pageNum) {
+      const {
+        pageSize,
+        keyword,
+        startDealDate,
+        endDealDate,
+        startDate,
+        endDate,
+        reconciliationState,
+        hospitalId
+      } = this.query;
+      const data = {
+        pageNum,
+        pageSize,
+        keyword,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        startDealDate: startDealDate
+          ? this.$moment(startDealDate).format("YYYY-MM-DD")
+          : null,
+        endDealDate: endDealDate
+          ? this.$moment(endDealDate).format("YYYY-MM-DD")
+          : null,
+        reconciliationState,
+        hospitalId:this.employeeType == 'amiyaEmployee' ? hospitalId : sessionStorage.getItem('hospitalId')
+      };
+      api.getReconciliationDocuments(data).then((res) => {
+        if (res.code === 0) {
+          this.collectionNum = 0
+          this.form.reconciliationDocumentsIdList.clear();
+          const { list, totalCount } = res.data.reconciliationDocumentsInfo;
+          this.query.data = list;
+          this.query.totalCount = totalCount;
+        }
+      });
+    },
+    // 确认
+    handleSubmit(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          const { reconciliationDocumentsIdList, returnBackDate } = this.form;
+          const data = {
+            reconciliationDocumentsIdList: [...reconciliationDocumentsIdList],
+            returnBackDate: this.$moment(returnBackDate).format("YYYY-MM-DD"),
+          };
+          // 回款
+          api.reconciliationReturnBackPriceList(data).then((res) => {
+            if (res.code === 0) {
+              this.cancelSubmit("form");
+              this.getHospitalInfo();
+              this.$Message.success({
+                content: "回款成功",
+                duration: 3,
+              });
+              this.form.reconciliationDocumentsIdList.clear();
+            }
+          });
+        }
+      });
+    },
+    markStatementhandSubmit() {
+      this.markStatementModel = false;
+      this.markStatementform.reconciliationState = null;
+      this.markStatementform.questionReason = "";
+    },
+    // 取消
+    cancelSubmit(name) {
+      this.isEdit = false;
+      this.controlModal = false;
+      this.$refs[name].resetFields();
+    },
+
+    // modal 显示状态发生变化时触发
+    handleModalVisibleChange(value) {
+      if (!value) {
+        this.isEdit = false;
+        this.$refs["form"].resetFields();
+      }
+    },
+  },
+  created() {
+    // this.getLogisticsCompanyList()
+  },
+  watch: {
+    activeName: {
+      handler(value) {
+        if (value === "historicalReconciliation") {
+          this.getHospitalInfo();
+          this.collectionNum = 0
+        }
+      },
+      immediate: true,
+    },
+  },
+};
+</script>
+<style lang="less" scoped>
+.content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.container {
+  margin-top: 16px;
+}
+.page_wrap {
+  text-align: right;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+.bottom_title{
+  font-size: 16px;
+}
+</style>

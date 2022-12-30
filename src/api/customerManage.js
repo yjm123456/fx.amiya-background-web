@@ -179,6 +179,22 @@ export const waitingConfirmCustomerHospital = (params) => {
         params,
     });
 };
+// 发优惠券   post
+export const sendVoucher = (data) => {
+    return http({
+        url: `/amiyabg/api/ConsumptionVoucher/sendVoucher`,
+        method: "post",
+        data,
+    });
+};
+// 优惠券列表（下拉框）
+export const codeList = (params) => {
+    return http({
+        url: "/amiyabg/api/ConsumptionVoucher/codeList",
+        method: "get",
+        params,
+    });
+};
 /**
  * 客户消费追踪
  */

@@ -128,7 +128,7 @@
             <span>{{detailObj.checkState}} </span>
           </div>
           <div class="mr_top">
-            <span class="title_bold">审核金额：</span>
+            <span class="title_bold">对账金额：</span>
             <span>{{detailObj.checkPrice}} </span>
           </div>
           <div class="mr_top">
@@ -136,7 +136,7 @@
             <span>{{detailObj.checkDate ? this.$moment(detailObj.checkDate).format("YYYY-MM-DD HH:mm:ss") : ''}} </span>
           </div>
           <div class="mr_top">
-            <span class="title_bold">结算金额：</span>
+            <span class="title_bold">服务费合计：</span>
             <span>{{detailObj.settlePrice}} </span>
           </div>
           <div class="mr_top">

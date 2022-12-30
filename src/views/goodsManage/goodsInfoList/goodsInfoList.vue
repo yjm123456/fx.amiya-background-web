@@ -218,6 +218,39 @@ export default {
             },
           },
           {
+            title: "是否限购",
+            key: "isLimitBuy",
+            minWidth: 120,
+            render: (h, params) => {
+              if (params.row.isLimitBuy == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "限购数量",
+            key: "limitBuyQuantity",
+            minWidth: 150,
+          },
+          {
             title: "库存",
             key: "inventoryQuantity",
             minWidth: 150,

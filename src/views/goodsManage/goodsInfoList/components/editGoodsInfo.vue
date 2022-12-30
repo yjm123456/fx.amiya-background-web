@@ -184,8 +184,33 @@
                 <i-switch v-model="form.isMaterial" />
               </FormItem>
             </Col>
-            
-            
+            <Col span="8">
+              <FormItem label="是否限购" prop="isLimitBuy">
+                <i-switch v-model="form.isLimitBuy" />
+              </FormItem>
+            </Col>
+            <Col span="8" >
+              <FormItem 
+                label="限购数量" 
+                prop="limitBuyQuantity"
+                :rules="{
+                  required: form.isLimitBuy === true,
+                  message: '请输入限购数量',
+                }"
+                
+                >
+                <Input
+                  v-model="form.limitBuyQuantity"
+                  placeholder="请输入限购数量"
+                  type="number"
+                  number
+                  :disabled="form.isLimitBuy == false"
+                ></Input>
+              </FormItem>
+            </Col>
+            <Col span="8">
+             <Button type="primary" @click="addSpecificationsModel=true" style="margin-left:15%;margin-bottom:20px" >添加规格</Button>
+            </Col>
             <Col span="8">
              <Button type="primary" @click="addMember()" style="margin-left:15%;margin-bottom:20px" v-if="form.exchangeType != 0">添加会员价格</Button>
             </Col>
@@ -197,7 +222,6 @@
             </Col>
             
           </Row>
-          
           <Row :gutter="30">
             
             
@@ -242,6 +266,12 @@
         <Button @click="handleCancel('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
+      <specifications 
+        :addSpecificationsModel.sync = "addSpecificationsModel" 
+        :goodsInfo.sync = "goodsInfo" 
+        @goodsStandardsPrice = "goodsStandardsPrice" 
+        ref="specifications"
+      />
       <hospitalModel 
         :addHispitalModel.sync = "addHispitalModel" 
         :hospitalnameList = "hospitalnameList" 
@@ -272,6 +302,7 @@
 import upload from "@/components/upload/upload";
 import editor from "@/components/editor/editor";
 import hospitalModel from "./addhospital.vue"
+import specifications from "./addSpecifications.vue"
 import voucher from "./voucher.vue"
 import member from "./member.vue"
 import * as api from "@/api/goodsManage";
@@ -286,10 +317,14 @@ export default {
     upload,
     hospitalModel,
     member,
-    voucher
+    voucher,
+    specifications
   },
   data() {
     return {
+      goodsInfoObj:{},
+      // 添加规格弹窗
+      addSpecificationsModel:false,
       // 抵用券弹窗
       voucherModel:false,
       // 抵用券
@@ -374,7 +409,15 @@ export default {
         // 修改医院和价格
         updateGoodsHospitalPrice:[],
         // 接受会员等级和价格
-        addmemberPrice:[]
+        addmemberPrice:[],
+        // 接受规格和价格
+        goodsStandardsPrice:[],
+        // 修改规格和价格
+        updateGoodsStandardsPrice:[],
+        // 是否限购
+        isLimitBuy:false,
+        // 限购数量
+        limitBuyQuantity:null
       },
 
       ruleValidate: {
@@ -480,11 +523,18 @@ export default {
       if(!data) return
       this.form.exchangeType = data
     },
-    // 接受子组件添加医院和价格的参数
+    // 医院 接受子组件添加医院和价格的参数
     addHospitalPrice(data){
       if(data){
         this.form.addGoodsHospitalPrice = data
         this.form.updateGoodsHospitalPrice = data
+      }
+    },
+    // 规格 接受子组件添加规格和价格的参数
+    goodsStandardsPrice(data){
+      if(data){
+        this.form.goodsStandardsPrice = data
+        this.form.updateGoodsStandardsPrice = data
       }
     },
     // 接受子组件添加会员等级和价格的参数
@@ -511,6 +561,7 @@ export default {
         }
       })
     },
+  
     // 获取有效的分类名称列表
     getValidGoodsCategory() {
       api.getValidGoodsCategory().then((res) => {
@@ -592,7 +643,15 @@ export default {
             // 会员等级和价格
             addGoodsMemberRankPrice,
             // 抵用券
-            addGoodsConsumptionVoucher
+            addGoodsConsumptionVoucher,
+            // 添加规格和价格
+            goodsStandardsPrice,
+            // 修改规格和价格
+            updateGoodsStandardsPrice,
+            // 是否限购
+            isLimitBuy,
+            limitBuyQuantity
+
           } = this.form;
           if (isEdit) {
             // 修改
@@ -626,13 +685,20 @@ export default {
               updateGoodsHospitalPrice:this.form.exchangeType ===1 && this.form.isMaterial == false ? (this.form.goodsHospitalPrice ? this.form.goodsHospitalPrice : []) :[],
               exchangeType,
               updateGoodsMemberRankPrice: this.form.goodsMemberRankPrices ? this.form.goodsMemberRankPrices : [],
-              updateGoodsConsumptionVoucher: this.form.goodsConsumptionVoucher ? this.form.goodsConsumptionVoucher : []
+              updateGoodsConsumptionVoucher: this.form.goodsConsumptionVoucher ? this.form.goodsConsumptionVoucher : [],
+              updateGoodsStandardsPrice:this.goodsInfoObj.goodsStandardPrice,
+              isLimitBuy,
+              limitBuyQuantity:isLimitBuy == false ? 0 : limitBuyQuantity
             };
             if(this.form.exchangeType===1 && this.form.isMaterial == false){
               if(!this.form.goodsHospitalPrice.length){
                 this.$Message.error('请选择医院')
                 return
               }
+            }
+            if(!this.goodsInfoObj.goodsStandardPrice || this.goodsInfoObj.goodsStandardPrice == [] ||this.goodsInfoObj.goodsStandardPrice.length==0){
+              this.$Message.error('请添加规格')
+                return
             }
             api.modifyGoodsInfo(data).then((res) => {
               if (res.code === 0) {
@@ -676,14 +742,20 @@ export default {
               addGoodsHospitalPrice: addGoodsHospitalPrice ? addGoodsHospitalPrice : [],
               exchangeType,
               addGoodsMemberRankPrice: addGoodsMemberRankPrice ? addGoodsMemberRankPrice : [],
-              addGoodsConsumptionVoucher: addGoodsConsumptionVoucher ? addGoodsConsumptionVoucher : []
+              addGoodsConsumptionVoucher: addGoodsConsumptionVoucher ? addGoodsConsumptionVoucher : [],
+              goodsStandardsPrice,
+              isLimitBuy,
+              limitBuyQuantity:isLimitBuy == false ? 0 : limitBuyQuantity
             };
-            console.log(data)
             if(this.form.exchangeType===1 && this.form.isMaterial == false){
               if(!addGoodsHospitalPrice){
                 this.$Message.error('请选择医院')
                 return
               }
+            }
+            if(!goodsStandardsPrice || goodsStandardsPrice == [] || goodsStandardsPrice.length==0){
+              this.$Message.error('请添加规格')
+                return
             }
             api.addGoodsInfo(data).then((res) => {
               if (res.code === 0) {
@@ -709,8 +781,10 @@ export default {
       this.carouselImageUploadObj.uploadList = [];
       this.$refs[name].resetFields();
       this.$refs.hospitalModel.query.data = []
+      this.$refs.specifications.query.data = []
       this.form.description = ""
       this.form.detailsDescription = ""
+
 
     },
 
@@ -739,8 +813,10 @@ export default {
         this.thumbPicUrlUploadObj.uploadList = [goodsInfo.thumbPicUrl];
         // 回显轮播图
         this.carouselImageUploadObj.uploadList = goodsInfo.carouselImageUrls;
+        
         // 回显
         this.form = goodsInfo;
+        this.goodsInfoObj = goodsInfo;
       }
       this.control = value;
     },
@@ -762,6 +838,13 @@ export default {
         this.$refs.salePrice.validateState = ""
       }
     },
+    // "form.exchangeType"(value) {
+    //   if (value == false) {
+    //     this.form.limitBuyQuantity = null;
+    //     this.$refs.integrationQuantity.validateMessage = ""
+    //     this.$refs.integrationQuantity.validateState = ""
+    //   }
+    // }
   },
 };
 </script>

@@ -53,3 +53,18 @@ export const getNotRepeatedSendOrder = () => {
         method: "get",
     });
 };
+// 获取预约状态列表
+export const getStatusList = () => {
+    return http({
+        url: `/amiyabg/Appointment/statusList`,
+        method: "get",
+    });
+};
+// 修改预约状态
+export const updateStatus = (data) => {
+    return http({
+        url: `/amiyabg/Appointment/updateStatus`,
+        method: "put",
+        data,
+    });
+};

@@ -253,6 +253,9 @@
     </Modal>
     <!-- 客户赠送积分 -->
     <bonusPoint :bonusPointsParams="bonusPointsParams" :bonusPointsControlModal.sync="bonusPointsControlModal" @getWeChatCustomerList="getWeChatCustomerList"/>
+    
+    <!-- 发优惠券 -->
+    <coupon :couponModel.sync="couponModel" :couponId="couponId" :consumptionVoucherCodeNames="consumptionVoucherCodeNames"/>
   </div>
 </template>
 
@@ -262,6 +265,7 @@ import customerInfo from "@/components/customerInfo/customerInfo";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
 import customerMessage from "@/components/customerMessage/customerMessage"
 import bonusPoint from "./bonusPoints.vue"
+import coupon from "./coupon.vue"
 
 export default {
   props: {
@@ -271,10 +275,14 @@ export default {
     customerInfo,
     trackReturnVisit,
     customerMessage,
-    bonusPoint
+    bonusPoint,
+    coupon
   },
   data() {
     return {
+      consumptionVoucherCodeNames:[],
+      couponId:'',
+      couponModel:false,
       customerMessageModel:false,
       // 客户信息组件参数
       customerInfoComParams2: {
@@ -393,6 +401,7 @@ export default {
           {
             title: "创建时间",
             key: "createDate",
+            width:170,
             render: (h, params) => {
               return h(
                 "div",
@@ -405,30 +414,36 @@ export default {
           {
             title: "电话",
             key: "phone",
+            width:160
           },
           {
             title: "省份",
             key: "province",
+            width:120
           },
           {
             title: "城市",
             key: "city",
+            width:120
           },
           {
             title: "积分余额",
             key: "integrationBalance",
+            width:160
           },
           {
             title: "会员级别",
             key: "memberRank",
+            width:200
           },
           {
             title: "会员卡号",
             key: "memberCardNum",
+            width:120
           },
           {
             title: "操作",
-            width: 400,
+            width: 440,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -437,6 +452,12 @@ export default {
               );
               const flag = currentRole.some((ele) => {
                 return "fx.amiya.permission.SEND_MEMBER_CARD".includes(
+                  ele
+                );
+              });
+              // 发优惠券
+              const flag2 = currentRole.some((ele) => {
+                return "fx.amiya.permission.SEND_MEMBE_CARD".includes(
                   ele
                 );
               });
@@ -535,6 +556,26 @@ export default {
                   "发会员卡"
                 )
                 : null,
+                flag2? h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.couponId = id;
+                        this.couponModel = true;
+                      },
+                    },
+                  },
+                  "发优惠券"
+                ):'',
                 h(
                   "Button",
                   {
@@ -638,6 +679,15 @@ export default {
     };
   },
   methods: {
+    // 优惠券列表
+    codeList(even){
+      api.codeList().then((res) => {
+        if(res.code === 0){
+          const { consumptionVoucherCodeNames } = res.data;
+          this.consumptionVoucherCodeNames = consumptionVoucherCodeNames;
+        }
+      })
+    },
     // 积分过期
     expiredCustomerIntergration(){
       this.$Modal.confirm({
@@ -866,6 +916,7 @@ export default {
     this.getMemberRankInfoList();
     this.getMemberRankLevelList();
     this.getCustomerServiceList();
+    this.codeList()
 
   },
   watch: {

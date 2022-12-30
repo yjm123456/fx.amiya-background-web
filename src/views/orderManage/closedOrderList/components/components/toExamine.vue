@@ -26,11 +26,11 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="审核金额"  prop="checkPrice">
-          <Input v-model="form.checkPrice" placeholder="请输入审核金额" type="number" number/>
+        <FormItem label="对账金额"  prop="checkPrice">
+          <Input v-model="form.checkPrice" placeholder="请输入对账金额" type="number" number/>
         </FormItem>
-        <FormItem label="结算金额"  prop="settlePrice">
-          <Input v-model="form.settlePrice" placeholder="请输入结算金额"  type="number" number/>
+        <FormItem label="服务费合计"  prop="settlePrice">
+          <Input v-model="form.settlePrice" placeholder="请输入服务费合计"  type="number" number/>
         </FormItem>
         <FormItem label="审核图片" prop="checkPicture" key="checkPicture">
           <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
@@ -84,9 +84,9 @@ export default {
         id:null,
         // 审核状态
         checkState:'',
-        // 审核审核金额
+        // 审核对账金额
         checkPrice:null,
-        // 结算金额
+        // 服务费合计
         settlePrice:null,
         // 审核备注
         checkRemark:'',
@@ -103,13 +103,13 @@ export default {
         checkPrice: [
           {
             required: true,
-            message: "请输入审核金额",
+            message: "请输入对账金额",
           },
         ],
         settlePrice: [
           {
             required: true,
-            message: "请输入结算金额",
+            message: "请输入服务费合计",
           },
         ],
       },

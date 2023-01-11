@@ -299,6 +299,12 @@ export default {
             minWidth: 60,
           },
           {
+            title: "对账单编号",
+            key: "id",
+            width: 170,
+            align:'center'
+          },
+          {
             title: "医院",
             key: "hospitalName",
             width: 220,
@@ -319,6 +325,7 @@ export default {
             key: "dealGoods",
             width: 160,
             align: "center",
+            tooltip:true
           },
           {
             title: "成交时间",
@@ -386,6 +393,20 @@ export default {
             title: "备注",
             key: "remark",
             width: 220,
+          },
+          {
+            title: "创建时间",
+            key: "createDate",
+            width: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.createDate
+                  ? this.$moment(params.row.createDate).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              );
+            },
           },
           {
             title: "创建人",

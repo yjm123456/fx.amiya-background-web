@@ -21,14 +21,14 @@
               />
               <DatePicker
                 type="date"
-                placeholder="下单开始日期"
+                placeholder="核销开始日期"
                 style="width: 160px; margin-left: 10px"
                 :value="query.startDate"
                 v-model="query.startDate"
               ></DatePicker>
               <DatePicker
                 type="date"
-                placeholder="下单结束日期"
+                placeholder="核销结束日期"
                 style="width: 160px; margin-left: 10px"
                 :value="query.endDate"
                 v-model="query.endDate"

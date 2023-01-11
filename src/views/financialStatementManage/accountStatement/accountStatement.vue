@@ -29,7 +29,7 @@
         <div>
           <curAccountStatement 
             :activeName="activeName"
-            :hospitalInfo="hospitalInfo"
+            :hospitalAllList="hospitalAllList"
           ></curAccountStatement>
         </div>
       </TabPane>
@@ -37,7 +37,7 @@
         <div>
           <historicalReconciliation 
             :activeName="activeName"
-            :hospitalInfo="hospitalInfo"
+            :hospitalAllList="hospitalAllList"
           ></historicalReconciliation>
         </div>
       </TabPane>
@@ -62,7 +62,8 @@ export default {
   data(){
     return {
       activeName: "currentReconciliation",
-      hospitalInfo:[]
+      hospitalInfo:[],
+      hospitalAllList:[{id:-1,name:'全部医院'}]
     }
   },
   methods: {
@@ -74,6 +75,7 @@ export default {
       api.HospitalInfonameList().then((res) => {
         if (res.code === 0) {
           this.hospitalInfo = res.data.hospitalInfo;
+          this.hospitalAllList = [...this.hospitalAllList,...res.data.hospitalInfo];
         }
       });
     },

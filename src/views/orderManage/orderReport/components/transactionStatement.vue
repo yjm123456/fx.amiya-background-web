@@ -597,6 +597,12 @@ export default {
             align: "center",
           },
           {
+            title: "是否重单深度",
+            key: "isRepeatProfundityOrder",
+            minWidth: 130,
+            align: "center",
+          },
+          {
             title: "是否成交",
             key: "isDeal",
             minWidth: 120,

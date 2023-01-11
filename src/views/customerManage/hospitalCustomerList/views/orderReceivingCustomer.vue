@@ -291,8 +291,8 @@ export default {
                     style: {},
                     on: {
                       click: () => {
-                        const { encryptPhone } = params.row;
-                        this.encryptPhone = encryptPhone;
+                        const { encryptCustomerPhone } = params.row;
+                        this.encryptPhone = encryptCustomerPhone;
                         this.controlConsumeTrackModal = true;
                       },
                     },

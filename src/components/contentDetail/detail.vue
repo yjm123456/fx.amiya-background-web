@@ -268,10 +268,13 @@
             </div>
           </div>
           <div class="mr_top">
+            <span class="title_bold">是否重单深度：</span>
+              <i-switch v-model="detailObj.isRepeatProfundityOrder" disabled />
+          </div>
+          <div class="mr_top">
             <span class="title_bold">抖店订单号：</span>
             <span>{{ detailObj.otherContentPlatFormOrderId }}</span>
           </div>
-          
           <div class="mr_top">
             <span class="title_bold">咨询内容：</span>
             <span>{{ detailObj.consultingContent }} </span>

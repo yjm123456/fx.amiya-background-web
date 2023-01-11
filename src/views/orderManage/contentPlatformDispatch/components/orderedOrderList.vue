@@ -939,6 +939,7 @@ export default {
             title: "咨询内容",
             minWidth: 400,
             key: "consultingContent",
+            tooltip:true
           },
           {
             title: "面诊状态",
@@ -961,7 +962,7 @@ export default {
           {
             title: "订单状态",
             key: "orderStatusText",
-            minWidth: 120,
+            minWidth: 160,
             align: "center",
             render: (h, params) => {
               if (params.row.orderStatusText == "已成交") {
@@ -974,7 +975,7 @@ export default {
                   },
                   params.row.orderStatusText
                 );
-              } else if (params.row.orderStatusText == "医院重单") {
+              } else if (params.row.orderStatusText == "重单-不可深度") {
                 return h(
                   "div",
                   {
@@ -984,7 +985,17 @@ export default {
                   },
                   params.row.orderStatusText
                 );
-              } else if (params.row.orderStatusText == "已派单") {
+              }  else if (params.row.orderStatusText == "重单-可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              }else if (params.row.orderStatusText == "已派单") {
                 return h(
                   "div",
                   {
@@ -1033,6 +1044,28 @@ export default {
           //   minWidth: 180,
           //   align: "center",
           // },
+          {
+            title: "是否重单深度",
+            key: "isRepeatProfundityOrder",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isRepeatProfundityOrder,
+                    size: "default",
+                    disabled:
+                      params.row.isRepeatProfundityOrder === true ||
+                      params.row.isRepeatProfundityOrder === false,
+                  },
+                },
+                h("span", { isRepeatProfundityOrder: "open" }, "开"),
+                h("span", { isRepeatProfundityOrder: "close" }, "关")
+              );
+            },
+          },
           {
             title: "是否到院",
             key: "isToHospital",
@@ -1273,7 +1306,7 @@ export default {
           },
           {
             title: "操作",
-            width: 390,
+            width: 360,
             align: "center",
             fixed: "right",
             render: (h, params) => {

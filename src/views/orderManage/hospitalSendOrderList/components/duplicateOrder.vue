@@ -435,7 +435,7 @@ export default {
           {
             title: "客户",
             key: "orderId",
-            minWidth: 150,
+            minWidth: 170,
             render: (h, params) => {
               return h("div", [
                 h(
@@ -666,7 +666,7 @@ export default {
           {
             title: "订单状态",
             key: "orderStatus",
-            minWidth: 50,
+            minWidth: 90,
             align: "center",
             render: (h, params) => {
               if (params.row.orderStatus == "已成交") {
@@ -679,12 +679,22 @@ export default {
                   },
                   params.row.orderStatus
                 );
-              } else if (params.row.orderStatus == "医院重单") {
+              } else if (params.row.orderStatus == "重单-不可深度") {
                 return h(
                   "div",
                   {
                     style: {
                       color: "red",
+                    },
+                  },
+                  params.row.orderStatus
+                );
+              } else if (params.row.orderStatus == "重单-可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
                     },
                   },
                   params.row.orderStatus
@@ -730,6 +740,28 @@ export default {
                   params.row.orderStatus
                 );
               }
+            },
+          },
+          {
+            title: "是否重单深度",
+            key: "isRepeatProfundityOrder",
+            minWidth: 70,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isRepeatProfundityOrder,
+                    size: "default",
+                    disabled:
+                      params.row.isRepeatProfundityOrder === true ||
+                      params.row.isRepeatProfundityOrder === false,
+                  },
+                },
+                h("span", { isRepeatProfundityOrder: "open" }, "开"),
+                h("span", { isRepeatProfundityOrder: "close" }, "关")
+              );
             },
           },
           {
@@ -864,7 +896,7 @@ export default {
                           props: {
                             name: "lookCustomerImg",
                             disabled:
-                              params.row.orderStatus == "医院重单" ||
+                              params.row.orderStatus == "重单-不可深度" ||
                               params.row.orderStatus == "已派单",
                           },
                         },
@@ -877,7 +909,7 @@ export default {
                           props: {
                             name: "deal",
                             disabled:
-                              params.row.orderStatus == "医院重单" ||
+                              params.row.orderStatus == "重单-不可深度" ||
                               params.row.orderStatus == "已派单",
                           },
                         },
@@ -891,7 +923,7 @@ export default {
                             name: "confirm",
                             disabled:
                               params.row.checkState == 2 ||
-                              params.row.orderStatus == "医院重单" ||
+                              params.row.orderStatus == "重单-不可深度" ||
                               params.row.orderStatus == "已派单",
                           },
                         },

@@ -373,6 +373,7 @@ export default {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 400,
+            tooltip:true
           },
           {
             title: "面诊状态",
@@ -516,7 +517,7 @@ export default {
           },
           {
             title: "操作",
-            width: 300,
+            width: 250,
             align: "center",
             fixed: "right",
             render: (h, params) => {

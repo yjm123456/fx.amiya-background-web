@@ -49,3 +49,10 @@ export const byIdConsumptionVoucher = (voucherId) => {
         method: "get"
     });
 };
+// 获取会员卡编码名称列表
+export const getMemberRankInfo = () => {
+    return http({
+        url: "/amiyabg/MemberRankInfo/codeList",
+        method: "get",
+    });
+};

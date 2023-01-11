@@ -1120,6 +1120,7 @@ export default {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 500,
+            tooltip:true
           },
           {
             title: "下单时间",
@@ -1171,11 +1172,32 @@ export default {
             minWidth: 140,
             align: "center",
           },
-
+          {
+            title: "是否重单深度",
+            key: "isRepeatProfundityOrder",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isRepeatProfundityOrder,
+                    size: "default",
+                    disabled:
+                      params.row.isRepeatProfundityOrder === true ||
+                      params.row.isRepeatProfundityOrder === false,
+                  },
+                },
+                h("span", { isRepeatProfundityOrder: "open" }, "开"),
+                h("span", { isRepeatProfundityOrder: "close" }, "关")
+              );
+            },
+          },
           {
             title: "订单状态",
             key: "orderStatusText",
-            minWidth: 120,
+            minWidth: 130,
             align: "center",
             render: (h, params) => {
               if (params.row.orderStatusText == "已成交") {
@@ -1188,12 +1210,22 @@ export default {
                   },
                   params.row.orderStatusText
                 );
-              } else if (params.row.orderStatusText == "医院重单") {
+              } else if (params.row.orderStatusText == "重单-不可深度") {
                 return h(
                   "div",
                   {
                     style: {
                       color: "red",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "重单-可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
                     },
                   },
                   params.row.orderStatusText
@@ -1252,7 +1284,7 @@ export default {
           {
             title: "操作",
             align: "center",
-            minWidth: 300,
+            minWidth: 230,
             fixed: "right",
             render: (h, params) => {
               return h("div", [

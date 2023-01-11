@@ -85,7 +85,6 @@ export default {
   },
   watch:{
     newCustomerPerformanceRatio(value){
-        console.log(value)
       this.order = value.performanceList.map((item) => {
         return {
           name: item.cityName,

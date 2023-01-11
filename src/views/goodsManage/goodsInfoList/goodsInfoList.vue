@@ -89,10 +89,6 @@ export default {
       // 是否有效列表
       validList: [
         {
-          name: "全部",
-          value: -1,
-        },
-        {
           name: "有效",
           value: 1,
         },
@@ -119,7 +115,7 @@ export default {
         exchangeType:"",
         keyword: "",
         categoryId: -1,
-        valid: -1,
+        valid: 1,
         pageNum: 1,
         pageSize: 10,
         columns: [

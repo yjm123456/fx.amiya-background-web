@@ -393,6 +393,18 @@ const customerService = [{
         component: () =>
             import ("@/views/customerService/chatRecord/chatRecord.vue"),
     },
+    {
+        path: "/appletAutoReplyTemplate",
+        name: "appletAutoReplyTemplate",
+        meta: {
+            title: "小程序自动回复模板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客服'],
+        },
+        component: () =>
+            import ("@/views/customerService/appletAutoReplyTemplate/appletAutoReplyTemplate.vue"),
+    },
 ];
 
 /**
@@ -958,6 +970,18 @@ const giftManage = [{
         component: () =>
             import ("@/views/giftManage/transactionVoucher/transactionVoucher.vue"),
     },
+    {
+        path: "/giftClassification",
+        name: "giftClassification",
+        meta: {
+            title: "礼品分类",
+            keepAlive: false,
+            isTag: true,
+            openName: ['礼品管理'],
+        },
+        component: () =>
+            import ("@/views/giftManage/giftClassification/giftClassification.vue"),
+    },
 ];
 
 /**
@@ -1467,6 +1491,18 @@ const financialStatementManage = [{
         },
         component: () =>
             import ("@/views/financialStatementManage/accountStatement/accountStatement.vue"),
+    },
+    {
+        path: "/unreconciledHospitalList",
+        name: "unreconciledHospitalList",
+        meta: {
+            title: "未对账机构列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/unreconciledHospitalList/unreconciledHospitalList.vue"),
     },
 ];
 /**

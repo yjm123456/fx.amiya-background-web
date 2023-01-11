@@ -15,38 +15,6 @@
         label-position="left"
         :label-width="100"
       >
-       <!-- <FormItem label="确认订单" prop="checkState">
-         <Select
-            v-model="form.checkState"
-            placeholder="确认订单"
-          >
-            <Option
-              v-for="item in checkStateList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-        </FormItem>
-        <FormItem label="是否到院"  prop="isToHospital" v-if="form.checkState==2" key="是否到院">
-          <i-switch v-model="form.isToHospital" disabled/>
-        </FormItem>
-        <FormItem
-          label="最后到院"
-          prop="toHospitalDate"
-          v-if="form.checkState==2" key="最后到院"
-        >
-          <DatePicker
-            type="date"
-            placeholder="最后到院"
-            style="width: 100%"
-            v-model="form.toHospitalDate"
-            v-if="form.checkState==2" key="最后到院"
-          ></DatePicker>
-        </FormItem>
-        <FormItem label="重单截图"  prop="repeatePictureUrl" v-if="form.checkState==2" key="重单截图">
-          <upload :uploadObj="delUploadObj" @uploadChange="dealHandleUploadChange" />
-        </FormItem> -->
         <div>请您填写客户 <span class="phone">{{phone}}</span> 的重单情况</div>
         <Tabs ref="tabs" v-model="active" v-if="isTabel">
           <TabPane label="未重单" name="unDuplicateOrder">
@@ -58,7 +26,10 @@
           <TabPane label="重单" name="duplicateOrder" >
             <div>
               <div class="ishos_con">
-                  <span class="isHos">是否到院:</span><i-switch v-model="form.isToHospital" disabled/>
+                  <span class="isHos">是否可深度:</span><i-switch v-model="form.isProfundity" />
+              </div>
+              <div class="ishos_con">
+                  <span class="isHos">是否到院:</span><i-switch v-model="form.isToHospital" disabled style="margin-left:16px"/>
               </div>
               <div  class="ishos_con">
                 <span  class="isHos">最后到院:</span>
@@ -73,7 +44,6 @@
               <div  class="ishos_con2">
                 <span  class="isHos">重单截图：</span><div class="upload_con"><upload :uploadObj="delUploadObj" @uploadChange="dealHandleUploadChange" /></div>
               </div>
-               
                 <Button type="primary" @click="duplicateOrderHandleSubmit" style="display:block;margin:30px auto">上传重单信息</Button>
             </div>
           </TabPane>
@@ -127,7 +97,8 @@ export default {
         checkState:'',
         isToHospital:true,
         toHospitalDate:'',
-         repeatePictureUrl:''
+         repeatePictureUrl:'',
+         isProfundity:false
       },
       ruleValidates: {
           repeatePictureUrl: [
@@ -171,7 +142,7 @@ export default {
     },
     // 重单
     duplicateOrderHandleSubmit(){
-      const {repeatePictureUrl,isToHospital,toHospitalDate} = this.form
+      const {repeatePictureUrl,isToHospital,toHospitalDate,isProfundity} = this.form
       if(!toHospitalDate){
         this.$Message.warning('请选择最后到院时间')
         return
@@ -186,6 +157,7 @@ export default {
           repeatePictureUrl,
           isToHospital,
           toHospitalDate:toHospitalDate ? this.$moment(toHospitalDate).format("YYYY-MM-DD") : null,
+          isProfundity
       }
       api.contentPlateFormOrderRepeates(data).then((res) => {
           if (res.code === 0) {

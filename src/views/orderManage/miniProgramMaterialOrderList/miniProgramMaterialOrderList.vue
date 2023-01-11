@@ -212,6 +212,12 @@ export default {
             align:'center'
           },
           {
+            title: "实付金额",
+            key: "totalAmount",
+            minWidth: 120,
+            align:'center'
+          },
+          {
             title: "快递单号",
             key: "courierNumber",
             minWidth: 200,
@@ -237,9 +243,9 @@ export default {
             render: (h, params) => {
               return h(
                 "div",
-                this.$moment(params.row.createDate).format(
+                params.row.sendGoodsDate ? this.$moment(params.row.sendGoodsDate).format(
                   "YYYY-MM-DD HH:mm:ss"
-                )
+                ) : ''
               );
             },
           },

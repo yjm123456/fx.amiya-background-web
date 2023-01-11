@@ -89,7 +89,6 @@ export default {
   },
   watch:{
     sendOrderPerformanceRatio(value){
-        console.log(value)
       this.order = value.performanceList.map((item) => {
         return {
           name: item.hospitalName,

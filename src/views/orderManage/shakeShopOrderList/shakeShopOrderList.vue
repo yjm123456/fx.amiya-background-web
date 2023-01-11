@@ -75,7 +75,7 @@
         :model="form"
         :rules="ruleValidates"
         label-position="left"
-        :label-width="110"
+        :label-width="80"
       >
       <Row :gutter="30">
         <!-- <Col span="8">
@@ -97,6 +97,22 @@
         <Col span="8">
           <FormItem label="订单号" prop="id">
             <Input v-model="form.id" placeholder="请输入订单号"></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="主播" prop="belongLiveAnchorId">
+            <Select
+              v-model="form.belongLiveAnchorId"
+              placeholder="请选择主播"
+              filterable
+            >
+              <Option
+                v-for="item in liveAnchorBaseInfoValidList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
           </FormItem>
         </Col>
         <Col span="8">
@@ -172,12 +188,19 @@
         <Button type="primary" @click="handleSubmit('form')">确认补单</Button>
       </div>
     </Modal>
+    <!-- 用户信息解密 -->
+    <userMessage :userMessageModel.sync="userMessageModel" :userMessageParams="userMessageParams" @getTikTokOrder="getTikTokOrder"/>
   </div>
 </template>
 <script>
 import * as api from "@/api/tikTokOrder";
 import * as orderApi from "@/api/orderManage";
+import * as anchorApi from "@/api/liveAnchorBaseInfo";
+import userMessage from "./components/userMessageDecrypt.vue"
 export default {
+  components:{
+    userMessage
+  },
   data() {
     return {
       // 查询
@@ -316,26 +339,29 @@ export default {
                     },
                     on: {
                       click: () => {
-                        this.$Modal.confirm({
-                          title: "用户信息解密提示",
-                          content: "是否确认用户信息解密？",
-                          onOk: () => {
-                            const { id } = params.row;
-                            const data = {
-                                orderid:id
-                            }
-                            api.decryptUserInfo(data).then((res) => {
-                              if (res.code === 0) {
-                                this.getTikTokOrder();
-                                this.$Message.success({
-                                  content: "用户信息解密成功",
-                                  duration: 3,
-                                });
-                              }
-                            });
-                          },
-                          onCancel: () => {},
-                        });
+                        const { id } = params.row;
+                        this.userMessageParams.orderid=id
+                        this.userMessageModel = true
+                        // this.$Modal.confirm({
+                        //   title: "用户信息解密提示",
+                        //   content: "是否确认用户信息解密？",
+                        //   onOk: () => {
+                        //     const { id } = params.row;
+                        //     const data = {
+                        //         orderid:id
+                        //     }
+                        //     api.decryptUserInfo(data).then((res) => {
+                        //       if (res.code === 0) {
+                        //         this.getTikTokOrder();
+                        //         this.$Message.success({
+                        //           content: "用户信息解密成功",
+                        //           duration: 3,
+                        //         });
+                        //       }
+                        //     });
+                        //   },
+                        //   onCancel: () => {},
+                        // });
                       },
                     },
                   },
@@ -385,7 +411,12 @@ export default {
 
       // 控制 modal
       controlModal: false,
-
+      userMessageModel:false,
+      // 用户信息解密 传给子组件的值
+      userMessageParams:{
+        orderid:'',
+        belongLiveAnchor:[]
+      },
       // modal title
       title: "添加",
 
@@ -439,11 +470,19 @@ export default {
         // 更新时间
         updateDate:'',
         // 创建时间
-        createDate:''
+        createDate:'',
+        // 主播
+        belongLiveAnchorId:''
 
       },
 
       ruleValidates: {
+        belongLiveAnchorId: [
+          {
+            required: true,
+            message: "请选择主播",
+          },
+        ],
         appType: [
           {
             required: true,
@@ -496,9 +535,21 @@ export default {
       },
       // 获取有效的医院列表
       hospitalNameList:[],
+      // 主播
+      liveAnchorBaseInfoValidList:[],
     };
   },
   methods: {
+    // 获取主播（下拉框）
+    getLiveAnchorBaseInfoValidList(){
+      anchorApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorBaseInfos } = res.data;
+          this.liveAnchorBaseInfoValidList = liveAnchorBaseInfos;
+          this.userMessageParams.belongLiveAnchor = liveAnchorBaseInfos
+        }
+      });
+    },
     //补单不能修改图片 
     imageChange(value){
       if(value==1){
@@ -558,8 +609,11 @@ export default {
     },
     // 补单
     supplementChange(){
-      const {id} = this.form
-      const data =  {orderId:id} 
+      const {id,belongLiveAnchorId} = this.form
+      const data =  {
+        orderId:id,
+        belongLiveAnchorId:belongLiveAnchorId
+      } 
       api.repairOrder(data).then((res) => {
         if(res.code ===0){
           const {orderData} = res.data
@@ -614,7 +668,8 @@ export default {
               cipherName,
               cipherPhone,
               updateDate,
-              createDate
+              createDate,
+              belongLiveAnchorId
             } = this.form
             const data = {
               id,
@@ -638,6 +693,7 @@ export default {
               cipherPhone,
               updateDate,
               createDate,
+              belongLiveAnchorId
             }
             api.AddOrder(data).then((res) => {
               if(res.code ===0 ){
@@ -670,6 +726,7 @@ export default {
   created() {
     this.getTikTokOrder();
     this.getHospitalList()
+    this.getLiveAnchorBaseInfoValidList()
   },
 };
 </script>

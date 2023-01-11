@@ -80,3 +80,36 @@ export const getContentPlatFormOrderDealInfoByReconciliationDocumentsId = (param
         params
     });
 };
+// 根据对账单id获取已成交订单列表（下单平台）
+export const getOrderByReconciliationDocumentsIdLlistWithPage = (params) => {
+    return http({
+        url: "/amiyabg/Order/getOrderByReconciliationDocumentsIdLlistWithPage",
+        method: "get",
+        params
+    });
+};
+// 根据对账单编号获取升单信息
+export const getByReconciliationDocumentsIdList = (params) => {
+    return http({
+        url: "/amiyabg/CustomerHospitalConsume/getByReconciliationDocumentsIdList",
+        method: "get",
+        params
+    });
+};
+// 当月对账完成账单和历史账单导出
+export const exportInternalExportReconciliationDocuments = (params) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocuments/internalExportReconciliationDocuments",
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};
+// 获取未对账机构列表
+export const getListByUnCheckHospitalOrder = (params) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocuments/listByUnCheckHospitalOrder",
+        method: "get",
+        params
+    });
+};

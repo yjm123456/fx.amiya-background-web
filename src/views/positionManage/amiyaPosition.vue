@@ -279,7 +279,6 @@ export default {
                     on: {
                       click: () => {
                         const { id , name } = params.row;
-                        console.log(id,name)
                         this.doctorPositionModal = true
                         this.doctorPositionId = id
                         this.doctorPositionName = name

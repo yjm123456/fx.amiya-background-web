@@ -33,6 +33,19 @@
             >{{ item.name }}</Option
           >
         </Select>
+        <Select
+            v-model="query.categoryId"
+            style="width: 200px; margin-left: 10px"
+            placeholder="请选择礼品分类"
+            filterable
+          >
+            <Option
+              v-for="item in giftCategoryNameList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
         <Button
           type="primary"
           style="margin-left: 10px"
@@ -160,16 +173,20 @@
 <script>
 import * as api from "@/api/giftManage";
 import * as apis from "@/api/orderManage";
+import * as giftCategoryApi from "@/api/giftCategory";
 import { download } from "@/utils/util";
 export default {
   data() {
     return {
+      // 礼品分类
+      giftCategoryNameList:[],
       orderExpressInfoVo:{},
       logisticsModel:false,
       // 物流信息
       ExpressList:[],
       // 查询
       query: {
+        categoryId:'',
         startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
         endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
         isSendGoodsList: [
@@ -218,6 +235,12 @@ export default {
             key: "giftName",
             minWidth: 200,
             align:'center',
+          },
+          {
+            title: "礼品分类",
+            key: "categoryName",
+            minWidth:150,
+            align:'center'
           },
           {
             title: "领取人电话",
@@ -439,13 +462,22 @@ export default {
     };
   },
   methods: {
+    // 获取礼品分类（下拉框）
+    getGiftCategoryNameList() {
+      giftCategoryApi.getGiftCategoryNameList().then((res) => {
+        if (res.code === 0) {
+          this.giftCategoryNameList= res.data.nameList;
+        }
+      });
+    },
     handleExportClick(){
-      const {keyword ,startDate ,endDate,isSendGoods} = this.query
+      const {keyword ,startDate ,endDate,isSendGoods,categoryId} = this.query
       const data = {
         keyword,
         startDate:startDate ? this.$moment(new Date(startDate)).format("YYYY-MM-DD") : '',
         endDate:endDate ? this.$moment(new Date(endDate)).format("YYYY-MM-DD") : '',
-        isSendGoods: JSON.parse(isSendGoods)
+        isSendGoods: JSON.parse(isSendGoods),
+        categoryId
       }
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -474,14 +506,15 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { keyword, isSendGoods, pageNum, pageSize,startDate,endDate } = this.query;
+      const { keyword, isSendGoods, pageNum, pageSize,startDate,endDate ,categoryId} = this.query;
       const data = {
         keyword,
         isSendGoods: JSON.parse(isSendGoods),
         pageNum,
         pageSize,
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : '',
-        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : ''
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : '',
+        categoryId
       };
       api.getReceiveGiftList(data).then((res) => {
         if (res.code === 0) {
@@ -494,14 +527,15 @@ export default {
 
     // 获取领取礼品列表（分页）
     handlePageChange(pageNum) {
-      const { keyword, isSendGoods, pageSize,startDate,endDate } = this.query;
+      const { keyword, isSendGoods, pageSize,startDate,endDate ,categoryId} = this.query;
       const data = {
         keyword,
         isSendGoods: JSON.parse(isSendGoods),
         pageNum,
         pageSize,
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : '',
-        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : ''
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : '',
+        categoryId
       };
       api.getReceiveGiftList(data).then((res) => {
         if (res.code === 0) {
@@ -591,6 +625,7 @@ export default {
   },
   created() {
     this.getReceiveGiftList();
+    this.getGiftCategoryNameList()
   },
 };
 </script>

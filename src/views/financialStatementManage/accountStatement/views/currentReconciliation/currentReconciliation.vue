@@ -152,7 +152,7 @@
           ></Input>
         </FormItem>
         <FormItem label="成交项目" prop="dealGoods">
-          <Input v-model="form.dealGoods" placeholder="请输入成交项目"></Input>
+          <Input v-model="form.dealGoods" placeholder="请输入成交项目" type="textarea" :rows="4"></Input>
         </FormItem>
         <FormItem label="成交时间" prop="customerPhone">
           <DatePicker
@@ -300,15 +300,18 @@ export default {
         totalDealPrice: null,
         returnBackTotalPrice: 0,
         id: "",
-        returnBackPrice:""
+        returnBackPrice:"",
+        returnBackPricePercent:null,
+        systemUpdatePricePercent:null,
+        tabFlag:false
       },
       // 查询
       query: {
+        // hospitalId:2,
         hospitalId:null,
         keyword: "",
-        startDate: this.$moment()
-          .startOf("month")
-          .format("YYYY-MM-DD"),
+        // startDate: "2022-01-01",
+        startDate: this.$moment().startOf("month").format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         startDealDate: null,
         endDealDate: null,
@@ -320,6 +323,12 @@ export default {
             key: "_checked",
             align: "center",
             minWidth: 60,
+          },
+          {
+            title: "对账单编号",
+            key: "id",
+            width: 170,
+            align:'center'
           },
           {
             title: "医院",
@@ -342,6 +351,7 @@ export default {
             key: "dealGoods",
             width: 160,
             align: "center",
+            tooltip:true
           },
           {
             title: "成交时间",
@@ -411,6 +421,20 @@ export default {
             width: 220,
           },
           {
+            title: "创建时间",
+            key: "createDate",
+            width: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.createDate
+                  ? this.$moment(params.row.createDate).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              );
+            },
+          },
+          {
             title: "创建人",
             key: "createByName",
             width: 140,
@@ -419,7 +443,7 @@ export default {
             title: "操作",
             key: "",
             fixed: "right",
-            width: 180,
+            width: 150,
             align: "center",
             render: (h, params) => {
               return h("div", [
@@ -487,7 +511,9 @@ export default {
                           customerPhone,
                           totalDealPrice,
                           returnBackTotalPrice,
-                          returnBackPrice
+                          returnBackPrice,
+                          returnBackPricePercent,
+                          systemUpdatePricePercent
                         } = params.row;
                         this.reconciliationParams.idList = [id];
                         this.reconciliationParams.reconciliationState = 3;
@@ -496,15 +522,15 @@ export default {
                         this.reconciliationParams.totalDealPrice = totalDealPrice;
                         this.reconciliationParams.returnBackTotalPrice = returnBackTotalPrice;
                         this.reconciliationParams.returnBackPrice = returnBackPrice;
+                        this.reconciliationParams.returnBackPricePercent = returnBackPricePercent;
+                        this.reconciliationParams.systemUpdatePricePercent = systemUpdatePricePercent;
                         this.reconciliationParams.id = id;
                         this.reconciliationCompletionListModel = true;
-                        this.$refs.reconciliationCompletionList.getContentPlatFormOrderDealInfo(
-                          customerPhone
-                        );
+                        this.reconciliationParams.tabFlag =  true
                       },
                     },
                   },
-                  "对账完成"
+                  "对账"
                 ),
               ]);
             },

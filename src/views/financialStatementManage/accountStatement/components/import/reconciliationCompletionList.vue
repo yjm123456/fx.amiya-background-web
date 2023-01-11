@@ -5,14 +5,46 @@
       title="成交情况"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
-      width="80%"
+      width="85%"
     >
       <Card class="container">
         <div style="margin-bottom:10px">当前对账单id： <span style="color:#f46544">{{reconciliationParams.id}}</span></div>
         <div>
-          <Table border :columns="query.columns" :data="query.data"></Table>
+          <!-- <Table border :columns="query.columns" :data="query.data"></Table> -->
+          <Tabs ref="tabs" v-model="active"  type="card" v-if="reconciliationParams.tabFlag==true">
+            <TabPane label="下单平台成交情况" name="order">
+              <div>
+                <order
+                  :active="active"
+                  :reconciliationParams="reconciliationParams"
+                  ref="order"
+                  @settlePriceChange1="settlePriceChange1"
+                ></order>  
+              </div> 
+            </TabPane>
+            <TabPane label="内容平台成交情况" name="contentOrder">
+              <div>
+                <contentOrder
+                  :active="active"  
+                  :reconciliationParams="reconciliationParams"
+                  ref="contentOrder"
+                  @settlePriceChange2="settlePriceChange2"
+                ></contentOrder>
+              </div>
+            </TabPane>
+            <TabPane label="升单情况" name="liter">
+              <div>
+                <liter
+                  :active="active"  
+                  :reconciliationParams="reconciliationParams"
+                  ref="liter"
+                  @settlePriceChange3="settlePriceChange3"
+                ></liter>
+              </div>
+            </TabPane>
+          </Tabs>
         </div>
-        <div class="page_wrap">
+        <!-- <div class="page_wrap">
           <Page
             ref="pages"
             :current="query.pageNum"
@@ -22,53 +54,114 @@
             show-elevator
             @on-change="handlePageChange"
           />
-        </div>
+        </div> -->
       </Card>
       <Modal
         v-model="controlModal"
         title="审核"
         :mask-closable="false"
         @on-visible-change="handleModalVisibleChanges"
+        width="800"
       >
         <Form
           ref="form"
           :model="form"
           :rules="ruleValidates"
           label-position="left"
-          :label-width="100"
+          :label-width="110"
         >
-          <FormItem label="审核状态" prop="checkState">
-            <Select v-model="form.checkState" placeholder="审核状态">
-              <Option
-                v-for="item in checkStateArr"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
-          </FormItem>
-          <FormItem label="对账金额" prop="checkPrice">
-            <Input
-              v-model="form.checkPrice"
-              placeholder="请输入对账金额"
-              type="number"
-              number
-            />
-          </FormItem>
-          <FormItem label="服务费合计" prop="settlePrice">
-            <Input
-              v-model="form.settlePrice"
-              placeholder="请输入服务费合计"
-              type="number"
-              number
-            />
-          </FormItem>
-          <FormItem label="审核图片" prop="checkPicture" key="checkPicture">
-            <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
-          </FormItem>
-          <FormItem label="审核备注" prop="checkRemark">
-            <Input v-model="form.checkRemark" type="textarea" :rows="3"></Input>
-          </FormItem>
+        <div class="form_content">
+          <div class="form_left">
+            <FormItem label="成交金额" prop="checkPriceRight">
+              <Input
+                v-model="form.checkPriceRight"
+                placeholder="请输入成交金额"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+            <FormItem label="信息服务费比例" prop="proportionOfInformationServiceFee">
+              <Input
+                v-model="form.proportionOfInformationServiceFee"
+                placeholder="请输入信息服务费比例"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+            <FormItem label="信息服务费金额" prop="informationServiceFeePrice">
+              <Input
+                v-model="form.informationServiceFeePrice"
+                placeholder="请输入信息服务费金额"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+            <FormItem label="系统使用费比例" prop="systemUsageFeeProportion">
+              <Input
+                v-model="form.systemUsageFeeProportion"
+                placeholder="请输入系统使用费比例"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+            <FormItem label="系统使用费金额" prop="systemUsageFeePrice">
+              <Input
+                v-model="form.systemUsageFeePrice"
+                placeholder="请输入系统使用费金额"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+            <FormItem label="服务费合计" prop="totalServiceFee">
+              <Input
+                v-model="form.totalServiceFee"
+                placeholder="请输入服务费合计"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+          </div>
+          <div class="form_right">
+            <FormItem label="审核状态" prop="checkState">
+              <Select v-model="form.checkState" placeholder="审核状态">
+                <Option
+                  v-for="item in checkStateArr"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+            <FormItem label="对账金额" prop="checkPrice">
+              <Input
+                v-model="form.checkPrice"
+                placeholder="请输入对账金额"
+                type="number"
+                number
+              />
+            </FormItem>
+            <FormItem label="服务费合计" prop="settlePrice">
+              <Input
+                v-model="form.settlePrice"
+                placeholder="请输入服务费合计"
+                type="number"
+                number
+              />
+            </FormItem>
+            <FormItem label="审核图片" prop="checkPicture" key="checkPicture">
+              <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
+            </FormItem>
+            <FormItem label="审核备注" prop="checkRemark">
+              <Input v-model="form.checkRemark" type="textarea" :rows="3"></Input>
+            </FormItem>
+          </div>
+        </div>
           <Spin fix v-if="flag == true">
             <Icon
               type="ios-loading"
@@ -86,7 +179,7 @@
       <div slot="footer" class="foot">
         <div class="foot_left">
           <div class="foot_title">当前对账单合计服务费：<span style="color:red;font-weight:bold">{{reconciliationParams.returnBackTotalPrice == 0 ? 0 : reconciliationParams.returnBackTotalPrice.toFixed(2)}}</span></div>
-          <div class="foot_title">累计审核服务费合计：<span style="color:red;font-weight:bold">{{settlePriceNum == 0 ? 0 : settlePriceNum.toFixed(2)}}</span></div>
+          <div class="foot_title">累计审核服务费合计：<span style="color:red;font-weight:bold">{{settlePriceNum1 == 0 && settlePriceNum2 == 0 && settlePriceNum ==0 ? 0 : (settlePriceNum1+settlePriceNum2+settlePriceNum3).toFixed(2) }}</span></div>
         </div>
         <div>
           <Button @click="handleCancel">取消</Button>
@@ -103,9 +196,15 @@ import * as api from "@/api/contentPlatFormOrderDealInfo";
 import * as reconapi from "@/api/reconciliationDocuments";
 import upload from "@/components/upload/upload";
 import * as orderapi from "@/api/orderManage";
+import order from "../order.vue"
+import contentOrder from "../contentOrder.vue"
+import liter from "../liter.vue"
 export default {
   components: {
     upload,
+    order,
+    contentOrder,
+    liter
   },
   props: {
     reconciliationCompletionListModel: Boolean,
@@ -113,6 +212,7 @@ export default {
   },
   data() {
     return {
+      active:"order",
       settlePriceNum:0,
       flag: false,
       // 审核状态 审核成功/审核失败
@@ -130,6 +230,21 @@ export default {
         uploadList: [],
       },
       form: {
+        // 左边字段
+        // 成交金额
+        checkPriceRight:0,
+        // 信息服务费比例
+        proportionOfInformationServiceFee:0,
+        // 信息服务费金额
+        informationServiceFeePrice:0,
+        // 系统使用费比列
+        systemUsageFeeProportion:0,
+        // 系统使用费金额
+        systemUsageFeePrice:0,
+        // 服务费合计
+        totalServiceFee:0,
+
+        // 右边字段
         id: null,
         // 审核状态
         checkState: "",
@@ -216,7 +331,7 @@ export default {
         pageSize: 10,
         columns: [
           {
-            title: "对账单id",
+            title: "对账单编号",
             key: "reconciliationDocumentsId",
             minWidth: 170,
             align: "center",
@@ -375,6 +490,13 @@ export default {
                         this.form.orderDealInfoId = id;
                         this.form.checkPrice = this.reconciliationParams.totalDealPrice;
                         this.form.settlePrice = this.reconciliationParams.returnBackTotalPrice;
+                        // 成交金额
+                        this.form.checkPriceRight = price
+                        this.form.proportionOfInformationServiceFee = this.reconciliationParams.returnBackPricePercent
+                        this.form.systemUsageFeeProportion = this.reconciliationParams.systemUpdatePricePercent
+                        this.form.informationServiceFeePrice = ((this.form.checkPriceRight * this.form.proportionOfInformationServiceFee) /100).toFixed(2)
+                        this.form.systemUsageFeePrice = ((this.form.checkPriceRight * this.form.systemUsageFeeProportion) /100).toFixed(2)
+                        this.form.totalServiceFee = (Number(this.form.informationServiceFeePrice) + Number(this.form.systemUsageFeePrice)).toFixed(2)
                       },
                     },
                   },
@@ -387,11 +509,24 @@ export default {
         data: [],
         totalCount: 0,
       },
+      settlePriceNum1:0,
+      settlePriceNum2:0,
+      settlePriceNum3:0,
     };
   },
   methods: {
+    settlePriceChange1(value){
+      this.settlePriceNum1 = value
+    },
+    settlePriceChange2(value){
+      this.settlePriceNum2 = value
+    },
+    settlePriceChange3(value){
+      this.settlePriceNum3 = value
+    },
     submitRecon() {
-      if(this.reconciliationParams.returnBackTotalPrice != this.settlePriceNum){
+      let settlePriceNum = (this.settlePriceNum1+this.settlePriceNum2+this.settlePriceNum3).toFixed(2)
+      if(this.reconciliationParams.returnBackTotalPrice != settlePriceNum){
         this.$Message.warning('当前对账服务费合计金额有偏差，无法完成对账，请检查！')
         return
       }
@@ -407,9 +542,6 @@ export default {
           reconapi.tagReconciliationState(data).then((res) => {
             if (res.code === 0) {
               this.$Message.success("已成功对账");
-              this.getContentPlatFormOrderDealInfo(
-                this.reconciliationParams.customerPhone
-              );
               this.$emit("update:reconciliationCompletionListModel", false);
             }
           });
@@ -440,6 +572,10 @@ export default {
             checkRemark,
             checkPicture,
             orderDealInfoId,
+            informationServiceFeePrice,
+            systemUsageFeePrice,
+            checkPriceRight,
+            totalServiceFee
           } = this.form;
           const data = {
             id,
@@ -450,7 +586,39 @@ export default {
             checkPicture,
             orderDealInfoId,
             reconciliationDocumentsId: this.reconciliationParams.id,
+            informationPrice:Number(informationServiceFeePrice),
+            systemUpdatePrice:Number(systemUsageFeePrice)
           };
+          if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
+            this.$Modal.confirm({
+              title: "审核确认提示",
+              content: "当前成交单与对账单的对账金额或服务费合计不一致，是否仍要审核通过？",
+              onOk: () => {
+                orderapi.checkContentPlateFormOrder(data).then((res) => {
+                  if (res.code === 0) {
+                    this.flag = false;
+                    this.controlModal = false;
+                    this.cancelSubmit("form");
+                    this.getContentPlatFormOrderDealInfo(
+                      this.reconciliationParams.customerPhone
+                    );
+                    this.$Message.success({
+                      content: "提交成功",
+                      duration: 3,
+                    });
+                  } else if (res.code != -1 || res.code != 0) {
+                    this.$Message.error("操作失败，请联系管理员");
+                  } else {
+                    setTimeout(() => {
+                      this.flag = false;
+                    }, 3000);
+                  }
+                });
+              },
+              onCancel: () => {},
+            });
+            return
+          }
           this.flag = true;
           orderapi.checkContentPlateFormOrder(data).then((res) => {
             if (res.code === 0) {
@@ -697,14 +865,13 @@ export default {
     handleCancel(name) {
       this.$emit("update:reconciliationCompletionListModel", false);
       this.$emit("getHospitalInfo");
-      // this.$refs[name].resetFields();
-      // this.$refs.importFiles.file = {};
+      this.active ="order"
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
       if (!value) {
         this.handleCancel("importFileForm");
-        // this.$refs.importFiles.file = {};
+        this.active ="order"
       }
     },
     // modal 显示状态发生变化时触发
@@ -717,9 +884,20 @@ export default {
       }
     },
   },
+  created(){
+   
+  },
   watch: {
     reconciliationCompletionListModel(value) {
       this.control = value;
+      if(value == true){  
+        this.$nextTick(()=>{
+          this.$refs.order.getContentPlatFormOrderDealInfo(this.reconciliationParams.customerPhone)
+          this.$refs.contentOrder.getContentPlatFormOrderDealInfo(this.reconciliationParams.customerPhone)
+          this.$refs.liter.getContentPlatFormOrderDealInfo(this.reconciliationParams.customerPhone)
+        })
+      }
+      
     },
   },
 };
@@ -739,5 +917,13 @@ export default {
 .foot_title{
   font-size: 16px;
   margin-right: 30px;
+}
+.form_content{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.form_left,.form_right{
+  width: 49%;
 }
 </style>

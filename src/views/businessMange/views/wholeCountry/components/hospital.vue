@@ -62,7 +62,6 @@ export default {
         oldCustomerUnitPrices.unshift(item.oldCustomerUnitPrice);
         newOrOldCustomerRates.unshift(item.newOrOldCustomerRate);
       });
-      console.log(sendNums,hospitalNames)
       let option = {
         tooltip: {
           trigger: "axis",

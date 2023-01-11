@@ -189,7 +189,7 @@
           </div>
           <div class="mr_top">
             <span class="title_bold">对账金额：</span>
-            <span>{{ upgradeOrderObjs.checkSettlePrice }} </span>
+            <span>{{ upgradeOrderObjs.checkBuyAgainPrice }} </span>
           </div>
           <!-- <div class="mr_top">
             <span class="title_bold">服务费合计：</span>

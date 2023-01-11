@@ -397,3 +397,43 @@ export const addCustomerIntergration = (data) => {
         data,
     });
 };
+// 对账单 升单列表
+export const listByCustomerPhone = (params) => {
+    return http({
+        url: `/amiyabg/CustomerHospitalConsume/listByCustomerPhone`,
+        method: "get",
+        params
+    });
+};
+// 根据加密手机号获取发放礼品的初始数据
+export const getSendGiftBaseInfo = (params) => {
+    return http({
+        url: `/amiyabg/Gift/SendGiftBaseInfo`,
+        method: "get",
+        params,
+    });
+};
+// 根据礼品类别获取礼品名称列表
+export const giftNameList = (params) => {
+    return http({
+        url: `/amiyabg/Gift/giftNameList`,
+        method: "get",
+        params
+    });
+};
+// 获取收货地址列表
+export const getAddressList = (params) => {
+    return http({
+        url: `/amiyabg/Address/list`,
+        method: "get",
+        params
+    });
+};
+// 手动发放礼品
+export const SendGift = (data) => {
+    return http({
+        url: `/amiyabg/Gift/SendGift`,
+        method: "post",
+        data,
+    });
+};

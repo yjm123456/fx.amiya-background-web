@@ -392,6 +392,28 @@ export default {
             },
           },
           {
+            title: "是否重单深度",
+            key: "isRepeatProfundityOrder",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isRepeatProfundityOrder,
+                    size: "default",
+                    disabled:
+                      params.row.isRepeatProfundityOrder === true ||
+                      params.row.isRepeatProfundityOrder === false,
+                  },
+                },
+                h("span", { isRepeatProfundityOrder: "open" }, "开"),
+                h("span", { isRepeatProfundityOrder: "close" }, "关")
+              );
+            },
+          },
+          {
             title: "是否到院",
             key: "isToHospital",
             minWidth: 120,

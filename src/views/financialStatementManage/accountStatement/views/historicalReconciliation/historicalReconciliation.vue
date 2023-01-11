@@ -17,7 +17,7 @@
             v-if="employeeType == 'amiyaEmployee'"
           >
             <Option
-              v-for="item in hospitalInfo"
+              v-for="item in hospitalAllList"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
@@ -25,7 +25,7 @@
           </Select>
           <Select
             v-model="query.reconciliationState"
-            style="margin-left: 10px; width: 200px"
+            style="margin-left: 10px; width: 150px"
             
           >
             <Option v-for="item in typeList" :value="item.id" :key="item.id" >{{
@@ -35,28 +35,28 @@
           <DatePicker
             type="date"
             placeholder="创建开始日期"
-            style="width: 180px; margin-left: .625rem"
+            style="width: 150px; margin-left: .625rem"
             :value="query.startDate"
             v-model="query.startDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="创建结束时间"
-            style="width: 180px;margin-left: .625rem;"
+            style="width: 150px;margin-left: .625rem;"
             :value="query.endDate"
             v-model="query.endDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="成交开始日期"
-            style="width: 180px; margin-left: .625rem"
+            style="width: 150px; margin-left: .625rem"
             :value="query.startDealDate"
             v-model="query.startDealDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="成交结束时间"
-            style="width: 180px;margin-left: .625rem;"
+            style="width: 150px;margin-left: .625rem;"
             :value="query.endDealDate"
             v-model="query.endDealDate"
           ></DatePicker>
@@ -73,30 +73,16 @@
             v-if="employeeType == 'amiyaEmployee' && query.reconciliationState == 3"
             >回款</Button
           >
-          <!-- <Button
+          <Button
             type="primary"
+            @click="exportChange"
             style="margin-left: 10px"
-            @click="exportChange()"
-            >下载模版</Button
+            v-if="employeeType == 'amiyaEmployee'"
+            >导出</Button
           >
-          <Button
-          type="primary"
-          style="margin-left: 10px"
-          @click="importControlModal = true"
-          >导入</Button
-        > -->
+         
         </div>
-        <!-- <div class="right">
-          <Button
-            type="primary"
-            @click="
-              controlModal = true;
-              title = '添加';
-            "
-            v-if="employeeType== 'hospitalEmployee'"
-            >添加</Button
-          >
-        </div> -->
+        
       </div>
     </Card>
 
@@ -114,7 +100,11 @@
         ></Table>
       </div>
       <div class="page_wrap">
-        <div class="bottom_title">服务费合计: <span style="color:red;font-weight:bold">{{collectionNum == 0 ? 0 : collectionNum.toFixed(2)}}</span></div>
+        <div class="bottom_title">
+          <span  class="bottom_right"> 信息服务费合计: <span style="color:red;font-weight:bold">{{returnBackPriceNum == 0 ? 0 : returnBackPriceNum.toFixed(2)}}</span></span>
+          <span  class="bottom_right"> 系统维护费合计: <span style="color:red;font-weight:bold">{{systemUpdatePriceNum == 0 ? 0 : systemUpdatePriceNum.toFixed(2)}}</span></span>
+          <span class="bottom_right"> 服务费合计: <span style="color:red;font-weight:bold">{{collectionNum == 0 ? 0 : collectionNum.toFixed(2)}}</span></span>
+        </div>
         <Page
           ref="pages"
           :current="query.pageNum"
@@ -184,14 +174,20 @@ export default {
   },
   props: {
     activeName: String,
-    hospitalInfo:Array
+    hospitalAllList:Array
   },
   data() {
     return {
+      // 信息服务费合计
+      returnBackPriceNum:0,
+      // 系统维护金额合计
+      systemUpdatePriceNum:0,
+      // 服务费合计
       collectionNum:0,
       viewTransactionOrderModel: false,
       viewTransactionOrderParams: {
         id: "",
+        tabFlag:false
       },
       typeList: [
         {
@@ -205,7 +201,7 @@ export default {
       ],
       // 查询
       query: {
-        hospitalId:null,
+        hospitalId:-1,
         reconciliationState: 3,
         keyword: "",
         startDate: this.$moment()
@@ -224,6 +220,12 @@ export default {
             key: "_checked",
             align: "center",
             minWidth: 60,
+          },
+          {
+            title: "对账单编号",
+            key: "id",
+            width: 170,
+            align:'center'
           },
           {
             title: "医院",
@@ -246,6 +248,7 @@ export default {
             key: "dealGoods",
             width: 160,
             align: "center",
+            tooltip:true
           },
           {
             title: "成交时间",
@@ -315,6 +318,20 @@ export default {
             width: 220,
           },
           {
+            title: "创建时间",
+            key: "createDate",
+            width: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.createDate
+                  ? this.$moment(params.row.createDate).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              );
+            },
+          },
+          {
             title: "创建人",
             key: "createByName",
             width: 140,
@@ -342,8 +359,9 @@ export default {
                       click: () => {
                         const { id } = params.row;
                         this.viewTransactionOrderParams.id = id;
+                        this.viewTransactionOrderParams.tabFlag = true;
                         this.viewTransactionOrderModel = true;
-                        this.$refs.viewTransactionOrder.getContentPlatFormOrderDealInfo();
+                        // this.$refs.viewTransactionOrder.getContentPlatFormOrderDealInfo();
                       },
                     },
                   },
@@ -418,6 +436,8 @@ export default {
     },
     handleSelect(selection, row) {
       this.collectionNum += row.returnBackTotalPrice
+      this.returnBackPriceNum += row.returnBackPrice
+      this.systemUpdatePriceNum += row.systemUpdatePrice
       // 回款
       this.form.reconciliationDocumentsIdList.add(row.id);
     },
@@ -425,24 +445,71 @@ export default {
       // 回款
       this.form.reconciliationDocumentsIdList.delete(row.id);
       this.collectionNum = this.collectionNum - row.returnBackTotalPrice
+      this.returnBackPriceNum = this.returnBackPriceNum - row.returnBackPrice
+      this.systemUpdatePriceNum = this.systemUpdatePriceNum - row.systemUpdatePrice
     },
 
     handleSelectAll(selection) {
       if (selection && selection.length === 0) {
         this.form.reconciliationDocumentsIdList.clear();
         this.collectionNum = 0
+        this.returnBackPriceNum = 0
+        this.systemUpdatePriceNum = 0
       } else {
         selection.forEach((item) => {
           this.form.reconciliationDocumentsIdList.add(item.id);
           this.collectionNum += item.returnBackTotalPrice
+          this.returnBackPriceNum += item.returnBackPrice
+          this.systemUpdatePriceNum += item.systemUpdatePrice
         });
       }
     },
-    // 导出模版
-    exportChange() {
-      api.exportReconciliationDocuments().then((res) => {
-        let name = "财务对账单";
-        download(res, name);
+    // 导出
+    exportChange(){
+      const {
+        pageNum,
+        pageSize,
+        keyword,
+        startDealDate,
+        endDealDate,
+        startDate,
+        endDate,
+        reconciliationState,
+        hospitalId
+      } = this.query;
+      const data = {
+        pageNum,
+        pageSize,
+        keyword,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        startDealDate: startDealDate
+          ? this.$moment(startDealDate).format("YYYY-MM-DD")
+          : null,
+        endDealDate: endDealDate
+          ? this.$moment(endDealDate).format("YYYY-MM-DD")
+          : null,
+        reconciliationState,
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
+      };
+      if(!startDate || !endDate){
+        this.$Message.error('请选择日期')
+        return
+      }
+      // 判断开始时间与结束时间不能超过一个月
+      if(this.$moment(endDate).diff(startDate, 'months')){
+        this.$Message.error('开始时间与结束时间不能超过一个月，请重新选择后再进行查询')
+        return
+      }
+      if(this.query.data.length==0){
+          this.$Message.error('没有数据时不支持导出')
+          return
+      }
+      api.exportInternalExportReconciliationDocuments(data).then((res) => {
+        let name = this.$moment(new Date(startDate)).format("YYYY-MM-DD") + '-' + this.$moment(new Date(endDate)).format("YYYY-MM-DD") + '历史账单'
+        download(res,name);
       });
     },
     // 获取对账单列表
@@ -476,11 +543,13 @@ export default {
           ? this.$moment(endDealDate).format("YYYY-MM-DD")
           : null,
         reconciliationState,
-        hospitalId:this.employeeType == 'amiyaEmployee' ? hospitalId : sessionStorage.getItem('hospitalId')
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
       };
       api.getReconciliationDocuments(data).then((res) => {
         if (res.code === 0) {
           this.collectionNum = 0
+          this.returnBackPriceNum = 0
+          this.systemUpdatePriceNum = 0
           this.form.reconciliationDocumentsIdList.clear();
           const { list, totalCount } = res.data.reconciliationDocumentsInfo;
           this.query.data = list;
@@ -516,11 +585,13 @@ export default {
           ? this.$moment(endDealDate).format("YYYY-MM-DD")
           : null,
         reconciliationState,
-        hospitalId:this.employeeType == 'amiyaEmployee' ? hospitalId : sessionStorage.getItem('hospitalId')
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
       };
       api.getReconciliationDocuments(data).then((res) => {
         if (res.code === 0) {
           this.collectionNum = 0
+          this.returnBackPriceNum = 0
+          this.systemUpdatePriceNum = 0
           this.form.reconciliationDocumentsIdList.clear();
           const { list, totalCount } = res.data.reconciliationDocumentsInfo;
           this.query.data = list;
@@ -581,6 +652,8 @@ export default {
         if (value === "historicalReconciliation") {
           this.getHospitalInfo();
           this.collectionNum = 0
+          this.returnBackPriceNum = 0
+          this.systemUpdatePriceNum = 0
         }
       },
       immediate: true,
@@ -607,5 +680,8 @@ export default {
 }
 .bottom_title{
   font-size: 16px;
+}
+.bottom_right{
+  margin-right: 20px;
 }
 </style>

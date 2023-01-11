@@ -672,6 +672,28 @@ export default {
             align:'center'
           },
           {
+            title: "是否重单深度",
+            key: "isRepeatProfundityOrder",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isRepeatProfundityOrder,
+                    size: "default",
+                    disabled:
+                      params.row.isRepeatProfundityOrder === true ||
+                      params.row.isRepeatProfundityOrder === false,
+                  },
+                },
+                h("span", { isRepeatProfundityOrder: "open" }, "开"),
+                h("span", { isRepeatProfundityOrder: "close" }, "关")
+              );
+            },
+          },
+          {
             title: "是否成交",
             key: "isDeal",
             minWidth: 120,
@@ -758,6 +780,18 @@ export default {
             title: "对账金额",
             key: "checkPrice",
             minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "信息服务费",
+            key: "informationPrice",
+            minWidth: 140,
+            align:'center'
+          },
+          {
+            title: "系统使用费",
+            key: "systemUpdatePrice",
+            minWidth: 140,
             align:'center'
           },
           {
@@ -1371,7 +1405,9 @@ export default {
             checkPrice,
             checkRemark,
             checkPicture,
-            orderDealInfoId
+            orderDealInfoId,
+            informationPrice:0,
+            systemUpdatePrice:0
           };
           this.flag = true
           api.checkContentPlateFormOrder(data).then((res) => {

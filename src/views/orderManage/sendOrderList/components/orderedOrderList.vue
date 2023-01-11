@@ -408,7 +408,6 @@ export default {
                                   purchaseNum,
                                   purchaseSiglePrice
                                 } = res.data.sendOrderInfo;
-                                console.log(res.data.sendOrderInfo)
                                 this.form.purchaseNum = purchaseNum;
                                 this.form.purchaseSinglePrice= purchaseSiglePrice;
                                 // 已参与项目医院

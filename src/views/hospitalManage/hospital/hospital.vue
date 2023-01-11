@@ -200,6 +200,11 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="是否在小程序展示" prop="isShareInMiniProgram" >
+              <i-switch v-model="form.isShareInMiniProgram" />
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
               <i-switch v-model="form.valid" />
             </FormItem>
@@ -371,8 +376,38 @@ export default {
             title: "是否有效",
             key: "valid",
             minWidth: 120,
+            align:'center',
             render: (h, params) => {
               if (params.row.valid == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "是否在小程序展示",
+            key: "isShareInMiniProgram",
+            minWidth: 160,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isShareInMiniProgram == true) {
                 return h("Icon", {
                   props: {
                     type: "md-checkmark",
@@ -552,7 +587,9 @@ export default {
         // 到期时间
         dueTime: null,
         // 归属公司
-        belongCompany:''
+        belongCompany:'',
+        // 是否在小程序里展示
+        isShareInMiniProgram:false
       },
 
       ruleValidate: {

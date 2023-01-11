@@ -402,7 +402,7 @@ export default {
           {
             title: "服务费合计",
             key: "settlePrice",
-            minWidth: 100,
+            minWidth: 120,
             align:'center'
           },
           {

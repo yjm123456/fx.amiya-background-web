@@ -372,9 +372,9 @@
                 @on-change="liveAnchorChange(form.liveAnchorId)"
               >
                 <Option
-                  v-for="item in liveAnchors"
+                  v-for="(item,index) in liveAnchors"
                   :value="item.id"
-                  :key="item.id"
+                  :key="index"
                   >{{ item.hostAccountName }}</Option
                 >
               </Select>
@@ -395,12 +395,12 @@
                 v-model="form.liveAnchorWeChatNo"
                 placeholder="请选择主播微信号"
                 :disabled="form.liveAnchorId == null"
-                
+                filterable
               >
                 <Option
-                  v-for="item in weChatList"
+                  v-for="(item,indexs) in weChatList"
                   :value="item.weChatNo"
-                  :key="item.weChatNo"
+                  :key="indexs"
                   >{{ item.weChatNo }}</Option
                 >
               </Select>
@@ -1659,6 +1659,8 @@ export default {
       if (!value) {
         return;
       }
+      this.form.liveAnchorWeChatNo= ''
+      this.form.liveAnchorWechatNo= ''
       this.getWeChatList(value);
     },
     //  根据主播获取主播微信号

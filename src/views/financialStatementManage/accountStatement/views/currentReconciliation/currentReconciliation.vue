@@ -9,20 +9,6 @@
             style="width: 200px; "
             @keyup.enter.native="getHospitalInfo()"
           />
-          <Select
-            v-model="query.hospitalId"
-            placeholder="请选择医院"
-            filterable
-            style="width: 240px;margin-left:10px"
-            v-if="employeeType == 'amiyaEmployee'"
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
           <DatePicker
             type="date"
             placeholder="创建开始日期"
@@ -63,7 +49,6 @@
             style="margin-left: 10px"
             >标记对账单状态</Button
           >
-
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -262,27 +247,16 @@
       :importControlModal.sync="importControlModal"
       @handleRefreshCustomerTrackList="getHospitalInfo()"
     ></importFile>
-    <!-- 对账完成列表 -->
-    <reconciliationCompletionList
-      :reconciliationCompletionListModel.sync="
-        reconciliationCompletionListModel
-      "
-      :reconciliationParams="reconciliationParams"
-      ref="reconciliationCompletionList"
-      @getHospitalInfo="getHospitalInfo"
-    />
   </div>
 </template>
 <script>
 import * as api from "@/api/reconciliationDocuments";
 import { download } from "@/utils/util";
 import importFile from "../../components/import/importModel.vue";
-import reconciliationCompletionList from "../../components/import/reconciliationCompletionList.vue";
 
 export default {
   components: {
     importFile,
-    reconciliationCompletionList,
   },
   props: {
     activeName: String,
@@ -443,7 +417,7 @@ export default {
             title: "操作",
             key: "",
             fixed: "right",
-            width: 150,
+            width: 100,
             align: "center",
             render: (h, params) => {
               return h("div", [
@@ -492,45 +466,6 @@ export default {
                     },
                   },
                   "修改"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: this.employeeType != "amiyaEmployee",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const {
-                          id,
-                          customerPhone,
-                          totalDealPrice,
-                          returnBackTotalPrice,
-                          returnBackPrice,
-                          returnBackPricePercent,
-                          systemUpdatePricePercent
-                        } = params.row;
-                        this.reconciliationParams.idList = [id];
-                        this.reconciliationParams.reconciliationState = 3;
-                        this.reconciliationParams.questionReason = "";
-                        this.reconciliationParams.customerPhone = customerPhone;
-                        this.reconciliationParams.totalDealPrice = totalDealPrice;
-                        this.reconciliationParams.returnBackTotalPrice = returnBackTotalPrice;
-                        this.reconciliationParams.returnBackPrice = returnBackPrice;
-                        this.reconciliationParams.returnBackPricePercent = returnBackPricePercent;
-                        this.reconciliationParams.systemUpdatePricePercent = systemUpdatePricePercent;
-                        this.reconciliationParams.id = id;
-                        this.reconciliationCompletionListModel = true;
-                        this.reconciliationParams.tabFlag =  true
-                      },
-                    },
-                  },
-                  "对账"
                 ),
               ]);
             },

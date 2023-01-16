@@ -9,20 +9,6 @@
             style="width: 200px; "
             @keyup.enter.native="getHospitalInfo()"
           />
-          <Select
-            v-model="query.hospitalId"
-            placeholder="请选择医院"
-            filterable
-            style="width: 240px;margin-left:10px"
-            v-if="employeeType == 'amiyaEmployee'"
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
           <DatePicker
             type="date"
             placeholder="创建开始日期"
@@ -64,19 +50,6 @@
             v-if="employeeType == 'hospitalEmployee'"
             >标记对账单状态</Button
           >
-
-          <!-- <Button
-            type="primary"
-            style="margin-left: 10px"
-            @click="exportChange()"
-            >下载模版</Button
-          >
-          <Button
-          type="primary"
-          style="margin-left: 10px"
-          @click="importControlModal = true"
-          >导入</Button
-        > -->
           <Button
             type="error"
             @click="deleteClick"
@@ -85,17 +58,6 @@
             >删除</Button
           >
         </div>
-        <!-- <div class="right">
-          <Button
-            type="primary"
-            @click="
-              controlModal = true;
-              title = '添加';
-            "
-            v-if="employeeType== 'hospitalEmployee'"
-            >添加</Button
-          >
-        </div> -->
       </div>
     </Card>
 
@@ -680,13 +642,7 @@ export default {
         }
       });
     },
-    // 导出模版
-    exportChange() {
-      api.exportReconciliationDocuments().then((res) => {
-        let name = "财务对账单";
-        download(res, name);
-      });
-    },
+    
     // 标记对账单
     markStatement() {
       if (![...this.markStatementform.orderId].length) {

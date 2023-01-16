@@ -325,9 +325,9 @@
                 @on-change="liveAnchorChange(form.liveAnchorId)"
               >
                 <Option
-                  v-for="item in liveAnchors"
+                  v-for="(item,index) in liveAnchors"
                   :value="item.id"
-                  :key="item.id"
+                  :key="index"
                   >{{ item.hostAccountName }}</Option
                 >
               </Select>
@@ -346,9 +346,9 @@
                 filterable
               >
                 <Option
-                  v-for="item in weChatList"
+                  v-for="(item,indexs) in weChatList"
                   :value="item.weChatNo"
-                  :key="item.weChatNo"
+                  :key="indexs"
                   >{{ item.weChatNo }}</Option
                 >
               </Select>
@@ -1284,7 +1284,7 @@ export default {
           {
             title: "操作",
             align: "center",
-            minWidth: 230,
+            minWidth: 330,
             fixed: "right",
             render: (h, params) => {
               return h("div", [
@@ -1313,6 +1313,44 @@ export default {
                     },
                   },
                   "订单详情"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled:params.row.isRepeatProfundityOrder ==  false,
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        this.$Modal.confirm({
+                          title: "确认重单可深度状态提示",
+                          content: "是否要关闭重单可深度状态吗？",
+                          onOk: () => {
+                            const { id } = params.row;
+                            const data = {
+                              contentPlateFormId:id
+                            }
+                            api.colseRepeatProfundityOrder(data).then((res) => {
+                              if (res.code === 0) {
+                                this.getOrderInfo();
+                                this.$Message.success({
+                                  content: "关闭成功",
+                                  duration: 3,
+                                });
+                              }
+                            });
+                          },
+                          onCancel: () => {},
+                        });
+                      },
+                    },
+                  },
+                  "关闭重单深度"
                 ),
                 // h(
                 //   "Button",
@@ -1740,6 +1778,7 @@ export default {
       if (!value) {
         return;
       }
+      this.form.liveAnchorWeChatNo = ''
       this.getLiveValidList(value);
     },
     //

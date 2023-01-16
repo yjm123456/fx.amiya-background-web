@@ -1372,3 +1372,11 @@ export const tenantAdd = (data) => {
         data
     });
 };
+// 关闭重单可深度
+export const colseRepeatProfundityOrder = (data) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormOrder/colseRepeatProfundityOrder`,
+        method: "post",
+        data
+    });
+};

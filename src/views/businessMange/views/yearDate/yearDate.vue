@@ -9,39 +9,40 @@
                     style="width: 200px"
                     v-model="query.year"
                     transfer
+                    :options="options"
                 ></DatePicker>
                 <Button type="primary" @click="getHospitalOperationYearData" style="margin-left: 10px">查询</Button>
             </div>
-            <div>
+            <div style="height:680px">
                 <!--前十机构运营数据（11条数据10条+1条总计）  -->
-                <Table :row-class-name="rowClassName" :columns="query.columns" :data="query.data1" border></Table>
+                <Table :row-class-name="rowClassName" :columns="query.columns" :data="query.data1" border height="400"></Table>
                 <!-- 其他机构运营数据 -->
-                <Table :columns="query.columns2" :data="query.data2" border :show-header="false" v-if="query.data2"></Table>
+                <Table :columns="query.columns2" :data="query.data2" border :show-header="false" v-if="query.data2" height="250"></Table>
                 <!-- 合计 -->
-                <Table :columns="query.columns3" :data="query.data3" border :show-header="false" v-if="query.data3" :row-class-name="rowClassName2"></Table>
+                <Table :columns="query.columns3" :data="query.data3" border :show-header="false" v-if="query.data3" :row-class-name="rowClassName2" height="50"></Table>
             </div>
             <!-- 派单量折线图 -->
-            <dispital :dispitalModel.sync="dispitalModel" :dispatchList="dispatchList"></dispital>
+            <dispital :dispitalModel.sync="dispitalModel" :dispatchList="dispatchList" :hospital="hospital" :date="year"></dispital>
             <!-- 上门数折线图 -->
-            <doorToDoor :doorToDoorModel.sync="doorToDoorModel" :doorToDoorList="doorToDoorList"></doorToDoor>
+            <doorToDoor :doorToDoorModel.sync="doorToDoorModel" :doorToDoorList="doorToDoorList" :hospital="hospital" :date="year"></doorToDoor>
             <!-- 上门率折线图 -->
-            <doorToDoorRate :doorToDoorRateModel.sync="doorToDoorRateModel" :doorToDoorRateList="doorToDoorRateList"></doorToDoorRate>
+            <doorToDoorRate :doorToDoorRateModel.sync="doorToDoorRateModel" :doorToDoorRateList="doorToDoorRateList" :hospital="hospital" :date="year"></doorToDoorRate>
             <!-- 新客成交 -->
-            <newCustomerDeal :newCustomerDealModel.sync="newCustomerDealModel" :newCustomerDealList="newCustomerDealList"></newCustomerDeal>
+            <newCustomerDeal :newCustomerDealModel.sync="newCustomerDealModel" :newCustomerDealList="newCustomerDealList" :hospital="hospital" :date="year"></newCustomerDeal>
             <!-- 新客成交率 -->
-            <newCustomerDealRate :newCustomerDealRateModel.sync="newCustomerDealRateModel" :newCustomerDealRateList="newCustomerDealRateList"></newCustomerDealRate>
+            <newCustomerDealRate :newCustomerDealRateModel.sync="newCustomerDealRateModel" :newCustomerDealRateList="newCustomerDealRateList" :hospital="hospital" :date="year"></newCustomerDealRate>
             <!-- 新客业绩 -->
-            <newCustomerPerformance :newCustomerPerformanceModel.sync="newCustomerPerformanceModel" :newCustomerPerformanceList="newCustomerPerformanceList"></newCustomerPerformance>
+            <newCustomerPerformance :newCustomerPerformanceModel.sync="newCustomerPerformanceModel" :newCustomerPerformanceList="newCustomerPerformanceList" :hospital="hospital" :date="year"></newCustomerPerformance>
             <!-- 新客客单价 -->
-            <newCustomerPrice :newCustomerPriceModel.sync="newCustomerPriceModel" :newCustomerPriceList="newCustomerPriceList"></newCustomerPrice>
+            <newCustomerPrice :newCustomerPriceModel.sync="newCustomerPriceModel" :newCustomerPriceList="newCustomerPriceList" :hospital="hospital" :date="year"></newCustomerPrice>
             <!-- 老客成交 -->
-            <oldDeal :oldDealModel.sync="oldDealModel" :oldDealList="oldDealList"></oldDeal>
+            <oldDeal :oldDealModel.sync="oldDealModel" :oldDealList="oldDealList" :hospital="hospital" :date="year"></oldDeal>
             <!-- 老客业绩 -->
-            <oldPerformance :oldPerformanceModel.sync="oldPerformanceModel" :oldPerformanceList="oldPerformanceList"></oldPerformance>
+            <oldPerformance :oldPerformanceModel.sync="oldPerformanceModel" :oldPerformanceList="oldPerformanceList" :hospital="hospital" :date="year"></oldPerformance>
             <!-- 老客客单价 -->
-            <oldPerformancePrice :oldPerformancePriceModel.sync="oldPerformancePriceModel" :oldPerformancePriceList="oldPerformancePriceList"></oldPerformancePrice>
+            <oldPerformancePrice :oldPerformancePriceModel.sync="oldPerformancePriceModel" :oldPerformancePriceList="oldPerformancePriceList" :hospital="hospital" :date="year"></oldPerformancePrice>
             <!-- 总业绩 -->
-            <totalPerformance :totalPerformanceModel.sync="totalPerformanceModel" :totalPerformanceList="totalPerformanceList"></totalPerformance>
+            <totalPerformance :totalPerformanceModel.sync="totalPerformanceModel" :totalPerformanceList="totalPerformanceList" :hospital="hospital" :date="year"></totalPerformance>
         </Card>
     </div>
 </template>
@@ -75,7 +76,12 @@ export default {
     },
   data() {
     return {
-     
+      options: {
+            disabledDate (date) {
+                return date && date.valueOf() > Date.now() - 86400000;
+            }
+        },
+        year:"",
       // 查询
       query: {
         rowIndex:0,
@@ -113,11 +119,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.dispitalModel = true
                                this.getHospitalSendOrderBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -147,11 +155,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.doorToDoorModel = true
                                this.getHospitalVisitBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -181,11 +191,14 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.doorToDoorRateModel = true
                                this.getHospitalVisitRateBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
+                               
                             }
                         },
                         },
@@ -215,11 +228,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.newCustomerDealModel = true
                                this.getHospitalNewCustomerDealBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -249,11 +264,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.newCustomerDealRateModel = true
                                this.getHospitalNewCustomerDealRateBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -283,11 +300,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.newCustomerPerformanceModel = true
                                this.getHospitalNewCustomerPerformanceBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -318,11 +337,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.newCustomerPriceModel = true
                                this.getHospitalNewCustomerUnitPriceBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -352,11 +373,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.oldDealModel = true
                                this.getHospitalOldCustomerDealBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -386,11 +409,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.oldPerformanceModel = true
                                this.getHospitalOldCustomerPerformanceBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -420,11 +445,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.oldPerformancePriceModel = true
                                this.getHospitalOldCustomerUnitPriceBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -461,11 +488,13 @@ export default {
                         },
                         on: {
                         click: () => {
-                            const {hospitalId} = params.row
+                            const {hospitalId,hospitalName} = params.row
                             // 判断是最后一行总计的时候不弹窗
                             if(params.index !== (this.query.rowIndex-1)){
                                this.totalPerformanceModel = true
                                this.getHospitalTotalPriceBrokenLine(hospitalId)
+                               this.hospital = hospitalName
+                               this.year = String( this.$moment(this.query.year).format("YYYY"))
                             }
                         },
                         },
@@ -1030,6 +1059,7 @@ export default {
       // 派单量折线图数据
       dispitalModel:false,
       dispatchList:[],
+      hospital:'',
       // 上门数折线图数据
       doorToDoorModel:false,
       doorToDoorList:[],
@@ -1061,6 +1091,9 @@ export default {
       totalPerformanceModel:false,
       totalPerformanceList:[],
     };
+  },
+  mounted(){
+    
   },
   methods: {
     rowClassName2 (row, index) {

@@ -153,24 +153,16 @@
       :importControlModal.sync="importControlModal"
       @handleRefreshCustomerTrackList="getHospitalInfo()"
     ></importFile>
-    <!-- 成交单 -->
-    <viewTransactionOrder
-      :viewTransactionOrderModel.sync="viewTransactionOrderModel"
-      :viewTransactionOrderParams="viewTransactionOrderParams"
-      ref="viewTransactionOrder"
-    />
   </div>
 </template>
 <script>
 import * as api from "@/api/reconciliationDocuments";
 import { download } from "@/utils/util";
 import importFile from "../../components/import/importModel.vue";
-import viewTransactionOrder from "../../components/viewTransactionOrder.vue";
 
 export default {
   components: {
     importFile,
-    viewTransactionOrder,
   },
   props: {
     activeName: String,
@@ -184,11 +176,6 @@ export default {
       systemUpdatePriceNum:0,
       // 服务费合计
       collectionNum:0,
-      viewTransactionOrderModel: false,
-      viewTransactionOrderParams: {
-        id: "",
-        tabFlag:false
-      },
       typeList: [
         {
           id: 3,
@@ -215,12 +202,6 @@ export default {
         pageNum: 1,
         pageSize: 10,
         columns: [
-          {
-            type: "selection",
-            key: "_checked",
-            align: "center",
-            minWidth: 60,
-          },
           {
             title: "对账单编号",
             key: "id",
@@ -335,40 +316,6 @@ export default {
             title: "创建人",
             key: "createByName",
             width: 140,
-          },
-          {
-            title: "操作",
-            key: "",
-            fixed: "right",
-            width: 140,
-            align: "center",
-            render: (h, params) => {
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: this.employeeType == "hospitalEmployee",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.viewTransactionOrderParams.id = id;
-                        this.viewTransactionOrderParams.tabFlag = true;
-                        this.viewTransactionOrderModel = true;
-                        // this.$refs.viewTransactionOrder.getContentPlatFormOrderDealInfo();
-                      },
-                    },
-                  },
-                  "查看成交单"
-                ),
-              ]);
-            },
           },
         ],
         data: [],

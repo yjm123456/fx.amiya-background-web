@@ -113,3 +113,11 @@ export const getListByUnCheckHospitalOrder = (params) => {
         params
     });
 };
+// 获取累计审核服务费合计
+export const getTotalCheckReturnBackPriceById = (params) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocuments/getTotalCheckReturnBackPriceById",
+        method: "get",
+        params
+    });
+};

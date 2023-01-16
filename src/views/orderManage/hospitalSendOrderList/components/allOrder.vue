@@ -995,7 +995,6 @@ export default {
                           props: {
                             name: "confirm",
                             disabled:
-                              params.row.checkState == 2 ||
                               params.row.orderStatus == "重单-不可深度" ||
                               params.row.orderStatus == "已派单",
                           },

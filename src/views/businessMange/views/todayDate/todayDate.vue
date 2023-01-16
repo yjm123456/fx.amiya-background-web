@@ -2,7 +2,7 @@
   <div>
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" :row-class-name="rowClassName"></Table>
+        <Table border :columns="query.columns" :data="query.data" :row-class-name="rowClassName" height="700"></Table>
       </div>
     </Card>
   </div>

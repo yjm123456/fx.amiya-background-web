@@ -1493,6 +1493,18 @@ const financialStatementManage = [{
             import ("@/views/financialStatementManage/accountStatement/accountStatement.vue"),
     },
     {
+        path: "/amyAccountStatement",
+        name: "amyAccountStatement",
+        meta: {
+            title: "对账单列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/amyAccountStatement/amyAccountStatement.vue"),
+    },
+    {
         path: "/unreconciledHospitalList",
         name: "unreconciledHospitalList",
         meta: {
@@ -1504,6 +1516,7 @@ const financialStatementManage = [{
         component: () =>
             import ("@/views/financialStatementManage/unreconciledHospitalList/unreconciledHospitalList.vue"),
     },
+
 ];
 /**
  * 阿美雅

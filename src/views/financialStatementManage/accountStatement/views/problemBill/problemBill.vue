@@ -63,19 +63,6 @@
             style="margin-left: 10px"
             >标记对账单状态</Button
           >
-
-          <!-- <Button
-            type="primary"
-            style="margin-left: 10px"
-            @click="exportChange()"
-            >下载模版</Button
-          >
-          <Button
-          type="primary"
-          style="margin-left: 10px"
-          @click="importControlModal = true"
-          >导入</Button
-        > -->
           <Button
             type="error"
             @click="deleteClick"
@@ -84,17 +71,6 @@
             >删除</Button
           >
         </div>
-        <!-- <div class="right">
-          <Button
-            type="primary"
-            @click="
-              controlModal = true;
-              title = '添加';
-            "
-            v-if="employeeType== 'hospitalEmployee'"
-            >添加</Button
-          > 
-        </div>-->
       </div>
     </Card>
 
@@ -684,13 +660,7 @@ export default {
         }
       });
     },
-    // 导出模版
-    exportChange() {
-      api.exportReconciliationDocuments().then((res) => {
-        let name = "财务对账单";
-        download(res, name);
-      });
-    },
+    
     // 标记对账单
     markStatement() {
       if (![...this.markStatementform.orderId].length) {

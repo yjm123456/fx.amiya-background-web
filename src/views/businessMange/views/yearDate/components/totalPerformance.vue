@@ -7,6 +7,7 @@
         width="1000"
     >
         <div class="wrapper">
+            <div style="color:#516b91;font-size:16px">{{date}}年  {{hospital}}</div>
             <div ref="dom" :style="{ width: '100%', height: '350px' }" ></div>
         </div>
         <div slot="footer">
@@ -22,7 +23,9 @@ echarts.registerTheme("tdTheme", tdTheme);
 export default {
     props:{
         totalPerformanceModel:Boolean,
-        totalPerformanceList:Array
+        totalPerformanceList:Array,
+        hospital:String,
+        date:String,
     },
     components:{
         

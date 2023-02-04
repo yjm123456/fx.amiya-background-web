@@ -838,18 +838,7 @@ const customerManage = [{
         component: () =>
             import ("@/views/customerManage/hospitalClients/hospitalClients.vue"),
     },
-    {
-        path: "/customerLabel",
-        name: "customerLabel",
-        meta: {
-            title: "客户标签",
-            keepAlive: false,
-            isTag: true,
-            openName: ['客户管理'],
-        },
-        component: () =>
-            import ("@/views/customerManage/customerLabel/customerLabel.vue"),
-    },
+
     {
         path: "/chatRoom",
         name: "chatRoom",
@@ -1154,6 +1143,18 @@ const baseDataMaintenance = [{
         },
         component: () =>
             import ("@/views/baseDataMaintenance/corporateManagement/corporateManagement.vue"),
+    },
+    {
+        path: "/customerLabel",
+        name: "customerLabel",
+        meta: {
+            title: "标签管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/customerLabel/customerLabel.vue"),
     },
 ];
 
@@ -1515,6 +1516,30 @@ const financialStatementManage = [{
         },
         component: () =>
             import ("@/views/financialStatementManage/unreconciledHospitalList/unreconciledHospitalList.vue"),
+    },
+    {
+        path: "/statementApprovalRecord",
+        name: "statementApprovalRecord",
+        meta: {
+            title: "对账单审核记录",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/statementApprovalRecord/statementApprovalRecord.vue"),
+    },
+    {
+        path: "/statementListNotUploaded",
+        name: "statementListNotUploaded",
+        meta: {
+            title: "未上传对账单订单",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/statementListNotUploaded/statementListNotUploaded.vue"),
     },
 
 ];

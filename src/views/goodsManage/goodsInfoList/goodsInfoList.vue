@@ -112,6 +112,7 @@ export default {
         },
       ],
       query: {
+        goodsInfopageNumEdit: 1,
         exchangeType:"",
         keyword: "",
         categoryId: -1,
@@ -438,6 +439,8 @@ export default {
           const { list, totalCount } = res.data.goodsInfos;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          // 修改时 保留在当前页面
+          sessionStorage.setItem("goodsInfopageNumEdit", pageNum);
         }
       });
     },

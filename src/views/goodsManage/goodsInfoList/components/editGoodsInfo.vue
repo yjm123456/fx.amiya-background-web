@@ -703,7 +703,11 @@ export default {
             api.modifyGoodsInfo(data).then((res) => {
               if (res.code === 0) {
                 this.handleCancel("form");
-                this.$parent.getGoodsInfoList();
+                this.$parent.handlePageChange(
+                        sessionStorage.getItem("goodsInfopageNumEdit")
+                          ? sessionStorage.getItem("goodsInfopageNumEdit")
+                          : 1
+                      );
                 this.$Message.success({
                   content: "修改成功",
                   duration: 3,

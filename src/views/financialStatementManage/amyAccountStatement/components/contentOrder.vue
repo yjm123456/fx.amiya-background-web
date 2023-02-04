@@ -542,6 +542,14 @@ export default {
             informationPrice:Number(proportionOfInformationServiceFee) * Number(checkPrice) /100,
             systemUpdatePrice:Number(systemUsageFeeProportion) * Number(checkPrice) /100
           };
+          if(checkPrice> checkPriceRight){
+            this.$Message.warning('该成交单只能审核成交金额' + checkPriceRight + '元，请确认后重新输入对账金额')
+            return
+          }
+          if(settlePrice> totalServiceFee){
+            this.$Message.warning('该成交单只能审核服务费合计金额' + totalServiceFee + '元，请确认后重新输入服务费合计金额')
+            return
+          }
           if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
             this.$Modal.confirm({
               title: "审核确认提示",
@@ -570,27 +578,29 @@ export default {
               onCancel: () => {},
             });
             return
-          }
-          this.flag = true;
-          orderapi.checkContentPlateFormOrder(data).then((res) => {
-            if (res.code === 0) {
-              this.flag = false;
-              this.controlModal = false;
-              this.cancelSubmit("form");
-              this.getContentPlatFormOrderDealInfo(
-                this.reconciliationParams.customerPhone
-              );
-              this.getTotalCheckReturnBackPriceByIdChange()
-              this.$Message.success({
-                content: "提交成功",
-                duration: 3,
-              });
-            } else {
-              setTimeout(() => {
+          }else{
+            this.flag = true;
+            orderapi.checkContentPlateFormOrder(data).then((res) => {
+              if (res.code === 0) {
                 this.flag = false;
-              }, 3000);
-            }
-          });
+                this.controlModal = false;
+                this.cancelSubmit("form");
+                this.getContentPlatFormOrderDealInfo(
+                  this.reconciliationParams.customerPhone
+                );
+                this.getTotalCheckReturnBackPriceByIdChange()
+                this.$Message.success({
+                  content: "提交成功",
+                  duration: 3,
+                });
+              } else {
+                setTimeout(() => {
+                  this.flag = false;
+                }, 3000);
+              }
+            });
+          }
+          
         }
       });
     },

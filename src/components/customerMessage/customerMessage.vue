@@ -170,6 +170,23 @@
                         </FormItem>
                     </Col>
                     <Col span="6">
+                        <FormItem label="标签" prop="tagIds">
+                          <Select
+                            v-model="form.tagIds"
+                            multiple
+                            placeholder="请选择标签"
+                            filterable
+                          >
+                            <Option
+                              v-for="item in customerTagNameList"
+                              :value="item.id"
+                              :key="item.id"
+                              >{{ item.name }}</Option
+                            >
+                          </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="6">
                         <FormItem label="详细地址" prop="detailAddress">
                             <Input
                                 v-model="form.detailAddress"
@@ -229,6 +246,7 @@
 </template>
 <script>
 import * as api from "@/api/customerManage";
+import * as customerTagInfoApi from "@/api/customerTagInfo";
 
 // 客户信息
 import baseInfo from "./components/baseInfo";
@@ -373,6 +391,8 @@ export default {
         isCall:false,
         // 是否发微信
         isSendWeChat:false,
+        // 标签
+        tagIds:[]
 
      },
      ruleValidate: {
@@ -382,7 +402,8 @@ export default {
             message: "请输入手机号",
           },
         ],
-     }
+     },
+     customerTagNameList:[]
     };
   },
   methods: {
@@ -436,7 +457,7 @@ export default {
     // 确认
     handleSubmit(name) {
       const {id,personalWechat,businessWeChat,wechatMiniProgram,officialAccounts,realName,wechatNumber,
-      sex,birthday,city,occupation,otherPhone,detailAddress,isSendNote,isCall,isSendWeChat,unTrackReason,remark,phone,
+      sex,birthday,city,occupation,otherPhone,detailAddress,isSendNote,isCall,isSendWeChat,unTrackReason,remark,phone,tagIds
       } = this.form
       const data = {
         id,
@@ -459,7 +480,8 @@ export default {
         unTrackReason,
         remark,
         phone:this.customerMessageObjs.phone,
-        name:this.form.name
+        name:this.form.name,
+        tagIds
       }
       if(!this.customerMessageObjs.phone){
         this.$Message.warning('无法提交')
@@ -484,6 +506,14 @@ export default {
     this.$emit("update:customerMessageModel", false);
     
     },
+    getTag(){
+      customerTagInfoApi.customerTagNameList().then((res) => {
+        if (res.code === 0) {
+          const { customerTagNameList } = res.data;
+          this.customerTagNameList = customerTagNameList;
+        }
+      });
+  },
 
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -494,8 +524,9 @@ export default {
       }
     },
   },
+  
   created() {
-    // this.getLogisticsCompanyList()
+    this.getTag()
   },
   watch: {
     customerMessageModel(value){
@@ -533,6 +564,11 @@ export default {
         this.form.businessWeChat = value.businessWeChat
         this.form.wechatMiniProgram = value.wechatMiniProgram
         this.form.officialAccounts = value.officialAccounts
+        let tagList = []
+        value.tagList.map(item=>{
+          tagList.push(item.id)
+        })
+        this.form.tagIds = tagList
         this.customerMessageObjs=value
     },
     customerInfoComParams2: {

@@ -115,6 +115,7 @@
           :page-size-opts="[10,50,100,200]"
           @on-change="handlePageChange"
           @on-page-size-change="handlePageSizeChange"
+          transfer
         />
       </div>
     </Card>

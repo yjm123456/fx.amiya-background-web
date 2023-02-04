@@ -292,17 +292,22 @@
 
     <!-- 发放礼品 -->
     <gift :giftModel.sync="giftModel" ref="gift" :giftParams="giftParams"/>
+
+    <!-- 添加标签 -->
+    <tag :tagModel.sync="tagModel" :tagParams="tagParams" :customerTagList="customerTagList"/>
   </div>
 </template>
 
 <script>
 import * as api from "@/api/customerManage";
+import * as customerTagInfoApi from "@/api/customerTagInfo";
 import customerInfo from "@/components/customerInfo/customerInfo";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
 import customerMessage from "@/components/customerMessage/customerMessage";
 import bonusPoint from "./bonusPoints.vue";
 import coupon from "./coupon.vue";
 import gift from "./gifts.vue";
+import tag from "./tag.vue";
 
 export default {
   props: {
@@ -315,9 +320,20 @@ export default {
     bonusPoint,
     coupon,
     gift,
+    tag
   },
   data() {
     return {
+      // 根据id获取已选择的标签
+        customerTagList:[],
+      tagModel:false,
+      // 添加标签参数
+      tagParams:{
+        id:'',
+        customerTagNameList:[],
+        tagIds:[],
+        
+      },
       giftModel: false,
       // 发放礼品组件参数
       giftParams: {
@@ -486,7 +502,7 @@ export default {
           },
           {
             title: "操作",
-            width: 520,
+            width: 580,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -663,6 +679,35 @@ export default {
                   },
                   "赠送积分"
                 ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.tagModel = true
+                        this.tagParams.id= id
+                        let tag = []
+                        customerTagInfoApi.getCustomertagList(id).then((res) => {
+                          if (res.code === 0) {
+                            res.data.customerTagList.map(item=>{
+                              tag.push(item.id)
+                            })
+                            this.customerTagList = tag
+                          }
+                        });
+                      },
+                    },
+                  },
+                  "用户标签"
+                ),
                 // h(
                 //   "Button",
                 //   {
@@ -749,6 +794,15 @@ export default {
     };
   },
   methods: {
+    // 获取所有标签
+    getCustomerTagNameList() {
+      customerTagInfoApi.customerTagNameList().then((res) => {
+        if (res.code === 0) {
+          const { customerTagNameList } = res.data;
+          this.tagParams.customerTagNameList = customerTagNameList;
+        }
+      });
+    },
     // 优惠券列表
     codeList(even) {
       api.codeList().then((res) => {
@@ -1039,6 +1093,7 @@ export default {
     this.getMemberRankLevelList();
     this.getCustomerServiceList();
     this.codeList();
+    this.getCustomerTagNameList()
   },
   watch: {
     activeName: {

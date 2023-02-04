@@ -41,3 +41,24 @@ export const deleteCustomerTagInfo = (id) => {
         method: "delete",
     });
 };
+// 获取分类名称列表
+export const tagCategoryNameList = () => {
+    return http({
+        url: "/amiyabg/CustomerTagInfo/tagCategoryNameList",
+        method: "get",
+    });
+};
+// 获取用户标签名称列表
+export const customerTagNameList = () => {
+    return http({
+        url: "/amiyabg/CustomerTagInfo/customerTagNameList",
+        method: "get",
+    });
+};
+// 根据id获取用户标签
+export const getCustomertagList = (customerId) => {
+    return http({
+        url: `/amiyabg/getCustomertagList/${customerId}`,
+        method: "get",
+    });
+};

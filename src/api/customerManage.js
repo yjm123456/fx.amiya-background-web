@@ -437,3 +437,11 @@ export const SendGift = (data) => {
         data,
     });
 };
+// 添加标签
+export const addCustomerTag = (data) => {
+    return http({
+        url: `/amiyabg/Customer/addCustomerTag`,
+        method: "post",
+        data,
+    });
+};

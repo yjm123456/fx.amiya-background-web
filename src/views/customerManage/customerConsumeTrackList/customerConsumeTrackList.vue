@@ -25,6 +25,35 @@
                   :value="query.endDate"
                   v-model="query.endDate"
                 ></DatePicker>
+                
+                <Select
+                  v-model="query.isConfirmOrder"
+                  style="width: 160px; margin-left: 10px"
+                  placeholder="确认升单状态"
+                >
+                  <Option
+                    v-for="item in isConfirmOrderList"
+                    :value="item.status"
+                    :key="item.status"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+                <DatePicker
+                  type="date"
+                  placeholder="升单开始日期"
+                  style="width: 160px; margin-left: 10px"
+                  :value="query.consumeStartDate"
+                  v-model="query.consumeStartDate"
+                  :disabled="query.isConfirmOrder!='true'"
+                ></DatePicker>
+                <DatePicker
+                  type="date"
+                  placeholder="升单结束日期"
+                  style="width: 160px; margin-left: 10px"
+                  :value="query.consumeEndDate"
+                  v-model="query.consumeEndDate"
+                  :disabled="query.isConfirmOrder!='true'"
+                ></DatePicker>
                 <Select
                   v-model="query.checkState"
                   placeholder="审核状态"
@@ -37,9 +66,12 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
+            </div>
+            <div style="margin-top:10px">
+              
                 <Select
                   v-model="query.consumeType"
-                  style="width: 160px; margin-left: 10px"
+                  style="width: 160px;"
                   placeholder="消费类型"
                 >
                   <Option
@@ -49,23 +81,9 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
-                <Select
-                  v-model="query.isConfirmOrder"
-                  style="width: 160px; margin-left: 10px"
-                  placeholder="确认状态"
-                >
-                  <Option
-                    v-for="item in isConfirmOrderList"
-                    :value="item.status"
-                    :key="item.status"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-            </div>
-            <div style="margin-top:10px">
               <Select
                 v-model="query.buyAgainType"
-                style="width: 180px;"
+                style="width: 180px; margin-left: 10px"
                 placeholder="升单类型"
                 filterable
               >
@@ -648,6 +666,10 @@ export default {
         },
       // 查询
       query: {
+        // 升单开始时间
+        consumeStartDate:'',
+        // 升单结束时间
+        consumeEndDate:'',
         // 是否确认升单
         isConfirmOrder:-1,
         liveAnchorId:null,
@@ -1587,7 +1609,9 @@ export default {
         checkState,
         channel,
         liveAnchorId,
-        isConfirmOrder
+        isConfirmOrder,
+        consumeStartDate,
+        consumeEndDate
       } = this.query;
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
@@ -1602,7 +1626,9 @@ export default {
         checkState,
         channel,
         liveAnchorId,
-        isConfirmOrder:isConfirmOrder==-1 ? null : isConfirmOrder
+        isConfirmOrder:isConfirmOrder==-1 ? null : isConfirmOrder,
+        consumeStartDate:isConfirmOrder =='true' ?  (consumeStartDate ? this.$moment(consumeStartDate).format("YYYY-MM-DD") : null) : null,
+        consumeEndDate:isConfirmOrder =='true' ?  (consumeEndDate ? this.$moment(consumeEndDate).format("YYYY-MM-DD") : null) : null
       };
       api.getCustomerHospitalConsume(data).then((res) => {
         if (res.code === 0) {
@@ -1627,7 +1653,9 @@ export default {
         checkState,
         channel,
         liveAnchorId,
-        isConfirmOrder
+        isConfirmOrder,
+        consumeStartDate,
+        consumeEndDate
       } = this.query;
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
@@ -1642,7 +1670,9 @@ export default {
         checkState,
         channel,
         liveAnchorId,
-        isConfirmOrder:isConfirmOrder==-1 ? null : isConfirmOrder
+        isConfirmOrder:isConfirmOrder==-1 ? null : isConfirmOrder,
+        consumeStartDate:isConfirmOrder =='true' ?  (consumeStartDate ? this.$moment(consumeStartDate).format("YYYY-MM-DD") : null) : null,
+        consumeEndDate:isConfirmOrder =='true' ?  (consumeEndDate ? this.$moment(consumeEndDate).format("YYYY-MM-DD") : null) : null
       };
       api.getCustomerHospitalConsume(data).then((res) => {
         if (res.code === 0) {

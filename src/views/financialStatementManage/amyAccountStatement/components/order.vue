@@ -464,6 +464,14 @@ export default {
             checkPicture,
             reconciliationDocumentsId: this.reconciliationParams.id,
           };
+          if(checkPrice> checkPriceRight){
+            this.$Message.warning('该成交单只能审核成交金额' + checkPriceRight + '元，请确认后重新输入对账金额')
+            return
+          }
+          if(settlePrice> totalServiceFee){
+            this.$Message.warning('该成交单只能审核服务费合计金额' + totalServiceFee + '元，请确认后重新输入服务费合计金额')
+            return
+          }
           if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
             this.$Modal.confirm({
               title: "审核确认提示",

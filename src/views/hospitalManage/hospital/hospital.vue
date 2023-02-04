@@ -281,6 +281,7 @@ export default {
 
       // 查询
       query: {
+        hospitalpageNumEdit: 1,
         isValidList: [
           {
             valid: "true",
@@ -733,6 +734,8 @@ export default {
           const { list, totalCount } = res.data.hospitalInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          // 修改时 保留在当前页面
+          sessionStorage.setItem("hospitalpageNumEdit", pageNum);
         }
       });
     },
@@ -789,7 +792,11 @@ export default {
                 this.flag = false;
                 this.isEdit = false;
                 this.cancelSubmit();
-                this.getHospitalInfo();
+                this.handlePageChange(
+                        sessionStorage.getItem("hospitalpageNumEdit")
+                          ? sessionStorage.getItem("hospitalpageNumEdit")
+                          : 1
+                      );;
                 // window.location.reload()
                 this.$Message.success({
                   content: "修改成功",

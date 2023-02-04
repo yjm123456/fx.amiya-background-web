@@ -78,18 +78,7 @@
                 >{{ item.orderTypeText }}</Option
               >
             </Select> -->
-            <Select
-              v-model="query.checkState"
-              placeholder="审核状态"
-              style="width: 180px;margin-left:10px"
-            >
-              <Option
-                v-for="item in checkStateListAll"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
+            
             
             <Select
               v-model="query.isDeal"
@@ -103,19 +92,23 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Select
-              v-model="query.lastDealHospitalId"
-              style="width: 180px; margin-left: 10px"
-              placeholder="请选择到院医院"
-              filterable
-            >
-              <Option
-                v-for="item in query.lastDealHospitalList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
+            <DatePicker
+              type="date"
+              placeholder="成交开始日期"
+              style="width: 180px;margin-left: 10px"
+              :value="query.dealStartDate"
+              v-model="query.dealStartDate"
+              :disabled="query.isDeal!='true'"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="成交结束日期"
+              style="width: 180px; margin-left: .625rem"
+              :value="query.dealEndDate"
+              v-model="query.dealEndDate"
+              :disabled="query.isDeal!='true'"
+            ></DatePicker>
+            
             <!-- <Select
               v-model="query.ReturnBackPriceState"
               placeholder="回款状态"
@@ -265,8 +258,33 @@
           </div> -->
           <div>
             <Select
-              v-model="query.isOldCustomer"
+              v-model="query.checkState"
+              placeholder="审核状态"
               style="width: 180px;"
+            >
+              <Option
+                v-for="item in checkStateListAll"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.lastDealHospitalId"
+              style="width: 180px; margin-left: 10px"
+              placeholder="请选择到院医院"
+              filterable
+            >
+              <Option
+                v-for="item in query.lastDealHospitalList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.isOldCustomer"
+              style="width: 180px; margin-left: 10px"
               placeholder="新老客业绩"
             >
               <Option
@@ -474,6 +492,7 @@ export default {
       //   审核状态
       checkStateList: [],
       query: {
+        
         // 最小金额
         minAddOrderPrice:null,
         // 最大金额
@@ -486,6 +505,10 @@ export default {
         toHospitalEndDate:'',
         // 是否成交
         isDeal:-1,
+        // 成交开始时间
+        dealStartDate:'',
+        // 成交结束时间
+        dealEndDate:'',
         // 到院医院
         lastDealHospitalId:-1,
         // 是否陪诊
@@ -1261,7 +1284,9 @@ export default {
         sendEndDate,
         consultationType,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        dealStartDate,
+        dealEndDate
       } = this.query;
       const data = {
         pageNum,
@@ -1295,7 +1320,9 @@ export default {
         sendEndDate: sendEndDate ? this.$moment(sendEndDate).format("YYYY-MM-DD") : "",
         consultationType:consultationType == -1 ? null : consultationType,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        dealStartDate:isDeal =='true' ?  (dealStartDate ? this.$moment(dealStartDate).format("YYYY-MM-DD") : null) : null,
+        dealEndDate:isDeal =='true' ?  (dealEndDate ? this.$moment(dealEndDate).format("YYYY-MM-DD") : null) : null
 
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
@@ -1339,7 +1366,9 @@ export default {
         sendEndDate,
         consultationType,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        dealStartDate,
+        dealEndDate
       } = this.query;
       const data = {
         pageNum,
@@ -1373,7 +1402,9 @@ export default {
         sendEndDate: sendEndDate ? this.$moment(sendEndDate).format("YYYY-MM-DD") : "",
         consultationType:consultationType == -1 ? null :consultationType,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        dealStartDate:isDeal =='true' ?  (dealStartDate ? this.$moment(dealStartDate).format("YYYY-MM-DD") : null) : null,
+        dealEndDate:isDeal =='true' ?  (dealEndDate ? this.$moment(dealEndDate).format("YYYY-MM-DD") : null) : null
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
         if (res.code === 0) {

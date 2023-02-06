@@ -7,14 +7,14 @@
           <DatePicker
             type="date"
             placeholder="下单开始日期"
-            style="width: 180px;"
+            style="width: 150px;"
             :value="query.startDate"
             v-model="query.startDate"
         ></DatePicker>
         <DatePicker
             type="date"
             placeholder="下单结束日期"
-            style="width: 180px; margin-left: .625rem"
+            style="width: 150px; margin-left: .625rem"
             :value="query.endDate"
             v-model="query.endDate"
         ></DatePicker>
@@ -24,6 +24,45 @@
             style="width: 200px; margin-left: 10px"
             @keyup.enter.native="getTikTokOrder()"
           />
+          <Select
+              v-model="query.belongLiveAnchorId"
+              placeholder="请选择主播"
+              filterable
+              style="width:220px;margin-left:10px"
+            >
+              <Option
+                v-for="item in liveAnchorBaseInfoValidList2All"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.statusCode"
+              placeholder="请选择订单状态"
+              filterable
+              style="width:200px;margin-left:10px"
+            >
+              <Option
+                v-for="item in statusCodeList"
+                :value="item.code"
+                :key="item.code"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.orderType"
+              placeholder="请选择订单类型"
+              filterable
+              style="width:150px;margin-left:10px"
+            >
+              <Option
+                v-for="item in orderTypeList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -107,7 +146,7 @@
               filterable
             >
               <Option
-                v-for="item in liveAnchorBaseInfoValidList"
+                v-for="item in liveAnchorBaseInfoValidList2"
                 :value="item.id"
                 :key="item.id"
                 >{{ item.name }}</Option
@@ -189,7 +228,7 @@
       </div>
     </Modal>
     <!-- 用户信息解密 -->
-    <userMessage :userMessageModel.sync="userMessageModel" :userMessageParams="userMessageParams" @getTikTokOrder="getTikTokOrder"/>
+    <userMessage :userMessageModel.sync="userMessageModel" :userMessageParams="userMessageParams" :liveAnchorBaseInfoValidList2 ="liveAnchorBaseInfoValidList2" @getTikTokOrder="getTikTokOrder"/>
   </div>
 </template>
 <script>
@@ -205,6 +244,9 @@ export default {
     return {
       // 查询
       query: {
+        orderType:-1,
+        statusCode:-1,
+        belongLiveAnchorId:-1,
         startDate:'',
         endDate:'',
         keyword: "",
@@ -537,6 +579,101 @@ export default {
       hospitalNameList:[],
       // 主播
       liveAnchorBaseInfoValidList:[],
+      liveAnchorBaseInfoValidList2:[
+        {
+          id:5,
+          name:'刀刀（啊美雅生活企业店）'
+        },
+        {
+          id:111,
+          name:'吉娜（啊美雅时尚企业店）'
+        },
+        {
+          id:1,
+          name:'吉娜（吉娜气质美学）'
+        }
+      ],
+      liveAnchorBaseInfoValidList2All:[
+        {
+          id:-1,
+          name:'全部主播'
+        },
+        {
+          id:5,
+          name:'刀刀（啊美雅生活企业店）'
+        },
+        {
+          id:111,
+          name:'吉娜（啊美雅时尚企业店）'
+        },
+        {
+          id:1,
+          name:'吉娜（吉娜气质美学）'
+        }
+      ],
+      // 订单状态
+      statusCodeList:[
+        {
+          code:-1,
+          name:'全部订单状态'
+        },
+        {
+          code:'WAIT_BUYER_PAY',
+          name:'等待买家付款'
+        },
+        {
+          code:'WAIT_SELLER_SEND_GOODS',
+          name:'待出库，即买家已付款'
+        },
+        {
+          code:'WAIT_BUYER_CONFIRM_GOODS',
+          name:'订单中的全部商品已发货'
+        },
+        {
+          code:'TRADE_CLOSED',
+          name:'订单取消'
+        },
+        {
+          code:'TRADE_FINISHED',
+          name:'订单完成'
+        },
+        {
+          code:'PENDING_REFUND',
+          name:'待退款'
+        },
+        {
+          code:'REFUNDING',
+          name:'退款中'
+        },
+        {
+          code:'TRADE_CLOSED_AFTER_REFUND',
+          name:'退款成功'
+        },
+        {
+          code:'REFUND_FAIL',
+          name:'退款失败'
+        },
+        {
+          code:'UNKNOW',
+          name:'未知'
+        },
+      ],
+      // 订单类型
+      orderTypeList:[
+        {
+          id:-1,
+          name:'全部订单类型'
+        },
+        {
+          id:2,
+          name:'虚拟订单'
+        },
+        {
+          id:0,
+          name:'实物订单'
+        },
+      ]
+
     };
   },
   methods: {
@@ -572,13 +709,16 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize ,keyword,startDate,endDate} = this.query;
+      const { pageNum, pageSize ,keyword,startDate,endDate,belongLiveAnchorId,statusCode,orderType} = this.query;
       const data = { 
         pageNum, 
         pageSize ,
         keyword ,
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        belongLiveAnchorId:belongLiveAnchorId == -1 ? null : belongLiveAnchorId,
+        statusCode:statusCode == -1 ? null : statusCode,
+        orderType:orderType == -1 ? null : orderType,
         };
       api.tikTokOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -591,13 +731,16 @@ export default {
 
     // 获取抖店列表分页
     handlePageChange(pageNum) {
-        const {  pageSize ,keyword,startDate,endDate} = this.query;
+        const {  pageSize ,keyword,startDate,endDate,belongLiveAnchorId,statusCode,orderType} = this.query;
         const data = { 
             pageNum, 
             pageSize ,
             keyword ,
             startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
             endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            belongLiveAnchorId:belongLiveAnchorId == -1 ? null : belongLiveAnchorId,
+            statusCode:statusCode == -1 ? null : statusCode,
+        orderType:orderType == -1 ? null : orderType,
             };
         api.tikTokOrderLlistWithPage(data).then((res) => {
             if (res.code === 0) {

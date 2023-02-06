@@ -196,6 +196,14 @@
             <span>{{ upgradeOrderObjs.settlePrice }} </span>
           </div> -->
           <div class="mr_top">
+            <span class="title_bold">是否开票：</span>
+            <i-switch v-model="upgradeOrderObjs.isCreateBill" disabled />
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">开票公司：</span>
+            <span>{{ upgradeOrderObjs.createBillCompany }} </span>
+          </div>
+          <div class="mr_top">
             <span class="title_bold">是否回款：</span>
             <i-switch v-model="upgradeOrderObjs.isReturnBackPrice" disabled />
           </div>

@@ -106,7 +106,7 @@
     <Modal v-model="controlModal" title="修改绑定客服" :mask-closable="false">
       <Form ref="form" :model="form" label-position="left" :label-width="60">
         <FormItem label="客服" prop="hospitalId">
-          <Select v-model="form.customerServiceId" placeholder="请选择客服">
+          <Select v-model="form.customerServiceId" placeholder="请选择客服" filterable>
             <Option v-for="item in employee" :value="item.id" :key="item.id">{{
               item.name
             }}</Option>
@@ -365,14 +365,17 @@ export default {
 
     // 获取已绑定了客服的订单列表 分页
     handleProjectPageChange(pageNum) {
-      const { keyword, customerServiceId, pageSize,liveAnchorId } = this.query;
+      const { keyword, customerServiceId, pageSize,liveAnchorId,startDate,
+        endDate } = this.query;
       const data = {
         keyword,
         customerServiceId:
           customerServiceId === "all" ? null : customerServiceId,
         pageNum,
         pageSize,
-        liveAnchorId
+        liveAnchorId,
+        startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {

@@ -51,6 +51,7 @@ export default {
   },
   data() {
     return {
+      positionId:sessionStorage.getItem('positionId'),
       query: {
         // 最小金额
         minAddOrderPrice: null,
@@ -86,7 +87,7 @@ export default {
         sendStartDate: "",
         // 派单结束时间
         sendEndDate: "",
-        // 面诊状态
+        // 面诊类型
         consultationType: -1,
         toHospitalType: -1,
         ReturnBackPriceState: "-1",
@@ -262,7 +263,7 @@ export default {
         pageNum,
         pageSize,
         keyword:this.timeParams.assemblyKeyword,
-        checkState: checkState == -1 ? null : checkState,
+        checkState: this.timeParams.assemblyChecked,
         contentPlateFormId,
         startDate: startDate
           ? this.$moment(startDate).format("YYYY-MM-DD")
@@ -322,6 +323,7 @@ export default {
         dealEndDate: this.timeParams.endDate
           ? this.$moment(this.timeParams.endDate).format("YYYY-MM-DD")
           : null,
+        dataFrom:this.positionId == '13' ? true : false
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
         if (res.code === 0) {
@@ -370,7 +372,7 @@ export default {
         pageNum,
         pageSize,
         keyword:this.timeParams.assemblyKeyword,
-        checkState: checkState == -1 ? null : checkState,
+        checkState:  this.timeParams.assemblyChecked,
         contentPlateFormId,
         startDate: startDate
           ? this.$moment(startDate).format("YYYY-MM-DD")
@@ -430,7 +432,9 @@ export default {
         dealEndDate: this.timeParams.endDate
           ? this.$moment(this.timeParams.endDate).format("YYYY-MM-DD")
           : null,
+        dataFrom:this.positionId == '13' ? true : false
       };
+      
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;

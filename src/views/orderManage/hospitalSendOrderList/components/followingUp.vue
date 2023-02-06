@@ -666,7 +666,7 @@ export default {
           {
             title: "跟进",
             key: "orderId",
-            minWidth: 180,
+            minWidth: 190,
             render: (h, params) => {
               return h("div", [
                 h(

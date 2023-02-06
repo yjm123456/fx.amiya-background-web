@@ -133,6 +133,14 @@
             :rows="4"
           ></Input>
         </FormItem>
+        <Spin fix v-if="isLoading == true">
+            <Icon
+              type="ios-loading"
+              size="18"
+              class="demo-spin-icon-load"
+            ></Icon>
+            <div>加载中...</div>
+          </Spin>
       </Form>
       <div slot="footer">
         <Button @click="markStatementhandSubmit('markStatementform')"
@@ -161,6 +169,7 @@ export default {
   },
   data() {
     return {
+      isLoading:false,
       orderId: new Set(),
       // 查询
       query: {
@@ -368,13 +377,19 @@ export default {
         reconciliationState,
         questionReason,
       };
+      this.isLoading = true
       api.tagReconciliationState(data).then((res) => {
         if (res.code === 0) {
+          this.isLoading = false
           this.markStatementhandSubmit();
           this.$Message.success("已成功");
           this.getHospitalInfo();
           this.markStatementform.orderId.clear();
           
+        }else{
+          setTimeout(()=>{
+            this.isLoading = false
+          },3000)
         }
       });
     },
@@ -534,5 +549,19 @@ export default {
 .page_wrap {
   text-align: right;
   margin-top: 10px;
+}
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

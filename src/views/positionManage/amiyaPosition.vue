@@ -49,6 +49,12 @@
         <FormItem label="是否是管理员" prop="isDirector" key="是否是管理员">
           <i-switch v-model="form.isDirector" />
         </FormItem>
+        <FormItem label="查看数据中心" prop="readDataCenter" key="查看数据中心">
+          <i-switch v-model="form.readDataCenter" />
+        </FormItem>
+        <FormItem label="查看主播数据" prop="readLiveAnchorData" key="查看主播数据">
+          <i-switch v-model="form.readLiveAnchorData" />
+        </FormItem>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -114,14 +120,17 @@ export default {
           {
             title: "职称名称",
             key: "name",
+            align:'center'
           },
           {
             title: "所属部门",
             key: "departmentName",
+            align:'center'
           },
           {
             title: "创建日期",
             key: "createDate",
+            align:'center',
             render: (h, params) => {
               params.row.createDate = params.row.createDate
                 ? params.row.createDate.substr(0, 10)
@@ -138,6 +147,7 @@ export default {
           {
             title: "更新日期",
             key: "updateDate",
+            align:'center',
             render: (h, params) => {
               params.row.updateDate = params.row.updateDate
                 ? params.row.updateDate.substr(0, 10)
@@ -154,12 +164,70 @@ export default {
           {
             title: "更新人",
             key: "updateName",
+            align:'center'
           },
           {
-            title: "是否是管理员",
+            title: "管理员权限",
             key: "isDirector",
+            align:'center',
             render: (h, params) => {
               if (params.row.isDirector == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "查看数据中心",
+            key: "readDataCenter",
+            align:'center',
+            render: (h, params) => {
+              if (params.row.readDataCenter == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "查看主播数据",
+            key: "readLiveAnchorData",
+            align:'center',
+            render: (h, params) => {
+              if (params.row.readLiveAnchorData == true) {
                 return h("Icon", {
                   props: {
                     type: "md-checkmark",
@@ -205,12 +273,14 @@ export default {
                         this.title = "修改";
                         api.byIdGetAmiyaPositionInfo(id).then((res) => {
                           if (res.code === 0) {
-                            const { id, name, departmentId ,isDirector } = res.data.positionInfo;
+                            const { id, name, departmentId ,isDirector,readDataCenter,readLiveAnchorData } = res.data.positionInfo;
                             this.isEdit = true;
                             this.form.id = id;
                             this.form.name = name;
                             this.form.isDirector = isDirector;
                             this.form.departmentId = departmentId;
+                            this.form.readDataCenter = readDataCenter;
+                            this.form.readLiveAnchorData = readLiveAnchorData;
                             this.controlModal = true;
                           }
                         });
@@ -357,6 +427,8 @@ export default {
         id: "",
         departmentId: "",
         isDirector:false,
+        readDataCenter:false,
+        readLiveAnchorData:false
       },
 
       ruleValidate: {
@@ -418,14 +490,16 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { name, id,departmentId ,isDirector} = this.form;
+          const { name, id,departmentId ,isDirector,readDataCenter,readLiveAnchorData	} = this.form;
           if (this.isEdit) {
             // 修改
             const data = {
               id,
               name,
               departmentId,
-              isDirector
+              isDirector,
+              readDataCenter,
+              readLiveAnchorData
             };
             api.updateAmiyaPositionInfo(data).then((res) => {
               if (res.code === 0) {
@@ -443,7 +517,9 @@ export default {
             const data = {
               name,
               departmentId,
-              isDirector
+              isDirector,
+              readDataCenter,
+              readLiveAnchorData	
             };
             api.addAmiyaPositionInfo(data).then((res) => {
               if (res.code === 0) {

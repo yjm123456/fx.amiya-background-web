@@ -7,7 +7,9 @@
       @on-visible-change="handleModalVisibleChange"
       width="1000"
     >
+    
       <div>
+        
         <Form
           ref="form"
           :model="form"
@@ -58,20 +60,20 @@
                 label="抵扣积分"
                 prop="integrationQuantity"
                 :rules="{
-                  required: form.exchangeType === 0,
+                  required: form.exchangeType === 0 || form.exchangeType === 7,
                   message: '请输入抵扣积分',
                 }"
               >
                 <Input
                   v-model="form.integrationQuantity"
                   placeholder="请输入积分抵扣"
-                  :disabled="form.exchangeType !== 0"
+                  :disabled="form.exchangeType == 1 || form.exchangeType == 2|| form.exchangeType == 3|| form.exchangeType == 4|| form.exchangeType == 5|| form.exchangeType == 6"
                 ></Input>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="商品分类" prop="categoryId">
-                <Select v-model="form.categoryId" placeholder="请选择商品分类">
+              <FormItem label="商品分类" prop="categoryIds">
+                <Select v-model="form.categoryIds" placeholder="请选择商品分类" multiple>
                   <Option
                     :value="item.id"
                     v-for="item in goodsCategorys"
@@ -89,14 +91,14 @@
                 label="最大价格" 
                 prop="maxShowPrice" 
                 :rules="{
-                  required: form.exchangeType === 1,
+                  required: form.exchangeType === 1 || form.exchangeType === 7,
                   message: '请输入最大价格',
                 }"
                 >
                  <Input 
                   v-model="form.maxShowPrice" 
                   placeholder="请输入最大价格" 
-                  :disabled="form.exchangeType !== 1" 
+                  :disabled="form.exchangeType == 0 || form.exchangeType == 2|| form.exchangeType == 3|| form.exchangeType == 4|| form.exchangeType == 5|| form.exchangeType == 6" 
                   number></Input>
               </FormItem>
             </Col>
@@ -106,14 +108,14 @@
                 label="最小价格" 
                 prop="minShowPrice"
                 :rules="{
-                  required: form.exchangeType === 1,
+                  required: form.exchangeType === 1 || form.exchangeType === 7,
                   message: '请输入最小价格',
                 }"
                 >
                   <Input
                     v-model="form.minShowPrice"
                     placeholder="请输入最小价格"
-                    :disabled="form.exchangeType !== 1"
+                    :disabled="form.exchangeType == 0 || form.exchangeType == 2|| form.exchangeType == 3|| form.exchangeType == 4|| form.exchangeType == 5|| form.exchangeType == 6"
                     number
                   ></Input>
               </FormItem>
@@ -124,14 +126,14 @@
                 label="销售价格" 
                 prop="salePrice"
                 :rules="{
-                  required: form.exchangeType === 1,
+                  required: form.exchangeType === 1|| form.exchangeType === 7,
                   message: '请输入销售价格',
                 }"
               >
                 <Input 
                   v-model="form.salePrice" 
                   placeholder="请输入销售价格" 
-                  :disabled="form.exchangeType !== 1"
+                  :disabled="form.exchangeType == 0 || form.exchangeType == 2|| form.exchangeType == 3|| form.exchangeType == 4|| form.exchangeType == 5|| form.exchangeType == 6"
                   number
                   ></Input>
               </FormItem>
@@ -164,6 +166,43 @@
           <!--  -->
           <Row :gutter="30">
             <Col span="8">
+              <FormItem label="序号" prop="sort">
+                <Input v-model="form.sort" placeholder="请输入序号"></Input>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="标签"  >
+                <Select
+                  v-model="form.addGoodsTag"
+                  placeholder="请选择标签"
+                  multiple
+                >
+                  <Option
+                    :value="item.id"
+                    :key="item.id"
+                    v-for="item in tags"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="归属小程序"  >
+                <Select
+                  v-model="form.appId"
+                  placeholder="请选择归属小程序"
+                  
+                >
+                  <Option
+                    :value="item.id"
+                    :key="item.id"
+                    v-for="item in miniprogramName"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="8">
               <FormItem label="缩略图" prop="thumbPicUrl">
                 <upload
                   :uploadObj="thumbPicUrlUploadObj"
@@ -177,6 +216,11 @@
                   :uploadObj="carouselImageUploadObj"
                   @uploadChange="handleCarouselUploadChange"
                 />
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="是否是热卖分类" prop="isHot">
+                <i-switch v-model="form.isHot" />
               </FormItem>
             </Col>
             <Col span="8">
@@ -209,7 +253,7 @@
               </FormItem>
             </Col>
             <Col span="8">
-             <Button type="primary" @click="addSpecificationsModel=true" style="margin-left:15%;margin-bottom:20px" >添加规格</Button>
+             <Button type="primary" @click="addSpecificationsModel=true;exchangeType=form.exchangeType" style="margin-left:15%;margin-bottom:20px" >添加规格</Button>
             </Col>
             <Col span="8">
              <Button type="primary" @click="addMember()" style="margin-left:15%;margin-bottom:20px" v-if="form.exchangeType != 0">添加会员价格</Button>
@@ -218,7 +262,7 @@
              <Button type="primary" @click="addVoucher()" style="margin-left:15%;margin-bottom:20px" v-if="form.exchangeType != 0">添加抵用券</Button>
             </Col>
             <Col span="8">
-             <Button type="primary" @click="addHispital()" style="margin-left:15%;margin-bottom:20px" v-if="form.exchangeType == 1 && form.isMaterial ==false">添加医院</Button>
+             <Button type="primary" @click="addHispital()" style="margin-left:15%;margin-bottom:20px" v-if="(form.exchangeType == 1 || form.exchangeType == 0) && form.isMaterial ==false">添加医院</Button>
             </Col>
             
           </Row>
@@ -266,12 +310,15 @@
         <Button @click="handleCancel('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
+      <!-- 添加规格 -->
       <specifications 
         :addSpecificationsModel.sync = "addSpecificationsModel" 
         :goodsInfo.sync = "goodsInfo" 
         @goodsStandardsPrice = "goodsStandardsPrice" 
         ref="specifications"
+        :exchangeType="exchangeType"
       />
+      <!-- 添加医院 -->
       <hospitalModel 
         :addHispitalModel.sync = "addHispitalModel" 
         :hospitalnameList = "hospitalnameList" 
@@ -279,6 +326,7 @@
         @addHospitalPrice = "addHospitalPrice" 
         ref="hospitalModel"
       />
+      <!-- 添加会员卡 -->
       <member 
         :memberModel.sync="memberModel"
         :memberRankNames ="memberRankNames"
@@ -286,6 +334,7 @@
         @addmemberPrice = "addmemberPrice" 
         ref="memberModel"
       />
+      <!-- 添加抵用券 -->
       <voucher 
         :voucherModel.sync="voucherModel"
         :consumptionVoucherNames ="consumptionVoucherNames"
@@ -322,6 +371,7 @@ export default {
   },
   data() {
     return {
+      exchangeType:null,
       goodsInfoObj:{},
       // 添加规格弹窗
       addSpecificationsModel:false,
@@ -370,7 +420,7 @@ export default {
         // 抵扣积分
         integrationQuantity: null,
         // 商品分类
-        categoryId: "",
+        categoryIds: [],
         // 库存
         inventoryQuantity: null,
         // 缩略图
@@ -417,10 +467,29 @@ export default {
         // 是否限购
         isLimitBuy:false,
         // 限购数量
-        limitBuyQuantity:null
+        limitBuyQuantity:null,
+        // 排序
+        sort:null,
+        // 商品标签
+        addGoodsTag:[],
+        // 归属小程序
+        appId:'',
+        // 是否是热门商品
+        isHot:false
       },
-
       ruleValidate: {
+        addGoodsTag: [
+          {
+            required: true,
+            message: "请选择标签",
+          },
+        ],
+        sort: [
+          {
+            required: true,
+            message: "请输入序号",
+          },
+        ],
         name: [
           {
             required: true,
@@ -446,7 +515,7 @@ export default {
           },
         ],
         
-        categoryId: [
+        categoryIds: [
           {
             required: true,
             message: "请选择商品分类",
@@ -494,9 +563,21 @@ export default {
         ],
         
       },
+      tags:[],
+      // 归属小程序
+      miniprogramName:[]
     };
   },
   methods: {
+    // 获取小程序名称列表
+    getminiprogramNameList() {
+      api.miniprogramNameList().then((res) => {
+        if (res.code === 0) {
+          const { nameList } = res.data;
+          this.miniprogramName = nameList;
+        }
+      });
+    },
     // 添加会员价格
     addMember(){
        this.memberModel = true
@@ -579,6 +660,14 @@ export default {
         }
       });
     },
+    // 获取商品标签
+    gettagList() {
+      api.tagList().then((res) => {
+        if (res.code === 0) {
+          this.tags = res.data.tags;
+        }
+      });
+    },
 
     // 缩略图
     handleThumbPicUrlUploadChange(values) {
@@ -604,7 +693,7 @@ export default {
             // 抵扣积分
             integrationQuantity,
             // 商品分类
-            categoryId,
+            categoryIds,
             // 库存
             inventoryQuantity,
             // 缩略图
@@ -650,9 +739,17 @@ export default {
             updateGoodsStandardsPrice,
             // 是否限购
             isLimitBuy,
-            limitBuyQuantity
+            limitBuyQuantity,
+            sort,
+            addGoodsTag,
+            appId,
+            isHot
 
           } = this.form;
+          if(this.form.addGoodsTag == [] || this.form.addGoodsTag.length==0){
+            this.$Message.warning('请选择标签')
+            return
+          }
           if (isEdit) {
             // 修改
             const data = {
@@ -660,7 +757,7 @@ export default {
               simpleCode,
               standard,
               integrationQuantity:Number(integrationQuantity),
-              categoryId,
+              categoryIds,
               inventoryQuantity:parseInt(inventoryQuantity),
               thumbPicUrl,
               carouselImageUrls: carouselImageUrls.map((url, index) => {
@@ -682,15 +779,19 @@ export default {
               visitCount:parseInt(visitCount),
               showSaleCount:parseInt(showSaleCount),
               detailsDescription,
-              updateGoodsHospitalPrice:this.form.exchangeType ===1 && this.form.isMaterial == false ? (this.form.goodsHospitalPrice ? this.form.goodsHospitalPrice : []) :[],
+              updateGoodsHospitalPrice:(this.form.exchangeType ===1 || this.form.exchangeType===0) && this.form.isMaterial == false ? (this.form.goodsHospitalPrice ? this.form.goodsHospitalPrice : []) :[],
               exchangeType,
               updateGoodsMemberRankPrice: this.form.goodsMemberRankPrices ? this.form.goodsMemberRankPrices : [],
               updateGoodsConsumptionVoucher: this.form.goodsConsumptionVoucher ? this.form.goodsConsumptionVoucher : [],
               updateGoodsStandardsPrice:this.goodsInfoObj.goodsStandardPrice,
               isLimitBuy,
-              limitBuyQuantity:isLimitBuy == false ? 0 : limitBuyQuantity
+              limitBuyQuantity:isLimitBuy == false ? 0 : limitBuyQuantity,
+              sort,
+              updateGoodTag:addGoodsTag,
+              appId,
+              isHot
             };
-            if(this.form.exchangeType===1 && this.form.isMaterial == false){
+            if((this.form.exchangeType===1 || this.form.exchangeType===0)&& this.form.isMaterial == false){
               if(!this.form.goodsHospitalPrice.length){
                 this.$Message.error('请选择医院')
                 return
@@ -715,14 +816,14 @@ export default {
               }
             });
           } else {
-
+           
             // 添加
             const data = {
               name,
               simpleCode,
               standard,
               integrationQuantity:Number(integrationQuantity),
-              categoryId,
+              categoryIds,
               inventoryQuantity : parseInt(inventoryQuantity),
               thumbPicUrl,
               carouselImageUrls: carouselImageUrls.map((url, index) => {
@@ -749,9 +850,13 @@ export default {
               addGoodsConsumptionVoucher: addGoodsConsumptionVoucher ? addGoodsConsumptionVoucher : [],
               goodsStandardsPrice,
               isLimitBuy,
-              limitBuyQuantity:isLimitBuy == false ? 0 : limitBuyQuantity
+              limitBuyQuantity:isLimitBuy == false ? 0 : limitBuyQuantity,
+              sort,
+              addGoodsTag:addGoodsTag,
+              appId,
+              isHot
             };
-            if(this.form.exchangeType===1 && this.form.isMaterial == false){
+            if((this.form.exchangeType===1 || this.form.exchangeType===0) && this.form.isMaterial == false){
               if(!addGoodsHospitalPrice){
                 this.$Message.error('请选择医院')
                 return
@@ -788,8 +893,6 @@ export default {
       this.$refs.specifications.query.data = []
       this.form.description = ""
       this.form.detailsDescription = ""
-
-
     },
 
     // modal 显示状态发生变化时触发
@@ -802,6 +905,8 @@ export default {
   created() {
     this.getValidGoodsCategory();
     this.getExchangeTypeList();
+    this.gettagList()
+    this.getminiprogramNameList()
   },
   watch: {
     controlModal(value) {
@@ -817,20 +922,19 @@ export default {
         this.thumbPicUrlUploadObj.uploadList = [goodsInfo.thumbPicUrl];
         // 回显轮播图
         this.carouselImageUploadObj.uploadList = goodsInfo.carouselImageUrls;
-        
         // 回显
         this.form = goodsInfo;
+        this.form.addGoodsTag = goodsInfo.goodsTags
         this.goodsInfoObj = goodsInfo;
       }
       this.control = value;
     },
     "form.exchangeType"(value) {
-      if (value !== 0) {
+      if (value ==1 ||value ==2 ||value ==3 ||value ==4 ||value ==5 ||value ==6 ) {
         this.form.integrationQuantity = "";
         this.$refs.integrationQuantity.validateMessage = ""
         this.$refs.integrationQuantity.validateState = ""
-        
-      }else if(value !== 1){
+      }else if(value ==0 ||value ==2 ||value ==3 ||value ==4 ||value ==5 ||value ==6 ){
         this.form.maxShowPrice = "";
         this.$refs.maxShowPrice.validateMessage = ""
         this.$refs.maxShowPrice.validateState = ""

@@ -1327,7 +1327,7 @@ export const orderReturnBackOrder = (data) => {
         data,
     });
 };
-// 获取内容平台面诊状态
+// 获取内容平台面诊类型
 export const getOrderConsultationTypeList = () => {
         return http({
             url: "/amiyabg/ContentPlateFormOrder/getOrderConsultationTypeList",
@@ -1378,5 +1378,83 @@ export const colseRepeatProfundityOrder = (data) => {
         url: `/amiyabg/ContentPlateFormOrder/colseRepeatProfundityOrder`,
         method: "post",
         data
+    });
+};
+// 业绩类型
+export const contentPlateFormOrderDealPerformanceType = () => {
+        return http({
+            url: "/amiyabg/ContentPlatFormOrderDealInfo/contentPlateFormOrderDealPerformanceType",
+            method: "get",
+        })
+    }
+    // 修改物流信息
+export const updateSendGoodsInfo = (data) => {
+    return http({
+        url: `/amiyabg/Order/updateSendGoodsInfo`,
+        method: "post",
+        data
+    });
+};
+// 获取物流信息
+export const getSendGoodsInfo = (tradeId, orderId) => {
+    return http({
+        url: `/amiyabg/Order/getSendGoodsInfo/${tradeId}/${orderId}`,
+        method: "get",
+    });
+};
+// 根据手机号筛选归属客服
+export const getCustomerServiceNameByPhone = (params) => {
+        return http({
+            url: "/amiyabg/BindCustomerService/getCustomerServiceNameByPhone",
+            method: "get",
+            params
+        })
+    }
+    // 获取视频号订单列表
+export const WeChatVideoOrder = (params) => {
+        return http({
+            url: "/amiyabg/WeChatVideoOrder/list",
+            method: "get",
+            params
+        })
+    }
+    // 视频号补单
+export const addWeChatVideoOrder = (data) => {
+    return http({
+        url: `/amiyabg/WeChatVideoOrder`,
+        method: "post",
+        data
+    });
+};
+// 根据订单id获取订单详情
+export const getByIdWeChatVideoOrder = (params) => {
+        return http({
+            url: "/amiyabg/WeChatVideoOrder/getById",
+            method: "get",
+            params
+        })
+    }
+    // 客户池客服手机号列表
+export const getPublicPoolPhone = (params) => {
+        return http({
+            url: "/amiyabg/BindCustomerService/getPublicPoolPhone",
+            method: "get",
+            params
+        })
+    }
+    // 客户池修改绑定客服
+export const updatePublicPoolPhone = (data) => {
+    return http({
+        url: `/amiyabg/BindCustomerService/updatePublicPoolPhone`,
+        method: "put",
+        data
+    });
+};
+
+// 根据录单申请手机号获取录单申请信息
+export const byPhoneContentPlatFormOrderAddWork = (phone) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderAddWork/byPhone/${phone}`,
+        method: "get",
     });
 };

@@ -75,7 +75,7 @@
           </Select>
           <Select
             v-model="query.isConsultation"
-            placeholder="请选择面诊状态"
+            placeholder="请选择面诊类型"
             filterable
             style="width: 140px; margin-left: 10px"
           >
@@ -213,7 +213,7 @@ export default {
         }],
         isConsultationList:[{
           type:-1,
-          name:'全部面诊状态'
+          name:'全部面诊类型'
         },{
           type:'true',
           name:'是'

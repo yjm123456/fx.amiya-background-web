@@ -40,6 +40,14 @@
             >查询</Button
           >
         </div>
+        <div class="right">
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="addTransactionVoucherModal = true"
+            >添加凭证</Button
+          >
+        </div>
       </div>
     </Card>
 
@@ -95,17 +103,23 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 查看图片 -->
     <checkImg :checkImgControlModal.sync="checkImgControlModal" :checkImgParams="checkImgParams"/>
+    <!-- 添加凭证 -->
+    <addTransactionVoucher :addTransactionVoucherModal.sync="addTransactionVoucherModal" :addTransactionVoucherParams="addTransactionVoucherParams" @getHospitalInfo="getHospitalInfo"/>
   </div>
 </template>
 <script>
 import * as api from "@/api/customerConsumptionCredentials";
 import * as orderApi from "@/api/customerManage.js";
 import checkImg from "./components/checkImg.vue"
+import addTransactionVoucher from "./components/addTransactionVoucher.vue"
+
 
 export default {
   components:{
-    checkImg
+    checkImg,
+    addTransactionVoucher
   },
   data() {
     return {
@@ -328,8 +342,12 @@ export default {
         },
         
       ],
+      // 查看图片
       checkImgControlModal:false,
-      checkImgParams:{}
+      checkImgParams:{},
+      // 添加凭证
+      addTransactionVoucherModal:false,
+      addTransactionVoucherParams:{}
     };
   },
   methods: {

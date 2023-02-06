@@ -249,7 +249,6 @@ export default {
         endDate,
         hospitalId,
       } = this.query;
-      console.log(Number(this.query.hospitalId));
       if (!hospitalId) {
         this.$Message.warning("请先选择医院");
         return;

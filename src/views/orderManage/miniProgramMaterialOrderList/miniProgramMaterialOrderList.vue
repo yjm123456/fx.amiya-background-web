@@ -67,47 +67,19 @@
       </div>
     </Card>
 
-    <orderList :controlModal.sync="controlModal" :tradeId="tradeId"></orderList>
-    <sendGoods
-      :controlModal.sync="controlSendGoodslModal"
-      :tradeId="tradeId"
-      :ExpressList ="ExpressList"
-      @handleRefreshOrderList="getMiniProgramMaterialOrderTradeList()"
-    ></sendGoods>
-    <!-- 查看物流 -->
-    <Modal
-      v-model="logisticsModel"
-      title="物流信息"
-      :mask-closable="false"
-    >
-      <div class="top_content">
-        <div class="company_con">
-          <div class="company" v-if="orderExpressInfoVo.expressName">物流公司：{{orderExpressInfoVo.expressName}}</div>
-          <div class="status" v-if="orderExpressInfoVo.state"><div class="circle"></div>{{orderExpressInfoVo.state}}</div>
-        </div>
-        <div class="orderId" v-if="orderExpressInfoVo.expressNo">快递单号：{{orderExpressInfoVo.expressNo}}</div>
-      </div>
-      <Steps :current="20" direction="vertical">
-          <Step v-for="(item,index) in orderExpressInfoVo.expressDetailList" :key="index" :title="item.content" :content="item.time" ></Step>
-      </Steps>
-      <div slot="footer"></div>
-    </Modal>
+    <orderList :controlModal.sync="controlModal" :tradeId="tradeId" :ExpressList="ExpressList"></orderList>
   </div>
 </template>
 <script>
 import * as api from "@/api/orderManage";
 import orderList from "./components/orderList";
-import sendGoods from "./components/sendGoods";
 import { download } from "@/utils/util";
 export default {
   components: {
     orderList,
-    sendGoods,
   },
   data() {
     return {
-      orderExpressInfoVo:{},
-      logisticsModel:false,
       // 物流公司
       ExpressList:[],
       query: {
@@ -251,7 +223,7 @@ export default {
           },
           {
             title: "操作",
-            width: 200,
+            width: 140,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -283,64 +255,7 @@ export default {
                   },
                   "订单详情"
                 ),
-                statusCode === "WAIT_SELLER_SEND_GOODS"
-                  ? h(
-                      "Button",
-                      {
-                        props: {
-                          type: "primary",
-                          size: "small",
-                          // disabled: statusCode !== "WAIT_SELLER_SEND_GOODS",
-                        },
-                        on: {
-                          click: () => {
-                            const { tradeId } = params.row;
-                            this.tradeId = tradeId;
-                            this.controlSendGoodslModal = true;
-                            this.getLogisticsCompany()
-                          },
-                        },
-                      },
-                      "发货"
-                    )
-                  : null,
-                  statusCode !== "WAIT_SELLER_SEND_GOODS"
-                  ? h(
-                      "Button",
-                      {
-                        props: {
-                          type: "primary",
-                          size: "small",
-                          // disabled: statusCode !== "WAIT_SELLER_SEND_GOODS",
-                        },
-                        on: {
-                          click: () => {
-                            const { courierNumber ,receivePhone , expressId} = params.row;
-                            const data = {
-                              courierNumber,
-                              receiverPhone:receivePhone,
-                              expressId : expressId ? expressId :""               
-                            }
-                            if(expressId){
-                              api.giftExpressInfo(data).then((res) => {
-                                if (res.code === 0) {
-                                  this.logisticsModel = true
-                                  const { orderExpressInfoVo } = res.data
-                                  this.orderExpressInfoVo = orderExpressInfoVo
-                                  this.orderExpressInfoVo.expressDetailList.map((item,index)=>{
-                                    this.orderExpressInfoVo.expressDetailList[index].time = this.$moment(new Date(item.time)).format("YYYY-MM-DD HH:mm:ss")
-                                  })
-                                }
-                              });
-                            }else{
-                              this.$Message.error("暂无物流信息")
-                            }
-                          },
-                        },
-                      },
-                      "查看物流"
-                    )
-                  : null,
+                 ,
               ]);
             },
           },
@@ -355,6 +270,7 @@ export default {
     };
   },
   methods: {
+    // 导出
     exportMinProgramOrderList() {
       const { isSendGoods, keyword,startDate,endDate } = this.query;
       const data = {
@@ -441,13 +357,13 @@ export default {
     cancelSubmit(name) {
       this.isEdit = false;
       this.controlModal = false;
-      this.logisticsModel = false
       this.$refs[name].resetFields();
     },
    
   },
   created() {
     this.getMiniProgramMaterialOrderTradeList();
+    this.getLogisticsCompany()
   },
 };
 </script>

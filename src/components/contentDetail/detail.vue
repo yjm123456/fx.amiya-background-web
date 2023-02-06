@@ -194,6 +194,20 @@
               <span>{{ detailObj.lastDealHospitalName }} </span>
             </div>
           </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">医院网咨人员：</span>
+              <span
+                >{{
+                  detailObj.netWorkConsulationName
+                }}
+              </span>
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">医院现场咨询人员：</span>
+              <span>{{ detailObj.sceneConsulationName }} </span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="order_message">
@@ -227,9 +241,16 @@
             <span class="title_bold">院方接诊人员：</span>
             <span>{{ detailObj.acceptConsulting }}</span>
           </div> -->
-          <div class="mr_top">
+          
+          <div  class="item_list">
+            <div class="mr_top items">
             <span class="title_bold">派单人：</span>
             <span>{{ detailObj.sendByName }}</span>
+          </div>
+            <div class="mr_top items">
+              <span class="title_bold">辅助客服：</span>
+              <span>{{ detailObj.supportEmpName }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -267,13 +288,24 @@
               <span>{{ detailObj.dealAmount }}</span>
             </div>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">是否重单深度：</span>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">是否重单深度：</span>
               <i-switch v-model="detailObj.isRepeatProfundityOrder" disabled />
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">面诊类型：</span>
+              <span>{{ detailObj.consultationTypeText }}</span>
+            </div>
           </div>
+         
           <div class="mr_top">
             <span class="title_bold">抖店订单号：</span>
             <span>{{ detailObj.otherContentPlatFormOrderId }}</span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">业绩类型：</span>
+            <span>{{ detailObj.dealPerformanceTypeText }}</span>
           </div>
           <div class="mr_top">
             <span class="title_bold">咨询内容：</span>
@@ -364,6 +396,16 @@
             <div class="mr_top items">
               <span class="title_bold">服务费合计：</span>
               <span>{{ detailObj.settlePrice }} </span>
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">是否开票：</span>
+              <i-switch v-model="detailObj.isCreateBill" disabled />
+            </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">开票公司：</span>
+              <span>{{ detailObj.createBillCompany }} </span>
             </div>
             <div class="mr_top items">
               <span class="title_bold">是否回款：</span>

@@ -71,6 +71,14 @@
         <FormItem label="是否上传对账单" prop="isSubmitReconciliationDocuments">
           <i-switch v-model="form.isSubmitReconciliationDocuments" />
         </FormItem>
+        <Spin fix v-if="isLoading == true">
+            <Icon
+              type="ios-loading"
+              size="18"
+              class="demo-spin-icon-load"
+            ></Icon>
+            <div>加载中...</div>
+          </Spin>
       </Form>
       <div slot="footer">
         <Button @click="handleCancel('form')">取消</Button>
@@ -89,6 +97,7 @@ export default {
   },
   data() {
     return {
+      isLoading:false,
       control: false,
       form: {
         id: null,
@@ -191,15 +200,20 @@ export default {
             returnBackPrice,
             isSubmitReconciliationDocuments,
           };
-          console.log(data);
+          this.isLoading = true
           api.updateUnCheckOrder(data).then((res) => {
             if (res.code === 0) {
+              this.isLoading = false
               this.handleCancel("form");
               this.$emit("getUnCheckOrders");
               this.$Message.success({
                 content: "提交成功",
                 duration: 3,
               });
+            }else{
+              setTimeout(()=>{
+                this.isLoading = false
+              },3000)
             }
           });
         }
@@ -225,3 +239,19 @@ export default {
   },
 };
 </script>
+<style scoped>
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

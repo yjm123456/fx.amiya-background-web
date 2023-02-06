@@ -9,6 +9,19 @@
             style="width: 200px; margin-left: 10px"
             @keyup.enter.native="getCustomerTagInfo()"
           />
+          <Select
+            v-model="query.categoryId"
+            placeholder="请选择标签类别"
+            filterable
+            style="width: 200px; margin-left: 10px"
+          >
+            <Option
+              v-for="item in tagCategoryNameListAll"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -95,6 +108,7 @@ export default {
       // 查询
       query: {
         keyword: "",
+        categoryId:-1,
         pageNum: 1,
         pageSize: 10,
         columns: [
@@ -249,6 +263,7 @@ export default {
       },
       // 标签分类
       tagCategoryNameList: [],
+      tagCategoryNameListAll:[{id:-1,name:'全部标签类别'}]
     };
   },
   methods: {
@@ -256,7 +271,9 @@ export default {
     getCustomerTagNameList() {
       api.tagCategoryNameList().then((res) => {
         if (res.code === 0) {
-          this.tagCategoryNameList = res.data.tagCategoryNameList;
+          const {tagCategoryNameList} = res.data
+          this.tagCategoryNameList = tagCategoryNameList;
+          this.tagCategoryNameListAll = [...this.tagCategoryNameListAll,...tagCategoryNameList]
         }
       });
     },
@@ -266,8 +283,8 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyword } = this.query;
-      const data = { pageNum, pageSize, keyword };
+      const { pageNum, pageSize, keyword,categoryId } = this.query;
+      const data = { pageNum, pageSize, keyword ,categoryId : categoryId == -1 ? null : categoryId};
       api.getCustomerTagInfo(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.customerTagInfoInfo;
@@ -279,8 +296,8 @@ export default {
 
     // 获取标签列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyword } = this.query;
-      const data = { pageNum, pageSize, keyword };
+      const { pageSize, keyword,categoryId } = this.query;
+      const data = { pageNum, pageSize, keyword ,categoryId : categoryId == -1 ? null : categoryId};
       api.getCustomerTagInfo(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.customerTagInfoInfo;

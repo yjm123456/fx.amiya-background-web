@@ -133,7 +133,8 @@
         </div>
         <div class="vedio_con">
           <!-- <video :src="vedio"  controls style="width:56%;height:440px;margin-left:20%"></video> -->
-          <video :src="vedio" controls style="width:100%;height:440px;">
+          <!-- <video :src="vedio" controls style="width:100%;height:440px;"> -->
+          <video src="https://app.ameiyes.com/amiyabackground/media/info.e6ff4027.mp4" controls style="width:100%;height:440px;">
           </video>
         </div>
       </div>
@@ -210,7 +211,7 @@
 </template>
 <script>
 import amy from "@/assets/images/amy.jpg";
-import vedio from "@/assets/images/info.mp4";
+// import vedio from "@/assets/images/info.mp4";
 import * as api from "@/api/hospitalFeedBack";
 export default {
   methods: {
@@ -253,7 +254,7 @@ export default {
     onScroll(e) {
       let scrollItems = document.querySelectorAll(".scroll-item");
       for (let i = scrollItems.length - 1; i >= 0; i--) {
-        // 判断滚动条滚动距离是否大于当前滚动项可滚动距离
+        // 判断滚动条滚动距离是否大于当前滚动项可滚动距离1
         let judge =
           e.target.scrollTop >=
           scrollItems[i].offsetTop - scrollItems[0].offsetTop;
@@ -272,7 +273,7 @@ export default {
         level: 0,
       },
       amy,
-      vedio,
+      // vedio,
       activeStep: 0,
       title_list: [
         { title: "公司简介" },

@@ -31,6 +31,20 @@ data() {
         pageSize: 10,
         columns: [
           {
+            title: "登记时间",
+            key: "createDate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return params.row.createDate
+                ? h(
+                    "div",
+                    params.row.createDate  == '0001-01-01T00:00:00' ?  '' : this.$moment(params.row.createDate).format("YYYY-MM-DD HH:mm:ss")
+                  )
+                : "";
+            },
+          },
+          {
             title: "成交编号",
             key: "id",
             minWidth: 170,
@@ -98,6 +112,12 @@ data() {
                   )
                 : "";
             },
+          },
+          {
+            title: "成交医院",
+            key: "dealHospital",
+            minWidth: 220,
+            align: "center",
           },
           {
             title: "成交金额",

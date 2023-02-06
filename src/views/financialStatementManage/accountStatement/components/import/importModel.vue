@@ -19,12 +19,11 @@
             ref="importFiles"
           />
         </FormItem>
+        <div v-if="loading == true" style="color:red;text-align:center">数据正在上传中，请耐心等待......</div>
       </Form>
       <div slot="footer">
         <Button @click="handleCancel('importFileForm')">取消</Button>
-        <Button type="primary" @click="handleSubmit('importFileForm')"
-          >确定</Button
-        >
+        <Button type="primary" @click="handleSubmit('importFileForm')" :loading="loading == true">{{loading == true ? 'Loading...' : '确定'}}</Button>
       </div>
     </Modal>
   </div>
@@ -47,6 +46,7 @@ export default {
       importFileForm: {
         file: "",
       },
+      loading:false,
 
       importFileRuleValidates: {
         file: [
@@ -61,7 +61,11 @@ export default {
   methods: {
     // 上传文件
     handleUploadFileChange(values, uploadListName) {
+      this.loading = true
       this.importFileForm.file = values;
+      setTimeout(()=>{
+        this.loading = false
+      },10000)
     },
     //
     submite(value) {
@@ -80,13 +84,15 @@ export default {
             formData.append("file", file);
             api.importReconciliationDocuments(formData).then((res) => {
               if (res.code === 0) {
-                this.handleCancel("importFileForm");
-                this.$emit("handleRefreshCustomerTrackList");
-                this.$Message.success({
-                  content: "导入成功",
-                  duration: 3,
-                });
-                this.importFileForm.file = "";
+                setTimeout(()=>{
+                  this.handleCancel("importFileForm");
+                  this.$emit("handleRefreshCustomerTrackList");
+                  this.$Message.success({
+                    content: "导入成功",
+                    duration: 3,
+                  });
+                  this.importFileForm.file = "";
+                },10000)
               } else {
                 this.$Message.warning({
                   content:
@@ -120,3 +126,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.loading_color{
+  color: red;
+  text-align: center;
+}
+</style>

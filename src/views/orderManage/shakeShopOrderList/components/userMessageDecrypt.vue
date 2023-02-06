@@ -19,7 +19,7 @@
             placeholder="请选择主播"
           >
             <Option
-              v-for="item in userMessageParams.belongLiveAnchor"
+              v-for="item in liveAnchorBaseInfoValidList2"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
@@ -40,7 +40,8 @@ import * as api from "@/api/tikTokOrder";
 export default {
   props: {
     userMessageModel: Boolean,
-    userMessageParams:Object
+    userMessageParams:Object,
+    liveAnchorBaseInfoValidList2:Array
   },
   data() {
     return {

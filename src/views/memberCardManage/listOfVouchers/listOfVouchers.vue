@@ -2,6 +2,27 @@
   <div>
     <Card :dis-hover="true">
       <div class="header_wrap">
+        <div class="left">
+          <Input
+              v-model="query.keyword"
+              placeholder="请输入关键字"
+              style="width: 200px; margin-right: 10px"
+              @keyup.enter.native="getConsumptionVoucherClick()"
+            />
+            <Select v-model="query.valid" placeholder="是否有效" style="width: 180px; margin-right: 10px">
+                <Option
+                  v-for="item in validList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Button
+            type="primary"
+            @click="getConsumptionVoucherClick()"
+            >搜索</Button
+          >
+        </div>
         <div class="right">
           <Button
             type="primary"
@@ -198,6 +219,8 @@ export default {
     return {
       // 查询
       query: {
+        valid:'true',
+        keyword:'',
         pageNum: 1,
         pageSize: 10,
         columns: [
@@ -572,6 +595,17 @@ export default {
       },
       // 会员卡名称
       memberRankNames: [],
+      // 是否有效
+      validList:[
+        {
+          type:'true',
+          name:'有效'
+        },
+        {
+          type:'false',
+          name:'无效'
+        }
+      ]
     };
   },
   methods: {
@@ -591,13 +625,13 @@ export default {
         }
       });
     },
-    // 获取物流公司列表
-    getHospitalInfo() {
+    // 获取抵用券列表
+    getConsumptionVoucherClick() {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize } = this.query;
-      const data = { pageNum, pageSize };
+      const { pageNum, pageSize ,keyword,valid} = this.query;
+      const data = { pageNum, pageSize ,keyword,valid};
       api.getConsumptionVoucher(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.consumptionVoucherInfoList;
@@ -607,10 +641,10 @@ export default {
       });
     },
 
-    // 获取物流公司列表分页
+    // 获取抵用券列表分页
     handlePageChange(pageNum) {
-      const { pageSize } = this.query;
-      const data = { pageNum, pageSize };
+      const { pageSize,keyword,valid } = this.query;
+      const data = { pageNum, pageSize,keyword,valid };
       api.getConsumptionVoucher(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.consumptionVoucherInfoList;
@@ -662,7 +696,7 @@ export default {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
-                this.getHospitalInfo();
+                this.getConsumptionVoucherClick();
                 this.$Message.success({
                   content: "修改成功",
                   duration: 3,
@@ -706,7 +740,7 @@ export default {
             api.AddConsumptionVoucher(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");
-                this.getHospitalInfo();
+                this.getConsumptionVoucherClick();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
@@ -734,7 +768,7 @@ export default {
     },
   },
   created() {
-    this.getHospitalInfo();
+    this.getConsumptionVoucherClick();
     this.getConsumptionVoucherTypeList();
     this.getMemberRankInfo();
   },

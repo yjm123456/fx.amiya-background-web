@@ -102,7 +102,7 @@ export default {
  data() {
     return {
       form: {
-        // 是否接收消息
+        // 是否接收消息1
         isReceive: false,
         // 开始时间
         startTime: "",

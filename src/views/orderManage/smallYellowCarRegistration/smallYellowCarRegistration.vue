@@ -16,21 +16,21 @@
                 placeholder="开始时间"
                 :value="query.startDate"
                 v-model="query.startDate"
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               ></DatePicker>
               <DatePicker
                 type="date"
                 placeholder="结束时间"
                 :value="query.endDate"
                 v-model="query.endDate"
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               ></DatePicker>
               <Select
                 v-model="query.contentPlatFormId"
                 placeholder="请选择渠道"
                 @on-change="contentPlateChange(query.contentPlatFormId)"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in contentPalteForms"
@@ -44,7 +44,7 @@
                 placeholder="请选择主播IP账号"
                 :disabled="query.contentPlatFormId === ''"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in liveAnchors"
@@ -57,7 +57,7 @@
                 v-model="query.isAddWechat"
                 placeholder="请选择加v状态"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in isAddWeChatList"
@@ -70,7 +70,7 @@
                 v-model="query.isWriteOff"
                 placeholder="请选择核销状态"
                 filterable
-                style="width: 180px;margin-left: 10px"
+                style="width: 150px;margin-left: 10px"
               >
                 <Option
                   v-for="item in isWriteOffList"
@@ -81,10 +81,9 @@
               </Select>
             </div>
             <div style="margin:10px 0 ">
-              
               <Select
                 v-model="query.isConsultation"
-                placeholder="请选择面诊状态"
+                placeholder="请选择面诊类型"
                 filterable
                 style="width: 180px;"
               >
@@ -95,12 +94,12 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              
+
               <Select
-                v-model="query.admissionId"
-                placeholder="请选择接诊人员"
+                v-model="query.assignEmpId"
+                placeholder="请选择指派给"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in employee"
@@ -113,7 +112,7 @@
                 v-model="query.isCreateOrder"
                 placeholder="请选择录单触达"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in query.isCreateOrderList"
@@ -126,7 +125,7 @@
                 v-model="query.isSendOrder"
                 placeholder="请选择派单触达"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in query.isSendOrderList"
@@ -139,7 +138,7 @@
                 v-model="query.emergencyLevel"
                 placeholder="请选择重要程度"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in query.emergencyLevelListAll"
@@ -148,11 +147,11 @@
                   >{{ item.emergencyLevelText }}</Option
                 >
               </Select>
-              
+
               <Input
                 v-model="query.minPrice"
                 placeholder="最小下单金额"
-                style="width: 170px;margin-left:10px"
+                style="width: 150px;margin-left:10px"
                 type="number"
                 namber
               />
@@ -160,11 +159,10 @@
               <Input
                 v-model="query.maxPrice"
                 placeholder="最大下单金额"
-                style="width: 170px;"
+                style="width: 150px;"
                 type="number"
                 namber
               />
-              
             </div>
             <div>
               <Select
@@ -185,7 +183,7 @@
                 placeholder="退款开始时间"
                 :value="query.startRefundTime"
                 v-model="query.startRefundTime"
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
                 :disabled="query.isReturnBackPrice != 'true'"
               ></DatePicker>
               <DatePicker
@@ -193,14 +191,14 @@
                 placeholder="退款结束时间"
                 :value="query.endRefundTime"
                 v-model="query.endRefundTime"
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
                 :disabled="query.isReturnBackPrice != 'true'"
               ></DatePicker>
               <Select
                 v-model="query.isBadReview"
                 placeholder="请选择差评状态"
                 filterable
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in isBadReviewList"
@@ -214,7 +212,7 @@
                 placeholder="差评开始时间"
                 :value="query.startBadReviewTime"
                 v-model="query.startBadReviewTime"
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
                 :disabled="query.isBadReview != 'true'"
               ></DatePicker>
               <DatePicker
@@ -222,16 +220,13 @@
                 placeholder="差评结束时间"
                 :value="query.endBadReviewTime"
                 v-model="query.endBadReviewTime"
-                style="width: 180px; margin-left: 10px"
+                style="width: 150px; margin-left: 10px"
                 :disabled="query.isBadReview != 'true'"
               ></DatePicker>
             </div>
           </div>
           <div>
-            <Button
-              type="primary"
-              style="margin:0 10px"
-              @click="getSmallCar()"
+            <Button type="primary" style="margin:0 10px" @click="getSmallCar()"
               >查询</Button
             >
             <Button
@@ -242,15 +237,16 @@
               "
               >添加</Button
             >
+            <Button
+              type="primary"
+              @click="batchAssignmentClick"
+              style="margin-left:10px"
+              >批量指派</Button
+            >
           </div>
-          
         </div>
-        <div class="right">
-          
-        </div>
-        <div class="containers">
-          
-        </div>
+        <div class="right"></div>
+        <div class="containers"></div>
       </div>
     </Card>
 
@@ -272,7 +268,16 @@
     </Card> -->
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data" height="600"></Table>
+        <Table
+          border
+          :columns="query.columns"
+          :data="query.data"
+          height="600"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancels"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"
+        ></Table>
       </div>
       <div class="page_wrap">
         <Page
@@ -282,7 +287,7 @@
           :total="query.totalCount"
           show-total
           show-sizer
-          :page-size-opts="[10,20,30,50,100]"
+          :page-size-opts="[10, 20, 30, 50, 100]"
           @on-change="handlePageChange"
           @on-page-size-change="handlePageSizeChange"
         />
@@ -319,19 +324,10 @@
             </FormItem>
           </Col> -->
           <Col span="8">
-            <FormItem
-              label="接诊人员"
-              prop="admissionId"
-              :rules="[
-                {
-                  required: true,
-                  message: '请选择接诊人员',
-                },
-              ]"
-            >
+            <FormItem label="指派给" prop="assignEmpId">
               <Select
-                v-model="form.admissionId"
-                placeholder="请选择接诊人员"
+                v-model="form.assignEmpId"
+                placeholder="请选择指派给"
                 filterable
               >
                 <Option
@@ -372,7 +368,7 @@
                 @on-change="liveAnchorChange(form.liveAnchorId)"
               >
                 <Option
-                  v-for="(item,index) in liveAnchors"
+                  v-for="(item, index) in liveAnchors"
                   :value="item.id"
                   :key="index"
                   >{{ item.hostAccountName }}</Option
@@ -388,9 +384,9 @@
               ></Input>
             </FormItem>
           </Col> -->
-          
+
           <Col span="8">
-            <FormItem label="主播微信号" prop="liveAnchorWeChatNo" >
+            <FormItem label="主播微信号" prop="liveAnchorWeChatNo">
               <Select
                 v-model="form.liveAnchorWeChatNo"
                 placeholder="请选择主播微信号"
@@ -398,7 +394,7 @@
                 filterable
               >
                 <Option
-                  v-for="(item,indexs) in weChatList"
+                  v-for="(item, indexs) in weChatList"
                   :value="item.weChatNo"
                   :key="indexs"
                   >{{ item.weChatNo }}</Option
@@ -421,14 +417,30 @@
                 placeholder="请输入客户手机号"
                 maxlength="11"
               ></Input>
+              <span style="color:#666">00000000000</span>
+              <button
+                type="button"
+                v-clipboard:copy="phoneCopy"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError"
+                style="border:none;padding:0 6px;box-sizing:border-box;background:#ccc;border-radius:5px;font-size:10px;margin-left:5px;height:20px;line-height:20px"
+              >
+                复制
+              </button>
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="下单金额" prop="price">
+            <FormItem label="辅助电话" prop="subPhone">
               <Input
-                v-model="form.price"
-                placeholder="请输入下单金额"
+                v-model="form.subPhone"
+                placeholder="请输入辅助电话"
               ></Input>
+            </FormItem>
+          </Col>
+
+          <Col span="8">
+            <FormItem label="下单金额" prop="price">
+              <Input v-model="form.price" placeholder="请输入下单金额"></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -446,9 +458,6 @@
               </Select>
             </FormItem>
           </Col>
-          
-        </Row>
-        <Row :gutter="30">
           <Col span="8">
             <FormItem label="重要程度" prop="emergencyLevel">
               <Select
@@ -477,7 +486,10 @@
           </Col>
           <Col span="8">
             <FormItem label="是否面诊" prop="isConsultation">
-              <i-switch v-model="form.isConsultation" @on-change="consultationChange()"/>
+              <i-switch
+                v-model="form.isConsultation"
+                @on-change="consultationChange()"
+              />
             </FormItem>
           </Col>
           <Col span="8" v-if="form.isConsultation == true">
@@ -492,7 +504,26 @@
           </Col>
           <Col span="8">
             <FormItem label="是否退款" prop="isReturnBackPrice">
-              <i-switch v-model="form.isReturnBackPrice" @on-change="isReturnBackPriceChange()"/>
+              <i-switch
+                v-model="form.isReturnBackPrice"
+                @on-change="isReturnBackPriceChange()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isReturnBackPrice == true">
+            <FormItem label="退款类型" prop="refundType" key="退款类型">
+              <Select
+                v-model="form.refundType"
+                placeholder="请选择退款类型"
+                @on-change="refundTypeChange"
+              >
+                <Option
+                  v-for="item in refundTypeList"
+                  :value="item.name"
+                  :key="item.name"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </FormItem>
           </Col>
           <Col span="8" v-if="form.isReturnBackPrice == true">
@@ -505,19 +536,31 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          <Col span="8"  v-if="form.isReturnBackPrice == true">
-            <FormItem label="退款原因" prop="refundReason" key="退款原因">
+          <Col span="8" v-if="form.isReturnBackPrice == true">
+            <FormItem
+              label="退款原因"
+              prop="refundReason"
+              key="退款原因"
+              :rules="{
+                required: form.refundType == '其他',
+                message: '请输入退款原因',
+              }"
+            >
               <Input
                 v-model="form.refundReason"
                 placeholder="请输入退款原因"
                 type="textarea"
                 :rows="3"
+                :disabled="form.refundType != '其他'"
               ></Input>
             </FormItem>
           </Col>
           <Col span="8">
             <FormItem label="是否差评" prop="isBadReview">
-              <i-switch v-model="form.isBadReview" @on-change="isBadReviewChange()"/>
+              <i-switch
+                v-model="form.isBadReview"
+                @on-change="isBadReviewChange()"
+              />
             </FormItem>
           </Col>
           <Col span="8" v-if="form.isBadReview == true">
@@ -530,7 +573,7 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          <Col span="8"  v-if="form.isBadReview == true">
+          <Col span="8" v-if="form.isBadReview == true">
             <FormItem label="差评原因" prop="badReviewReason" key="差评原因">
               <Input
                 v-model="form.badReviewReason"
@@ -540,7 +583,7 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="8"  v-if="form.isBadReview == true">
+          <Col span="8" v-if="form.isBadReview == true">
             <FormItem label="差评内容" prop="badReviewContent" key="差评内容">
               <Input
                 v-model="form.badReviewContent"
@@ -552,10 +595,13 @@
           </Col>
           <Col span="8">
             <FormItem label="是否追评" prop="isReContent">
-              <i-switch v-model="form.isReContent" @on-change="isReContentChange()"/>
+              <i-switch
+                v-model="form.isReContent"
+                @on-change="isReContentChange()"
+              />
             </FormItem>
           </Col>
-          <Col span="8"  v-if="form.isReContent == true">
+          <Col span="8" v-if="form.isReContent == true">
             <FormItem label="追评原因" prop="reContent" key="追评原因">
               <Input
                 v-model="form.reContent"
@@ -586,6 +632,14 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 指派给 -->
+    <assign
+      :assignModel.sync="assignModel"
+      :assignParams="assignParams"
+      @getSmallCar="getSmallCar"
+    />
+    <!-- 批量指派 -->
+    <batchAssignment :batchAssignmentModel.sync="batchAssignmentModel" :assignParams="assignParams" @getSmallCar="getSmallCar"/>
   </div>
 </template>
 <script>
@@ -593,40 +647,54 @@ import * as api from "@/api/shoppingCartRegistration";
 import * as apis from "@/api/baseDataMaintenance";
 import * as orderApi from "@/api/orderManage";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
+import assign from "./components/assign.vue";
+import batchAssignment from "./components/batchAssignment.vue";
 export default {
+  components: { assign,batchAssignment },
   data() {
     return {
+      
+      batchAssignmentModel:false,
+      // 指派给
+      assignModel: false,
+      assignParams: {
+        id: "",
+        employeeList: [],
+        // 批量指派
+        idList: new Set(),
+      },
+      phoneCopy: "00000000000",
       // 查询
       query: {
         // 重要程度
-        emergencyLevel:-1,
+        emergencyLevel: -1,
         // 退款开始时间
-        startRefundTime:'',
+        startRefundTime: "",
         // 退款结束时间
-        endRefundTime:'',
+        endRefundTime: "",
         // 差评开始时间
-        startBadReviewTime:'',
+        startBadReviewTime: "",
         // 差评结束时间
-        endBadReviewTime:'',
+        endBadReviewTime: "",
         // 是否差评
-        isBadReview:-1,
+        isBadReview: -1,
         // 录单触达
-        isCreateOrder:-1,
+        isCreateOrder: -1,
         // 派单触达
-        isSendOrder:-1,
+        isSendOrder: -1,
         smallpageNumEdit: 1,
-        admissionId:-1,
-        minPrice:null,
-        maxPrice:null,
-        isAddWechat:-1,
-        isWriteOff:-1,
-        isConsultation:-1,
-        isReturnBackPrice:-1,
+        assignEmpId: -1,
+        minPrice: null,
+        maxPrice: null,
+        isAddWechat: -1,
+        isWriteOff: -1,
+        isConsultation: -1,
+        isReturnBackPrice: -1,
         keyword: "",
-        startDate:this.$moment().format("YYYY-MM-DD"),
-        endDate:this.$moment().format("YYYY-MM-DD"),
-        LiveAnchorId:null,
-        contentPlatFormId:'',
+        startDate: this.$moment().format("YYYY-MM-DD"),
+        endDate: this.$moment().format("YYYY-MM-DD"),
+        LiveAnchorId: null,
+        contentPlatFormId: "",
         pageNum: 1,
         pageSize: 10,
         columns: [
@@ -637,6 +705,12 @@ export default {
           //   align: "center",
           // },
           {
+            type: "selection",
+            key: "_checked",
+            align: "center",
+            minWidth: 80,
+          },
+          {
             title: "登记日期",
             key: "recordDate",
             minWidth: 110,
@@ -645,12 +719,22 @@ export default {
               return h(
                 "div",
                 params.row.recordDate
-                  ? this.$moment(params.row.recordDate).format(
-                      "YYYY-MM-DD"
-                    )
+                  ? this.$moment(params.row.recordDate).format("YYYY-MM-DD")
                   : ""
               );
             },
+          },
+          {
+            title: "指派给",
+            key: "assignEmpName",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "创建人",
+            key: "createBy",
+            minWidth: 120,
+            align: "center",
           },
           {
             title: "重要程度",
@@ -752,6 +836,12 @@ export default {
             align: "center",
           },
           {
+            title: "辅助电话",
+            key: "subPhone",
+            minWidth: 130,
+            align: "center",
+          },
+          {
             title: "下单金额",
             key: "price",
             minWidth: 130,
@@ -770,45 +860,41 @@ export default {
             // }
             render: (h, params) => {
               if (params.row.consultationType == 1) {
-                return h(
-                  "div",
-                  '视频'
-                );
+                return h("div", "视频");
               } else if (params.row.consultationType == 2) {
                 return h(
                   "div",
-                 
-                  '图片'
+
+                  "图片"
                 );
               } else if (params.row.consultationType == 3) {
                 return h(
                   "div",
-                  
-                  '私信'
+
+                  "私信"
                 );
               } else if (params.row.consultationType == 4) {
                 return h(
                   "div",
-                  
-                  '其他'
+
+                  "其他"
                 );
-              }else if (params.row.consultationType == 5) {
+              } else if (params.row.consultationType == 5) {
                 return h(
                   "div",
-                  
-                  '粉丝群'
+
+                  "粉丝群"
                 );
-              }else if (params.row.consultationType == 6) {
+              } else if (params.row.consultationType == 6) {
                 return h(
                   "div",
-                  
-                  '短视频'
+
+                  "短视频"
                 );
               }
             },
           },
-          
-          
+
           {
             title: "录单触达",
             key: "isCreateOrder",
@@ -1009,9 +1095,7 @@ export default {
               return h(
                 "div",
                 params.row.refundDate
-                  ? this.$moment(params.row.refundDate).format(
-                      "YYYY-MM-DD "
-                    )
+                  ? this.$moment(params.row.refundDate).format("YYYY-MM-DD ")
                   : ""
               );
             },
@@ -1060,9 +1144,7 @@ export default {
               return h(
                 "div",
                 params.row.badReviewDate
-                  ? this.$moment(params.row.badReviewDate).format(
-                      "YYYY-MM-DD "
-                    )
+                  ? this.$moment(params.row.badReviewDate).format("YYYY-MM-DD ")
                   : ""
               );
             },
@@ -1108,7 +1190,7 @@ export default {
               }
             },
           },
-         
+
           {
             title: "追评内容",
             key: "reContent",
@@ -1121,12 +1203,7 @@ export default {
             minWidth: 200,
             align: "center",
           },
-          {
-            title: "接诊人",
-            key: "createBy",
-            minWidth: 120,
-            align: "center",
-          },
+          
           {
             title: "创建日期",
             key: "createDate",
@@ -1146,10 +1223,31 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 150,
+            width: 200,
             fixed: "right",
+            align: "center",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.assignParams.id = id;
+                        this.assignModel = true;
+                      },
+                    },
+                  },
+                  "指派给"
+                ),
                 h(
                   "Button",
                   {
@@ -1191,8 +1289,7 @@ export default {
                               // 备注
                               remark,
                               isAddWeChat,
-
-                              createByEmpId,
+                              assignEmpId,
                               refundDate,
                               refundReason,
                               badReviewDate,
@@ -1202,10 +1299,28 @@ export default {
                               reContent,
                               isBadReview,
                               emergencyLevel,
-                              consultationDate
+                              consultationDate,
+                              subPhone,
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
+                            if (
+                              refundReason == "客户未接/拒接" ||
+                              refundReason == "客户不需要" ||
+                              refundReason == "客户错拍/多拍" ||
+                              refundReason == "客户是同行" ||
+                              refundReason == "客户不了解产品" ||
+                              refundReason == "客户个人原因" ||
+                              refundReason == "助理服务问题" ||
+                              refundReason == "助理专业问题" ||
+                              refundReason == "助理建议退款"
+                            ) {
+                              this.form.refundType = refundReason;
+                              this.form.refundReason = "";
+                            } else {
+                              this.form.refundType = "其他";
+                              this.form.refundReason = refundReason.slice(3);
+                            }
                             this.isEdit = true;
                             this.form.recordDate = recordDate;
                             this.form.contentPlatFormId = contentPlatFormId;
@@ -1222,9 +1337,9 @@ export default {
                             this.form.isConsultation = isConsultation;
                             this.form.isReturnBackPrice = isReturnBackPrice;
                             this.form.remark = remark;
-                            this.form.admissionId = createByEmpId;
+                            this.form.assignEmpId = assignEmpId;
                             this.form.refundDate = refundDate;
-                            this.form.refundReason = refundReason;
+
                             this.form.badReviewDate = badReviewDate;
                             this.form.consultationDate = consultationDate;
                             this.form.badReviewReason = badReviewReason;
@@ -1233,12 +1348,16 @@ export default {
                             this.form.isBadReview = isBadReview;
                             this.form.badReviewContent = badReviewContent;
                             this.form.remark = remark;
+                            this.form.subPhone = subPhone;
                             this.form.id = id;
                             this.controlModal = true;
-                            
+
                             let index = recordDate.indexOf("T");
-                            let result = recordDate.substr(index + 1,recordDate.length); 
-                            this.form.time = result
+                            let result = recordDate.substr(
+                              index + 1,
+                              recordDate.length
+                            );
+                            this.form.time = result;
                           }
                         });
                       },
@@ -1246,6 +1365,7 @@ export default {
                   },
                   "修改"
                 ),
+
                 h(
                   "Button",
                   {
@@ -1286,37 +1406,39 @@ export default {
         data: [],
         totalCount: 0,
         // 录单触达
-        isCreateOrderList:[
+        isCreateOrderList: [
           {
-            type:-1,
-            name:'全部录单触达状态'
+            type: -1,
+            name: "全部录单触达状态",
           },
           {
-            type:'true',
-            name:'是'
+            type: "true",
+            name: "是",
           },
           {
-            type:'false',
-            name:'否'
-          }
+            type: "false",
+            name: "否",
+          },
         ],
         // 派单触达
-        isSendOrderList:[
+        isSendOrderList: [
           {
-            type:-1,
-            name:'全部派单触达状态'
+            type: -1,
+            name: "全部派单触达状态",
           },
           {
-            type:'true',
-            name:'是'
+            type: "true",
+            name: "是",
           },
           {
-            type:'false',
-            name:'否'
-          }
+            type: "false",
+            name: "否",
+          },
         ],
         // 重要程度
-        emergencyLevelListAll:[{emergencyLevel:-1,emergencyLevelText:'全部重要程度'}]
+        emergencyLevelListAll: [
+          { emergencyLevel: -1, emergencyLevelText: "全部重要程度" },
+        ],
       },
       flag: false,
       // 控制 modal
@@ -1346,13 +1468,13 @@ export default {
         // 面诊方式
         consultationType: null,
         // 是否加V
-        IsAddWeChat:false,
+        IsAddWeChat: false,
         // 是否核销
         isWriteOff: false,
         // 是否面诊
         isConsultation: false,
         // 面诊时间
-        consultationDate:null,
+        consultationDate: null,
         // 是否退款
         isReturnBackPrice: false,
         // 备注
@@ -1360,34 +1482,42 @@ export default {
         // 是否有效
         valid: false,
         // 主播平台
-        contentPlateFormId:'',
+        contentPlateFormId: "",
         id: "",
-        time:'',
+        time: "",
         // 退款时间
-        refundDate:'',
+        refundDate: "",
         // 退款原因
-        refundReason:'',
+        refundReason: "",
+        // 退款类型
+        refundType: "",
         // 是否差评
-        isBadReview:false,
+        isBadReview: false,
         // 差评时间
-        badReviewDate:'',
+        badReviewDate: "",
         // 差评原因
-        badReviewReason:'',
+        badReviewReason: "",
         // 差评内容
-        badReviewContent:'',
+        badReviewContent: "",
         // 是否追评,
-        isReContent:false,
+        isReContent: false,
         // 追评内容
-        reContent:'',
-        // 接诊人员
-        admissionId:Number(sessionStorage.getItem("employeeId"))
-          ? Number(sessionStorage.getItem("employeeId"))
-          : null,
+        reContent: "",
+        // 指派给
+        assignEmpId: null,
         // 重要程度
-        emergencyLevel:null
+        emergencyLevel: null,
+        // 辅助电话
+        subPhone: "",
       },
 
       ruleValidate: {
+        refundType: [
+          {
+            required: true,
+            message: "请选择退款类型",
+          },
+        ],
         emergencyLevel: [
           {
             required: true,
@@ -1418,25 +1548,25 @@ export default {
             message: "请输入差评原因",
           },
         ],
-         badReviewDate: [
+        badReviewDate: [
           {
             required: true,
             message: "请选择差评时间",
           },
         ],
-         refundReason: [
+        refundReason: [
           {
             required: true,
             message: "请输入退款原因",
           },
         ],
-         refundDate: [
+        refundDate: [
           {
             required: true,
             message: "请选择退款时间",
           },
         ],
-        
+
         recordDate: [
           {
             required: true,
@@ -1479,7 +1609,7 @@ export default {
             message: "请选择面诊方式",
           },
         ],
-         consultationDate: [
+        consultationDate: [
           {
             required: true,
             message: "请选择面诊时间",
@@ -1491,176 +1621,284 @@ export default {
       // ip账号
       liveAnchors: [],
       //   下单金额
-      priceList:[
-          {
-              id:1,
-              price:199
-          },
-          {
-              id:2,
-              price:99
-          }
-        ],
-        // 面诊方式
-        faceList:[
-            {
-                id:1,
-                name:'视频'
-            },
-            {
-                id:2,
-                name:'照片'
-            },
-            {
-              id:3,
-              name:'私信'
-            },{
-              id:5,
-              name:'粉丝群'
-            },
-            {
-              id:6,
-              name:'短视频'
-            },
-            {
-              id:4,
-              name:'其他'
-            }
-        ],
-        // 是否加v
-        isAddWeChatList:[{
-          type:-1,
-          name:'全部加V状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
-        isWriteOffList:[{
-          type:-1,
-          name:'全部核销状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
-        isConsultationList:[{
-          type:-1,
-          name:'全部面诊状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
-        isReturnBackPriceList:[{
-          type:-1,
-          name:'全部退款状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
-        isBadReviewList:[{
-          type:-1,
-          name:'全部差评状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
-        //接诊人员
-        employeeList:[],
-        employee: [{ name: "全部接诊人员", id: -1 }],
-        // 微信号
-        weChatList: [],
-        // 紧急程度
-        emergencyLevelsList:[]
-       
-
+      priceList: [
+        {
+          id: 1,
+          price: 199,
+        },
+        {
+          id: 2,
+          price: 99,
+        },
+      ],
+      // 面诊方式
+      faceList: [
+        {
+          id: 1,
+          name: "视频",
+        },
+        {
+          id: 2,
+          name: "照片",
+        },
+        {
+          id: 3,
+          name: "私信",
+        },
+        {
+          id: 5,
+          name: "粉丝群",
+        },
+        {
+          id: 6,
+          name: "短视频",
+        },
+        {
+          id: 4,
+          name: "其他",
+        },
+      ],
+      // 退款类型
+      refundTypeList: [
+        {
+          id: 1,
+          name: "客户未接/拒接",
+        },
+        {
+          id: 2,
+          name: "客户不需要",
+        },
+        {
+          id: 3,
+          name: "客户错拍/多拍",
+        },
+        {
+          id: 4,
+          name: "客户是同行",
+        },
+        {
+          id: 5,
+          name: "客户不了解产品",
+        },
+        {
+          id: 6,
+          name: "客户个人原因",
+        },
+        {
+          id: 7,
+          name: "助理服务问题",
+        },
+        {
+          id: 8,
+          name: "助理专业问题",
+        },
+        {
+          id: 9,
+          name: "助理建议退款",
+        },
+        {
+          id: 10,
+          name: "其他",
+        },
+      ],
+      // 是否加v
+      isAddWeChatList: [
+        {
+          type: -1,
+          name: "全部加V状态",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
+      isWriteOffList: [
+        {
+          type: -1,
+          name: "全部核销状态",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
+      isConsultationList: [
+        {
+          type: -1,
+          name: "全部面诊类型",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
+      isReturnBackPriceList: [
+        {
+          type: -1,
+          name: "全部退款状态",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
+      isBadReviewList: [
+        {
+          type: -1,
+          name: "全部差评状态",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
+      //指派给
+      employeeList: [],
+      employee: [{ name: "全部指派人员", id: -1 }],
+      // 微信号
+      weChatList: [],
+      // 紧急程度
+      emergencyLevelsList: [],
+      
     };
   },
   methods: {
-    // 是否面诊
-    consultationChange(){
-      if(this.form.isConsultation == false){
-        this.form.consultationDate = null
+    // 批量指派
+    batchAssignmentClick() {
+      if (![...this.assignParams.idList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.batchAssignmentModel = true;
+    },
+    handleSelect(selection, row) {
+      // 批量指派
+      this.assignParams.idList.add(row.id);
+    },
+
+    handleCancels(selection, row) {
+      // 批量指派
+      this.assignParams.idList.delete(row.id);
+    },
+
+    handleSelectAll(selection) {
+      if (selection && selection.length === 0) {
+        this.assignParams.idList.clear();
+      } else {
+        selection.forEach((item) => {
+          this.assignParams.idList.add(item.id);
+        });
       }
     },
-    emergencyLevelChange(){
-      if(this.form.emergencyLevel == 2){
-        this.form.IsAddWeChat = false
-        this.form.isConsultation = false
-        this.form.isReturnBackPrice = false
-        this.form.isBadReview = false
-        this.form.refundReason = ''
-        this.form.refundDate = null
-        this.form.badReviewDate = null
-        this.form.badReviewReason = ''  
-        this.form.badReviewContent = ''
-      }else if(this.form.emergencyLevel == 0){
-        this.form.isReturnBackPrice = true
-        this.form.isBadReview = true
-        this.form.IsAddWeChat = false
-        this.form.isConsultation = false
-      }else{
-        this.form.isReturnBackPrice = false
-        this.form.isBadReview = false
-        this.form.refundReason = ''
-        this.form.refundDate = null
-        this.form.badReviewDate = null
-        this.form.badReviewReason = ''  
-        this.form.badReviewContent = ''
-        this.form.IsAddWeChat = false
-        this.form.isConsultation = false
+    onCopy: function(e) {
+      this.$Message.success("你已复制成功！");
+    },
+    onError: function(e) {
+      this.$Message.error("无法复制文本！");
+    },
+    refundTypeChange() {
+      if (this.form.refundType != "其他") {
+        this.form.refundReason = "";
+      }
+    },
+    // 是否面诊
+    consultationChange() {
+      if (this.form.isConsultation == false) {
+        this.form.consultationDate = null;
+      }
+    },
+    emergencyLevelChange() {
+      if (this.form.emergencyLevel == 2) {
+        this.form.IsAddWeChat = false;
+        this.form.isConsultation = false;
+        this.form.isReturnBackPrice = false;
+        this.form.isBadReview = false;
+        this.form.refundReason = "";
+        this.form.refundDate = null;
+        this.form.badReviewDate = null;
+        this.form.badReviewReason = "";
+        this.form.badReviewContent = "";
+      } else if (this.form.emergencyLevel == 0) {
+        this.form.isReturnBackPrice = true;
+        this.form.isBadReview = true;
+        this.form.IsAddWeChat = false;
+        this.form.isConsultation = false;
+        this.form.refundType = "";
+      } else {
+        this.form.isReturnBackPrice = false;
+        this.form.isBadReview = false;
+        this.form.refundReason = "";
+        this.form.refundDate = null;
+        this.form.badReviewDate = null;
+        this.form.badReviewReason = "";
+        this.form.badReviewContent = "";
+        this.form.IsAddWeChat = false;
+        this.form.isConsultation = false;
       }
     },
     // 紧急程度（下拉框）
-    getEmergencyLevels(){
+    getEmergencyLevels() {
       api.emergencyLevels().then((res) => {
         if (res.code === 0) {
           const { emergencyLevels } = res.data;
-            this.emergencyLevelsList = emergencyLevels;
-            this.query.emergencyLevelListAll = [...this.query.emergencyLevelListAll,...emergencyLevels]
+          this.emergencyLevelsList = emergencyLevels;
+          this.query.emergencyLevelListAll = [
+            ...this.query.emergencyLevelListAll,
+            ...emergencyLevels,
+          ];
         }
       });
     },
-    isReturnBackPriceChange(){
-      const {isReturnBackPrice} = this.form
-      if(isReturnBackPrice == false){
-        this.form.refundDate = null
-        this.form.refundReason = ''
+    isReturnBackPriceChange() {
+      const { isReturnBackPrice } = this.form;
+      if (isReturnBackPrice == false) {
+        this.form.refundDate = null;
+        this.form.refundReason = "";
       }
     },
-    isBadReviewChange(){
-      const {isBadReview} = this.form
-      if(isBadReview == false){
-        this.form.badReviewDate = null
-        this.form.badReviewReason = ''
-        this.form.badReviewContent = ''
+    isBadReviewChange() {
+      const { isBadReview } = this.form;
+      if (isBadReview == false) {
+        this.form.badReviewDate = null;
+        this.form.badReviewReason = "";
+        this.form.badReviewContent = "";
       }
     },
-    isReContentChange(){
-      const {isReContent} = this.form
-      if(isReContent == false){
-        this.form.reContent = null
+    isReContentChange() {
+      const { isReContent } = this.form;
+      if (isReContent == false) {
+        this.form.reContent = null;
       }
     },
     liveAnchorChange(value) {
       if (!value) {
         return;
       }
-      this.form.liveAnchorWeChatNo= ''
-      this.form.liveAnchorWechatNo= ''
+      this.form.liveAnchorWeChatNo = "";
+      this.form.liveAnchorWechatNo = "";
       this.getWeChatList(value);
     },
     //  根据主播获取主播微信号
@@ -1671,7 +1909,7 @@ export default {
       liveAnchorApi.getvalidList(data).then((res) => {
         if (res.code === 0) {
           const { liveAnchorWechatInfos } = res.data;
-            this.weChatList = liveAnchorWechatInfos;
+          this.weChatList = liveAnchorWechatInfos;
         }
       });
     },
@@ -1682,6 +1920,7 @@ export default {
           const { employee } = res.data;
           this.employee = [...this.employee, ...employee];
           this.employeeList = employee;
+          this.assignParams.employeeList = employee;
         }
       });
     },
@@ -1717,58 +1956,98 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyword , startDate,endDate,liveAnchorId,contentPlatFormId,
-      isAddWechat,isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId,
-      isCreateOrder,isSendOrder,isBadReview,startRefundTime,endRefundTime,startBadReviewTime,endBadReviewTime,
-      emergencyLevel
-      
-      } = this.query;
-      const data = { 
-        pageNum, 
-        pageSize, 
-        keyword , 
-        startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
-        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null ,
+      const {
+        pageNum,
+        pageSize,
+        keyword,
+        startDate,
+        endDate,
         liveAnchorId,
         contentPlatFormId,
-        isAddWechat:isAddWechat == -1 ? null : isAddWechat,
-        isWriteOff:isWriteOff == -1 ? null : isWriteOff,
-        isConsultation:isConsultation == -1 ? null : isConsultation,
-        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
-        admissionId:admissionId==-1 ? null : admissionId,
+        isAddWechat,
+        isWriteOff,
+        isConsultation,
+        isReturnBackPrice,
         minPrice,
         maxPrice,
-        isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
-        isSendOrder:isSendOrder == -1 ? null : isSendOrder,
-        isBadReview:isBadReview == -1 ? null : isBadReview,
-        startRefundTime:isReturnBackPrice == 'true' ?  (startRefundTime ? this.$moment(startRefundTime).format("YYYY-MM-DD") : null) : null,
-        endRefundTime:isReturnBackPrice == 'true' ?   (endRefundTime ? this.$moment(endRefundTime).format("YYYY-MM-DD") : null) : null,
-        startBadReviewTime:isBadReview == 'true' ?  (startBadReviewTime ? this.$moment(startBadReviewTime).format("YYYY-MM-DD") : null) : null,
-        endBadReviewTime:isBadReview == 'true' ?  (endBadReviewTime ? this.$moment(endBadReviewTime).format("YYYY-MM-DD") : null) : null,
-        emergencyLevel:emergencyLevel == -1 ? null : emergencyLevel
+        assignEmpId,
+        isCreateOrder,
+        isSendOrder,
+        isBadReview,
+        startRefundTime,
+        endRefundTime,
+        startBadReviewTime,
+        endBadReviewTime,
+        emergencyLevel,
+      } = this.query;
+      const data = {
+        pageNum,
+        pageSize,
+        keyword,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        liveAnchorId,
+        contentPlatFormId,
+        isAddWechat: isAddWechat == -1 ? null : isAddWechat,
+        isWriteOff: isWriteOff == -1 ? null : isWriteOff,
+        isConsultation: isConsultation == -1 ? null : isConsultation,
+        isReturnBackPrice: isReturnBackPrice == -1 ? null : isReturnBackPrice,
+        assignEmpId: assignEmpId == -1 ? null : assignEmpId,
+        minPrice,
+        maxPrice,
+        isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
+        isSendOrder: isSendOrder == -1 ? null : isSendOrder,
+        isBadReview: isBadReview == -1 ? null : isBadReview,
+        startRefundTime:
+          isReturnBackPrice == "true"
+            ? startRefundTime
+              ? this.$moment(startRefundTime).format("YYYY-MM-DD")
+              : null
+            : null,
+        endRefundTime:
+          isReturnBackPrice == "true"
+            ? endRefundTime
+              ? this.$moment(endRefundTime).format("YYYY-MM-DD")
+              : null
+            : null,
+        startBadReviewTime:
+          isBadReview == "true"
+            ? startBadReviewTime
+              ? this.$moment(startBadReviewTime).format("YYYY-MM-DD")
+              : null
+            : null,
+        endBadReviewTime:
+          isBadReview == "true"
+            ? endBadReviewTime
+              ? this.$moment(endBadReviewTime).format("YYYY-MM-DD")
+              : null
+            : null,
+        emergencyLevel: emergencyLevel == -1 ? null : emergencyLevel,
       };
-      if(!startDate || !endDate){
-        this.$Message.warning('请选择日期')
-        return
+      if (!startDate || !endDate) {
+        this.$Message.warning("请选择日期");
+        return;
       }
-      if(isReturnBackPrice == 'true'){
-        if(!startRefundTime){
-          this.$Message.warning('请选择退款开始日期')
-          return
+      if (isReturnBackPrice == "true") {
+        if (!startRefundTime) {
+          this.$Message.warning("请选择退款开始日期");
+          return;
         }
-        if(!endRefundTime){
-          this.$Message.warning('请选择退款结束日期')
-          return
+        if (!endRefundTime) {
+          this.$Message.warning("请选择退款结束日期");
+          return;
         }
       }
-      if(isBadReview == 'true'){
-        if(!startBadReviewTime){
-          this.$Message.warning('请选择差评开始日期')
-          return
+      if (isBadReview == "true") {
+        if (!startBadReviewTime) {
+          this.$Message.warning("请选择差评开始日期");
+          return;
         }
-        if(!endBadReviewTime){
-          this.$Message.warning('请选择差评结束日期')
-          return
+        if (!endBadReviewTime) {
+          this.$Message.warning("请选择差评结束日期");
+          return;
         }
       }
       api.shoppingCartRegistrationList(data).then((res) => {
@@ -1776,140 +2055,116 @@ export default {
           const { list, totalCount } = res.data.shoppingCartRegistrationInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
-        }else if (res.code != -1 || res.code !=0){
-          this.$Message.error('操作失败，请联系管理员')
+          this.assignParams.idList.clear();
+        } else if (res.code != -1 || res.code != 0) {
+          this.$Message.error("操作失败，请联系管理员");
         }
       });
     },
 
     // 获取小黄车登记列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyword, startDate,endDate,liveAnchorId,contentPlatFormId,isAddWechat,
-      isWriteOff,isConsultation,isReturnBackPrice,minPrice,maxPrice,admissionId,
-      isCreateOrder,isSendOrder,isBadReview,startRefundTime,endRefundTime,startBadReviewTime,endBadReviewTime,
-      emergencyLevel
-       } = this.query;
-      const data = { 
-        pageNum, 
-        pageSize, 
-        keyword ,
-        startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
-        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null ,
+      const {
+        pageSize,
+        keyword,
+        startDate,
+        endDate,
         liveAnchorId,
         contentPlatFormId,
-        isAddWechat:isAddWechat == -1 ? null : isAddWechat,
-        isWriteOff:isWriteOff == -1 ? null : isWriteOff,
-        isConsultation:isConsultation == -1 ? null : isConsultation,
-        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice,
-        admissionId:admissionId==-1 ? null : admissionId,
+        isAddWechat,
+        isWriteOff,
+        isConsultation,
+        isReturnBackPrice,
         minPrice,
         maxPrice,
-        isCreateOrder:isCreateOrder == -1 ? null : isCreateOrder,
-        isSendOrder:isSendOrder == -1 ? null : isSendOrder,
-        isBadReview:isBadReview == -1 ? null : isBadReview,
-        startRefundTime:isReturnBackPrice == 'true' ?  (startRefundTime ? this.$moment(startRefundTime).format("YYYY-MM-DD") : null) : null,
-        endRefundTime:isReturnBackPrice == 'true' ?   (endRefundTime ? this.$moment(endRefundTime).format("YYYY-MM-DD") : null) : null,
-        startBadReviewTime:isBadReview == 'true' ?  (startBadReviewTime ? this.$moment(startBadReviewTime).format("YYYY-MM-DD") : null) : null,
-        endBadReviewTime:isBadReview == 'true' ?  (endBadReviewTime ? this.$moment(endBadReviewTime).format("YYYY-MM-DD") : null) : null,
-        emergencyLevel: emergencyLevel == -1 ? null :emergencyLevel
-        
+        assignEmpId,
+        isCreateOrder,
+        isSendOrder,
+        isBadReview,
+        startRefundTime,
+        endRefundTime,
+        startBadReviewTime,
+        endBadReviewTime,
+        emergencyLevel,
+      } = this.query;
+      const data = {
+        pageNum,
+        pageSize,
+        keyword,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        liveAnchorId,
+        contentPlatFormId,
+        isAddWechat: isAddWechat == -1 ? null : isAddWechat,
+        isWriteOff: isWriteOff == -1 ? null : isWriteOff,
+        isConsultation: isConsultation == -1 ? null : isConsultation,
+        isReturnBackPrice: isReturnBackPrice == -1 ? null : isReturnBackPrice,
+        assignEmpId: assignEmpId == -1 ? null : assignEmpId,
+        minPrice,
+        maxPrice,
+        isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
+        isSendOrder: isSendOrder == -1 ? null : isSendOrder,
+        isBadReview: isBadReview == -1 ? null : isBadReview,
+        startRefundTime:
+          isReturnBackPrice == "true"
+            ? startRefundTime
+              ? this.$moment(startRefundTime).format("YYYY-MM-DD")
+              : null
+            : null,
+        endRefundTime:
+          isReturnBackPrice == "true"
+            ? endRefundTime
+              ? this.$moment(endRefundTime).format("YYYY-MM-DD")
+              : null
+            : null,
+        startBadReviewTime:
+          isBadReview == "true"
+            ? startBadReviewTime
+              ? this.$moment(startBadReviewTime).format("YYYY-MM-DD")
+              : null
+            : null,
+        endBadReviewTime:
+          isBadReview == "true"
+            ? endBadReviewTime
+              ? this.$moment(endBadReviewTime).format("YYYY-MM-DD")
+              : null
+            : null,
+        emergencyLevel: emergencyLevel == -1 ? null : emergencyLevel,
       };
-      if(!startDate || !endDate){
-        this.$Message.warning('请选择日期')
-        return
+      if (!startDate || !endDate) {
+        this.$Message.warning("请选择日期");
+        return;
       }
       api.shoppingCartRegistrationList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.shoppingCartRegistrationInfo;
-          
+
           this.query.data = list;
           this.query.totalCount = totalCount;
           // 修改时 保留在当前页面
-          sessionStorage.setItem("smallpageNumEdit", pageNum);
-        }else if (res.code != -1 || res.code !=0){
-          this.$Message.error('操作失败，请联系管理员')
+          // sessionStorage.setItem("smallpageNumEdit", pageNum);
+        } else if (res.code != -1 || res.code != 0) {
+          this.$Message.error("操作失败，请联系管理员");
         }
       });
     },
-    handlePageSizeChange(pageSize){
-      this.query.pageSize = pageSize
-      this.getSmallCar()
+    handlePageSizeChange(pageSize) {
+      this.query.pageSize = pageSize;
+      this.getSmallCar();
     },
     // 确认
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            if (this.form.phone) {
-                if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
-                  this.$Message.error("请输入正确的手机号");
-                  return false;
-                }else{
-                  const {id,recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,
-                  consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat ,time ,
-                  refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId,emergencyLevel,consultationDate} = this.form;
-                  
-                  const data = { 
-                    recordDate:time ? this.$moment(recordDate).format("YYYY-MM-DD")+'T' + time : this.$moment(recordDate).format("YYYY-MM-DD") + 'T' + '00:00:00',
-                    contentPlatFormId,
-                    liveAnchorId,
-                    liveAnchorWechatNo:this.form.liveAnchorWeChatNo,
-                    customerNickName,
-                    phone,
-                    price,
-                    consultationType,
-                    isWriteOff,
-                    isConsultation,
-                    isReturnBackPrice,
-                    remark ,
-                    IsAddWeChat,
-                    id,
-                    refundDate:refundDate ? this.$moment(refundDate).format("YYYY-MM-DD") : null ,
-                    refundReason,
-                    isBadReview,
-                    badReviewDate:badReviewDate ? this.$moment(badReviewDate).format("YYYY-MM-DD") : null ,
-                    badReviewReason,
-                    badReviewContent,
-                    isReContent,
-                    reContent,
-                    admissionId,
-                    emergencyLevel,
-                    consultationDate:consultationDate ? this.$moment(consultationDate).format("YYYY-MM-DD") : null
-                    };
-                    if(!data.liveAnchorWechatNo){
-                        this.$Message.warning('请选择微信号')
-                        return
-                    }
-                  // 修改
-                  api.editShoppingCartRegistration(data).then((res) => {
-                    if (res.code === 0) {
-                      this.isEdit = false;
-                      this.cancelSubmit("form");
-                      // this.getSmallCar();
-                      this.handlePageChange(
-                        sessionStorage.getItem("smallpageNumEdit")
-                          ? sessionStorage.getItem("smallpageNumEdit")
-                          : 1
-                      );
-                      this.$Message.success({
-                        content: "修改成功",
-                        duration: 3,
-                      });
-                    }else if (res.code != -1 || res.code !=0){
-                      this.$Message.error('操作失败，请联系管理员')
-                    }
-                  });
-                }
-              }
-          } else {
-            const {recordDate,contentPlatFormId,liveAnchorId,liveAnchorWechatNo,customerNickName,phone,price,
-            consultationType,isWriteOff,isConsultation,isReturnBackPrice,remark,IsAddWeChat,time  ,
-            refundDate,refundReason,isBadReview,badReviewDate,badReviewReason,badReviewContent,isReContent,reContent,admissionId,emergencyLevel,consultationDate} = this.form;
-            const data = { 
-              recordDate:time ? this.$moment(recordDate).format("YYYY-MM-DD")+'T' + time : this.$moment(recordDate).format("YYYY-MM-DD") + 'T' + '00:00:00',
+            const {
+              id,
+              recordDate,
               contentPlatFormId,
               liveAnchorId,
-              liveAnchorWechatNo:this.form.liveAnchorWeChatNo,
+              liveAnchorWechatNo,
               customerNickName,
               phone,
               price,
@@ -1917,30 +2172,204 @@ export default {
               isWriteOff,
               isConsultation,
               isReturnBackPrice,
-              remark ,
+              remark,
               IsAddWeChat,
-              refundDate:refundDate ? this.$moment(refundDate).format("YYYY-MM-DD") : null ,
+              time,
+              refundDate,
               refundReason,
               isBadReview,
-              badReviewDate:badReviewDate ? this.$moment(badReviewDate).format("YYYY-MM-DD") : null ,
+              badReviewDate,
               badReviewReason,
               badReviewContent,
               isReContent,
               reContent,
-              admissionId,
+              assignEmpId,
               emergencyLevel,
-              consultationDate:consultationDate ? this.$moment(consultationDate).format("YYYY-MM-DD") : null
-              };
-
-              if (phone) {
-                if (!/^1[3456789]\d{9}$/.test(phone)) {
+              consultationDate,
+              refundType,
+              subPhone,
+            } = this.form;
+            const data = {
+              recordDate: time
+                ? this.$moment(recordDate).format("YYYY-MM-DD") + "T" + time
+                : this.$moment(recordDate).format("YYYY-MM-DD") +
+                  "T" +
+                  "00:00:00",
+              contentPlatFormId,
+              liveAnchorId,
+              liveAnchorWechatNo: this.form.liveAnchorWeChatNo,
+              customerNickName,
+              phone,
+              price,
+              consultationType,
+              isWriteOff,
+              isConsultation,
+              isReturnBackPrice,
+              remark,
+              IsAddWeChat,
+              id,
+              refundDate: refundDate
+                ? this.$moment(refundDate).format("YYYY-MM-DD")
+                : null,
+              refundReason:
+                refundType != "其他" ? refundType : "其他：" + refundReason,
+              isBadReview,
+              badReviewDate: badReviewDate
+                ? this.$moment(badReviewDate).format("YYYY-MM-DD")
+                : null,
+              badReviewReason,
+              badReviewContent,
+              isReContent,
+              reContent,
+              assignEmpId,
+              emergencyLevel,
+              consultationDate: consultationDate
+                ? this.$moment(consultationDate).format("YYYY-MM-DD")
+                : null,
+              subPhone,
+            };
+            if (this.form.phone) {
+              if (this.form.phone == "00000000000") {
+                if (!data.liveAnchorWechatNo) {
+                  this.$Message.warning("请选择微信号");
+                  return;
+                }
+                // 修改
+                api.editShoppingCartRegistration(data).then((res) => {
+                  if (res.code === 0) {
+                    this.isEdit = false;
+                    this.cancelSubmit("form");
+                    // this.getSmallCar();
+                    this.handlePageChange(this.$refs.pages.currentPage);
+                    this.$Message.success({
+                      content: "修改成功",
+                      duration: 3,
+                    });
+                  } else if (res.code != -1 || res.code != 0) {
+                    this.$Message.error("操作失败，请联系管理员");
+                  }
+                });
+                return;
+              } else {
+                if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
                   this.$Message.error("请输入正确的手机号");
                   return false;
-                }else{
-                  if(!data.liveAnchorWechatNo){
-                        this.$Message.warning('请选择微信号')
-                        return
+                } else {
+                  if (!data.liveAnchorWechatNo) {
+                    this.$Message.warning("请选择微信号");
+                    return;
+                  }
+                  // 修改
+                  api.editShoppingCartRegistration(data).then((res) => {
+                    if (res.code === 0) {
+                      this.isEdit = false;
+                      this.cancelSubmit("form");
+                      // this.getSmallCar();
+                      this.handlePageChange(this.$refs.pages.currentPage);
+                      this.$Message.success({
+                        content: "修改成功",
+                        duration: 3,
+                      });
+                    } else if (res.code != -1 || res.code != 0) {
+                      this.$Message.error("操作失败，请联系管理员");
                     }
+                  });
+                }
+              }
+            }
+          } else {
+            const {
+              recordDate,
+              contentPlatFormId,
+              liveAnchorId,
+              liveAnchorWechatNo,
+              customerNickName,
+              phone,
+              price,
+              consultationType,
+              isWriteOff,
+              isConsultation,
+              isReturnBackPrice,
+              remark,
+              IsAddWeChat,
+              time,
+              refundDate,
+              refundReason,
+              isBadReview,
+              badReviewDate,
+              badReviewReason,
+              badReviewContent,
+              isReContent,
+              reContent,
+              assignEmpId,
+              emergencyLevel,
+              consultationDate,
+              refundType,
+              subPhone,
+            } = this.form;
+            const data = {
+              recordDate: time
+                ? this.$moment(recordDate).format("YYYY-MM-DD") + "T" + time
+                : this.$moment(recordDate).format("YYYY-MM-DD") +
+                  "T" +
+                  "00:00:00",
+              contentPlatFormId,
+              liveAnchorId,
+              liveAnchorWechatNo: this.form.liveAnchorWeChatNo,
+              customerNickName,
+              phone,
+              price,
+              consultationType,
+              isWriteOff,
+              isConsultation,
+              isReturnBackPrice,
+              remark,
+              IsAddWeChat,
+              refundDate: refundDate
+                ? this.$moment(refundDate).format("YYYY-MM-DD")
+                : null,
+              refundReason:
+                refundType != "其他" ? refundType : "其他：" + refundReason,
+              isBadReview,
+              badReviewDate: badReviewDate
+                ? this.$moment(badReviewDate).format("YYYY-MM-DD")
+                : null,
+              badReviewReason,
+              badReviewContent,
+              isReContent,
+              reContent,
+              assignEmpId,
+              emergencyLevel,
+              consultationDate: consultationDate
+                ? this.$moment(consultationDate).format("YYYY-MM-DD")
+                : null,
+              subPhone,
+            };
+            if (phone === "00000000000") {
+              // 添加
+              api.addShoppingCartRegistration(data).then((res) => {
+                if (res.code === 0) {
+                  this.cancelSubmit("form");
+                  this.getSmallCar();
+                  this.$Message.success({
+                    content: "添加成功",
+                    duration: 3,
+                  });
+                } else if (res.code != -1 || res.code != 0) {
+                  this.$Message.warning("操作失败，请联系管理员");
+                }
+              });
+              return;
+            } else {
+              if (phone) {
+                if (!/^1[3456789]\d{9}$/.test(phone)) {
+                  this.$Message.warning("请输入正确的手机号");
+                  return false;
+                } else {
+                  if (!data.liveAnchorWechatNo) {
+                    this.$Message.warning("请选择微信号");
+                    return;
+                  }
                   // 添加
                   api.addShoppingCartRegistration(data).then((res) => {
                     if (res.code === 0) {
@@ -1950,12 +2379,13 @@ export default {
                         content: "添加成功",
                         duration: 3,
                       });
-                    }else if (res.code != -1 || res.code !=0){
-                      this.$Message.error('操作失败，请联系管理员')
+                    } else if (res.code != -1 || res.code != 0) {
+                      this.$Message.warning("操作失败，请联系管理员");
                     }
                   });
                 }
               }
+            }
           }
         }
       });
@@ -1965,6 +2395,7 @@ export default {
     cancelSubmit(name) {
       this.isEdit = false;
       this.controlModal = false;
+      this.assignParams.idList.clear();
       this.$refs[name].resetFields();
     },
 
@@ -1979,10 +2410,9 @@ export default {
   created() {
     this.getSmallCar();
     this.getProvince();
-    this.getCustomerServiceLists()
-    this.getEmergencyLevels()
+    this.getCustomerServiceLists();
+    this.getEmergencyLevels();
   },
-  
 };
 </script>
 <style lang="less" scoped>
@@ -1998,9 +2428,8 @@ export default {
   margin-top: 16px;
   text-align: right;
 }
-.left{
+.left {
   display: flex;
-   align-items: center;
+  align-items: center;
 }
-
 </style>

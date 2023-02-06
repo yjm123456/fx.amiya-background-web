@@ -53,6 +53,7 @@ export default {
   },
   data() {
     return {
+      positionId:sessionStorage.getItem('positionId'),
       query: {
         checkState: -1,
         ReturnBackPriceState: "-1",
@@ -227,9 +228,10 @@ export default {
           : "",
         appType,
         orderNature,
-        checkState: checkState == -1 ? null : checkState,
+        checkState: this.timeParams.assemblyChecked,
         ReturnBackPriceState:
           ReturnBackPriceState == "-1" ? null : ReturnBackPriceState,
+        dataFrom:this.positionId == '13' ? true : false
       };
       api.tmallOrderFinishLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -264,9 +266,10 @@ export default {
           : "",
         appType,
         orderNature,
-        checkState: checkState == -1 ? null : checkState,
+        checkState:  this.timeParams.assemblyChecked,
         ReturnBackPriceState:
           ReturnBackPriceState == "-1" ? null : ReturnBackPriceState,
+        dataFrom:this.positionId == '13' ? true : false
       };
       api.tmallOrderFinishLlistWithPage(data).then((res) => {
         if (res.code === 0) {

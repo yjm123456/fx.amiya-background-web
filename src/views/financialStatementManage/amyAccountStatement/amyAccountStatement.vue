@@ -30,6 +30,9 @@
           <curAccountStatement 
             :activeName="activeName"
             :hospitalAllList="hospitalAllList"
+            :hospitalInfo="hospitalInfo"
+            :companyNameList="companyNameList"
+            :billTypeList="billTypeList"
           ></curAccountStatement>
         </div>
       </TabPane>
@@ -38,6 +41,9 @@
           <historicalReconciliation 
             :activeName="activeName"
             :hospitalAllList="hospitalAllList"
+            :hospitalInfo="hospitalInfo"
+            :companyNameList="companyNameList"
+            :billTypeList="billTypeList"
           ></historicalReconciliation>
         </div>
       </TabPane>
@@ -46,6 +52,8 @@
 </template>
 <script>
 import * as api from "@/api/hospitalManage";
+import * as corApi from "@/api/corporateManagement";
+import * as billApi from "@/api/bill";
 import currentReconciliation from "./views/currentReconciliation/currentReconciliation.vue"
 import statementToBeConfirmed from "./views/statementToBeConfirmed/statementToBeConfirmed.vue"
 import problemBill from "./views/problemBill/problemBill.vue"
@@ -63,7 +71,11 @@ export default {
     return {
       activeName: "currentReconciliation",
       hospitalInfo:[],
-      hospitalAllList:[{id:-1,name:'全部医院'}]
+      hospitalAllList:[{id:-1,name:'全部医院'}],
+      // 公司管理
+      companyNameList:[],
+      // 发票
+      billTypeList:[]
     }
   },
   methods: {
@@ -79,10 +91,28 @@ export default {
         }
       });
     },
+    // 获取公司管理数据
+    getCompany(){
+      corApi.getCompanyBaseInfoNameList().then((res) => {
+        if (res.code === 0) {
+          this.companyNameList = res.data.nameList
+        }
+      });
+    },
+    // 获取发票下拉框
+    getBillTypeList(){
+      billApi.getBillTypeList().then((res) => {
+        if (res.code === 0) {
+          this.billTypeList = res.data.billTypeList
+        }
+      });
+    },
     
   },
   created(){
     this.getHospitalInfonameList()
+    this.getCompany()
+    this.getBillTypeList()
   }
 }
 </script>

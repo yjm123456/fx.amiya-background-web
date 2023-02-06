@@ -14,7 +14,7 @@
             <Input
               v-model="query.keyword"
               placeholder="请输入客户名称和手机尾号"
-              style="width: 180px; margin-right: 10px"
+              style="width: 200px; margin-right: 10px"
               @keyup.enter.native="bindCustomerConsumptionServerList()"
               :disabled="query.orderId !== ''"
             />
@@ -127,13 +127,13 @@ export default {
             title: "电话",
             key: "phone",
             align:'center',
-            width:150
+            minWidth:130
           },
           {
             title: "创建时间",
             key: "createDate",
             align:'center',
-            width:170,
+            minWidth:170,
             render: (h, params) => {
               return h(
                 "div",
@@ -148,18 +148,19 @@ export default {
             title: "绑定客服",
             key: "customerServiceName",
             align:'center',
-            width:120
+            minWidth:140
           },
           {
             title: "首次项目需求",
             key: "firstOrderInfo",
             align:'center',
+            minWidth:160
           },
           {
             title: "首次消费时间",
             key: "firstOrderCreateDate",
             align:'center',
-            width:180,
+            minWidth:170,
             render: (h, params) => {
               return h(
                 "div",
@@ -173,7 +174,7 @@ export default {
             title: "最新消费时间",
             key: "newConsumptionTime",
             align:'center',
-            width:170,
+            minWidth:170,
             render: (h, params) => {
               return h(
                 "div",
@@ -187,26 +188,38 @@ export default {
             title: "最新消费平台",
             key: "newConsumptionPlatForm",
             align:'center',
-            width:150
+            minWidth:130
+          },
+          {
+            title: "最新消费所属主播",
+            key: "newLiveAnchorName",
+            align:'center',
+            minWidth:150
+          },
+          {
+            title: "最新消费所属微信",
+            key: "newWechatNo",
+            align:'center',
+            minWidth:150
           },
           {
             title: "最新消费渠道",
             key: "newConsumptionPlatFormAppTypeText",
             align:'center',
-            width:150
+            minWidth:130
           },
           
           {
             title: "累计消费",
             key: "allConsumptionPrice",
             align:'center',
-            width:120
+            minWidth:140
           },
           {
             title: "总单数",
             key: "createdOrderNum",
             align:'center',
-            width:120
+            minWidth:120
           },
           
         ],

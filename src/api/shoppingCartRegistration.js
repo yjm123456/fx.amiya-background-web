@@ -46,3 +46,19 @@ export const emergencyLevels = () => {
         method: "get",
     });
 };
+// 指派给
+export const ShoppingCartRegistrationAssign = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/assign`,
+        method: "put",
+        data,
+    });
+};
+// 批量指派给
+export const ShoppingCartRegistrationassignList = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/assignList`,
+        method: "put",
+        data,
+    });
+};

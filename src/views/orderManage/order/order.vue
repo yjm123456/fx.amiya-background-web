@@ -1013,11 +1013,24 @@ export default {
               );
             },
           },
+          {
+            title: "规格",
+            key: "standard",
+            minWidth: 200,
+            align:'center',
+            tooltip:true
+          },
           // {
           //   title: "描述",
           //   key: "description",
           //   minWidth: 200,
           // },
+          {
+            title: "支付类型",
+            key: "exchangeTypeText",
+            minWidth: 120,
+            align:'center',
+          },
           {
             title: "实付款",
             key: "actualPayment",

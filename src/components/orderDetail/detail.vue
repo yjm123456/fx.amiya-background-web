@@ -148,6 +148,14 @@
             <span>{{detailObj.checkRemark}} </span>
           </div>
           <div class="mr_top">
+            <span class="title_bold">是否开票：</span>
+            <span>{{detailObj.isCreateBill == true ? '已开票' : '未开票'}} </span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">开票公司：</span>
+            <span>{{detailObj.createBillCompany}} </span>
+          </div>
+          <div class="mr_top">
             <span class="title_bold">是否回款：</span>
             <span>{{detailObj.isReturnBackPrice == true ? '已回款' : '未回款'}} </span>
           </div>

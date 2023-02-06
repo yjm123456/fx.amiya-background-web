@@ -17,3 +17,11 @@ export const customerConsumptionCredentials = (data) => {
         data
     });
 };
+// 添加消费凭证
+export const addCustomerConsumptionCredentials = (data) => {
+    return http({
+        url: "/amiyabg/CustomerConsumptionCredentials",
+        method: "post",
+        data
+    });
+};

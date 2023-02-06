@@ -303,7 +303,7 @@ import * as api from "@/api/customerManage";
 import * as customerTagInfoApi from "@/api/customerTagInfo";
 import customerInfo from "@/components/customerInfo/customerInfo";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
-import customerMessage from "@/components/customerMessage/customerMessage";
+import customerMessage from "@/components/customerMessage/customerMessageXCX";
 import bonusPoint from "./bonusPoints.vue";
 import coupon from "./coupon.vue";
 import gift from "./gifts.vue";
@@ -324,6 +324,8 @@ export default {
   },
   data() {
     return {
+      flag:false,
+      flag2:false,
       // 根据id获取已选择的标签
         customerTagList:[],
       tagModel:false,
@@ -349,6 +351,7 @@ export default {
         userId: "",
         encryptPhone: "",
         tabGlag: false,
+        id:''
       },
       // 客户赠送积分
       bonusPointsParams: {
@@ -502,13 +505,241 @@ export default {
           },
           {
             title: "操作",
-            width: 580,
+            width: 280,
             fixed: "right",
             align: "center",
+            // render: (h, params) => {
+            //   const currentRole = JSON.parse(
+            //     sessionStorage.getItem("permissions")
+            //   );
+            //   const flag = currentRole.some((ele) => {
+            //     return "fx.amiya.permission.SEND_MEMBER_CARD".includes(ele);
+            //   });
+            //   // 发优惠券
+            //   const flag2 = currentRole.some((ele) => {
+            //     return "fx.amiya.permission.SEND_MEMBE_CARD".includes(ele);
+            //   });
+            //   return h("div", [
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { encryptPhone, userId } = params.row;
+            //             //
+            //             let data = {
+            //               encryptPhone: encryptPhone,
+            //             };
+
+            //             api
+            //               .getBaseAndBindCustomerInfoByEncryptPhone(data)
+            //               .then((res) => {
+            //                 if (res.code === 0) {
+            //                   this.customerInfoComParams2.userId = userId;
+            //                   this.customerInfoComParams2.encryptPhone = encryptPhone;
+            //                   this.customerInfoComParams2.tabGlag = true;
+            //                   this.customerMessageModel = true;
+            //                   this.customerMessageObj = res.data.customer;
+            //                 }
+            //               });
+            //           },
+            //         },
+            //       },
+            //       "客户信息"
+            //     ),
+            //     // h(
+            //     //   "Button",
+            //     //   {
+            //     //     props: {
+            //     //       type: "primary",
+            //     //       size: "small",
+            //     //     },
+            //     //     style: {
+            //     //       marginRight: "5px",
+            //     //     },
+            //     //     on: {
+            //     //       click: () => {
+            //     //         const { userId, encryptPhone } = params.row;
+            //     //         this.customerInfoComParams.userId = userId;
+            //     //         this.customerInfoComParams.encryptPhone = encryptPhone;
+            //     //         this.customerInfoComParams.controlCustomerInfoDisplay = true;
+            //     //       },
+            //     //     },
+            //     //   },
+            //     //   "客户详情"
+            //     // ),
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { encryptPhone } = params.row;
+            //             this.trackReturnVisitComParams.encryptPhone = encryptPhone;
+            //             this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
+            //           },
+            //         },
+            //       },
+            //       "追踪回访"
+            //     ),
+            //     flag
+            //       ? h(
+            //           "Button",
+            //           {
+            //             props: {
+            //               type: "primary",
+            //               size: "small",
+            //             },
+            //             style: {
+            //               marginRight: "5px",
+            //             },
+            //             on: {
+            //               click: () => {
+            //                 const { id } = params.row;
+            //                 this.sendMemberCardForm.customerId = id;
+            //                 this.sendMemberCardForm.controlModal = true;
+            //               },
+            //             },
+            //           },
+            //           "发会员卡"
+            //         )
+            //       : null,
+            //     flag2
+            //       ? h(
+            //           "Button",
+            //           {
+            //             props: {
+            //               type: "primary",
+            //               size: "small",
+            //             },
+            //             style: {
+            //               marginRight: "5px",
+            //             },
+            //             on: {
+            //               click: () => {
+            //                 const { id } = params.row;
+            //                 this.couponId = id;
+            //                 this.couponModel = true;
+            //               },
+            //             },
+            //           },
+            //           "发优惠券"
+            //         )
+            //       : "",
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { id, encryptPhone } = params.row;
+            //             this.giftModel = true;
+            //             this.giftParams.id = id;
+            //             this.giftParams.encryptPhone = encryptPhone;
+            //             this.$refs.gift.getSendGiftBaseInfos(encryptPhone);
+            //             this.$refs.gift.getAddressLists(id);
+            //           },
+            //         },
+            //       },
+            //       "发放礼品"
+            //     ),
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { encryptPhone } = params.row;
+            //             this.bonusPointsParams.encryptPhone = encryptPhone;
+            //             this.bonusPointsControlModal = true;
+            //           },
+            //         },
+            //       },
+            //       "赠送积分"
+            //     ),
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { id } = params.row;
+            //             this.tagModel = true
+            //             this.tagParams.id= id
+            //             let tag = []
+            //             customerTagInfoApi.getCustomertagList(id).then((res) => {
+            //               if (res.code === 0) {
+            //                 res.data.customerTagList.map(item=>{
+            //                   tag.push(item.id)
+            //                 })
+            //                 this.customerTagList = tag
+            //               }
+            //             });
+            //           },
+            //         },
+            //       },
+            //       "用户标签"
+            //     ),
+            //     // h(
+            //     //   "Button",
+            //     //   {
+            //     //     props: {
+            //     //       type: "primary",
+            //     //       size: "small",
+            //     //     },
+            //     //     style: {
+            //     //       marginRight: "5px",
+            //     //     },
+            //     //     on: {
+            //     //       click: () => {
+            //     //         const { encryptPhone } = params.row;
+            //     //         this.editCustomerForm.encryptPhone = encryptPhone;
+            //     //         this.phone = encryptPhone
+            //     //         this.editCustomerForm.editCustomerModel = true
+            //     //         this.getBaseInfoByEncryptPhone(encryptPhone)
+            //     //       },
+            //     //     },
+            //     //   },
+            //     //   "编辑信息"
+            //     // ),
+            //   ]);
+            // },
             render: (h, params) => {
               const currentRole = JSON.parse(
                 sessionStorage.getItem("permissions")
               );
+              // 发会员卡
               const flag = currentRole.some((ele) => {
                 return "fx.amiya.permission.SEND_MEMBER_CARD".includes(ele);
               });
@@ -516,181 +747,109 @@ export default {
               const flag2 = currentRole.some((ele) => {
                 return "fx.amiya.permission.SEND_MEMBE_CARD".includes(ele);
               });
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { encryptPhone, userId } = params.row;
+              let check = h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    // icon: "md-eye",
+                    size: "small",
+                  },
+                  style: {
+                    fontSize: "14px",
+                    color: "#fff",
+                    background: "#007fff",
+                    marginRight: "14px",
+                    cursor: "pointer",
+                    width: "70px",
+                    height: "27px",
+                  },
+                  on: {
+                    click: () => {
+                      const { encryptPhone, userId,id } = params.row;
                         //
-                        let data = {
-                          encryptPhone: encryptPhone,
-                        };
+                      let data = {
+                        customerId: id,
+                      };
 
-                        api
-                          .getBaseAndBindCustomerInfoByEncryptPhone(data)
-                          .then((res) => {
-                            if (res.code === 0) {
-                              this.customerInfoComParams2.userId = userId;
-                              this.customerInfoComParams2.encryptPhone = encryptPhone;
-                              this.customerInfoComParams2.tabGlag = true;
-                              this.customerMessageModel = true;
-                              this.customerMessageObj = res.data.customer;
-                            }
-                          });
-                      },
+                      api.getBaseAndBindCustomerInfoByCustomerId(data).then((res) => {
+                          if (res.code === 0) {
+                            this.customerInfoComParams2.userId = userId;
+                            this.customerInfoComParams2.encryptPhone = encryptPhone;
+                            this.customerInfoComParams2.tabGlag = true;
+                            this.customerInfoComParams2.id = id;
+                            this.customerMessageModel = true;
+                            this.customerMessageObj = res.data.customer;
+                          }
+                        });
+                      
                     },
                   },
-                  "客户信息"
-                ),
-                // h(
-                //   "Button",
-                //   {
-                //     props: {
-                //       type: "primary",
-                //       size: "small",
-                //     },
-                //     style: {
-                //       marginRight: "5px",
-                //     },
-                //     on: {
-                //       click: () => {
-                //         const { userId, encryptPhone } = params.row;
-                //         this.customerInfoComParams.userId = userId;
-                //         this.customerInfoComParams.encryptPhone = encryptPhone;
-                //         this.customerInfoComParams.controlCustomerInfoDisplay = true;
-                //       },
-                //     },
-                //   },
-                //   "客户详情"
-                // ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { encryptPhone } = params.row;
+                },
+                "客户信息"
+              );
+              let check2 = h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    // icon: "md-eye",
+                    size: "small",
+                  },
+                  style: {
+                    fontSize: "14px",
+                    color: "#fff",
+                    background: "#007fff",
+                    marginRight: "14px",
+                    cursor: "pointer",
+                    width: "70px",
+                    height: "27px",
+                  },
+                  on: {
+                    click: () => {
+                     const { encryptPhone } = params.row;
                         this.trackReturnVisitComParams.encryptPhone = encryptPhone;
                         this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
-                      },
+                      
                     },
                   },
-                  "追踪回访"
-                ),
-                flag
-                  ? h(
-                      "Button",
-                      {
-                        props: {
-                          type: "primary",
-                          size: "small",
-                        },
-                        style: {
-                          marginRight: "5px",
-                        },
-                        on: {
-                          click: () => {
-                            const { id } = params.row;
+                },
+                "追踪回访"
+              );
+              let send_order = h(
+                "Dropdown",
+                {
+                  props: {
+                    placement: "bottom",
+                    transfer: true,
+                  },
+                  on: {
+                    "on-click": (name) => {
+                      if (name == "lookCustomerImg") {
+                        // 发会员卡
+                        const { id } = params.row;
                             this.sendMemberCardForm.customerId = id;
                             this.sendMemberCardForm.controlModal = true;
-                          },
-                        },
-                      },
-                      "发会员卡"
-                    )
-                  : null,
-                flag2
-                  ? h(
-                      "Button",
-                      {
-                        props: {
-                          type: "primary",
-                          size: "small",
-                        },
-                        style: {
-                          marginRight: "5px",
-                        },
-                        on: {
-                          click: () => {
-                            const { id } = params.row;
+                      } else if (name == "deal") {
+                        // 发优惠券
+                        const { id } = params.row;
                             this.couponId = id;
                             this.couponModel = true;
-                          },
-                        },
-                      },
-                      "发优惠券"
-                    )
-                  : "",
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id, encryptPhone } = params.row;
+                      } else if (name == "remark") {
+                        // 发放礼品
+                         const { id, encryptPhone } = params.row;
                         this.giftModel = true;
                         this.giftParams.id = id;
                         this.giftParams.encryptPhone = encryptPhone;
                         this.$refs.gift.getSendGiftBaseInfos(encryptPhone);
                         this.$refs.gift.getAddressLists(id);
-                      },
-                    },
-                  },
-                  "发放礼品"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
+                      } else if (name == "confirm") {
+                        //赠送积分
                         const { encryptPhone } = params.row;
                         this.bonusPointsParams.encryptPhone = encryptPhone;
                         this.bonusPointsControlModal = true;
-                      },
-                    },
-                  },
-                  "赠送积分"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
+                      } else if (name == "goodNews") {
+                        //用户标签
                         const { id } = params.row;
                         this.tagModel = true
                         this.tagParams.id= id
@@ -703,34 +862,101 @@ export default {
                             this.customerTagList = tag
                           }
                         });
-                      },
+                      }
                     },
                   },
-                  "用户标签"
-                ),
-                // h(
-                //   "Button",
-                //   {
-                //     props: {
-                //       type: "primary",
-                //       size: "small",
-                //     },
-                //     style: {
-                //       marginRight: "5px",
-                //     },
-                //     on: {
-                //       click: () => {
-                //         const { encryptPhone } = params.row;
-                //         this.editCustomerForm.encryptPhone = encryptPhone;
-                //         this.phone = encryptPhone
-                //         this.editCustomerForm.editCustomerModel = true
-                //         this.getBaseInfoByEncryptPhone(encryptPhone)
-                //       },
-                //     },
-                //   },
-                //   "编辑信息"
-                // ),
-              ]);
+                },
+                [
+                  h(
+                    "a",
+                    {
+                      style: {
+                        color: "#007fff",
+                      },
+                    },
+                    [
+                      "更多",
+                      h("Icon", {
+                        props: {
+                          type: "ios-arrow-down",
+                        },
+                        style: {
+                          marginLeft: "5px",
+                          color: "#3A64FF",
+                        },
+                      }),
+                    ]
+                  ),
+                  h(
+                    "DropdownMenu",
+                    {
+                      slot: "list",
+                      props: {
+                        trigger: "hover",
+                      },
+                    },
+                    [
+                      flag  ? h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "lookCustomerImg",
+                            // disabled: this.flag != 'fx.amiya.permission.SEND_MEMBER_CARD' ,
+                          },
+                        },
+                        "发会员卡"
+                      ) : null,
+
+                      flag2  ? h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "deal",
+                            // disabled:this.flag2 != 'fx.amiya.permission.SEND_MEMBE_CARD',
+                          },
+                        },
+                        "发优惠券"
+                      ):null,
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "remark",
+                          },
+                        },
+                        "发放礼品"
+                      ),
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "confirm",
+                          },
+                        },
+                        "赠送积分"
+                      ),
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "goodNews",
+                          },
+                        },
+                        "用户标签"
+                      ),
+                    ]
+                  ),
+                ]
+              );
+              let option = [];
+              // option.push(message);
+              option.push(check);
+              option.push(check2);
+              option.push(send_order);
+              return h("div", option);
             },
           },
         ],

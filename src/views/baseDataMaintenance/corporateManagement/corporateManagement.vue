@@ -240,7 +240,7 @@ export default {
                           content: "是否确认删除？",
                           onOk: () => {
                             const { id } = params.row;
-                            api.deleteExpressManage(id).then((res) => {
+                            api.deleteCompanyBaseInfo(id).then((res) => {
                               if (res.code === 0) {
                                 this.getCompanyBaseInfo();
                                 this.$Message.success({

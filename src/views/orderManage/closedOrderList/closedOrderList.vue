@@ -6,6 +6,7 @@
           <singlePlatformCompleted
             :activeName="activeName"
             :checkStateListAll="checkStateListAll"
+            :companyNameAllList ="companyNameAllList"
           ></singlePlatformCompleted>
         </div>
       </TabPane>
@@ -23,6 +24,7 @@
             :activeName="activeName"
             :checkStateListAll="checkStateListAll"
             :employee ="employee"
+            :companyNameAllList ="companyNameAllList"
           ></transactionOfContentPlatform>
         </div>
       </TabPane>
@@ -36,6 +38,8 @@ import transactionOfContentPlatform from "./components/transactionOfContentPlatf
 
 import * as api from "@/api/customerManage.js";
 import * as orderApi from "@/api/orderManage";
+import * as corApi from "@/api/corporateManagement";
+
 export default {
   components:{
     singlePlatformCompleted,
@@ -46,10 +50,23 @@ export default {
     return {
       activeName: "singlePlatformCompleted",
       checkStateListAll: [{ id: -1, name: "全部审核状态" }],
-      employee:[{ id: -1, name: "全部跟进人员" }],
+      employee:[{ id: -1, name: "全部归属客服" }],
+       // 收款公司 开票公司
+      companyNameAllList: [{ id: -1, name: "全部开票公司" }],
     }
   },
   methods:{
+    // 获取公司管理数据下拉框
+    getCompany() {
+      corApi.getCompanyBaseInfoNameList().then((res) => {
+        if (res.code === 0) {
+          this.companyNameAllList = [
+            ...this.companyNameAllList,
+            ...res.data.nameList,
+          ];
+        }
+      });
+    },
     // 获取客服列表
     getCustomerServiceList() {
       orderApi.getCustomerServiceList().then((res) => {
@@ -76,6 +93,7 @@ export default {
   created(){
     this.getCheckStateList()
     this.getCustomerServiceList()
+    this.getCompany()
   }
 }
 </script>

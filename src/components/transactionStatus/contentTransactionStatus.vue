@@ -43,6 +43,17 @@
         label-position="left"
         :label-width="130"
       >
+        <FormItem
+          label="面诊类型"
+          prop="consultatioType"
+          key="面诊类型"
+        >
+          <Input
+            v-model="transactionStatusParams.consultationTypeText"
+            placeholder="请输入面诊类型"
+            disabled
+          ></Input>
+        </FormItem>
         <FormItem label="是否到院" prop="isToHospital" key="是否到院">
           <i-switch
             v-model="confirmForm.isToHospital"
@@ -153,6 +164,21 @@
             v-model="confirmForm.DealDate"
           ></DatePicker>
         </FormItem>
+        <FormItem label="业绩类型" prop="dealPerformanceType" key="业绩类型" v-if="confirmForm.isToHospital === true">
+          <Select
+              v-model="confirmForm.dealPerformanceType"
+              placeholder="请选择业绩类型"
+              clearable
+              filterable
+            >
+              <Option
+                v-for="item in contentPlateFormOrderDealPerformanceType"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+        </FormItem>
         <!-- <FormItem
           label="佣金比例(%)"
           prop="commissionRatio"
@@ -197,17 +223,7 @@
             type="textarea"
           ></Input>
         </FormItem>
-        <FormItem
-          label="面诊状态"
-          prop="consultatioType"
-          key="面诊状态"
-        >
-          <Input
-            v-model="transactionStatusParams.consultationTypeText"
-            placeholder="请输入面诊状态"
-            disabled
-          ></Input>
-        </FormItem>
+        
         <FormItem
           label="邀约凭证"
           key="邀约凭证"
@@ -252,6 +268,7 @@ export default {
   },
   data() {
     return {
+      contentPlateFormOrderDealPerformanceType:[],
       viewCustomerPhotosModel:false,
       viewImgParams:{
         contentPlatFormOrderId:'',
@@ -325,12 +342,20 @@ export default {
         isAcompanying:false,
         // 佣金比例
         commissionRatio:null,
-        // 面诊状态
+        // 面诊类型
         consultatioType:'',
         // 邀约凭证
-        invitationDocuments:[]
+        invitationDocuments:[],
+        // 业绩类型
+        dealPerformanceType:null
       },
       confirmRuleValidate: {
+        dealPerformanceType: [
+          {
+            required: true,
+            message: "请选择业绩类型",
+          },
+        ],
         commissionRatio: [
           {
             required: true,
@@ -631,7 +656,8 @@ export default {
                               toHospitalType,
                               isAcompanying,
                               commissionRatio,
-                              invitationDocuments
+                              invitationDocuments,
+                              dealPerformanceType
                             } = res.data.contentPlatFormOrderDealInfoInfo;
                             this.isEdit = true;
                             this.confirmForm.toHospitalDate = tohospitalDate
@@ -646,6 +672,7 @@ export default {
                             this.confirmForm.dealPicture = dealPicture;
                             this.confirmForm.isAcompanying = isAcompanying;
                             this.confirmForm.commissionRatio = commissionRatio;
+                            this.confirmForm.dealPerformanceType = String(dealPerformanceType);
                             this.uploadObj.uploadList = this.confirmForm
                               .dealPicture
                               ? [this.confirmForm.dealPicture]
@@ -703,6 +730,15 @@ export default {
     };
   },
   methods: {
+    //   获取业绩类型
+    getcontentPlateFormOrderDealPerformanceType() {
+      api.contentPlateFormOrderDealPerformanceType().then((res) => {
+        if (res.code === 0) {
+          const { contentPlateFormOrderDealPerformanceType } = res.data;
+          this.contentPlateFormOrderDealPerformanceType = contentPlateFormOrderDealPerformanceType
+        }
+      });
+    },
     // 邀约凭证
      invitationDocumentsHandleUploadChange(values) {
       this.confirmForm.invitationDocuments = values;
@@ -767,7 +803,8 @@ export default {
             toHospitalType,
             isAcompanying,
             commissionRatio,
-            invitationDocuments
+            invitationDocuments,
+            dealPerformanceType,
           } = this.confirmForm;
           const data = {
             id,
@@ -794,7 +831,8 @@ export default {
             toHospitalType:isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
             commissionRatio:0,
-            invitationDocuments
+            invitationDocuments,
+            dealPerformanceType
           };
           api.updateContentPlatFormOrderDealInfo(data).then((res) => {
             if (res.code === 0) {
@@ -908,6 +946,7 @@ export default {
   },
   created() {
     this.getHospitalInfonameList();
+    this.getcontentPlateFormOrderDealPerformanceType()
   },
   watch: {
     transactionStatusParams: {

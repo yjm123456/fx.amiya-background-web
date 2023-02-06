@@ -130,7 +130,8 @@ export default {
             checkBuyAgainPrice ,
             checkSettlePrice,
             checkRemark,
-            checkPicture
+            checkPicture,
+            reconciliationDocumentsId:''
           }
           api.customerManageCheck(data).then((res) => {
             if (res.code === 0) {

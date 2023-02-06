@@ -161,3 +161,17 @@ export const ConsumptionVoucher = () => {
         method: "get"
     });
 };
+// 商品标签列表（下拉框）
+export const tagList = () => {
+    return http({
+        url: "/amiyabg/GoodsInfo/tagList",
+        method: "get"
+    });
+};
+// 获取小程序名称列表
+export const miniprogramNameList = () => {
+    return http({
+        url: "/amiyabg/CarouselImage/miniprogramNameList",
+        method: "get"
+    });
+};

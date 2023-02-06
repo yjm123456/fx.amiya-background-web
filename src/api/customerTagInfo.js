@@ -58,7 +58,7 @@ export const customerTagNameList = () => {
 // 根据id获取用户标签
 export const getCustomertagList = (customerId) => {
     return http({
-        url: `/amiyabg/getCustomertagList/${customerId}`,
+        url: `/amiyabg/customer/getCustomertagList/${customerId}`,
         method: "get",
     });
 };

@@ -121,6 +121,12 @@ export default {
         pageSize: 10,
         columns: [
           {
+            title: "序号",
+            key: "sort",
+            minWidth: 100,
+            align:'center'
+          },
+          {
             title: "商品名称",
             key: "name",
             minWidth: 300,
@@ -163,33 +169,39 @@ export default {
             key: "standard",
             minWidth: 150,
             tooltip:true,
+            align:'center'
           },
           {
             title: "支付类型",
             key: "exchangeTypeText",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "抵扣积分",
             key: "integrationQuantity",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "描述",
             key: "description",
             minWidth: 150,
             tooltip:true,
+            align:'center'
           },
           {
             title: "分类",
             key: "categoryName",
             minWidth: 150,
             tooltip:true,
+            align:'center'
           },
           {
             title: "是否有效",
             key: "valid",
             minWidth: 120,
+            align:'center',
             render: (h, params) => {
               if (params.row.valid == true) {
                 return h("Icon", {
@@ -218,6 +230,7 @@ export default {
             title: "是否限购",
             key: "isLimitBuy",
             minWidth: 120,
+            align:'center',
             render: (h, params) => {
               if (params.row.isLimitBuy == true) {
                 return h("Icon", {
@@ -246,36 +259,43 @@ export default {
             title: "限购数量",
             key: "limitBuyQuantity",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "库存",
             key: "inventoryQuantity",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "最大价格",
             key: "maxShowPrice",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "最小价格",
             key: "minShowPrice",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "销售价格",
             key: "salePrice",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "浏览量",
             key: "visitCount",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "销量",
             key: "showSaleCount",
             minWidth: 150,
+            align:'center'
           },
           
           {

@@ -180,6 +180,14 @@
             :rows="4"
           ></Input>
         </FormItem>
+        <Spin fix v-if="isLoading == true">
+          <Icon
+            type="ios-loading"
+            size="18"
+            class="demo-spin-icon-load"
+          ></Icon>
+          <div>加载中...</div>
+        </Spin>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -230,6 +238,14 @@
             :rows="4"
           ></Input>
         </FormItem>
+        <Spin fix v-if="isLoading == true">
+            <Icon
+              type="ios-loading"
+              size="18"
+              class="demo-spin-icon-load"
+            ></Icon>
+            <div>加载中...</div>
+          </Spin>
       </Form>
       <div slot="footer">
         <Button @click="markStatementhandSubmit('markStatementform')"
@@ -264,6 +280,7 @@ export default {
   },
   data() {
     return {
+      isLoading:false,
       reconciliationCompletionListModel: false,
       customerPhone: "",
       reconciliationParams: {
@@ -609,15 +626,22 @@ export default {
         reconciliationState,
         questionReason,
       };
-      api.tagReconciliationState(data).then((res) => {
-        if (res.code === 0) {
-          this.markStatementhandSubmit();
-          this.$Message.success("已成功");
-          this.getHospitalInfo();
-          this.markStatementform.orderId.clear();
-          
-        }
+      this.$Modal.confirm({
+        title: "标记对账单确认提示",
+        content: "<span style='color:red'>当前选中的对账单状态将转变为待确认状态，啊美雅财务将不会审核</span>，直至您最终确认完成该笔对账单并将其变更为'已提交'状态，啊美雅财务才能对您的对账单进行审核！",
+        onOk: () => {
+          api.tagReconciliationState(data).then((res) => {
+            if (res.code === 0) {
+              this.markStatementhandSubmit();
+              this.$Message.success("已成功");
+              this.getHospitalInfo();
+              this.markStatementform.orderId.clear();
+            }
+          });
+        },
+        onCancel: () => {},
       });
+      
     },
     // 导出模版
     exportChange() {
@@ -795,9 +819,11 @@ export default {
               systemUpdatePricePercent,
               remark,
             };
+            this.isLoading = true
             // 修改
             api.editReconciliationDocuments(data).then((res) => {
               if (res.code === 0) {
+                this.isLoading = false
                 this.isEdit = false;
                 this.cancelSubmit("form");
                 this.getHospitalInfo();
@@ -805,7 +831,11 @@ export default {
                   content: "修改成功",
                   duration: 3,
                 });
-              }
+              }else{
+               setTimeout(()=>{
+                  this.isLoading = false
+                },3000)
+            }
             });
           } else {
             const {
@@ -828,16 +858,22 @@ export default {
               systemUpdatePricePercent,
               remark,
             };
+            this.isLoading = true
             // 添加
             api.addReconciliationDocuments(data).then((res) => {
               if (res.code === 0) {
+                this.isLoading = false
                 this.cancelSubmit("form");
                 this.getHospitalInfo();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
                 });
-              }
+              }else{
+               setTimeout(()=>{
+                  this.isLoading = false
+                },3000)
+            }
             });
           }
         }
@@ -891,5 +927,19 @@ export default {
 .page_wrap {
   text-align: right;
   margin-top: 10px;
+}
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

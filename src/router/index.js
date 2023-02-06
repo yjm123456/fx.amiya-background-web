@@ -324,6 +324,20 @@ const hospitalManage = [{
                 "@/views/hospitalManage/goodHospitalDataFilling/goodHospitalDataFilling.vue"
             ),
     },
+    {
+        path: "/supplyChainDispatchGuide",
+        name: "supplyChainDispatchGuide",
+        meta: {
+            title: "供应链派单指南",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/supplyChainDispatchGuide/supplyChainDispatchGuide.vue"
+            ),
+    },
 ];
 
 /**
@@ -351,6 +365,17 @@ const appointment = [{
     },
     component: () =>
         import ("@/views/appointment/appointmentCall/appointmentCall.vue"),
+}, , {
+    path: "/customerAppointmentSchedule",
+    name: "customerAppointmentSchedule",
+    meta: {
+        title: "客户预约日程",
+        keepAlive: false,
+        isTag: true,
+        openName: ['预约'],
+    },
+    component: () =>
+        import ("@/views/appointment/customerAppointmentSchedule/customerAppointmentSchedule.vue"),
 }, ];
 
 
@@ -700,6 +725,34 @@ const orderManage = [{
                 "@/views/orderManage/onlineRetailersPlatformOrder/onlineRetailersPlatformOrder.vue"
             ),
     },
+    {
+        path: "/recordingApplicationList",
+        name: "recordingApplicationList",
+        meta: {
+            title: "录单申请列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/recordingApplicationList/recordingApplicationList.vue"
+            ),
+    },
+    {
+        path: "/vedioOrderList",
+        name: "vedioOrderList",
+        meta: {
+            title: "视频号订单列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/vedioOrderList/vedioOrderList.vue"
+            ),
+    },
 
 ];
 
@@ -850,6 +903,30 @@ const customerManage = [{
         },
         component: () =>
             import ("@/views/customerManage/chatRoom/chatRoom.vue"),
+    },
+    {
+        path: "/pointsDistribution",
+        name: "pointsDistribution",
+        meta: {
+            title: "积分发放列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/pointsDistribution/pointsDistribution.vue"),
+    },
+    {
+        path: "/aestheticDesignReport",
+        name: "aestheticDesignReport",
+        meta: {
+            title: "美学设计报告",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/aestheticDesignReport/aestheticDesignReport.vue"),
     },
 ];
 
@@ -1541,6 +1618,42 @@ const financialStatementManage = [{
         component: () =>
             import ("@/views/financialStatementManage/statementListNotUploaded/statementListNotUploaded.vue"),
     },
+    {
+        path: "/controlOverInvoices",
+        name: "controlOverInvoices",
+        meta: {
+            title: "发票管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/controlOverInvoices/controlOverInvoices.vue"),
+    },
+    {
+        path: "/invoiceCollectionRecord",
+        name: "invoiceCollectionRecord",
+        meta: {
+            title: "发票回款记录",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/invoiceCollectionRecord/invoiceCollectionRecord.vue"),
+    },
+    {
+        path: "/financialSignage",
+        name: "financialSignage",
+        meta: {
+            title: "财务看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/financialSignage/financialSignage.vue"),
+    },
 
 ];
 /**
@@ -1666,6 +1779,35 @@ const businessMange = [{
 //     component: () =>
 //         import ("@/views/mechanismManage/mechanismKanBan.vue"),
 // }];
+/**
+ * 系统设置
+ */
+const systemSettingsManage = [{
+        path: "/operationLog",
+        name: "operationLog",
+        meta: {
+            title: "操作日志",
+            keepAlive: false,
+            isTag: true,
+            openName: ['系统设置'],
+        },
+        component: () =>
+            import ("@/views/systemSettingsManage/operationLog/operationLog.vue"),
+    },
+    {
+        path: "/trends",
+        name: "trends",
+        meta: {
+            title: "动态",
+            keepAlive: false,
+            isTag: true,
+            openName: ['系统设置'],
+        },
+        component: () =>
+            import ("@/views/systemSettingsManage/trends/trends.vue"),
+    },
+
+];
 export const dynamicRouter = [{
     path: "/home",
     name: "home",
@@ -1718,6 +1860,7 @@ export const dynamicRouter = [{
         ...ameiyaMange,
         ...stockMange,
         ...businessMange,
+        ...systemSettingsManage
     ],
 }, ];
 

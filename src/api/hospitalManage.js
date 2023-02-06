@@ -406,3 +406,25 @@ export const updateHospitalMessageRecieve = (data) => {
         data
     });
 };
+// 派单顺序名称列表
+export const sendOrderList = () => {
+    return http({
+        url: "/amiyabg/HospitalInfo/sendOrderList",
+        method: "get",
+    });
+};
+// 年费或保证金缴纳状态列表
+export const payStatusList = () => {
+    return http({
+        url: "/amiyabg/HospitalInfo/payStatusList",
+        method: "get",
+    });
+};
+// 供应商派单指南
+export const getAmiyaTotalSendHospitalInstructions = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/getAmiyaTotalSendHospitalInstructions",
+        method: "get",
+        params
+    });
+};

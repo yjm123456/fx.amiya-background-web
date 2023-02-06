@@ -143,7 +143,7 @@ export default {
           {
             title: "支付方式",
             key: "exchageTypeText",
-            width:100,
+            width:120,
             align:'center',
           },
           {

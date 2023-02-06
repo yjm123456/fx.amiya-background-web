@@ -381,10 +381,26 @@ export const getBaseAndBindCustomerInfoByEncryptPhone = (params) => {
         params
     });
 };
+// 根据id查询客户资料
+export const getBaseAndBindCustomerInfoByCustomerId = (params) => {
+    return http({
+        url: `/amiyabg/Customer/getBaseAndBindCustomerInfoByCustomerId`,
+        method: "get",
+        params
+    });
+};
 // 根据id编辑客户基础信息
 export const updateById = (data) => {
     return http({
         url: `/amiyabg/Customer/updateById`,
+        method: "put",
+        data,
+    });
+};
+// 小程序根据customerId编辑客户基础信息
+export const updateByCustomerId = (data) => {
+    return http({
+        url: `/amiyabg/Customer/updateByCustomerId`,
         method: "put",
         data,
     });
@@ -443,5 +459,30 @@ export const addCustomerTag = (data) => {
         url: `/amiyabg/Customer/addCustomerTag`,
         method: "post",
         data,
+    });
+};
+// 积分列表
+export const IntegrationGenerateRecord = (params) => {
+    return http({
+        url: `/amiyabg/IntegrationGenerateRecord/list`,
+        method: "get",
+        params
+    });
+};
+// 修改积分
+export const editIntegrationGenerateRecord = (data) => {
+    return http({
+        url: `/amiyabg/IntegrationGenerateRecord/editIntegrationGenerateRecord`,
+        method: "post",
+        data,
+    });
+};
+// 导出积分发放记录
+export const exportRecordList = (params) => {
+    return http({
+        url: "/amiyabg/IntegrationGenerateRecord/exportRecordList",
+        method: "get",
+        params,
+        responseType: 'blob'
     });
 };

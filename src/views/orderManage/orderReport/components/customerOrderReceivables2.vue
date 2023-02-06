@@ -69,6 +69,30 @@
                   >{{ item.appTypeText }}</Option
                 >
               </Select>
+              <Select
+                v-model="query.isCreateBill"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="是否开票"
+              >
+                <Option
+                  v-for="item in query.isCreateBillList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.belongCompanyId"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="请选择开票公司"
+              >
+                <Option
+                  v-for="item in companyNameAllList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
               <Button
                 type="primary"
                 style="margin:0 10px"
@@ -203,7 +227,8 @@ export default {
     checkStateListAll:{
       type:Array
     },
-    appTypeList:Array
+    appTypeList:Array,
+    companyNameAllList:Array
   },
   data() {
     return {
@@ -217,6 +242,22 @@ export default {
         pageCount:0,
         // 交易完成订单
         query:{
+          isCreateBillList:[
+            {
+              type:-1,
+              name:'全部开票状态'
+            },
+            {
+              type:'true',
+              name:'已开票'
+            },
+            {
+              type:'false',
+              name:'未开票'
+            },
+          ],
+          isCreateBill:-1,
+          belongCompanyId:-1,
           appType:-1,
           checkState:-1,
           ReturnBackPriceState:'-1',
@@ -410,7 +451,7 @@ export default {
           {
             title: "服务费合计",
             key: "settlePrice",
-            minWidth: 100,
+            minWidth: 120,
             align:'center'
           },
           {
@@ -425,7 +466,18 @@ export default {
             minWidth: 200,
             align:'center'
           },
-          
+          {
+            title: "是否开票",
+            key: "isCreateBill",
+            minWidth: 100,
+            align:'center'
+          },
+           {
+            title: "开票公司",
+            key: "belongCompanyName",
+            minWidth: 220,
+            align:'center'
+          },
           {
             title: "是否回款",
             key: "isReturnBackPrice",
@@ -652,7 +704,7 @@ export default {
             minWidth: 200,
             align:'center'
           },
-          
+           
           {
             title: "是否回款",
             key: "isReturnBackPrice",
@@ -743,18 +795,22 @@ export default {
         this.query.customerName = ""
         this.query.ReturnBackPriceState = '-1'
         this.query.checkState = -1
+        this.query.isCreateBill = -1
+        this.query.belongCompanyId = -1
       }
     },
     // 获取交易完成订单
     getcustomerOrderReceivableReports(val) {
-      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState,appType} = this.query;
+      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState,appType,isCreateBill,belongCompanyId} = this.query;
       const data = { 
             startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
             endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
             customerName,
             checkState: checkState == -1 ? null : checkState,
             ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
-            appType:appType == -1 ? null :appType
+            appType:appType == -1 ? null :appType,
+            isCreateBill : isCreateBill == -1 ? null : isCreateBill,
+            belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId
         };
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -787,14 +843,16 @@ export default {
     },
     // 交易完成订单导出
     exportsendOrder() {
-      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState,appType} = this.query;
+      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState,appType,isCreateBill,belongCompanyId} = this.query;
       const data = { 
         startDate: this.$moment(startDate).format("YYYY-MM-DD")  ,
         endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         customerName,
         checkState: checkState == -1 ? null : checkState,
         ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
-        appType:appType == -1 ? null :appType
+        appType:appType == -1 ? null :appType,
+        isCreateBill : isCreateBill == -1 ? null : isCreateBill,
+        belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId
       };
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -884,6 +942,8 @@ export default {
         this.contentInfo.customerName = ""
         this.contentInfo.ReturnBackPriceState = '-1'
         this.contentInfo.checkState = -1
+        this.query.isCreateBill = -1
+        this.query.belongCompanyId = -1
         this.activeName = "orderDistribution";
         this.$emit("update:moneyReportModel2", false);
       }
@@ -903,6 +963,8 @@ export default {
       this.contentInfo.customerName = ""
       this.contentInfo.ReturnBackPriceState = '-1'
       this.contentInfo.checkState = -1
+      this.query.isCreateBill = -1
+        this.query.belongCompanyId = -1
       this.activeName = "orderDistribution";
       this.$emit("update:moneyReportModel2", false);
     },

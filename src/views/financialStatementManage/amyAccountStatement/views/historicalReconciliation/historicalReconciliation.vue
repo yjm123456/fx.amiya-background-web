@@ -6,14 +6,14 @@
           <Input
             v-model="query.keyword"
             placeholder="请输入关键字"
-            style="width: 200px; "
+            style="width: 180px; "
             @keyup.enter.native="getHospitalInfo()"
           />
           <Select
             v-model="query.hospitalId"
             placeholder="请选择医院"
             filterable
-            style="width: 240px;margin-left:10px"
+            style="width: 200px;margin-left:10px"
             v-if="employeeType == 'amiyaEmployee'"
           >
             <Option
@@ -23,10 +23,20 @@
               >{{ item.name }}</Option
             >
           </Select>
+          
+          <Select
+            v-model="query.isCreateBill"
+            style="margin-left: 10px; width: 130px"
+            placeholder="开票状态"
+          >
+            <Option v-for="item in isCreateBillList" :value="item.type" :key="item.type" >{{
+              item.name
+            }}</Option>
+          </Select>
           <Select
             v-model="query.reconciliationState"
-            style="margin-left: 10px; width: 150px"
-            
+            style="margin-left: 10px; width: 130px"
+            placeholder="对账状态"
           >
             <Option v-for="item in typeList" :value="item.id" :key="item.id" >{{
               item.name
@@ -35,28 +45,28 @@
           <DatePicker
             type="date"
             placeholder="创建开始日期"
-            style="width: 150px; margin-left: .625rem"
+            style="width: 130px; margin-left: .625rem"
             :value="query.startDate"
             v-model="query.startDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="创建结束时间"
-            style="width: 150px;margin-left: .625rem;"
+            style="width: 130px;margin-left: .625rem;"
             :value="query.endDate"
             v-model="query.endDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="成交开始日期"
-            style="width: 150px; margin-left: .625rem"
+            style="width: 130px; margin-left: .625rem"
             :value="query.startDealDate"
             v-model="query.startDealDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="成交结束时间"
-            style="width: 150px;margin-left: .625rem;"
+            style="width: 130px;margin-left: .625rem;"
             :value="query.endDealDate"
             v-model="query.endDealDate"
           ></DatePicker>
@@ -66,12 +76,15 @@
             @click="getHospitalInfo()"
             >查询</Button
           >
-          <Button
+          <!-- <Button
             type="primary"
             @click="collection"
             style="margin-left: 10px"
             v-if="employeeType == 'amiyaEmployee' && query.reconciliationState == 3"
             >回款</Button
+          > -->
+          <Button type="primary" @click="invoiceClick" style="margin-left: 10px"
+            >开票</Button
           >
           <Button
             type="primary"
@@ -101,9 +114,10 @@
       </div>
       <div class="page_wrap">
         <div class="bottom_title">
-          <span  class="bottom_right"> 信息服务费合计: <span style="color:red;font-weight:bold">{{returnBackPriceNum == 0 ? 0 : returnBackPriceNum.toFixed(2)}}</span></span>
-          <span  class="bottom_right"> 系统维护费合计: <span style="color:red;font-weight:bold">{{systemUpdatePriceNum == 0 ? 0 : systemUpdatePriceNum.toFixed(2)}}</span></span>
-          <span class="bottom_right"> 服务费合计: <span style="color:red;font-weight:bold">{{collectionNum == 0 ? 0 : collectionNum.toFixed(2)}}</span></span>
+          <span  class="bottom_right"> <span class="title_00">信息服务费合计: </span><span style="color:red;font-weight:bold">{{returnBackPriceNum == 0 ? 0 : returnBackPriceNum.toFixed(2)}}</span></span>
+          <span  class="bottom_right"> <span class="title_00">系统维护费合计: </span><span style="color:red;font-weight:bold">{{systemUpdatePriceNum == 0 ? 0 : systemUpdatePriceNum.toFixed(2)}}</span></span>
+          <span class="bottom_right"> <span class="title_00">服务费合计: </span><span style="color:red;font-weight:bold">{{collectionNum == 0 ? 0 : collectionNum.toFixed(2)}}</span></span>
+          <span class="bottom_right"> <span class="title_00"> 对账业绩合计:</span><span style="color:red;font-weight:bold">{{reconciliationPerformanceNum == 0 ? 0 : reconciliationPerformanceNum.toFixed(2)}}</span></span>
         </div>
         <Page
           ref="pages"
@@ -160,6 +174,15 @@
       :viewTransactionOrderParams="viewTransactionOrderParams"
       ref="viewTransactionOrder"
     />
+    <!-- 生成发票 -->
+    <invoice
+      :invoiceModel.sync="invoiceModel"
+      :invoiceParams="invoiceParams"
+      :hospitalInfo="hospitalInfo"
+      @hanledgetHospitalInfo="hanledgetHospitalInfo"
+      :companyNameList="companyNameList"
+      :billTypeList="billTypeList"
+    />
   </div>
 </template>
 <script>
@@ -167,24 +190,50 @@ import * as api from "@/api/reconciliationDocuments";
 import { download } from "@/utils/util";
 import importFile from "../../components/import/importModel.vue";
 import viewTransactionOrder from "../../components/viewTransactionOrder.vue";
+import invoice from "../../components/invoice/invoice.vue";
 
 export default {
   components: {
     importFile,
     viewTransactionOrder,
+    invoice
   },
   props: {
     activeName: String,
-    hospitalAllList:Array
+    hospitalAllList:Array,
+    hospitalInfo: Array,
+    companyNameList: Array,
+    billTypeList: Array,
   },
   data() {
     return {
+      // 生成发票
+      invoiceModel: false,
+      invoiceParams: {
+        invoiceList: new Set(),
+        // 信息服务费合计
+        returnBackPriceNum: 0,
+        // 系统维护费合计
+        systemUpdatePriceNum: 0,
+        // 服务费合计
+        collectionNum: 0,
+        // 对账业绩
+        reconciliationPerformanceNum:0,
+        //  医院id
+        hospitalId: null,
+        // 用于批量选择订单时判断有不同医院 提示报错
+        invoiceHospitalList: new Set(),
+        // 用于批量选择订单时判断有开票状态不同 提示报错
+        invoiceTypeList: new Set(),
+      },
       // 信息服务费合计
       returnBackPriceNum:0,
       // 系统维护金额合计
       systemUpdatePriceNum:0,
       // 服务费合计
       collectionNum:0,
+      // 对账业绩
+      reconciliationPerformanceNum:0,
       viewTransactionOrderModel: false,
       viewTransactionOrderParams: {
         id: "",
@@ -192,8 +241,12 @@ export default {
       },
       typeList: [
         {
+          id:-1,
+          name:'全部回款状态'
+        },
+        {
           id: 3,
-          name: "已对账",
+          name: "未回款",
         },
         {
           id: 4,
@@ -202,8 +255,9 @@ export default {
       ],
       // 查询
       query: {
+        isCreateBill:-1,
         hospitalId:-1,
-        reconciliationState: 3,
+        reconciliationState: -1,
         keyword: "",
         startDate: this.$moment()
           .startOf("year")
@@ -276,6 +330,19 @@ export default {
             key: "reconciliationStateText",
             width: 140,
             align: "center",
+          },
+          {
+            title: "开票状态",
+            key: "isCreateBill",
+            width: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isCreateBill == true ? '已开票': '未开票'
+                  
+              );
+            },
           },
           {
             title: "信息服务费比例（%）",
@@ -392,6 +459,20 @@ export default {
           name: "对账完成",
         },
       ],
+      isCreateBillList:[
+        {
+          type:-1,
+          name:'全部开票状态'
+        },
+        {
+          type:'false',
+          name:'未开票'
+        },
+        {
+          type:'true',
+          name:'已开票'
+        },
+      ],
       // 控制 modal
       controlModal: false,
       // 标记对账单弹窗
@@ -417,12 +498,87 @@ export default {
         ],
       },
       employeeType: sessionStorage.getItem("employeeType"),
+      isHospital:null
     };
   },
   methods: {
-    handlePageSizeChange(pageSize){
-      this.query.pageSize = pageSize
+    hanledgetHospitalInfo(){
       this.getHospitalInfo()
+      // this.invoiceParams.invoiceList.clear();
+      // this.invoiceParams.invoiceHospitalList.clear();
+      // this.invoiceParams.invoiceTypeList.clear();
+    },
+    // 生成开票
+    invoiceClick() {
+      if (!this.invoiceParams.invoiceList.length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      for (var i = 0; i < this.invoiceParams.invoiceList.length; i++) {
+          if(i > 0){
+            if(this.invoiceParams.invoiceList[i].hospitalId != this.invoiceParams.invoiceList[i-1].hospitalId){
+              this.$Message.warning("医院选择不同，请重选选择");
+              this.isHospital = 1
+              break 
+            }else{
+              this.isHospital = 0
+            }
+          }
+          if (this.invoiceParams.invoiceList[i].isCreateBill == true) {
+            this.$Message.warning("您选中的对账单存在已开票数据，请认真核对后重试！");
+            this.isHospital = 1
+            break;
+          }else{
+              this.isHospital = 0
+            }
+          
+      }
+         this.invoiceModel =  (this.isHospital == 1 || !this.invoiceParams.invoiceList) ? false : true ;
+          this.invoiceParams.returnBackPriceNum =  this.returnBackPriceNum == 0 ? 0 : this.returnBackPriceNum.toFixed(2);
+          this.invoiceParams.systemUpdatePriceNum = this.systemUpdatePriceNum == 0 ? 0: this.systemUpdatePriceNum.toFixed(2);
+          this.invoiceParams.collectionNum =this.collectionNum == 0 ? 0 : this.collectionNum.toFixed(2);
+          this.invoiceParams.reconciliationPerformanceNum = this.reconciliationPerformanceNum == 0 ? 0 : this.reconciliationPerformanceNum.toFixed(2);  
+          this.invoiceParams.hospitalId = this.invoiceParams.invoiceList[0].hospitalId;
+      // let hostpital = [...this.invoiceParams.invoiceHospitalList];
+      // let type = [...this.invoiceParams.invoiceTypeList];
+      // // 判断选择的医院是否是同一家医院
+      // if (hostpital.length > 1) {
+      //   this.$Message.warning("医院选择不同，请重选选择");
+      //   // this.getHospitalInfo()
+      //   return;
+      // }
+      //  // 判断选择的已开票状态不能再次开票
+      // if (type.find(item=>item==1)) {
+      //   this.$Message.warning("您选中的对账单存在已开票数据，请认真核对后重试！");
+      //   // this.getHospitalInfo()
+      //   return;
+      // }
+      // if (![...this.invoiceParams.invoiceList].length) {
+      //   this.$Message.warning({
+      //     content: "请选择订单",
+      //     duration: 3,
+      //   });
+      //   return;
+      // }
+      // this.invoiceModel = true;
+      // this.invoiceParams.returnBackPriceNum =
+      //   this.returnBackPriceNum == 0 ? 0 : this.returnBackPriceNum.toFixed(2);
+      // this.invoiceParams.systemUpdatePriceNum =
+      //   this.systemUpdatePriceNum == 0
+      //     ? 0
+      //     : this.systemUpdatePriceNum.toFixed(2);
+      // this.invoiceParams.collectionNum =
+      //   this.collectionNum == 0 ? 0 : this.collectionNum.toFixed(2);
+      // this.invoiceParams.reconciliationPerformanceNum =
+      //   this.reconciliationPerformanceNum == 0 ? 0 : this.reconciliationPerformanceNum.toFixed(2);
+      // this.invoiceParams.hospitalId = hostpital[0];
+    },
+    handlePageSizeChange(pageSize) {
+      this.query.pageSize = pageSize;
+      this.getHospitalInfo();
     },
     // 回款
     collection() {
@@ -437,29 +593,56 @@ export default {
     },
     handleSelect(selection, row) {
       this.collectionNum += row.returnBackTotalPrice
+      this.reconciliationPerformanceNum += row.totalDealPrice
       this.returnBackPriceNum += row.returnBackPrice
       this.systemUpdatePriceNum += row.systemUpdatePrice
       // 回款
       this.form.reconciliationDocumentsIdList.add(row.id);
+      // 生成发票
+      this.invoiceParams.invoiceList = selection
+      // this.invoiceParams.invoiceList.add(row.id);
+      // this.invoiceParams.invoiceHospitalList.add(row.hospitalId);
+      // let isCreateBill = row.isCreateBill == true ? 1 : 2
+      // this.invoiceParams.invoiceTypeList.add(isCreateBill);
     },
     handleCancels(selection, row) {
       // 回款
       this.form.reconciliationDocumentsIdList.delete(row.id);
       this.collectionNum = this.collectionNum - row.returnBackTotalPrice
+      this.reconciliationPerformanceNum = this.reconciliationPerformanceNum - row.totalDealPrice
       this.returnBackPriceNum = this.returnBackPriceNum - row.returnBackPrice
       this.systemUpdatePriceNum = this.systemUpdatePriceNum - row.systemUpdatePrice
+      // 生成发票
+      this.invoiceParams.invoiceList = selection
+      // this.invoiceParams.invoiceList.delete(row.id);
+      // this.invoiceParams.invoiceHospitalList.delete(row.hospitalId);
+      // let isCreateBill = row.isCreateBill == true ? 1 : 2
+      // this.invoiceParams.invoiceTypeList.delete(isCreateBill);
     },
 
     handleSelectAll(selection) {
       if (selection && selection.length === 0) {
         this.form.reconciliationDocumentsIdList.clear();
+        // 生成发票
+        this.invoiceParams.invoiceList = []
+        // this.invoiceParams.invoiceList.clear();
+        // this.invoiceParams.invoiceHospitalList.clear();
+        // this.invoiceParams.invoiceTypeList.clear();
+
         this.collectionNum = 0
+        this.reconciliationPerformanceNum = 0
         this.returnBackPriceNum = 0
         this.systemUpdatePriceNum = 0
       } else {
+        this.invoiceParams.invoiceList = selection
         selection.forEach((item) => {
           this.form.reconciliationDocumentsIdList.add(item.id);
+          // this.invoiceParams.invoiceList.add(item.id);
+          // this.invoiceParams.invoiceHospitalList.add(item.hospitalId);
+          // let isCreateBill = item.isCreateBill == true ? 1 : 2;
+          // this.invoiceParams.invoiceTypeList.add(isCreateBill);
           this.collectionNum += item.returnBackTotalPrice
+          this.reconciliationPerformanceNum += item.totalDealPrice
           this.returnBackPriceNum += item.returnBackPrice
           this.systemUpdatePriceNum += item.systemUpdatePrice
         });
@@ -476,7 +659,8 @@ export default {
         startDate,
         endDate,
         reconciliationState,
-        hospitalId
+        hospitalId,
+        isCreateBill
       } = this.query;
       const data = {
         pageNum,
@@ -492,8 +676,9 @@ export default {
         endDealDate: endDealDate
           ? this.$moment(endDealDate).format("YYYY-MM-DD")
           : null,
-        reconciliationState,
-        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
+        reconciliationState:reconciliationState == -1 ? null : reconciliationState,
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId,
+        isCreateBill:isCreateBill == -1 ? null : isCreateBill
       };
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -527,7 +712,8 @@ export default {
         startDate,
         endDate,
         reconciliationState,
-        hospitalId
+        hospitalId,
+        isCreateBill
       } = this.query;
       const data = {
         pageNum,
@@ -543,15 +729,20 @@ export default {
         endDealDate: endDealDate
           ? this.$moment(endDealDate).format("YYYY-MM-DD")
           : null,
-        reconciliationState,
-        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
+        reconciliationState:reconciliationState == -1 ? null : reconciliationState,
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId,
+        isCreateBill:isCreateBill == -1 ? null : isCreateBill
       };
       api.getReconciliationDocuments(data).then((res) => {
         if (res.code === 0) {
           this.collectionNum = 0
+          this.reconciliationPerformanceNum = 0
           this.returnBackPriceNum = 0
           this.systemUpdatePriceNum = 0
-          this.form.reconciliationDocumentsIdList.clear();
+           this.invoiceParams.invoiceList = []
+          // this.invoiceParams.invoiceList.clear();
+          // this.invoiceParams.invoiceHospitalList.clear();
+          // this.form.reconciliationDocumentsIdList.clear();
           const { list, totalCount } = res.data.reconciliationDocumentsInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
@@ -569,7 +760,8 @@ export default {
         startDate,
         endDate,
         reconciliationState,
-        hospitalId
+        hospitalId,
+        isCreateBill
       } = this.query;
       const data = {
         pageNum,
@@ -585,12 +777,14 @@ export default {
         endDealDate: endDealDate
           ? this.$moment(endDealDate).format("YYYY-MM-DD")
           : null,
-        reconciliationState,
-        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
+        reconciliationState:reconciliationState == -1 ? null : reconciliationState,
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId,
+        isCreateBill:isCreateBill == -1 ? null : isCreateBill
       };
       api.getReconciliationDocuments(data).then((res) => {
         if (res.code === 0) {
           this.collectionNum = 0
+          this.reconciliationPerformanceNum = 0
           this.returnBackPriceNum = 0
           this.systemUpdatePriceNum = 0
           this.form.reconciliationDocumentsIdList.clear();
@@ -634,6 +828,8 @@ export default {
       this.isEdit = false;
       this.controlModal = false;
       this.$refs[name].resetFields();
+      // this.invoiceParams.invoiceList.clear();
+      // this.invoiceParams.invoiceHospitalList.clear();
     },
 
     // modal 显示状态发生变化时触发
@@ -641,6 +837,8 @@ export default {
       if (!value) {
         this.isEdit = false;
         this.$refs["form"].resetFields();
+        // this.invoiceParams.invoiceList.clear();
+        // this.invoiceParams.invoiceHospitalList.clear();
       }
     },
   },
@@ -653,6 +851,7 @@ export default {
         if (value === "historicalReconciliation") {
           this.getHospitalInfo();
           this.collectionNum = 0
+          this.reconciliationPerformanceNum = 0
           this.returnBackPriceNum = 0
           this.systemUpdatePriceNum = 0
         }
@@ -684,5 +883,8 @@ export default {
 }
 .bottom_right{
   margin-right: 20px;
+}
+.title_00{
+  color: #000;
 }
 </style>

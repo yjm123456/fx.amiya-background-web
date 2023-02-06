@@ -5,7 +5,7 @@
       title="添加规格"
       :mask-closable="false"
       @on-visible-change="addHispitalChange"
-      width="70%"
+      width="85%"
     >
       <div>
         <Form
@@ -14,15 +14,20 @@
           label-position="right"
           :label-width="90"
         >
-          <Row :gutter="30">
-            <Col span="8">
+          <Row :gutter="10">
+            <Col span="6">
               <FormItem label="规格" prop="standards">
                 <Input v-model="form.standards" placeholder="选择规格"></Input>
               </FormItem>
             </Col>
-            <Col span="6">
-              <FormItem label="价格" prop="price">
-                <Input v-model="form.price" placeholder="价格" type="number" number></Input>
+            <Col span="5">
+              <FormItem label="购买值" prop="price">
+                <Input v-model="form.price" placeholder="购买值" type="number" number></Input>
+              </FormItem>
+            </Col>
+            <Col span="4">
+              <FormItem label="抵扣积分" prop="integralAmount">
+                <Input v-model="form.integralAmount" placeholder="抵扣积分" type="number" number :disabled="exchangeType != 7"></Input>
               </FormItem>
             </Col>
             <Col span="6">
@@ -43,10 +48,14 @@
       </div>
       <div class="table">
          <Table border :columns="query.columns" :data="query.data"   height="300"></Table>
+         
       </div>
-      <div slot="footer">
-        <Button @click="handleCancelClick('form')">取消</Button>
-        <Button type="primary" @click="handleSubmitClick()">确定</Button>
+      <div slot="footer" class="footer">
+          <div class="title">注：当改商品的支付方式为人民币支付的形式时，购买值即意为"金额"；另外若为积分支付形式时，购买值即意为"积分"</div>
+          <div>
+            <Button @click="handleCancelClick('form')">取消</Button>
+            <Button type="primary" @click="handleSubmitClick()">确定</Button>
+          </div>
       </div>
     </Modal>
   </div>
@@ -59,7 +68,8 @@ export default {
   },
   props: {
     addSpecificationsModel: Boolean,
-    goodsInfo: Object
+    goodsInfo: Object,
+    exchangeType:Number
   },
   data() {
     return {
@@ -76,7 +86,8 @@ export default {
       form: {
         standards: "",
         price: null,
-        standardsImg:""
+        standardsImg:"",
+        integralAmount:null
       },
       specificationsModel: false,
       query: {
@@ -102,7 +113,7 @@ export default {
                 },
           },
           {
-            title: "价格",
+            title: "购买值",
             key: "price",
             align: "center",
             min: 0,
@@ -119,6 +130,32 @@ export default {
                     this.query.data.map((item,index)=>{
                       if(index=== params.index){
                         this.query.data[params.index].price = value;
+                      }
+                    })
+                  },
+                },
+              });
+            },
+          },
+          {
+            title: "抵扣积分",
+            key: "integralAmount",
+            align: "center",
+            min: 0,
+            render: (h, params) => {
+              return h("InputNumber", {
+                props: {
+                  value: params.row.integralAmount,
+                  disabled:this.exchangeType !=7
+                },
+                style: {
+                  width: "100px",
+                },
+                on: {
+                  "on-change": (value) => {
+                    this.query.data.map((item,index)=>{
+                      if(index=== params.index){
+                        this.query.data[params.index].integralAmount = value;
                       }
                     })
                   },
@@ -200,18 +237,25 @@ export default {
     },
     // 确认添加
     handleAddSubmitClick() {
-      const { standards, price,standardsImg } = this.form;
+      const { standards, price,standardsImg ,integralAmount} = this.form;
       let hospitalArr = [] 
       if(!standards){
         this.$Message.error('请输入规格')
         return
       };
       if(!price){
-        this.$Message.error('请输入价格')
+        this.$Message.error('请输入购买值')
         return
       };
+      if(this.exchangeType == 7){
+        if(!integralAmount){
+          this.$Message.error('请输入抵扣积分')
+          return
+        };
+      }
+      
 
-      this.query.data.push({standards:standards,price:Number(price),index:this.index++,standardsImg:standardsImg})
+      this.query.data.push({standards:standards,price:Number(price),integralAmount:Number(integralAmount),index:this.index++,standardsImg:standardsImg})
       this.form = {}
       this.thumbPicUrlUploadObj.uploadList = [];
     },
@@ -241,7 +285,8 @@ export default {
         return {
           standards:item.standards,
           price:item.price,
-          standardsImg:item.standardsImg
+          standardsImg:item.standardsImg,
+          integralAmount:item.integralAmount
 
         }
       })
@@ -268,4 +313,11 @@ export default {
   height: 100px;
   overflow-y: scroll;
 } */
+.footer{
+  display: flex;
+  justify-content: space-between;
+}
+.title{
+  color: red;
+}
 </style>

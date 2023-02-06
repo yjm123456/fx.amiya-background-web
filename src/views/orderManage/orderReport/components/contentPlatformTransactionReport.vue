@@ -174,7 +174,7 @@ export default {
           //   },
           // },
           {
-            title: "面诊状态",
+            title: "面诊类型",
             key: "consultationTypeText",
             minWidth: 100,
           },

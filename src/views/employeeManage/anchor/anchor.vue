@@ -66,7 +66,7 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="80"
+        :label-width="110"
       >
         <Row :gutter="30">
           <Col span="12">
@@ -158,7 +158,11 @@
         </Row>
         <Row :gutter="30">
           
-          
+          <Col span="12">
+            <FormItem label="是否为自播达人" prop="isSelfLivevAnchor">
+            <i-switch v-model="form.isSelfLivevAnchor" />
+          </FormItem>
+          </Col>
           <Col span="12">
             <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
             <i-switch v-model="form.valid" />
@@ -275,6 +279,35 @@ export default {
           //     );
           //   },
           // },
+          {
+            title: "是否为自播达人",
+            key: "isSelfLivevAnchor",
+            width:150,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isSelfLivevAnchor == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
           {
             title: "是否有效",
             key: "valid",
@@ -394,6 +427,7 @@ export default {
                               nickName,
                               videoUrl,
                               thumbPicture,
+                              isSelfLivevAnchor
                             } = res.data.liveAnchorBaseInfo;
                             this.isEdit = true;
                             this.form.valid = valid;
@@ -411,6 +445,7 @@ export default {
                             this.form.videoUrl = videoUrl;
                             this.videouploadObj.uploadList = [this.form.videoUrl]
                             this.uploadFileObj.uploadList = this.form.contractUrl ? [this.form.contractUrl] : [];
+                            this.form.isSelfLivevAnchor = isSelfLivevAnchor;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -538,7 +573,9 @@ export default {
         // 到期时间
         dueTime:'',
         // 是否主推
-        isMain:0
+        isMain:0,
+        // 是否为自播达人
+        isSelfLivevAnchor:false
       },
 
       ruleValidate: {
@@ -572,12 +609,12 @@ export default {
         //     message: "请输入合同地址",
         //   },
         // ],
-        videoUrl: [
-          {
-            required: true,
-            message: "请输入视频地址",
-          },
-        ],
+        // videoUrl: [
+        //   {
+        //     required: true,
+        //     message: "请输入视频地址",
+        //   },
+        // ],
 
         thumbPicture: [
           {
@@ -648,7 +685,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const { liveAnchorName, nickName, thumbPicture ,individualitySignature,description,detailPicture,contractUrl,videoUrl,dueTime,isMain ,id,valid} = this.form;
+            const { liveAnchorName, nickName, thumbPicture ,individualitySignature,description,detailPicture,contractUrl,videoUrl,dueTime,isMain ,id,valid,isSelfLivevAnchor} = this.form;
             const  data = { 
               id,
               valid,
@@ -658,10 +695,11 @@ export default {
               individualitySignature,
               description,
               detailPicture,
-              contractUrl,
-              videoUrl,
+              contractUrl: contractUrl ? contractUrl : '',
+              videoUrl:videoUrl ? videoUrl : '',
               dueTime:dueTime ? this.$moment(new Date(dueTime)).format("YYYY-MM-DD") : null,
-              isMain
+              isMain,
+              isSelfLivevAnchor
             } 
             // 修改
             api.editLiveAnchorBaseInfo(data).then((res) => {
@@ -676,7 +714,7 @@ export default {
               }
             });
           } else {
-            const { liveAnchorName, nickName, thumbPicture ,individualitySignature,description,detailPicture,contractUrl,videoUrl,dueTime,isMain } = this.form;
+            const { liveAnchorName, nickName, thumbPicture ,individualitySignature,description,detailPicture,contractUrl,videoUrl,dueTime,isMain,isSelfLivevAnchor } = this.form;
             const  data = { 
               liveAnchorName ,
               nickName,
@@ -687,7 +725,8 @@ export default {
               contractUrl,
               videoUrl,
               dueTime:dueTime ? this.$moment(new Date(dueTime)).format("YYYY-MM-DD") : null,
-              isMain
+              isMain,
+              isSelfLivevAnchor
             } 
             // 添加
             api.addLiveAnchorBaseInfo(data).then((res) => {

@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      positionId:sessionStorage.getItem('positionId'),
       // 查询
       query: {
         // 升单开始时间
@@ -243,12 +244,13 @@ export default {
         pageSize,
         addedBy,
         buyAgainType,
-        checkState,
+        checkState: this.timeParams.assemblyChecked,
         channel,
         liveAnchorId,
         isConfirmOrder:this.timeParams.startDate && this.timeParams.endDate ? true : null,
         consumeStartDate:isConfirmOrder ?   this.$moment(this.timeParams.startDate).format("YYYY-MM-DD"): null,
         consumeEndDate:isConfirmOrder ?  this.$moment(this.timeParams.endDate).format("YYYY-MM-DD") : null,
+        dataFrom:this.positionId == '13' ? true : false
       };
       if(!this.timeParams.startDate || !this.timeParams.endDate){
         this.$Message.warning('请选择时间')
@@ -291,12 +293,13 @@ export default {
         pageSize,
         addedBy,
         buyAgainType,
-        checkState,
+        checkState: this.timeParams.assemblyChecked,
         channel,
         liveAnchorId,
         isConfirmOrder:this.timeParams.startDate && this.timeParams.endDate ? true : null,
         consumeStartDate:isConfirmOrder ?   this.$moment(this.timeParams.startDate).format("YYYY-MM-DD"): null,
         consumeEndDate:isConfirmOrder ?  this.$moment(this.timeParams.endDate).format("YYYY-MM-DD") : null,
+        dataFrom:this.positionId == '13' ? true : false
       };
       api.getCustomerHospitalConsume(data).then((res) => {
         if (res.code === 0) {

@@ -1409,7 +1409,7 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: params.row.checkState =='审核通过'
+                      disabled: params.row.checkState =='审核通过' || params.row.isConfirmOrder == true
                     },
                     style: {
                       marginRight: "5px",

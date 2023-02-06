@@ -24,9 +24,17 @@
             >
           </Select>
           <Select
+            v-model="query.isCreateBill"
+            style="margin-left: 10px; width: 130px"
+            placeholder="开票状态"
+          >
+            <Option v-for="item in isCreateBillList" :value="item.type" :key="item.type" >{{
+              item.name
+            }}</Option>
+          </Select>
+          <Select
             v-model="query.reconciliationState"
             style="margin-left: 10px; width: 150px"
-            
           >
             <Option v-for="item in typeList" :value="item.id" :key="item.id" >{{
               item.name
@@ -101,9 +109,9 @@
       </div>
       <div class="page_wrap">
         <div class="bottom_title">
-          <span  class="bottom_right"> 信息服务费合计: <span style="color:red;font-weight:bold">{{returnBackPriceNum == 0 ? 0 : returnBackPriceNum.toFixed(2)}}</span></span>
+          <!-- <span  class="bottom_right"> 信息服务费合计: <span style="color:red;font-weight:bold">{{returnBackPriceNum == 0 ? 0 : returnBackPriceNum.toFixed(2)}}</span></span>
           <span  class="bottom_right"> 系统维护费合计: <span style="color:red;font-weight:bold">{{systemUpdatePriceNum == 0 ? 0 : systemUpdatePriceNum.toFixed(2)}}</span></span>
-          <span class="bottom_right"> 服务费合计: <span style="color:red;font-weight:bold">{{collectionNum == 0 ? 0 : collectionNum.toFixed(2)}}</span></span>
+          <span class="bottom_right"> 服务费合计: <span style="color:red;font-weight:bold">{{collectionNum == 0 ? 0 : collectionNum.toFixed(2)}}</span></span> -->
         </div>
         <Page
           ref="pages"
@@ -178,8 +186,12 @@ export default {
       collectionNum:0,
       typeList: [
         {
+          id:-1,
+          name:'全部回款状态'
+        },
+        {
           id: 3,
-          name: "已对账",
+          name: "未回款",
         },
         {
           id: 4,
@@ -188,8 +200,9 @@ export default {
       ],
       // 查询
       query: {
+        isCreateBill:-1,
         hospitalId:-1,
-        reconciliationState: 3,
+        reconciliationState: -1,
         keyword: "",
         startDate: this.$moment()
           .startOf("year")
@@ -258,6 +271,19 @@ export default {
             align: "center",
           },
           {
+            title: "开票状态",
+            key: "isCreateBill",
+            width: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isCreateBill == true ? '已开票': '未开票'
+                  
+              );
+            },
+          },
+          {
             title: "信息服务费比例（%）",
             key: "returnBackPricePercent",
             width: 180,
@@ -321,6 +347,20 @@ export default {
         data: [],
         totalCount: 0,
       },
+      isCreateBillList:[
+        {
+          type:-1,
+          name:'全部开票状态'
+        },
+        {
+          type:'false',
+          name:'未开票'
+        },
+        {
+          type:'true',
+          name:'已开票'
+        },
+      ],
       importControlModal: false,
       markStatementList: [
         {
@@ -422,7 +462,8 @@ export default {
         startDate,
         endDate,
         reconciliationState,
-        hospitalId
+        hospitalId,
+        isCreateBill
       } = this.query;
       const data = {
         pageNum,
@@ -438,8 +479,9 @@ export default {
         endDealDate: endDealDate
           ? this.$moment(endDealDate).format("YYYY-MM-DD")
           : null,
-        reconciliationState,
-        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
+        reconciliationState:reconciliationState == -1 ? null : reconciliationState,
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId,
+        isCreateBill:isCreateBill == -1 ? null : isCreateBill
       };
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -473,7 +515,8 @@ export default {
         startDate,
         endDate,
         reconciliationState,
-        hospitalId
+        hospitalId,
+        isCreateBill
       } = this.query;
       const data = {
         pageNum,
@@ -489,8 +532,9 @@ export default {
         endDealDate: endDealDate
           ? this.$moment(endDealDate).format("YYYY-MM-DD")
           : null,
-        reconciliationState,
-        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
+        reconciliationState:reconciliationState == -1 ? null : reconciliationState,
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId,
+        isCreateBill:isCreateBill == -1 ? null : isCreateBill
       };
       api.getReconciliationDocuments(data).then((res) => {
         if (res.code === 0) {
@@ -515,7 +559,8 @@ export default {
         startDate,
         endDate,
         reconciliationState,
-        hospitalId
+        hospitalId,
+        isCreateBill
       } = this.query;
       const data = {
         pageNum,
@@ -531,8 +576,9 @@ export default {
         endDealDate: endDealDate
           ? this.$moment(endDealDate).format("YYYY-MM-DD")
           : null,
-        reconciliationState,
-        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId
+        reconciliationState:reconciliationState == -1 ? null : reconciliationState,
+        hospitalId:this.employeeType == 'hospitalEmployee' ? sessionStorage.getItem('hospitalId') : hospitalId == -1 ? null : hospitalId,
+        isCreateBill:isCreateBill == -1 ? null : isCreateBill
       };
       api.getReconciliationDocuments(data).then((res) => {
         if (res.code === 0) {

@@ -141,14 +141,14 @@
         <DatePicker
           type="date"
           placeholder="开始日期"
-          style="width: 200px;margin-left: 10px"
+          style="width: 150px;margin-left: 10px"
           :value="query.assemblyStartDate"
           v-model="query.assemblyStartDate"
         ></DatePicker>
         <DatePicker
           type="date"
           placeholder="结束日期"
-          style="width: 200px; margin-left: 10px"
+          style="width: 150px; margin-left: 10px"
           :value="query.assemblyEndDate"
           v-model="query.assemblyEndDate"
         ></DatePicker>
@@ -156,7 +156,7 @@
           v-model="query.status"
           placeholder="请选择平台"
           filterable
-          style="width: 200px; margin-left: 10px"
+          style="width: 150px; margin-left: 10px"
           @on-change="statusChange(query.status)"
         >
           <Option
@@ -166,6 +166,19 @@
             >{{ item.name }}</Option
           >
         </Select>
+        <Select
+            v-model="query.assemblyChecked"
+            placeholder="请选择审核状态"
+            filterable
+            style="width: 150px;margin-left:10px"
+          >
+            <Option
+              v-for="item in assemblyCheckedList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
         <Select
             v-model="query.assemblyHospitalId"
             placeholder="请选择医院"
@@ -181,6 +194,7 @@
               >{{ item.name }}</Option
             >
           </Select>
+          
         <Button
           type="primary"
           style="margin-left: 10px"
@@ -202,6 +216,14 @@
           <!-- 消费追踪 -->
           <literOrder ref="literOrder" :timeParams="timeParams" />
         </div>
+        <Spin fix v-if="isLoading == true">
+            <Icon
+              type="ios-loading"
+              size="18"
+              class="demo-spin-icon-load"
+            ></Icon>
+            <div>加载中...</div>
+          </Spin>
       </div>
       <div slot="footer">
         <!-- <Button @click="cancelSubmit('form')">取消</Button> -->
@@ -219,6 +241,7 @@
           number
           type="number"
         />
+        
         <Button @click="handleModalVisibleChange()">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">添加</Button>
       </div>
@@ -257,6 +280,14 @@
             >
           </Select>
         </FormItem>
+        <Spin fix v-if="isLoading == true">
+            <Icon
+              type="ios-loading"
+              size="18"
+              class="demo-spin-icon-load"
+            ></Icon>
+            <div>加载中...</div>
+          </Spin>
       </Form>
       <div slot="footer">
         <Button @click="hospitalCancelSubmit('form')">取消</Button>
@@ -283,6 +314,7 @@ export default {
   },
   data() {
     return {
+      isLoading:false,
       hospitalform: {
         hospitalId: null,
       },
@@ -307,8 +339,23 @@ export default {
         startDate: "",
         endDate: "",
         assemblyHospitalId:-1,
-        assemblyKeyword:''
+        assemblyKeyword:'',
+        assemblyChecked:null
       },
+      assemblyCheckedList:[
+        {
+          id:0,
+          name:'未审核'
+        },
+        {
+          id:1,
+          name:'审核不通过'
+        },
+        {
+          id:3,
+          name:'审核中'
+        },
+      ],
       // 查询
       query: {
         // 添加弹窗 组件内的时间
@@ -319,6 +366,7 @@ export default {
         status: 1,
         assemblyHospitalId:-1,
         assemblyKeyword:'',
+        assemblyChecked:0,
         // 未上传对账单列表参数
         keyword: "",
         startDate: this.$moment()
@@ -784,6 +832,7 @@ export default {
       this.timeParams.endDate = this.query.assemblyEndDate;
       this.controlModal = true;
       this.timeParams.assemblyKeyword = this.query.assemblyKeyword
+      this.timeParams.assemblyChecked = this.query.assemblyChecked
       this.$refs.order.gettmallOrderFinishLlistWithPage();
     },
     // 切换平台
@@ -792,6 +841,7 @@ export default {
       this.timeParams.endDate = this.query.assemblyEndDate;
       this.timeParams.assemblyHospitalId = this.query.assemblyHospitalId
       this.timeParams.assemblyKeyword = this.query.assemblyKeyword
+      this.timeParams.assemblyChecked = this.query.assemblyChecked
       if (value == 1) {
         this.$nextTick(() => {
           this.$refs.order.query.rightData = [];
@@ -948,8 +998,10 @@ export default {
         addBaseOrderInfoVoList: this.addBaseOrderInfoVoList,
         orderFrom: this.query.status,
       };
+      this.isLoading = true
       api.addUnCheckOrder(data).then((res) => {
         if (res.code === 0) {
+          this.isLoading = false
           this.isEdit = false;
           this.cancelSubmit("form");
           this.getUnCheckOrders();
@@ -957,6 +1009,10 @@ export default {
             content: "修改成功",
             duration: 3,
           });
+        }else{
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 3000);
         }
       });
     },
@@ -966,14 +1022,20 @@ export default {
         idList: [...this.hospitalObj.idList],
         hospitalId: this.hospitalform.hospitalId,
       };
+      this.isLoading = true;
       api.sendToHospital(data).then((res) => {
         if (res.code === 0) {
+          this.isLoading = false;
           this.hospitalCancelSubmit();
           this.getUnCheckOrders();
           this.$Message.success({
             content: "指派成功",
             duration: 3,
           });
+        }else{
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 3000);
         }
       });
     },
@@ -998,7 +1060,8 @@ export default {
         "YYYY-MM-DD"
       );
       this.query.assemblyHospitalId = -1;
-      this.query.assemblyKeyword = '';
+      this.query.assemblyChecked = 0;
+      
     },
 
     // modal 显示状态发生变化时触发
@@ -1020,6 +1083,13 @@ export default {
         );
         this.query.assemblyHospitalId = -1;
         this.query.assemblyKeyword = '';
+        this.query.assemblyChecked = 0;
+        this.$nextTick(()=>{
+          if(this.query.status == 1){
+            this.$refs.order.query.rightData = []
+            return
+          }
+        })
       }
     },
   },
@@ -1047,6 +1117,20 @@ export default {
 }
 .tables {
   margin: 10px 0;
+}
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 </style>

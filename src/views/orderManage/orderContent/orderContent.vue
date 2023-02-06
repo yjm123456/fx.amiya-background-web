@@ -191,10 +191,16 @@
             @click="getOrderInfo()"
             >查询</Button
           >
-          <Button
+          <!-- <Button
             type="primary"
             style="margin-left: .625rem"
             @click="addgoods()"
+            >录单</Button
+          > -->
+          <Button
+            type="primary"
+            style="margin-left: .625rem"
+            @click="duplicateModel = true"
             >录单</Button
           >
           <Button
@@ -347,7 +353,7 @@
               >
                 <Option
                   v-for="(item,indexs) in weChatList"
-                  :value="item.weChatNo"
+                  :value="item.id"
                   :key="indexs"
                   >{{ item.weChatNo }}</Option
                 >
@@ -489,10 +495,10 @@
           </Col> -->
         
           <Col span="8">
-            <FormItem label="面诊状态" prop="consultationType">
+            <FormItem label="面诊类型" prop="consultationType">
               <Select
                 v-model="form.consultationType"
-                placeholder="请选择面诊状态"
+                placeholder="请选择面诊类型"
                 filterable
                 :disabled="
                   title == '录单编辑' && (positionId == 2 || positionId == 4)
@@ -759,6 +765,10 @@
     ></viewCustomerPhotos>
     <!-- 订单详情 -->
     <detail :detailModel.sync="detailModel" :detailList="detailList"></detail>
+    <!-- 待查重  录单-->
+    <duplicateCheck :duplicateModel.sync="duplicateModel" :recordingParams="recordingParams" />
+    <!-- 编辑录单 -->
+    <editRecording :editRecordingModel.sync="editRecordingModel" :recordingParams="recordingParams" />
   </div>
 </template>
 
@@ -771,15 +781,50 @@ import upload from "@/components/upload/upload";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import { download } from "@/utils/util";
 import detail from "@/components/contentDetail/detail.vue";
+import duplicateCheck from "./components/duplicateCheck.vue"
+import editRecording from "@/components/recording/editRecording"
 
 export default {
   components: {
     upload,
     viewCustomerPhotos,
     detail,
+    duplicateCheck,
+    editRecording
   },
   data() {
     return {
+      
+      // 录单(待查重)
+      duplicateModel:false,
+      //编辑录单参数
+      recordingParams:{
+        // 客服
+        employeeList:[],
+        // 平台
+        contentPalteForms:[],
+        // 科室
+        AmiyaHospitalDepartmentListDepartment:[],
+        // 内容平台订单类型
+        statusCodeArr2:[],
+        // 预约门店
+        hospitalNameList:[],
+        // 内容平台订单来源
+        orderSourcesList:[],
+        // 面诊类型列表
+        consultationTypeList:[],
+        // 
+        belongMonthList:[],
+
+        // 录单编辑
+        // 获取订单信息
+        info:{},
+        // 弹窗标题
+        title:'录单编辑'
+
+      },
+      // 编辑录单
+      editRecordingModel:false,
       positionId: sessionStorage.getItem("positionId"),
       weChatList: [],
       detailList: [],
@@ -914,7 +959,7 @@ export default {
           : "",
         // 面诊人员
         consultationEmpId: null,
-        // 面诊状态
+        // 面诊类型
         consultationType: -1,
         // 归属月份
         belongMonth:null,
@@ -948,7 +993,7 @@ export default {
         consultationType: [
           {
             required: true,
-            message: "请选择面诊状态",
+            message: "请选择面诊类型",
           },
         ],
         consultationEmpId: [
@@ -1053,7 +1098,7 @@ export default {
         // 核销时间
         writeOffStartDate: "",
         writeOffEndDate: "",
-        // 面诊状态
+        // 面诊类型
         consultationType: -1,
         // 最小金额
         minAddOrderPrice:null,
@@ -1079,7 +1124,13 @@ export default {
             align: "center",
           },
           {
-            title: "面诊状态",
+            title: "辅助客服",
+            key: "supportEmpName",
+            minWidth: 110,
+            align: "center",
+          },
+          {
+            title: "面诊类型",
             key: "consultationType",
             minWidth: 120,
             align: "center",
@@ -1386,83 +1437,91 @@ export default {
                     on: {
                       click: () => {
                         const { id } = params.row;
-                        this.title = "录单编辑";
                         api.byIdContentPlateForm(id).then((res) => {
-                          if (res.code === 0) {
-                            // this.getgetAmiyaHospitalDepartmentList();
-                            this.getHospitalList();
-                            this.controlModal = true;
-                            const {
-                              appointmentHospitalId,
-                              consultingContent,
-                              customerName,
-                              depositAmount,
-                              goodsId,
-                              id,
-                              lateProjectStage,
-                              liveAnchorId,
-                              orderType,
-                              phone,
-                              remark,
-                              contentPlateFormId,
-                              appointmentDate,
-                              hospitalDepartmentId,
-                              customerPictures,
-                              acceptConsulting,
-                              orderSource,
-                              unSendReason,
-                              consultationEmpId,
-                              liveAnchorWeChatNo,
-                              consultationType,
-                              belongMonth,
-                              addOrderPrice,
-                              sex,
-                              city,
-                              occupation,
-                              wechatNumber,
-                              birthday
-
-                            } = res.data.orderInfo;
-                            this.contentPlateChange(contentPlateFormId);
-                            this.liveAnchorChange(liveAnchorId);
-                            this.isEdit = true;
-                            this.form.appointmentHospitalId = appointmentHospitalId;
-                            this.form.id = id;
-                            this.form.consultingContent = consultingContent;
-                            this.form.sex = sex;
-                            this.form.city = city;
-                            this.form.occupation = occupation;
-                            this.form.wechatNumber = wechatNumber;
-                            this.form.birthday = birthday;
-                            this.form.phone = phone;
-                            this.form.customerName = customerName;
-                            this.form.depositAmount = depositAmount;
-                            this.form.goodsId = goodsId;
-                            this.form.lateProjectStage = lateProjectStage;
-                            this.form.liveAnchorId = liveAnchorId;
-                            this.form.remark = remark;
-                            this.form.contentPlateFormId = contentPlateFormId;
-                            this.form.orderType = orderType;
-                            this.form.appointmentDate = appointmentDate;
-                            this.form.hospitalDepartmentId = hospitalDepartmentId;
-                            this.form.acceptConsulting = acceptConsulting;
-                            this.form.orderSource = orderSource;
-                            this.form.unSendReason = unSendReason;
-                            this.form.customerPictures = customerPictures;
-                            this.form.liveAnchorWeChatNo = liveAnchorWeChatNo;
-                            this.form.belongMonth = belongMonth;
-                            this.form.addOrderPrice = addOrderPrice;
-                            this.form.belongEmpId = this.form.belongEmpId
-                              ? this.form.belongEmpId
-                              : "";
-                            this.form.consultationEmpId = consultationEmpId;
-                            this.customerUploadObj.uploadList = this.form
-                              .customerPictures
-                              ? this.form.customerPictures
-                              : [];
-                            this.form.consultationType = consultationType;
+                          if(res.code === 0){
+                            this.editRecordingModel = true
+                            this.recordingParams.title = '录单编辑'
+                            this.recordingParams.info = res.data.orderInfo
                           }
-                        });
+                        })
+                      //   this.title = "录单编辑";
+                      //   api.byIdContentPlateForm(id).then((res) => {
+                      //     if (res.code === 0) {
+                      //       // this.getgetAmiyaHospitalDepartmentList();
+                      //       this.getHospitalList();
+                      //       this.controlModal = true;
+                      //       const {
+                      //         appointmentHospitalId,
+                      //         consultingContent,
+                      //         customerName,
+                      //         depositAmount,
+                      //         goodsId,
+                      //         id,
+                      //         lateProjectStage,
+                      //         liveAnchorId,
+                      //         orderType,
+                      //         phone,
+                      //         remark,
+                      //         contentPlateFormId,
+                      //         appointmentDate,
+                      //         hospitalDepartmentId,
+                      //         customerPictures,
+                      //         acceptConsulting,
+                      //         orderSource,
+                      //         unSendReason,
+                      //         consultationEmpId,
+                      //         liveAnchorWeChatNo,
+                      //         consultationType,
+                      //         belongMonth,
+                      //         addOrderPrice,
+                      //         sex,
+                      //         city,
+                      //         occupation,
+                      //         wechatNumber,
+                      //         birthday,
+                      //         liveAnchorBaseWechatId
+
+                      //       } = res.data.orderInfo;
+                      //       this.contentPlateChange(contentPlateFormId);
+                      //       this.liveAnchorChange(liveAnchorId);
+                      //       this.isEdit = true;
+                      //       this.form.appointmentHospitalId = appointmentHospitalId;
+                      //       this.form.id = id;
+                      //       this.form.consultingContent = consultingContent;
+                      //       this.form.sex = sex;
+                      //       this.form.city = city;
+                      //       this.form.occupation = occupation;
+                      //       this.form.wechatNumber = wechatNumber;
+                      //       this.form.birthday = birthday;
+                      //       this.form.phone = phone;
+                      //       this.form.customerName = customerName;
+                      //       this.form.depositAmount = depositAmount;
+                      //       this.form.goodsId = goodsId;
+                      //       this.form.lateProjectStage = lateProjectStage;
+                      //       this.form.liveAnchorId = liveAnchorId;
+                      //       this.form.remark = remark;
+                      //       this.form.contentPlateFormId = contentPlateFormId;
+                      //       this.form.orderType = orderType;
+                      //       this.form.appointmentDate = appointmentDate;
+                      //       this.form.hospitalDepartmentId = hospitalDepartmentId;
+                      //       this.form.acceptConsulting = acceptConsulting;
+                      //       this.form.orderSource = orderSource;
+                      //       this.form.unSendReason = unSendReason;
+                      //       this.form.customerPictures = customerPictures;
+                      //       this.form.liveAnchorWeChatNo = liveAnchorBaseWechatId;
+                      //       this.form.belongMonth = belongMonth;
+                      //       this.form.addOrderPrice = addOrderPrice;
+                      //       this.form.belongEmpId = this.form.belongEmpId
+                      //         ? this.form.belongEmpId
+                      //         : "";
+                      //       this.form.consultationEmpId = consultationEmpId;
+                      //       this.customerUploadObj.uploadList = this.form
+                      //         .customerPictures
+                      //         ? this.form.customerPictures
+                      //         : [];
+                      //       this.form.consultationType = consultationType;
+                      //     }
+                      //   });
                       },
                     },
                   },
@@ -1548,11 +1607,11 @@ export default {
         pageSize: 10,
         totalCount: 0,
       },
-      // 面诊状态(搜索用)
+      // 面诊类型(搜索用)
       consultationTypeListAll: [
-        { orderType: -1, orderTypeText: "全部面诊状态" },
+        { orderType: -1, orderTypeText: "全部面诊类型" },
       ],
-      // 面诊状态 录单
+      // 面诊类型 录单
       consultationTypeList: [],
       // 归属月份
       belongMonthList:[
@@ -1573,10 +1632,11 @@ export default {
       api.getcontentPlateFormOrderTypeList().then((res) => {
         if (res.code === 0) {
           this.statusCodeArr2 = res.data.orderTypes;
+          this.recordingParams.statusCodeArr2 = res.data.orderTypes;
         }
       });
     },
-    //   获取 面诊状态列表（下拉框）
+    //   获取 面诊类型列表（下拉框）
     getOrderConsultationTypeList() {
       api.getOrderConsultationTypeList().then((res) => {
         if (res.code === 0) {
@@ -1586,6 +1646,7 @@ export default {
             ...orderConsultationTypes,
           ];
           this.consultationTypeList = orderConsultationTypes;
+          this.recordingParams.consultationTypeList = orderConsultationTypes;
         }
       });
     },
@@ -1618,6 +1679,7 @@ export default {
         if (res.code === 0) {
           const { orderSources } = res.data;
           this.orderSourcesList = orderSources;
+          this.recordingParams.orderSourcesList = orderSources;
           this.orderSourcesListAll = [
             ...this.orderSourcesListAll,
             ...orderSources,
@@ -1631,6 +1693,7 @@ export default {
         if (res.code === 0) {
           const { AmiyaHospitalDepartmentList } = res.data;
           this.AmiyaHospitalDepartmentListDepartment = AmiyaHospitalDepartmentList;
+          this.recordingParams.AmiyaHospitalDepartmentListDepartment = AmiyaHospitalDepartmentList;
         }
       });
     },
@@ -1660,6 +1723,7 @@ export default {
           const { employee } = res.data;
           this.employee = [...this.employee, ...employee];
           this.employeeList = employee;
+          this.recordingParams.employeeList = employee;
         }
       });
     },
@@ -1815,6 +1879,7 @@ export default {
         if (res.code === 0) {
           const { contentPalteForms } = res.data;
           this.contentPalteForms = contentPalteForms;
+          this.recordingParams.contentPalteForms = contentPalteForms;
         }
       });
     },
@@ -1855,6 +1920,7 @@ export default {
         if (res.code === 0) {
           const { hospitalInfo } = res.data;
           this.hospitalNameList = hospitalInfo;
+          this.recordingParams.hospitalNameList = hospitalInfo;
         }
       });
     },
@@ -1951,11 +2017,7 @@ export default {
                   this.isEdit = false;
                   this.flag = false;
                   this.handleCancel("form");
-                  this.handlePageChange(
-                    sessionStorage.getItem("pageNumEdit")
-                      ? sessionStorage.getItem("pageNumEdit")
-                      : 1
-                  );
+                  this.handlePageChange(this.$refs.pages.currentPage);
                   this.$Message.success({
                     content: "修改成功",
                     duration: 3,
@@ -2236,7 +2298,7 @@ export default {
           this.query.data = list;
           this.query.totalCount = totalCount;
           // 修改时 保留在当前页面
-          sessionStorage.setItem("pageNumEdit", pageNum);
+          // sessionStorage.setItem("pageNumEdit", pageNum);
         }else if (res.code != -1 || res.code !=0){
           this.$Message.error('操作失败，请联系管理员')
         }
@@ -2261,6 +2323,7 @@ export default {
     this.getHospitalInfonameList();
     this.getOrderConsultationTypeList();
     this.getcontentPlateFormOrderTypeList()
+    this.getHospitalList();
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")

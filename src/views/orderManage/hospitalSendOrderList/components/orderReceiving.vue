@@ -20,13 +20,49 @@
           <TabPane label="未重单" name="unDuplicateOrder">
             <div>
                 <div class="title">温馨提示：判断未重单，客户信息将全部展示并进入客户管理列表。</div>
+                <div class="input_con">
+                  <div  class="input_content">
+                    <span>医院网咨人员：</span>
+                    <Input
+                      v-model="netWorkConsulationName"
+                      placeholder="请输入医院网咨人员"
+                      style="width: 220px; margin: 0 38px"
+                    />
+                  </div>
+                  <div class="input_content">
+                    <span>医院现场咨询人员：</span>
+                    <Input
+                      v-model="sceneConsulationName"
+                      placeholder="请输入医院现场咨询人员"
+                      style="width: 220px; margin: 0 10px"
+                    />
+                  </div>
+                </div>
                 <Button type="primary" @click="unDuplicateOrderHandleSubmit" style="display:block;margin:30px auto">确认不重单</Button>
             </div>
           </TabPane>
           <TabPane label="重单" name="duplicateOrder" >
             <div>
               <div class="ishos_con">
-                  <span class="isHos">是否可深度:</span><i-switch v-model="form.isProfundity" />
+                  <span class="isHos">是否可深度:</span><i-switch v-model="form.isProfundity" @on-change="isProfundityChange"/>
+              </div>
+              <div v-if="form.isProfundity == true">
+                <div   class="ishos_con input_c">
+                  <span>医院网咨人员：</span>
+                  <Input
+                    v-model="form.netWorkConsulationName"
+                    placeholder="请输入医院网咨人员"
+                    style="width: 220px; margin: 0 38px"
+                  />
+                </div>
+                <div  class="ishos_con input_c">
+                  <span>医院现场咨询人员：</span>
+                  <Input
+                    v-model="form.sceneConsulationName"
+                    placeholder="请输入医院现场咨询人员"
+                    style="width: 220px; margin: 0 10px"
+                  />
+                </div>
               </div>
               <div class="ishos_con">
                   <span class="isHos">是否到院:</span><i-switch v-model="form.isToHospital" disabled style="margin-left:16px"/>
@@ -70,6 +106,10 @@ export default {
   },
   data() {
     return {
+      // 医院网咨人员
+      netWorkConsulationName:'',
+      // 医院现场咨询人员
+      sceneConsulationName:'',
       active:'unDuplicateOrder',
       flag:false,
        delUploadObj: {
@@ -98,7 +138,9 @@ export default {
         isToHospital:true,
         toHospitalDate:'',
          repeatePictureUrl:'',
-         isProfundity:false
+         isProfundity:false,
+         netWorkConsulationName:'',
+         sceneConsulationName:''
       },
       ruleValidates: {
           repeatePictureUrl: [
@@ -123,11 +165,27 @@ export default {
     };
   },
   methods: {
+   
+    isProfundityChange(){
+      this.form.netWorkConsulationName = ''
+      this.form.sceneConsulationName = ''
+    },
     // 不重单
     unDuplicateOrderHandleSubmit(){
-      const receivingData ={
-          orderId:this.receivingObj.orderId
+      if(!this.netWorkConsulationName.replace(/\s+/g,'')){
+        this.$Message.warning('请输入医院网咨人员')
+        return
       }
+      if(!this.sceneConsulationName.replace(/\s+/g,'')){
+        this.$Message.warning('请输入医院现场咨询人员')
+        return
+      }
+      const receivingData ={
+          orderId:this.receivingObj.orderId,
+          netWorkConsulationName:this.netWorkConsulationName,
+          sceneConsulationName:this.sceneConsulationName
+      }
+     
       api.contentPlateFormOrderConfirm(receivingData).then((res) => {
           if (res.code === 0) {
               this.handleCancel;
@@ -137,12 +195,21 @@ export default {
                   content: "确认成功",
                   duration: 3,
               });
+              
           }
       });
     },
     // 重单
     duplicateOrderHandleSubmit(){
-      const {repeatePictureUrl,isToHospital,toHospitalDate,isProfundity} = this.form
+      const {repeatePictureUrl,isToHospital,toHospitalDate,isProfundity,netWorkConsulationName,sceneConsulationName} = this.form
+      if(isProfundity == true && !netWorkConsulationName.replace(/\s+/g,'')){
+        this.$Message.warning('请输入医院网咨人员')
+        return
+      }
+      if(isProfundity == true && !sceneConsulationName.replace(/\s+/g,'')){
+        this.$Message.warning('请输入医院现场咨询人员')
+        return
+      }
       if(!toHospitalDate){
         this.$Message.warning('请选择最后到院时间')
         return
@@ -157,11 +224,14 @@ export default {
           repeatePictureUrl,
           isToHospital,
           toHospitalDate:toHospitalDate ? this.$moment(toHospitalDate).format("YYYY-MM-DD") : null,
-          isProfundity
+          isProfundity,
+          netWorkConsulationName,
+          sceneConsulationName
       }
       api.contentPlateFormOrderRepeates(data).then((res) => {
           if (res.code === 0) {
-              this.handleCancel;
+              this.handleCancel("form");
+              this.active = 'duplicateOrder'
               this.$emit("update:orderReceivingModel", false);
               this.$emit("handleRefreshList");
               this.$Message.success({
@@ -222,7 +292,13 @@ export default {
       this.$emit("update:orderReceivingModel", false);
       this.form.toHospitalDate = ''
       this.delUploadObj.uploadList = [];
-      this.$refs["form"].resetFields();      
+      this.$refs["form"].resetFields(); 
+      this.active = 'duplicateOrder'
+      this.netWorkConsulationName = ''
+      this.sceneConsulationName = ''
+      this.form.netWorkConsulationName = ''
+      this.form.sceneConsulationName = ''     
+      this.form.isProfundity = false  
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -246,8 +322,8 @@ export default {
   margin: 0 5px;
 }
 .title{
-  text-align: center;
-  margin: 60px 0;
+  /* text-align: center; */
+  margin: 60px 0 30px 30%;
 }
 .isHos{
   margin: 0 20px ;
@@ -264,5 +340,14 @@ export default {
   height: 150px;
   border: 1px dashed #ccc;
   padding: 10px;
+}
+.input_con{
+  margin-left: 30%;
+}
+.input_content{
+  margin-top: 10px;
+}
+.input_c{
+  margin-left: 19px;
 }
 </style>

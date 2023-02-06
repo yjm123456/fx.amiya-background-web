@@ -13,28 +13,28 @@
             <DatePicker
               type="date"
               placeholder="登记开始日期"
-              style="width: 180px;margin-left: 10px"
+              style="width: 140px;margin-left: 10px"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="登记结束日期"
-              style="width: 180px; margin-left: .625rem"
+              style="width: 140px; margin-left: .625rem"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="派单开始日期"
-              style="width: 180px;margin-left: 10px"
+              style="width: 140px;margin-left: 10px"
               :value="query.sendStartDate"
               v-model="query.sendStartDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="派单结束日期"
-              style="width: 180px; margin-left: .625rem"
+              style="width: 140px; margin-left: .625rem"
               :value="query.sendEndDate"
               v-model="query.sendEndDate"
             ></DatePicker>
@@ -79,54 +79,9 @@
               >
             </Select> -->
             
-            
-            <Select
-              v-model="query.isDeal"
-              style="width: 180px; margin-left: 10px"
-              placeholder="请选择成交状态"
-            >
-              <Option
-                v-for="item in query.dealList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <DatePicker
-              type="date"
-              placeholder="成交开始日期"
-              style="width: 180px;margin-left: 10px"
-              :value="query.dealStartDate"
-              v-model="query.dealStartDate"
-              :disabled="query.isDeal!='true'"
-            ></DatePicker>
-            <DatePicker
-              type="date"
-              placeholder="成交结束日期"
-              style="width: 180px; margin-left: .625rem"
-              :value="query.dealEndDate"
-              v-model="query.dealEndDate"
-              :disabled="query.isDeal!='true'"
-            ></DatePicker>
-            
-            <!-- <Select
-              v-model="query.ReturnBackPriceState"
-              placeholder="回款状态"
-              style="width: 180px;margin-left:10px"
-            >
-              <Option
-                v-for="item in query.ReturnBackPriceStateList"
-                :value="item.status"
-                :key="item.status"
-                >{{ item.name }}</Option
-              >
-            </Select> -->
-            
-          </div>
-          <div style="margin:10px 0">
             <Select
               v-model="query.isToHospital"
-              style="width: 180px;"
+              style="width: 170px; margin-left: 10px"
               placeholder="请选择到院状态"
             >
               <Option
@@ -139,7 +94,7 @@
             <DatePicker
               type="date"
               placeholder="到院开始日期"
-              style="width: 180px;margin-left: 10px"
+              style="width: 140px;margin-left: 10px"
               :value="query.tohospitalStartDate"
               v-model="query.tohospitalStartDate"
               transfer
@@ -149,7 +104,7 @@
             <DatePicker
               type="date"
               placeholder="到院结束日期"
-              style="width: 180px; margin-left: 10px"
+              style="width: 140px; margin-left: 10px"
               :value="query.toHospitalEndDate"
               v-model="query.toHospitalEndDate"
               transfer
@@ -157,7 +112,7 @@
             ></DatePicker>
             <Select
               v-model="query.toHospitalType"
-              style="width: 180px;margin-left: 10px"
+              style="width: 140px;margin-left: 10px"
               placeholder="请选择到院类型"
               :disabled="query.isToHospital!='true'"
               clearable
@@ -172,18 +127,115 @@
             </Select>
             
             
-            <Select
-              v-model="query.isAccompanying"
-              style="width: 180px;margin-left:10px"
-              placeholder="是否陪诊"
+            <!-- <Select
+              v-model="query.ReturnBackPriceState"
+              placeholder="回款状态"
+              style="width: 140px;margin-left:10px"
             >
               <Option
-                v-for="item in query.isAccompanyingList"
+                v-for="item in query.ReturnBackPriceStateList"
+                :value="item.status"
+                :key="item.status"
+                >{{ item.name }}</Option
+              >
+            </Select> -->
+            
+          </div>
+          <div style="margin:10px 0">
+            
+            <Select
+              v-model="query.isDeal"
+              style="width: 180px;"
+              placeholder="请选择成交状态"
+            >
+              <Option
+                v-for="item in query.dealList"
                 :value="item.type"
                 :key="item.type"
                 >{{ item.name }}</Option
               >
             </Select>
+            <DatePicker
+              type="date"
+              placeholder="成交开始日期"
+              style="width: 140px;margin-left: 10px"
+              :value="query.dealStartDate"
+              v-model="query.dealStartDate"
+              :disabled="query.isDeal!='true'"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="成交结束日期"
+              style="width: 140px; margin-left: .625rem"
+              :value="query.dealEndDate"
+              v-model="query.dealEndDate"
+              :disabled="query.isDeal!='true'"
+            ></DatePicker>
+            <Select
+              v-model="query.checkState"
+              placeholder="审核状态"
+              style="width: 140px;margin-left: 10px"
+            >
+              <Option
+                v-for="item in checkStateListAll"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+                v-model="query.isCreateBill"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="是否开票"
+              >
+                <Option
+                  v-for="item in isCreateBillList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.belongCompanyId"
+                style="width: 170px;margin-left: .625rem"
+                placeholder="请选择开票公司"
+              >
+                <Option
+                  v-for="item in companyNameAllList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+              v-model="query.isReturnBakcPrice"
+              style="width: 140px;margin-left:10px"
+              placeholder="是否回款"
+            >
+              <Option
+                v-for="item in query.isReturnBakcPriceList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <DatePicker
+              type="date"
+              placeholder="回款开始时间"
+              style="width: 140px;margin-left:10px"
+              :value="query.returnBackPriceStartDate"
+              v-model="query.returnBackPriceStartDate"
+              :disabled="query.isReturnBakcPrice!='true'"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="回款结束时间"
+              style="width: 140px; margin-left: .625rem"
+              :value="query.returnBackPriceEndDate"
+              v-model="query.returnBackPriceEndDate"
+              :disabled="query.isReturnBakcPrice!='true'"
+            ></DatePicker>
+           
             <!-- <Select
               v-model="query.hospitalId"
               style="width: 180px; margin-left: 10px"
@@ -197,34 +249,7 @@
                 >{{ item.name }}</Option
               >
             </Select> -->
-            <Select
-              v-model="query.isReturnBakcPrice"
-              style="width: 180px;margin-left:10px"
-              placeholder="是否回款"
-            >
-              <Option
-                v-for="item in query.isReturnBakcPriceList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <DatePicker
-              type="date"
-              placeholder="回款开始时间"
-              style="width: 180px;margin-left:10px"
-              :value="query.returnBackPriceStartDate"
-              v-model="query.returnBackPriceStartDate"
-              :disabled="query.isReturnBakcPrice!='true'"
-            ></DatePicker>
-            <DatePicker
-              type="date"
-              placeholder="回款结束时间"
-              style="width: 180px; margin-left: .625rem"
-              :value="query.returnBackPriceEndDate"
-              v-model="query.returnBackPriceEndDate"
-              :disabled="query.isReturnBakcPrice!='true'"
-            ></DatePicker>
+            
           </div>
           <!-- <div>
             <Select
@@ -258,20 +283,8 @@
           </div> -->
           <div>
             <Select
-              v-model="query.checkState"
-              placeholder="审核状态"
-              style="width: 180px;"
-            >
-              <Option
-                v-for="item in checkStateListAll"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
               v-model="query.lastDealHospitalId"
-              style="width: 180px; margin-left: 10px"
+              style="width: 180px;"
               placeholder="请选择到院医院"
               filterable
             >
@@ -282,9 +295,34 @@
                 >{{ item.name }}</Option
               >
             </Select>
+             <Select
+              v-model="query.isAccompanying"
+              style="width: 140px; margin-left: 10px"
+              placeholder="是否陪诊"
+            >
+              <Option
+                v-for="item in query.isAccompanyingList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.consultationType"
+              style="width: 140px;margin-left:10px"
+              placeholder="请选择完成情况"
+              filterable
+            >
+              <Option
+                v-for="item in consultationTypeList"
+                :value="item.orderType"
+                :key="item.orderType"
+                >{{ item.orderTypeText }}</Option
+              >
+            </Select>
             <Select
               v-model="query.isOldCustomer"
-              style="width: 180px; margin-left: 10px"
+              style="width: 140px; margin-left: 10px"
               placeholder="新老客业绩"
             >
               <Option
@@ -296,8 +334,8 @@
             </Select>
             <Select
               v-model="query.customerServiceId"
-              style="width: 180px;margin-left:10px"
-              placeholder="请选择跟进人员"
+              style="width: 140px;margin-left:10px"
+              placeholder="请选择归属客服"
               filterable
             >
               <Option
@@ -307,23 +345,10 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Select
-              v-model="query.consultationType"
-              style="width: 180px;margin-left:10px"
-              placeholder="请选择完成情况"
-              filterable
-            >
-              <Option
-                v-for="item in consultationTypeList"
-                :value="item.orderType"
-                :key="item.orderType"
-                >{{ item.orderTypeText }}</Option
-              >
-            </Select>
             <Input
                 v-model="query.minAddOrderPrice"
                 placeholder="请输入最小下单金额"
-                style="width: 180px;margin-left:10px"
+                style="width: 170px;margin-left:10px"
                 type="number"
                 namber
               />
@@ -331,7 +356,7 @@
               <Input
                 v-model="query.maxAddOrderPrice"
                 placeholder="请输入最大下单金额"
-                style="width: 180px;"
+                style="width: 170px;"
                 type="number"
                 namber
               />
@@ -452,10 +477,25 @@ export default {
   props:{
     activeName:String,
     checkStateListAll:Array,
-    employee:Array
+    employee:Array,
+    companyNameAllList:Array
   },
   data() {
     return {
+      isCreateBillList:[
+            {
+              type:-1,
+              name:'全部开票状态'
+            },
+            {
+              type:'true',
+              name:'已开票'
+            },
+            {
+              type:'false',
+              name:'未开票'
+            },
+          ],
       viewCustomerPhotosModel:false,
       viewImgParams:{
         contentPlatFormOrderId:'',
@@ -492,7 +532,10 @@ export default {
       //   审核状态
       checkStateList: [],
       query: {
-        
+        // 是否开票
+        isCreateBill:-1,
+        // 开票公司
+        belongCompanyId:-1,
         // 最小金额
         minAddOrderPrice:null,
         // 最大金额
@@ -527,7 +570,7 @@ export default {
         sendStartDate:'',
         // 派单结束时间
         sendEndDate:'',
-        // 面诊状态
+        // 面诊类型
         consultationType:-1,
         toHospitalType:-1,
         ReturnBackPriceState:'-1',
@@ -578,7 +621,7 @@ export default {
             align:'center'
           },
           {
-            title: "面诊状态",
+            title: "面诊类型",
             key: "consultationTypeText",
             minWidth: 120,
             align:'center'
@@ -837,6 +880,7 @@ export default {
                 : "";
             },
           },
+          
           {
             title: "回款时间",
             key: "returnBackDate",
@@ -864,6 +908,33 @@ export default {
             align:'center'
           },
           {
+            title: "是否开票",
+            key: "isCreateBill",
+            minWidth: 100,
+            align:'center',
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isCreateBill,
+                    size: "default",
+                    disabled:
+                      params.row.isCreateBill === true || params.row.isCreateBill === false,
+                  },
+                },
+                h("span", { isCreateBill: "open" }, "开"),
+                h("span", { isCreateBill: "close" }, "关")
+              );
+            },
+          },
+           {
+            title: "开票公司",
+            key: "creatBillCompany",
+            minWidth: 220,
+            align:'center'
+          },
+          {
             title: "回款金额",
             key: "returnBackPrice",
             minWidth: 120,
@@ -871,7 +942,7 @@ export default {
           },
           
           {
-            title: "跟进人员",
+            title: "归属客服",
             key: "createByEmpName",
             minWidth: 120,
             align:'center'
@@ -1170,8 +1241,8 @@ export default {
           },
         ],
       },
-      // 面诊状态
-      consultationTypeList:[{orderType:-1,orderTypeText:'全部面诊状态'}]
+      // 面诊类型
+      consultationTypeList:[{orderType:-1,orderTypeText:'全部面诊类型'}]
     };
   },
   methods: {
@@ -1286,7 +1357,9 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         dealStartDate,
-        dealEndDate
+        dealEndDate,
+        isCreateBill,
+        belongCompanyId
       } = this.query;
       const data = {
         pageNum,
@@ -1322,7 +1395,9 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         dealStartDate:isDeal =='true' ?  (dealStartDate ? this.$moment(dealStartDate).format("YYYY-MM-DD") : null) : null,
-        dealEndDate:isDeal =='true' ?  (dealEndDate ? this.$moment(dealEndDate).format("YYYY-MM-DD") : null) : null
+        dealEndDate:isDeal =='true' ?  (dealEndDate ? this.$moment(dealEndDate).format("YYYY-MM-DD") : null) : null,
+        isCreateBill: isCreateBill == -1 ? null : isCreateBill,
+          belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
 
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
@@ -1368,7 +1443,9 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         dealStartDate,
-        dealEndDate
+        dealEndDate,
+        isCreateBill,
+        belongCompanyId
       } = this.query;
       const data = {
         pageNum,
@@ -1404,7 +1481,9 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         dealStartDate:isDeal =='true' ?  (dealStartDate ? this.$moment(dealStartDate).format("YYYY-MM-DD") : null) : null,
-        dealEndDate:isDeal =='true' ?  (dealEndDate ? this.$moment(dealEndDate).format("YYYY-MM-DD") : null) : null
+        dealEndDate:isDeal =='true' ?  (dealEndDate ? this.$moment(dealEndDate).format("YYYY-MM-DD") : null) : null,
+        isCreateBill: isCreateBill == -1 ? null : isCreateBill,
+          belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
         if (res.code === 0) {
@@ -1438,7 +1517,8 @@ export default {
             checkPicture,
             orderDealInfoId,
             informationPrice:0,
-            systemUpdatePrice:0
+            systemUpdatePrice:0,
+            reconciliationDocumentsId:''
           };
           this.flag = true
           api.checkContentPlateFormOrder(data).then((res) => {

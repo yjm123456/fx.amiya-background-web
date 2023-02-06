@@ -4,7 +4,7 @@
       title="修改预约状态"
       footer-hide
       v-model="statusControlModals"
-      width="40%"
+      width="25%"
       :closable="false"
       @click="handleModalVisibleChange"
 

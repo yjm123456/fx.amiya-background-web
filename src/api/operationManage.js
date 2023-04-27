@@ -273,3 +273,149 @@ export const BeforeLivingVideoUpdate = (data) => {
         data,
     });
 };
+
+
+
+// 获取直播前主播月度运营目标情况
+export const getLiveAnchorMonthlyTargetBeforeLiving = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorMonthlyTargetBeforeLiving/listWithPage",
+        method: "get",
+        params
+    });
+};
+// 根据年月获取id和名称
+export const getLiveAnchorMonthlyTargetBeforeLivingName = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorMonthlyTargetBeforeLiving/getLiveAnchorMonthlyTargetBeforeLiving",
+        method: "get",
+        params
+    });
+};
+// 添加直播前月度运营目标情况
+export const AddLiveAnchorMonthlyTargetBeforeLiving = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetBeforeLiving`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播前月度运营目标情况
+export const editLiveAnchorMonthlyTargetBeforeLiving = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetBeforeLiving`,
+        method: "put",
+        data,
+    });
+};
+//   根据id获取直播前月度运营目标情况
+export const byIdLiveAnchorMonthlyTargetBeforeLiving = (id) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetBeforeLiving/byId/${id}`,
+        method: "get",
+    });
+};
+// 删除直播前月度运营目标情况  delete
+export const deleteLiveAnchorMonthlyTargetBeforeLiving = (id) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetBeforeLiving/${id}`,
+        method: "DELETE"
+    })
+}
+
+
+
+// 获取直播中主播月度运营目标情况
+export const getLiveAnchorMonthlyTargetLiving = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorMonthlyTargetLiving/listWithPage",
+        method: "get",
+        params
+    });
+};
+// 根据年月获取id和名称
+export const getLiveAnchorMonthlyTargetLivingName = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorMonthlyTargetLiving/getLiveAnchorMonthlyTargetLiving",
+        method: "get",
+        params
+    });
+};
+// 添加直播中月度运营目标情况
+export const AddLiveAnchorMonthlyTargetLiving = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetLiving`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播中月度运营目标情况
+export const editLiveAnchorMonthlyTargetLiving = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetLiving`,
+        method: "put",
+        data,
+    });
+};
+//   根据id获取直播中月度运营目标情况
+export const byIdLiveAnchorMonthlyTargetLiving = (id) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetLiving/byId/${id}`,
+        method: "get",
+    });
+};
+// 删除直播中月度运营目标情况  delete
+export const deleteLiveAnchorMonthlyTargetLiving = (id) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetLiving/${id}`,
+        method: "DELETE"
+    })
+}
+
+
+// 获取直播后主播月度运营目标情况
+export const getLiveAnchorMonthlyTargetAfterLiving = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorMonthlyTargetAfterLiving/listWithPage",
+        method: "get",
+        params
+    });
+};
+// 根据年月获取id和名称
+export const getLiveAnchorMonthlyTargetAfterLivingName = (params) => {
+    return http({
+        url: "/amiyabg/LiveAnchorMonthlyTargetAfterLiving/getLiveAnchorMonthlyTargetAfterLiving",
+        method: "get",
+        params
+    });
+};
+// 添加直播后月度运营目标情况
+export const AddLiveAnchorMonthlyTargetAfterLiving = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetAfterLiving`,
+        method: "post",
+        data,
+    });
+};
+// 修改直播后月度运营目标情况
+export const editLiveAnchorMonthlyTargetAfterLiving = (data) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetAfterLiving`,
+        method: "put",
+        data,
+    });
+};
+//   根据id获取直播后月度运营目标情况
+export const byIdLiveAnchorMonthlyTargetAfterLiving = (id) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetAfterLiving/byId/${id}`,
+        method: "get",
+    });
+};
+// 删除直播后月度运营目标情况  delete
+export const deleteLiveAnchorMonthlyTargetAfterLiving = (id) => {
+    return http({
+        url: `/amiyabg/LiveAnchorMonthlyTargetAfterLiving/${id}`,
+        method: "DELETE"
+    })
+}

@@ -1,16 +1,15 @@
 <template>
     <div>
-        <div class="top">
-          <div class="title">今日未处理任务</div>
-          <div class="more" @click="moreClick">更多></div>
-        </div>
-        <Table border :columns="query.columns" :data="query.data"></Table>
+      <!-- 今日未处理数据 -->
+        <Table border :columns="query.columns" :data="todayNoRepeatedSendOrder" height="320"></Table>
     </div>
 </template>
 <script>
-import * as api from "@/api/hospitalManage";
 
 export default {
+  props:{
+    todayNoRepeatedSendOrder:Array
+  },
     data(){
         return{
             // 查询
@@ -49,18 +48,9 @@ export default {
       moreClick(){
         this.$router.push("/hospitalSendOrderList");
       },
-        // 获取医院获取今日未处理任务
-        getTodayNotRepeatedSendOrders() {
-            api.getTodayNotRepeatedSendOrder().then((res) => {
-                if (res.code === 0) {
-                    this.query.data = res.data.todayNoRepeatedSendOrder;
-                }
-            });
-        },
+        
     },
-    created(){
-        this.getTodayNotRepeatedSendOrders()
-    }
+   
 }
 </script>
 <style scoped>

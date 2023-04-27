@@ -57,6 +57,14 @@
             >查询</Button
           >
         </div>
+        <div class="right">
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="addRecordingModel = true"
+            >添加</Button
+          >
+        </div>
       </div>
     </Card>
 
@@ -76,6 +84,8 @@
         />
       </div>
     </Card>
+    <!-- 录单申请 -->
+    <addRecording :addRecordingModel.sync="addRecordingModel" :editRecordingApplicationParams="editRecordingApplicationParams" :hospitalList="params.hospitalInfo" @getContentPlatFormOrderAddWork="getContentPlatFormOrderAddWork"/>
     <!-- 编辑录单申请 -->
     <editRecordingApplication
       :recordingApplicationModel.sync="recordingApplicationModel"
@@ -102,11 +112,13 @@ import * as emApi from "@/api/employeeManage";
 import editRecordingApplication from "@/components/recordingApplication/recordingApplication";
 import recording from "../components/recording.vue";
 import transfer from "../components/transfer.vue"
+import addRecording from "../components/addRecording.vue"
 export default {
   components: {
     editRecordingApplication,
     recording,
-    transfer
+    transfer,
+    addRecording
   },
   props: {
     activeName: String,
@@ -381,6 +393,8 @@ export default {
         acceptBy:null,
         employee:[]
       },
+      // 添加录单申请
+      addRecordingModel:false,
       
       id: "",
       // 编辑录单
@@ -433,7 +447,7 @@ export default {
     // 获取所有员工
     getEmployeeByPositionId(){
       const data ={
-        positionId:null
+        positionId:29
       }
       emApi.getEmployeeByPositionId(data).then(res=>{
         if(res.code===0){

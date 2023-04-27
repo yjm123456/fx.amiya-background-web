@@ -103,6 +103,9 @@
               <span>{{ detailObj.isOldCustomer == true ? '老客业绩' : '新客业绩'  }} </span>
             </div>
             <div style="margin-left:120px;display:flex">
+              <!-- <Button type="primary" @click="customerClick(detailObj)"
+                style="margin-right:10px">生成预约日程</Button
+              > -->
               <Button type="primary" @click="customerClick(detailObj)"
                 style="margin-right:10px">顾客信息</Button
               >
@@ -112,8 +115,9 @@
             </div>
           </div>
           </div>
+          <div class="appoint" style="display:flex;justify-content:flex-end;margin-top:10px;margin-right:-5px"><Button type="primary" @click="appointmentScheduleModel =true" style="margin-right:10px">生成预约日程</Button></div>
         </div>
-        <div></div>
+        
       </div>
       <div class="order_message">
         <div class="message_title"><span class="line"></span>门店信息</div>
@@ -484,19 +488,24 @@
     <!--客户信息  -->
     <customerMessage :customerMessageModel.sync="customerMessageModel" 
     :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
+    <!-- 生成预约日程 -->
+    <appointmentSchedule :appointmentScheduleModel.sync="appointmentScheduleModel" :appointmentParams="appointmentParams" :detailObj="detailObj"/>
   </div>
 </template>
 <script>
 import * as api from "@/api/orderManage";
 import * as OrderCheckPictureApi from "@/api/OrderCheckPicture.js";
 import * as customerManageApi from "@/api/customerManage";
+import * as customerApi from "@/api/customerAppointmentSchedule";
+import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
+
 import { time } from "echarts";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import viewPic from "@/components/viewPic/viewPic";
 import transactionStatus from "@/components/transactionStatus/contentTransactionStatus";
 import goodsNews from "@/components/goodsNews/goodsNews.vue";
 import customerMessage from "@/components/customerMessage/customerMessage"
-
+import appointmentSchedule from "./appointmentSchedule.vue"
 
 export default {
   props: {
@@ -508,7 +517,8 @@ export default {
     viewPic,
     transactionStatus,
     goodsNews,
-    customerMessage
+    customerMessage,
+    appointmentSchedule
   },
   data() {
     return {
@@ -538,6 +548,16 @@ export default {
       time: null,
       detailObj: {},
       controlModel: false,
+
+      // 生成预约日程
+      appointmentParams:{
+        // 预约类型
+        appointmentTypeList:[],
+        // 紧急程度
+        emergencyLevelsList:[]
+      },
+      // 生成预约日程model
+      appointmentScheduleModel:false,
       query: {
         doubleOrderModel: false,
         columns: [
@@ -606,6 +626,26 @@ export default {
   },
 
   methods: {
+    // 预约类型
+    getAppointmentTypeList() {
+      customerApi.getAppointmentTypeList().then((res) => {
+        if (res.code === 0) {
+          const { appointmentTypeList } = res.data;
+          this.appointmentParams.appointmentTypeList = appointmentTypeList;
+        }
+      });
+    },
+    
+    // 紧急程度（下拉框）
+    getEmergencyLevels() {
+      shoppingCartRegistrationApi.emergencyLevels().then((res) => {
+        if (res.code === 0) {
+          const { emergencyLevels } = res.data;
+          this.appointmentParams.emergencyLevelsList = emergencyLevels;
+          
+        }
+      });
+    },
     customerClick(value){
       const {userId,encryptPhone} = value
       let data = {
@@ -703,6 +743,10 @@ export default {
     handleCancelClick(name) {
       this.$emit("update:detailModel", false);
     },
+  },
+  created(){
+    this.getAppointmentTypeList()
+    this.getEmergencyLevels()
   },
   watch: {
     detailModel(value) {
@@ -802,5 +846,11 @@ export default {
 }
 .items2{
   width: 360px;
+}
+.appoint{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:10px;
+  margin-right:-5px
 }
 </style>

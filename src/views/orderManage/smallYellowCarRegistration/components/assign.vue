@@ -70,6 +70,10 @@ export default {
               id:this.assignParams.id,
               assignBy:Number(this.form.assignBy)
           }
+          if(!data.assignBy){
+            this.$Message.warning('请选择指派人员')
+            return
+          }
           api.ShoppingCartRegistrationAssign(data).then((res) => {
               if(res.code == 0){
                   this.form.assignBy = null 

@@ -124,7 +124,6 @@
                 v-model="form.liveanchorMonthlyTargetId"
                 placeholder="请选择月目标名称"
                 filterable
-                @on-change ="liveanchorMonthlyTargetIdChange(form.liveanchorMonthlyTargetId)"
               >
                 <Option
                   v-for="item in liveAnchorMonthlyTarget"
@@ -839,7 +838,7 @@ export default {
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
-                            this.liveanchorMonthlyTargetIdChange(this.form.liveanchorMonthlyTargetId)
+                            // this.liveanchorMonthlyTargetIdChange(this.form.liveanchorMonthlyTargetId)
 
                           }
                         });
@@ -1292,17 +1291,17 @@ export default {
         year: this.$moment(new Date(year)).format("YYYY"),
         month,
       };
-      api.getLiveAnchorMonthlyTarget(data).then((res) => {
+      api.getLiveAnchorMonthlyTargetAfterLivingName(data).then((res) => {
         if (res.code === 0) {
-          const { liveAnchorMonthlyTarget } = res.data;
-          if(liveAnchorMonthlyTarget.length == 0 || !liveAnchorMonthlyTarget){
+          const { liveAnchorMonthlyTargetAfterLiving } = res.data;
+          if(liveAnchorMonthlyTargetAfterLiving.length == 0 || !liveAnchorMonthlyTargetAfterLiving){
             this.$Message.warning({
               content: "主播IP月目标暂未生成，无法填写数据，请联系管理员进行月目标数据完善！",
               duration: 3,
             });
             return
           }
-          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTarget;
+          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTargetAfterLiving;
         }
       });
     },

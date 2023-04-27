@@ -42,7 +42,8 @@ export default {
   data(){
     return{
       myUnReadNoticeMessage:null,
-       isShow:false
+       isShow:false,
+       employeeType:sessionStorage.getItem('employeeType')
     }
   },
   methods: {
@@ -54,12 +55,15 @@ export default {
       this.$router.push("/trends");
     },
     getMyUnReadCount(){
-      api.getMyUnReadCount().then((res) => {
-        if(res.code === 0){
-          const {myUnReadNoticeMessage} = res.data
-          this.myUnReadNoticeMessage = myUnReadNoticeMessage
-        }
-    })
+      // 医院端不调用接口
+      if(this.employeeType == 'amiyaEmployee'){
+        api.getMyUnReadCount().then((res) => {
+            if(res.code === 0){
+              const {myUnReadNoticeMessage} = res.data
+              this.myUnReadNoticeMessage = myUnReadNoticeMessage
+            }
+        })
+      }
     },
     // 获取动态权限
     getMenu(){
@@ -68,7 +72,7 @@ export default {
         if(item.name == "systemSettingsManage"){
           item.subMenus.map(item2=>{
             // 线上id 133  测试145
-            if(item2.moduleId == 145){
+            if(item2.moduleId == 133){
               this.isShow = true
               return
             }
@@ -79,7 +83,7 @@ export default {
     
   },
   mounted(){
-    // this.getMyUnReadCount()
+    this.getMyUnReadCount()
   },
   created(){
     this.getMenu()

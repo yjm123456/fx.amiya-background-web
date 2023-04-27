@@ -186,6 +186,35 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="预约医院" prop="appointmentHospitalId">
+              <Select
+                v-model="form.appointmentHospitalId"
+                placeholder="请选择预约医院"
+                filterable
+              >
+                <Option
+                  v-for="item in hospitalInfo"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="接诊咨询" prop="consultation">
+              <Input
+                v-model="form.consultation"
+                placeholder="请输入接诊咨询"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否完成" prop="isFinish" key="是否完成">
+              <i-switch v-model="form.isFinish" />
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="备注" prop="remark">
               <Input
                 v-model="form.remark"
@@ -195,11 +224,7 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="是否完成" prop="isFinish" key="是否完成">
-              <i-switch v-model="form.isFinish" />
-            </FormItem>
-          </Col>
+          
         </Row>
       </Form>
       <div slot="footer">
@@ -211,6 +236,7 @@
 </template>
 <script>
 import * as api from "@/api/customerAppointmentSchedule";
+import * as apis from "@/api/goodsManage";
 import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
 import * as orderApi from "@/api/orderManage";
 
@@ -296,6 +322,24 @@ export default {
             },
           },
           {
+            title: "预约医院",
+            key: "appointmentHospitalName",
+            minWidth: 220,
+            align:'center'
+          },
+          {
+            title: "接诊咨询",
+            key: "consultation",
+            minWidth: 220,
+            align:'center'
+          },
+          {
+            title: "重要程度",
+            key: "importantTypeText",
+            minWidth: 150,
+            align:'center'
+          },
+          {
             title: "是否完成",
             key: "phone",
             minWidth: 150,
@@ -307,12 +351,7 @@ export default {
               );
             },
           },
-          {
-            title: "重要程度",
-            key: "importantTypeText",
-            minWidth: 150,
-            align:'center'
-          },
+          
           {
             title: "备注",
             key: "remark",
@@ -354,6 +393,8 @@ export default {
                               isFinish,
                               phone,
                               remark,
+                              appointmentHospitalId,
+                              consultation
                             } = res.data.customerAppointmentScheduleInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -364,6 +405,8 @@ export default {
                             this.form.isFinish = isFinish;
                             this.form.phone = phone;
                             this.form.remark = remark;
+                            this.form.appointmentHospitalId = appointmentHospitalId;
+                            this.form.consultation = consultation;
                             this.controlModal = true;
                           }
                         });
@@ -436,6 +479,10 @@ export default {
         importantType: null,
         // 备注
         remark: "",
+        // 预约医院
+        appointmentHospitalId:null,
+        // 接诊咨询
+        consultation:''
       },
 
       ruleValidate: {
@@ -470,9 +517,20 @@ export default {
           },
         ],
       },
+      // 医院
+      hospitalInfo:[]
     };
   },
   methods: {
+    // 获取医院列表（select）
+    getHospital() {
+      apis.getHospitalnameList().then((res) => {
+        if (res.code === 0) {
+          const { hospitalInfo } = res.data;
+          this.hospitalInfo = hospitalInfo;
+        }
+      });
+    },
     // 预约类型
     getAppointmentTypeList() {
       api.getAppointmentTypeList().then((res) => {
@@ -587,6 +645,8 @@ export default {
             isFinish,
             importantType,
             remark,
+            appointmentHospitalId,
+            consultation
           } = this.form;
           if (phone) {
             if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -607,6 +667,8 @@ export default {
               isFinish,
               importantType,
               remark,
+              appointmentHospitalId,
+            consultation
             };
             api.updateCustomerAppointmentSchedule(data).then((res) => {
               if (res.code === 0) {
@@ -631,6 +693,8 @@ export default {
               isFinish,
               importantType,
               remark,
+              appointmentHospitalId,
+            consultation
             };
             api.addCustomerAppointmentSchedule(data).then((res) => {
               if (res.code === 0) {
@@ -666,6 +730,7 @@ export default {
     this.getEmergencyLevels();
     this.getCustomerServiceList();
     this.getAppointmentTypeList();
+    this.getHospital()
   },
   watch: {
     activeName: {

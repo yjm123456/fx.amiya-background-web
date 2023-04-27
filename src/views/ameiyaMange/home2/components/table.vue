@@ -1,10 +1,10 @@
 <template>
     <div>
-        <!-- <div class="top">
+        <div class="top">
           <div class="title">今日未处理任务</div>
           <div class="more" @click="moreClick">更多></div>
-        </div> -->
-        <Table border :columns="query.columns" :data="query.data" height="505"></Table>
+        </div>
+        <Table border :columns="query.columns" :data="query.data"></Table>
     </div>
 </template>
 <script>

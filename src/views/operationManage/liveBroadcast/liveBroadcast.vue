@@ -638,17 +638,17 @@ export default {
         year: this.$moment(new Date(year)).format("YYYY"),
         month,
       };
-      api.getLiveAnchorMonthlyTarget(data).then((res) => {
+      api.getLiveAnchorMonthlyTargetLivingName(data).then((res) => {
         if (res.code === 0) {
-          const { liveAnchorMonthlyTarget } = res.data;
-          if(liveAnchorMonthlyTarget.length == 0 || !liveAnchorMonthlyTarget){
+          const { liveAnchorMonthlyTargetLiving } = res.data;
+          if(liveAnchorMonthlyTargetLiving.length == 0 || !liveAnchorMonthlyTargetLiving){
             this.$Message.warning({
               content: "主播IP月目标暂未生成，无法填写数据，请联系管理员进行月目标数据完善！",
               duration: 3,
             });
             return
           }
-          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTarget;
+          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTargetLiving;
         }
       });
     },

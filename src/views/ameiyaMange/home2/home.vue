@@ -2,28 +2,23 @@
   <div class="content">
     <div class="left">
       <Tabs ref="tabs" v-model="activeName" type="card">
-        <TabPane label="订单看板" name="orderBulletinBoard">
+        <TabPane label="机构数据" name="hospitalData">
           <div>
-            <orderBulletinBoard :activeName="activeName"></orderBulletinBoard>
+            <hospitalData :activeName="activeName"></hospitalData>
           </div>
         </TabPane>
-        <TabPane label="运营看板" name="businessBulletinBoard">
+        <TabPane label="数据比例" name="dataProportion">
           <div>
-            <businessBulletinBoard :activeName="activeName"></businessBulletinBoard>
-          </div>
-        </TabPane>
-        <TabPane label="成交看板" name="dealBulletinBoard">
-          <div>
-            <dealBulletinBoard :activeName="activeName"></dealBulletinBoard>
-          </div>
-        </TabPane>
-        <TabPane label="机构排名" name="hospitalRanking">
-          <div>
-            <hospitalRanking :activeName="activeName"></hospitalRanking>
+            <dataProportion :activeName="activeName"></dataProportion>
           </div>
         </TabPane>
       </Tabs>
-      
+      <Card style="margin:10px 0"> 
+        <tables></tables>
+      </Card>
+      <Card>
+        <datas :dataParams="dataParams"></datas>
+      </Card>
     </div>
     <div class="right">
       <Card>
@@ -93,23 +88,21 @@
 </template>
 <script>
 import * as api from "@/api/hospitalManage";
-import orderBulletinBoard from "./views/orderBulletinBoard.vue";
-import businessBulletinBoard from "./views/businessBulletinBoard.vue";
-import dealBulletinBoard from "./views/dealBulletinBoard.vue";
-import hospitalRanking from "./views/hospitalRanking.vue";
-
+import datas from "./components/data.vue";
+import hospitalData from "./views/hospitalData.vue";
+import dataProportion from "./views/dataProportion.vue";
+import tables from "./components/table.vue"
 export default {
   components: {
-    businessBulletinBoard,
-    orderBulletinBoard,
-    dealBulletinBoard,
-    hospitalRanking,
-    
+    datas,
+    dataProportion,
+    hospitalData,
+    tables
   },
  data() {
     return {
       form: {
-        // 是否接收消息
+        // 是否接收消息1
         isReceive: false,
         // 开始时间
         startTime: "",
@@ -130,7 +123,7 @@ export default {
       },
       messageRecieve:{},
       controlModal:false,
-      activeName: "orderBulletinBoard",
+      activeName: "hospitalData",
       hospitalId:sessionStorage.getItem('hospitalId'),
       hospitalInfo:{},
       tagInfo:[],
@@ -252,7 +245,7 @@ export default {
   watch: {
     activeName: {
       handler(value) {
-        if (value === "orderBulletinBoard") {
+        if (value === "hospitalData") {
         }
       },
       immediate: true,

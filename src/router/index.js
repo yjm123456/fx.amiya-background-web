@@ -1390,13 +1390,36 @@ const operationManage = [{
         path: "/anchorMonthlyTarget",
         name: "anchorMonthlyTarget",
         meta: {
-            title: "主播IP月度运营目标",
+            title: "直播前月度目标",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
         },
         component: () =>
             import ("@/views/operationManage/anchorMonthlyTarget/anchorMonthlyTarget.vue"),
+    }, {
+        path: "/liveStreamingMonthlyTarget",
+        name: "liveStreamingMonthlyTarget",
+        meta: {
+            title: "直播中月度目标",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/liveStreamingMonthlyTarget/liveStreamingMonthlyTarget.vue"),
+    },
+    {
+        path: "/afterLiveStreamingMonthlyTarget",
+        name: "afterLiveStreamingMonthlyTarget",
+        meta: {
+            title: "直播后月度目标",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/afterLiveStreamingMonthlyTarget/afterLiveStreamingMonthlyTarget.vue"),
     },
     {
         path: "/anchorDayData",

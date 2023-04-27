@@ -1458,3 +1458,10 @@ export const byPhoneContentPlatFormOrderAddWork = (phone) => {
         method: "get",
     });
 };
+// 根据小黄车登记手机号获取小窗车登记信息
+export const byEncryptPhone = (phone) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/byPhone/${phone}`,
+        method: "get",
+    });
+};

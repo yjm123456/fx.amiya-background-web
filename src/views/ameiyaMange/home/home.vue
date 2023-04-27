@@ -2,23 +2,28 @@
   <div class="content">
     <div class="left">
       <Tabs ref="tabs" v-model="activeName" type="card">
-        <TabPane label="机构数据" name="hospitalData">
+        <TabPane label="订单看板" name="orderBulletinBoard">
           <div>
-            <hospitalData :activeName="activeName"></hospitalData>
+            <orderBulletinBoard :activeName="activeName"></orderBulletinBoard>
           </div>
         </TabPane>
-        <TabPane label="数据比例" name="dataProportion">
+        <TabPane label="运营看板" name="businessBulletinBoard">
           <div>
-            <dataProportion :activeName="activeName"></dataProportion>
+            <businessBulletinBoard :activeName="activeName"></businessBulletinBoard>
+          </div>
+        </TabPane>
+        <TabPane label="成交看板" name="dealBulletinBoard">
+          <div>
+            <dealBulletinBoard :activeName="activeName"></dealBulletinBoard>
+          </div>
+        </TabPane>
+        <TabPane label="机构排名" name="hospitalRanking">
+          <div>
+            <hospitalRanking :activeName="activeName"></hospitalRanking>
           </div>
         </TabPane>
       </Tabs>
-      <Card style="margin:10px 0"> 
-        <tables></tables>
-      </Card>
-      <Card>
-        <datas :dataParams="dataParams"></datas>
-      </Card>
+      
     </div>
     <div class="right">
       <Card>
@@ -88,21 +93,23 @@
 </template>
 <script>
 import * as api from "@/api/hospitalManage";
-import datas from "./components/data.vue";
-import hospitalData from "./views/hospitalData.vue";
-import dataProportion from "./views/dataProportion.vue";
-import tables from "./components/table.vue"
+import orderBulletinBoard from "./views/orderBulletinBoard.vue";
+import businessBulletinBoard from "./views/businessBulletinBoard.vue";
+import dealBulletinBoard from "./views/dealBulletinBoard.vue";
+import hospitalRanking from "./views/hospitalRanking.vue";
+
 export default {
   components: {
-    datas,
-    dataProportion,
-    hospitalData,
-    tables
+    businessBulletinBoard,
+    orderBulletinBoard,
+    dealBulletinBoard,
+    hospitalRanking,
+    
   },
  data() {
     return {
       form: {
-        // 是否接收消息1
+        // 是否接收消息
         isReceive: false,
         // 开始时间
         startTime: "",
@@ -123,7 +130,7 @@ export default {
       },
       messageRecieve:{},
       controlModal:false,
-      activeName: "hospitalData",
+      activeName: "orderBulletinBoard",
       hospitalId:sessionStorage.getItem('hospitalId'),
       hospitalInfo:{},
       tagInfo:[],
@@ -245,7 +252,7 @@ export default {
   watch: {
     activeName: {
       handler(value) {
-        if (value === "hospitalData") {
+        if (value === "orderBulletinBoard") {
         }
       },
       immediate: true,

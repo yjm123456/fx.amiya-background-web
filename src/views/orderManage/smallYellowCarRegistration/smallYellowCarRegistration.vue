@@ -272,7 +272,7 @@
           border
           :columns="query.columns"
           :data="query.data"
-          height="600"
+          height="536"
           @on-select="handleSelect"
           @on-select-cancel="handleCancels"
           @on-select-all="handleSelectAll"
@@ -324,22 +324,6 @@
             </FormItem>
           </Col> -->
           <Col span="8">
-            <FormItem label="指派给" prop="assignEmpId">
-              <Select
-                v-model="form.assignEmpId"
-                placeholder="请选择指派给"
-                filterable
-              >
-                <Option
-                  v-for="item in employeeList"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="8">
             <FormItem label="渠道" prop="contentPlatFormId">
               <Select
                 v-model="form.contentPlatFormId"
@@ -356,8 +340,6 @@
               </Select>
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
           <Col span="8">
             <FormItem label="主播IP账号" prop="liveAnchorId">
               <Select
@@ -611,14 +593,37 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="16">
             <FormItem label="备注" prop="remark">
               <Input
                 v-model="form.remark"
                 type="textarea"
-                :rows="5"
+                :rows="3"
                 placeholder="请输入备注"
               ></Input>
+            </FormItem>
+          </Col>
+          
+        </Row>
+        <Row :gutter="30">
+          <!-- <Col span="8">
+          </Col>
+          <Col span="8">
+          </Col> -->
+          <Col span="8">
+            <FormItem label="指派给" prop="assignEmpId">
+              <Select
+                v-model="form.assignEmpId"
+                placeholder="请选择指派给"
+                filterable
+              >
+                <Option
+                  v-for="item in employeeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </FormItem>
           </Col>
         </Row>
@@ -683,7 +688,7 @@ export default {
         // 派单触达
         isSendOrder: -1,
         smallpageNumEdit: 1,
-        assignEmpId: -1,
+        assignEmpId: 0,
         minPrice: null,
         maxPrice: null,
         isAddWechat: -1,
@@ -1196,12 +1201,14 @@ export default {
             key: "reContent",
             minWidth: 200,
             align: "center",
+            tooltip: true,
           },
           {
             title: "备注",
             key: "remark",
             minWidth: 200,
             align: "center",
+            tooltip: true,
           },
           
           {
@@ -1774,7 +1781,7 @@ export default {
       ],
       //指派给
       employeeList: [],
-      employee: [{ name: "全部指派人员", id: -1 }],
+      employee: [{ name: "全部指派人员", id: 0 },{ name: "未指派", id: -1 }],
       // 微信号
       weChatList: [],
       // 紧急程度

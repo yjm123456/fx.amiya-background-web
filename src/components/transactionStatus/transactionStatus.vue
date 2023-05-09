@@ -121,6 +121,11 @@ export default {
             key: "price",
             minWidth: 140,
           },
+          {
+            title: "消费类型",
+            key: "consumptionTypeText",
+            minWidth: 120,
+          },
           
           {
             title: "成交截图",

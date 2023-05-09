@@ -479,7 +479,7 @@ export default {
         this.form.customerRequirement = value.firstProjectDemand
         this.form.customerState = value.customerState
         this.form.newContentPlatForm = value.newContentPlatForm
-        this.form.remark = value.remark ? value.remark : '渠道客服备注：\n1）咨询项目：\n2）顾客情况：\n3）设计方案：\n4）专家及报价：\n5）顾客反馈：\n6）顾客预算：\n7）备注：\n接诊备注：\n开单备注'
+        this.form.remark = value.remark ? value.remark : '咨询项目：\n既往史：\n方案及报价：\n推荐医生：\n预算及确定治疗项目：\n痛点、禁忌、喜好：\n是否车接车送：\n助理、vip管家：\n备注：'
         this.form.personalWechat = value.personalWechat
         this.form.businessWeChat = value.businessWeChat
         this.form.wechatMiniProgram = value.wechatMiniProgram

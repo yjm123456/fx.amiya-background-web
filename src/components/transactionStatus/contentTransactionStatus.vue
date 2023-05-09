@@ -179,6 +179,21 @@
               >
             </Select>
         </FormItem>
+        <FormItem label="消费类型" prop="consumptionType" key="消费类型" v-if="confirmForm.isToHospital === true">
+          <Select
+              v-model="confirmForm.consumptionType"
+              placeholder="请选择消费类型"
+              clearable
+              filterable
+            >
+              <Option
+                v-for="item in typeList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+        </FormItem>
         <!-- <FormItem
           label="佣金比例(%)"
           prop="commissionRatio"
@@ -347,9 +362,17 @@ export default {
         // 邀约凭证
         invitationDocuments:[],
         // 业绩类型
-        dealPerformanceType:null
+        dealPerformanceType:null,
+        // 消费类型
+        consumptionType:null
       },
       confirmRuleValidate: {
+        consumptionType: [
+          {
+            required: true,
+            message: "请选择消费类型",
+          },
+        ],
         dealPerformanceType: [
           {
             required: true,
@@ -545,6 +568,11 @@ export default {
             minWidth: 140,
           },
           {
+            title: "消费类型",
+            key: "consumptionTypeText",
+            minWidth: 120,
+          },
+          {
             title: "新老客业绩",
             key: "isOldCustomer",
             minWidth: 140,
@@ -557,6 +585,7 @@ export default {
               );
             },
           },
+          
           // {
           //   title: "佣金比例(%)",
           //   key: "commissionRatio",
@@ -657,7 +686,8 @@ export default {
                               isAcompanying,
                               commissionRatio,
                               invitationDocuments,
-                              dealPerformanceType
+                              dealPerformanceType,
+                              consumptionType
                             } = res.data.contentPlatFormOrderDealInfoInfo;
                             this.isEdit = true;
                             this.confirmForm.toHospitalDate = tohospitalDate
@@ -672,6 +702,7 @@ export default {
                             this.confirmForm.dealPicture = dealPicture;
                             this.confirmForm.isAcompanying = isAcompanying;
                             this.confirmForm.commissionRatio = commissionRatio;
+                            this.confirmForm.consumptionType = consumptionType;
                             this.confirmForm.dealPerformanceType = String(dealPerformanceType);
                             this.uploadObj.uploadList = this.confirmForm
                               .dealPicture
@@ -727,9 +758,20 @@ export default {
           },
         ],
       },
+      // 消费类型
+      typeList:[]
     };
   },
   methods: {
+    // 消费类型列表
+    getContentPlatFormOrderDealInfotypeList() {
+      api.ContentPlatFormOrderDealInfotypeList().then((res) => {
+        if (res.code === 0) {
+          const { typeList } = res.data;
+          this.typeList = typeList
+        }
+      });
+    },
     //   获取业绩类型
     getcontentPlateFormOrderDealPerformanceType() {
       api.contentPlateFormOrderDealPerformanceType().then((res) => {
@@ -805,6 +847,7 @@ export default {
             commissionRatio,
             invitationDocuments,
             dealPerformanceType,
+            consumptionType
           } = this.confirmForm;
           const data = {
             id,
@@ -832,7 +875,8 @@ export default {
             isAcompanying,
             commissionRatio:0,
             invitationDocuments,
-            dealPerformanceType
+            dealPerformanceType,
+            consumptionType
           };
           api.updateContentPlatFormOrderDealInfo(data).then((res) => {
             if (res.code === 0) {
@@ -947,6 +991,7 @@ export default {
   created() {
     this.getHospitalInfonameList();
     this.getcontentPlateFormOrderDealPerformanceType()
+    this.getContentPlatFormOrderDealInfotypeList()
   },
   watch: {
     transactionStatusParams: {

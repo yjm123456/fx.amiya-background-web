@@ -10,6 +10,8 @@ import addRoute from "./modules/addRoute";
 import chat from "./modules/chat";
 // 呼叫中心
 import callCenter from "./modules/callCenter"
+// 消息通知(小铃铛)
+import message from "./modules/message"
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -18,6 +20,7 @@ export default new Vuex.Store({
         tag,
         addRoute,
         chat,
-        callCenter
+        callCenter,
+        message
     },
 });

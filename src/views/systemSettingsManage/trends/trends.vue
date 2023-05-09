@@ -53,10 +53,12 @@
                                 <div class="list" >
                                     <span class="time" >{{ $moment(new Date(i.createDate)).format("HH:mm")}}</span>
                                     <div class="circle"  :style="{border: i.isRead == false ? '1px solid #ccc' : '#4a9bf0',background:i.isRead == false ? '#ccc' : '#4a9bf0'}"></div>
-                                    <div @click="detail(item,i.noticeType,i.orderId)">
-                                        <span class="type_con">【<span class="type">{{i.noticeTypeText}}</span>】 </span>
-                                        <span> {{i.acceptByEmpName}} <span>{{i.noticeContent}}</span></span>
-                                            <Radio v-model="i.isRead" style="margin-left:10px" @on-change="isReadClick(i)"><span :style="{color: i.isRead == false ? '#ccc' : '#4a9bf0',marginLeft:'5px'}" >{{i.isRead == false ? '未读' : '已读'}}</span></Radio>
+                                    <div style="display:flex">
+                                        <div @click="detail(item,i.noticeType,i.orderId)">
+                                            <span class="type_con">【<span class="type">{{i.noticeTypeText}}</span>】 </span>
+                                            <span> {{i.acceptByEmpName}} <span>{{i.noticeContent}}</span></span>
+                                        </div>
+                                        <Radio v-model="i.isRead" style="margin-left:10px" @on-change="isReadClick(i)"><span :style="{color: i.isRead == false ? '#ccc' : '#4a9bf0',marginLeft:'5px'}" >{{i.isRead == false ? '未读' : '已读'}}</span></Radio>
                                     </div>
                                 </div>
                                 <div class="lines" v-if="d !== item.details.length - 1"></div>
@@ -219,7 +221,9 @@ export default {
         }
         api.updateMessageNotice(data).then(res=>{
             if(res.code === 0){
-                window.location.reload();
+                // window.location.reload();
+                this.$store.dispatch("message/getMessage")
+                this.getlistByCalendar()
             }
         })
             return

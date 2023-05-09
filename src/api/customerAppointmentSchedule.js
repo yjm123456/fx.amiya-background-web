@@ -83,3 +83,19 @@ export const getMessageNoticeTypeList = () => {
         method: "get",
     });
 };
+// 指派直播
+export const assign = (data) => {
+    return http({
+        url: `/amiyabg/CustomerAppointmentSchedule/assign`,
+        method: "put",
+        data
+    });
+};
+// 批量直播
+export const assignList = (data) => {
+    return http({
+        url: `/amiyabg/CustomerAppointmentSchedule/assignList`,
+        method: "put",
+        data
+    });
+};

@@ -6,20 +6,20 @@
           <Input
             v-model="query.keyWord"
             placeholder="请输入关键字"
-            style="width: 200px; margin-left: 10px"
+            style="width: 200px; "
             @keyup.enter.native="getCustomerAppointmentSchedule()"
           />
           <DatePicker
             type="date"
             placeholder="开始日期"
-            style="width: 180px; margin-left: .625rem"
+            style="width: 150px; margin-left: .625rem"
             :value="query.startDate"
             v-model="query.startDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="结束时间"
-            style="width: 180px;margin-left: .625rem;"
+            style="width: 150px;margin-left: .625rem;"
             :value="query.endDate"
             v-model="query.endDate"
           ></DatePicker>
@@ -27,7 +27,7 @@
             v-model="query.importantType"
             placeholder="请选择重要程度"
             filterable
-            style="width: 180px; margin-left: 10px"
+            style="width: 150px; margin-left: 10px"
           >
             <Option
               v-for="item in query.emergencyLevelListAll"
@@ -40,7 +40,7 @@
             v-model="query.appointmentType"
             placeholder="请选择预约类型"
             filterable
-            style="width: 180px; margin-left: 10px"
+            style="width: 150px; margin-left: 10px"
           >
             <Option
               v-for="item in appointmentTypeListAll"
@@ -53,7 +53,7 @@
             v-model="query.isFinish"
             placeholder="请选择完成情况"
             filterable
-            style="width: 180px; margin-left: 10px"
+            style="width: 150px; margin-left: 10px"
           >
             <Option
               v-for="item in isFinishList"
@@ -67,6 +67,12 @@
             style="margin-left: 10px"
             @click="getCustomerAppointmentSchedule()"
             >查询</Button
+          >
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="batchAssignmentClick"
+            >批量指派主播</Button
           >
         </div>
         <div class="right">
@@ -94,7 +100,10 @@
           show-elevator
           :columns="query.columns"
           :data="query.data"
-          @on-change="handlePageChange"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancels"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"
         ></Table>
       </div>
       <div class="page_wrap">
@@ -224,7 +233,22 @@
               ></Input>
             </FormItem>
           </Col>
-          
+          <Col span="8">
+            <FormItem label="指派主播" prop="assignLiveanchorId">
+              <Select
+                v-model="form.assignLiveanchorId"
+                placeholder="请选择指派主播"
+                filterable
+              >
+                <Option
+                  v-for="item in assignParams.liveAnchorBaseInfos"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
         </Row>
       </Form>
       <div slot="footer">
@@ -232,6 +256,9 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+
+    <!-- 指派 -->
+    <assign :assignModel.sync="assignModel" :assignParams="assignParams" @getCustomerAppointmentSchedule="getCustomerAppointmentSchedule"/>
   </div>
 </template>
 <script>
@@ -239,9 +266,10 @@ import * as api from "@/api/customerAppointmentSchedule";
 import * as apis from "@/api/goodsManage";
 import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
 import * as orderApi from "@/api/orderManage";
-
+import * as liveApi from "@/api/liveAnchorBaseInfo";
+import assign from "./assign.vue"
 export default {
-  components: {},
+  components: {assign},
   props: ["activeName"],
   data() {
     return {
@@ -280,10 +308,23 @@ export default {
           .startOf("month")
           .format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
+        assignLiveanchorId:null,
         columns: [
+          {
+            type: "selection",
+            key: "_checked",
+            align: "center",
+            minWidth: 80,
+          },
           {
             title: "创建人",
             key: "createByEmpName",
+            minWidth: 150,
+            align:'center'
+          },
+          {
+            title: "指派主播",
+            key: "assignLiveanchorName",
             minWidth: 150,
             align:'center'
           },
@@ -364,10 +405,31 @@ export default {
           {
             title: "操作",
             align: "center",
-            minWidth: 150,
+            minWidth: 210,
             fixed: "right",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.assignParams.title = "指派主播"
+                        this.assignParams.id = id
+                        this.assignModel = true
+                      },
+                    },
+                  },
+                  "指派主播"
+                ),
                 h(
                   "Button",
                   {
@@ -394,7 +456,8 @@ export default {
                               phone,
                               remark,
                               appointmentHospitalId,
-                              consultation
+                              consultation,
+                              assignLiveanchorId
                             } = res.data.customerAppointmentScheduleInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -407,6 +470,7 @@ export default {
                             this.form.remark = remark;
                             this.form.appointmentHospitalId = appointmentHospitalId;
                             this.form.consultation = consultation;
+                            this.form.assignLiveanchorId = assignLiveanchorId;
                             this.controlModal = true;
                           }
                         });
@@ -518,10 +582,61 @@ export default {
         ],
       },
       // 医院
-      hospitalInfo:[]
+      hospitalInfo:[],
+      // 指派
+      assignModel:false,
+      assignParams:{
+        title:"",
+        // 主播
+        liveAnchorBaseInfos:[],
+        // 单个指派id
+        id:'',
+        // 批量指派
+        idList: new Set(),
+      }
     };
   },
   methods: {
+    // 批量指派
+    batchAssignmentClick() {
+      if (![...this.assignParams.idList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.assignModel = true;
+      this.assignParams.title = '批量指派主播'
+    },
+    handleSelect(selection, row) {
+      // 批量指派
+      this.assignParams.idList.add(row.id);
+    },
+
+    handleCancels(selection, row) {
+      // 批量指派
+      this.assignParams.idList.delete(row.id);
+    },
+
+    handleSelectAll(selection) {
+      if (selection && selection.length === 0) {
+        this.assignParams.idList.clear();
+      } else {
+        selection.forEach((item) => {
+          this.assignParams.idList.add(item.id);
+        });
+      }
+    },
+    // 获取主播基础信息列表
+    getLiveAnchorBaseInfoValid(){
+      liveApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if(res.code === 0){
+          const {liveAnchorBaseInfos} = res.data
+          this.assignParams.liveAnchorBaseInfos = liveAnchorBaseInfos
+        }
+      })
+    },
     // 获取医院列表（select）
     getHospital() {
       apis.getHospitalnameList().then((res) => {
@@ -596,6 +711,7 @@ export default {
           const { list, totalCount } = res.data.customerAppointmentScheduleInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          this.assignParams.idList.clear();
         }
       });
     },
@@ -628,6 +744,7 @@ export default {
           const { list, totalCount } = res.data.customerAppointmentScheduleInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          this.assignParams.idList.clear();
         }
       });
     },
@@ -646,7 +763,8 @@ export default {
             importantType,
             remark,
             appointmentHospitalId,
-            consultation
+            consultation,
+            assignLiveanchorId
           } = this.form;
           if (phone) {
             if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -668,7 +786,8 @@ export default {
               importantType,
               remark,
               appointmentHospitalId,
-            consultation
+            consultation,
+            assignLiveanchorId
             };
             api.updateCustomerAppointmentSchedule(data).then((res) => {
               if (res.code === 0) {
@@ -694,7 +813,8 @@ export default {
               importantType,
               remark,
               appointmentHospitalId,
-            consultation
+            consultation,
+            assignLiveanchorId
             };
             api.addCustomerAppointmentSchedule(data).then((res) => {
               if (res.code === 0) {
@@ -731,6 +851,7 @@ export default {
     this.getCustomerServiceList();
     this.getAppointmentTypeList();
     this.getHospital()
+    this.getLiveAnchorBaseInfoValid()
   },
   watch: {
     activeName: {

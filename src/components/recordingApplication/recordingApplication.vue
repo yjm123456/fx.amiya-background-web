@@ -20,6 +20,7 @@
          <Select
             v-model="form.acceptBy"
             placeholder="接收人"
+            filterable
             disabled
           >
             <Option
@@ -83,12 +84,14 @@ export default {
     return {
       isLoading:false,
       control: false,
-      recipientList:[{id:1,name:'管理员'}],
+      // recipientList:[{id:1,name:'管理员'}],
       // recipientList:[{id:104,name:'虞郑韡'}],
       // recipientList:[{id:62,name:'余建明'}],
+      recipientList:[{id:220,name:'张凌玥'}],
       form: {
-        // 接收人
-        acceptBy:104,
+        // // 接收人
+        // acceptBy:104,
+        acceptBy:220,
         // 手机号
         phone:'',
         // 医院
@@ -190,7 +193,9 @@ export default {
         // 测试 管理员
         //  this.form.acceptBy = 1
          //  线上虞老师id
-         this.form.acceptBy = 104
+        //  this.form.acceptBy = 104
+        //  线上张凌玥id
+         this.form.acceptBy = 220
          this.employee = this.recordingNormalParams.employee
          this.form.phone = this.recordingNormalParams.phone
          return

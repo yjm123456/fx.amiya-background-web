@@ -447,7 +447,10 @@ export default {
     // 获取所有员工
     getEmployeeByPositionId(){
       const data ={
+        // 线上职位id
         positionId:29
+        // 测试1
+        // positionId:1
       }
       emApi.getEmployeeByPositionId(data).then(res=>{
         if(res.code===0){

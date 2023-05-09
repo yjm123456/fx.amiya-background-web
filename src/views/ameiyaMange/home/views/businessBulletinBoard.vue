@@ -252,19 +252,21 @@ export default {
   }
   .yellow {
     background: #ffb142;
+    margin: 0 20px;
   }
   .orange {
     background: #d7825d;
-    margin: 0 20px;
   }
   .orange2 {
     background: #7e789c;
+    margin: 0 20px;
   }
   .orange3 {
     background: #b8b53d;
   }
   .orange4 {
     background: #d39057;
+    margin: 0 20px;
   }
 }
 .red{

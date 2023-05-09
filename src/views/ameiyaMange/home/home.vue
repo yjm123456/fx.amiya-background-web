@@ -2,19 +2,20 @@
   <div class="content">
     <div class="left">
       <Tabs ref="tabs" v-model="activeName" type="card">
-        <TabPane label="订单看板" name="orderBulletinBoard">
+        <TabPane label="成交看板" name="dealBulletinBoard">
           <div>
-            <orderBulletinBoard :activeName="activeName"></orderBulletinBoard>
+            <dealBulletinBoard :activeName="activeName"></dealBulletinBoard>
           </div>
         </TabPane>
+        
         <TabPane label="运营看板" name="businessBulletinBoard">
           <div>
             <businessBulletinBoard :activeName="activeName"></businessBulletinBoard>
           </div>
         </TabPane>
-        <TabPane label="成交看板" name="dealBulletinBoard">
+        <TabPane label="订单看板" name="orderBulletinBoard">
           <div>
-            <dealBulletinBoard :activeName="activeName"></dealBulletinBoard>
+            <orderBulletinBoard :activeName="activeName"></orderBulletinBoard>
           </div>
         </TabPane>
         <TabPane label="机构排名" name="hospitalRanking">
@@ -130,7 +131,7 @@ export default {
       },
       messageRecieve:{},
       controlModal:false,
-      activeName: "orderBulletinBoard",
+      activeName: "dealBulletinBoard",
       hospitalId:sessionStorage.getItem('hospitalId'),
       hospitalInfo:{},
       tagInfo:[],

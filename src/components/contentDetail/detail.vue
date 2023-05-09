@@ -115,7 +115,6 @@
             </div>
           </div>
           </div>
-          <div class="appoint" style="display:flex;justify-content:flex-end;margin-top:10px;margin-right:-5px"><Button type="primary" @click="appointmentScheduleModel =true" style="margin-right:10px">生成预约日程</Button></div>
         </div>
         
       </div>
@@ -211,6 +210,20 @@
               <span class="title_bold">医院现场咨询人员：</span>
               <span>{{ detailObj.sceneConsulationName }} </span>
             </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">是否生成过预约日程：</span>
+              <i-switch v-model="customerAppointmentScheduleInfo.isCustomerAppointmentSchedule" disabled />
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">预约日期：</span>
+              <span>{{ customerAppointmentScheduleInfo.appointmentDate }} </span>
+            </div>
+          </div>
+          <div class="appoint"  style="display:flex;justify-content:flex-end;margin-top:10px;margin-right:-5px">
+            <Button type="primary" @click="appointmentScheduleModel =true" style="margin-right:10px">生成预约日程</Button>
+            <Button type="primary" @click="messageClick" style="margin-right:10px" v-if="detailObj.orderStatusText != '未派单'">留言板</Button>
           </div>
         </div>
       </div>
@@ -490,6 +503,8 @@
     :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
     <!-- 生成预约日程 -->
     <appointmentSchedule :appointmentScheduleModel.sync="appointmentScheduleModel" :appointmentParams="appointmentParams" :detailObj="detailObj"/>
+    <!-- 留言板 -->
+    <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
   </div>
 </template>
 <script>
@@ -506,6 +521,7 @@ import transactionStatus from "@/components/transactionStatus/contentTransaction
 import goodsNews from "@/components/goodsNews/goodsNews.vue";
 import customerMessage from "@/components/customerMessage/customerMessage"
 import appointmentSchedule from "./appointmentSchedule.vue"
+import messageBoard from "@/components/contentMessageBoard/contentMessageBoard.vue";
 
 export default {
   props: {
@@ -518,10 +534,23 @@ export default {
     transactionStatus,
     goodsNews,
     customerMessage,
-    appointmentSchedule
+    appointmentSchedule,
+    messageBoard
   },
   data() {
     return {
+      // 是否生成预约日程
+      customerAppointmentScheduleInfo:{
+        isCustomerAppointmentSchedule:false,
+        appointmentDate:''
+      },
+       //  留言板
+      messageBoardParams: {
+        hospitalId: null,
+        id: null,
+        content: "",
+        messageBoard: false,
+      },
       customerMessageModel:false,
       // 客户信息组件参数
       customerInfoComParams2: {
@@ -626,6 +655,16 @@ export default {
   },
 
   methods: {
+    // 留言板
+    messageBoardChange() {
+      this.messageBoardParams.messageBoard = false;
+    },
+    // 留言板
+    messageClick(){
+      this.messageBoardParams.id = this.detailObj.id
+      this.messageBoardParams.messageBoard = true
+    },
+    
     // 预约类型
     getAppointmentTypeList() {
       customerApi.getAppointmentTypeList().then((res) => {
@@ -737,11 +776,15 @@ export default {
       if (!value) {
         this.handleCancelClick();
         this.$emit("update:detailModel", false);
+        this.customerAppointmentScheduleInfo.isCustomerAppointmentSchedule = false
+      this.customerAppointmentScheduleInfo.appointmentDate = ''
       }
     },
     // 取消
     handleCancelClick(name) {
       this.$emit("update:detailModel", false);
+      this.customerAppointmentScheduleInfo.isCustomerAppointmentSchedule = false
+      this.customerAppointmentScheduleInfo.appointmentDate = ''
     },
   },
   created(){
@@ -755,12 +798,27 @@ export default {
     detailList(value) {
       this.query.data = value;
       this.detailObj = value[0];
-      this.time =
-        value[0].orderStatusText == "未派单"
-          ? 0
-          : value[0].orderStatusText == "已派单"
-          ? 1
-          : 2;
+      this.time =value[0].orderStatusText == "未派单"? 0: value[0].orderStatusText == "已派单" ? 1: 2;
+      // 根据加密手机号获取是否生成过预约日程信息
+      const data = {
+        encryptPhone:value[0].encryptPhone
+      }
+       api.byCustomerAppointmentScheduleEncryptPhone(data).then(res=>{
+          if(res.code == 0){
+            const {id,appointmentDate} = res.data.customerAppointmentScheduleInfo
+            if(!id){
+              this.isCustomerAppointmentSchedule = false
+              
+            }else{
+              this.customerAppointmentScheduleInfo.isCustomerAppointmentSchedule = true
+              this.customerAppointmentScheduleInfo.appointmentDate = appointmentDate ?  this.$moment(appointmentDate).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                  ) 
+                  : ''
+            }
+            
+          }
+        })
     },
   },
 };

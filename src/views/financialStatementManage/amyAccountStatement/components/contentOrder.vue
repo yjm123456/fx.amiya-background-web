@@ -428,6 +428,12 @@ export default {
             align: "center",
           },
           {
+            title: "消费类型",
+            key: "consumptionTypeText",
+            minWidth: 120,
+            align: "center",
+          },
+          {
             title: "审核状态",
             key: "checkStateText",
             minWidth: 110,

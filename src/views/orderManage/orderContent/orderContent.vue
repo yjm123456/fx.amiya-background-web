@@ -820,7 +820,9 @@ export default {
         // 获取订单信息
         info:{},
         // 弹窗标题
-        title:'录单编辑'
+        title:'录单编辑',
+        // 主播微信号
+        weChatList:[]
 
       },
       // 编辑录单
@@ -1850,17 +1852,18 @@ export default {
       if (!value) {
         return;
       }
-      this.getWeChatList(value);
+      // this.getWeChatList(value);
     },
     //  根据主播获取主播微信号
     getWeChatList(value) {
       const data = {
-        liveanchorId: value,
+        liveanchorId: '',
       };
       liveAnchorApi.getvalidList(data).then((res) => {
         if (res.code === 0) {
           const { liveAnchorWechatInfos } = res.data;
           this.weChatList = liveAnchorWechatInfos;
+          this.recordingParams.weChatList = liveAnchorWechatInfos;
         }
       });
     },
@@ -2324,6 +2327,7 @@ export default {
     this.getOrderConsultationTypeList();
     this.getcontentPlateFormOrderTypeList()
     this.getHospitalList();
+    this.getWeChatList()
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")

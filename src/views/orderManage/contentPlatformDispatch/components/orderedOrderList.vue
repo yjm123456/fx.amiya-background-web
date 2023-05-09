@@ -495,6 +495,21 @@
               >
             </Select>
         </FormItem>
+        <FormItem label="消费类型" prop="consumptionType" key="消费类型" v-if="confirmForm.isToHospital === true">
+          <Select
+              v-model="confirmForm.consumptionType"
+              placeholder="请选择消费类型"
+              clearable
+              filterable
+            >
+              <Option
+                v-for="item in typeList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+        </FormItem>
         <!-- <FormItem
           label="佣金比例(%)"
           prop="commissionRatio"
@@ -695,9 +710,17 @@ export default {
         // 邀约凭证
         invitationDocuments:[],
         // 业绩类型
-        dealPerformanceType:null
+        dealPerformanceType:null,
+        // 消费类型
+        consumptionType:null
       },
       confirmRuleValidate: {
+        consumptionType: [
+          {
+            required: true,
+            message: "请选择消费类型",
+          },
+        ],
         dealPerformanceType: [
           {
             required: true,
@@ -1670,10 +1693,21 @@ export default {
         transactionStatusModel: false,
       },
       // 业绩类型
-      contentPlateFormOrderDealPerformanceType:[]
+      contentPlateFormOrderDealPerformanceType:[],
+      // 消费类型
+      typeList:[]
     };
   },
   methods: {
+    // 消费类型列表
+    getContentPlatFormOrderDealInfotypeList() {
+      api.ContentPlatFormOrderDealInfotypeList().then((res) => {
+        if (res.code === 0) {
+          const { typeList } = res.data;
+          this.typeList = typeList
+        }
+      });
+    },
     //   获取业绩类型
     getcontentPlateFormOrderDealPerformanceType() {
       api.contentPlateFormOrderDealPerformanceType().then((res) => {
@@ -1726,6 +1760,7 @@ export default {
         this.uploadObj.uploadList = [];
         this.confirmForm.DealDate = null;
         this.confirmForm.dealPerformanceType = null
+        this.confirmForm.consumptionType = null
       } else {
         this.confirmForm.dealAmount = null;
         this.confirmForm.lastProjectStage = "";
@@ -1768,7 +1803,8 @@ export default {
             isAcompanying,
             commissionRatio,
             invitationDocuments,
-            dealPerformanceType
+            dealPerformanceType,
+            consumptionType
           } = this.confirmForm;
           const data = {
             id,
@@ -1792,7 +1828,8 @@ export default {
             isAcompanying,
             commissionRatio:0,
             invitationDocuments,
-            dealPerformanceType
+            dealPerformanceType,
+            consumptionType
           };
           api.finishContentPlateFormOrderByEmployee(data).then((res) => {
             if (res.code === 0) {
@@ -2119,6 +2156,7 @@ export default {
     this.getcontentPlateFormOrderSourceList();
     this.getcontentPlateFormOrderToHospitalTypeList()
     this.getcontentPlateFormOrderDealPerformanceType()
+    this.getContentPlatFormOrderDealInfotypeList()
   },
 };
 </script>

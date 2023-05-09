@@ -1465,3 +1465,19 @@ export const byEncryptPhone = (phone) => {
         method: "get",
     });
 };
+// 根据客户手机号获取客户预约日程信息（单条）
+export const byCustomerAppointmentScheduleEncryptPhone = (params) => {
+    return http({
+        url: `/amiyabg/CustomerAppointmentSchedule/byEncryptPhone`,
+        method: "get",
+        params
+    });
+};
+// 根据客户手机号获取客户预约日程信息（单条）
+export const ContentPlatFormOrderDealInfotypeList = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderDealInfo/typeList`,
+        method: "get",
+        params
+    });
+};

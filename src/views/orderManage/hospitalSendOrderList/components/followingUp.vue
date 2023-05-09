@@ -252,6 +252,26 @@
           ></DatePicker>
         </FormItem>
         <FormItem
+          label="消费类型"
+          prop="consumptionType"
+          key="消费类型"
+          v-if="form.isFinish === true"
+        >
+          <Select
+            v-model="form.consumptionType"
+            placeholder="请选择消费类型"
+            clearable
+            filterable
+          >
+            <Option
+              v-for="item in typeList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
+        <FormItem
           label="后期项目铺垫"
           v-if="form.isFinish === true"
           key="后期项目铺垫"
@@ -371,7 +391,8 @@ import goodsNews from "@/components/goodsNews/goodsNews.vue";
 export default {
   props:{
     activeName:String,
-    toHospitalTypeList:Array
+    toHospitalTypeList:Array,
+    typeList:Array
   },
   components: {
     messageBoard,
@@ -459,6 +480,8 @@ export default {
         toHospitalType: null,
         // 是否陪诊
         isAcompanying: false,
+        // 消费类型
+        consumptionType:null
       },
       imgForm: {
         id: "",
@@ -1018,6 +1041,12 @@ export default {
       controlModal: false,
 
       ruleValidate: {
+        consumptionType: [
+          {
+            required: true,
+            message: "请选消费类型",
+          },
+        ],
         toHospitalType: [
           {
             required: true,
@@ -1115,6 +1144,7 @@ export default {
         this.form.lastProjectStage = "";
         this.uploadObj.uploadList = [];
         this.form.DealDate = null;
+        this.form.consumptionType = null;
       } else {
         this.form.isToHospital = false;
         this.form.unDealReason = "";
@@ -1336,6 +1366,7 @@ export default {
             toHospitalDate,
             toHospitalType,
             isAcompanying,
+            consumptionType
           } = this.form;
           const data = {
             id,
@@ -1357,6 +1388,7 @@ export default {
               : null,
             toHospitalType: isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
+            consumptionType
           };
           api.finishContentPlateFormOrder(data).then((res) => {
             if (res.code === 0) {

@@ -6,6 +6,7 @@
           <allOrder
             :activeName="activeName"
             :toHospitalTypeList = "toHospitalTypeList"
+            :typeList="typeList"
           ></allOrder>
         </div>
       </TabPane>
@@ -14,6 +15,7 @@
           <unhandled
             :activeName="activeName"
             :toHospitalTypeList = "toHospitalTypeList"
+            :typeList="typeList"
           ></unhandled>
         </div>
       </TabPane>
@@ -22,6 +24,7 @@
           <followingUp
             :activeName="activeName"
             :toHospitalTypeList = "toHospitalTypeList"
+            :typeList="typeList"
           ></followingUp>
         </div>
       </TabPane>
@@ -30,6 +33,7 @@
           <arrived
             :activeName="activeName"
             :toHospitalTypeList = "toHospitalTypeList"
+            :typeList="typeList"
           ></arrived>
         </div>
       </TabPane>
@@ -38,6 +42,7 @@
           <closed
             :activeName="activeName"
             :toHospitalTypeList = "toHospitalTypeList"
+            :typeList="typeList"
           ></closed>
         </div>
       </TabPane>
@@ -46,6 +51,7 @@
           <duplicateOrder
             :activeName="activeName"
             :toHospitalTypeList = "toHospitalTypeList"
+            :typeList="typeList"
           ></duplicateOrder>
         </div>
       </TabPane>
@@ -74,10 +80,21 @@ export default {
     return {
       activeName: "allOrder",
       // 到院类型
-      toHospitalTypeList:[]
+      toHospitalTypeList:[],
+      // 消费类型
+      typeList:[]
     }
   },
   methods:{
+    // 消费类型列表
+    getContentPlatFormOrderDealInfotypeList() {
+      api.ContentPlatFormOrderDealInfotypeList().then((res) => {
+        if (res.code === 0) {
+          const { typeList } = res.data;
+          this.typeList = typeList
+        }
+      });
+    },
      //   获取订单到院类型
     getcontentPlateFormOrderToHospitalTypeList() {
       api.contentPlateFormOrderToHospitalTypeList().then((res) => {
@@ -90,6 +107,7 @@ export default {
   },
   created(){
     this.getcontentPlateFormOrderToHospitalTypeList()
+    this.getContentPlatFormOrderDealInfotypeList()
   }
   
 }

@@ -24,8 +24,7 @@
         <Tooltip placement="top">
             <i class="iconfont icon-guize guize"></i>
             <div slot="content" >
-                <p >排名方式：机构按运营健康指标进行</p>
-                <p >排名</p>
+                <p >排名方式：按运营健康指标进行排名</p>
                 <p >计算方式：上门率权重50%，成交率</p>
                 <p >权重20%，复购率权重30%</p>
             </div>

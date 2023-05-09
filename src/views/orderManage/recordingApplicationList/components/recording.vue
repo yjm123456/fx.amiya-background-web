@@ -91,11 +91,7 @@
               <Select
                 v-model="form.liveAnchorWeChatNo"
                 placeholder="请选择主播微信号"
-                :disabled="
-                  form.liveAnchorId === '' ||
-                    (recordingNormalParams.title == '录单编辑' &&
-                      buttonFlag == false)
-                "
+               
                 filterable
               >
                 <Option
@@ -718,12 +714,12 @@ export default {
       if (!value) {
         return;
       }
-      this.getWeChatList(value);
+      // this.getWeChatList(value);
     },
     //  根据主播获取主播微信号
     getWeChatList(value) {
       const data = {
-        liveanchorId: value,
+        liveanchorId: '',
       };
       liveAnchorApi.getvalidList(data).then((res) => {
         if (res.code === 0) {
@@ -856,6 +852,10 @@ export default {
         this.$refs["form"].resetFields();
       }
     },
+    
+  },
+  created() {
+    this.getWeChatList()
   },
   watch: {
     recordingModel(value) {

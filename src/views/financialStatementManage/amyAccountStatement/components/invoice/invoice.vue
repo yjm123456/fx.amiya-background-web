@@ -386,6 +386,10 @@ export default {
               systemUpdatePrice:Number(systemUpdatePriceNum),
               details
             };
+            if(!time[0] || !time[1]){
+              this.$Message.warning('请选择账单归属时间')
+              return
+            }
             let separateBillPrice = 0
             details.map(item=>{
               separateBillPrice += Number(item.separateBillPrice);

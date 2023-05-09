@@ -345,6 +345,19 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            <Select
+              v-model="query.consumptionType"
+              style="width: 140px;margin-left:10px"
+              placeholder="请选择消费类型"
+              filterable
+            >
+              <Option
+                v-for="item in typeList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
             <Input
                 v-model="query.minAddOrderPrice"
                 placeholder="请输入最小下单金额"
@@ -566,6 +579,8 @@ export default {
         returnBackPriceEndDate:'',
         // 跟进人员
         customerServiceId:-1,
+        // 消费类型
+        consumptionType:-1,
         // 派单开始时间
         sendStartDate:'',
         // 派单结束时间
@@ -626,6 +641,7 @@ export default {
             minWidth: 120,
             align:'center'
           },
+          
           {
             title: "手机号",
             key: "phone",
@@ -805,6 +821,12 @@ export default {
             title: "三方订单号",
             key: "otherOrderId",
             minWidth: 180,
+            align:'center'
+          },
+          {
+            title: "消费类型",
+            key: "consumptionTypeText",
+            minWidth: 120,
             align:'center'
           },
           {
@@ -1242,10 +1264,21 @@ export default {
         ],
       },
       // 面诊类型
-      consultationTypeList:[{orderType:-1,orderTypeText:'全部面诊类型'}]
+      consultationTypeList:[{orderType:-1,orderTypeText:'全部面诊类型'}],
+      // 消费类型
+      typeList:[{id:-1,name:'全部消费类型'}]
     };
   },
   methods: {
+     // 消费类型列表
+    getContentPlatFormOrderDealInfotypeList() {
+      api.ContentPlatFormOrderDealInfotypeList().then((res) => {
+        if (res.code === 0) {
+          const { typeList } = res.data;
+          this.typeList = [...this.typeList,...typeList]
+        }
+      });
+    },
     //   获取完成情况列表（下拉框）
     getOrderConsultationTypeList() {
       api.getOrderConsultationTypeList().then((res) => {
@@ -1359,7 +1392,8 @@ export default {
         dealStartDate,
         dealEndDate,
         isCreateBill,
-        belongCompanyId
+        belongCompanyId,
+        consumptionType
       } = this.query;
       const data = {
         pageNum,
@@ -1398,6 +1432,7 @@ export default {
         dealEndDate:isDeal =='true' ?  (dealEndDate ? this.$moment(dealEndDate).format("YYYY-MM-DD") : null) : null,
         isCreateBill: isCreateBill == -1 ? null : isCreateBill,
           belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
+          consumptionType: consumptionType == -1 ? null : consumptionType,
 
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
@@ -1445,7 +1480,8 @@ export default {
         dealStartDate,
         dealEndDate,
         isCreateBill,
-        belongCompanyId
+        belongCompanyId,
+        consumptionType
       } = this.query;
       const data = {
         pageNum,
@@ -1484,6 +1520,7 @@ export default {
         dealEndDate:isDeal =='true' ?  (dealEndDate ? this.$moment(dealEndDate).format("YYYY-MM-DD") : null) : null,
         isCreateBill: isCreateBill == -1 ? null : isCreateBill,
           belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
+          consumptionType: consumptionType == -1 ? null : consumptionType,
       };
       dealApi.getContentPlatFormOrderDealInfo(data).then((res) => {
         if (res.code === 0) {
@@ -1567,6 +1604,7 @@ export default {
     this.getconsultationNameList()
     this.getcontentPlateFormOrderToHospitalTypeList()
     this.getOrderConsultationTypeList()
+    this.getContentPlatFormOrderDealInfotypeList()
   },
   watch: {
     activeName: {

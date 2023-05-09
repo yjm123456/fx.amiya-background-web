@@ -523,6 +523,8 @@ export default {
         dealHospitalList: [{ name: "全部到院医院", id: -1 }],
         // 到院类型
         toHospitalTypeList: [{ orderType: -1, orderTypeText: "全部到院类型" }],
+        // 消费类型
+        typeList:[{id:-1,name:'全部消费类型'}]
       },
       // 重要程度
       emergencyLevelListAll: [
@@ -539,6 +541,15 @@ export default {
     };
   },
   methods: {
+    // 消费类型列表
+    getContentPlatFormOrderDealInfotypeList() {
+      api.ContentPlatFormOrderDealInfotypeList().then((res) => {
+        if (res.code === 0) {
+          const { typeList } = res.data;
+          this.transactionParams.typeList = [...this.transactionParams.typeList,...typeList]
+        }
+      });
+    },
     // 获取公司管理数据下拉框
     getCompany() {
       corApi.getCompanyBaseInfoNameList().then((res) => {
@@ -724,6 +735,7 @@ export default {
     this.getEmergencyLevels();
     this.getAppTypeList();
     this.getCompany();
+    this.getContentPlatFormOrderDealInfotypeList();
   },
   mounted() {
     this.getData();

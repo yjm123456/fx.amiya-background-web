@@ -255,6 +255,19 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            <Select
+              v-model="query.consumptionType"
+              style="width: 140px;margin-left:10px"
+              placeholder="请选择消费类型"
+              filterable
+            >
+              <Option
+                v-for="item in transactionParams.typeList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
             <Input
                 v-model="query.minAddOrderPrice"
                 placeholder="请输入最小下单金额"
@@ -466,6 +479,8 @@ export default {
       pageCount: 0,
       transactionStatementModals: false,
       query: {
+        //消费类型
+        consumptionType:-1,
         // 是否开票
         isCreateBill:-1,
         // 开票公司
@@ -692,6 +707,12 @@ export default {
             title: "三方订单号",
             key: "otherOrderId",
             minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "消费类型",
+            key: "consumptionTypeText",
+            minWidth: 120,
             align: "center",
           },
           {
@@ -1022,7 +1043,8 @@ export default {
         checkStartDate,
         checkEndDate,
         isCreateBill,
-        belongCompanyId
+        belongCompanyId,
+        consumptionType
       } = this.query;
       this.transactionParams.employee.map((item) => {
         if (Number(this.positionId) == 2 || Number(this.positionId) == 4) {
@@ -1084,7 +1106,9 @@ export default {
         checkStartDate: checkState == 2 ? this.$moment(checkStartDate).format("YYYY-MM-DD"): null,
         checkEndDate: checkState == 2 ? this.$moment(checkEndDate).format("YYYY-MM-DD"): null,
         isCreateBill : isCreateBill == -1 ? null : isCreateBill,
-        belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId
+        belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
+        consumptionType: consumptionType == -1 ? null : consumptionType
+
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1217,7 +1241,8 @@ export default {
         checkStartDate,
         checkEndDate,
         isCreateBill,
-        belongCompanyId
+        belongCompanyId,
+        consumptionType
       } = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
@@ -1274,7 +1299,8 @@ export default {
         checkStartDate: checkState == 2 ? this.$moment(checkStartDate).format("YYYY-MM-DD"): null,
         checkEndDate: checkState == 2 ? this.$moment(checkEndDate).format("YYYY-MM-DD"): null,
         isCreateBill : isCreateBill == -1 ? null : isCreateBill,
-        belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId
+        belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
+        consumptionType: consumptionType == -1 ? null : consumptionType,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");

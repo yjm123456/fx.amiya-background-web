@@ -81,7 +81,6 @@ export default {
     return {
       isLoading:false,
       control: false,
-      // id
       // recipientList:[{id:1,name:'管理员'}],
       // recipientList:[{id:104,name:'虞郑韡'}],
       // recipientList:[{id:62,name:'余建明'}],

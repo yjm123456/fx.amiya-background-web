@@ -570,6 +570,7 @@ export default {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 300,
+            tooltip: true
           },
           {
             title: "面诊类型",
@@ -735,16 +736,19 @@ export default {
             title: "未成交原因",
             key: "unDealReason",
             minWidth: 300,
+            tooltip: true
           },
           {
             title: "后期铺垫",
             key: "lateProjectStage",
             minWidth: 300,
+            tooltip: true
           },
           {
             title: "备注",
             key: "remark",
             minWidth: 300,
+            tooltip: true
           },
           {
             title: "操作",

@@ -1,14 +1,16 @@
 <template>
   <div class="content">
     <Modal
-      title="邀约凭证"
+      title="明细"
       footer-hide
       v-model="viewCustomerPhotosModels"
-      width="40%"
+      width="50%"
       :closable="false"
       @click="handleModalVisibleChange"
 
     >
+
+      <div class="title">邀约凭证</div>
       <div class="img_cons">
         <!-- <img  :src="item.customerPicture" alt="" class="viewDoctorImg"> -->
         <div class="img" v-for="(item,index) in customerPhotos" :key="index">
@@ -16,8 +18,17 @@
             <img :src="item.customerPicture" alt="" class="img_o" />
           </viewer>
         </div>
+        
       </div>
-      <div v-if="customerPhotos.length == 0" class="no_date">暂无数据</div>
+      <div v-if="customerPhotos.length == 0" class="no_date">暂无图片</div>
+
+      <div class="title2">成交明细</div>
+      <Table
+        border
+        :columns="query.columns"
+        :data="viewImgParams.contentPlatFormOrderDealDetails"
+        style="margin:10px 0"
+      ></Table>
       <div class="footer" >
           <Button @click="cancel" style="margin-right: 10px" >取消</Button>
       </div>
@@ -38,6 +49,34 @@ export default {
     return {
       viewCustomerPhotosModels:false,
       customerPhotos:[],
+      query:{
+        columns:[
+          {
+            title: "项目名称",
+            key: "goodsName",
+            align: "center",
+            minWidth:100
+          },
+          {
+            title: "项目规格",
+            key: "goodsSpec",
+            align: "center",
+            minWidth:100
+          },
+          {
+            title: "数量",
+            key: "quantity",
+            align: "center",
+            minWidth:100
+          },
+          {
+            title: "金额",
+            key: "price",
+            align: "center",
+            minWidth:100
+          },
+        ]
+      },
     };
   },
   methods: {
@@ -109,5 +148,13 @@ export default {
 }
 .img_cons{
   display: flex;
+}
+.title,.title2{
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+}
+.title2{
+ margin-top: 30px;
 }
 </style>

@@ -1481,3 +1481,11 @@ export const ContentPlatFormOrderDealInfotypeList = (params) => {
         params
     });
 };
+// 根据时间，成交情况编号，订单号获取内容平台成交详情列表
+export const getContentPlatFormOrderDealDetails = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderDealDetails/list`,
+        method: "get",
+        params
+    });
+};

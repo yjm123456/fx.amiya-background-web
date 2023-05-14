@@ -35,6 +35,7 @@
       title="修改成交情况"
       :mask-closable="false"
       @on-visible-change="handleModalChange"
+      width="65%"
     >
       <Form
         ref="confirmForm"
@@ -43,158 +44,225 @@
         label-position="left"
         :label-width="130"
       >
-        <FormItem
-          label="面诊类型"
-          prop="consultatioType"
-          key="面诊类型"
-        >
-          <Input
-            v-model="transactionStatusParams.consultationTypeText"
-            placeholder="请输入面诊类型"
-            disabled
-          ></Input>
-        </FormItem>
-        <FormItem label="是否到院" prop="isToHospital" key="是否到院">
-          <i-switch
-            v-model="confirmForm.isToHospital"
-            :disabled="confirmForm.isFinish == true"
-            @on-change="isToHospitalChange"
-          />
-        </FormItem>
-        <FormItem label="到院类型" prop="toHospitalType" key="到院类型" v-if="confirmForm.isToHospital === true">
-          <Select
-              v-model="confirmForm.toHospitalType"
-              placeholder="请选择到院类型"
-              clearable
-              filterable
+        <Row :gutter="30">
+          <Col span="8">
+            <FormItem label="面诊类型" prop="consultatioType" key="面诊类型">
+              <Input
+                v-model="transactionStatusParams.consultationTypeText"
+                placeholder="请输入面诊类型"
+                disabled
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否到院" prop="isToHospital" key="是否到院">
+              <i-switch
+                v-model="confirmForm.isToHospital"
+                :disabled="confirmForm.isFinish == true"
+                @on-change="isToHospitalChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8"  v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="到院类型"
+              prop="toHospitalType"
+              key="到院类型"
+             
             >
-              <Option
-                v-for="item in toHospitalTypeList"
-                :value="item.orderType"
-                :key="item.orderType"
-                >{{ item.orderTypeText }}</Option
+              <Select
+                v-model="confirmForm.toHospitalType"
+                placeholder="请选择到院类型"
+                clearable
+                filterable
+                @on-change="toHospitalTypeListChange"
               >
-            </Select>
-        </FormItem>
-        <FormItem
-          label="到院时间"
-          prop="toHospitalDate"
-          v-if="confirmForm.isToHospital == true"
-          key="到院时间"
-        >
-          <DatePicker
-            type="date"
-            placeholder="到院时间"
-            style="width: 100%"
-            v-model="confirmForm.toHospitalDate"
-          ></DatePicker>
-        </FormItem>
-        <FormItem label="是否陪诊" prop="isAcompanying" key="是否陪诊" v-if="confirmForm.isToHospital === true">
-          <i-switch
-            v-model="confirmForm.isAcompanying"
-          />
-        </FormItem>
-        <FormItem label="是否成交" prop="isFinish" key="是否成交">
-          <i-switch v-model="confirmForm.isFinish" @on-change="switchChange" />
-          <!--  @on-change="switchChange"  -->
-        </FormItem>
-        <FormItem
-          label="到院医院"
-          prop="lastDealHospitalId"
-          key="到院医院"
-          v-if="confirmForm.isFinish == true"
-        >
-          <Select
-            v-model="confirmForm.lastDealHospitalId"
-            placeholder="请选择到院医院"
-            filterable
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+                <Option
+                  v-for="item in toHospitalTypeList"
+                  :value="item.orderType"
+                  :key="item.orderType"
+                  >{{ item.orderTypeText }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital == true">
+            <FormItem
+              label="到院时间"
+              prop="toHospitalDate"
+              
+              key="到院时间"
             >
-          </Select>
-        </FormItem>
-        <FormItem
-          label="未成交原因"
-          prop="unDealReason"
-          v-if="confirmForm.isFinish != true"
-          key="未成交原因"
-        >
-          <Input
-            v-model="confirmForm.unDealReason"
-            placeholder="请输入未成交原因"
-            type="textarea"
-          ></Input>
-        </FormItem>
-        <FormItem
-          label="未成交截图"
-          key="未成交截图"
-          v-if="confirmForm.isFinish != true"
-        >
-          <upload
-            :uploadObj="noDealuploadObj"
-            @uploadChange="noDealhandleUploadChange"
-          />
-        </FormItem>
-        <FormItem
-          label="成交金额"
-          v-if="confirmForm.isFinish == true"
-          prop="dealAmount"
-          key="成交金额"
-        >
-          <Input
-            v-model="confirmForm.dealAmount"
-            placeholder="请输入成交金额"
-            type="number"
-          ></Input>
-        </FormItem>
-        <FormItem
-          label="成交时间"
-          prop="DealDate"
-          v-if="confirmForm.isFinish == true"
-          key="成交时间"
-        >
-          <DatePicker
-            type="date"
-            placeholder="成交时间"
-            style="width: 100%"
-            v-model="confirmForm.DealDate"
-          ></DatePicker>
-        </FormItem>
-        <FormItem label="业绩类型" prop="dealPerformanceType" key="业绩类型" v-if="confirmForm.isToHospital === true">
-          <Select
-              v-model="confirmForm.dealPerformanceType"
-              placeholder="请选择业绩类型"
-              clearable
-              filterable
+              <DatePicker
+                type="date"
+                placeholder="到院时间"
+                style="width: 100%"
+                v-model="confirmForm.toHospitalDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="是否陪诊"
+              prop="isAcompanying"
+              key="是否陪诊"
+              
             >
-              <Option
-                v-for="item in contentPlateFormOrderDealPerformanceType"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
+              <i-switch v-model="confirmForm.isAcompanying" />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否成交" prop="isFinish" key="是否成交">
+              <i-switch
+                v-model="confirmForm.isFinish"
+                @on-change="switchChange"
+              />
+              <!--  @on-change="switchChange"  -->
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish == true">
+            <FormItem
+              label="到院医院"
+              prop="lastDealHospitalId"
+              key="到院医院"
+              
+            >
+              <Select
+                v-model="confirmForm.lastDealHospitalId"
+                placeholder="请选择到院医院"
+                filterable
               >
-            </Select>
-        </FormItem>
-        <FormItem label="消费类型" prop="consumptionType" key="消费类型" v-if="confirmForm.isToHospital === true">
-          <Select
-              v-model="confirmForm.consumptionType"
-              placeholder="请选择消费类型"
-              clearable
-              filterable
+                <Option
+                  v-for="item in hospitalInfo"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish != true">
+            <FormItem
+              label="未成交原因"
+              prop="unDealReason"
+              key="未成交原因"
             >
-              <Option
-                v-for="item in typeList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
+              <Input
+                v-model="confirmForm.unDealReason"
+                placeholder="请输入未成交原因"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish != true">
+            <FormItem
+              label="未成交截图"
+              key="未成交截图"
+            >
+              <upload
+                :uploadObj="noDealuploadObj"
+                @uploadChange="noDealhandleUploadChange"
+              />
+            </FormItem>
+          </Col>
+          <!-- <Col span="8" v-if="confirmForm.isFinish == true">
+            <FormItem
+              label="成交金额"
+              prop="dealAmount"
+              key="成交金额"
+            >
+              <Input
+                v-model="confirmForm.dealAmount"
+                placeholder="请输入成交金额"
+                type="number"
+              ></Input>
+            </FormItem>
+          </Col> -->
+          <Col span="8" v-if="confirmForm.isFinish == true">
+            <FormItem
+              label="成交金额"
+              prop="dealAmount"
+              key="成交金额"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入成交金额(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="confirmForm.dealAmount"
+                placeholder="请输入成交金额"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish == true">
+            <FormItem
+              label="成交时间"
+              prop="DealDate"
+              
+              key="成交时间"
+            >
+              <DatePicker
+                type="date"
+                placeholder="成交时间"
+                style="width: 100%"
+                v-model="confirmForm.DealDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="业绩类型"
+              prop="dealPerformanceType"
+              key="业绩类型"
+              
+            >
+              <Select
+                v-model="confirmForm.dealPerformanceType"
+                placeholder="请选择业绩类型"
+                clearable
+                filterable
               >
-            </Select>
-        </FormItem>
-        <!-- <FormItem
+                <Option
+                  v-for="item in contentPlateFormOrderDealPerformanceType"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish === true">
+            <FormItem
+              label="消费类型"
+              prop="consumptionType"
+              key="消费类型"
+              
+            >
+              <Select
+                v-model="confirmForm.consumptionType"
+                placeholder="请选择消费类型"
+                clearable
+                filterable
+                :disabled="confirmForm.toHospitalType == 4"
+              >
+                <Option
+                  v-for="item in typeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <!-- <FormItem
           label="佣金比例(%)"
           prop="commissionRatio"
           key="佣金比例(%)"
@@ -217,42 +285,60 @@
             number
           ></Input>
         </FormItem> -->
-        <FormItem
-          label="抖店订单号"
-          prop="otherContentPlatFormOrderId"
-          key="抖店订单号"
-        >
-          <Input
-            v-model="confirmForm.otherContentPlatFormOrderId"
-            placeholder="请输入抖店订单号"
-          ></Input>
-        </FormItem>
-        <FormItem
-          label="后期项目铺垫"
-          v-if="confirmForm.isFinish == true"
-          key="后期项目铺垫"
-        >
-          <Input
-            v-model="confirmForm.lastProjectStage"
-            placeholder="请输入后期项目铺垫"
-            type="textarea"
-          ></Input>
-        </FormItem>
-        
-        <FormItem
-          label="邀约凭证"
-          key="邀约凭证"
-        >
-          <upload :uploadObj="invitationDocumentsUploadObj" @uploadChange="invitationDocumentsHandleUploadChange" />
-        </FormItem>
-        <FormItem
-          label="成交凭证"
-          key="成交凭证"
-          v-if="confirmForm.isFinish == true"
-        >
-          <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
-        </FormItem>
+          <Col span="8">
+            <FormItem
+              label="抖店订单号"
+              prop="otherContentPlatFormOrderId"
+              key="抖店订单号"
+            >
+              <Input
+                v-model="confirmForm.otherContentPlatFormOrderId"
+                placeholder="请输入抖店订单号"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8"  v-if="confirmForm.isFinish == true">
+            <FormItem
+              label="后期项目铺垫"
+              key="后期项目铺垫"
+            >
+              <Input
+                v-model="confirmForm.lastProjectStage"
+                placeholder="请输入后期项目铺垫"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="邀约凭证" key="邀约凭证">
+              <upload
+                :uploadObj="invitationDocumentsUploadObj"
+                @uploadChange="invitationDocumentsHandleUploadChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="成交凭证"
+              key="成交凭证"
+              v-if="confirmForm.isFinish == true"
+            >
+              <upload
+                :uploadObj="uploadObj"
+                @uploadChange="handleUploadChange"
+              />
+            </FormItem>
+          </Col>
+        </Row>
+        <Divider style="margin-top:-6px"/>
+        <!-- 成交明细 -->
+        <detailTable @handle="handle"  :id="confirmForm.id" :contentPlatFormOrderDealDetails="contentPlatFormOrderDealDetails" v-if="confirmForm.isFinish === true" />
         <!-- <div style="color:red;font-size:3px" v-if="confirmForm.isFinish === true">*注：请上传该手机号客户在贵公司系统的成交凭证截图</div> -->
+        <Spin fix v-if="isLoading == true">
+          <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
+          <div>加载中...</div>
+        </Spin>
       </Form>
       <div slot="footer">
         <Button @click="handleCancelClick('confirmForm')">取消</Button>
@@ -262,19 +348,25 @@
       </div>
     </Modal>
     <!-- 查看邀约凭证 -->
-    <viewImg :viewCustomerPhotosModel.sync="viewCustomerPhotosModel" :viewImgParams="viewImgParams"></viewImg>
+    <viewImg
+      :viewCustomerPhotosModel.sync="viewCustomerPhotosModel"
+      :viewImgParams="viewImgParams"
+    ></viewImg>
   </div>
 </template>
 <script>
 import * as api from "@/api/orderManage";
 import * as hospitalManage from "@/api/employeeManage";
 import upload from "@/components/upload/upload";
-import viewImg from "./viewImg.vue"
+import viewImg from "./viewImg.vue";
+import detailTable from '@/components/dealDetailTable/dealDetailTable.vue';
+import { addCustomerAppointmentSchedule } from '../../api/customerAppointmentSchedule';
 
 export default {
   components: {
     upload,
-    viewImg
+    viewImg,
+    detailTable
   },
   props: {
     transactionStatusParams: {
@@ -283,14 +375,18 @@ export default {
   },
   data() {
     return {
-      contentPlateFormOrderDealPerformanceType:[],
-      viewCustomerPhotosModel:false,
-      viewImgParams:{
-        contentPlatFormOrderId:'',
-        orderDealId:''
+      isLoading:false,
+      // 成交明细
+      contentPlatFormOrderDealDetails:[],
+      contentPlateFormOrderDealPerformanceType: [],
+      viewCustomerPhotosModel: false,
+      viewImgParams: {
+        contentPlatFormOrderId: "",
+        orderDealId: "",
+        contentPlatFormOrderDealDetails:[]
       },
       // 到院状态
-      toHospitalTypeList:[],
+      toHospitalTypeList: [],
 
       // 邀约凭证
       invitationDocumentsUploadObj: {
@@ -352,19 +448,21 @@ export default {
         // 抖店订单号
         otherContentPlatFormOrderId: "",
         // 到院类型
-        toHospitalType:null,
+        toHospitalType: null,
         // 是否陪诊
-        isAcompanying:false,
+        isAcompanying: false,
         // 佣金比例
-        commissionRatio:null,
+        commissionRatio: null,
         // 面诊类型
-        consultatioType:'',
+        consultatioType: "",
         // 邀约凭证
-        invitationDocuments:[],
+        invitationDocuments: [],
         // 业绩类型
-        dealPerformanceType:null,
+        dealPerformanceType: null,
         // 消费类型
-        consumptionType:null
+        consumptionType: null,
+        // 明细
+        addContentPlatFormOrderDealDetailsVoList:[]
       },
       confirmRuleValidate: {
         consumptionType: [
@@ -519,7 +617,8 @@ export default {
                     value: params.row.isAcompanying,
                     size: "default",
                     disabled:
-                      params.row.isAcompanying === true || params.row.isAcompanying === false,
+                      params.row.isAcompanying === true ||
+                      params.row.isAcompanying === false,
                   },
                 },
                 h("span", { isAcompanying: "open" }, "开"),
@@ -548,7 +647,7 @@ export default {
               );
             },
           },
-          
+
           {
             title: "成交时间",
             key: "dealDate",
@@ -572,6 +671,7 @@ export default {
             key: "consumptionTypeText",
             minWidth: 120,
           },
+          
           {
             title: "新老客业绩",
             key: "isOldCustomer",
@@ -580,12 +680,16 @@ export default {
             render: (h, params) => {
               return h(
                 "div",
-                params.row.isOldCustomer == true ? '老客业绩': '新客业绩'
-                 
+                params.row.isOldCustomer == true ? "老客业绩" : "新客业绩"
               );
             },
           },
-          
+          {
+            title: "业绩类型",
+            key: "dealPerformanceTypeText",
+            minWidth: 120,
+          },
+
           // {
           //   title: "佣金比例(%)",
           //   key: "commissionRatio",
@@ -646,7 +750,7 @@ export default {
           {
             title: "操作",
             key: "",
-            width:200,
+            width: 150,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -659,15 +763,16 @@ export default {
                       type: "primary",
                       size: "small",
                       // 审核通过不可编辑
-                      disabled:params.row.checkState == 2
+                      disabled: params.row.checkState == 2,
                     },
                     style: {
                       marginRight: "5px",
                     },
                     on: {
                       click: () => {
-                        const { id } = params.row;
-                        this.getcontentPlateFormOrderToHospitalTypeList()
+                        const { id ,contentPlatFormOrderId} = params.row;
+                        this.getcontentPlateFormOrderToHospitalTypeList();
+                        this.getdealDetail(id,contentPlatFormOrderId)
                         api.ContentPlatFormOrderDealInfo(id).then((res) => {
                           if (res.code === 0) {
                             const {
@@ -687,7 +792,7 @@ export default {
                               commissionRatio,
                               invitationDocuments,
                               dealPerformanceType,
-                              consumptionType
+                              consumptionType,
                             } = res.data.contentPlatFormOrderDealInfoInfo;
                             this.isEdit = true;
                             this.confirmForm.toHospitalDate = tohospitalDate
@@ -703,7 +808,9 @@ export default {
                             this.confirmForm.isAcompanying = isAcompanying;
                             this.confirmForm.commissionRatio = commissionRatio;
                             this.confirmForm.consumptionType = consumptionType;
-                            this.confirmForm.dealPerformanceType = String(dealPerformanceType);
+                            this.confirmForm.dealPerformanceType = String(
+                              dealPerformanceType
+                            );
                             this.uploadObj.uploadList = this.confirmForm
                               .dealPicture
                               ? [this.confirmForm.dealPicture]
@@ -719,7 +826,10 @@ export default {
                             this.confirmForm.otherContentPlatFormOrderId = otherOrderId;
                             this.confirmForm.toHospitalType = toHospitalType;
                             this.confirmForm.invitationDocuments = invitationDocuments;
-                            this.invitationDocumentsUploadObj.uploadList = this.confirmForm.invitationDocuments ? this.confirmForm.invitationDocuments: [];
+                            this.invitationDocumentsUploadObj.uploadList = this
+                              .confirmForm.invitationDocuments
+                              ? this.confirmForm.invitationDocuments
+                              : [];
                             this.confirmForm.DealDate = dealDate
                               ? this.$moment(dealDate).format("YYYY-MM-DD")
                               : "";
@@ -744,14 +854,15 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id,contentPlatFormOrderId } = params.row;
-                        this.viewCustomerPhotosModel = true
-                        this.viewImgParams.contentPlatFormOrderId = contentPlatFormOrderId
-                        this.viewImgParams.orderDealId = id
-                       }
+                        const { id, contentPlatFormOrderId } = params.row;
+                        this.viewCustomerPhotosModel = true;
+                        this.viewImgParams.contentPlatFormOrderId = contentPlatFormOrderId;
+                        this.viewImgParams.orderDealId = id;
+                        this.getdealDetail(id,contentPlatFormOrderId)
+                      },
                     },
                   },
-                  "查看邀约凭证"
+                  "明细"
                 ),
               ]);
             },
@@ -759,16 +870,55 @@ export default {
         ],
       },
       // 消费类型
-      typeList:[]
+      typeList: [],
     };
   },
   methods: {
+    // 判断到院类型为退款(4)的情况 消费类型只能选择退款消费
+    toHospitalTypeListChange(value){
+      const {isToHospital,isFinish,toHospitalType} = this.confirmForm
+      // if(isToHospital == true && isFinish == true){
+        if(toHospitalType == 4){
+          this.confirmForm.toHospitalType = value
+          this.confirmForm.consumptionType = 2
+          return
+        }
+        // else{
+        //   this.confirmForm.consumptionType = ''
+        // }
+      // }else{
+      //   this.confirmForm.consumptionType = 3
+      // }
+    },
+     // 成交详情 明细
+    getdealDetail(id,contentPlatFormOrderId){
+      const data = {
+        contentPlatFormOrderId:contentPlatFormOrderId,
+        contentPlatFormOrderDealId:id,
+        startDate:'',
+        endDate:'',
+        keyWord:'',
+        pageNum:1,
+        pageSize:999
+      }
+      api.getContentPlatFormOrderDealDetails(data).then(res=>{
+        if(res.code == 0){
+          const {list} = res.data.contentPlatFormOrderDealDetails
+          this.contentPlatFormOrderDealDetails=list
+          this.viewImgParams.contentPlatFormOrderDealDetails=list
+          this.confirmForm.addContentPlatFormOrderDealDetailsVoList = list
+        }
+      })
+    },
+    handle(value){
+      this.confirmForm.addContentPlatFormOrderDealDetailsVoList = value
+    },
     // 消费类型列表
     getContentPlatFormOrderDealInfotypeList() {
       api.ContentPlatFormOrderDealInfotypeList().then((res) => {
         if (res.code === 0) {
           const { typeList } = res.data;
-          this.typeList = typeList
+          this.typeList = typeList;
         }
       });
     },
@@ -777,12 +927,12 @@ export default {
       api.contentPlateFormOrderDealPerformanceType().then((res) => {
         if (res.code === 0) {
           const { contentPlateFormOrderDealPerformanceType } = res.data;
-          this.contentPlateFormOrderDealPerformanceType = contentPlateFormOrderDealPerformanceType
+          this.contentPlateFormOrderDealPerformanceType = contentPlateFormOrderDealPerformanceType;
         }
       });
     },
     // 邀约凭证
-     invitationDocumentsHandleUploadChange(values) {
+    invitationDocumentsHandleUploadChange(values) {
       this.confirmForm.invitationDocuments = values;
     },
     //   获取订单到院类型
@@ -790,39 +940,42 @@ export default {
       api.contentPlateFormOrderToHospitalTypeList().then((res) => {
         if (res.code === 0) {
           const { orderTypes } = res.data;
-          this.toHospitalTypeList = orderTypes
+          this.toHospitalTypeList = orderTypes;
         }
       });
     },
-    // 是否到院
-    isToHospitalChange(){
-      if(this.confirmForm.isToHospital == false){
-        this.confirmForm.toHospitalDate = null
-        this.confirmForm.toHospitalType = null
-        this.confirmForm.isAcompanying = false
+   // 是否到院
+    isToHospitalChange() {
+      if (this.confirmForm.isToHospital == false) {
+        this.confirmForm.toHospitalDate = null;
+        this.confirmForm.toHospitalType = null;
+        this.confirmForm.isAcompanying = false;
+        this.confirmForm.lastDealHospitalId = null;
+        this.confirmForm.dealPerformanceType = null
+        this.confirmForm.unDealReason = ''
       }
     },
-    // 是否成交
     switchChange() {
-      if (this.confirmForm.isFinish == true) {
+      if (this.confirmForm.isFinish === true) {
         this.confirmForm.unDealReason = "";
         this.confirmForm.isToHospital = true;
         this.confirmForm.dealAmount = "";
         this.confirmForm.lastProjectStage = "";
         this.uploadObj.uploadList = [];
         this.confirmForm.DealDate = null;
+        // this.confirmForm.consumptionType = null;
       } else {
         this.confirmForm.dealAmount = null;
         this.confirmForm.lastProjectStage = "";
         this.confirmForm.isToHospital = false;
         this.confirmForm.unDealReason = "";
         this.noDealuploadObj.uploadList = [];
-        this.confirmForm.DealDate = null;
         this.confirmForm.toHospitalDate = null;
+        this.confirmForm.toHospitalType = null;
+        this.confirmForm.commissionRatio = "";
+        this.confirmForm.isAcompanying = false;
         this.confirmForm.lastDealHospitalId = null;
-        this.confirmForm.toHospitalType = null
-        this.confirmForm.isAcompanying = false
-        this.confirmForm.commissionRatio = null
+        this.confirmForm.dealPerformanceType = null;
       }
     },
     submiteChange(name) {
@@ -847,7 +1000,8 @@ export default {
             commissionRatio,
             invitationDocuments,
             dealPerformanceType,
-            consumptionType
+            consumptionType,
+            addContentPlatFormOrderDealDetailsVoList
           } = this.confirmForm;
           const data = {
             id,
@@ -871,22 +1025,82 @@ export default {
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,
             otherContentPlatFormOrderId,
-            toHospitalType:isToHospital == false ? 0 : toHospitalType,
+            toHospitalType: isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
-            commissionRatio:0,
+            commissionRatio: 0,
             invitationDocuments,
             dealPerformanceType,
-            consumptionType
+            consumptionType,
+            // addContentPlatFormOrderDealDetailsVoList:isFinish == false ? [] : addContentPlatFormOrderDealDetailsVoList
+            addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList
           };
+          if(isFinish == true){
+            if(dealAmount == 0){
+              this.isLoading = true
+              api.updateContentPlatFormOrderDealInfo(data).then((res) => {
+                if (res.code === 0) {
+                  this.isLoading = false
+                  this.handleCancelClick("confirmForm");
+                  this.geTransactionStatus();
+                  this.$Message.success({
+                    content: "修改成功",
+                    duration: 3,
+                  });
+                }else {
+                  setTimeout(() => {
+                    this.isLoading = false;
+                  }, 3000);
+                }
+              });
+              return
+            }else{
+                let price = 0
+                if(addContentPlatFormOrderDealDetailsVoList.length == 0 || addContentPlatFormOrderDealDetailsVoList == []){
+                  this.$Message.warning('请填写成交明细！')
+                  return
+                }
+                addContentPlatFormOrderDealDetailsVoList.map(item=>{
+                  price += Number(item.price)
+                  return
+                })
+                if(price*100 != dealAmount*100){
+                  this.$Message.warning('成交明细合计与成金金额不一致，请认真核对！')
+                  return
+                }
+                this.isLoading = true
+              api.updateContentPlatFormOrderDealInfo(data).then((res) => {
+                if (res.code === 0) {
+                  this.isLoading = false
+                  this.handleCancelClick("confirmForm");
+                  this.geTransactionStatus();
+                  this.$Message.success({
+                    content: "修改成功",
+                    duration: 3,
+                  });
+                }else {
+                  setTimeout(() => {
+                    this.isLoading = false;
+                  }, 3000);
+                }
+              });
+              return
+            }
+          }
+          this.isLoading = true
           api.updateContentPlatFormOrderDealInfo(data).then((res) => {
             if (res.code === 0) {
+              this.isLoading = false
               this.handleCancelClick("confirmForm");
               this.geTransactionStatus();
               this.$Message.success({
                 content: "修改成功",
                 duration: 3,
               });
-            }
+            }else {
+                  setTimeout(() => {
+                    this.isLoading = false;
+                  }, 3000);
+                }
           });
         }
       });
@@ -985,13 +1199,13 @@ export default {
       this.$refs[name].resetFields();
       this.uploadObj.uploadList = [];
       this.noDealuploadObj.uploadList = [];
-      this.invitationDocumentsUploadObj.uploadList = []
+      this.invitationDocumentsUploadObj.uploadList = [];
     },
   },
   created() {
     this.getHospitalInfonameList();
-    this.getcontentPlateFormOrderDealPerformanceType()
-    this.getContentPlatFormOrderDealInfotypeList()
+    this.getcontentPlateFormOrderDealPerformanceType();
+    this.getContentPlatFormOrderDealInfotypeList();
   },
   watch: {
     transactionStatusParams: {

@@ -66,11 +66,14 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              <Select
+             
+            </div>
+            <div style="margin:10px 0 ">
+               <Select
                 v-model="query.isWriteOff"
                 placeholder="请选择核销状态"
                 filterable
-                style="width: 150px;margin-left: 10px"
+                style="width: 180px;"
               >
                 <Option
                   v-for="item in isWriteOffList"
@@ -79,13 +82,11 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-            </div>
-            <div style="margin:10px 0 ">
               <Select
                 v-model="query.isConsultation"
                 placeholder="请选择面诊类型"
                 filterable
-                style="width: 180px;"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in isConsultationList"
@@ -148,10 +149,13 @@
                 >
               </Select>
 
+              
+            </div>
+            <div>
               <Input
                 v-model="query.minPrice"
                 placeholder="最小下单金额"
-                style="width: 150px;margin-left:10px"
+                style="width: 160px;"
                 type="number"
                 namber
               />
@@ -159,17 +163,15 @@
               <Input
                 v-model="query.maxPrice"
                 placeholder="最大下单金额"
-                style="width: 150px;"
+                style="width: 160px;"
                 type="number"
                 namber
               />
-            </div>
-            <div>
               <Select
                 v-model="query.isReturnBackPrice"
                 placeholder="请选择退款状态"
                 filterable
-                style="width: 180px;"
+                style="width: 150px;margin-left:10px"
               >
                 <Option
                   v-for="item in isReturnBackPriceList"
@@ -195,10 +197,25 @@
                 :disabled="query.isReturnBackPrice != 'true'"
               ></DatePicker>
               <Select
+                v-model="query.baseLiveAnchorId"
+                placeholder="请选择主播"
+                filterable
+                style="width: 150px;margin-left: 10px"
+              >
+                <Option
+                  v-for="item in liveAnchorBaseInfos"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </div>
+            <div style="margin-top:10px">
+              <Select
                 v-model="query.isBadReview"
                 placeholder="请选择差评状态"
                 filterable
-                style="width: 150px; margin-left: 10px"
+                style="width: 180px;"
               >
                 <Option
                   v-for="item in isBadReviewList"
@@ -223,6 +240,19 @@
                 style="width: 150px; margin-left: 10px"
                 :disabled="query.isBadReview != 'true'"
               ></DatePicker>
+              <Select
+                v-model="query.source"
+                placeholder="请选择客户来源"
+                filterable
+                style="width: 150px;margin-left: 10px"
+              >
+                <Option
+                  v-for="item in sourceListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </div>
           </div>
           <div>
@@ -432,7 +462,23 @@
                 placeholder="请选择面诊方式"
               >
                 <Option
-                  v-for="item in faceList"
+                  v-for="item in typeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="客户来源" prop="source">
+              <Select
+                v-model="form.source"
+                placeholder="请选择客户来源"
+                filterable
+              >
+                <Option
+                  v-for="item in sourceList"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.name }}</Option
@@ -461,11 +507,19 @@
               <i-switch v-model="form.IsAddWeChat" />
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem label="是否核销" prop="isWriteOff">
               <i-switch v-model="form.isWriteOff" />
             </FormItem>
-          </Col>
+          </Col> -->
+          <!-- <Col span="8">
+            <FormItem label="是否面诊" prop="isConsultation">
+              <i-switch
+                v-model="form.isConsultation"
+                @on-change="consultationChange()"
+              />
+            </FormItem>
+          </Col> -->
           <Col span="8">
             <FormItem label="是否面诊" prop="isConsultation">
               <i-switch
@@ -616,9 +670,10 @@
                 v-model="form.assignEmpId"
                 placeholder="请选择指派给"
                 filterable
+                :disabled="form.liveAnchorId == null"
               >
                 <Option
-                  v-for="item in employeeList"
+                  v-for="item in baseEmployee"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.name }}</Option
@@ -652,6 +707,7 @@ import * as api from "@/api/shoppingCartRegistration";
 import * as apis from "@/api/baseDataMaintenance";
 import * as orderApi from "@/api/orderManage";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
+import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
 import assign from "./components/assign.vue";
 import batchAssignment from "./components/batchAssignment.vue";
 export default {
@@ -671,6 +727,10 @@ export default {
       phoneCopy: "00000000000",
       // 查询
       query: {
+        // 客户来源
+        source:-1,
+        // 主播
+        baseLiveAnchorId:-1,
         // 重要程度
         emergencyLevel: -1,
         // 退款开始时间
@@ -739,6 +799,12 @@ export default {
             title: "创建人",
             key: "createBy",
             minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "主播",
+            key: "baseLiveAnchorName",
+            minWidth: 150,
             align: "center",
           },
           {
@@ -853,8 +919,14 @@ export default {
             align: "center",
           },
           {
+            title: "客户来源",
+            key: "sourceText",
+            minWidth: 130,
+            align: "center",
+          },
+          {
             title: "面诊方式",
-            key: "consultationType",
+            key: "consultationTypeText",
             minWidth: 110,
             align: "center",
             // render:(h,params)=>{
@@ -863,41 +935,41 @@ export default {
             //       params.row.consultationType == 1 ? '视频':'图片'
             //     );
             // }
-            render: (h, params) => {
-              if (params.row.consultationType == 1) {
-                return h("div", "视频");
-              } else if (params.row.consultationType == 2) {
-                return h(
-                  "div",
+            // render: (h, params) => {
+            //   if (params.row.consultationType == 1) {
+            //     return h("div", "视频");
+            //   } else if (params.row.consultationType == 2) {
+            //     return h(
+            //       "div",
 
-                  "图片"
-                );
-              } else if (params.row.consultationType == 3) {
-                return h(
-                  "div",
+            //       "图片"
+            //     );
+            //   } else if (params.row.consultationType == 3) {
+            //     return h(
+            //       "div",
 
-                  "私信"
-                );
-              } else if (params.row.consultationType == 4) {
-                return h(
-                  "div",
+            //       "私信"
+            //     );
+            //   } else if (params.row.consultationType == 4) {
+            //     return h(
+            //       "div",
 
-                  "其他"
-                );
-              } else if (params.row.consultationType == 5) {
-                return h(
-                  "div",
+            //       "其他"
+            //     );
+            //   } else if (params.row.consultationType == 5) {
+            //     return h(
+            //       "div",
 
-                  "粉丝群"
-                );
-              } else if (params.row.consultationType == 6) {
-                return h(
-                  "div",
+            //       "粉丝群"
+            //     );
+            //   } else if (params.row.consultationType == 6) {
+            //     return h(
+            //       "div",
 
-                  "短视频"
-                );
-              }
-            },
+            //       "短视频"
+            //     );
+            //   }
+            // },
           },
 
           {
@@ -987,35 +1059,35 @@ export default {
               }
             },
           },
-          {
-            title: "是否核销",
-            key: "isWriteOff",
-            minWidth: 100,
-            align: "center",
-            render: (h, params) => {
-              if (params.row.isWriteOff == true) {
-                return h("Icon", {
-                  props: {
-                    type: "md-checkmark",
-                  },
-                  style: {
-                    fontSize: "18px",
-                    color: "#559DF9",
-                  },
-                });
-              } else {
-                return h("Icon", {
-                  props: {
-                    type: "md-close",
-                  },
-                  style: {
-                    fontSize: "18px",
-                    color: "red",
-                  },
-                });
-              }
-            },
-          },
+          // {
+          //   title: "是否核销",
+          //   key: "isWriteOff",
+          //   minWidth: 100,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     if (params.row.isWriteOff == true) {
+          //       return h("Icon", {
+          //         props: {
+          //           type: "md-checkmark",
+          //         },
+          //         style: {
+          //           fontSize: "18px",
+          //           color: "#559DF9",
+          //         },
+          //       });
+          //     } else {
+          //       return h("Icon", {
+          //         props: {
+          //           type: "md-close",
+          //         },
+          //         style: {
+          //           fontSize: "18px",
+          //           color: "red",
+          //         },
+          //       });
+          //     }
+          //   },
+          // },
           {
             title: "是否面诊",
             key: "isConsultation",
@@ -1308,6 +1380,7 @@ export default {
                               emergencyLevel,
                               consultationDate,
                               subPhone,
+                              source
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1346,6 +1419,7 @@ export default {
                             this.form.remark = remark;
                             this.form.assignEmpId = assignEmpId;
                             this.form.refundDate = refundDate;
+                            this.form.source = source;
 
                             this.form.badReviewDate = badReviewDate;
                             this.form.consultationDate = consultationDate;
@@ -1516,9 +1590,17 @@ export default {
         emergencyLevel: null,
         // 辅助电话
         subPhone: "",
+        // 客户来源
+        source:null
       },
 
       ruleValidate: {
+        source: [
+          {
+            required: true,
+            message: "请选择客户来源",
+          },
+        ],
         refundType: [
           {
             required: true,
@@ -1786,10 +1868,63 @@ export default {
       weChatList: [],
       // 紧急程度
       emergencyLevelsList: [],
+      // 根据主播id获取客服
+      baseEmployee:[],
+      // 客户来源
+      sourceList:[],
+      // 客户来源
+      sourceListAll:[{ name: "全部客户来源", id: -1}],
+      // 主播
+      liveAnchorBaseInfos:[{ name: "全部主播", id: -1}],
+      // 面诊方式
+      typeList:[]
       
     };
   },
   methods: {
+    // 获取面诊方式列表
+    getconsultationTypeList() {
+      api.consultationTypeList().then((res) => {
+        if (res.code === 0) {
+          const { typeList } = res.data;
+          this.typeList = typeList
+          
+        }
+      });
+    },
+    // 获取有效的主播基础信息列表
+    getLiveAnchorBaseInfoValid() {
+      liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorBaseInfos } = res.data;
+          this.liveAnchorBaseInfos = [...this.liveAnchorBaseInfos,...liveAnchorBaseInfos];
+          
+        }
+      });
+    },
+    // 客户来源
+    getcustomerSourceList() {
+      api.customerSourceList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.sourceList = sourceList;
+          this.sourceListAll = [...this.sourceListAll,...sourceList]
+        }
+      });
+    },
+    // 根据主播id获取客服名称列表
+    getcustomerServiceNameList(value) {
+      const data = {
+        baseLiveAnchorId:value ? value : ''
+      }
+      api.customerServiceNameList(data).then((res) => {
+        if (res.code === 0) {
+          const { employee } = res.data;
+          this.baseEmployee = employee;
+          
+        }
+      });
+    },
     // 批量指派
     batchAssignmentClick() {
       if (![...this.assignParams.idList].length) {
@@ -1907,6 +2042,21 @@ export default {
       this.form.liveAnchorWeChatNo = "";
       this.form.liveAnchorWechatNo = "";
       this.getWeChatList(value);
+      if(value){
+        if(this.title == '添加'){
+          // 根据id获取寻找liveAnchorBaseId
+          this.liveAnchors.map(item=>{
+            if(item.id == value){
+              this.getcustomerServiceNameList(item.liveAnchorBaseId)
+              return
+            }
+          })
+          return
+        }else{
+          this.getcustomerServiceNameList()
+          return
+        }
+      }
     },
     //  根据主播获取主播微信号
     getWeChatList(value) {
@@ -1936,6 +2086,8 @@ export default {
         return;
       }
       this.getLiveValidList(value);
+      
+
     },
     // 根据平台id去获取IP账号
     getLiveValidList(value) {
@@ -1986,6 +2138,8 @@ export default {
         startBadReviewTime,
         endBadReviewTime,
         emergencyLevel,
+        baseLiveAnchorId,
+        source
       } = this.query;
       const data = {
         pageNum,
@@ -2032,6 +2186,8 @@ export default {
               : null
             : null,
         emergencyLevel: emergencyLevel == -1 ? null : emergencyLevel,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
+        source: source == -1 ? null : source,
       };
       if (!startDate || !endDate) {
         this.$Message.warning("请选择日期");
@@ -2093,6 +2249,8 @@ export default {
         startBadReviewTime,
         endBadReviewTime,
         emergencyLevel,
+        baseLiveAnchorId,
+        source
       } = this.query;
       const data = {
         pageNum,
@@ -2139,6 +2297,8 @@ export default {
               : null
             : null,
         emergencyLevel: emergencyLevel == -1 ? null : emergencyLevel,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
+        source: source == -1 ? null : source,
       };
       if (!startDate || !endDate) {
         this.$Message.warning("请选择日期");
@@ -2195,6 +2355,7 @@ export default {
               consultationDate,
               refundType,
               subPhone,
+              source
             } = this.form;
             const data = {
               recordDate: time
@@ -2234,6 +2395,7 @@ export default {
                 ? this.$moment(consultationDate).format("YYYY-MM-DD")
                 : null,
               subPhone,
+              source
             };
             if (this.form.phone) {
               if (this.form.phone == "00000000000") {
@@ -2313,6 +2475,7 @@ export default {
               consultationDate,
               refundType,
               subPhone,
+              source
             } = this.form;
             const data = {
               recordDate: time
@@ -2351,6 +2514,7 @@ export default {
                 ? this.$moment(consultationDate).format("YYYY-MM-DD")
                 : null,
               subPhone,
+              source
             };
             if (phone === "00000000000") {
               // 添加
@@ -2419,6 +2583,9 @@ export default {
     this.getProvince();
     this.getCustomerServiceLists();
     this.getEmergencyLevels();
+    this.getcustomerSourceList();
+    this.getLiveAnchorBaseInfoValid();
+    this.getconsultationTypeList();
   },
 };
 </script>

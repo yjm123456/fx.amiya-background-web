@@ -62,3 +62,26 @@ export const ShoppingCartRegistrationassignList = (data) => {
         data,
     });
 };
+// 客户来源列表
+export const customerSourceList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/customerSourceList",
+        method: "get",
+    });
+};
+// 获取客服姓名列表
+export const customerServiceNameList = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaEmployee/customerServiceNameList",
+        method: "get",
+        params
+    });
+};
+// 获取面诊方式
+export const consultationTypeList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/consultationTypeList",
+        method: "get",
+
+    });
+};

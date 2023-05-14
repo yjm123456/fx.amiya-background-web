@@ -394,6 +394,7 @@
       ref="smallYellowCarRegistrationReport"
       :contentPalteForms="contentPalteForms"
       :emergencyLevelListAll="emergencyLevelListAll"
+      :liveAnchorBaseInfos="liveAnchorBaseInfos"
     ></smallYellowCarRegistrationReport>
     <!-- 成交情况报表 -->
     <transactionStatement
@@ -416,6 +417,7 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as apis from "@/api/customerManage.js";
 import * as shopApi from "@/api/shoppingCartRegistration";
 import * as corApi from "@/api/corporateManagement";
+import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
 
 import transactionStatus from "@/assets/images/report/transactionStatus.png";
 
@@ -538,9 +540,21 @@ export default {
       ],
       // 收款公司 开票公司
       companyNameAllList: [{ id: -1, name: "全部收款公司" }],
+      // 主播基础id
+      liveAnchorBaseInfos: [{ id: -1, name: "全部主播" }],
     };
   },
   methods: {
+    // 获取有效的主播基础信息列表
+    getLiveAnchorBaseInfoValid() {
+      liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorBaseInfos } = res.data;
+          this.liveAnchorBaseInfos = [...this.liveAnchorBaseInfos,...liveAnchorBaseInfos];
+          
+        }
+      });
+    },
     // 消费类型列表
     getContentPlatFormOrderDealInfotypeList() {
       api.ContentPlatFormOrderDealInfotypeList().then((res) => {
@@ -736,6 +750,7 @@ export default {
     this.getAppTypeList();
     this.getCompany();
     this.getContentPlatFormOrderDealInfotypeList();
+    this.getLiveAnchorBaseInfoValid();
   },
   mounted() {
     this.getData();

@@ -467,7 +467,7 @@
     <paymentCollection :paymentCollectionModel.sync ="paymentCollectionModel" :paymentCollectionObj="paymentCollectionObj" @hanPaymentChange="getContentPlatFormOrderDealInfo"></paymentCollection>
     <!-- 订单详情 -->
     <detail :detailModel.sync ="detailModel" :detailList ="detailList"></detail>
-     <!-- 查看邀约凭证 -->
+     <!-- 明细 -->
     <viewImg :viewCustomerPhotosModel.sync="viewCustomerPhotosModel" :viewImgParams="viewImgParams"></viewImg>
   </div>
 </template>
@@ -512,7 +512,8 @@ export default {
       viewCustomerPhotosModel:false,
       viewImgParams:{
         contentPlatFormOrderId:'',
-        orderDealId:''
+        orderDealId:'',
+        contentPlatFormOrderDealDetails:[]
       },
       // 到院状态
       toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],
@@ -842,6 +843,11 @@ export default {
             },
           },
           {
+            title: "业绩类型",
+            key: "dealPerformanceTypeText",
+            minWidth: 120,
+          },
+          {
             title: "是否陪诊",
             key: "isAcompanying",
             minWidth: 120,
@@ -973,7 +979,7 @@ export default {
           {
             title: "操作",
             align: "center",
-            minWidth: 240,
+            minWidth: 200,
             fixed: "right",
             render: (h, params) => {
               const currentRole = JSON.parse(
@@ -1118,10 +1124,25 @@ export default {
                         this.viewCustomerPhotosModel = true
                         this.viewImgParams.contentPlatFormOrderId = contentPlatFormOrderId
                         this.viewImgParams.orderDealId = id
+                        const data = {
+                          contentPlatFormOrderId:contentPlatFormOrderId,
+                          contentPlatFormOrderDealId:id,
+                          startDate:'',
+                          endDate:'',
+                          keyWord:'',
+                          pageNum:1,
+                          pageSize:999
+                        }
+                        api.getContentPlatFormOrderDealDetails(data).then(res=>{
+                          if(res.code == 0){
+                            const {list} = res.data.contentPlatFormOrderDealDetails
+                            this.viewImgParams.contentPlatFormOrderDealDetails=list
+                          }
+                        })
                        }
                     },
                   },
-                  "查看邀约凭证"
+                  "明细"
                 ),
               ]);
             },

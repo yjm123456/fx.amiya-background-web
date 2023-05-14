@@ -107,7 +107,7 @@
         />
       </div>
     </Card>
-    <Modal
+    <!-- <Modal
       v-model="controlModal"
       title="确认"
       :mask-closable="false"
@@ -127,26 +127,7 @@
             @on-change="isToHospitalChange"
           />
         </FormItem>
-        <!-- <FormItem
-          label="到院医院"
-          prop="lastDealHospitalId"
-          key="到院医院"
-          v-if="form.isToHospital == true"
-        >
-          <Select
-            v-model="form.lastDealHospitalId"
-            placeholder="请选择到院医院"
-            filterable
-            disabled
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-        </FormItem> -->
+       
         <FormItem
           label="到院类型"
           prop="toHospitalType"
@@ -294,7 +275,7 @@
         <Button @click="cancel('form')">取消</Button>
         <Button type="primary" @click="submit('form')">确定</Button>
       </div>
-    </Modal>
+    </Modal> -->
     <Modal
       v-model="imgControlModal"
       title="重单退回"
@@ -374,6 +355,8 @@
     <goodsNews :goodsNewsModel.sync="goodsNewsModel" :id="id"></goodsNews>
     <!-- 留言板 -->
     <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
+    <!-- 确认 -->
+    <hospitalConfirm :controlModal.sync="controlModal" :typeList="typeList" :toHospitalTypeList="toHospitalTypeList" :id="form.id" @getHospitalContentList="getHospitalContentList"/>
   </div>
 </template>
 
@@ -388,6 +371,7 @@ import { download } from "@/utils/util";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import orderReceiving from "./orderReceiving.vue";
 import goodsNews from "@/components/goodsNews/goodsNews.vue";
+import hospitalConfirm from "./hospitalConfirm.vue"
 
 export default {
   props:{
@@ -402,6 +386,7 @@ export default {
     viewCustomerPhotos,
     orderReceiving,
     goodsNews,
+    hospitalConfirm
   },
   data() {
     return {
@@ -815,7 +800,7 @@ export default {
           {
             title: "是否重单深度",
             key: "isRepeatProfundityOrder",
-            minWidth: 70,
+            minWidth: 80,
             align: "center",
             render: (h, params) => {
               return h(

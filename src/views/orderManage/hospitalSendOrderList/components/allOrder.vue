@@ -106,11 +106,12 @@
         />
       </div>
     </Card>
-    <Modal
+    <!-- <Modal
       v-model="controlModal"
       title="确认"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
+      width="60%"
     >
       <Form
         ref="form"
@@ -119,181 +120,193 @@
         label-position="left"
         :label-width="130"
       >
-        <FormItem label="是否到院" prop="isToHospital" key="是否到院">
-          <i-switch
-            v-model="form.isToHospital"
-            :disabled="form.isFinish === true"
-            @on-change="isToHospitalChange"
-          />
-        </FormItem>
-        <!-- <FormItem
-          label="到院医院"
-          prop="lastDealHospitalId"
-          key="到院医院"
-          v-if="form.isToHospital == true"
-        >
-          <Select
-            v-model="form.lastDealHospitalId"
-            placeholder="请选择到院医院"
-            filterable
-            disabled
-          >
-            <Option
-              v-for="item in hospitalInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-        </FormItem> -->
-        <FormItem
-          label="到院类型"
-          prop="toHospitalType"
-          key="到院类型"
-          v-if="form.isToHospital === true"
-        >
-          <Select
-            v-model="form.toHospitalType"
-            placeholder="请选择到院类型"
-            clearable
-            filterable
-          >
-            <Option
-              v-for="item in this.toHospitalTypeList"
-              :value="item.orderType"
-              :key="item.orderType"
-              >{{ item.orderTypeText }}</Option
-            >
-          </Select>
-        </FormItem>
-        <FormItem
-          label="到院时间"
-          prop="toHospitalDate"
-          key="到院时间"
-          v-if="form.isToHospital == true"
-        >
-          <DatePicker
-            type="date"
-            placeholder="到院时间"
-            :value="form.toHospitalDate"
-            v-model="form.toHospitalDate"
-            style="width:360px"
-            transfer
-          ></DatePicker>
-        </FormItem>
+        <Row :gutter="30">
+          <Col span="8">
+            <FormItem label="是否到院" prop="isToHospital" key="是否到院">
+              <i-switch
+                v-model="form.isToHospital"
+                :disabled="form.isFinish === true"
+                @on-change="isToHospitalChange"
+              />
+            </FormItem>
+          </Col>
 
-        <FormItem
-          label="是否陪诊"
-          prop="isAcompanying"
-          key="是否陪诊"
-          v-if="form.isToHospital == true"
-        >
-          <i-switch v-model="form.isAcompanying" />
-        </FormItem>
-        <FormItem label="是否成交" prop="isFinish" key="是否成交">
-          <i-switch v-model="form.isFinish" @on-change="isFinishChange" />
-        </FormItem>
-
-        <FormItem
-          label="未成交原因"
-          prop="unDealReason"
-          v-if="form.isFinish !== true"
-          key="未成交原因"
-        >
-          <Input
-            v-model="form.unDealReason"
-            placeholder="请输入未成交原因"
-            type="textarea"
-          ></Input>
-        </FormItem>
-        <FormItem
-          label="未成交截图"
-          key="未成交截图"
-          v-if="form.isFinish !== true"
-        >
-          <upload
-            :uploadObj="noDealuploadObj"
-            @uploadChange="noDealhandleUploadChange"
-          />
-        </FormItem>
-        <FormItem
-          label="成交金额"
-          v-if="form.isFinish === true"
-          prop="dealAmount"
-          key="成交金额"
-          :rules="[
-            {
-              required: true,
-              message: '请输入成交金额(最小是1)',
-              trigger: 'change',
-              type: 'number',
-              min: 1,
-            },
-          ]"
-        >
-          <Input
-            v-model="form.dealAmount"
-            placeholder="请输入成交金额"
-            type="number"
-            number
-          ></Input>
-        </FormItem>
-        <FormItem
-          label="成交时间"
-          prop="DealDate"
-          v-if="form.isFinish === true"
-          key="成交时间"
-        >
-          <DatePicker
-            type="date"
-            placeholder="成交时间"
-            style="width: 100%"
-            v-model="form.DealDate"
-          ></DatePicker>
-        </FormItem>
-        <FormItem
-          label="消费类型"
-          prop="consumptionType"
-          key="消费类型"
-          v-if="form.isFinish === true"
-        >
-          <Select
-            v-model="form.consumptionType"
-            placeholder="请选择消费类型"
-            clearable
-            filterable
-          >
-            <Option
-              v-for="item in typeList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+          <Col span="8" v-if="form.isToHospital === true">
+            <FormItem
+              label="到院类型"
+              prop="toHospitalType"
+              key="到院类型"
+              
             >
-          </Select>
-        </FormItem>
-        <FormItem
-          label="后期项目铺垫"
-          v-if="form.isFinish === true"
-          key="后期项目铺垫"
-        >
-          <Input
-            v-model="form.lastProjectStage"
-            placeholder="请输入后期项目铺垫"
-            type="textarea"
-          ></Input>
-        </FormItem>
-        <FormItem label="成交凭证" key="成交凭证" v-if="form.isFinish === true">
-          <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
-        </FormItem>
+              <Select
+                v-model="form.toHospitalType"
+                placeholder="请选择到院类型"
+                clearable
+                filterable
+              >
+                <Option
+                  v-for="item in this.toHospitalTypeList"
+                  :value="item.orderType"
+                  :key="item.orderType"
+                  >{{ item.orderTypeText }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isToHospital == true">
+            <FormItem
+              label="到院时间"
+              prop="toHospitalDate"
+              key="到院时间"
+              
+            >
+              <DatePicker
+                type="date"
+                placeholder="到院时间"
+                :value="form.toHospitalDate"
+                v-model="form.toHospitalDate"
+                style="width:100%"
+                transfer
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isToHospital == true">
+            <FormItem
+              label="是否陪诊"
+              prop="isAcompanying"
+              key="是否陪诊"
+              
+            >
+              <i-switch v-model="form.isAcompanying" />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否成交" prop="isFinish" key="是否成交">
+              <i-switch v-model="form.isFinish" @on-change="isFinishChange" />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isFinish !== true">
+            <FormItem
+              label="未成交原因"
+              prop="unDealReason"
+              
+              key="未成交原因"
+            >
+              <Input
+                v-model="form.unDealReason"
+                placeholder="请输入未成交原因"
+                type="textarea"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isFinish !== true">
+            <FormItem
+              label="未成交截图"
+              key="未成交截图"
+              
+            >
+              <upload
+                :uploadObj="noDealuploadObj"
+                @uploadChange="noDealhandleUploadChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isFinish === true">
+            <FormItem
+              label="成交金额"
+              
+              prop="dealAmount"
+              key="成交金额"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入成交金额(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.dealAmount"
+                placeholder="请输入成交金额"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isFinish === true">
+            <FormItem
+              label="成交时间"
+              prop="DealDate"
+              
+              key="成交时间"
+            >
+              <DatePicker
+                type="date"
+                placeholder="成交时间"
+                style="width: 100%"
+                v-model="form.DealDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isFinish === true">
+            <FormItem
+              label="消费类型"
+              prop="consumptionType"
+              key="消费类型"
+              
+            >
+              <Select
+                v-model="form.consumptionType"
+                placeholder="请选择消费类型"
+                clearable
+                filterable
+              >
+                <Option
+                  v-for="item in typeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isFinish === true">
+            <FormItem
+              label="后期项目铺垫"
+              
+              key="后期项目铺垫"
+            >
+              <Input
+                v-model="form.lastProjectStage"
+                placeholder="请输入后期项目铺垫"
+                type="textarea"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isFinish === true">
+            <FormItem
+              label="成交凭证"
+              key="成交凭证"
+              
+            >
+              <upload
+                :uploadObj="uploadObj"
+                @uploadChange="handleUploadChange"
+              />
+            </FormItem>
+          </Col>
+        </Row>
         <div style="color:red;font-size:3px" v-if="form.isFinish === true">
-          *注：请上传该手机号客户在贵公司系统的成交凭证截图
-        </div>
+            *注：请上传该手机号客户在贵公司系统的成交凭证截图
+          </div>
       </Form>
       <div slot="footer">
         <Button @click="cancel('form')">取消</Button>
         <Button type="primary" @click="submit('form')">确定</Button>
       </div>
-    </Modal>
+    </Modal> -->
     <Modal
       v-model="imgControlModal"
       title="重单退回"
@@ -372,7 +385,12 @@
     <!-- 生成喜报 -->
     <goodsNews :goodsNewsModel.sync="goodsNewsModel" :id="id"></goodsNews>
     <!-- 留言板 -->
-    <messageBoard  @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
+    <messageBoard
+      @messageBoardChange="messageBoardChange"
+      :messageBoardParams="messageBoardParams"
+    />
+    <!-- 确认 -->
+    <hospitalConfirm :controlModal.sync="controlModal" :typeList="typeList" :toHospitalTypeList="toHospitalTypeList" :id="form.id" @getHospitalContentList="getHospitalContentList"/>
   </div>
 </template>
 
@@ -387,13 +405,12 @@ import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhot
 import orderReceiving from "./orderReceiving.vue";
 import goodsNews from "@/components/goodsNews/goodsNews.vue";
 import messageBoard from "@/components/contentMessageBoard/contentMessageBoard.vue";
-
-
+import hospitalConfirm from "./hospitalConfirm.vue"
 export default {
-  props:{
-    activeName:String,
-    toHospitalTypeList:Array,
-    typeList:Array
+  props: {
+    activeName: String,
+    toHospitalTypeList: Array,
+    typeList: Array,
   },
   components: {
     messageBoard,
@@ -402,11 +419,12 @@ export default {
     viewCustomerPhotos,
     orderReceiving,
     goodsNews,
+    hospitalConfirm
   },
   data() {
     return {
-      isTabel:false,
-      phone:'',
+      isTabel: false,
+      phone: "",
       flag: false,
       // 生成喜报
       goodsNewsModel: false,
@@ -482,7 +500,7 @@ export default {
         // 是否陪诊
         isAcompanying: false,
         // 消费类型
-        consumptionType:null
+        consumptionType: null,
       },
       imgForm: {
         id: "",
@@ -494,7 +512,9 @@ export default {
         toHospitalStartDate: "",
         toHospitalEndDate: "",
         toHospitalType: null,
-        startDate: this.$moment().startOf("month").format("YYYY-MM-DD"),
+        startDate: this.$moment()
+          .startOf("month")
+          .format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         keyword: "",
         pageNum: 1,
@@ -721,7 +741,10 @@ export default {
                       marginTop: "6px",
                     },
                   },
-                  "最新消息：" + (params.row.firstlyRemark == null ? '' :  params.row.firstlyRemark)
+                  "最新消息：" +
+                    (params.row.firstlyRemark == null
+                      ? ""
+                      : params.row.firstlyRemark)
                 ),
               ]);
             },
@@ -730,7 +753,7 @@ export default {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 400,
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "订单状态",
@@ -758,7 +781,7 @@ export default {
                   },
                   params.row.orderStatus
                 );
-              }  else if (params.row.orderStatus == "重单-可深度") {
+              } else if (params.row.orderStatus == "重单-可深度") {
                 return h(
                   "div",
                   {
@@ -814,7 +837,7 @@ export default {
           {
             title: "是否重单深度",
             key: "isRepeatProfundityOrder",
-            minWidth: 70,
+            minWidth: 80,
             align: "center",
             render: (h, params) => {
               return h(
@@ -884,23 +907,24 @@ export default {
                   },
                   on: {
                     click: () => {
-                      const { id, orderId ,phone} = params.row;
-                      if(params.row.orderStatus != '已派单'){
-                        this.$Message.warning('订单' + params.row.orderStatus + '，无需查重')
-                        return
+                      const { id, orderId, phone } = params.row;
+                      if (params.row.orderStatus != "已派单") {
+                        this.$Message.warning(
+                          "订单" + params.row.orderStatus + "，无需查重"
+                        );
+                        return;
                       }
                       this.orderReceivingModel = true;
                       this.receivingObj = params.row;
-                      this.isTabel = true
+                      this.isTabel = true;
                       const data = {
-                        orderId:orderId
-                      }
+                        orderId: orderId,
+                      };
                       api.contentPlatformPhone(data).then((res) => {
-                        if(res.code === 0){
-                          this.phone = res.data.phone
+                        if (res.code === 0) {
+                          this.phone = res.data.phone;
                         }
-                      })
-                      
+                      });
                     },
                   },
                 },
@@ -927,10 +951,10 @@ export default {
                         this.transactionStatusParams.transactionStatusModel = true;
                       } else if (name == "remark") {
                         // 备注
-                         const { hospitalId , id,orderId} = params.row;
-                        this.messageBoardParams.hospitalId = hospitalId
-                        this.messageBoardParams.id = orderId
-                        this.messageBoardParams.messageBoard = true
+                        const { hospitalId, id, orderId } = params.row;
+                        this.messageBoardParams.hospitalId = hospitalId;
+                        this.messageBoardParams.id = orderId;
+                        this.messageBoardParams.messageBoard = true;
                       } else if (name == "confirm") {
                         //确认
                         const { id, orderId } = params.row;
@@ -1401,7 +1425,7 @@ export default {
             toHospitalDate,
             toHospitalType,
             isAcompanying,
-            consumptionType
+            consumptionType,
           } = this.form;
           const data = {
             id,
@@ -1417,13 +1441,15 @@ export default {
               ? this.$moment(DealDate).format("YYYY-MM-DD")
               : null,
             lastDealHospitalId:
-              isToHospital == true ? Number(sessionStorage.getItem('hospitalId')) : null,
+              isToHospital == true
+                ? Number(sessionStorage.getItem("hospitalId"))
+                : null,
             toHospitalDate: toHospitalDate
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,
             toHospitalType: isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
-            consumptionType
+            consumptionType,
           };
           api.finishContentPlateFormOrder(data).then((res) => {
             if (res.code === 0) {
@@ -1482,8 +1508,7 @@ export default {
       }
     },
   },
-  created() {
-  },
+  created() {},
   watch: {
     activeName: {
       handler(value) {

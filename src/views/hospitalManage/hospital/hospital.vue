@@ -283,7 +283,7 @@
             </FormItem>
           </Col>
         </Row>
-        <Row :gutter="30">
+        <Row :gutter="30" v-if="title == '添加'">
           <Col span="13">
             <FormItem label="上传合同" prop="contractUrl">
               <uploadFile
@@ -311,6 +311,8 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 合同 -->
+    <contract :contractModel.sync ="contractModel" :contractParams="contractParams"/>
   </div>
 </template>
 <script>
@@ -319,14 +321,20 @@ import * as corApi from "@/api/corporateManagement";
 import upload from "@/components/upload/upload";
 import uploadFile from "@/components/upload/uploadFile";
 import { download } from "@/utils/util";
-
+import contract from "./components/contract.vue"
 export default {
   components: {
     upload,
     uploadFile,
+    contract
   },
   data() {
     return {
+      // 合同model
+      contractModel:false,
+      contractParams:{
+        id:''
+      },
       // 归属公司
       nameList:[],
       flag: false,
@@ -626,7 +634,7 @@ export default {
           {
             title: "操作",
             key: "",
-            minWidth: 240,
+            minWidth: 200,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -644,19 +652,21 @@ export default {
                     on: {
                       click: () => {
                         const { id } = params.row;
-                        api.byIdGetHospitalInfo(id).then((res) => {
-                          if (res.code === 0) {
-                            if (res.data.hospitalInfo.contractUrl) {
-                              window.open(res.data.hospitalInfo.contractUrl);
-                            } else {
-                              this.$Message.error("暂无上传合同");
-                            }
-                          }
-                        });
+                        // api.byIdGetHospitalInfo(id).then((res) => {
+                        //   if (res.code === 0) {
+                        //     if (res.data.hospitalInfo.contractUrl) {
+                        //       window.open(res.data.hospitalInfo.contractUrl);
+                        //     } else {
+                        //       this.$Message.error("暂无上传合同");
+                        //     }
+                        //   }
+                        // });
+                        this.contractModel = true
+                        this.contractParams.id = id
                       },
                     },
                   },
-                  "预览合同"
+                  "合同"
                 ),
                 h(
                   "Button",
@@ -685,7 +695,7 @@ export default {
                             this.form.businessHours = this.form.businessHours.split(
                               "-"
                             );
-                            this.form.contractUrl = this.form.contractUrl;
+                            this.form.contractUrl = '';
                             // this.form.dueTime = this.$moment(new Date(res.data.hospitalInfo.dueTime)).format("YYYY-MM-DD")
                           }
                         });
@@ -974,7 +984,7 @@ export default {
           {
             title: "操作",
             key: "",
-            minWidth: 240,
+            minWidth: 200,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -992,19 +1002,21 @@ export default {
                     on: {
                       click: () => {
                         const { id } = params.row;
-                        api.byIdGetHospitalInfo(id).then((res) => {
-                          if (res.code === 0) {
-                            if (res.data.hospitalInfo.contractUrl) {
-                              window.open(res.data.hospitalInfo.contractUrl);
-                            } else {
-                              this.$Message.error("暂无上传合同");
-                            }
-                          }
-                        });
+                        // api.byIdGetHospitalInfo(id).then((res) => {
+                        //   if (res.code === 0) {
+                        //     if (res.data.hospitalInfo.contractUrl) {
+                        //       window.open(res.data.hospitalInfo.contractUrl);
+                        //     } else {
+                        //       this.$Message.error("暂无上传合同");
+                        //     }
+                        //   }
+                        // });
+                        this.contractModel = true
+                        this.contractParams.id = id
                       },
                     },
                   },
-                  "预览合同"
+                  "合同"
                 ),
                 h(
                   "Button",
@@ -1463,7 +1475,6 @@ export default {
             );
             // data.contractUrl = this.form.contractUrl ? this.form.contractUrl : ""
             this.flag = true;
-            console.log(data)
             // 添加
             api.addHospitalInfo(data).then((res) => {
               if (res.code === 0) {
@@ -1490,10 +1501,13 @@ export default {
     cancelSubmit() {
       this.controlModal = false;
       this.uploadObj.uploadList = [];
-      this.uploadFileObj.uploadList = [];
-      this.$refs.uploadFile.uploadListName = [];
-      this.$refs.uploadFile.uploadList = [];
-      this.uploadFileName = [];
+      
+      if(this.title == '添加'){
+        this.uploadFileObj.uploadList = [];
+        this.$refs.uploadFile.uploadListName = [];
+        this.$refs.uploadFile.uploadList = [];
+        this.uploadFileName = [];
+      }
     },
 
     // modal 显示状态发生变化时触发
@@ -1501,10 +1515,16 @@ export default {
       if (!value) {
         this.isEdit = false;
         this.uploadObj.uploadList = [];
-        this.uploadFileObj.uploadList = [];
-        this.$refs.uploadFile.uploadList = [];
+        // this.uploadFileObj.uploadList = [];
+        // this.$refs.uploadFile.uploadList = [];
+        // this.$refs.uploadFile.uploadListName = [];
+        // this.uploadFileName = [];
+        if(this.title == '添加'){
+          this.uploadFileObj.uploadList = [];
         this.$refs.uploadFile.uploadListName = [];
+        this.$refs.uploadFile.uploadList = [];
         this.uploadFileName = [];
+      }
         this.$refs["form"].resetFields();
       }
     },

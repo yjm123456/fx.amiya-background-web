@@ -428,3 +428,11 @@ export const getAmiyaTotalSendHospitalInstructions = (params) => {
         params
     });
 };
+// 修改医院合同信息
+export const UpdateContractUrl = (data) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/UpdateContractUrl`,
+        method: "put",
+        data
+    });
+};

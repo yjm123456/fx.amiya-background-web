@@ -219,20 +219,31 @@ export default {
 
     // 获取列表分页
     handlePageChange(pageNum) {
-      const { contentPlatFormOrderId } = this.transactionStatusParams;
-      const { pageSize } = this.transactionStatusPage;
+      const { contentPlatFormOrderId ,isHospital} = this.transactionStatusParams;
+      const {  pageSize } = this.transactionStatusPage;
       const data = {
         pageNum,
         pageSize,
         contentPlatFormOrderId,
       };
-      api.contentPlatFormOrderDealInfo(data).then((res) => {
-        if (res.code === 0) {
-          const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
-          this.transactionStatusPage.data = list;
-          this.transactionStatusPage.totalCount = totalCount;
-        }
-      });
+      //   等于2是医院端成交情况接口
+      if(isHospital==2){
+        api.hospitalContentPlatFormOrderDealInfo(data).then((res) => {
+            if (res.code === 0) {
+            const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
+            this.transactionStatusPage.data = list;
+            this.transactionStatusPage.totalCount = totalCount;
+            }
+        });
+      }else{
+        api.contentPlatFormOrderDealInfo(data).then((res) => {
+            if (res.code === 0) {
+            const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
+            this.transactionStatusPage.data = list;
+            this.transactionStatusPage.totalCount = totalCount;
+            }
+        });
+      }
     },
     // 取消
     cancel(name) {

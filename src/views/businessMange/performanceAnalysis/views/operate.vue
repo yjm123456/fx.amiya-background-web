@@ -136,7 +136,7 @@ export default {
 
                 ]
             },
-            // 平台
+            // 平台1
             contentPalteForms:[]
         }
     },

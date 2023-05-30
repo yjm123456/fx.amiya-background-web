@@ -396,13 +396,12 @@
               ></Input>
             </FormItem>
           </Col> -->
-
+          <!-- :disabled="form.liveAnchorId == null" -->
           <Col span="8">
             <FormItem label="主播微信号" prop="liveAnchorWeChatNo">
               <Select
                 v-model="form.liveAnchorWeChatNo"
                 placeholder="请选择主播微信号"
-                :disabled="form.liveAnchorId == null"
                 filterable
               >
                 <Option
@@ -452,7 +451,8 @@
 
           <Col span="8">
             <FormItem label="下单金额" prop="price">
-              <Input v-model="form.price" placeholder="请输入下单金额"></Input>
+              <Input v-model="form.price" placeholder="请输入下单金额" type="number"
+                namber></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -2041,7 +2041,7 @@ export default {
       }
       this.form.liveAnchorWeChatNo = "";
       this.form.liveAnchorWechatNo = "";
-      this.getWeChatList(value);
+      // this.getWeChatList(value);
       if(value){
         if(this.title == '添加'){
           // 根据id获取寻找liveAnchorBaseId
@@ -2061,7 +2061,7 @@ export default {
     //  根据主播获取主播微信号
     getWeChatList(value) {
       const data = {
-        liveanchorId: value,
+        liveanchorId: '',
       };
       liveAnchorApi.getvalidList(data).then((res) => {
         if (res.code === 0) {
@@ -2586,6 +2586,7 @@ export default {
     this.getcustomerSourceList();
     this.getLiveAnchorBaseInfoValid();
     this.getconsultationTypeList();
+    this.getWeChatList()
   },
 };
 </script>

@@ -315,10 +315,9 @@ export default {
           this.form.toHospitalType = value
           this.form.consumptionType = 2
           return
+        }else{
+          this.form.consumptionType = ''
         }
-        // else{
-        //   this.form.consumptionType = ''
-        // }
       // }else{
       //   this.form.consumptionType = 3
       // }

@@ -928,8 +928,8 @@ export default {
         this.getgetAmiyaHospitalDepartmentList(info.hospitalDepartmentId)
         this.form.appointmentHospitalId = info.appointmentHospitalId;
         this.form.id = info.id;
-        // this.form.consultingContent = info.consultingContent;
-        this.form.consultingContent = info.consultingContent ? info.consultingContent : '咨询项目：\n既往史：\n方案及报价：\n推荐医生：\n预算及确定治疗项目：\n痛点、禁忌、喜好：\n是否车接车送：\n助理、vip管家：\n备注：'
+        this.form.consultingContent = info.consultingContent;
+        // this.form.consultingContent = info.consultingContent ? info.consultingContent : '咨询项目：\n既往史：\n方案及报价：\n推荐医生：\n预算及确定治疗项目：\n痛点、禁忌、喜好：\n是否车接车送：\n助理、vip管家：\n备注：'
         this.form.sex = info.sex;
         this.form.city = info.city;
         this.form.occupation = info.occupation;

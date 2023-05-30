@@ -347,7 +347,7 @@
       title="确认"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
-      width="65%"
+      width="80%"
     >
       <Form
         ref="confirmForm"
@@ -563,18 +563,18 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem
-              label="抖店订单号"
+              label="三方单号"
               prop="otherContentPlatFormOrderId"
-              key="抖店订单号"
+              key="三方单号"
             >
               <Input
                 v-model="confirmForm.otherContentPlatFormOrderId"
-                placeholder="请输入抖店订单号"
+                placeholder="请输入三方单号"
               ></Input>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="8" v-if="confirmForm.isFinish === true">
             <FormItem
               label="后期项目铺垫"
@@ -613,7 +613,7 @@
 
         <Divider style="margin-top:-6px"/>
         <!-- 成交明细 -->
-        <detailTable @handle="handle"  :id="confirmForm.id" v-if="confirmForm.isFinish === true"/>
+        <detailTable ref="detailTable" @handle="handle"  :id="confirmForm.id" v-if="confirmForm.isFinish === true" :confirmParams="confirmParams" :confirmForm="confirmForm"/>
         <Spin fix v-if="isLoading == true">
           <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
           <div>加载中...</div>
@@ -756,7 +756,7 @@ export default {
         DealDate: null,
         lastDealHospitalId: null,
         toHospitalDate: "",
-        // 抖店订单号
+        // 三方单号
         otherContentPlatFormOrderId: "",
         // 到院类型
         toHospitalType: null,
@@ -1147,7 +1147,7 @@ export default {
             },
           },
           // {
-          //   title: "抖店订单号",
+          //   title: "三方单号",
           //   key: "otherContentPlatFormOrderId",
           //   minWidth: 180,
           //   align: "center",
@@ -1587,10 +1587,19 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id, orderId, consultatioType } = params.row;
+                        const { id, orderId, consultatioType,encryptPhone } = params.row;
                         this.contentConfirmOrderModel = true;
                         this.confirmForm.id = orderId;
                         this.confirmForm.consultatioType = consultatioType;
+                        const data = {
+                          encryptPhone:encryptPhone
+                        }
+                        // 解密手机号
+                        api.decryptoPhonesNew(data).then(res=>{
+                          if(res.code ===0){
+                            this.confirmParams.phone = res.data.phone
+                          }
+                        })
                       },
                     },
                   },
@@ -1762,9 +1771,46 @@ export default {
       contentPlateFormOrderDealPerformanceType: [],
       // 消费类型
       typeList: [],
+      // 确认成交参数
+      confirmParams:{
+        // 医院成交类型
+        hospitalDealTypeList:{name:'全部成交类型',id:'-1'},
+        // 医院消费类型
+        hospitalConsumptionTypeList:{name:'全部消费类型',id:'-1'},
+        // 医院退款类型
+        hospitalRefundTypeList:{name:'全部退款类型',id:'-1'},
+        // 手机号
+        phone:''
+      }
     };
   },
   methods: {
+    
+    // 获取医院成交类型
+    getHospitalDealTypeList(){
+      api.getHospitalDealTypeList().then(res=>{
+        if(res.code == 0){
+          this.confirmParams.hospitalDealTypeList = [this.confirmParams.hospitalDealTypeList,...res.data.hospitalDealTypeList]
+        }
+      })
+    },
+    // 获取医院消费类型
+    getHospitalConsumptionTypeList(){
+      api.getHospitalConsumptionTypeList().then(res=>{
+        if(res.code == 0){
+          this.confirmParams.hospitalConsumptionTypeList = [this.confirmParams.hospitalConsumptionTypeList,...res.data.hospitalConsumptionTypeList]
+          
+        }
+      })
+    },
+    //  获取医院退款类型
+    getHospitalRefundTypeList(){
+      api.getHospitalRefundTypeList().then(res=>{
+        if(res.code == 0){
+          this.confirmParams.hospitalRefundTypeList = [this.confirmParams.hospitalRefundTypeList,...res.data.hospitalRefundTypeList]
+        }
+      })
+    },
     // 判断到院类型为退款(4)的情况 消费类型只能选择退款消费
     toHospitalTypeListChange(value){
       const {isToHospital,isFinish,toHospitalType} = this.confirmForm
@@ -1773,10 +1819,9 @@ export default {
           this.confirmForm.toHospitalType = value
           this.confirmForm.consumptionType = 2
           return
+        }else{
+          this.confirmForm.consumptionType = ''
         }
-        // else{
-        //   this.confirmForm.consumptionType = ''
-        // }
       // }else{
       //   this.confirmForm.consumptionType = 3
       // }
@@ -2311,6 +2356,8 @@ export default {
       this.confirmForm.DealDate = null;
       this.query.doubleOrderModel = false;
       this.confirmForm.isFinish = false
+      this.$refs.detailTable.query2.data = []
+      // this.$refs.detailTable.query2.data = []
     },
 
     // modal 显示状态发生变化时触发
@@ -2345,6 +2392,9 @@ export default {
     this.getcontentPlateFormOrderToHospitalTypeList();
     this.getcontentPlateFormOrderDealPerformanceType();
     this.getContentPlatFormOrderDealInfotypeList();
+    this.getHospitalDealTypeList()
+    this.getHospitalConsumptionTypeList()
+    this.getHospitalRefundTypeList()
   },
 };
 </script>

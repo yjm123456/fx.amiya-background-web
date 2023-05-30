@@ -67,7 +67,9 @@ export default {
       //       }
       //   })
       // }
-      this.$store.dispatch("message/getMessage")
+      if(this.employeeType == 'amiyaEmployee'){
+        this.$store.dispatch("message/getMessage")
+      }
     },
     // 获取动态权限(根据动态菜单权限判断是否显示小铃铛)
     getMenu(){

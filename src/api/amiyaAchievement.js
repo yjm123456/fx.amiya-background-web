@@ -107,3 +107,35 @@ export const performanceCompleteRate = (params) => {
         params
     });
 };
+// 总业绩,主播业绩,退款
+export const amiyaAchievementData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaAchievement/amiyaAchievementData",
+        method: "get",
+        params
+    });
+};
+// 业绩分析数据
+export const amiyaAchievementDetailData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaAchievement/amiyaAchievementDetailData",
+        method: "get",
+        params
+    });
+};
+// 折线图数据
+export const amiyaAchievementDetailDataLine = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaAchievement/getAmiyaAchievementBrokenLineListData",
+        method: "get",
+        params
+    });
+};
+// 业绩分析运营看板数据
+export const performanceOperationData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaAchievement/performanceOperationData",
+        method: "get",
+        params
+    });
+};

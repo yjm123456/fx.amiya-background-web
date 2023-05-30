@@ -1489,3 +1489,48 @@ export const getContentPlatFormOrderDealDetails = (params) => {
         params
     });
 };
+// 获取客户在院消费信息列表（分页
+export const getCustomerHospitalDealInfo = (params) => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealInfo/listWithPage`,
+        method: "get",
+        params
+    });
+};
+// 获取医院成交类型
+export const getHospitalDealTypeList = () => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealInfo/getHospitalDealTypeList`,
+        method: "get",
+    });
+};
+// 获取医院消费类型
+export const getHospitalConsumptionTypeList = () => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealInfo/getHospitalConsumptionTypeList`,
+        method: "get",
+    });
+};
+// 获取医院退款类型
+export const getHospitalRefundTypeList = () => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealInfo/getHospitalRefundTypeList`,
+        method: "get",
+    });
+};
+// 获取客户再远消费详情信息列表
+export const getCustomerHospitalDealDetails = (params) => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealDetails/listWithPage`,
+        method: "get",
+        params
+    });
+};
+// 解密手机号
+export const decryptoPhonesNew = (params) => {
+    return http({
+        url: `/amiyabg/Customer/decryptoPhone`,
+        method: "get",
+        params
+    });
+};

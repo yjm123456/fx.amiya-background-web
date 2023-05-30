@@ -242,8 +242,8 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="抖店订单号" prop="otherContentPlatFormOrderId">
-              <Input v-model="form.otherContentPlatFormOrderId" placeholder="请输入抖店订单号"></Input>
+            <FormItem label="三方单号" prop="otherContentPlatFormOrderId">
+              <Input v-model="form.otherContentPlatFormOrderId" placeholder="请输入三方单号"></Input>
             </FormItem>
           </Col>
           
@@ -572,7 +572,7 @@ export default {
           channel:'',
           // 主播IP
           liveAnchorId:'',
-          // 抖店订单号
+          // 三方单号
           otherContentPlatFormOrderId:''
         },
         // 获取有效的医院列表
@@ -774,7 +774,7 @@ export default {
             align:'center'
           },
           {
-            title: "抖店订单号",
+            title: "三方单号",
             key: "otherContentPlatFormOrderId",
             minWidth: 180,
             align:'center'

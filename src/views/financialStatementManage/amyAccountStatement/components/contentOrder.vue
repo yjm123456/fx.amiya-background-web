@@ -157,6 +157,15 @@
                 
               />
             </FormItem>
+            <FormItem label="客服结算服务费" prop="customerServiceSettlePrice">
+              <Input
+                v-model="form.customerServiceSettlePrice"
+                placeholder="请输入客服结算服务费"
+                type="number"
+                number
+                
+              />
+            </FormItem>
             <FormItem label="审核图片" prop="checkPicture" key="checkPicture">
               <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
             </FormItem>
@@ -253,10 +262,18 @@ export default {
         // 当前服务费金额
         currentInformationServiceFee:null,
         // 当前系统使用费
-        currentSystemUsagefee:null
+        currentSystemUsagefee:null,
+        // 客服结算服务费
+        customerServiceSettlePrice:null
       },
 
       ruleValidates: {
+        customerServiceSettlePrice: [
+          {
+            required: true,
+            message: "请输入客服结算服务费",
+          },
+        ],
         checkState: [
           {
             required: true,
@@ -583,17 +600,22 @@ export default {
                         this.form.currentInformationServiceFee = (this.form.checkPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
                         // 当前系统服务费
                         this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
+                        
+
+                        // // 客服结算服务费
+                        this.form.customerServiceSettlePrice =  proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  this.form.checkPrice*0.3
+
 
                         // 成交服务费合计
                          // 为负数情况
                         if(Number(checkPriceRight) <0){
                           let num = ((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000).toFixed(2)
                           this.form.totalServiceFee = (-num).toFixed(2)
-                          console.log(this.form.totalServiceFee,'为负数情况')
+                          // console.log(this.form.totalServiceFee,'为负数情况')
                           return
                         }else{
                           this.form.totalServiceFee = Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000).toFixed(2))
-                          console.log(this.form.totalServiceFee,'为正数情况')
+                          // console.log(this.form.totalServiceFee,'为正数情况')
                           return
                         }
                       },
@@ -616,6 +638,7 @@ export default {
       this.form.currentInformationServiceFee = (this.form.checkPrice * (Number(this.form.proportionOfInformationServiceFee) / 100)).toFixed(2)
       this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
       this.form.settlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+      this.form.customerServiceSettlePrice = this.form.proportionOfInformationServiceFee+this.form.systemUsageFeeProportion <=30 ?  this.form.settlePrice :  this.form.checkPrice*0.3
    },
     // 取消
     cancelSubmit(name) {
@@ -645,7 +668,8 @@ export default {
             checkPriceRight,
             totalServiceFee,
             currentSystemUsagefee,
-            currentInformationServiceFee
+            currentInformationServiceFee,
+            customerServiceSettlePrice
           } = this.form;
           const data = {
             id,
@@ -657,11 +681,14 @@ export default {
             orderDealInfoId,
             reconciliationDocumentsId: this.reconciliationParams.id,
             informationPrice:currentInformationServiceFee,
-            systemUpdatePrice:currentSystemUsagefee
+            systemUpdatePrice:currentSystemUsagefee,
+            customerServiceSettlePrice
           };
           // 已对账金额+当前对账金额不能大于成交金额
           // 取绝对值判断 防止为负数时无法对账
+          //                        已对账金额+对账金额
           let res = Math.abs((Number(this.form.checkPriceNum)+Number(this.form.checkPrice)))
+          //       成交金额
           let res2 = Math.abs(Number(this.form.checkPriceRight))
           // if((Number(this.form.checkPriceNum)+Number(this.form.checkPrice))>Number(this.form.checkPriceRight)){
           if(res>res2){
@@ -672,7 +699,10 @@ export default {
               return
             }
           // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
-          if((Number(this.form.totalServiceFeeReconciled)+Number(this.form.settlePrice)) > Number(this.form.totalServiceFee)){
+          // (Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100) > Number(this.form.totalServiceFee)*100
+          let num1 = Math.abs((Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100))
+          let num2 = Math.abs(Number(this.form.totalServiceFee)*100)
+          if(num1 > num2){
             this.$Message.warning({
               content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
               duration: 3,

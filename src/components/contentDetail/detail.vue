@@ -317,7 +317,7 @@
           </div>
          
           <div class="mr_top">
-            <span class="title_bold">抖店订单号：</span>
+            <span class="title_bold">三方单号：</span>
             <span>{{ detailObj.otherContentPlatFormOrderId }}</span>
           </div>
           <div class="mr_top">
@@ -410,26 +410,21 @@
             </div>
           </div>
           <div  class="item_list">
-            <div class="mr_top items">
-              <span class="title_bold">服务费合计：</span>
-              <span>{{ detailObj.settlePrice }} </span>
-            </div>
+            
             <div class="mr_top items">
               <span class="title_bold">是否开票：</span>
               <i-switch v-model="detailObj.isCreateBill" disabled />
             </div>
-          </div>
-          <div  class="item_list">
-            <div class="mr_top items">
+             <div class="mr_top items">
               <span class="title_bold">开票公司：</span>
               <span>{{ detailObj.createBillCompany }} </span>
             </div>
+          </div>
+          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">是否回款：</span>
               <i-switch v-model="detailObj.isReturnBackPrice" disabled />
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">回款时间：</span>
               <span
@@ -442,7 +437,13 @@
                 }}
               </span>
             </div>
-            <div class="fl_item">
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items" v-if="isShow">
+              <span class="title_bold">服务费合计：</span>
+              <span>{{ detailObj.settlePrice }} </span>
+            </div>
+            <div class="fl_item" v-if="isShow">
               <div class="mr_top items2">
                 <span class="title_bold">回款金额：</span>
                 <span> {{ detailObj.returnBackPrice }}</span>
@@ -539,6 +540,7 @@ export default {
   },
   data() {
     return {
+      isShow:false,
       // 是否生成预约日程
       customerAppointmentScheduleInfo:{
         isCustomerAppointmentSchedule:false,
@@ -794,6 +796,15 @@ export default {
   watch: {
     detailModel(value) {
       this.controlModel = value;
+       const currentRole = JSON.parse(
+          sessionStorage.getItem("permissions")
+        );
+        // 服务费按钮权限
+        this.isShow = currentRole.some((ele) => {
+          return "fx.amiya.permission.SELECT_RETURN_BACK_PRICE".includes(
+            ele
+          );
+        });
     },
     detailList(value) {
       this.query.data = value;

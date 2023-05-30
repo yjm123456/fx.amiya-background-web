@@ -268,6 +268,76 @@
               />
             </FormItem>
           </Col>
+
+          <Col span="8">
+            <FormItem
+              label="退卡量目标"
+              prop="livingRefundCardTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '退卡量目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="退卡量目标"
+            >
+              <Input
+                v-model="form.livingRefundCardTarget"
+                placeholder="请输入退卡量目标"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="GMV目标"
+              prop="gmvTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: 'GMV目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="GMV目标"
+            >
+              <Input
+                v-model="form.gmvTarget"
+                placeholder="请输入GMV目标"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="去卡GMV目标"
+              prop="eliminateCardGMVTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '去卡GMV目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="去卡GMV目标"
+            >
+              <Input
+                v-model="form.eliminateCardGMVTarget"
+                placeholder="请输入去卡GMV目标"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -423,6 +493,78 @@ export default {
             },
           },
           {
+            title: "退卡量目标",
+            key: "livingRefundCardTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月累计退卡量",
+            key: "cumulativeLivingRefundCard",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "退卡量目标完成率",
+            key: "livingRefundCardCompleteRate",
+            minWidth: 170,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.livingRefundCardCompleteRate + "%"
+              );
+            },
+          },
+          {
+            title: "GMV目标",
+            key: "gmvTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月累计GMV",
+            key: "cumulativeGMV",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "GMV目标完成率",
+            key: "gmvTargetCompleteRate",
+            minWidth: 170,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.gmvTargetCompleteRate + "%"
+              );
+            },
+          },
+          {
+            title: "去卡GMV目标",
+            key: "eliminateCardGMVTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月累计去卡GMV",
+            key: "cumulativeEliminateCardGMV",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "去卡GMV目标完成率",
+            key: "eliminateCardGMVTargetCompleteRate",
+            minWidth: 170,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.eliminateCardGMVTargetCompleteRate + "%"
+              );
+            },
+          },
+          {
             title: "创建日期",
             key: "createDate",
             minWidth: 170,
@@ -479,6 +621,12 @@ export default {
                               consultationTarget2,
                                 // 带货结算佣金目标
                               cargoSettlementCommissionTarget,
+                              // 退卡量目标
+                              livingRefundCardTarget,
+                              // GMV目标
+                              gmvTarget,
+                              // 去卡GMV目标
+                              eliminateCardGMVTarget
                            
                             } = res.data.liveAnchorMonthlyTargetLivingInfo;
                             this.contentPlateChange(contentPlatFormId);
@@ -492,6 +640,9 @@ export default {
                             this.form.consultationTarget = consultationTarget;
                             this.form.consultationTarget2 = consultationTarget2;
                             this.form.cargoSettlementCommissionTarget = cargoSettlementCommissionTarget;
+                            this.form.livingRefundCardTarget = livingRefundCardTarget;
+                            this.form.gmvTarget = gmvTarget;
+                            this.form.eliminateCardGMVTarget = eliminateCardGMVTarget;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -623,6 +774,12 @@ export default {
         consultationTarget2: null,
         // 带货结算佣金目标
         cargoSettlementCommissionTarget: null,
+        // 退卡量目标
+        livingRefundCardTarget:null,
+        // GMV目标
+        gmvTarget:null,
+        // 去卡GMV目标
+        eliminateCardGMVTarget:null
       },
 
       ruleValidate: {
@@ -783,6 +940,9 @@ export default {
               consultationTarget,
               cargoSettlementCommissionTarget,
               consultationTarget2,
+              livingRefundCardTarget,
+              gmvTarget,
+              eliminateCardGMVTarget
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -793,6 +953,9 @@ export default {
               consultationTarget,
               cargoSettlementCommissionTarget,
               consultationTarget2,
+              livingRefundCardTarget,
+              gmvTarget,
+              eliminateCardGMVTarget
             };
             this.isflag = true
             // 添加

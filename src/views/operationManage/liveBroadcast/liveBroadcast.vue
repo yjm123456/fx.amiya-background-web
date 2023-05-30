@@ -241,6 +241,66 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="今日退卡量"
+              prop="refundCard"
+              key="今日退卡量"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日退卡量',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.refundCard"
+                placeholder="请输入今日退卡量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日GMV"
+              prop="gmv"
+              key="今日GMV"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日GMV',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.gmv"
+                placeholder="请输入今日GMV"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日去卡GMV"
+              prop="eliminateCardGMV"
+              key="今日去卡GMV"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日去卡GMV',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.eliminateCardGMV"
+                placeholder="请输入今日去卡GMV"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -280,7 +340,7 @@ export default {
           {
             title: "填报日期",
             key: "recordDate",
-            minWidth: 150,
+            minWidth: 110,
             align: "center",
             render: (h, params) => {
               return h(
@@ -322,13 +382,13 @@ export default {
           {
             title: "今日照片面诊卡下单数量",
             key: "consultation",
-            minWidth: 190,
+            minWidth: 200,
             align: "center",
           },
           {
             title: "今日视频面诊卡下单数量",
             key: "consultation2",
-            minWidth: 190,
+            minWidth: 200,
             align: "center",
           },
           {
@@ -338,9 +398,27 @@ export default {
             align: "center",
           },
           {
+            title: "今日退卡量",
+            key: "refundCard",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "今日GMV",
+            key: "gmv",
+            minWidth: 100,
+            align: "center",
+          },
+          {
+            title: "今日去卡GMV",
+            key: "eliminateCardGMV",
+            minWidth: 130,
+            align: "center",
+          },
+          {
             title: "操作",
             key: "",
-            width: 120,
+            width: 100,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -374,7 +452,10 @@ export default {
                               consultation2,
                               cargoSettlementCommission,
                               livingTrackingEmployeeId,
-                              recordDate
+                              recordDate,
+                              gmv,
+                              eliminateCardGMV,
+                              refundCard
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
@@ -385,6 +466,9 @@ export default {
                             this.form.consultation = consultation;
                             this.form.consultation2 = consultation2;
                             this.form.cargoSettlementCommission = cargoSettlementCommission;
+                            this.form.gmv = gmv;
+                            this.form.eliminateCardGMV = eliminateCardGMV;
+                            this.form.refundCard = refundCard;
                             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId ? livingTrackingEmployeeId : null;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
@@ -525,7 +609,12 @@ export default {
         cargoSettlementCommission: null,
         // 直播中人员
         livingTrackingEmployeeId: null,
-        
+        // 今日退卡量
+        refundCard:null,
+        // 今日GMV
+        gmv:null,
+        // 今日去卡GMV
+        eliminateCardGMV:null
       },
 
       ruleValidate: {
@@ -736,7 +825,10 @@ export default {
               consultation,
               consultation2,
               livingTrackingEmployeeId,
-              cargoSettlementCommission
+              cargoSettlementCommission,
+              gmv,
+              eliminateCardGMV,
+              refundCard
             } = this.form;
             const data = {
               id,
@@ -755,6 +847,9 @@ export default {
               livingTrackingEmployeeId: livingTrackingEmployeeId
                 ? livingTrackingEmployeeId
                 : 0,
+                gmv,
+              eliminateCardGMV,
+              refundCard
             };
             this.isflag = true
             api.livingUpdate(data).then((res) => {
@@ -782,6 +877,9 @@ export default {
               consultation2,
               cargoSettlementCommission,
               livingTrackingEmployeeId,
+              gmv,
+              eliminateCardGMV,
+              refundCard
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -797,6 +895,9 @@ export default {
                 ? cargoSettlementCommission
                 : 0,
               livingTrackingEmployeeId,
+              gmv,
+              eliminateCardGMV,
+              refundCard
             };
             this.isflag = true
             // 添加

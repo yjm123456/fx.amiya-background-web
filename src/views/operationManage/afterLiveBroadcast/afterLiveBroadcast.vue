@@ -260,6 +260,44 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="今日有效业绩"
+              prop="effectivePerformance"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日有效业绩',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.effectivePerformance"
+                placeholder="请输入今日潜在业绩"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日潜在业绩"
+              prop="potentialPerformance"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日潜在业绩',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.potentialPerformance"
+                placeholder="请输入今日潜在业绩"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
         </Row>
         <Row :gutter="30">
           <Col span="8">
@@ -665,6 +703,18 @@ export default {
             align: "center",
           },
           {
+            title: "今日有效业绩",
+            key: "effectivePerformance",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日潜在业绩",
+            key: "potentialPerformance",
+            minWidth: 130,
+            align: "center",
+          },
+          {
             title: "今日新诊上门量",
             key: "newVisitNum",
             minWidth: 150,
@@ -808,6 +858,8 @@ export default {
                               consultationCardConsumed,
                               consultationCardConsumed2,
                               activateHistoricalConsultation,
+                              effectivePerformance,
+                              potentialPerformance
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
@@ -835,6 +887,8 @@ export default {
                             this.form.consultationCardConsumed = consultationCardConsumed;
                             this.form.consultationCardConsumed2 = consultationCardConsumed2;
                             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
+                            this.form.effectivePerformance = effectivePerformance;
+                            this.form.potentialPerformance = potentialPerformance;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -1008,6 +1062,10 @@ export default {
         activateHistoricalConsultation: null,
         // 主播IP(自动填写用的字段)
         liveAnchorId:null,
+        // 今日有效业绩
+        effectivePerformance:null,
+        // 今日潜在业绩
+        potentialPerformance:null,
        
       },
 
@@ -1146,6 +1204,8 @@ export default {
         this.form.consultationCardConsumed = res.consultationCardConsumed
         this.form.consultationCardConsumed2 = res.consultationCardConsumed2
         this.form.activateHistoricalConsultation = res.activateHistoricalConsultation
+        this.form.effectivePerformance = res.effectivePerformance
+        this.form.potentialPerformance = res.potentialPerformance
       })
 
     },
@@ -1394,6 +1454,8 @@ export default {
               consultationCardConsumed,
               consultationCardConsumed2,
               activateHistoricalConsultation,
+              effectivePerformance,
+              potentialPerformance
             } = this.form;
             const data = {
               id,
@@ -1438,6 +1500,8 @@ export default {
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
+                effectivePerformance,
+              potentialPerformance
             };
             this.isflag = true
             api.afterLivingUpdate(data).then((res) => {
@@ -1481,6 +1545,8 @@ export default {
               consultationCardConsumed,
               consultationCardConsumed2,
               activateHistoricalConsultation,
+              effectivePerformance,
+              potentialPerformance
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -1522,6 +1588,8 @@ export default {
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
+              effectivePerformance,
+              potentialPerformance
             };
             this.isflag = true
             // 添加

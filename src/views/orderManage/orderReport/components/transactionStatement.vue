@@ -704,7 +704,7 @@ export default {
             },
           },
           {
-            title: "三方订单号",
+            title: "三方单号",
             key: "otherOrderId",
             minWidth: 180,
             align: "center",
@@ -815,6 +815,12 @@ export default {
             key: "settlePrice",
             minWidth: 120,
             align: "center",
+            render: (h, params) => {
+              return  h(
+                    "div",
+                    this.isShow ? params.row.settlePrice : '*'
+                  )
+            },
           },
           {
             title: "审核人",
@@ -1411,6 +1417,15 @@ export default {
     // this.transactionStatement()
     this.getCheckStateList();
     this.getOrderConsultationTypeList();
+    const currentRole = JSON.parse(
+          sessionStorage.getItem("permissions")
+        );
+        // 服务费按钮权限
+        this.isShow = currentRole.some((ele) => {
+          return "fx.amiya.permission.SELECT_RETURN_BACK_PRICE".includes(
+            ele
+          );
+        });
   },
   watch: {
     transactionStatementModal(value) {

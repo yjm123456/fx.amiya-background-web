@@ -1233,6 +1233,18 @@ const baseDataMaintenance = [{
         component: () =>
             import ("@/views/baseDataMaintenance/customerLabel/customerLabel.vue"),
     },
+    {
+        path: "/healthIndicators",
+        name: "healthIndicators",
+        meta: {
+            title: "健康指标填写",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/healthIndicators/healthIndicators.vue"),
+    },
 ];
 
 /**
@@ -1784,6 +1796,18 @@ const businessMange = [{
         },
         component: () =>
             import ("@/views/businessMange/mechanismKanBan.vue"),
+    },
+    {
+        path: "/performanceAnalysis",
+        name: "performanceAnalysis",
+        meta: {
+            title: "业绩分析看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/performanceAnalysis/performanceAnalysis.vue"),
     }
 ];
 

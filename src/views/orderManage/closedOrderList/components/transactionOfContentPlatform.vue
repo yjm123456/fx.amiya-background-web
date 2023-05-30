@@ -495,6 +495,8 @@ export default {
   },
   data() {
     return {
+      // 是否展示服务费金额
+      isShow:false,
       isCreateBillList:[
             {
               type:-1,
@@ -819,7 +821,7 @@ export default {
             align:'center'
           },
           {
-            title: "三方订单号",
+            title: "三方单号",
             key: "otherOrderId",
             minWidth: 180,
             align:'center'
@@ -880,19 +882,37 @@ export default {
             title: "信息服务费",
             key: "informationPrice",
             minWidth: 140,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return  h(
+                    "div",
+                    this.isShow ? params.row.informationPrice : '*'
+                  )
+            },
           },
           {
             title: "系统使用费",
             key: "systemUpdatePrice",
             minWidth: 140,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return  h(
+                    "div",
+                    this.isShow ? params.row.systemUpdatePrice : '*'
+                  )
+            },
           },
           {
             title: "服务费合计",
             key: "settlePrice",
             minWidth: 120,
-            align:'center'
+            align:'center',
+            render: (h, params) => {
+              return  h(
+                    "div",
+                    this.isShow ? params.row.settlePrice : '*'
+                  )
+            },
           },
           {
             title: "对账时间",
@@ -1626,6 +1646,16 @@ export default {
     this.getcontentPlateFormOrderToHospitalTypeList()
     this.getOrderConsultationTypeList()
     this.getContentPlatFormOrderDealInfotypeList()
+
+    const currentRole = JSON.parse(
+          sessionStorage.getItem("permissions")
+        );
+        // 服务费按钮权限
+        this.isShow = currentRole.some((ele) => {
+          return "fx.amiya.permission.SELECT_RETURN_BACK_PRICE".includes(
+            ele
+          );
+        });
   },
   watch: {
     activeName: {

@@ -94,7 +94,7 @@
             <span>{{ upgradeOrderObjs.channelText }} </span>
           </div>
           <div class="mr_top">
-            <span class="title_bold">三方订单号：</span>
+            <span class="title_bold">三方单号：</span>
             <span>{{ upgradeOrderObjs.otherContentPlatFormOrderId }} </span>
           </div>
            <div class="mr_top">

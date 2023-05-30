@@ -724,7 +724,7 @@ export default {
             align: "center",
           },
           {
-            title: "抖店订单号",
+            title: "三方单号",
             key: "otherContentPlatFormOrderId",
             minWidth: 180,
             align: "center",

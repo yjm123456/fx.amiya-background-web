@@ -964,7 +964,7 @@ export default {
       this.form.belongEmpId = Number(this.recordingNormalParams.belongEmpId)
       this.form.phone = this.recordingNormalParams.phone
       this.form.isCustomer = this.recordingNormalParams.isCustomer
-      this.form.consultingContent = '咨询项目：\n既往史：\n方案及报价：\n推荐医生：\n预算及确定治疗项目：\n痛点、禁忌、喜好：\n是否车接车送：\n助理、vip管家：\n备注：'
+      // this.form.consultingContent = '咨询项目：\n既往史：\n方案及报价：\n推荐医生：\n预算及确定治疗项目：\n痛点、禁忌、喜好：\n是否车接车送：\n助理、vip管家：\n备注：'
       const currentRole = JSON.parse(sessionStorage.getItem("permissions"));
       const flag = currentRole.some((ele) => {
         return 'fx.amiya.permission.UPDATE_CONTENT_PLAT_FORM_ORDER'.includes(ele);

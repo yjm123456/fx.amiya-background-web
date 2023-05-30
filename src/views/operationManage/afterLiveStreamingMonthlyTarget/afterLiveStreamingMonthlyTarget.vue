@@ -577,6 +577,52 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="有效业绩"
+              prop="effectivePerformanceTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入有效业绩(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="有效业绩"
+            >
+              <Input
+                v-model="form.effectivePerformanceTarget"
+                placeholder="请输入有效业绩"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="潜在业绩"
+              prop="potentialPerformanceTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入潜在业绩(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="潜在业绩"
+            >
+              <Input
+                v-model="form.potentialPerformanceTarget"
+                placeholder="请输入潜在业绩"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -1011,6 +1057,48 @@ export default {
               return h("div", params.row.miniVanBadReviewsCompleteRate + "%");
             },
           },
+          {
+            title: "有效业绩目标",
+            key: "effectivePerformanceTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计有效业绩",
+            key: "cumulativeEffectivePerformance",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "有效业绩完成率",
+            key: "effectivePerformanceCompleteRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.effectivePerformanceCompleteRate + "%");
+            },
+          },
+          {
+            title: "潜在业绩目标",
+            key: "potentialPerformanceTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计潜在业绩",
+            key: "cumulativePotentialPerformance",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "潜在业绩目标完成率",
+            key: "potentialPerformanceCompleteRate",
+            minWidth: 170,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.potentialPerformanceCompleteRate + "%");
+            },
+          },
 
           {
             title: "创建日期",
@@ -1095,6 +1183,10 @@ export default {
                               minivanRefundTarget,
                               // 差评总量上限
                               miniVanBadReviewsTarget,
+                              // 有效业绩目标
+                              effectivePerformanceTarget,
+                              // 潜在业绩
+                              potentialPerformanceTarget
                             } = res.data.liveAnchorMonthlyTargetAfterLivingInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.isEdit = true;
@@ -1120,6 +1212,8 @@ export default {
                             this.form.activateHistoricalConsultationTarget = activateHistoricalConsultationTarget;
                             this.form.minivanRefundTarget = minivanRefundTarget;
                             this.form.miniVanBadReviewsTarget = miniVanBadReviewsTarget;
+                            this.form.effectivePerformanceTarget = effectivePerformanceTarget;
+                            this.form.potentialPerformanceTarget = potentialPerformanceTarget;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -1291,6 +1385,10 @@ export default {
         consultationCardConsumedTarget2: null,
         // 激活历史面诊数量目标
         activateHistoricalConsultationTarget: null,
+        // 有效业绩目标
+        effectivePerformanceTarget: null,
+        // 潜在业绩
+        potentialPerformanceTarget: null
       },
 
       ruleValidate: {
@@ -1521,7 +1619,9 @@ export default {
               miniVanBadReviewsTarget,
               newCustomerPerformanceTarget,
               subsequentPerformanceTarget,
-              oldCustomerPerformanceTarget
+              oldCustomerPerformanceTarget,
+              effectivePerformanceTarget,
+              potentialPerformanceTarget
             } = this.form;
             const data = {
               id,
@@ -1546,6 +1646,8 @@ export default {
               oldCustomerPerformanceTarget,
               newCustomerDealTarget,
               oldCustomerDealTarget,
+              effectivePerformanceTarget,
+              potentialPerformanceTarget
               
             };
             this.isflag = true
@@ -1588,7 +1690,9 @@ export default {
               miniVanBadReviewsTarget,
               newCustomerPerformanceTarget,
               subsequentPerformanceTarget,
-              oldCustomerPerformanceTarget
+              oldCustomerPerformanceTarget,
+              effectivePerformanceTarget,
+              potentialPerformanceTarget
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -1612,6 +1716,8 @@ export default {
               oldCustomerPerformanceTarget,
               newCustomerDealTarget,
               oldCustomerDealTarget,
+              effectivePerformanceTarget,
+              potentialPerformanceTarget
               
             };
             this.isflag = true

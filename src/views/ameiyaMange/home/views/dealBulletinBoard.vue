@@ -11,6 +11,18 @@
           v-model="month"
         ></DatePicker>
         <Button type="primary" @click="handlerChange">查询</Button>
+        <Button
+          :type="accumulateType"
+          style="margin-left: 30px"
+          @click="accumulate()"
+          >累计</Button
+      >
+      <Button
+          :type="monthsType"
+          style="margin-left: 10px"
+          @click="months()"
+          >当月</Button
+      >
       </div>
       <div class="list">
         <div class="item blue">
@@ -111,12 +123,34 @@ export default {
       rankList:[],
 
       month: this.$moment().format("YYYY-MM"),
+      type:0,
+      accumulateType:'primary',
+      monthsType:'default',
     };
   },
   methods: {
     // 调用所有接口
     handlerChange(){
         this.getDealPerformance()
+        this.getDepartmentRankList()
+        this.getConsultantRankList()
+        this.getSceneConsultantRankList()
+    },
+    // 累计
+    accumulate(){
+      this.accumulateType = 'primary'
+      this.monthsType = 'default'
+      this.type = 0
+      this.getDepartmentRankList()
+      this.getConsultantRankList()
+      this.getSceneConsultantRankList()
+      
+    },
+    // 当月
+    months(){
+        this.monthsType = 'primary'
+        this.accumulateType = 'default'
+        this.type = 1
         this.getDepartmentRankList()
         this.getConsultantRankList()
         this.getSceneConsultantRankList()
@@ -140,6 +174,7 @@ export default {
       const data = {
         year:this.$moment(this.month).format("YYYY"),
         month:this.$moment(this.month).format("MM"),
+        type:this.type
       }
       api.getDepartmentRankList(data).then((res) => {
         if(res.code === 0){
@@ -153,6 +188,7 @@ export default {
       const data = {
         year:this.$moment(this.month).format("YYYY"),
         month:this.$moment(this.month).format("MM"),
+        type:this.type
       }
       api.getConsultantRankList(data).then((res) => {
         if(res.code === 0){
@@ -166,6 +202,7 @@ export default {
       const data = {
         year:this.$moment(this.month).format("YYYY"),
         month:this.$moment(this.month).format("MM"),
+        type:this.type
       }
       api.getSceneConsultantRankList(data).then((res) => {
         if(res.code === 0){
@@ -179,6 +216,8 @@ export default {
       handler(value) {
         if (value === "dealBulletinBoard") {
           this.handlerChange()
+          this.month = this.$moment().format("YYYY-MM")
+          this.type = 0
         }
       },
       immediate: true,

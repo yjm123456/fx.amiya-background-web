@@ -237,12 +237,18 @@ export default {
             // },
           },
           {
-            title: "审核服务费金额",
+            title: "服务费合计",
             key: "returnBackPrice",
             minWidth:140,
             align: "center",
           },
-          
+          {
+            title: "助理服务费合计",
+            key: "customerServiceSettlePrice",
+            minWidth: 140,
+            align:'center',
+            
+          },
           {
             title: "是否回款",
             key: "isSettle",

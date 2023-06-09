@@ -1963,10 +1963,9 @@ export default {
             commissionRatio: 0,
             invitationDocuments,
             dealPerformanceType,
-            consumptionType,
+            consumptionType:consumptionType ? consumptionType : null,
             addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList
           };
-          
           if(isFinish == true){
             if(dealAmount == 0){
               this.isLoading = true

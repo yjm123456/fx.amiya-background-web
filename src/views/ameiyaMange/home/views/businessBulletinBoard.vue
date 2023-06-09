@@ -11,8 +11,20 @@
           v-model="month"
         ></DatePicker>
         <Button type="primary" @click="getOperationData">查询</Button>
+        <Button
+          :type="accumulateType"
+          style="margin-left: 30px"
+          @click="accumulate()"
+          >累计</Button
+      >
+      <Button
+          :type="monthsType"
+          style="margin-left: 10px"
+          @click="months()"
+          >当月</Button
+      >
       </div>
-      <div class="list" style="margin-top:10px">
+      <div class="list" style="margin-top:40px">
         <div class="item blue">
           <div class="item_title">新客上门量</div>
           <div class="item_num">{{operateData.newCustomerToHospitalCount}}</div>
@@ -45,7 +57,7 @@
         </div>
       </div>
       <div class="list" style="margin-top:10px">
-        <div class="item green2">
+        <!-- <div class="item green2">
           <div class="item_title">老客上门量</div>
           <div class="item_num">{{operateData.oldCustomerToHospitalCount }}</div>
           <div class="item_proportion">环比 
@@ -59,8 +71,8 @@
             <span v-else>0%</span>
           </div>
           <i class="iconfont icon-yonghu icon" style="font-size:40px"></i>
-        </div>
-        <div class="item yellow">
+        </div> -->
+        <!-- <div class="item yellow">
           <div class="item_title">老客成交量</div>
           <div class="item_num">{{operateData.oldCustomerDealCount}}</div>
           <div class="item_proportion">环比 
@@ -74,7 +86,7 @@
             <span v-else>0%</span>
           </div>
           <i class="iconfont icon-yonghushouquan icon2" style="font-size:43px"></i>
-        </div>
+        </div> -->
       </div>
       <div class="list" style="margin-top:10px">
         <div class="item orange">
@@ -115,7 +127,7 @@
           <i class="iconfont icon-yonghuguanli icon2" style="font-size:45px"></i>
         </div>
       </div>
-      <div class="list" style="margin-top:10px">
+      <div class="list" style="margin-top:50px">
         <div class="item orange3">
           <div class="item_title">老客复购率</div>
           <div class="item_num">{{operateData.oldCustomerRepurchaseRatio + '%'}}</div>
@@ -134,7 +146,22 @@
           </div>
           <i class="iconfont icon-tianjiayonghu icon" style="font-size:40px"></i>
         </div>
-        <div class="item orange4">
+        <div class="item yellow">
+          <div class="item_title">老客成交量</div>
+          <div class="item_num">{{operateData.oldCustomerDealCount}}</div>
+          <div class="item_proportion">环比 
+            <span v-if="Math.sign(operateData.oldCustomerDealChainRatio)== 1"> <span  class="red">增长</span>{{ Math.abs(operateData.oldCustomerDealChainRatio) + '%'}}</span>
+            <span v-else-if="Math.sign(operateData.oldCustomerDealChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(operateData.oldCustomerDealChainRatio) + '%'}}</span>
+            <span v-else>0%</span>
+          </div>
+          <div class="item_proportion">同比
+            <span v-if="Math.sign(operateData.oldCustomerDealYearOnYear)== 1"> <span  class="red">增长</span>{{ Math.abs(operateData.oldCustomerDealYearOnYear) + '%'}}</span>
+            <span v-else-if="Math.sign(operateData.oldCustomerDealYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(operateData.oldCustomerDealYearOnYear) + '%'}}</span>
+            <span v-else>0%</span>
+          </div>
+          <i class="iconfont icon-yonghushouquan icon2" style="font-size:43px"></i>
+        </div>
+        <!-- <div class="item orange4">
           <div class="item_title">老客成交率</div>
           <div class="item_num">{{operateData.oldCustomerDealRation + '%'}}</div>
           <div class="item_proportion">环比 
@@ -151,7 +178,7 @@
            <span>{{operateData.oldCustomerDealRationHealthValue}}%</span>
           </div>
           <i class="iconfont icon-yonghuguanli1 icon2" style="font-size:45px"></i>
-        </div>
+        </div> -->
       </div>
     </Card>
   </div>
@@ -166,6 +193,9 @@ export default {
     return {
       operateData:{},
       month: this.$moment().format("YYYY-MM"),
+      type:0,
+      accumulateType:'primary',
+      monthsType:'default',
     };
   },
   methods: {
@@ -174,12 +204,28 @@ export default {
       const data ={
         year:this.$moment(this.month).format("YYYY"),
         month:this.$moment(this.month).format("MM"),
+        type:this.type
       }
       api.getOperationData(data).then((res) => {
         if(res.code === 0){
           this.operateData = res.data.operateData
         }
       })
+    },
+    // 累计
+    accumulate(){
+      this.accumulateType = 'primary'
+      this.monthsType = 'default'
+      this.type = 0
+      this.getOperationData()
+      
+    },
+    // 当月
+    months(){
+        this.monthsType = 'primary'
+        this.accumulateType = 'default'
+        this.type = 1
+        this.getOperationData()
     },
   },
   watch: {
@@ -188,6 +234,7 @@ export default {
         if (value === "businessBulletinBoard") {
           this.getOperationData()
           this.month = this.$moment().format("YYYY-MM")
+          this.type = 0
         }
       },
       immediate: true,

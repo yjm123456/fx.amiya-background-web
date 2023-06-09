@@ -915,6 +915,13 @@ export default {
             },
           },
           {
+            title: "助理服务费合计",
+            key: "customerServiceSettlePrice",
+            minWidth: 140,
+            align:'center',
+            
+          },
+          {
             title: "对账时间",
             key: "checkDate",
             minWidth: 180,

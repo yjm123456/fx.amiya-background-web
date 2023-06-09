@@ -11,6 +11,18 @@
           v-model="month"
         ></DatePicker>
         <Button type="primary" @click="handlerChange">查询</Button>
+        <Button
+          :type="accumulateType"
+          style="margin-left: 30px"
+          @click="accumulate()"
+          >累计</Button
+      >
+      <Button
+          :type="monthsType"
+          style="margin-left: 10px"
+          @click="months()"
+          >当月</Button
+      >
       </div>
       <div class="list">
         <div class="item blue">
@@ -146,10 +158,28 @@ export default {
       orderData:{},
       month: this.$moment().format("YYYY-MM"),
       // 今日未处理任务
-      todayNoRepeatedSendOrder:[]
+      todayNoRepeatedSendOrder:[],
+      type:1,
+      accumulateType:'default',
+      monthsType:'primary',
     };
   },
   methods: {
+    // 累计
+    accumulate(){
+      this.accumulateType = 'primary'
+      this.monthsType = 'default'
+      this.type = 0
+      this.getOrderData()
+      
+    },
+    // 当月
+    months(){
+        this.monthsType = 'primary'
+        this.accumulateType = 'default'
+        this.type = 1
+        this.getOrderData()
+    },
     // 获取所有接口数据
     handlerChange(){
       this.getOrderData()
@@ -163,6 +193,7 @@ export default {
       const data = {
         year:this.$moment(this.month).format("YYYY"),
         month:this.$moment(this.month).format("MM"),
+        type:this.type
       }
       api.getOrderData(data).then((res) => {
         if(res.code === 0){
@@ -188,6 +219,7 @@ export default {
         if (value === "orderBulletinBoard") {
           this.handlerChange()
           this.month = this.$moment().format("YYYY-MM")
+          this.type = 1
         }
       },
       immediate: true,

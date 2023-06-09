@@ -68,12 +68,12 @@
             @click="getCustomerAppointmentSchedule()"
             >查询</Button
           >
-          <Button
+          <!-- <Button
             type="primary"
             style="margin-left: 10px"
             @click="batchAssignmentClick"
             >批量指派主播</Button
-          >
+          > -->
         </div>
         <div class="right">
           <Button
@@ -169,13 +169,26 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="预约时间" prop="appointmentDate" key="预约时间">
+            <FormItem label="预约日期" prop="appointmentDate" key="预约日期">
               <DatePicker
                 type="date"
-                placeholder="请选择预约时间"
+                placeholder="请选择预约日期"
                 style="width: 100%"
                 v-model="form.appointmentDate"
               ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="预约时间" prop="time" key="预约时间">
+              <TimePicker
+                format="HH:mm"
+                placeholder="请选择预约时间"
+                style="width: 100%"
+                :disabled-minutes="[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,
+                ]"
+                hide-disabled-options
+                v-model="form.time"
+              />
             </FormItem>
           </Col>
           <Col span="8">
@@ -250,6 +263,16 @@
             </FormItem>
           </Col>
         </Row>
+        <Row>
+          <Col span="8">
+            <FormItem label="顾客照片" prop="customerPic" key="customerPic">
+              <upload
+                :uploadObj="uploadObj"
+                @uploadChange="handleUploadChange"
+              />
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -258,7 +281,11 @@
     </Modal>
 
     <!-- 指派 -->
-    <assign :assignModel.sync="assignModel" :assignParams="assignParams" @getCustomerAppointmentSchedule="getCustomerAppointmentSchedule"/>
+    <assign
+      :assignModel.sync="assignModel"
+      :assignParams="assignParams"
+      @getCustomerAppointmentSchedule="getCustomerAppointmentSchedule"
+    />
   </div>
 </template>
 <script>
@@ -267,9 +294,11 @@ import * as apis from "@/api/goodsManage";
 import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
 import * as orderApi from "@/api/orderManage";
 import * as liveApi from "@/api/liveAnchorBaseInfo";
-import assign from "./assign.vue"
+import assign from "./assign.vue";
+import upload from "@/components/upload/upload";
+
 export default {
-  components: {assign},
+  components: { assign, upload },
   props: ["activeName"],
   data() {
     return {
@@ -294,12 +323,14 @@ export default {
       employee: [],
       //   预约类型
       appointmentTypeList: [],
-      appointmentTypeListAll: [{ id: -1, name: "全部预约类型" },],
+      appointmentTypeListAll: [{ id: -1, name: "全部预约类型" }],
       query: {
         // 重要程度
-        emergencyLevelListAll: [{ emergencyLevel: -1, emergencyLevelText: "全部重要程度" },],
+        emergencyLevelListAll: [
+          { emergencyLevel: -1, emergencyLevelText: "全部重要程度" },
+        ],
         keyWord: "",
-        appointmentType:-1,
+        appointmentType: -1,
         importantType: -1,
         pageNum: 1,
         pageSize: 10,
@@ -308,7 +339,7 @@ export default {
           .startOf("month")
           .format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
-        assignLiveanchorId:null,
+        assignLiveanchorId: null,
         columns: [
           {
             type: "selection",
@@ -320,43 +351,43 @@ export default {
             title: "创建人",
             key: "createByEmpName",
             minWidth: 150,
-            align:'center'
+            align: "center",
           },
           {
             title: "指派主播",
             key: "assignLiveanchorName",
             minWidth: 150,
-            align:'center'
+            align: "center",
           },
           {
             title: "客户昵称",
             key: "customerName",
             minWidth: 150,
-            align:'center'
+            align: "center",
           },
           {
             title: "手机号",
             key: "phone",
             minWidth: 150,
-            align:'center'
+            align: "center",
           },
           {
             title: "预约类型",
             key: "appointmentTypeText",
             minWidth: 150,
-            align:'center'
+            align: "center",
           },
           {
             title: "预约时间",
             key: "appointmentDate",
-            minWidth: 140,
+            minWidth: 160,
             align: "center",
             render: (h, params) => {
               return h(
                 "div",
                 params.row.appointmentDate
                   ? this.$moment(params.row.appointmentDate).format(
-                      "YYYY-MM-DD"
+                      "YYYY-MM-DD HH:mm"
                     )
                   : ""
               );
@@ -366,25 +397,25 @@ export default {
             title: "预约医院",
             key: "appointmentHospitalName",
             minWidth: 220,
-            align:'center'
+            align: "center",
           },
           {
             title: "接诊咨询",
             key: "consultation",
             minWidth: 220,
-            align:'center'
+            align: "center",
           },
           {
             title: "重要程度",
             key: "importantTypeText",
             minWidth: 150,
-            align:'center'
+            align: "center",
           },
           {
             title: "是否完成",
             key: "phone",
             minWidth: 150,
-            align:'center',
+            align: "center",
             render: (h, params) => {
               return h(
                 "div",
@@ -392,15 +423,118 @@ export default {
               );
             },
           },
-          
+          {
+            title: "顾客照片",
+            key: "customerPic1",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return params.row.customerPic1
+                ? h(
+                    "viewer",
+                    {
+                      props: {
+                        options: {
+                          toolbar: false,
+                          title: false,
+                          navbar: false,
+                        },
+                      },
+                    },
+                    [
+                      h("img", {
+                        style: {
+                          width: "50px",
+                          height: "50px",
+                          margin: "5px 0",
+                          verticalAlign: "middle",
+                        },
+                        attrs: {
+                          src: params.row.customerPic1,
+                        },
+                      }),
+                    ]
+                  )
+                : "";
+            },
+          },
+          {
+            title: "顾客照片",
+            key: "customerPic2",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return params.row.customerPic2
+                ? h(
+                    "viewer",
+                    {
+                      props: {
+                        options: {
+                          toolbar: false,
+                          title: false,
+                          navbar: false,
+                        },
+                      },
+                    },
+                    [
+                      h("img", {
+                        style: {
+                          width: "50px",
+                          height: "50px",
+                          margin: "5px 0",
+                          verticalAlign: "middle",
+                        },
+                        attrs: {
+                          src: params.row.customerPic2,
+                        },
+                      }),
+                    ]
+                  )
+                : "";
+            },
+          },
+          {
+            title: "顾客照片",
+            key: "customerPic3",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return params.row.customerPic3
+                ? h(
+                    "viewer",
+                    {
+                      props: {
+                        options: {
+                          toolbar: false,
+                          title: false,
+                          navbar: false,
+                        },
+                      },
+                    },
+                    [
+                      h("img", {
+                        style: {
+                          width: "30px",
+                          height: "30px",
+                          margin: "2px 0",
+                          verticalAlign: "middle",
+                        },
+                        attrs: {
+                          src: params.row.customerPic3,
+                        },
+                      }),
+                    ]
+                  )
+                : "";
+            },
+          },
           {
             title: "备注",
             key: "remark",
             tooltip: true,
             minWidth: 300,
-            align:'center'
+            align: "center",
           },
-          
 
           {
             title: "操作",
@@ -422,9 +556,9 @@ export default {
                     on: {
                       click: () => {
                         const { id } = params.row;
-                        this.assignParams.title = "指派主播"
-                        this.assignParams.id = id
-                        this.assignModel = true
+                        this.assignParams.title = "指派主播";
+                        this.assignParams.id = id;
+                        this.assignModel = true;
                       },
                     },
                   },
@@ -457,7 +591,10 @@ export default {
                               remark,
                               appointmentHospitalId,
                               consultation,
-                              assignLiveanchorId
+                              assignLiveanchorId,
+                              customerPic1,
+                              customerPic2,
+                              customerPic3,
                             } = res.data.customerAppointmentScheduleInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -471,6 +608,18 @@ export default {
                             this.form.appointmentHospitalId = appointmentHospitalId;
                             this.form.consultation = consultation;
                             this.form.assignLiveanchorId = assignLiveanchorId;
+                            this.form.time = this.$moment(
+                              appointmentDate
+                            ).format("HH:mm");
+                            // this.form.customerPic = customerPic1,customerPic2,customerPic3
+                            this.uploadObj.uploadList =
+                              customerPic1 && customerPic2 && customerPic3
+                                ? [customerPic1, customerPic2, customerPic3]
+                                : customerPic1 && customerPic2
+                                ? [customerPic1, customerPic2]
+                                : customerPic1
+                                ? [customerPic1]
+                                : [];
                             this.controlModal = true;
                           }
                         });
@@ -493,15 +642,17 @@ export default {
                           content: "是否确认删除？",
                           onOk: () => {
                             const { id } = params.row;
-                            api.deleteCustomerAppointmentSchedule(id).then((res) => {
-                              if (res.code === 0) {
-                                this.getCustomerAppointmentSchedule();
-                                this.$Message.success({
-                                  content: "删除成功",
-                                  duration: 3,
-                                });
-                              }
-                            });
+                            api
+                              .deleteCustomerAppointmentSchedule(id)
+                              .then((res) => {
+                                if (res.code === 0) {
+                                  this.getCustomerAppointmentSchedule();
+                                  this.$Message.success({
+                                    content: "删除成功",
+                                    duration: 3,
+                                  });
+                                }
+                              });
                           },
                           onCancel: () => {},
                         });
@@ -526,7 +677,14 @@ export default {
 
       // 是否是编辑
       isEdit: false,
-
+      uploadObj: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 3,
+        // 文件列表
+        uploadList: [],
+      },
       form: {
         id: "",
         // 客户昵称
@@ -537,6 +695,8 @@ export default {
         appointmentType: null,
         // 预约时间
         appointmentDate: "",
+        // 预约时间
+        time: "",
         // 是否完成
         isFinish: false,
         // 重要程度
@@ -544,9 +704,11 @@ export default {
         // 备注
         remark: "",
         // 预约医院
-        appointmentHospitalId:null,
+        appointmentHospitalId: null,
         // 接诊咨询
-        consultation:''
+        consultation: "",
+        // 顾客照片
+        customerPic: [],
       },
 
       ruleValidate: {
@@ -571,6 +733,12 @@ export default {
         appointmentDate: [
           {
             required: true,
+            message: "请选择预约日期",
+          },
+        ],
+        time: [
+          {
+            required: true,
             message: "请选择预约时间",
           },
         ],
@@ -582,21 +750,25 @@ export default {
         ],
       },
       // 医院
-      hospitalInfo:[],
+      hospitalInfo: [],
       // 指派
-      assignModel:false,
-      assignParams:{
-        title:"",
+      assignModel: false,
+      assignParams: {
+        title: "",
         // 主播
-        liveAnchorBaseInfos:[],
+        liveAnchorBaseInfos: [],
         // 单个指派id
-        id:'',
+        id: "",
         // 批量指派
         idList: new Set(),
-      }
+      },
     };
   },
   methods: {
+    // 图片
+    handleUploadChange(values) {
+      this.form.customerPic = values;
+    },
     // 批量指派
     batchAssignmentClick() {
       if (![...this.assignParams.idList].length) {
@@ -607,7 +779,7 @@ export default {
         return;
       }
       this.assignModel = true;
-      this.assignParams.title = '批量指派主播'
+      this.assignParams.title = "批量指派主播";
     },
     handleSelect(selection, row) {
       // 批量指派
@@ -629,13 +801,13 @@ export default {
       }
     },
     // 获取主播基础信息列表
-    getLiveAnchorBaseInfoValid(){
+    getLiveAnchorBaseInfoValid() {
       liveApi.getLiveAnchorBaseInfoValid().then((res) => {
-        if(res.code === 0){
-          const {liveAnchorBaseInfos} = res.data
-          this.assignParams.liveAnchorBaseInfos = liveAnchorBaseInfos
+        if (res.code === 0) {
+          const { liveAnchorBaseInfos } = res.data;
+          this.assignParams.liveAnchorBaseInfos = liveAnchorBaseInfos;
         }
-      })
+      });
     },
     // 获取医院列表（select）
     getHospital() {
@@ -652,7 +824,10 @@ export default {
         if (res.code === 0) {
           const { appointmentTypeList } = res.data;
           this.appointmentTypeList = appointmentTypeList;
-          this.appointmentTypeListAll = [...this.appointmentTypeListAll,...appointmentTypeList];
+          this.appointmentTypeListAll = [
+            ...this.appointmentTypeListAll,
+            ...appointmentTypeList,
+          ];
         }
       });
     },
@@ -691,7 +866,7 @@ export default {
         endDate,
         isFinish,
         importantType,
-        appointmentType
+        appointmentType,
       } = this.query;
       const data = {
         pageNum,
@@ -704,7 +879,6 @@ export default {
         isFinish: isFinish == -1 ? null : isFinish,
         importantType: importantType == -1 ? null : importantType,
         appointmentType: appointmentType == -1 ? null : appointmentType,
-
       };
       api.getCustomerAppointmentSchedule(data).then((res) => {
         if (res.code === 0) {
@@ -725,7 +899,7 @@ export default {
         endDate,
         isFinish,
         importantType,
-        appointmentType
+        appointmentType,
       } = this.query;
       const data = {
         pageNum,
@@ -764,7 +938,9 @@ export default {
             remark,
             appointmentHospitalId,
             consultation,
-            assignLiveanchorId
+            assignLiveanchorId,
+            time,
+            customerPic,
           } = this.form;
           if (phone) {
             if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -779,15 +955,16 @@ export default {
               phone,
               customerName,
               appointmentType,
-              appointmentDate: this.$moment(new Date(appointmentDate)).format(
-                "YYYY-MM-DD"
-              ),
+              appointmentDate:this.$moment(new Date(appointmentDate)).format("YYYY-MM-DD") + "T" + time + ":00",
               isFinish,
               importantType,
               remark,
               appointmentHospitalId,
-            consultation,
-            assignLiveanchorId
+              consultation,
+              assignLiveanchorId: assignLiveanchorId ? assignLiveanchorId : "",
+              customerPic1: this.uploadObj.uploadList[0],
+              customerPic2: this.uploadObj.uploadList[1],
+              customerPic3: this.uploadObj.uploadList[2],
             };
             api.updateCustomerAppointmentSchedule(data).then((res) => {
               if (res.code === 0) {
@@ -806,15 +983,20 @@ export default {
               customerName,
               phone,
               appointmentType,
-              appointmentDate: this.$moment(new Date(appointmentDate)).format(
-                "YYYY-MM-DD"
-              ),
+              appointmentDate:
+                this.$moment(new Date(appointmentDate)).format("YYYY-MM-DD") +
+                "T" +
+                time +
+                ":00",
               isFinish,
               importantType,
               remark,
               appointmentHospitalId,
-            consultation,
-            assignLiveanchorId
+              consultation,
+              assignLiveanchorId: assignLiveanchorId ? assignLiveanchorId : "",
+              customerPic1: customerPic.length > 0 ? customerPic[0] : "",
+              customerPic2: customerPic.length > 1 ? customerPic[1] : "",
+              customerPic3: customerPic.length > 2 ? customerPic[2] : "",
             };
             api.addCustomerAppointmentSchedule(data).then((res) => {
               if (res.code === 0) {
@@ -835,6 +1017,7 @@ export default {
     cancelSubmit(name) {
       this.isEdit = false;
       this.controlModal = false;
+      this.uploadObj.uploadList = [];
       this.$refs[name].resetFields();
     },
 
@@ -842,6 +1025,7 @@ export default {
     handleModalVisibleChange(value) {
       if (!value) {
         this.isEdit = false;
+        this.uploadObj.uploadList = [];
         this.$refs["form"].resetFields();
       }
     },
@@ -850,8 +1034,8 @@ export default {
     this.getEmergencyLevels();
     this.getCustomerServiceList();
     this.getAppointmentTypeList();
-    this.getHospital()
-    this.getLiveAnchorBaseInfoValid()
+    this.getHospital();
+    this.getLiveAnchorBaseInfoValid();
   },
   watch: {
     activeName: {

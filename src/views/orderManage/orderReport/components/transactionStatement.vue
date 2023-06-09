@@ -823,6 +823,13 @@ export default {
             },
           },
           {
+            title: "助理服务费合计",
+            key: "customerServiceSettlePrice",
+            minWidth: 160,
+            align:'center',
+            
+          },
+          {
             title: "审核人",
             key: "checkBy",
             minWidth: 120,

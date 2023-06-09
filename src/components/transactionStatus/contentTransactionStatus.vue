@@ -1078,7 +1078,7 @@ export default {
             commissionRatio: 0,
             invitationDocuments,
             dealPerformanceType,
-            consumptionType,
+            consumptionType:consumptionType ? consumptionType : null,
             // addContentPlatFormOrderDealDetailsVoList:isFinish == false ? [] : addContentPlatFormOrderDealDetailsVoList
             addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoLists
           };

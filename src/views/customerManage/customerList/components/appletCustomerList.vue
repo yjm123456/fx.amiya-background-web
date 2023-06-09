@@ -280,6 +280,7 @@
       :bonusPointsParams="bonusPointsParams"
       :bonusPointsControlModal.sync="bonusPointsControlModal"
       @getWeChatCustomerList="getWeChatCustomerList"
+      ref="bonusPoint"
     />
 
     <!-- 发优惠券 -->
@@ -845,9 +846,10 @@ export default {
                         this.$refs.gift.getAddressLists(id);
                       } else if (name == "confirm") {
                         //赠送积分
-                        const { encryptPhone } = params.row;
+                        const { encryptPhone ,id} = params.row;
                         this.bonusPointsParams.encryptPhone = encryptPhone;
                         this.bonusPointsControlModal = true;
+                        this.$refs.bonusPoint.getCustomerInternelPercent(id)
                       } else if (name == "goodNews") {
                         //用户标签
                         const { id } = params.row;

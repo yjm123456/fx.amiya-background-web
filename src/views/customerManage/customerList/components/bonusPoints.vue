@@ -31,6 +31,7 @@
           />
         </FormItem>
       </Form>
+      <div style="color:red;font-weight:bold;font-size:12px">积分生成比例:{{percent}}%</div>
       <div slot="footer">
         <Button @click="handleCancel('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
@@ -57,9 +58,22 @@ export default {
         actualPayment: null,
       },
       ruleValidates: {},
+      percent:0
     };
+
   },
   methods: {
+    // 客户积分生成比例
+    getCustomerInternelPercent(id){
+      const data={
+        customerId:id
+      }
+      api.customerInternelPercent(data).then(res=>{
+        if(res.code === 0){
+          this.percent = res.data.percent
+        }
+      })
+    },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {

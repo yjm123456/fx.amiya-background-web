@@ -486,3 +486,11 @@ export const exportRecordList = (params) => {
         responseType: 'blob'
     });
 };
+// 客户积分生成比例
+export const customerInternelPercent = (params) => {
+    return http({
+        url: `/amiyabg/Customer/customerInternelPercent`,
+        method: "get",
+        params
+    });
+};

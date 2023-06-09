@@ -1398,8 +1398,11 @@ export default {
                               this.form.refundType = refundReason;
                               this.form.refundReason = "";
                             } else {
-                              this.form.refundType = "其他";
-                              this.form.refundReason = refundReason.slice(3);
+                              if(isReturnBackPrice == true && refundReason){
+                                this.form.refundType = "其他";
+                                this.form.refundReason = refundReason.slice(3);
+                              }
+                              
                             }
                             this.isEdit = true;
                             this.form.recordDate = recordDate;

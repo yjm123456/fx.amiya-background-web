@@ -15,6 +15,18 @@
           v-model="month"
         ></DatePicker>
         <Button type="primary" @click="getRankData">查询</Button>
+        <Button
+          :type="accumulateType"
+          style="margin-left: 30px"
+          @click="accumulate()"
+          >累计</Button
+      >
+      <Button
+          :type="monthsType"
+          style="margin-left: 10px"
+          @click="months()"
+          >当月</Button
+      >
       </div>
       <hospitalTable :rankList="rankList"></hospitalTable>
     </Card>
@@ -52,6 +64,9 @@ export default {
       // 总排名
       myRank:0,
       month: this.$moment().format("YYYY-MM"),
+      type:0,
+      accumulateType:'primary',
+      monthsType:'default',
     };
   },
   methods: {
@@ -60,6 +75,7 @@ export default {
       const data = {
         year:this.$moment(this.month).format("YYYY"),
         month:this.$moment(this.month).format("MM"),
+        type:this.type
       }
       api.getRankData(data).then((res) => {
         if(res.code === 0){
@@ -69,12 +85,28 @@ export default {
         }
       })
     },
+    // 累计
+    accumulate(){
+      this.accumulateType = 'primary'
+      this.monthsType = 'default'
+      this.type = 0
+      this.getRankData()
+      
+    },
+    // 当月
+    months(){
+        this.monthsType = 'primary'
+        this.accumulateType = 'default'
+        this.type = 1
+        this.getRankData()
+    },
   },
   watch: {
     activeName: {
       handler(value) {
         if (value === "hospitalRanking") {
           this.getRankData()
+          this.type = 0
         }
       },
       immediate: true,

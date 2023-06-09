@@ -222,7 +222,7 @@
             </div>
           </div>
           <div class="appoint"  style="display:flex;justify-content:flex-end;margin-top:10px;margin-right:-5px">
-            <Button type="primary" @click="appointmentScheduleModel =true" style="margin-right:10px">生成预约日程</Button>
+            <Button type="primary" @click="appointmentScheduleClick(detailObj.id)" style="margin-right:10px">生成预约日程</Button>
             <Button type="primary" @click="messageClick" style="margin-right:10px" v-if="detailObj.orderStatusText != '未派单'">留言板</Button>
           </div>
         </div>
@@ -449,6 +449,17 @@
                 <span> {{ detailObj.returnBackPrice }}</span>
                 <!--  -->
               </div>
+            </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items" >
+              <span class="title_bold">助理服务费合计：</span>
+              <span>{{ detailObj.customerServiceSettlePrice }} </span>
+            </div>
+            <div class="fl_item" >
+              <div class="mr_top items2">
+               
+              </div>
               <Button type="primary" @click="lookCheckImg(detailObj.id)"
                 >查看审核图片</Button
               >
@@ -503,7 +514,7 @@
     <customerMessage :customerMessageModel.sync="customerMessageModel" 
     :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
     <!-- 生成预约日程 -->
-    <appointmentSchedule :appointmentScheduleModel.sync="appointmentScheduleModel" :appointmentParams="appointmentParams" :detailObj="detailObj"/>
+    <appointmentSchedule :appointmentScheduleModel.sync="appointmentScheduleModel" :appointmentParams="appointmentParams" :detailObj="detailObj" ref="appointmentSchedule"/>
     <!-- 留言板 -->
     <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
   </div>
@@ -585,7 +596,8 @@ export default {
         // 预约类型
         appointmentTypeList:[],
         // 紧急程度
-        emergencyLevelsList:[]
+        emergencyLevelsList:[],
+        orderId:''
       },
       // 生成预约日程model
       appointmentScheduleModel:false,
@@ -657,6 +669,11 @@ export default {
   },
 
   methods: {
+    // 生成预约日程
+    appointmentScheduleClick(orderId){
+      this.appointmentScheduleModel =true
+      this.appointmentParams.orderId = orderId
+    },
     // 留言板
     messageBoardChange() {
       this.messageBoardParams.messageBoard = false;

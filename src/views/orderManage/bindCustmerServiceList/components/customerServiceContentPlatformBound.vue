@@ -79,7 +79,7 @@
     </Card>
 
     <Card style="margin-top: 10px">
-      <div>
+      <!-- <div>
         <Table
           border
           :columns="query.columns"
@@ -99,6 +99,30 @@
           show-total
           show-elevator
           @on-change="handleProjectPageChange"
+        />
+      </div> -->
+      <div>
+        <Table
+          border
+          :columns="query.columns"
+          :data="query.data"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancel"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"
+        ></Table>
+      </div>
+      <div class="page_wrap">
+        <Page
+          ref="pages"
+          :current="query.pageNum"
+          :page-size="query.pageSize"
+          :total="query.totalCount"
+          show-total
+          show-sizer
+          :page-size-opts="[10, 50, 100,200,500]"
+          @on-change="handleProjectPageChange"
+          @on-page-size-change="handlePageSizeChange"
         />
       </div>
     </Card>
@@ -160,7 +184,7 @@ export default {
             type: "selection",
             key: "_checked",
             align: "center",
-            minWidth: 100,
+            minWidth: 70,
           },
           {
             title: "录单时间",
@@ -179,17 +203,22 @@ export default {
           {
             title: "订单号",
             key: "id",
-            minWidth: 200,
+            minWidth: 180,
+            align: "center",
+            tooltip: true,
           },
           {
             title: "绑定客服",
             key: "customerServiceName",
             minWidth: 120,
+            align: "center",
+            tooltip: true,
           },
           {
             title: "项目",
             key: "thumbPictureUrl",
-            minWidth: 220,
+            minWidth: 180,
+            align: "center",
             render: (h, params) => {
               return h(
                 "viewer",
@@ -221,33 +250,43 @@ export default {
           {
             title: "下单平台",
             key: "contentPlatformName",
-            minWidth: 120,
+            minWidth: 100,
+             align: "center",
+             tooltip: true,
           },
           {
             title: "IP账号",
             key: "liveAnchorName",
             minWidth: 120,
+             align: "center",
+             tooltip: true,
           },
           {
             title: "姓名",
             key: "customerName",
             minWidth: 150,
+             align: "center",
+             tooltip: true,
           },
           {
             title: "手机号",
             key: "phone",
             minWidth: 140,
+             align: "center",
           },
           {
             title: "预约门店",
             key: "appointmentHospitalName",
-            minWidth: 220,
+            minWidth: 200,
+             align: "center",
+             tooltip: true,
           },
           
           {
             title: "备注",
             key: "remark",
-            minWidth: 200,
+            minWidth: 180,
+            tooltip: true,
           },
         ],
         data: [],
@@ -396,7 +435,10 @@ export default {
         }
       });
     },
-
+    handlePageSizeChange(pageSize) {
+      this.query.pageSize = pageSize;
+      this.getbindCustomerServieOrderList();
+    },
     handleSelect(selection, row) {
       this.form.encryptPhoneList.add(row.encryptPhone);
     },
@@ -480,7 +522,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.pages {
+.page_wrap {
   margin-top: 16px;
   text-align: right;
 }

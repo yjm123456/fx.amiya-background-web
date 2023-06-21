@@ -63,6 +63,7 @@
               v-model="query.hospitalId"
               placeholder="医院"
               style="width: 180px; margin-left: 10px"
+              filterable
             >
               <Option
                 v-for="item in hospitalParams.hospitalList"

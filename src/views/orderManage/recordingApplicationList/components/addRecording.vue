@@ -33,11 +33,27 @@
         <FormItem label="手机号"  prop="phone">
           <Input v-model="form.phone" placeholder="请输入手机号" maxlength="11"/>
         </FormItem>
+        <FormItem label="申请类型" prop="addWorkType">
+         <Select
+            v-model="form.addWorkType"
+            placeholder="请选择申请类型"
+            filterable
+            @on-change="addWorkTypeChange(form.addWorkType)"
+          >
+            <Option
+              v-for="item in editRecordingApplicationParams.contentPlatformOrderAddWorkTypeList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
         <FormItem label="医院" prop="hospitalId">
          <Select
             v-model="form.hospitalId"
             placeholder="请选择医院"
             filterable
+            :disabled="form.addWorkType == 2"
           >
             <Option
               v-for="item in hospitalList"
@@ -47,6 +63,7 @@
             >
           </Select>
         </FormItem>
+        
         <FormItem label="申请理由" prop="sendRemark">
           <Input v-model="form.sendRemark" type="textarea" :rows="4"></Input>
         </FormItem>
@@ -89,7 +106,11 @@ export default {
         // 接收人
         // 线上虞老师
         // acceptBy:104,
+        // 线上张凌玥
+        // acceptBy:220,
         // 测试管理员
+        // acceptBy:1,
+
         acceptBy:220,
         // 手机号
         phone:'',
@@ -97,8 +118,16 @@ export default {
         hospitalId:null,
         // 申请理由
         sendRemark:'',
+        // 申请类型
+        addWorkType:null
       },
       ruleValidates: {
+        addWorkType: [
+          {
+            required: true,
+            message: "请选择申请类型",
+          },
+        ],
         acceptBy: [
           {
             required: true,
@@ -122,6 +151,17 @@ export default {
     };
   },
   methods: {
+    // 申请类型为改绑申请时 默认医院为测试医院
+    addWorkTypeChange(value){
+      if(value == 2){
+        // 测试医院
+        // this.form.hospitalId = 39
+        // 线上医院
+        this.form.hospitalId = 124
+      }else{
+        this.form.hospitalId = null
+      }
+    },
     handleCancel(name) {
       this.$emit("update:addRecordingModel", false);
       this.$refs[name].resetFields();

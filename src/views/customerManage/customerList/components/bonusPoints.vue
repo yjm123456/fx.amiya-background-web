@@ -78,7 +78,8 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           const data = {
-            encryptPhone: this.bonusPointsParams.encryptPhone,
+            // encryptPhone: this.bonusPointsParams.encryptPhone,
+            customerId: this.bonusPointsParams.id,
             orderId: this.form.orderId,
             actualPayment: this.form.actualPayment,
           };

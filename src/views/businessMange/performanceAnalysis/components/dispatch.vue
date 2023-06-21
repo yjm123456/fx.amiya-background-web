@@ -9,15 +9,21 @@
                         <h3>{{achievementdata.thisMonthSendOrderPerformance}}</h3>
                     </i-circle>
                     <div class="data">
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">环比</div>
-                            <div  class="num">{{achievementdata.thisMonthSendOrderPerformanceChainRatio}}%</div>
+                            <!-- <div  class="num">{{achievementdata.thisMonthSendOrderPerformanceChainRatio}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.thisMonthSendOrderPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.thisMonthSendOrderPerformanceChainRatio) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.thisMonthSendOrderPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.thisMonthSendOrderPerformanceChainRatio) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">同比</div>
-                            <div  class="num">{{achievementdata.thisMonthSendOrderPerformanceYearOnYear}}%</div>
+                            <!-- <div  class="num">{{achievementdata.thisMonthSendOrderPerformanceYearOnYear}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.thisMonthSendOrderPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.thisMonthSendOrderPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.thisMonthSendOrderPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.thisMonthSendOrderPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">占比</div>
                             <div  class="num">{{achievementdata.thisMonthSendOrderPerformanceProportion}}%</div>
                         </div>
@@ -32,15 +38,21 @@
                         <h3 >{{achievementdata.historySendOrderPerformance}}</h3>
                     </i-circle>
                     <div class="data">
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">环比</div>
-                            <div  class="num">{{achievementdata.historySendOrderPerformanceChainRatio}}%</div>
+                            <!-- <div  class="num">{{achievementdata.historySendOrderPerformanceChainRatio}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.historySendOrderPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.historySendOrderPerformanceChainRatio) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.historySendOrderPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.historySendOrderPerformanceChainRatio) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">同比</div>
-                            <div  class="num">{{achievementdata.historySendOrderPerformanceYearOnYear}}%</div>
+                            <!-- <div  class="num">{{achievementdata.historySendOrderPerformanceYearOnYear}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.historySendOrderPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.historySendOrderPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.historySendOrderPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.historySendOrderPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">占比</div>
                             <div  class="num">{{achievementdata.historySendOrderPerformanceProportion}}%</div>
                         </div>
@@ -95,5 +107,19 @@ export default {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 30px;
+}
+.red{
+  color: green;
+  margin-right: 4px;
+  font-size: 14px;
+}
+.green{
+  color: red;
+  margin-right: 4px;
+  font-size: 14px;
+}
+.data_item2{
+    width: 140px;
+    text-align: start;
 }
 </style>

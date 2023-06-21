@@ -9,15 +9,21 @@
                         <h3 >{{achievementdata.liveAnchorVideoPerformance}}</h3>
                     </i-circle>
                     <div class="data">
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">环比</div>
-                            <div  class="num">{{achievementdata.liveAnchorVideoPerformanceChainRatio}}%</div>
+                            <!-- <div  class="num">{{achievementdata.liveAnchorVideoPerformanceChainRatio}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.liveAnchorVideoPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.liveAnchorVideoPerformanceChainRatio) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.liveAnchorVideoPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.liveAnchorVideoPerformanceChainRatio) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">同比</div>
-                            <div  class="num">{{achievementdata.liveAnchorVideoPerformanceYearOnYear}}%</div>
+                            <!-- <div  class="num">{{achievementdata.liveAnchorVideoPerformanceYearOnYear}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.liveAnchorVideoPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.liveAnchorVideoPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.liveAnchorVideoPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.liveAnchorVideoPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">占比</div>
                             <div  class="num">{{achievementdata.liveAnchorVideoPerformanceProportion}}%</div>
                         </div>
@@ -32,15 +38,21 @@
                         <h3 >{{achievementdata.assistantPhotoPerformance}}</h3>
                     </i-circle>
                     <div class="data">
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">环比</div>
-                            <div  class="num">{{achievementdata.assistantPhotoPerformanceChainRatio}}%</div>
+                            <!-- <div  class="num">{{achievementdata.assistantPhotoPerformanceChainRatio}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.assistantPhotoPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.assistantPhotoPerformanceChainRatio) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.assistantPhotoPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.assistantPhotoPerformanceChainRatio) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">同比</div>
-                            <div  class="num">{{achievementdata.assistantPhotoPerformanceYearOnYear}}%</div>
+                            <!-- <div  class="num">{{achievementdata.assistantPhotoPerformanceYearOnYear}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.assistantPhotoPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.assistantPhotoPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.assistantPhotoPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.assistantPhotoPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">占比</div>
                             <div  class="num">{{achievementdata.assistantPhotoPerformanceProportion}}%</div>
                         </div>
@@ -95,5 +107,19 @@ export default {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 30px;
+}
+.red{
+  color: green;
+  margin-right: 4px;
+  font-size: 14px;
+}
+.green{
+  color: red;
+  margin-right: 4px;
+  font-size: 14px;
+}
+.data_item2{
+    width: 140px;
+    text-align: start;
 }
 </style>

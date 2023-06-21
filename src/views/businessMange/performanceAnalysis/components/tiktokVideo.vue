@@ -9,15 +9,21 @@
                         <h3>{{achievementdata.tikTokPerformance}}</h3>
                     </i-circle>
                     <div class="data">
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">环比</div>
-                            <div  class="num">{{achievementdata.tikTokPerformanceChainRatio}}%</div>
+                            <!-- <div  class="num">{{achievementdata.tikTokPerformanceChainRatio}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.tikTokPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.tikTokPerformanceChainRatio) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.tikTokPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.tikTokPerformanceChainRatio) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">同比</div>
-                            <div  class="num">{{achievementdata.tikTokPerformanceYearOnYear}}%</div>
+                            <!-- <div  class="num">{{achievementdata.tikTokPerformanceYearOnYear}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.tikTokPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.tikTokPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.tikTokPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.tikTokPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">占比</div>
                             <div  class="num">{{achievementdata.tikTokPerformanceProportion}}%</div>
                         </div>
@@ -32,15 +38,21 @@
                         <h3>{{achievementdata.videoPerformance}}</h3>
                     </i-circle>
                     <div class="data">
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">环比</div>
-                            <div  class="num">{{achievementdata.videoPerformanceChainRatio}}%</div>
+                            <!-- <div  class="num">{{achievementdata.videoPerformanceChainRatio}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.videoPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.videoPerformanceChainRatio) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.videoPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.videoPerformanceChainRatio) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">同比</div>
-                            <div  class="num">{{achievementdata.videoPerformanceYearOnYear}}%</div>
+                            <!-- <div  class="num">{{achievementdata.videoPerformanceYearOnYear}}%</div> -->
+                            <span  class="num" v-if="Math.sign(achievementdata.videoPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdata.videoPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num" v-else-if="Math.sign(achievementdata.videoPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdata.videoPerformanceYearOnYear) + '%'}}</span>
+                            <span class="num"  v-else>-</span>
                         </div>
-                        <div  class="data_item">
+                        <div  class="data_item2">
                             <div  class="text">占比</div>
                             <div  class="num">{{achievementdata.videoPerformanceProportion}}%</div>
                         </div>
@@ -95,5 +107,19 @@ export default {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 30px;
+}
+.red{
+  color: green;
+  margin-right: 4px;
+  font-size: 14px;
+}
+.green{
+  color: red;
+  margin-right: 4px;
+  font-size: 14px;
+}
+.data_item2{
+    width: 140px;
+    text-align: start;
 }
 </style>

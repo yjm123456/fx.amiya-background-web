@@ -359,6 +359,7 @@ export default {
         encryptPhone: "",
         orderId: "",
         actualPayment: null,
+        id:''
       },
       bonusPointsControlModal: false,
       customerMessageObj: {},
@@ -437,7 +438,8 @@ export default {
           {
             title: "头像",
             key: "avatar",
-            width: 300,
+            width: 160,
+            tooltip:true,
             render: (h, params) => {
               return h(
                 "viewer",
@@ -467,6 +469,7 @@ export default {
             title: "创建时间",
             key: "createDate",
             width: 170,
+            tooltip:true,
             render: (h, params) => {
               return h(
                 "div",
@@ -475,34 +478,47 @@ export default {
             },
           },
           {
+            title: "归属小程序",
+            key: "appName",
+            width: 140,
+            tooltip:true,
+            align:'center'
+          },
+          {
             title: "电话",
             key: "phone",
             width: 160,
+            align:'center'
           },
           {
             title: "省份",
             key: "province",
             width: 120,
+            align:'center'
           },
           {
             title: "城市",
             key: "city",
             width: 120,
+            align:'center'
           },
           {
             title: "积分余额",
             key: "integrationBalance",
             width: 160,
+            align:'center'
           },
           {
             title: "会员级别",
             key: "memberRank",
             width: 200,
+            align:'center'
           },
           {
             title: "会员卡号",
             key: "memberCardNum",
             width: 120,
+            align:'center'
           },
           {
             title: "操作",
@@ -848,6 +864,7 @@ export default {
                         //赠送积分
                         const { encryptPhone ,id} = params.row;
                         this.bonusPointsParams.encryptPhone = encryptPhone;
+                        this.bonusPointsParams.id = id;
                         this.bonusPointsControlModal = true;
                         this.$refs.bonusPoint.getCustomerInternelPercent(id)
                       } else if (name == "goodNews") {

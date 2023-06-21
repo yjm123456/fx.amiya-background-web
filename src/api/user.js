@@ -62,3 +62,12 @@ export const checkPassword = (password) => {
         method: "get",
     });
 };
+
+// 修改头像
+export const updateAvatar = (data) => {
+    return http({
+        url: `/amiyabg/Auth/updateAvatar`,
+        method: "put",
+        data
+    });
+};

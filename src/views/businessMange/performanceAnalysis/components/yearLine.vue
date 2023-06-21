@@ -89,12 +89,6 @@ export default {
           type: 'value',
           axisLabel:{
               formatter:(value) => {
-                  // if(value >= 10000){
-                  //     value = (value / 10000) + 'W';
-                  // }
-                  // if(value >= 1000){
-                  //     value = (value / 1000) + 'K';
-                  // }
                   return value + 'w';
               }
           }
@@ -120,110 +114,6 @@ export default {
                 listItem = list.join('<br>')
                 return axisValueLabel + '<br>' + listItem
             }
-            //  formatter: params => {
-            //     return `<div style="border:0;color:#666;text-align: left;width:180px">
-            //               <p style="color:#000"> ${params[0].axisValue + '月份'}</p>
-            //               <div class="flex justify-content-space-between">
-            //                 <div>
-            //                     <i class="dot" style="background: ${params[0].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[0].seriesName}:
-            //                         ${(function () {
-            //                             return params[0].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[1].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[1].seriesName}:
-            //                         ${(function () {
-            //                             return params[1].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[2].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[2].seriesName}:
-            //                         ${(function () {
-            //                             return params[2].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[3].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[3].seriesName}:
-            //                         ${(function () {
-            //                             return params[3].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[4].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[4].seriesName}:
-            //                         ${(function () {
-            //                             return params[4].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[5].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[5].seriesName}:
-            //                         ${(function () {
-            //                             return params[5].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[6].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[6].seriesName}:
-            //                         ${(function () {
-            //                             return params[6].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[7].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[7].seriesName}:
-            //                         ${(function () {
-            //                             return params[7].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[8].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[8].seriesName}:
-            //                         ${(function () {
-            //                             return params[8].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[9].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[9].seriesName}:
-            //                         ${(function () {
-            //                             return params[9].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[10].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[10].seriesName}:
-            //                         ${(function () {
-            //                             return params[10].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-            //                   <div>
-            //                     <i class="dot" style="background: ${params[11].color};display: inline-block;width: 8px; height: 8px;border-radius: 50%;"></i>
-            //                       <span> ${params[11].seriesName}:
-            //                         ${(function () {
-            //                             return params[11].data + 'w'
-            //                         })()}
-            //                       </span>
-            //                   </div>
-
-            //               </div>
-            //             </div>`
-            // },
           },
         
         

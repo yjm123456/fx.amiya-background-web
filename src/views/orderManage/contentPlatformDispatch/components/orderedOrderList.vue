@@ -934,8 +934,9 @@ export default {
           {
             title: "订单编号",
             key: "orderId",
-            minWidth: 180,
+            minWidth: 170,
             align: "center",
+            tooltip:true
           },
 
           // {
@@ -957,8 +958,9 @@ export default {
           {
             title: "客户昵称",
             key: "customerName",
-            minWidth: 180,
+            minWidth: 150,
             align: "center",
+            tooltip:true
           },
           {
             title: "电话",
@@ -1001,77 +1003,38 @@ export default {
           {
             title: "派单医院",
             key: "sendHospital",
-            minWidth: 220,
+            minWidth: 200,
             align: "center",
+            tooltip:true
           },
           {
-            title: "项目",
-            key: "thumbPictureUrl",
-            minWidth: 200,
+            title: "是否到院",
+            key: "isToHospital",
+            minWidth: 120,
             align: "center",
             render: (h, params) => {
               return h(
-                "viewer",
+                "i-switch",
                 {
                   props: {
-                    zoomable: false,
-                  },
-                  style: {
-                    display: "flex",
+                    value: params.row.isToHospital,
+                    size: "default",
+                    disabled:
+                      params.row.isToHospital === true ||
+                      params.row.isToHospital === false,
                   },
                 },
-                [
-                  h("img", {
-                    style: {
-                      width: "50px",
-                      height: "50px",
-                      margin: "5px 15px 5px 5px",
-                      verticalAlign: "middle",
-                    },
-                    attrs: {
-                      src: params.row.thumbPictureUrl,
-                    },
-                  }),
-                  h("div", params.row.goodsName),
-                ]
+                h("span", { isToHospital: "open" }, "开"),
+                h("span", { isToHospital: "close" }, "关")
               );
             },
-          },
-          // {
-          //   title: "面诊员",
-          //   minWidth: 120,
-          //   key: "consultationEmpName",
-          //   align:'center'
-          // },
-          {
-            title: "咨询内容",
-            minWidth: 400,
-            key: "consultingContent",
-            tooltip: true,
-          },
-          {
-            title: "面诊类型",
-            key: "consultatioType",
-            minWidth: 120,
-            align: "center",
-          },
-          {
-            title: "所属平台",
-            key: "contentPlatFormName",
-            minWidth: 120,
-            align: "center",
-          },
-          {
-            title: "主播IP账号",
-            key: "liveAnchorName",
-            minWidth: 160,
-            align: "center",
           },
           {
             title: "订单状态",
             key: "orderStatusText",
-            minWidth: 160,
+            minWidth: 140,
             align: "center",
+            tooltip:true,
             render: (h, params) => {
               if (params.row.orderStatusText == "已成交") {
                 return h(
@@ -1146,6 +1109,84 @@ export default {
               }
             },
           },
+          {
+            title: "成交金额",
+            key: "dealAmount",
+            minWidth: 140,
+            align: "center",
+            tooltip:true,
+          },
+          {
+            title: "派单人",
+            key: "senderName",
+            minWidth: 140,
+            align: "center",
+            tooltip:true
+          },
+          {
+            title: "项目",
+            key: "thumbPictureUrl",
+            minWidth: 200,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "viewer",
+                {
+                  props: {
+                    zoomable: false,
+                  },
+                  style: {
+                    display: "flex",
+                  },
+                },
+                [
+                  h("img", {
+                    style: {
+                      width: "50px",
+                      height: "50px",
+                      margin: "5px 15px 5px 5px",
+                      verticalAlign: "middle",
+                    },
+                    attrs: {
+                      src: params.row.thumbPictureUrl,
+                    },
+                  }),
+                  h("div", params.row.goodsName),
+                ]
+              );
+            },
+          },
+          // {
+          //   title: "面诊员",
+          //   minWidth: 120,
+          //   key: "consultationEmpName",
+          //   align:'center'
+          // },
+          {
+            title: "咨询内容",
+            minWidth: 400,
+            key: "consultingContent",
+            tooltip: true,
+          },
+          {
+            title: "面诊类型",
+            key: "consultatioType",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "所属平台",
+            key: "contentPlatFormName",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "主播IP账号",
+            key: "liveAnchorName",
+            minWidth: 160,
+            align: "center",
+          },
+          
           // {
           //   title: "三方单号",
           //   key: "otherContentPlatFormOrderId",
@@ -1174,28 +1215,7 @@ export default {
               );
             },
           },
-          {
-            title: "是否到院",
-            key: "isToHospital",
-            minWidth: 140,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "i-switch",
-                {
-                  props: {
-                    value: params.row.isToHospital,
-                    size: "default",
-                    disabled:
-                      params.row.isToHospital === true ||
-                      params.row.isToHospital === false,
-                  },
-                },
-                h("span", { isToHospital: "open" }, "开"),
-                h("span", { isToHospital: "close" }, "关")
-              );
-            },
-          },
+          
           {
             title: "到院类型",
             minWidth: 120,
@@ -1360,12 +1380,7 @@ export default {
                 : "";
             },
           },
-          {
-            title: "成交金额",
-            key: "dealAmount",
-            minWidth: 140,
-            align: "center",
-          },
+          
           {
             title: "派单时间",
             key: "sendDate",
@@ -1378,12 +1393,7 @@ export default {
               );
             },
           },
-          {
-            title: "派单人",
-            key: "senderName",
-            minWidth: 140,
-            align: "center",
-          },
+          
 
           // {
           //   title: "派单留言",

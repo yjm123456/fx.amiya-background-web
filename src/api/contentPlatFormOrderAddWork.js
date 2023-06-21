@@ -53,3 +53,10 @@ export const updateAcceptBy = (data) => {
         data
     });
 };
+// 获取申请类型
+export const getContentPlatformOrderAddWorkTypeList = () => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderAddWork/getContentPlatformOrderAddWorkTypeList`,
+        method: "get",
+    });
+};

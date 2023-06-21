@@ -49,7 +49,6 @@
               >{{ item.name }}</Option
             >
           </Select>
-
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -230,6 +229,12 @@ export default {
             },
           },
           {
+            title: "申请类型",
+            key: "addWorkTypeText",
+            minWidth: 100,
+            align: "center",
+          },
+          {
             title: "审核备注",
             key: "checkRemark",
             minWidth: 150,
@@ -276,6 +281,7 @@ export default {
                             const {
                               phone,
                               acceptBy,
+                              addWorkType
                             } = res.data.contentPlatFormOrderAddWork;
                             this.title = "修改录单申请";
                             this.editRecordingApplicationParams.phone = phone;
@@ -391,7 +397,9 @@ export default {
         id:'',
         phone: "",
         acceptBy:null,
-        employee:[]
+        employee:[],
+        // 申请类型数组
+        contentPlatformOrderAddWorkTypeList:[],
       },
       // 添加录单申请
       addRecordingModel:false,
@@ -440,10 +448,19 @@ export default {
         id:'',
         // 所有员工
         employee:[]
-      }
+      },
     };
   },
   methods: {
+    // 获取申请类型
+    getContentPlatformOrderAddWorkTypeList(){
+      api.getContentPlatformOrderAddWorkTypeList().then(res=>{
+        if(res.code===0){
+          const {contentPlatformOrderAddWorkTypeList} = res.data
+          this.editRecordingApplicationParams.contentPlatformOrderAddWorkTypeList = contentPlatformOrderAddWorkTypeList
+        }
+      })
+    },
     // 获取所有员工
     getEmployeeByPositionId(){
       const data ={
@@ -673,7 +690,8 @@ export default {
     this.getAmiyaHospitalDepartmentListChange();
     this.getCustomerServiceList();
     this.getContentValidList();
-    this.getEmployeeByPositionId()
+    this.getEmployeeByPositionId();
+    this.getContentPlatformOrderAddWorkTypeList()
   },
   watch: {
     activeName: {

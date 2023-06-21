@@ -34,11 +34,28 @@
         <FormItem label="手机号"  prop="phone">
           <Input v-model="form.phone" placeholder="请输入手机号" disabled/>
         </FormItem>
+        <FormItem label="申请类型" prop="addWorkType">
+         <Select
+            v-model="form.addWorkType"
+            placeholder="请选择申请类型"
+            filterable
+            :disabled="title == '录单申请'"
+            @on-change="addWorkTypeChange(form.addWorkType)"
+          >
+            <Option
+              v-for="item in  editRecordingApplicationParams.contentPlatformOrderAddWorkTypeList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
         <FormItem label="医院" prop="hospitalId">
          <Select
             v-model="form.hospitalId"
             placeholder="请选择医院"
             filterable
+            :disabled="form.addWorkType == 2"
           >
             <Option
               v-for="item in hospitalList"
@@ -48,6 +65,7 @@
             >
           </Select>
         </FormItem>
+        
         <FormItem label="申请理由" prop="sendRemark">
           <Input v-model="form.sendRemark" type="textarea" :rows="4"></Input>
         </FormItem>
@@ -91,6 +109,7 @@ export default {
       form: {
         // // 接收人
         // acceptBy:104,
+        // 记得改watch里面的字段
         acceptBy:220,
         // 手机号
         phone:'',
@@ -98,6 +117,7 @@ export default {
         hospitalId:null,
         // 申请理由
         sendRemark:'',
+        addWorkType: null
       },
       ruleValidates: {
         acceptBy: [
@@ -118,11 +138,29 @@ export default {
             message: "请选择医院",
           },
         ],
+        addWorkType: [
+          {
+            required: true,
+            message: "请选择申请类型",
+          },
+        ],
       },
-      employee:[]
+      employee:[],
+      contentPlatformOrderAddWorkTypeList:[]
     };
   },
   methods: {
+    // 申请类型为改绑申请时 默认医院为测试医院
+    addWorkTypeChange(value){
+      if(value == 2){
+        // 测试医院
+        // this.form.hospitalId = 39
+        // 线上医院
+        this.form.hospitalId = 124
+      }else{
+        this.form.hospitalId = null
+      }
+    },
     handleCancel(name) {
       this.$emit("update:recordingApplicationModel", false);
       this.$refs[name].resetFields();
@@ -149,13 +187,14 @@ export default {
                 }
             });
           }else{
-            const {acceptBy,phone,hospitalId,sendRemark} = this.form
+            const {acceptBy,phone,hospitalId,sendRemark,addWorkType} = this.form
             const data ={
               id:this.editRecordingApplicationParams.id,
               acceptBy,
               phone,
               hospitalId,
-              sendRemark
+              sendRemark,
+              addWorkType
 
             }
             this.isLoading = true;
@@ -198,6 +237,8 @@ export default {
          this.form.acceptBy = 220
          this.employee = this.recordingNormalParams.employee
          this.form.phone = this.recordingNormalParams.phone
+         this.contentPlatformOrderAddWorkTypeList = this.editRecordingApplicationParams.contentPlatformOrderAddWorkTypeList
+         this.form.addWorkType = '1'
          return
       }else{
         if(this.editRecordingApplicationParams.acceptBy){

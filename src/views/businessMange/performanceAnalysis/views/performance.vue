@@ -53,9 +53,12 @@
                     <div>目标完成率</div>
                     <div  class="h5">{{achievementdataInfo.totalPerformanceCompleteRate}}%</div>
                   </div>
-                  <div>
+                  <div class="cen">
                     <div>环比</div>
-                    <div  class="h5">{{achievementdataInfo.totalPerformanceChainRatio}}%</div>
+                    <!-- <div  class="h5">{{achievementdataInfo.totalPerformanceChainRatio}}%</div> -->
+                    <span  class="h5" v-if="Math.sign(achievementdataInfo.totalPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.totalPerformanceChainRatio) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.totalPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.totalPerformanceChainRatio) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
                   </div>
                 </div>
                 <div class="item_center">
@@ -63,15 +66,24 @@
                     <div></div>
                     <div  class="h5"></div>
                   </div>
-                  <div>
+                  <div class="cen">
                     <div>同比</div>
-                    <div  class="h5">{{achievementdataInfo.totalPerformanceYearOnYear}}%</div>
+                    <!-- <div  class="h5">{{achievementdataInfo.totalPerformanceYearOnYear}}%</div> -->
+                    <span  class="h5" v-if="Math.sign(achievementdataInfo.totalPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.totalPerformanceYearOnYear) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.totalPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.totalPerformanceYearOnYear) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
                   </div>
                 </div>
               </div>
               <div class="h3">数据诊断：</div>
               <div class="bottom_text">
-                <div>对比时间进度：<span >{{achievementdataInfo.totalPerformanceToDateSchedule}}%</span></div>
+                <!-- <div>对比时间进度：<span >{{achievementdataInfo.totalPerformanceToDateSchedule}}%</span></div> -->
+                <div>
+                  对比时间进度：
+                  <span  class="h5" v-if="Math.sign(achievementdataInfo.totalPerformanceToDateSchedule)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.totalPerformanceToDateSchedule) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.totalPerformanceToDateSchedule)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.totalPerformanceToDateSchedule) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
+                </div>
                 <div>对比时间进度，业绩偏差：<span >{{achievementdataInfo.totalPerformanceDeviation}}元</span></div>
                 <div>距目标达成，后期需完成：<span >{{achievementdataInfo.laterCompleteEveryDayTotalPerformance}}元/天</span></div>
               </div>
@@ -88,9 +100,12 @@
                     <div>目标完成率</div>
                     <div  class="h5">{{achievementdataInfo.groupDaoDaoPerformanceCompleteRate}}%</div>
                   </div>
-                  <div>
+                  <div class="cen">
                     <div>环比</div>
-                    <div  class="h5">{{achievementdataInfo.groupDaoDaoPerformanceChainRatio}}%</div>
+                    <!-- <div  class="h5">{{achievementdataInfo.groupDaoDaoPerformanceChainRatio}}%</div> -->
+                    <span  class="h5" v-if="Math.sign(achievementdataInfo.groupDaoDaoPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.groupDaoDaoPerformanceChainRatio) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.groupDaoDaoPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.groupDaoDaoPerformanceChainRatio) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
                   </div>
                 </div>
                 <div class="item_center">
@@ -98,15 +113,24 @@
                     <div>占比</div>
                     <div  class="h5">{{achievementdataInfo.groupDaoDaoPerformanceProportion}}%</div>
                   </div>
-                  <div>
+                  <div class="cen">
                     <div>同比</div>
-                    <div  class="h5">{{achievementdataInfo.groupDaoDaoPerformanceYearOnYear}}%</div>
+                    <!-- <div  class="h5">{{achievementdataInfo.groupDaoDaoPerformanceYearOnYear}}%</div> -->
+                    <span  class="h5" v-if="Math.sign(achievementdataInfo.groupDaoDaoPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.groupDaoDaoPerformanceYearOnYear) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.groupDaoDaoPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.groupDaoDaoPerformanceYearOnYear) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
                   </div>
                 </div>
               </div>
               <div style="margin-top:50px"></div>
               <div class="bottom_text">
-                <div>对比时间进度：<span >{{achievementdataInfo.groupDaoDaoPerformanceToDateSchedule}}%</span></div>
+                <!-- <div>对比时间进度：<span >{{achievementdataInfo.groupDaoDaoPerformanceToDateSchedule}}%</span></div> -->
+                <div>
+                  对比时间进度：
+                  <span  class="h5" v-if="Math.sign(achievementdataInfo.groupDaoDaoPerformanceToDateSchedule)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.groupDaoDaoPerformanceToDateSchedule) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.groupDaoDaoPerformanceToDateSchedule)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.groupDaoDaoPerformanceToDateSchedule) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
+                </div>
                 <div>对比时间进度，业绩偏差：<span >{{achievementdataInfo.groupDaoDaoPerformanceDeviation}}元</span></div>
                 <div>距目标达成，后期需完成：<span >{{achievementdataInfo.laterCompleteEveryDayGroupDaoDaoPerformance}}元/天</span></div>
               </div>
@@ -123,25 +147,38 @@
                     <div>目标完成率</div>
                     <div  class="h5">{{achievementdataInfo.groupJinaPerformanceCompleteRate}}%</div>
                   </div>
-                  <div>
+                  <div class="cen">
                     <div>环比</div>
-                    <div  class="h5">{{achievementdataInfo.groupJinaPerformanceChainRatio}}%</div>
+                    <!-- <div  class="h5">{{achievementdataInfo.groupJinaPerformanceChainRatio}}%</div> -->
+                    <span  class="h5" v-if="Math.sign(achievementdataInfo.groupJinaPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.groupJinaPerformanceChainRatio) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.groupJinaPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.groupJinaPerformanceChainRatio) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
                   </div>
                 </div>
                 <div class="item_center">
-                  <div>
+                  <div class="cen">
                     <div>占比</div>
                     <div  class="h5">{{achievementdataInfo.groupJinaPerformanceProportion}}%</div>
                   </div>
-                  <div>
+                  <div class="cen">
                     <div>同比</div>
-                    <div  class="h5">{{achievementdataInfo.groupJinaPerformanceYearOnYear}}%</div>
+                    <!-- <div  class="h5">{{achievementdataInfo.groupJinaPerformanceYearOnYear}}%</div> -->
+                    <span  class="h5" v-if="Math.sign(achievementdataInfo.groupJinaPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.groupJinaPerformanceYearOnYear) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.groupJinaPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.groupJinaPerformanceYearOnYear) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
                   </div>
                 </div>
               </div>
               <div style="margin-top:50px"></div>
               <div class="bottom_text">
-                <div>对比时间进度：<span >{{achievementdataInfo.groupJinaPerformanceToDateSchedule}}%</span></div>
+                <!-- <div>对比时间进度：<span >{{achievementdataInfo.groupJinaPerformanceToDateSchedule}}%</span></div> -->
+                <div>
+                  对比时间进度：
+                  <span  class="h5" v-if="Math.sign(achievementdataInfo.groupJinaPerformanceToDateSchedule)== 1"> <span  class="red ">增长</span>{{ Math.abs(achievementdataInfo.groupJinaPerformanceToDateSchedule) + '%'}}</span>
+                    <span class="h5" v-else-if="Math.sign(achievementdataInfo.groupJinaPerformanceToDateSchedule)== -1"><span  class="green">下降</span>{{ Math.abs(achievementdataInfo.groupJinaPerformanceToDateSchedule) + '%'}}</span>
+                    <span class="h5"  v-else>-</span>
+                </div>
+                
                 <div>对比时间进度，业绩偏差：<span >{{achievementdataInfo.groupJinaPerformanceDeviation}}元</span></div>
                 <div>距目标达成，后期需完成：<span >{{achievementdataInfo.laterCompleteEveryDayGroupJinaPerformance}}元/天</span></div>
               </div>
@@ -700,6 +737,10 @@ export default {
   font-size: 14px;
   font-weight: bold;
 }
+.cen{
+  width: 110px;
+  text-align:start
+}
 .bottom_text{
   margin-top: 5px;
   color: rgb(173, 168, 168);
@@ -717,5 +758,13 @@ export default {
 }
 .date_con{
   text-align: end;
+}
+.red{
+  color: green;
+  margin-right: 4px;
+}
+.green{
+  color: red;
+  margin-right: 4px;
 }
 </style>

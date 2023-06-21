@@ -191,6 +191,12 @@ export default {
             },
           },
           {
+            title: "申请类型",
+            key: "addWorkTypeText",
+            minWidth: 100,
+            align: "center",
+          },
+          {
             title: "审核备注",
             key: "checkRemark",
             minWidth: 150,

@@ -68,12 +68,12 @@
             @click="getCustomerAppointmentSchedule()"
             >查询</Button
           >
-          <!-- <Button
+          <Button
             type="primary"
             style="margin-left: 10px"
             @click="batchAssignmentClick"
             >批量指派主播</Button
-          > -->
+          >
         </div>
         <div class="right">
           <Button

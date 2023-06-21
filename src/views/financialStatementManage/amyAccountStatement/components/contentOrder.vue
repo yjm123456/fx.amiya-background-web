@@ -603,18 +603,35 @@ export default {
                         
 
                         // // 客服结算服务费
-                        this.form.customerServiceSettlePrice =  proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  this.form.checkPrice*0.3
+                        this.form.customerServiceSettlePrice =  proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
+
 
 
                         // 成交服务费合计
                          // 为负数情况
                         if(Number(checkPriceRight) <0){
-                          let num = ((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000).toFixed(2)
-                          this.form.totalServiceFee = (-num).toFixed(2)
+                          // let num = ((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000).toFixed(2)
+                          // this.form.totalServiceFee = (-num).toFixed(2)
+                          let num = Math.round(((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000)*100)/100
+                          this.form.totalServiceFee = -num
                           // console.log(this.form.totalServiceFee,'为负数情况')
                           return
                         }else{
-                          this.form.totalServiceFee = Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000).toFixed(2))
+                          // .toFixed(2)银行家算法
+                          // > (3.61).toFixed(1)    //四舍
+                          // '3.6'
+                          // > (3.69).toFixed(1)    //六入
+                          // '3.7'
+                          // > (3.651).toFixed(1)    //五考虑，五后非零，进
+                          // '3.7'
+                          // > (3.65).toFixed(1)    //五考虑，五后为零，五前为偶数，舍去
+                          // '3.6'
+                          // > (3.75).toFixed(1)    //五考虑，五后为零，五前为奇数，进
+                          // '3.8'
+
+                          
+                          // this.form.totalServiceFee = Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000).toFixed(2))
+                          this.form.totalServiceFee = Math.round(Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000))*100)/100
                           // console.log(this.form.totalServiceFee,'为正数情况')
                           return
                         }

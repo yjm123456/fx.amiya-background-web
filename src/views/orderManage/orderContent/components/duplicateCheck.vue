@@ -140,6 +140,7 @@
       :phone="recordingNormalParams.phone"
       :title="title"
       :recordingNormalParams="recordingNormalParams"
+      :editRecordingApplicationParams="editRecordingApplicationParams"
     />
     
   </div>
@@ -148,6 +149,7 @@
 <script>
 import * as api from "@/api/orderManage";
 import * as emApi from "@/api/employeeManage";
+import * as contentPlatFormOrderAddWorkApi from "@/api/contentPlatFormOrderAddWork";
 
 import upload from "@/components/upload/upload";
 import recording from "@/components/recording/recording";
@@ -163,6 +165,7 @@ export default {
   props: {
     duplicateModel: Boolean,
     recordingParams: Object,
+    
   },
   data() {
     return {
@@ -197,6 +200,8 @@ export default {
         phone: "",
         acceptBy: null,
         employee: [],
+        // 申请类型
+        contentPlatformOrderAddWorkTypeList:[]
       },
       // 小黄车详情
       shoppingCartRegistrationInfo:{}
@@ -205,8 +210,18 @@ export default {
   },
   created() {
     this.getEmployeeByPositionId();
+    this.getContentPlatformOrderAddWorkTypeList()
   },
   methods: {
+     // 获取申请类型
+    getContentPlatformOrderAddWorkTypeList(){
+      contentPlatFormOrderAddWorkApi.getContentPlatformOrderAddWorkTypeList().then(res=>{
+        if(res.code===0){
+          const {contentPlatformOrderAddWorkTypeList} = res.data
+          this.editRecordingApplicationParams.contentPlatformOrderAddWorkTypeList = contentPlatformOrderAddWorkTypeList
+        }
+      })
+    },
     // 根据加密手机号获取小黄车数据
     getbyEncryptPhone(){
       api.byEncryptPhone(this.phone).then(res=>{

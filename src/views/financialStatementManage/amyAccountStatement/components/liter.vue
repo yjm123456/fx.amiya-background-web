@@ -456,10 +456,17 @@ export default {
                         // 已对账服务费合计(信息服务费金额+系统使用费金额)
                         // this.form.totalServiceFeeReconciled = (Number(this.form.informationServiceFeePrice) +  Number(this.form.systemUsageFeePrice)).toFixed(2)
                         this.form.totalServiceFeeReconciled = checkSettlePrice
-                        // 当前信息服务费
-                        this.form.currentInformationServiceFee = (this.form.checkBuyAgainPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
+                        // // 当前信息服务费
+                        // this.form.currentInformationServiceFee = (this.form.checkBuyAgainPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
+                        // // 当前系统服务费
+                        // this.form.currentSystemUsagefee = (this.form.checkBuyAgainPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
+
+                        // // 当前信息服务费
+                        this.form.currentInformationServiceFee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
                         // 当前系统服务费
-                        this.form.currentSystemUsagefee = (this.form.checkBuyAgainPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
+                        this.form.currentSystemUsagefee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+                        // 服务费合计
+                        this.form.checkSettlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
 
                         // 成交服务费合计
                         // 为负数情况
@@ -491,9 +498,13 @@ export default {
   methods: {
     checkPriceChange(){
       // 当前服务费金额
-      this.form.currentInformationServiceFee = (this.form.checkBuyAgainPrice * (Number(this.form.proportionOfInformationServiceFee) / 100)).toFixed(2)
-      this.form.currentSystemUsagefee = (this.form.checkBuyAgainPrice * (Number(this.form.systemUsageFeeProportion) / 100)).toFixed(2)
-      this.form.checkSettlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+      this.form.currentInformationServiceFee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
+      // 当前系统服务费
+      this.form.currentSystemUsagefee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+      this.form.checkSettlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
+      // this.form.currentInformationServiceFee = (this.form.checkBuyAgainPrice * (Number(this.form.proportionOfInformationServiceFee) / 100)).toFixed(2)
+      // this.form.currentSystemUsagefee = (this.form.checkBuyAgainPrice * (Number(this.form.systemUsageFeeProportion) / 100)).toFixed(2)
+      // this.form.checkSettlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
    },
     // 取消
     cancelSubmit(name) {
@@ -576,11 +587,60 @@ export default {
             }
           // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
           if((Number(this.form.totalServiceFeeReconciled)+Number(this.form.checkSettlePrice)) > Number(this.form.totalServiceFee)){
-            this.$Message.warning({
-              content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
-              duration: 3,
+            // this.$Message.warning({
+            //   content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
+            //   duration: 3,
+            // });
+            // return
+            this.$Modal.confirm({
+              title: "确认提示",
+              content:  "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
+              onOk: () => {
+                this.isLoading = true
+                api.customerManageCheck(data).then((res) => {
+                  if (res.code === 0) {
+                    this.isLoading = false;
+                    this.controlModal = false;
+                    this.cancelSubmit("form");
+                    this.getContentPlatFormOrderDealInfo(
+                      this.reconciliationParams.customerPhone
+                    );
+                    this.getTotalCheckReturnBackPriceByIdChange()
+                    this.$Message.success({
+                      content: "提交成功",
+                      duration: 3,
+                    });
+                  } else {
+                    setTimeout(() => {
+                      this.isLoading = false;
+                    }, 3000);
+                  }
+                });
+              },
+              onCancel: () => {},
             });
             return
+          }else{
+            this.isLoading = true;
+            api.customerManageCheck(data).then((res) => {
+              if (res.code === 0) {
+                this.isLoading = false;
+                this.controlModal = false;
+                this.cancelSubmit("form");
+                this.getContentPlatFormOrderDealInfo(
+                  this.reconciliationParams.customerPhone
+                );
+                this.getTotalCheckReturnBackPriceByIdChange()
+                this.$Message.success({
+                  content: "提交成功",
+                  duration: 3,
+                });
+              } else {
+                setTimeout(() => {
+                  this.isLoading = false;
+                }, 3000);
+              }
+            });
           }
           
           if(checkPriceRight != checkBuyAgainPrice || totalServiceFee !=checkSettlePrice){

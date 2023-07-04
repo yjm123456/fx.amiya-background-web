@@ -14,6 +14,7 @@
             v-model="phone"
             style="width:250px;margin-left:10px"
             placeholder="请输入客户手机号"
+            maxlength="20"
           />
           <Button
             type="primary"
@@ -79,7 +80,8 @@
                 </div>
                 <div v-else>
                   <div class="red">
-                    该顾客手机号已绑定了 {{recordingNormalParams.CustomerServiceNameByPhone}}，若仍需要录单，您可以向主管提交录单申请！
+                    <!-- 该顾客手机号已绑定了 {{recordingNormalParams.CustomerServiceNameByPhone}}，若仍需要录单，您可以向主管提交录单申请！ -->
+                    该顾客手机号已绑定了啊美雅客服，若仍需要录单，您可以向主管提交录单申请！
                   </div>
                   <div class="ts">
                     温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准
@@ -116,6 +118,9 @@
               :columns="query.columns"
               :data="query.data"
             ></Table> -->
+
+            <!-- 重单的订单信息 -->
+            <orderList ref="orderList" :isOrder="isOrder" :phone="phone"/>
             <!-- 小黄车登记详情 -->
             <ofoDetail :shoppingCartRegistrationInfo="shoppingCartRegistrationInfo" v-if="isShoppingCar == true"/>
           </div>
@@ -155,12 +160,14 @@ import upload from "@/components/upload/upload";
 import recording from "@/components/recording/recording";
 import recordingApplication from "../../../../components/recordingApplication/recordingApplication.vue";
 import ofoDetail from "./ofo.vue"
+import orderList from './orderList.vue';
 export default {
   components: {
     upload,
     recording,
     recordingApplication,
-    ofoDetail
+    ofoDetail,
+    orderList
   },
   props: {
     duplicateModel: Boolean,
@@ -171,6 +178,7 @@ export default {
     return {
       // 判断是否显示
       isShoppingCar:false,
+      isOrder:false,
       control: false,
       //
       phone: "",
@@ -204,7 +212,9 @@ export default {
         contentPlatformOrderAddWorkTypeList:[]
       },
       // 小黄车详情
-      shoppingCartRegistrationInfo:{}
+      shoppingCartRegistrationInfo:{},
+      // 重单订单列表
+      orderParams:[]
       
     };
   },
@@ -231,6 +241,7 @@ export default {
         }
       })
     },
+   
     // 获取所有员工
     getEmployeeByPositionId() {
       const data = {
@@ -259,14 +270,20 @@ export default {
         this.$Message.warning("请输入客户手机号");
         return;
       }
-      if (this.phone) {
-        if (!/^1[3456789]\d{9}$/.test(this.phone)) {
-          this.$Message.warning("请输入正确的手机号");
-          return false;
-        }
-      }
+      // if (this.phone) {
+      //   if (!/^1[3456789]\d{9}$/.test(this.phone)) {
+      //     this.$Message.warning("请输入正确的手机号");
+      //     return false;
+      //   }
+      // }
       this.getbyPhoneContentPlatFormOrderAddWork();
       this.getbyEncryptPhone()
+      // this.isOrder = true
+      // setTimeout(()=>{
+      //   this.$refs.orderList.getContentPlateFormOrderSimpleInfos(this.phone)
+      // },30)
+      this.isOrder = true
+      this.$refs.orderList.getContentPlateFormOrderSimpleInfos(this.phone)
     },
     // 根据录单申请手机号获取录单申请信息
     getbyPhoneContentPlatFormOrderAddWork() {
@@ -330,6 +347,8 @@ export default {
       this.recordingNormalParams.CustomerServiceNameByPhone = "";
       this.checkStateTexts = "";
       this.isShoppingCar = false
+      this.isOrder = false
+      this.$refs.orderList.query.data = []
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChanges(value) {

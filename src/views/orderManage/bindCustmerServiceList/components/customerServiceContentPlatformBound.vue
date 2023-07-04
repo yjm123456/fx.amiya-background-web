@@ -25,7 +25,7 @@
         <Select
           v-model="query.customerServiceId"
           placeholder="请选择客服"
-          style="width: 200px; margin-left: 10px"
+          style="width: 180px; margin-left: 10px"
           filterable
         >
           <Option
@@ -39,7 +39,7 @@
           v-model="query.contentPlatFormId"
           placeholder="请选择主播平台"
           @on-change="contentPlateChange(query.contentPlatFormId)"
-          style="width: 200px; margin-left: 10px"
+          style="width: 180px; margin-left: 10px"
           filterable
         >
           <Option
@@ -52,7 +52,7 @@
         <Select
           v-model="query.liveAnchorId"
           placeholder="请选择主播IP账号"
-          style="width: 200px; margin-left: 10px"
+          style="width: 180px; margin-left: 10px"
           :disabled="query.contentPlatFormId === null"
           filterable
         >
@@ -61,6 +61,19 @@
             :value="item.id"
             :key="item.id"
             >{{ item.hostAccountName }}</Option
+          >
+        </Select>
+        <Select
+          v-model="query.liveAnchorWechatNoId"
+          placeholder="请选择主播微信号"
+          filterable
+          style="width: 180px; margin-left: 10px"
+        >
+          <Option
+            v-for="(item, indexs) in weChatList"
+            :value="item.weChatNo"
+            :key="indexs"
+            >{{ item.weChatNo }}</Option
           >
         </Select>
         <Button
@@ -148,6 +161,8 @@
 <script>
 import * as api from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
+import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
+
 export default {
   props: ["activeName"],
   data() {
@@ -160,6 +175,7 @@ export default {
         keyword: "",
         employee: [{ name: "全部", id: "all" }],
         customerServiceId: null,
+        liveAnchorWechatNoId:'全部微信号',
         appTypeList: [
           {
             name: "全部平台",
@@ -283,10 +299,11 @@ export default {
           },
           
           {
-            title: "备注",
-            key: "remark",
+            title: "主播微信号",
+            key: "liveAnchorWeChatNo",
             minWidth: 180,
             tooltip: true,
+            align: "center",
           },
         ],
         data: [],
@@ -304,9 +321,23 @@ export default {
         encryptPhoneList: new Set(),
         customerServiceId: "",
       },
+      // 微信号
+      weChatList:[{weChatNo:'全部微信号',name:'全部微信号'}]
     };
   },
   methods: {
+    //  主播微信号
+    getWeChatList() {
+      const data = {
+        liveanchorId: '',
+      };
+      liveAnchorApi.getvalidList(data).then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorWechatInfos } = res.data;
+          this.weChatList = [...this.weChatList,...liveAnchorWechatInfos];
+        }
+      });
+    },
     //   获取平台（下拉框）
     getContentValidList() {
       contentPlatForm.getContentPlatFormValidList().then((res) => {
@@ -368,7 +399,8 @@ export default {
         pageSize,
         liveAnchorId,
         startDate,
-        endDate
+        endDate,
+        liveAnchorWechatNoId
       } = this.query;
       if(!startDate){
         this.$Message.error('请选择开始时间')
@@ -386,7 +418,8 @@ export default {
         pageSize,
         liveAnchorId,
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
-        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null
+        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        liveAnchorWechatNoId:liveAnchorWechatNoId == '全部微信号' ? '' : liveAnchorWechatNoId
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {
@@ -405,7 +438,7 @@ export default {
     // 获取已绑定了客服的订单列表 分页
     handleProjectPageChange(pageNum) {
       const { keyword, customerServiceId, pageSize,liveAnchorId,startDate,
-        endDate } = this.query;
+        endDate ,liveAnchorWechatNoId} = this.query;
       const data = {
         keyword,
         customerServiceId:
@@ -414,7 +447,8 @@ export default {
         pageSize,
         liveAnchorId,
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
-        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null
+        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        liveAnchorWechatNoId:liveAnchorWechatNoId == '全部微信号' ? '' : liveAnchorWechatNoId
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {
@@ -518,6 +552,7 @@ export default {
     this.getCustomerServiceList();
     // this.getOrderPlatform()
     this.getContentValidList()
+    this.getWeChatList()
   },
 };
 </script>

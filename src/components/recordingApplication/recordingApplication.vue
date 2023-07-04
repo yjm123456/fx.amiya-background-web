@@ -32,7 +32,7 @@
           </Select>
         </FormItem>
         <FormItem label="手机号"  prop="phone">
-          <Input v-model="form.phone" placeholder="请输入手机号" disabled/>
+          <Input v-model="form.phone" placeholder="请输入手机号" disabled maxlength="20"/>
         </FormItem>
         <FormItem label="申请类型" prop="addWorkType">
          <Select

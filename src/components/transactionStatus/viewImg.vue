@@ -75,6 +75,12 @@ export default {
             align: "center",
             minWidth:100
           },
+          {
+            title: "创建人",
+            key: "createByEmpName",
+            align: "center",
+            minWidth:100
+          },
         ]
       },
     };

@@ -299,11 +299,37 @@
               ></Input>
             </FormItem>
           </Col>
+          <Col span="8" >
+            <FormItem
+              label="归属地"
+              prop="belongingPlace"
+              :rules="[
+                {
+                  required: true,
+                  message: '请选择归属地',
+                },
+              ]"
+            >
+              <Select
+                v-model="form.belongingPlace"
+                placeholder="请选择归属地"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in belongingPlaceList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem label="手机号" prop="phone">
               <Input
                 v-model="form.phone"
-                maxlength="11"
+                maxlength="20"
                 placeholder="请输入手机号"
                 :disabled="recordingParams.title == '录单编辑' && buttonFlag == false"
               ></Input>
@@ -506,7 +532,9 @@ export default {
         // 是否为辅助客服
         isCustomer:'',
         // 辅助客服
-        auxiliaryCustomerService:null
+        auxiliaryCustomerService:null,
+        // 归属地
+        belongingPlace:null
       },
       ruleValidates: {
         city: [
@@ -607,6 +635,17 @@ export default {
           },
         ],
       },
+      // 归属地
+      belongingPlaceList:[
+        {
+          id:1,
+          name:'国内'
+        },
+        {
+          id:2,
+          name:'国外'
+        },
+      ],
     //   主播ip
     liveAnchors:[],
     // 主播微信号
@@ -735,7 +774,8 @@ export default {
               wechatNumber,
               city,
               isCustomer,
-              auxiliaryCustomerService
+              auxiliaryCustomerService,
+              belongingPlace
             } = this.form;
             const data = {
               orderType,
@@ -769,37 +809,101 @@ export default {
               wechatNumber ,
               city,
               isCustomer,
-              auxiliaryCustomerService
+              auxiliaryCustomerService,
             };
             if (phone) {
-              if (!/^1[3456789]\d{9}$/.test(phone)) {
-                this.$Message.error("请输入正确的手机号");
-                return false;
-              }
-              this.flag = true;
-              api.editContentPlateFormOrder(data).then((res) => {
-                if (res.code === 0) {
-                  this.isEdit = false;
-                  this.flag = false;
-                  this.handleCancel("form");
-                //   this.handlePageChange(this.$refs.pages.currentPage);
-                // let pageNumEdit = sessionStorage.getItem('pageNumEdit')
-                this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
-                  this.$Message.success({
-                    content: "修改成功",
-                    duration: 3,
+              // if (!/^1[3456789]\d{9}$/.test(phone)) {
+              //   this.$Message.error("请输入正确的手机号");
+              //   return false;
+              // }
+              // 归属地 1是国内 2是国外
+              if(belongingPlace == 1){
+                // 国内手机号分为00000000000和正常手机号
+                if(phone == '00000000000'){
+                  this.flag = true;
+                  api.editContentPlateFormOrder(data).then((res) => {
+                    if (res.code === 0) {
+                      this.isEdit = false;
+                      this.flag = false;
+                      this.handleCancel("form");
+                    //   this.handlePageChange(this.$refs.pages.currentPage);
+                    // let pageNumEdit = sessionStorage.getItem('pageNumEdit')
+                    this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
+                      this.$Message.success({
+                        content: "修改成功",
+                        duration: 3,
+                      });
+                    } else if (res.code != -1 || res.code !=0){
+                      this.$Message.error('操作失败，请联系管理员')
+                      setTimeout(() => {
+                        this.flag = false;
+                      }, 3000);
+                    }else {
+                      setTimeout(() => {
+                        this.flag = false;
+                      }, 3000);
+                    }
                   });
-                } else if (res.code != -1 || res.code !=0){
-                  this.$Message.error('操作失败，请联系管理员')
-                  setTimeout(() => {
-                    this.flag = false;
-                  }, 3000);
-                }else {
-                  setTimeout(() => {
-                    this.flag = false;
-                  }, 3000);
+                  return
+                }else{
+                  if (!/^1[3456789]\d{9}$/.test(phone)) {
+                    this.$Message.warning("请确认归属地和手机号是否正确！");
+                    return false;
+                  }
+                  this.flag = true;
+                  api.editContentPlateFormOrder(data).then((res) => {
+                    if (res.code === 0) {
+                      this.isEdit = false;
+                      this.flag = false;
+                      this.handleCancel("form");
+                    //   this.handlePageChange(this.$refs.pages.currentPage);
+                    // let pageNumEdit = sessionStorage.getItem('pageNumEdit')
+                    this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
+                      this.$Message.success({
+                        content: "修改成功",
+                        duration: 3,
+                      });
+                    } else if (res.code != -1 || res.code !=0){
+                      this.$Message.error('操作失败，请联系管理员')
+                      setTimeout(() => {
+                        this.flag = false;
+                      }, 3000);
+                    }else {
+                      setTimeout(() => {
+                        this.flag = false;
+                      }, 3000);
+                    }
+                  });
+                  return
                 }
-              });
+              }else{
+                this.flag = true;
+                api.editContentPlateFormOrder(data).then((res) => {
+                  if (res.code === 0) {
+                    this.isEdit = false;
+                    this.flag = false;
+                    this.handleCancel("form");
+                  //   this.handlePageChange(this.$refs.pages.currentPage);
+                  // let pageNumEdit = sessionStorage.getItem('pageNumEdit')
+                  this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
+                    this.$Message.success({
+                      content: "修改成功",
+                      duration: 3,
+                    });
+                  } else if (res.code != -1 || res.code !=0){
+                    this.$Message.error('操作失败，请联系管理员')
+                    setTimeout(() => {
+                      this.flag = false;
+                    }, 3000);
+                  }else {
+                    setTimeout(() => {
+                      this.flag = false;
+                    }, 3000);
+                  }
+                });
+                return
+              }
+              
             }
           } else {
             const {
@@ -869,10 +973,10 @@ export default {
               auxiliaryCustomerService
             };
             if (phone) {
-              if (!/^1[3456789]\d{9}$/.test(phone)) {
-                this.$Message.error("请输入正确的手机号");
-                return false;
-              }
+              // if (!/^1[3456789]\d{9}$/.test(phone)) {
+              //   this.$Message.error("请输入正确的手机号");
+              //   return false;
+              // }
               this.flag = true;
               api.AddContentPlateFormAddOrder(data).then((res) => {
                 if (res.code === 0) {
@@ -955,6 +1059,7 @@ export default {
         this.form.addOrderPrice = info.addOrderPrice;
         this.form.belongEmpId = info.belongEmpId
         this.form.consultationEmpId = info.consultationEmpId;
+        this.form.belongingPlace = 1
         this.customerUploadObj.uploadList = this.form
             .customerPictures
             ? this.form.customerPictures

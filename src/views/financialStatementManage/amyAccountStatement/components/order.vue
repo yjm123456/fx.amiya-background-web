@@ -475,22 +475,28 @@ export default {
                         this.form.systemUsageFeePrice = ((Number(this.form.checkPriceNum) * Number(this.form.systemUsageFeeProportion)) / 100).toFixed(2)
                         // 已对账服务费合计(信息服务费金额+系统使用费金额)
                         // this.form.totalServiceFeeReconciled = (Number(this.form.informationServiceFeePrice) +  Number(this.form.systemUsageFeePrice)).toFixed(2)
-                        this.form.totalServiceFeeReconciled = settlePrice
+                        this.form.totalServiceFeeReconciled = settlePrice ? settlePrice : 0
+                        // // 当前信息服务费
+                        // this.form.currentInformationServiceFee = (this.form.checkPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
+                        // // 当前系统服务费
+                        // this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
                         // 当前信息服务费
-                        this.form.currentInformationServiceFee = (this.form.checkPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
+                        this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
                         // 当前系统服务费
-                        this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
+                        this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+                        // 服务费合计
+                        this.form.settlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
 
                         // 成交服务费合计
                         // 为负数情况
                         if(Number(checkPriceRight) <0){
                           let num = ((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000).toFixed(2)
                           this.form.totalServiceFee = (-num).toFixed(2)
-                          console.log(this.form.totalServiceFee,'为负数情况')
+                          // console.log(this.form.totalServiceFee,'为负数情况')
                           return
                         }else{
                           this.form.totalServiceFee = Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000).toFixed(2))
-                          console.log(this.form.totalServiceFee,'为正数情况')
+                          // console.log(this.form.totalServiceFee,'为正数情况')
                           return
                         }
                       },
@@ -510,9 +516,16 @@ export default {
   methods: {
     checkPriceChange(){
       // 当前服务费金额
-      this.form.currentInformationServiceFee = (this.form.checkPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
-      this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
-      this.form.settlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+      // this.form.currentInformationServiceFee = (this.form.checkPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
+      // this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
+      // this.form.settlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+      // 当前信息服务费
+      this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
+      // 当前系统服务费
+      this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+      // 服务费合计
+      this.form.settlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
+
    },
     // 取消
     cancelSubmit(name) {
@@ -582,11 +595,60 @@ export default {
             }
           // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
           if((Number(this.form.totalServiceFeeReconciled)+Number(this.form.settlePrice)) > Number(this.form.totalServiceFee)){
-            this.$Message.warning({
-              content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
-              duration: 3,
+            // this.$Message.warning({
+            //   content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
+            //   duration: 3,
+            // });
+            // return
+            this.$Modal.confirm({
+              title: "确认提示",
+              content: "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
+              onOk: () => {
+                this.isLoading = true
+                api.checkOrder(data).then((res) => {
+                  if (res.code === 0) {
+                    this.isLoading = false
+                    this.controlModal = false;
+                    this.cancelSubmit("form");
+                    this.getContentPlatFormOrderDealInfo(
+                      this.reconciliationParams.customerPhone
+                    );
+                    this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
+                    this.$Message.success({
+                      content: "提交成功",
+                      duration: 3,
+                    });
+                  } else {
+                    setTimeout(() => {
+                      this.isLoading = false;
+                    }, 3000);
+                  }
+                });
+              },
+              onCancel: () => {},
             });
             return
+          }else{
+            this.isLoading = true;
+            api.checkOrder(data).then((res) => {
+              if (res.code === 0) {
+                this.isLoading = false;
+                this.controlModal = false;
+                this.cancelSubmit("form");
+                this.getContentPlatFormOrderDealInfo(
+                  this.reconciliationParams.customerPhone
+                );
+                this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
+                this.$Message.success({
+                  content: "提交成功",
+                  duration: 3,
+                });
+              } else {
+                setTimeout(() => {
+                  this.isLoading = false;
+                }, 3000);
+              }
+            });
           }
           // 成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
           if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){

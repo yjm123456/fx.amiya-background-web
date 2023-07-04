@@ -98,7 +98,7 @@
 
               <Select
                 v-model="query.assignEmpId"
-                placeholder="请选择指派给"
+                placeholder="请选择指派"
                 filterable
                 style="width: 150px; margin-left: 10px"
               >
@@ -421,12 +421,38 @@
               ></Input>
             </FormItem>
           </Col>
+          <Col span="8" >
+            <FormItem
+              label="归属地"
+              prop="belongingPlace"
+              :rules="[
+                {
+                  required: true,
+                  message: '请选择归属地',
+                },
+              ]"
+            >
+              <Select
+                v-model="form.belongingPlace"
+                placeholder="请选择归属地"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in belongingPlaceList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem label="客户手机号" prop="phone">
               <Input
                 v-model="form.phone"
                 placeholder="请输入客户手机号"
-                maxlength="11"
+                maxlength="20"
               ></Input>
               <span style="color:#666">00000000000</span>
               <button
@@ -455,7 +481,7 @@
                 namber></Input>
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem label="面诊方式" prop="consultationType">
               <Select
                 v-model="form.consultationType"
@@ -469,7 +495,7 @@
                 >
               </Select>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="8">
             <FormItem label="客户来源" prop="source">
               <Select
@@ -665,10 +691,10 @@
           <Col span="8">
           </Col> -->
           <Col span="8">
-            <FormItem label="指派给" prop="assignEmpId">
+            <FormItem label="指派" prop="assignEmpId">
               <Select
                 v-model="form.assignEmpId"
-                placeholder="请选择指派给"
+                placeholder="请选择指派"
                 filterable
                 :disabled="form.liveAnchorId == null"
               >
@@ -692,7 +718,7 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
-    <!-- 指派给 -->
+    <!-- 指派 -->
     <assign
       :assignModel.sync="assignModel"
       :assignParams="assignParams"
@@ -716,7 +742,7 @@ export default {
     return {
       
       batchAssignmentModel:false,
-      // 指派给
+      // 指派
       assignModel: false,
       assignParams: {
         id: "",
@@ -790,7 +816,7 @@ export default {
             },
           },
           {
-            title: "指派给",
+            title: "指派",
             key: "assignEmpName",
             minWidth: 120,
             align: "center",
@@ -924,53 +950,53 @@ export default {
             minWidth: 130,
             align: "center",
           },
-          {
-            title: "面诊方式",
-            key: "consultationTypeText",
-            minWidth: 110,
-            align: "center",
-            // render:(h,params)=>{
-            //   return h(
-            //       "div",
-            //       params.row.consultationType == 1 ? '视频':'图片'
-            //     );
-            // }
-            // render: (h, params) => {
-            //   if (params.row.consultationType == 1) {
-            //     return h("div", "视频");
-            //   } else if (params.row.consultationType == 2) {
-            //     return h(
-            //       "div",
+          // {
+          //   title: "面诊方式",
+          //   key: "consultationTypeText",
+          //   minWidth: 110,
+          //   align: "center",
+          //   // render:(h,params)=>{
+          //   //   return h(
+          //   //       "div",
+          //   //       params.row.consultationType == 1 ? '视频':'图片'
+          //   //     );
+          //   // }
+          //   // render: (h, params) => {
+          //   //   if (params.row.consultationType == 1) {
+          //   //     return h("div", "视频");
+          //   //   } else if (params.row.consultationType == 2) {
+          //   //     return h(
+          //   //       "div",
 
-            //       "图片"
-            //     );
-            //   } else if (params.row.consultationType == 3) {
-            //     return h(
-            //       "div",
+          //   //       "图片"
+          //   //     );
+          //   //   } else if (params.row.consultationType == 3) {
+          //   //     return h(
+          //   //       "div",
 
-            //       "私信"
-            //     );
-            //   } else if (params.row.consultationType == 4) {
-            //     return h(
-            //       "div",
+          //   //       "私信"
+          //   //     );
+          //   //   } else if (params.row.consultationType == 4) {
+          //   //     return h(
+          //   //       "div",
 
-            //       "其他"
-            //     );
-            //   } else if (params.row.consultationType == 5) {
-            //     return h(
-            //       "div",
+          //   //       "其他"
+          //   //     );
+          //   //   } else if (params.row.consultationType == 5) {
+          //   //     return h(
+          //   //       "div",
 
-            //       "粉丝群"
-            //     );
-            //   } else if (params.row.consultationType == 6) {
-            //     return h(
-            //       "div",
+          //   //       "粉丝群"
+          //   //     );
+          //   //   } else if (params.row.consultationType == 6) {
+          //   //     return h(
+          //   //       "div",
 
-            //       "短视频"
-            //     );
-            //   }
-            // },
-          },
+          //   //       "短视频"
+          //   //     );
+          //   //   }
+          //   // },
+          // },
 
           {
             title: "录单触达",
@@ -1302,7 +1328,7 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 200,
+            width: 180,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -1325,7 +1351,7 @@ export default {
                       },
                     },
                   },
-                  "指派给"
+                  "指派"
                 ),
                 h(
                   "Button",
@@ -1423,6 +1449,7 @@ export default {
                             this.form.assignEmpId = assignEmpId;
                             this.form.refundDate = refundDate;
                             this.form.source = source;
+                            this.form.belongingPlace = 1;
 
                             this.form.badReviewDate = badReviewDate;
                             this.form.consultationDate = consultationDate;
@@ -1524,6 +1551,17 @@ export default {
           { emergencyLevel: -1, emergencyLevelText: "全部重要程度" },
         ],
       },
+      // 归属地
+      belongingPlaceList:[
+        {
+          id:1,
+          name:'国内'
+        },
+        {
+          id:2,
+          name:'国外'
+        },
+      ],
       flag: false,
       // 控制 modal
       controlModal: false,
@@ -1587,14 +1625,16 @@ export default {
         isReContent: false,
         // 追评内容
         reContent: "",
-        // 指派给
+        // 指派
         assignEmpId: null,
         // 重要程度
         emergencyLevel: null,
         // 辅助电话
         subPhone: "",
         // 客户来源
-        source:null
+        source:null,
+        // 归属地
+        belongingPlace:1
       },
 
       ruleValidate: {
@@ -1864,7 +1904,7 @@ export default {
           name: "否",
         },
       ],
-      //指派给
+      //指派
       employeeList: [],
       employee: [{ name: "全部指派人员", id: 0 },{ name: "未指派", id: -1 }],
       // 微信号
@@ -2358,7 +2398,9 @@ export default {
               consultationDate,
               refundType,
               subPhone,
-              source
+              source,
+              belongingPlace
+              
             } = this.form;
             const data = {
               recordDate: time
@@ -2372,7 +2414,7 @@ export default {
               customerNickName,
               phone,
               price,
-              consultationType,
+              consultationType:4,
               isWriteOff,
               isConsultation,
               isReturnBackPrice,
@@ -2400,16 +2442,65 @@ export default {
               subPhone,
               source
             };
-            if (this.form.phone) {
-              if (this.form.phone == "00000000000") {
-                if (!data.liveAnchorWechatNo) {
-                  this.$Message.warning("请选择微信号");
-                  return;
-                }
+            // if (this.form.phone) {
+            //   if (this.form.phone == "00000000000") {
+            //     if (!data.liveAnchorWechatNo) {
+            //       this.$Message.warning("请选择微信号");
+            //       return;
+            //     }
+            //     // 修改
+            //     api.editShoppingCartRegistration(data).then((res) => {
+            //       if (res.code === 0) {
+            //         this.isEdit = false;
+            //         this.cancelSubmit("form");
+            //         // this.getSmallCar();
+            //         this.handlePageChange(this.$refs.pages.currentPage);
+            //         this.$Message.success({
+            //           content: "修改成功",
+            //           duration: 3,
+            //         });
+            //       } else if (res.code != -1 || res.code != 0) {
+            //         this.$Message.error("操作失败，请联系管理员");
+            //       }
+            //     });
+            //     return;
+            //   } else {
+            //     if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
+            //       this.$Message.error("请输入正确的手机号");
+            //       return false;
+            //     } else {
+            //       if (!data.liveAnchorWechatNo) {
+            //         this.$Message.warning("请选择微信号");
+            //         return;
+            //       }
+            //       // 修改
+            //       api.editShoppingCartRegistration(data).then((res) => {
+            //         if (res.code === 0) {
+            //           this.isEdit = false;
+            //           this.cancelSubmit("form");
+            //           // this.getSmallCar();
+            //           this.handlePageChange(this.$refs.pages.currentPage);
+            //           this.$Message.success({
+            //             content: "修改成功",
+            //             duration: 3,
+            //           });
+            //         } else if (res.code != -1 || res.code != 0) {
+            //           this.$Message.error("操作失败，请联系管理员");
+            //         }
+            //       });
+            //     }
+            //   }
+            // }
+            // 归属地 国内是1 国外是2
+            if(belongingPlace == 1){
+              // 国内手机号分为00000000000和正常手机号
+              if(phone == '00000000000'){
+                this.flag = true
                 // 修改
                 api.editShoppingCartRegistration(data).then((res) => {
                   if (res.code === 0) {
                     this.isEdit = false;
+                    this.flag = false
                     this.cancelSubmit("form");
                     // this.getSmallCar();
                     this.handlePageChange(this.$refs.pages.currentPage);
@@ -2419,35 +2510,56 @@ export default {
                     });
                   } else if (res.code != -1 || res.code != 0) {
                     this.$Message.error("操作失败，请联系管理员");
+                    this.flag = false
+                    return
                   }
                 });
-                return;
-              } else {
+                return
+              }else{
                 if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
-                  this.$Message.error("请输入正确的手机号");
+                  this.$Message.error("请确认归属地和手机号是否正确！");
                   return false;
-                } else {
-                  if (!data.liveAnchorWechatNo) {
-                    this.$Message.warning("请选择微信号");
-                    return;
+                } 
+                this.flag = true
+                // 修改
+                api.editShoppingCartRegistration(data).then((res) => {
+                  if (res.code === 0) {
+                    this.isEdit = false;
+                    this.flag = false
+                    this.cancelSubmit("form");
+                    // this.getSmallCar();
+                    this.handlePageChange(this.$refs.pages.currentPage);
+                    this.$Message.success({
+                      content: "修改成功",
+                      duration: 3,
+                    });
+                  } else if (res.code != -1 || res.code != 0) {
+                    this.$Message.error("操作失败，请联系管理员");
+                    this.flag = false
+                    return
                   }
-                  // 修改
-                  api.editShoppingCartRegistration(data).then((res) => {
-                    if (res.code === 0) {
-                      this.isEdit = false;
-                      this.cancelSubmit("form");
-                      // this.getSmallCar();
-                      this.handlePageChange(this.$refs.pages.currentPage);
-                      this.$Message.success({
-                        content: "修改成功",
-                        duration: 3,
-                      });
-                    } else if (res.code != -1 || res.code != 0) {
-                      this.$Message.error("操作失败，请联系管理员");
-                    }
-                  });
-                }
+                });
               }
+            }else{
+              this.flag = true
+              // 修改
+              api.editShoppingCartRegistration(data).then((res) => {
+                if (res.code === 0) {
+                  this.isEdit = false;
+                  this.flag = false
+                  this.cancelSubmit("form");
+                  // this.getSmallCar();
+                  this.handlePageChange(this.$refs.pages.currentPage);
+                  this.$Message.success({
+                    content: "修改成功",
+                    duration: 3,
+                  });
+                } else if (res.code != -1 || res.code != 0) {
+                  this.$Message.error("操作失败，请联系管理员");
+                  this.flag = false
+                  return
+                }
+              });
             }
           } else {
             const {
@@ -2478,7 +2590,8 @@ export default {
               consultationDate,
               refundType,
               subPhone,
-              source
+              source,
+              belongingPlace
             } = this.form;
             const data = {
               recordDate: time
@@ -2492,7 +2605,7 @@ export default {
               customerNickName,
               phone,
               price,
-              consultationType,
+              consultationType:4,
               isWriteOff,
               isConsultation,
               isReturnBackPrice,
@@ -2519,10 +2632,55 @@ export default {
               subPhone,
               source
             };
-            if (phone === "00000000000") {
+            
+            // 归属地 国内是1 国外是2
+            if(belongingPlace == 1){
+              // 国内手机号分为00000000000和正常手机号
+              if(phone == '00000000000'){
+                this.flag = true
+                // 添加
+                api.addShoppingCartRegistration(data).then((res) => {
+                  if (res.code === 0) {
+                    this.flag = false
+                    this.cancelSubmit("form");
+                    this.getSmallCar();
+                    this.$Message.success({
+                      content: "添加成功",
+                      duration: 3,
+                    });
+                  } else if (res.code != -1 || res.code != 0) {
+                    this.$Message.warning("操作失败，请联系管理员");
+                    return
+                  }
+                });
+              }else{
+                if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
+                  this.$Message.error("请确认归属地和手机号是否正确！");
+                  return false;
+                } 
+                this.flag = true
+                // 添加
+                api.addShoppingCartRegistration(data).then((res) => {
+                  if (res.code === 0) {
+                    this.flag = false
+                    this.cancelSubmit("form");
+                    this.getSmallCar();
+                    this.$Message.success({
+                      content: "添加成功",
+                      duration: 3,
+                    });
+                  } else if (res.code != -1 || res.code != 0) {
+                    this.$Message.warning("操作失败，请联系管理员");
+                    return
+                  }
+                });
+              }
+            }else{
+              this.flag = true
               // 添加
               api.addShoppingCartRegistration(data).then((res) => {
                 if (res.code === 0) {
+                  this.flag = false
                   this.cancelSubmit("form");
                   this.getSmallCar();
                   this.$Message.success({
@@ -2531,35 +2689,51 @@ export default {
                   });
                 } else if (res.code != -1 || res.code != 0) {
                   this.$Message.warning("操作失败，请联系管理员");
+                  return
                 }
               });
-              return;
-            } else {
-              if (phone) {
-                if (!/^1[3456789]\d{9}$/.test(phone)) {
-                  this.$Message.warning("请输入正确的手机号");
-                  return false;
-                } else {
-                  if (!data.liveAnchorWechatNo) {
-                    this.$Message.warning("请选择微信号");
-                    return;
-                  }
-                  // 添加
-                  api.addShoppingCartRegistration(data).then((res) => {
-                    if (res.code === 0) {
-                      this.cancelSubmit("form");
-                      this.getSmallCar();
-                      this.$Message.success({
-                        content: "添加成功",
-                        duration: 3,
-                      });
-                    } else if (res.code != -1 || res.code != 0) {
-                      this.$Message.warning("操作失败，请联系管理员");
-                    }
-                  });
-                }
-              }
             }
+            // if (phone === "00000000000") {
+            //   // 添加
+            //   api.addShoppingCartRegistration(data).then((res) => {
+            //     if (res.code === 0) {
+            //       this.cancelSubmit("form");
+            //       this.getSmallCar();
+            //       this.$Message.success({
+            //         content: "添加成功",
+            //         duration: 3,
+            //       });
+            //     } else if (res.code != -1 || res.code != 0) {
+            //       this.$Message.warning("操作失败，请联系管理员");
+            //     }
+            //   });
+            //   return;
+            // } else {
+            //   if (phone) {
+            //     if (!/^1[3456789]\d{9}$/.test(phone)) {
+            //       this.$Message.warning("请输入正确的手机号");
+            //       return false;
+            //     } else {
+            //       if (!data.liveAnchorWechatNo) {
+            //         this.$Message.warning("请选择微信号");
+            //         return;
+            //       }
+            //       // 添加
+            //       api.addShoppingCartRegistration(data).then((res) => {
+            //         if (res.code === 0) {
+            //           this.cancelSubmit("form");
+            //           this.getSmallCar();
+            //           this.$Message.success({
+            //             content: "添加成功",
+            //             duration: 3,
+            //           });
+            //         } else if (res.code != -1 || res.code != 0) {
+            //           this.$Message.warning("操作失败，请联系管理员");
+            //         }
+            //       });
+            //     }
+            //   }
+            // }
           }
         }
       });

@@ -928,6 +928,18 @@ const customerManage = [{
         component: () =>
             import ("@/views/customerManage/aestheticDesignReport/aestheticDesignReport.vue"),
     },
+    {
+        path: "/customerRfm",
+        name: "customerRfm",
+        meta: {
+            title: "客户RFM分析",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/customerRfm/customerRfm.vue"),
+    },
 ];
 
 /**

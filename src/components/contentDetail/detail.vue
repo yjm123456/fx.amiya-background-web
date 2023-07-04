@@ -336,10 +336,14 @@
             <span class="title_bold">后期项目铺垫：</span>
             <span>{{ detailObj.lateProjectStage }} </span>
           </div>
-          <div class="fl_end">
-            <div class="mr_top">
+          <div class="mr_top">
               <span class="title_bold">未派单原因：</span>
               <span>{{ detailObj.unSendReason }} </span>
+            </div>
+          <div class="fl_end">
+            <div class="mr_top">
+              <span class="title_bold">未成交原因：</span>
+              <span>{{ detailObj.unDealReason }} </span>
             </div>
             <div style="display:flex;align-items:flex-end">
               <Button

@@ -199,7 +199,7 @@ export default {
                         props: {
                           type: "primary",
                           size: "small",
-                          disabled: statusCode !== "WAIT_SELLER_SEND_GOODS",
+                          disabled: statusCode !== "WAIT_SELLER_SEND_GOODS"  && statusCode !== 'TRADE_BUYER_PAID',
                         },
                         style: {
                           marginRight: "5px",

@@ -4,27 +4,24 @@
         <div class="message_title"><span class="line"></span>客资登记信息</div>
         <div class="order_content">
           <div  class="item_list">
-            <div class="items">
-              <span class="title_bold">来源渠道：</span>
+            <div class="mr_top  items">
+              <span class=" mr_top  title_bold">来源渠道：</span>
               <span>{{shoppingCartRegistrationInfo.contentPlatFormName}} </span>
             </div>
-            <div  class="items">
+            <div  class="mr_top items">
               <span class="title_bold">主播IP：</span>
               <span>{{shoppingCartRegistrationInfo.liveAnchorName}}</span>
             </div>
-          </div>
-           <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">主播微信号：</span>
               <span>{{ shoppingCartRegistrationInfo.liveAnchorWechatNo }} </span>
             </div>
-
+          </div>
+           <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">抖音昵称：</span>
               <span>{{ shoppingCartRegistrationInfo.customerNickName }} </span>
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">手机号：</span>
               <span>{{ shoppingCartRegistrationInfo.phone }} </span>
@@ -43,18 +40,16 @@
               <span class="title_bold">面诊方式：</span>
               <span>{{ shoppingCartRegistrationInfo.consultationTypeText }}</span>
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">录单触达：</span>
               <i-switch v-model="shoppingCartRegistrationInfo.isCreateOrder" disabled />
             </div>
+          </div>
+          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">派单触达：</span>
               <i-switch v-model="shoppingCartRegistrationInfo.isSendOrder" disabled />
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">是否加V：</span>
               <i-switch v-model="shoppingCartRegistrationInfo.isAddWeChat" disabled />
@@ -79,18 +74,16 @@
                     : ""
                 }}</span>
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">是否退款：</span>
               <i-switch v-model="shoppingCartRegistrationInfo.isReturnBackPrice" disabled />
             </div>
+          </div>
+          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">是否核销：</span>
               <span>{{shoppingCartRegistrationInfo.createBy}}</span>
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">接诊人员：</span>
               <span>{{shoppingCartRegistrationInfo.assignEmpName}}</span>
@@ -102,21 +95,21 @@
                 }}</span>
             </div>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">退款时间：</span>
-            <span>{{
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">退款时间：</span>
+              <span>{{
                   shoppingCartRegistrationInfo.refundDate
                     ? this.$moment(shoppingCartRegistrationInfo.refundDate).format(
                         "YYYY-MM-DD HH:mm:ss"
                       )
                     : ""
                 }}</span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">退款原因：</span>
-            <span>{{ shoppingCartRegistrationInfo.refundReason }}</span>
-          </div>
-          <div  class="item_list">
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">是否差评：</span>
+              <i-switch v-model="shoppingCartRegistrationInfo.isBadReview" disabled />
+            </div>
             <div class="mr_top items">
               <span class="title_bold">差评时间：</span>
               <span>{{
@@ -128,6 +121,23 @@
                 }}</span>
             </div>
           </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">是否追评：</span>
+              <i-switch v-model="shoppingCartRegistrationInfo.isReContent" disabled />
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">重要程度：</span>
+              <span>{{ shoppingCartRegistrationInfo.emergencyLevelText }} </span>
+            </div>
+            <div class="mr_top items">
+              
+            </div>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">退款原因：</span>
+            <span>{{ shoppingCartRegistrationInfo.refundReason }}</span>
+          </div>
           <div class="mr_top">
             <span class="title_bold">差评原因：</span>
             <span>{{ shoppingCartRegistrationInfo.badReviewReason }}</span>
@@ -136,24 +146,10 @@
             <span class="title_bold">差评内容：</span>
             <span>{{ shoppingCartRegistrationInfo.badReviewContent }}</span>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">是否追评：</span>
-            <i-switch v-model="shoppingCartRegistrationInfo.isReContent" disabled />
-          </div>
+          
           <div class="mr_top">
             <span class="title_bold">追评内容：</span>
             <span>{{ shoppingCartRegistrationInfo.reContent }}</span>
-          </div>
-          <div  class="item_list">
-            <div class="mr_top items">
-              <span class="title_bold">是否差评：</span>
-              <i-switch v-model="shoppingCartRegistrationInfo.isBadReview" disabled />
-            </div>
-
-            <div class="mr_top items">
-              <span class="title_bold">重要程度：</span>
-              <span>{{ shoppingCartRegistrationInfo.emergencyLevelText }} </span>
-            </div>
           </div>
         </div>
       </div>

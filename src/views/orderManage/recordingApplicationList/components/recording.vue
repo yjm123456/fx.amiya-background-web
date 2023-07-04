@@ -342,7 +342,7 @@
             <FormItem label="手机号" prop="phone">
               <Input
                 v-model="form.phone"
-                maxlength="11"
+                maxlength="20"
                 placeholder="请输入手机号"
                 disabled
               ></Input>
@@ -804,10 +804,10 @@ export default {
                 : 0,
             };
             if (phone) {
-              if (!/^1[3456789]\d{9}$/.test(phone)) {
-                this.$Message.error("请输入正确的手机号");
-                return false;
-              }
+              // if (!/^1[3456789]\d{9}$/.test(phone)) {
+              //   this.$Message.error("请输入正确的手机号");
+              //   return false;
+              // }
               this.flag = true;
               api.AddContentPlateFormAddOrder(data).then((res) => {
                 if (res.code === 0) {

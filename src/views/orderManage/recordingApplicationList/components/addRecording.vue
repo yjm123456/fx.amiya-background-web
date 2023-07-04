@@ -30,8 +30,32 @@
             >
           </Select>
         </FormItem>
+        <FormItem
+          label="归属地"
+          prop="belongingPlace"
+          :rules="[
+            {
+              required: true,
+              message: '请选择归属地',
+            },
+          ]"
+        >
+          <Select
+            v-model="form.belongingPlace"
+            placeholder="请选择归属地"
+            filterable
+            
+          >
+            <Option
+              v-for="item in belongingPlaceList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
         <FormItem label="手机号"  prop="phone">
-          <Input v-model="form.phone" placeholder="请输入手机号" maxlength="11"/>
+          <Input v-model="form.phone" placeholder="请输入手机号" maxlength="20"/>
         </FormItem>
         <FormItem label="申请类型" prop="addWorkType">
          <Select
@@ -96,6 +120,17 @@ export default {
   },
   data() {
     return {
+      // 归属地
+      belongingPlaceList:[
+        {
+          id:1,
+          name:'国内'
+        },
+        {
+          id:2,
+          name:'国外'
+        },
+      ],
       isLoading:false,
       control: false,
       // recipientList:[{id:1,name:'管理员'}],
@@ -109,9 +144,9 @@ export default {
         // 线上张凌玥
         // acceptBy:220,
         // 测试管理员
-        // acceptBy:1,
-
         acceptBy:220,
+
+        // acceptBy:220,
         // 手机号
         phone:'',
         // 医院
@@ -119,7 +154,9 @@ export default {
         // 申请理由
         sendRemark:'',
         // 申请类型
-        addWorkType:null
+        addWorkType:null,
+        // 归属地
+        belongingPlace:1
       },
       ruleValidates: {
         addWorkType: [
@@ -170,28 +207,74 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-            if (this.form.phone) {
+            // if (this.form.phone) {
+            //     if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
+            //       this.$Message.error("请输入正确的手机号");
+            //       return false;
+            //     }
+            // }
+            // 归属地 1是国内 2是国外
+            if(this.form.belongingPlace == 1){
+              // 国内手机号分为00000000000和正常手机号
+              if(this.form.phone == '00000000000'){
+                this.isLoading = true
+                api.addContentPlatFormOrderAddWork(this.form).then((res) => {
+                  if (res.code === 0) {
+                    this.isLoading =false
+                    this.handleCancel("form");
+                    this.$emit("getContentPlatFormOrderAddWork");
+                    this.$Message.success({
+                      content: "添加成功",
+                      duration: 3,
+                    });
+                  }else {
+                      setTimeout(() => {
+                        this.isLoading = false;
+                      }, 3000);
+                    }
+                });
+                return
+              }else{
                 if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
-                  this.$Message.error("请输入正确的手机号");
+                  this.$Message.warning("请确认归属地和手机号是否正确！");
                   return false;
                 }
-            }
-            this.isLoading = true
-            api.addContentPlatFormOrderAddWork(this.form).then((res) => {
-              if (res.code === 0) {
-                this.isLoading =false
-                this.handleCancel("form");
-                this.$emit("getContentPlatFormOrderAddWork");
-                this.$Message.success({
-                  content: "添加成功",
-                  duration: 3,
+                this.isLoading = true
+                api.addContentPlatFormOrderAddWork(this.form).then((res) => {
+                  if (res.code === 0) {
+                    this.isLoading =false
+                    this.handleCancel("form");
+                    this.$emit("getContentPlatFormOrderAddWork");
+                    this.$Message.success({
+                      content: "添加成功",
+                      duration: 3,
+                    });
+                  }else {
+                      setTimeout(() => {
+                        this.isLoading = false;
+                      }, 3000);
+                    }
                 });
-              }else {
-                  setTimeout(() => {
-                    this.isLoading = false;
-                  }, 3000);
-                }
-            });
+              }
+            }else{
+              this.isLoading = true
+              api.addContentPlatFormOrderAddWork(this.form).then((res) => {
+                if (res.code === 0) {
+                  this.isLoading =false
+                  this.handleCancel("form");
+                  this.$emit("getContentPlatFormOrderAddWork");
+                  this.$Message.success({
+                    content: "添加成功",
+                    duration: 3,
+                  });
+                }else {
+                    setTimeout(() => {
+                      this.isLoading = false;
+                    }, 3000);
+                  }
+              });
+            }
+            
         }
       });
     },

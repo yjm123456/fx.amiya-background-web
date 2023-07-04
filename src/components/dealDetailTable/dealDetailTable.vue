@@ -46,17 +46,21 @@
         </Col>
         <Col span="8">
           <Button type="primary" @click="addDetail">添加明细</Button>
+          <Button type="primary" @click="synchronousClick" style="margin-left:10px">一键同步</Button>
         </Col>
       </Row>
     </Form>
     
     <Divider style="margin-top:5px"/>
     <div class="h3">明细栏</div>
-    <Table
-      border
-      :columns="query.columns"
-      :data="query.data"
-    ></Table>
+    <div style="height:300px">
+      <Table
+        border
+        :columns="query.columns"
+        :data="query.data"
+        height="300"
+      ></Table>
+    </div>
     <Divider style="margin-top:5px"/>
     <div class="h3">客户在院消费列表</div>
     <div class="search">
@@ -140,6 +144,11 @@
           border
           :columns="query2.columns"
           :data="query2.data"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancels"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"
+          
           style="width:100%;height:280px"
         ></Table>
         <div class="pages">
@@ -197,12 +206,19 @@ export default {
         quantity: null,
         // 金额
         price: null,
-        contentPlatFormOrderId:''
+        contentPlatFormOrderId:'',
+        // 订单号
+        orderId: new Set(),
+        // orderId: [],
+        // 日期
+        date: new Set(),
+        // date: [],
       },
       
       query:{
         data:[],
         columns:[
+          
           {
             title: "项目名称",
             key: "goodsName",
@@ -273,6 +289,13 @@ export default {
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         data:[],
         columns:[
+          {
+            type: "selection",
+            key: "_checked",
+            align: "center",
+            minWidth: 80,
+            fixed:'left'
+          },
           {
             title: "医院",
             key: "hospitalName",
@@ -424,10 +447,134 @@ export default {
         ]
 
       },
-      ids:''
+      ids:'',
+      // 用于收集添加同步成功的id
+      idList:[]
     };
   },
   methods:{
+    // 一键同步详情
+    synchronousClick(){
+      // const arr = [{id:'123456',name:'张三'},{id:'123123123',name:'李四'}].find(item=>item.id == '123456').name
+      if([...this.form.date].length > 1){
+        this.$Message.warning('消费日期只能是同一天才可以同步数据！')
+        return
+      }
+      
+      // 查重 判断是否存在已同步数据
+      // var ary = ['b6b46568-7b4f-4c6f-94dc-d0e7fc93fdd3',...this.form.orderId]
+      // var ary = [...this.form.orderId]
+      // var s = ary.join(",")+",";
+      // for(var i=0;i<ary.length;i++) {
+      //   if(s.replace(ary[i]+",","").indexOf(ary[i]+",")>-1) {
+      //     this.$Message.warning("存在已同步数据，请重新选择！");
+      //     return;
+      //   }
+      // }
+     
+      // 判断客户消费列表是否有数据
+      if([...this.form.orderId].length==0 || [...this.form.orderId] == []){
+        this.$Message.warning('请在 “客户在院消费列表” 选中数据进行同步！')
+        return
+      }
+
+      // 判断是否已存在该数据
+      if(this.idList.length == 0 || this.idList == []){
+        this.getDataList()
+        return
+      }else{
+        // [...this.form.orderId].map(item2=>{
+        //   console.log(this.idList.includes(item2),'查找是否存在')
+        //   if(this.idList.includes(item2) == true){
+        //       this.$Message.warning('存在已同步数据，请重新选择！')
+        //       throw new Error
+        //   }else{
+        //     this.getDataList();
+        //       throw new Error
+        //   }
+        // })
+        for (const val of [...this.form.orderId]) {
+          if (this.idList.includes(val) == true) {
+            this.$Message.warning('存在已同步数据，请重新选择！')
+              break;
+          }else{
+            this.getDataList();
+            break;
+          }
+        }
+      }
+      
+    },
+    // 一键同步接口
+    getDataList(){
+      const data = {
+        customerHospitalDealIds:String([...this.form.orderId]),
+        // customerHospitalDealIds:String(this.form.orderId),
+        startDate:null,
+        endDate:null,
+        keyWord:'',
+        pageNum:1,
+        pageSize:999
+      }
+      api.CustomerHospitalDealDetailsListByIds(data).then(res=>{
+        if(res.code===0){
+          const {list} = res.data.customerHospitalDealDetailsDetails
+          list.map(item=>{
+            this.query.data.push({
+              goodsName:item.itemName,
+              goodsSpec:item.itemStandard,
+              quantity:item.quantity,
+              price:item.cashAmount,
+              contentPlatFormOrderId:this.id,
+              index:this.index++,
+              createBy:Number(sessionStorage.getItem('employeeId'))
+            })
+          })
+          let arr = [...this.form.orderId]
+          arr.map(item=>{
+            this.idList.push(item)
+          })
+          this.$emit('handle',this.query.data)
+        }
+      })
+    },
+    handleSelect(selection, row) {
+      // 一键同步
+      this.form.orderId.add(row.id);
+      this.form.date.add(this.$moment(row.date).format("YYYY-MM-DD"));
+      // this.form.orderId.push(row.id)
+      // this.form.date.push(this.$moment(row.date).format("YYYY-MM-DD"))
+    },
+
+    handleCancels(selection, row) {
+      // 一键同步
+      this.form.orderId.delete(row.id);
+      this.form.date.delete(this.$moment(row.date).format("YYYY-MM-DD"));
+      // this.form.orderId.map((item,index)=>{
+      //   if(item == row.id){
+      //     this.form.orderId.splice(index,1)
+      //      this.form.date.splice(index,1)
+      //   }
+      // })
+
+    },
+
+    handleSelectAll(selection) {
+      if (selection && selection.length === 0) {
+        this.form.orderId.clear();
+        this.form.date.clear();
+        // this.form.orderId = []
+        // this.form.date = []
+
+      } else {
+        selection.forEach((item) => {
+          this.form.orderId.add(item.id);
+          this.form.date.add(this.$moment(item.date).format("YYYY-MM-DD"));
+          // this.form.orderId.push(item.id);
+          // this.form.date.push(this.$moment(item.date).format("YYYY-MM-DD"));
+        });
+      }
+    },
     // 查询
     getCustomerHospitalDealInfo(){
       const {keyWord,type,consumptionType,refundType,pageNum,pageSize,startDate,endDate} = this.query2
@@ -448,9 +595,12 @@ export default {
       }
       api.getCustomerHospitalDealInfo(data).then(res=>{
         if(res.code == 0){
+          this.form.orderId.clear();
+          this.form.date.clear();
           const {list, totalCount} = res.data.customerHospitalDealInfoInfo
           this.query2.data = list;
           this.query2.totalCount = totalCount;
+          
         }
       })
     },
@@ -572,5 +722,6 @@ export default {
 }
 .search{
   display: flex;
+  
 }
 </style>

@@ -1534,3 +1534,19 @@ export const decryptoPhonesNew = (params) => {
         params
     });
 };
+// 根据客户在院消费id集合获取客户在院消费详情信息列表（分页）
+export const CustomerHospitalDealDetailsListByIds = (params) => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealDetails/listByIdsWithPage`,
+        method: "get",
+        params
+    });
+};
+// 根据加密手机号获取内容平台订单
+export const getContentPlateFormOrderSimpleInfo = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormOrder/getContentPlateFormOrderSimpleInfo`,
+        method: "get",
+        params
+    });
+};

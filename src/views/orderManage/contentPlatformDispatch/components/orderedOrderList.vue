@@ -2365,7 +2365,6 @@ export default {
       this.confirmForm.DealDate = null;
       this.query.doubleOrderModel = false;
       this.confirmForm.isFinish = false
-      this.$refs.detailTable.query2.data = []
       // this.$refs.detailTable.query2.data = []
     },
 

@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <Modal
-      title="指派给"
+      title="指派"
       footer-hide
       v-model="assignModels"
       width="25%"
@@ -16,10 +16,10 @@
         label-position="left"
         :label-width="110"
       >
-       <FormItem label="指派给" prop="assignBy">
+       <FormItem label="指派" prop="assignBy">
         <Select
             v-model="form.assignBy"
-            placeholder="请选择指派给"
+            placeholder="请选择指派"
             filterable
         >
             <Option
@@ -58,7 +58,7 @@ export default {
         assignBy: [
           {
             required: true,
-            message: "请选择指派给",
+            message: "请选择指派",
           },
         ],
       }

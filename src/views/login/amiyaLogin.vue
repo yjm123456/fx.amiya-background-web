@@ -42,7 +42,8 @@ export default {
           token,
           refreshToken,
           isDirector,
-          avatar
+          avatar,
+          readDataCenter
         } = amiyaEmployeeLoginRes.data.token;
         sessionStorage.setItem("positionId", amiyaPositionId);
         sessionStorage.setItem("positionName", amiyaPositionName);
@@ -53,6 +54,7 @@ export default {
         sessionStorage.setItem("refreshToken", refreshToken);
         sessionStorage.setItem("isDirector", isDirector);
         sessionStorage.setItem("avatar", avatar);
+        sessionStorage.setItem("readDataCenter", readDataCenter);
         // 权限
         const permissionRes = await permission();
         const {

@@ -7,7 +7,7 @@
           <div class="left_top">
             <Input
               v-model="query.keyword"
-              style="width:200px;"
+              style="width:180px;"
               placeholder="请输入订单号或商品名称"
               @keyup.enter.native="getOrderInfo()"
             />
@@ -51,6 +51,19 @@
                 >{{ item.orderSourceText }}</Option
               >
             </Select>
+            <Select
+              v-model="query.contentPlateFormId"
+              placeholder="请选择(订单)下单平台"
+              style="width: 170px;margin-left: .625rem"
+              filterable
+            >
+              <Option
+                v-for="item in contentPalteForms"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.contentPlatformName }}</Option
+              >
+            </Select>
             <!-- <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
@@ -68,22 +81,10 @@
           </div>
           <!-- 一个是订单平台筛选 一个是主播平台筛选 -->
           <div>
-            <Select
-              v-model="query.contentPlateFormId"
-              placeholder="请选择(订单)下单平台"
-              style="width: 200px;"
-              filterable
-            >
-              <Option
-                v-for="item in contentPalteForms"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.contentPlatformName }}</Option
-              >
-            </Select>
+            
             <Select
               v-model="query.belongEmpId"
-              style="width: 160px;margin-left: 10px"
+              style="width: 180px;"
               placeholder="请选择归属客服"
               filterable
             >
@@ -124,8 +125,21 @@
               >
             </Select>
             <Select
+                v-model="query.liveAnchorWechatId"
+                placeholder="请选择主播微信号"
+                filterable
+                style="width: 160px; margin-left: 10px"
+              >
+                <Option
+                  v-for="(item,indexs) in weChatListAll"
+                  :value="item.id"
+                  :key="indexs"
+                  >{{ item.weChatNo }}</Option
+                >
+              </Select>
+            <Select
               v-model="query.consultationType"
-              style="width: 160px;margin-left:10px"
+              style="width: 160px;margin-left: 10px"
               placeholder="请选择完成情况"
               filterable
             >
@@ -136,14 +150,11 @@
                 >{{ item.orderTypeText }}</Option
               >
             </Select>
-            
-          </div>
-          <div style="margin-top:10px">
             <Select
                 v-model="query.belongMonth"
                 placeholder="请选择归属月份"
                 filterable
-                style="width:200px;"
+                style="width:170px;margin-left:10px"
                 
               >
                 <Option
@@ -153,10 +164,27 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+          </div>
+          <div style="margin-top:10px">
+            
+            <Select
+                v-model="query.baseLiveAnchorId"
+                style="width: 180px;"
+                placeholder="请选择基础主播"
+                filterable
+                transfer
+              >
+                <Option
+                  v-for="item in liveAnchorBaseInfos"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+            </Select>
               <Input
                 v-model="query.minAddOrderPrice"
                 placeholder="请输入最小下单金额"
-                style="width: 180px;margin-left:10px"
+                style="width: 160px;margin-left: 10px"
                 type="number"
                 namber
               />
@@ -164,24 +192,25 @@
               <Input
                 v-model="query.maxAddOrderPrice"
                 placeholder="请输入最大下单金额"
-                style="width: 180px;"
+                style="width: 160px;"
                 type="number"
                 namber
               />
               <Select
-              v-model="query.appointmentHospital"
-              style="width: 220px;margin-left: 10px"
-              placeholder="请选择医院"
-              filterable
-              transfer
-            >
-              <Option
-                v-for="item in hospitallist"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
+                v-model="query.appointmentHospital"
+                style="width: 180px;margin-left: 10px"
+                placeholder="请选择医院"
+                filterable
+                transfer
               >
+                <Option
+                  v-for="item in hospitallist"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
             </Select>
+            
           </div>
         </div>
         <div class="button_con">
@@ -777,6 +806,7 @@ import * as api from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as hospitalManage from "@/api/hospitalManage";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
+import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
 import upload from "@/components/upload/upload";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import { download } from "@/utils/util";
@@ -830,6 +860,7 @@ export default {
       positionId: sessionStorage.getItem("positionId"),
       weChatList: [],
       detailList: [],
+      weChatListAll:[{id:-1,weChatNo:'全部主播微信号'}],
       detailModel: false,
       hospitallist: [{ id: -1, name: "全部预约医院" }],
       // 面诊人
@@ -1079,6 +1110,8 @@ export default {
         ],
       },
       query: {
+        baseLiveAnchorId:-1,
+        liveAnchorWechatId:-1,
         belongMonth:null,
         pageNumEdit: 1,
         appointmentHospital: -1,
@@ -1625,10 +1658,21 @@ export default {
           id:1,
           name:'历史'
         }
-      ]
+      ],
+      // 全部基础主播id
+      liveAnchorBaseInfos:[{id:-1,name:'全部基础主播'}]
     };
   },
   methods: {
+    // 主播基础数据列表
+    getLiveAnchorBaseInfoValids(){
+      liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if (res.code === 0) {
+          const {liveAnchorBaseInfos} = res.data
+          this.liveAnchorBaseInfos = [...this.liveAnchorBaseInfos,...liveAnchorBaseInfos]
+        }
+      });
+    },
     //  获取内容平台订单类型
     getcontentPlateFormOrderTypeList() {
       api.getcontentPlateFormOrderTypeList().then((res) => {
@@ -1799,7 +1843,8 @@ export default {
         consultationType,
         belongMonth,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         keyword,
@@ -1820,7 +1865,8 @@ export default {
         consultationType: consultationType == -1 ? null : consultationType,
         belongMonth,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1863,6 +1909,7 @@ export default {
         if (res.code === 0) {
           const { liveAnchorWechatInfos } = res.data;
           this.weChatList = liveAnchorWechatInfos;
+          this.weChatListAll = [...this.weChatListAll,...liveAnchorWechatInfos];
           this.recordingParams.weChatList = liveAnchorWechatInfos;
         }
       });
@@ -2221,7 +2268,9 @@ export default {
         consultationType,
         belongMonth,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        liveAnchorWechatId,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         keyword,
@@ -2242,7 +2291,10 @@ export default {
         consultationType: consultationType == -1 ? null : consultationType,
         belongMonth,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        liveAnchorWechatId: liveAnchorWechatId == -1 ? null : liveAnchorWechatId,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
+
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -2272,7 +2324,9 @@ export default {
         consultationType,
         belongMonth,
         minAddOrderPrice,
-        maxAddOrderPrice
+        maxAddOrderPrice,
+        liveAnchorWechatId,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         keyword,
@@ -2293,7 +2347,9 @@ export default {
         consultationType: consultationType == -1 ? null : consultationType,
         minAddOrderPrice,
         maxAddOrderPrice,
-        belongMonth
+        belongMonth,
+        liveAnchorWechatId: liveAnchorWechatId == -1 ? null : liveAnchorWechatId,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -2327,7 +2383,8 @@ export default {
     this.getOrderConsultationTypeList();
     this.getcontentPlateFormOrderTypeList()
     this.getHospitalList();
-    this.getWeChatList()
+    this.getWeChatList();
+    this.getLiveAnchorBaseInfoValids()
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")

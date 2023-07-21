@@ -14,10 +14,25 @@
             placeholder="请选择归属仓库"
             filterable
             style="width: 200px; margin-left: 10px"
+            @on-change="wareHouseInfoIdChange(query.wareHouseInfoId)"
           >
             <Option
               :value="item.id"
               v-for="item in getIdAndNameListAll"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Select
+            v-model="query.warehouseStorageRacksId"
+            placeholder="请选择归属货架"
+            filterable
+            :disabled="query.wareHouseInfoId ==-1 || query.wareHouseInfoId == ''"
+            style="width: 200px; margin-left: 10px"
+          >
+            <Option
+              :value="item.id"
+              v-for="item in amiyawareHouseStorageRacks"
               :key="item.id"
               >{{ item.name }}</Option
             >
@@ -83,10 +98,26 @@
             v-model="form.goodsSourceId"
             placeholder="请选择归属仓库"
             filterable
+            @on-change="goodsSourceIdChange(form.goodsSourceId)"
           >
             <Option
               :value="item.id"
               v-for="item in getIdAndNameList"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
+        <FormItem label="归属货架" prop="storageRacksId">
+          <Select
+            v-model="form.storageRacksId"
+            placeholder="请选择归属货架"
+            filterable
+            :disabled="form.goodsSourceId ==''"
+          >
+            <Option
+              :value="item.id"
+              v-for="item in amiyawareHouseStorageRacks"
               :key="item.id"
               >{{ item.name }}</Option
             >
@@ -192,6 +223,7 @@
 </template>
 <script>
 import * as api from "@/api/AmiyaWareHouseNameManage";
+import * as AmiyaApi from "@/api/AmiyaWareHouseStorageRacks";
 import * as apis from "@/api/liveRequirementManage";
 import warehousing from "../components/warehousing.vue";
 import outWarehouse from "../components/outWarehouse.vue";
@@ -208,11 +240,20 @@ export default {
     return {
       // 查询
       query: {
+        warehouseStorageRacksId:'',
         keyword: "",
         wareHouseInfoId: -1,
         pageNum: 1,
         pageSize: 10,
         columns: [
+          {
+            title: "仓库",
+            key: "goodsSourceName",
+          },
+          {
+            title: "归属货架",
+            key: "storageRacks",
+          },
           {
             title: "物料名称",
             key: "goodsName",
@@ -221,10 +262,7 @@ export default {
             title: "单位",
             key: "unit",
           },
-          {
-            title: "仓库",
-            key: "goodsSourceName",
-          },
+          
           {
             title: "单价",
             key: "singlePrice",
@@ -323,6 +361,7 @@ export default {
                       click: () => {
                         const { id } = params.row;
                         this.title = "修改";
+
                         api.byIdAmiyaWareHouse(id).then((res) => {
                           if (res.code === 0) {
                             const {
@@ -333,11 +372,14 @@ export default {
                               singlePrice,
                               totalPrice,
                               unit,
+                              storageRacksId
                             } = res.data.amiyaWareHouseInfo;
+                            this.goodsSourceIdChange(goodsSourceId)
                             this.isEdit = true;
                             this.form.amount = amount;
                             this.form.goodsName = goodsName;
                             this.form.goodsSourceId = goodsSourceId;
+                            this.form.storageRacksId = storageRacksId;
                             this.form.singlePrice = singlePrice;
                             this.form.totalPrice = totalPrice;
                             this.form.unit = unit;
@@ -417,6 +459,8 @@ export default {
         goodsName: "",
         // 归属仓库
         goodsSourceId: "",
+        // 归属货架
+        storageRacksId: "",
         // 单价
         singlePrice: "",
         // 数量
@@ -432,6 +476,12 @@ export default {
       getIdAndNameList: [],
       getIdAndNameListAll: [{ id: -1, name: "全部仓库" }],
       ruleValidate: {
+        storageRacksId: [
+          {
+            required: true,
+            message: "请选择归属货架",
+          },
+        ],
         goodsName: [
           {
             required: true,
@@ -451,9 +501,41 @@ export default {
           },
         ],
       },
+      // 货架
+      amiyawareHouseStorageRacks:[],
+      amiyawareHouseStorageRacksAll:[]
     };
   },
   methods: {
+    // 查询
+    wareHouseInfoIdChange(value){
+       if (!value) {
+        return;
+      }
+      this.query.warehouseStorageRacksId = ''
+      this.getAmiyawareHouseStorageRacks(value)
+    },
+    // 添加/编辑时 根据仓库id获取货架
+    goodsSourceIdChange(value){
+      if (!value) {
+        return;
+      }
+      this.form.storageRacksId = ''
+      this.getAmiyawareHouseStorageRacks(value)
+      
+    },
+    // 根据仓库id获取货架信息
+    getAmiyawareHouseStorageRacks(value){
+      const data = {
+        wareHouseId:value
+      }
+      AmiyaApi.getAmiyawareHouseStorageRacks(data).then(res=>{
+        if(res.code===0){
+          const {amiyawareHouseStorageRacks} = res.data
+          this.amiyawareHouseStorageRacks = amiyawareHouseStorageRacks
+        }
+      })
+    },
     // 获取有效的部门名称列表
     getAmiyaDepartment() {
       apis.getAmiyaDepartment().then((res) => {
@@ -490,12 +572,13 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyword, wareHouseInfoId } = this.query;
+      const { pageNum, pageSize, keyword, wareHouseInfoId,warehouseStorageRacksId } = this.query;
       const data = {
         pageNum,
         pageSize,
         keyword,
         wareHouseInfoId: wareHouseInfoId == -1 ? null : wareHouseInfoId,
+        warehouseStorageRacksId
       };
       api.AmiyaWareHouse(data).then((res) => {
         if (res.code === 0) {
@@ -508,12 +591,13 @@ export default {
 
     // 获取仓库列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyword, wareHouseInfoId } = this.query;
+      const { pageSize, keyword, wareHouseInfoId,warehouseStorageRacksId } = this.query;
       const data = {
         pageNum,
         pageSize,
         keyword,
         wareHouseInfoId: wareHouseInfoId == -1 ? null : wareHouseInfoId,
+        warehouseStorageRacksId
       };
       api.AmiyaWareHouse(data).then((res) => {
         if (res.code === 0) {
@@ -525,10 +609,11 @@ export default {
     },
     // 导出
     handleExportClick() {
-      const { keyword, wareHouseInfoId } = this.query;
+      const { keyword, wareHouseInfoId ,warehouseStorageRacksId} = this.query;
       const data = {
         keyword,
         wareHouseInfoId: wareHouseInfoId == -1 ? null : wareHouseInfoId,
+        warehouseStorageRacksId
       };
       if (this.query.data.length == 0) {
         this.$Message.error("没有数据时不支持导出");
@@ -544,12 +629,13 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const { id, unit, goodsName, goodsSourceId } = this.form;
+            const { id, unit, goodsName, goodsSourceId,storageRacksId } = this.form;
             const data = {
               id,
               unit,
               goodsName,
               goodsSourceId,
+              storageRacksId
               // singlePrice:0,
               // amount:0,
               // totalPrice:0
@@ -574,6 +660,7 @@ export default {
               singlePrice,
               amount,
               totalPrice,
+              storageRacksId
             } = this.form;
             const data = {
               unit,
@@ -582,6 +669,7 @@ export default {
               singlePrice,
               amount,
               totalPrice,
+              storageRacksId
             };
             // 添加
             api.addAmiyaWareHouse(data).then((res) => {
@@ -604,6 +692,9 @@ export default {
       this.isEdit = false;
       this.controlModal = false;
       this.$refs[name].resetFields();
+      this.form.singlePrice = null
+      this.form.amount = null
+      this.form.totalPrice = null
     },
 
     // modal 显示状态发生变化时触发
@@ -611,6 +702,9 @@ export default {
       if (!value) {
         this.isEdit = false;
         this.$refs["form"].resetFields();
+        this.form.singlePrice = null
+        this.form.amount = null
+        this.form.totalPrice = null
       }
     },
   },

@@ -85,3 +85,27 @@ export const consultationTypeList = () => {
 
     });
 };
+// 导入小黄车登记列表
+export const importShoppingCartRegistionData = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/importShoppingCartRegistionData`,
+        method: "put",
+        data,
+    });
+};
+// 获取带货产品类型列表
+export const shoppingCartTakeGoodsProductTypeList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/shoppingCartTakeGoodsProductTypeList",
+        method: "get",
+
+    });
+};
+// 获客方式列表
+export const shoppingCartGetCustomerTypeList = (params) => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/shoppingCartGetCustomerTypeList",
+        method: "get",
+        params
+    });
+};

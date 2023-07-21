@@ -661,6 +661,14 @@ export default {
         }
       });
     },
+    contentPlateChange(value) {
+      if (!value) {
+        return;
+      }
+      this.getLiveValidList(value);
+      
+
+    },
     // 根据平台id去获取IP账号
     getLiveValidList(value) {
       const data = {

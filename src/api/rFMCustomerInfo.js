@@ -64,3 +64,27 @@ export const importRFMCustomerInfo = (data) => {
         data
     });
 };
+// 根据条件获取客户RFM模型数据
+export const getAllCustomerByRFM = (params) => {
+    return http({
+        url: "/amiyabg/BindCustomerService/getAllCustomerByRFM",
+        method: "get",
+        params,
+    });
+};
+// 根据RFM条件获取客户RFM详情数据
+export const getAllCustomerByRFMType = (params) => {
+    return http({
+        url: "/amiyabg/BindCustomerService/getAllCustomerByRFMType",
+        method: "get",
+        params,
+    });
+};
+// 获取客户RFM等级更新记录
+export const getCustomerRFMTypeUpdateData = (params) => {
+    return http({
+        url: "/amiyabg/BindCustomerService/getCustomerRFMTypeUpdateData",
+        method: "get",
+        params,
+    });
+};

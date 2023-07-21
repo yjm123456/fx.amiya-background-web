@@ -244,7 +244,7 @@
             </Select>
             <Select
               v-model="query.lastDealHospitalId"
-              style="width: 220px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
               placeholder="请选择到院医院"
               filterable
             >
@@ -257,7 +257,7 @@
             </Select>
             <Select
               v-model="query.consumptionType"
-              style="width: 140px;margin-left:10px"
+              style="width: 170px;margin-left:10px"
               placeholder="请选择消费类型"
               filterable
             >
@@ -268,18 +268,32 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            <Select
+              v-model="query.baseLiveAnchorId"
+              style="width: 150px;margin-left: 10px"
+              placeholder="请选择基础主播"
+              filterable
+              transfer
+            >
+              <Option
+                v-for="item in transactionParams.liveAnchorBaseInfos"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+          </Select>
             <Input
                 v-model="query.minAddOrderPrice"
-                placeholder="请输入最小下单金额"
-                style="width: 180px;margin-left:10px"
+                placeholder="输入最小下单金额"
+                style="width: 150px;margin-left:10px"
                 type="number"
                 namber
               />
               <span> — </span>
               <Input
                 v-model="query.maxAddOrderPrice"
-                placeholder="请输入最大下单金额"
-                style="width: 180px;"
+                placeholder="输入最大下单金额"
+                style="width: 150px;"
                 type="number"
                 namber
               />
@@ -479,6 +493,8 @@ export default {
       pageCount: 0,
       transactionStatementModals: false,
       query: {
+        // 基础主播
+        baseLiveAnchorId:-1,
         //消费类型
         consumptionType:-1,
         // 是否开票
@@ -611,7 +627,7 @@ export default {
           {
             title: "主播",
             key: "liveAnchorName",
-            minWidth: 130,
+            minWidth: 150,
             align: "center",
           },
           {
@@ -623,7 +639,7 @@ export default {
           {
             title: "客户昵称",
             key: "customerNickName",
-            minWidth: 130,
+            minWidth: 150,
             align: "center",
           },
           {
@@ -662,8 +678,9 @@ export default {
           {
             title: "到院医院",
             key: "lastDealHospital",
-            minWidth: 220,
+            minWidth: 250,
             align: "center",
+            tooltip:true
           },
           {
             title: "是否重单深度",
@@ -682,6 +699,7 @@ export default {
             key: "remark",
             minWidth: 200,
             align: "center",
+            tooltip:true
           },
           {
             title: "成交金额",
@@ -1057,7 +1075,8 @@ export default {
         checkEndDate,
         isCreateBill,
         belongCompanyId,
-        consumptionType
+        consumptionType,
+        baseLiveAnchorId
       } = this.query;
       this.transactionParams.employee.map((item) => {
         if (Number(this.positionId) == 2 || Number(this.positionId) == 4) {
@@ -1120,7 +1139,8 @@ export default {
         checkEndDate: checkState == 2 ? this.$moment(checkEndDate).format("YYYY-MM-DD"): null,
         isCreateBill : isCreateBill == -1 ? null : isCreateBill,
         belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
-        consumptionType: consumptionType == -1 ? null : consumptionType
+        consumptionType: consumptionType == -1 ? null : consumptionType,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
 
       };
       if (!startDate || !endDate) {
@@ -1255,7 +1275,8 @@ export default {
         checkEndDate,
         isCreateBill,
         belongCompanyId,
-        consumptionType
+        consumptionType,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
@@ -1314,6 +1335,7 @@ export default {
         isCreateBill : isCreateBill == -1 ? null : isCreateBill,
         belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
         consumptionType: consumptionType == -1 ? null : consumptionType,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");

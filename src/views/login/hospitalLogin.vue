@@ -43,7 +43,8 @@ export default {
           refreshToken,
           hospitalName,
           hospitalId,
-          avatar
+          avatar,
+          readDataCenter
         } = hospitalEmployeeLoginRes.data.token;
         sessionStorage.setItem("positionId", hospitalPositionId);
         sessionStorage.setItem("positionName", hospitalPositionName);
@@ -55,6 +56,7 @@ export default {
         sessionStorage.setItem("hospitalName", hospitalName);
         sessionStorage.setItem("hospitalId", hospitalId);
         sessionStorage.setItem("avatar", avatar);
+        sessionStorage.setItem("readDataCenter", readDataCenter);
 
         // 权限
         const permissionRes = await permission();

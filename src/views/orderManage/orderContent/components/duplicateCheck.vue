@@ -137,6 +137,7 @@
       :recordingNormalModel.sync="recordingNormalModel"
       :recordingNormalParams="recordingNormalParams"
       :recordingParams="recordingParams"
+      :shoppingCartRegistrationInfo="shoppingCartRegistrationInfo"
     />
     <!-- 提交录单申请 -->
     <recordingApplication

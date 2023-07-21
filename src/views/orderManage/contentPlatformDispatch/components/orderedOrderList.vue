@@ -217,6 +217,20 @@
               >
             </Select>
             <Select
+              v-model="query.baseLiveAnchorId"
+              style="width: 160px;margin-left: 10px"
+              placeholder="请选择基础主播"
+              filterable
+              transfer
+            >
+              <Option
+                v-for="item in liveAnchorBaseInfos"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+          </Select>
+            <Select
               v-model="query.hospitalIds"
               style="width: 240px;margin-left: 10px"
               placeholder="请选择医院"
@@ -678,6 +692,7 @@ export default {
   props: {
     activeName: String,
     consultationNameList: Array,
+    liveAnchorBaseInfos:Array,
   },
   components: {
     messageBoard,
@@ -836,6 +851,7 @@ export default {
       employee: [{ name: "全部归属客服", id: -1 }],
       dispatchEmployee: [{ name: "全部派单客服", id: -1 }],
       query: {
+        baseLiveAnchorId:-1,
         // 陪诊
         isAcompanying: -1,
         // 新老客业绩
@@ -2153,6 +2169,7 @@ export default {
         isAcompanying,
         isOldCustomer,
         commissionRatio,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         startDate: startDate
@@ -2194,6 +2211,7 @@ export default {
             : toHospitalType,
         isAcompanying: isAcompanying == -1 ? null : isAcompanying,
         isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? '' : baseLiveAnchorId,
         commissionRatio,
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
@@ -2227,6 +2245,7 @@ export default {
         isAcompanying,
         isOldCustomer,
         commissionRatio,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         startDate: startDate
@@ -2266,6 +2285,7 @@ export default {
             : toHospitalType,
         isAcompanying: isAcompanying == -1 ? null : isAcompanying,
         isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? '' : baseLiveAnchorId,
         commissionRatio,
       };
       api.getContentPlateFormSendOrder(data).then((res) => {

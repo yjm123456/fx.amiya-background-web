@@ -6,14 +6,14 @@
           <DatePicker
             type="date"
             placeholder="开始日期"
-            style="width: 180px;"
+            style="width: 150px;"
             :value="query.startDate"
             v-model="query.startDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="结束日期"
-            style="width: 180px; margin-left: .625rem"
+            style="width: 150px; margin-left: .625rem"
             :value="query.endDate"
             v-model="query.endDate"
           ></DatePicker>
@@ -27,11 +27,26 @@
             v-model="query.wareHouseInfoId"
             placeholder="请选择归属仓库"
             filterable
-            style="width: 200px; margin-left: 10px"
+            style="width: 180px; margin-left: 10px"
+            @on-change="wareHouseInfoIdChange(query.wareHouseInfoId)"
           >
             <Option
               :value="item.id"
               v-for="item in getIdAndNameListAll"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Select
+            v-model="query.warehouseStorageRacksId"
+            placeholder="请选择归属货架"
+            filterable
+            :disabled="query.wareHouseInfoId ==-1 || query.wareHouseInfoId == ''"
+            style="width: 180px; margin-left: 10px"
+          >
+            <Option
+              :value="item.id"
+              v-for="item in amiyawareHouseStorageRacks"
               :key="item.id"
               >{{ item.name }}</Option
             >
@@ -72,6 +87,7 @@
 </template>
 <script>
 import * as api from "@/api/AmiyaWareHouseNameManage";
+import * as AmiyaApi from "@/api/AmiyaWareHouseStorageRacks";
 import { download } from "@/utils/util";
 
 export default {
@@ -79,6 +95,7 @@ export default {
     return {
       // 查询
       query: {
+        warehouseStorageRacksId:-1,
         keyword: "",
         startDate: this.$moment()
           .startOf("month")
@@ -89,6 +106,14 @@ export default {
         pageSize: 10,
         columns: [
           {
+            title: "仓库",
+            key: "wareHouseName",
+          },
+          {
+            title: "归属货架",
+            key: "storageRacksName",
+          },
+          {
             title: "物料名称",
             key: "goodsName",
             width: 240,
@@ -97,10 +122,7 @@ export default {
             title: "单位",
             key: "unit",
           },
-          {
-            title: "仓库",
-            key: "wareHouseName",
-          },
+          
           {
             title: "单价",
             key: "singlePrice",
@@ -147,9 +169,31 @@ export default {
 
       // 是否是编辑
       isEdit: false,
+      // 仓库
+      amiyawareHouseStorageRacks:[]
     };
   },
   methods: {
+    // 查询
+    wareHouseInfoIdChange(value){
+       if (!value) {
+        return;
+      }
+      this.query.warehouseStorageRacksId = ''
+      this.getAmiyawareHouseStorageRacks(value)
+    },
+    // 根据仓库id获取货架信息
+    getAmiyawareHouseStorageRacks(value){
+      const data = {
+        wareHouseId:value
+      }
+      AmiyaApi.getAmiyawareHouseStorageRacks(data).then(res=>{
+        if(res.code===0){
+          const {amiyawareHouseStorageRacks} = res.data
+          this.amiyawareHouseStorageRacks = amiyawareHouseStorageRacks
+        }
+      })
+    },
     // 获取仓库名称（下拉框）
     getIdAndName() {
       api.getIdAndName().then((res) => {
@@ -175,6 +219,7 @@ export default {
         startDate,
         endDate,
         wareHouseInfoId,
+        warehouseStorageRacksId
       } = this.query;
       const data = {
         pageNum,
@@ -185,6 +230,7 @@ export default {
           : "",
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         wareHouseInfoId: wareHouseInfoId == -1 ? null : wareHouseInfoId,
+        warehouseStorageRacksId
       };
       api.AmiyaInWarehouseList(data).then((res) => {
         if (res.code === 0) {
@@ -196,7 +242,7 @@ export default {
     },
     // 导出
     handleExportClick() {
-      const { keyword, wareHouseInfoId, startDate, endDate } = this.query;
+      const { keyword, wareHouseInfoId, startDate, endDate,warehouseStorageRacksId } = this.query;
       const data = {
         keyword,
         startDate: startDate
@@ -204,6 +250,7 @@ export default {
           : "",
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         wareHouseInfoId: wareHouseInfoId == -1 ? null : wareHouseInfoId,
+        warehouseStorageRacksId
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -230,6 +277,7 @@ export default {
         startDate,
         endDate,
         wareHouseInfoId,
+        warehouseStorageRacksId
       } = this.query;
       const data = {
         pageNum,
@@ -240,6 +288,7 @@ export default {
           : "",
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         wareHouseInfoId: wareHouseInfoId == -1 ? null : wareHouseInfoId,
+        warehouseStorageRacksId
       };
       api.AmiyaInWarehouseList(data).then((res) => {
         if (res.code === 0) {
@@ -288,6 +337,7 @@ export default {
   created() {
     this.getAmiyaInWarehouseList();
     this.getIdAndName();
+    this.getAmiyawareHouseStorageRacks()
   },
 };
 </script>

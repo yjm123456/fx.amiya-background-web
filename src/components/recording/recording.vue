@@ -498,7 +498,8 @@ export default {
   props: {
     recordingNormalModel: Boolean,
     recordingNormalParams:Object,
-    recordingParams:Object
+    recordingParams:Object,
+    shoppingCartRegistrationInfo:Object
   },
   data() {
     return {
@@ -1065,6 +1066,26 @@ export default {
         return 'fx.amiya.permission.UPDATE_CONTENT_PLAT_FORM_ORDER'.includes(ele);
      });
      this.buttonFlag = flag
+     if(value == true){
+      //  客资登记信息赋值
+      if(this.recordingNormalParams.title == '录单'){
+        this.form.contentPlateFormId = this.shoppingCartRegistrationInfo.contentPlatFormId
+        this.contentPlateChange(this.shoppingCartRegistrationInfo.contentPlatFormId)
+        this.liveAnchorChange(this.shoppingCartRegistrationInfo.liveAnchorId)
+        this.form.liveAnchorId = this.shoppingCartRegistrationInfo.liveAnchorId
+        this.form.liveAnchorWeChatNo =  this.shoppingCartRegistrationInfo.liveAnchorWechatNo ? this.recordingParams.weChatList.find(item=>this.shoppingCartRegistrationInfo.liveAnchorWechatNo == item.weChatNo).id : ''
+        this.form.addOrderPrice = this.shoppingCartRegistrationInfo.price
+        this.form.customerName = this.shoppingCartRegistrationInfo.customerNickName
+      }
+      return
+     }else{
+      this.form.contentPlateFormId = ''
+      this.form.liveAnchorId = null
+      this.form.liveAnchorWeChatNo =  ''
+      this.form.addOrderPrice = null
+      this.form.customerName = ''
+     }
+     
     },
   },
 };

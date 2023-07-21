@@ -1257,6 +1257,18 @@ const baseDataMaintenance = [{
         component: () =>
             import ("@/views/baseDataMaintenance/healthIndicators/healthIndicators.vue"),
     },
+    {
+        path: "/goodsShelves",
+        name: "goodsShelves",
+        meta: {
+            title: "货架管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/goodsShelves/goodsShelves.vue"),
+    },
 ];
 
 /**

@@ -114,6 +114,20 @@
               >{{ item.orderSourceText }}</Option
             >
           </Select>
+          <Select
+              v-model="query.baseLiveAnchorId"
+              style="width: 150px;margin-left: 10px"
+              placeholder="请选择基础主播"
+              filterable
+              transfer
+            >
+              <Option
+                v-for="item in liveAnchorBaseInfos"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+          </Select>
           </div>
         </div>
         <div>
@@ -272,7 +286,8 @@ export default {
   // props: ["activeName"],
   props:{
     activeName:String,
-    consultationNameList:Array
+    consultationNameList:Array,
+    liveAnchorBaseInfos:Array,
   },
   components: {
     viewCustomerPhotos,
@@ -292,6 +307,7 @@ export default {
       employee: [{ name: "全部客服", id: -1 }],
       employeeList:[],
       query: {
+        baseLiveAnchorId:-1,
         consultationEmpId:-1,
         orderSource: -1,
         columns: [
@@ -875,7 +891,8 @@ export default {
         endDate,
         liveAnchorId,
         orderSource,
-        consultationEmpId
+        consultationEmpId,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         keyword,
@@ -890,7 +907,8 @@ export default {
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         liveAnchorId,
         orderSource,
-        consultationEmpId:consultationEmpId == -1 ? null :consultationEmpId
+        consultationEmpId:consultationEmpId == -1 ? null :consultationEmpId,
+        baseLiveAnchorId:baseLiveAnchorId == -1 ? '' :baseLiveAnchorId,
       };
       api.getUnContentPlatFormSendOrderList(data).then((res) => {
         if (res.code === 0) {
@@ -916,7 +934,8 @@ export default {
         endDate,
         liveAnchorId,
         orderSource,
-        consultationEmpId
+        consultationEmpId,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         keyword,
@@ -931,7 +950,8 @@ export default {
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         liveAnchorId,
         orderSource,
-        consultationEmpId:consultationEmpId == -1 ? null :consultationEmpId
+        consultationEmpId:consultationEmpId == -1 ? null :consultationEmpId,
+        baseLiveAnchorId:baseLiveAnchorId == -1 ? '' :baseLiveAnchorId,
       };
       api.getUnContentPlatFormSendOrderList(data).then((res) => {
         if (res.code === 0) {

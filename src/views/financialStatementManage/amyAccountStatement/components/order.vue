@@ -483,7 +483,9 @@ export default {
                         // 当前信息服务费
                         this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
                         // 当前系统服务费
-                        this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+                        // this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+                        let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
+                        this.form.currentSystemUsagefee = price2.toFixed(2)
                         // 服务费合计
                         this.form.settlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
 
@@ -522,7 +524,9 @@ export default {
       // 当前信息服务费
       this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
       // 当前系统服务费
-      this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+      // this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+      let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
+      this.form.currentSystemUsagefee = price2.toFixed(2)
       // 服务费合计
       this.form.settlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
 
@@ -587,120 +591,164 @@ export default {
           let res2 = Math.abs(Number(this.form.checkPriceRight))
           // if((Number(this.form.checkPriceNum)+Number(this.form.checkPrice))>Number(this.form.checkPriceRight)){
           if(res>res2){
-              this.$Message.warning({
-                content:'已对账金额和当前对账金额合计不能大于成交金额！',
-                duration: 3,
-              });
-              return
-            }
-          // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
-          if((Number(this.form.totalServiceFeeReconciled)+Number(this.form.settlePrice)) > Number(this.form.totalServiceFee)){
-            // this.$Message.warning({
-            //   content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
-            //   duration: 3,
-            // });
-            // return
-            this.$Modal.confirm({
-              title: "确认提示",
-              content: "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
-              onOk: () => {
-                this.isLoading = true
-                api.checkOrder(data).then((res) => {
-                  if (res.code === 0) {
-                    this.isLoading = false
-                    this.controlModal = false;
-                    this.cancelSubmit("form");
-                    this.getContentPlatFormOrderDealInfo(
-                      this.reconciliationParams.customerPhone
-                    );
-                    this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
-                    this.$Message.success({
-                      content: "提交成功",
-                      duration: 3,
-                    });
-                  } else {
-                    setTimeout(() => {
-                      this.isLoading = false;
-                    }, 3000);
-                  }
-                });
-              },
-              onCancel: () => {},
-            });
-            return
-          }else{
-            this.isLoading = true;
-            api.checkOrder(data).then((res) => {
-              if (res.code === 0) {
-                this.isLoading = false;
-                this.controlModal = false;
-                this.cancelSubmit("form");
-                this.getContentPlatFormOrderDealInfo(
-                  this.reconciliationParams.customerPhone
-                );
-                this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
-                this.$Message.success({
-                  content: "提交成功",
-                  duration: 3,
-                });
-              } else {
-                setTimeout(() => {
-                  this.isLoading = false;
-                }, 3000);
-              }
-            });
-          }
-          // 成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
-          if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
-            this.$Modal.confirm({
-              title: "审核确认提示",
-              content: "当前成交单与对账单的对账金额或服务费合计不一致，是否仍要审核通过？",
-              onOk: () => {
-                this.isLoading = true
-                api.checkOrder(data).then((res) => {
-                  if (res.code === 0) {
-                    this.isLoading = false
-                    this.controlModal = false;
-                    this.cancelSubmit("form");
-                    this.getContentPlatFormOrderDealInfo(
-                      this.reconciliationParams.customerPhone
-                    );
-                    this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
-                    this.$Message.success({
-                      content: "提交成功",
-                      duration: 3,
-                    });
-                  } else {
-                    setTimeout(() => {
-                      this.isLoading = false;
-                    }, 3000);
-                  }
-                });
-              },
-              onCancel: () => {},
+            this.$Message.warning({
+              content:'已对账金额和当前对账金额合计不能大于成交金额！',
+              duration: 3,
             });
             return
           }
-          this.isLoading = true;
-          api.checkOrder(data).then((res) => {
-            if (res.code === 0) {
-              this.isLoading = false;
-              this.controlModal = false;
-              this.cancelSubmit("form");
-              this.getContentPlatFormOrderDealInfo(
-                this.reconciliationParams.customerPhone
-              );
-              this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
-              this.$Message.success({
-                content: "提交成功",
-                duration: 3,
+          let content=""
+          if((Number(this.form.totalServiceFeeReconciled)+Number(this.form.settlePrice)) > Number(this.form.totalServiceFee))
+          {
+             content="当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额"
+          }
+          if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice)
+          {
+             content+="<br/>当前成交单与对账单的对账金额或服务费合计不一致"
+          }
+          if(content=="")
+          {
+             content="数据验证无误，请点击确认完成对账单审核"
+          }
+          else
+          {
+             content+="，是否仍要审核通过？"
+          }
+          this.$Modal.confirm({
+            title: "审核确认提示",
+            content: content,
+            onOk: () => {
+              this.isLoading = true
+              api.checkOrder(data).then((res) => {
+                if (res.code === 0) {
+                  this.isLoading = false
+                  this.controlModal = false;
+                  this.cancelSubmit("form");
+                  this.getContentPlatFormOrderDealInfo(
+                    this.reconciliationParams.customerPhone
+                  );
+                  this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
+                  this.$Message.success({
+                    content: "提交成功",
+                    duration: 3,
+                  });
+                } else {
+                  setTimeout(() => {
+                    this.isLoading = false;
+                  }, 3000);
+                }
               });
-            } else {
-              setTimeout(() => {
-                this.isLoading = false;
-              }, 3000);
-            }
+            },
+            onCancel: () => {},
           });
+          // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
+        //   if((Number(this.form.totalServiceFeeReconciled)+Number(this.form.settlePrice)) > Number(this.form.totalServiceFee)){
+        //     // this.$Message.warning({
+        //     //   content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
+        //     //   duration: 3,
+        //     // });
+        //     // return
+        //     this.$Modal.confirm({
+        //       title: "确认提示",
+        //       content: "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
+        //       onOk: () => {
+        //         this.isLoading = true
+        //         api.checkOrder(data).then((res) => {
+        //           if (res.code === 0) {
+        //             this.isLoading = false
+        //             this.controlModal = false;
+        //             this.cancelSubmit("form");
+        //             this.getContentPlatFormOrderDealInfo(
+        //               this.reconciliationParams.customerPhone
+        //             );
+        //             this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
+        //             this.$Message.success({
+        //               content: "提交成功",
+        //               duration: 3,
+        //             });
+        //           } else {
+        //             setTimeout(() => {
+        //               this.isLoading = false;
+        //             }, 3000);
+        //           }
+        //         });
+        //       },
+        //       onCancel: () => {},
+        //     });
+        //     return
+        //   }else{
+        //     this.isLoading = true;
+        //     api.checkOrder(data).then((res) => {
+        //       if (res.code === 0) {
+        //         this.isLoading = false;
+        //         this.controlModal = false;
+        //         this.cancelSubmit("form");
+        //         this.getContentPlatFormOrderDealInfo(
+        //           this.reconciliationParams.customerPhone
+        //         );
+        //         this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
+        //         this.$Message.success({
+        //           content: "提交成功",
+        //           duration: 3,
+        //         });
+        //       } else {
+        //         setTimeout(() => {
+        //           this.isLoading = false;
+        //         }, 3000);
+        //       }
+        //     });
+        //   }
+        //   // 成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
+        //   if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
+        //     this.$Modal.confirm({
+        //       title: "审核确认提示",
+        //       content: "当前成交单与对账单的对账金额或服务费合计不一致，是否仍要审核通过？",
+        //       onOk: () => {
+        //         this.isLoading = true
+        //         api.checkOrder(data).then((res) => {
+        //           if (res.code === 0) {
+        //             this.isLoading = false
+        //             this.controlModal = false;
+        //             this.cancelSubmit("form");
+        //             this.getContentPlatFormOrderDealInfo(
+        //               this.reconciliationParams.customerPhone
+        //             );
+        //             this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
+        //             this.$Message.success({
+        //               content: "提交成功",
+        //               duration: 3,
+        //             });
+        //           } else {
+        //             setTimeout(() => {
+        //               this.isLoading = false;
+        //             }, 3000);
+        //           }
+        //         });
+        //       },
+        //       onCancel: () => {},
+        //     });
+        //     return
+        //   }
+        //   this.isLoading = true;
+        //   api.checkOrder(data).then((res) => {
+        //     if (res.code === 0) {
+        //       this.isLoading = false;
+        //       this.controlModal = false;
+        //       this.cancelSubmit("form");
+        //       this.getContentPlatFormOrderDealInfo(
+        //         this.reconciliationParams.customerPhone
+        //       );
+        //       this.getTotalCheckReturnBackPriceByIdChange(this.reconciliationParams.id)
+        //       this.$Message.success({
+        //         content: "提交成功",
+        //         duration: 3,
+        //       });
+        //     } else {
+        //       setTimeout(() => {
+        //         this.isLoading = false;
+        //       }, 3000);
+        //     }
+        //   });
         }
       });
     },

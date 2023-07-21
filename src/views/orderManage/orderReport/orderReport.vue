@@ -526,7 +526,9 @@ export default {
         // 到院类型
         toHospitalTypeList: [{ orderType: -1, orderTypeText: "全部到院类型" }],
         // 消费类型
-        typeList:[{id:-1,name:'全部消费类型'}]
+        typeList:[{id:-1,name:'全部消费类型'}],
+        // 基础主播
+        liveAnchorBaseInfos:[{id:-1,name:'全部基础主播'}],
       },
       // 重要程度
       emergencyLevelListAll: [
@@ -545,12 +547,14 @@ export default {
     };
   },
   methods: {
+    
     // 获取有效的主播基础信息列表
     getLiveAnchorBaseInfoValid() {
       liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
         if (res.code === 0) {
           const { liveAnchorBaseInfos } = res.data;
           this.liveAnchorBaseInfos = [...this.liveAnchorBaseInfos,...liveAnchorBaseInfos];
+          this.transactionParams.liveAnchorBaseInfos = [...this.transactionParams.liveAnchorBaseInfos,...liveAnchorBaseInfos];
           
         }
       });

@@ -176,6 +176,8 @@ export default {
     handleModalVisibleChange(value) {
       if (!value) {
         this.$refs["form"].resetFields();
+      this.$emit("update:inventoryModel", false);
+
       }
     },
   },

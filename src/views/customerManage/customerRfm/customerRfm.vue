@@ -9,6 +9,20 @@
             style="width: 200px;"
             @keyup.enter.native="getListByPage()"
           />
+          <Select
+              v-model="query.leave"
+              placeholder="请选择等级"
+              filterable
+              style="width: 200px;margin-left:10px"
+          >
+          <Option
+              v-for="item in rfmtagNameListAll"
+              :value="item.id"
+              :key="item.id"
+              
+              >{{ item.name }}</Option
+          >
+          </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -257,6 +271,7 @@ export default {
         keyword: "",
         pageNum: 1,
         pageSize: 10,
+        leave:-1,
         columns: [
             {
             title: "手机号",
@@ -644,6 +659,7 @@ export default {
     rfmvalueNameList:[],
     // 标签
     rfmtagNameList:[],
+    rfmtagNameListAll:[{id:-1,name:'全部等级'}],
     // 微信号
     weChatList:[]
     };
@@ -674,6 +690,7 @@ export default {
       api.getRfmtagNameList().then((res) => {
         if (res.code === 0) {
           this.rfmtagNameList = res.data.nameList;
+          this.rfmtagNameListAll = [...this.rfmtagNameListAll,...res.data.nameList];
         }
       });
     },
@@ -700,8 +717,8 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize ,keyword} = this.query;
-      const data = { pageNum, pageSize ,keyword };
+      const { pageNum, pageSize ,keyword,leave} = this.query;
+      const data = { pageNum, pageSize ,keyword,leave:leave==-1? null : leave };
       api.getListByPage(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.list;
@@ -713,8 +730,8 @@ export default {
 
     // 获取rfm客户列表分页
     handlePageChange(pageNum) {
-        const {  pageSize ,keyword} = this.query;
-        const data = { pageNum, pageSize ,keyword };
+        const {  pageSize ,keyword,leave} = this.query;
+        const data = { pageNum, pageSize ,keyword,leave:leave==-1? null : leave };
         api.getListByPage(data).then((res) => {
             if (res.code === 0) {
             const { list, totalCount } = res.data.list;

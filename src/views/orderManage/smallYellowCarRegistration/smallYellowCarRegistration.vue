@@ -273,6 +273,12 @@
               style="margin-left:10px"
               >批量指派</Button
             >
+            <Button
+              type="primary"
+              style="margin-left: 10px"
+              @click="importControlModal = true"
+              >导入</Button
+            >
           </div>
         </div>
         <div class="right"></div>
@@ -512,6 +518,50 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8" v-show="form.source == 6">
+            <FormItem label="产品类型" prop="productType" :rules="[
+                    {
+                      required: form.source == 6 ? true : false,
+                      message: '请输入产品类型',
+                    },
+                  ]">
+              <Select
+                v-model="form.productType"
+                placeholder="请选择产品类型"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in productTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8" >
+            <FormItem label="获客方式" prop="getCustomerType" :rules="[
+                    {
+                      required:true,
+                      message: '请输入获客方式',
+                    },
+                  ]">
+              <Select
+                v-model="form.getCustomerType"
+                placeholder="请选择获客方式"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in getCustomerTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem label="重要程度" prop="emergencyLevel">
               <Select
@@ -726,6 +776,11 @@
     />
     <!-- 批量指派 -->
     <batchAssignment :batchAssignmentModel.sync="batchAssignmentModel" :assignParams="assignParams" @getSmallCar="getSmallCar"/>
+    <!-- 导入 -->
+    <importFile
+      :importControlModal.sync="importControlModal"
+      @handleRefreshCustomerTrackList="getSmallCar()"
+    ></importFile>
   </div>
 </template>
 <script>
@@ -736,11 +791,17 @@ import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
 import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
 import assign from "./components/assign.vue";
 import batchAssignment from "./components/batchAssignment.vue";
+import importFile from "./components/importModel.vue";
+
 export default {
-  components: { assign,batchAssignment },
+  components: { assign,batchAssignment,importFile },
   data() {
     return {
-      
+      // 产品类型
+      productTypeList:[],
+      // 导入
+      importControlModal:false,
+      // 批量删除
       batchAssignmentModel:false,
       // 指派
       assignModel: false,
@@ -947,6 +1008,18 @@ export default {
           {
             title: "客户来源",
             key: "sourceText",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "获客方式",
+            key: "getCustomerTypeText",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "产品类型",
+            key: "productTypeText",
             minWidth: 130,
             align: "center",
           },
@@ -1406,7 +1479,9 @@ export default {
                               emergencyLevel,
                               consultationDate,
                               subPhone,
-                              source
+                              source,
+                              productType,
+                              getCustomerType
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1449,6 +1524,7 @@ export default {
                             this.form.assignEmpId = assignEmpId;
                             this.form.refundDate = refundDate;
                             this.form.source = source;
+                            this.form.productType = productType;
                             this.form.belongingPlace = 1;
 
                             this.form.badReviewDate = badReviewDate;
@@ -1460,6 +1536,7 @@ export default {
                             this.form.badReviewContent = badReviewContent;
                             this.form.remark = remark;
                             this.form.subPhone = subPhone;
+                            this.form.getCustomerType = getCustomerType;
                             this.form.id = id;
                             this.controlModal = true;
 
@@ -1634,10 +1711,15 @@ export default {
         // 客户来源
         source:null,
         // 归属地
-        belongingPlace:1
+        belongingPlace:1,
+        // 产品类型
+        productType:null,
+        // 获客方式
+        getCustomerType:null
       },
 
       ruleValidate: {
+        
         source: [
           {
             required: true,
@@ -1920,11 +2002,33 @@ export default {
       // 主播
       liveAnchorBaseInfos:[{ name: "全部主播", id: -1}],
       // 面诊方式
-      typeList:[]
+      typeList:[],
+      // 获客方式
+      getCustomerTypeList:[]
       
     };
   },
   methods: {
+    // 获客方式列表
+    getShoppingCartGetCustomerTypeList() {
+      api.shoppingCartGetCustomerTypeList().then((res) => {
+        if (res.code === 0) {
+          const { typeList } = res.data;
+          this.getCustomerTypeList = typeList
+          
+        }
+      });
+    },
+    // 获取产品类型列表列表
+    getshoppingCartTakeGoodsProductTypeList() {
+      api.shoppingCartTakeGoodsProductTypeList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.productTypeList = sourceList
+          
+        }
+      });
+    },
     // 获取面诊方式列表
     getconsultationTypeList() {
       api.consultationTypeList().then((res) => {
@@ -2399,7 +2503,9 @@ export default {
               refundType,
               subPhone,
               source,
-              belongingPlace
+              belongingPlace,
+              productType,
+              getCustomerType
               
             } = this.form;
             const data = {
@@ -2440,7 +2546,9 @@ export default {
                 ? this.$moment(consultationDate).format("YYYY-MM-DD")
                 : null,
               subPhone,
-              source
+              source,
+              productType:source == 6 ? productType : 0,
+              getCustomerType
             };
             // if (this.form.phone) {
             //   if (this.form.phone == "00000000000") {
@@ -2591,7 +2699,9 @@ export default {
               refundType,
               subPhone,
               source,
-              belongingPlace
+              belongingPlace,
+              productType,
+              getCustomerType
             } = this.form;
             const data = {
               recordDate: time
@@ -2630,7 +2740,9 @@ export default {
                 ? this.$moment(consultationDate).format("YYYY-MM-DD")
                 : null,
               subPhone,
-              source
+              source,
+              productType:source == 6 ? productType : 0,
+              getCustomerType
             };
             
             // 归属地 国内是1 国外是2
@@ -2763,7 +2875,9 @@ export default {
     this.getcustomerSourceList();
     this.getLiveAnchorBaseInfoValid();
     this.getconsultationTypeList();
-    this.getWeChatList()
+    this.getWeChatList();
+    this.getshoppingCartTakeGoodsProductTypeList();
+    this.getShoppingCartGetCustomerTypeList()
   },
 };
 </script>

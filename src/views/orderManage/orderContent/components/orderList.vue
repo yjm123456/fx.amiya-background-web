@@ -55,6 +55,28 @@ export default {
             tooltip:true
           },
           {
+            title: "是否到院",
+            key: "isToHospital",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isToHospital,
+                    size: "default",
+                    disabled:
+                      params.row.isToHospital === true ||
+                      params.row.isToHospital === false,
+                  },
+                },
+                h("span", { isToHospital: "open" }, "开"),
+                h("span", { isToHospital: "close" }, "关")
+              );
+            },
+          },
+          {
             title: "咨询内容",
             key: "consultContent",
             minWidth:500,

@@ -575,18 +575,7 @@ export default {
                         this.form.systemUsageFeeProportion = this.reconciliationParams.systemUpdatePricePercent
                         const {checkPriceRight,proportionOfInformationServiceFee,systemUsageFeeProportion} = this.form
                         // 成交服务费合计(成交金额*（信息服务费比例+系统使用费比例）/100)
-                        // console.log(Number(checkPriceRight)*100,(proportionOfInformationServiceFee+systemUsageFeeProportion)*100)
-                        // console.log((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000)
-                        // console.log(Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000).toFixed(2)))
-                        // console.log(Number(((Math.abs(Number(checkPriceRight))*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000).toFixed(2)))
-                        // console.log((proportionOfInformationServiceFee+systemUsageFeeProportion))
-                        // console.log(((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000).toFixed(2))
-                       
-                        // console.log((Number((Number(checkPriceRight) * (Number(proportionOfInformationServiceFee / 100) + Number(systemUsageFeeProportion/ 100))).toFixed(3))).toFixed(2))
-                        // this.form.totalServiceFee = (Number(checkPriceRight) * (Number(proportionOfInformationServiceFee / 100) + Number(systemUsageFeeProportion/ 100))).toFixed(3)
-
-                        // this.form.totalServiceFee = (Number(checkPriceRight) * (Number(proportionOfInformationServiceFee / 100) + Number(systemUsageFeeProportion/ 100)) ).toFixed(2)
-                        // this.form.totalServiceFee = this.reconciliationParams.returnBackTotalPrice
+                        
                         // 已对账金额
                         this.form.checkPriceNum = checkPrice.toFixed(2)
                         // 已对账信息服务费金额（已对账金额*信息服务费比例/100）
@@ -600,10 +589,11 @@ export default {
                         // this.form.currentInformationServiceFee = (this.form.checkPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
                         this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
                         // 当前系统服务费
-                        // this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
-                        this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+                        // 正确的保留两位小数
+                        let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
+                        this.form.currentSystemUsagefee = price2.toFixed(2)
                         // 服务费合计
-                        this.form.settlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
+                        this.form.settlePrice = (this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
 
                         // // 客服结算服务费
                         this.form.customerServiceSettlePrice =  proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
@@ -650,6 +640,8 @@ export default {
         data: [],
         totalCount: 0,
       },
+      // 确认弹窗是否调用
+      isConfim:false,
     };
   },
   methods: {
@@ -658,7 +650,9 @@ export default {
       // this.form.currentInformationServiceFee = (this.form.checkPrice * (Number(this.form.proportionOfInformationServiceFee) / 100)).toFixed(2)
       // this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
       this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
-      this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+      let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
+      this.form.currentSystemUsagefee = price2.toFixed(2)
+      // this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
       this.form.settlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
       this.form.customerServiceSettlePrice = this.form.proportionOfInformationServiceFee+this.form.systemUsageFeeProportion <=30 ?  this.form.settlePrice :  this.form.checkPrice*0.3
    },
@@ -724,114 +718,108 @@ export default {
           // (Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100) > Number(this.form.totalServiceFee)*100
           let num1 = Math.abs((Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100))
           let num2 = Math.abs(Number(this.form.totalServiceFee)*100)
-          if(num1 > num2){
-            // this.$Message.warning({
-            //   content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
-            //   duration: 3,
-            // });
-            // return
-            this.$Modal.confirm({
+          // if(num1 > num2){
+          //   // this.$Message.warning({
+          //   //   content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
+          //   //   duration: 3,
+          //   // });
+          //   // return
+          //   this.$Modal.confirm({
+          //     title: "确认提示",
+          //     content:  "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
+          //     onOk: () => {
+          //       this.isConfim = true
+          //     },
+          //     onCancel: () => {},
+          //   });
+          // }
+          // // 成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
+          // if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
+          //   this.$Modal.confirm({
+          //     title: "审核确认提示",
+          //     content: "当前成交单与对账单的对账金额或服务费合计不一致，是否仍要审核通过？",
+          //     onOk: () => {
+          //       this.isConfim = true
+          //     },
+          //     onCancel: () => {},
+          //   });
+          // }
+
+          // if(num1 > num2){
+          //   this.$Modal.confirm({
+          //     title: "确认提示",
+          //     content:  "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
+          //     onOk: () => {
+          //       console.log(1)
+          //       this.isConfim = true
+          //       return
+          //     },
+          //     onCancel: () => {},
+          //   });
+          //   // 成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
+          //   if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
+          //     this.$Modal.confirm({
+          //       title: "审核确认提示",
+          //       content: "当前成交单与对账单的对账金额或服务费合计不一致，是否仍要审核通过？",
+          //       onOk: () => {
+          //       console.log(2)
+          //         this.isConfim = true
+          //         return
+          //       },
+          //       onCancel: () => {},
+          //     });
+          //   }
+          //   return
+          // }
+          let content=""
+          // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
+          if(num1 > num2)
+          {
+             content="当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额"
+          }
+          //  成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
+          if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice)
+          {
+             content+="<br/>当前成交单与对账单的对账金额或服务费合计不一致"
+          }
+          if(content=="")
+          {
+             content="数据验证无误，请点击确认完成对账单审核"
+          }
+          else
+          {
+             content+="，是否仍要审核通过？"
+          }
+           this.$Modal.confirm({
               title: "确认提示",
-              content:  "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
+              content: content ,
               onOk: () => {
-                this.isLoading = true
-                orderapi.checkContentPlateFormOrder(data).then((res) => {
-                  if (res.code === 0) {
-                    this.isLoading = false;
-                    this.controlModal = false;
-                    this.cancelSubmit("form");
-                    this.getContentPlatFormOrderDealInfo(
-                      this.reconciliationParams.customerPhone
-                    );
-                    this.getTotalCheckReturnBackPriceByIdChange()
-                    this.$Message.success({
-                      content: "提交成功",
-                      duration: 3,
+                   this.isLoading = true;
+                    orderapi.checkContentPlateFormOrder(data).then((res) => {
+                      if (res.code === 0) {
+                        this.isLoading = false;
+                        this.controlModal = false;
+                        this.cancelSubmit("form");
+                        this.getContentPlatFormOrderDealInfo(
+                          this.reconciliationParams.customerPhone
+                        );
+                        this.getTotalCheckReturnBackPriceByIdChange()
+                        this.$Message.success({
+                          content: "提交成功",
+                          duration: 3,
+                        });
+                      } else {
+                        setTimeout(() => {
+                          this.isLoading = false;
+                        }, 3000);
+                      }
                     });
-                  } else {
-                    setTimeout(() => {
-                      this.isLoading = false;
-                    }, 3000);
-                  }
-                });
+                return
               },
               onCancel: () => {},
             });
-            return
-          }else{
-            this.isLoading = true;
-            orderapi.checkContentPlateFormOrder(data).then((res) => {
-              if (res.code === 0) {
-                this.isLoading = false;
-                this.controlModal = false;
-                this.cancelSubmit("form");
-                this.getContentPlatFormOrderDealInfo(
-                  this.reconciliationParams.customerPhone
-                );
-                this.getTotalCheckReturnBackPriceByIdChange()
-                this.$Message.success({
-                  content: "提交成功",
-                  duration: 3,
-                });
-              } else {
-                setTimeout(() => {
-                  this.isLoading = false;
-                }, 3000);
-              }
-            });
-          }
-          // 成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
-          if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
-            this.$Modal.confirm({
-              title: "审核确认提示",
-              content: "当前成交单与对账单的对账金额或服务费合计不一致，是否仍要审核通过？",
-              onOk: () => {
-                this.isLoading = true
-                orderapi.checkContentPlateFormOrder(data).then((res) => {
-                  if (res.code === 0) {
-                    this.isLoading = false;
-                    this.controlModal = false;
-                    this.cancelSubmit("form");
-                    this.getContentPlatFormOrderDealInfo(
-                      this.reconciliationParams.customerPhone
-                    );
-                    this.getTotalCheckReturnBackPriceByIdChange()
-                    this.$Message.success({
-                      content: "提交成功",
-                      duration: 3,
-                    });
-                  } else {
-                    setTimeout(() => {
-                      this.isLoading = false;
-                    }, 3000);
-                  }
-                });
-              },
-              onCancel: () => {},
-            });
-            return
-          }else{
-            this.isLoading = true;
-            orderapi.checkContentPlateFormOrder(data).then((res) => {
-              if (res.code === 0) {
-                this.isLoading = false;
-                this.controlModal = false;
-                this.cancelSubmit("form");
-                this.getContentPlatFormOrderDealInfo(
-                  this.reconciliationParams.customerPhone
-                );
-                this.getTotalCheckReturnBackPriceByIdChange()
-                this.$Message.success({
-                  content: "提交成功",
-                  duration: 3,
-                });
-              } else {
-                setTimeout(() => {
-                  this.isLoading = false;
-                }, 3000);
-              }
-            });
-          }
+       
+
           
         }
       });

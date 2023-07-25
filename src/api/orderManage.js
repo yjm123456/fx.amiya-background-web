@@ -1550,3 +1550,10 @@ export const getContentPlateFormOrderSimpleInfo = (params) => {
         params
     });
 };
+// 视频号主播ip列表接
+export const wechatVideoOrderLiveAnchorId = () => {
+    return http({
+        url: `/amiyabg/WeChatVideoOrder/wechatVideoOrderLiveAnchorId`,
+        method: "get",
+    });
+};

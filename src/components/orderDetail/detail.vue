@@ -79,7 +79,10 @@
             <span class="title_bold">订单性质：</span>
             <span>{{detailObj.orderNatureText}} </span>
           </div>
-        
+          <div class="mr_top">
+            <span class="title_bold">是否发货：</span>
+            <span>{{detailObj.isSendOrder == true ? '已发货' : '未发货'}} </span>
+          </div>
           <div class="mr_top">
             <span class="title_bold">是否已预约：</span>
             <span>{{detailObj.isAppointment == true ? '已预约' : '未预约'}} </span>
@@ -99,6 +102,10 @@
           <div class="mr_top">
             <span class="title_bold">描述：</span>
             <span>{{detailObj.description }} </span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">备注：</span>
+            <span>{{detailObj.remark }} </span>
           </div>
         </div>
       </div>

@@ -587,8 +587,10 @@ export default {
           // }
           // 已对账金额+当前对账金额不能大于成交金额
           // 取绝对值判断 防止为负数时无法对账
-          let res = Math.abs((Number(this.form.checkPriceNum)+Number(this.form.checkPrice)))
-          let res2 = Math.abs(Number(this.form.checkPriceRight))
+          // let res = Math.abs((Number(this.form.checkPriceNum)+Number(this.form.checkPrice)))
+          // let res2 = Math.abs(Number(this.form.checkPriceRight))
+          let res = (Number(this.form.checkPriceNum)+Number(this.form.checkPrice))
+          let res2 = Number(this.form.checkPriceRight)
           // if((Number(this.form.checkPriceNum)+Number(this.form.checkPrice))>Number(this.form.checkPriceRight)){
           if(res>res2){
             this.$Message.warning({

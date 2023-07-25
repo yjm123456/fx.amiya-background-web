@@ -1086,6 +1086,35 @@ export default {
             align:'center',
           },
           {
+            title: "是否发货",
+            key: "isSendOrder",
+            minWidth: 100,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isSendOrder == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
             title: "预约时间",
             key: "appointmentDate",
             minWidth: 120,
@@ -1108,6 +1137,13 @@ export default {
             key: "appointmentHospital",
             minWidth: 220,
             align:'center',
+          },
+          {
+            title: "备注",
+            key: "remark",
+            minWidth: 300,
+            align:'center',
+            tooltip:true
           },
           {
             title: "操作",

@@ -28,7 +28,7 @@
               v-model="query.status"
               placeholder="请选择订单状态"
               filterable
-              style="width:200px;margin-left:10px"
+              style="width:150px;margin-left:10px"
             >
               <Option
                 v-for="item in statusCodeList"
@@ -50,6 +50,19 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            <Select
+            v-model="query.belongLiveAnchorId"
+            placeholder="请选择主播"
+            filterable
+            style="width:200px;margin-left:10px"
+          >
+            <Option
+              v-for="item in anchorListAll"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -109,8 +122,25 @@
             <Input v-model="form.id" placeholder="请输入订单号"></Input>
           </FormItem>
         </Col>
+        <Col span="7">
+          <FormItem label="主播" prop="anchor">
+            <Select
+              v-model="form.anchor"
+              placeholder="请选择主播"
+              filterable
+              style="width:200px;"
+            >
+              <Option
+                v-for="item in anchorList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </FormItem>
+        </Col>
         <Col span="8">
-          <Button type="primary" style="margin-left: .625rem" @click="supplementChange">搜索</Button>
+          <Button type="primary" style="margin-left: 10px" @click="supplementChange">搜索</Button>
         </Col>
       </Row> 
       <Row :gutter="30">
@@ -203,6 +233,7 @@ export default {
     return {
       // 查询
       query: {
+        belongLiveAnchorId:-1,
         orderType:-1,
         status:-1,
         startDate:'',
@@ -210,7 +241,6 @@ export default {
         keyWord: "",
         pageNum: 1,
         pageSize: 10,
-        belongLiveAnchorId:10,
         columns: [
           {
             title: "订单号",
@@ -417,11 +447,19 @@ export default {
         // 创建时间
         createDate:'',
         // 主播
-        belongLiveAnchorId:''
+        belongLiveAnchorId:'',
+        // 主播筛选
+        anchor:''
 
       },
 
       ruleValidates: {
+        anchor: [
+          {
+            required: true,
+            message: "请选择主播",
+          },
+        ],
         belongLiveAnchorId: [
           {
             required: true,
@@ -523,11 +561,25 @@ export default {
           id:0,
           name:'实物订单'
         },
-      ]
+      ],
+      // 主播IP
+      anchorList:[],
+      anchorListAll:[{id:-1,name:'全部主播'}],
+      
 
     };
   },
   methods: {
+    // 主播IP
+    getWechatVideoOrderLiveAnchorId(){
+      api.wechatVideoOrderLiveAnchorId().then(res=>{
+        if(res.code === 0){
+          const {nameList} = res.data
+          this.anchorList = nameList
+          this.anchorListAll = [...this.anchorListAll,...nameList]
+        }
+      })
+    },
     //补单不能修改图片 
     imageChange(value){
       if(value==1){
@@ -550,14 +602,14 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize ,keyWord,startDate,endDate,belongLiveAnchorId,status,orderType} = this.query;
+      const { pageNum, pageSize ,keyWord,startDate,endDate,belongLiveAnchorId,status,orderType,} = this.query;
       const data = { 
         pageNum, 
         pageSize ,
         keyWord ,
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        belongLiveAnchorId,
+        belongLiveAnchorId:belongLiveAnchorId==-1 ? null : belongLiveAnchorId,
         status:status == -1 ? null : status,
         orderType:orderType == -1 ? null : orderType,
         };
@@ -579,7 +631,7 @@ export default {
             keyWord ,
             startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
             endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-            belongLiveAnchorId,
+            belongLiveAnchorId:belongLiveAnchorId==-1 ? null : belongLiveAnchorId,
             status:status == -1 ? null : status,
             orderType:orderType == -1 ? null : orderType,
             };
@@ -596,8 +648,16 @@ export default {
       const {id} = this.form
       const data =  {
         orderId:id,
-        belongLiveAnchorId:10
+        belongLiveAnchorId:this.form.anchor,
       } 
+      if(!id){
+        this.$Message.warning('请输入订单号')
+        return
+      }
+      if(!this.form.anchor){
+        this.$Message.warning('请选择主播')
+        return
+      }
       api.getByIdWeChatVideoOrder(data).then((res) => {
         if(res.code ===0){
           const {orderInfo} = res.data
@@ -680,6 +740,7 @@ export default {
       this.isEdit = false;
       this.controlModal = false;
       this.$refs[name].resetFields();
+      this.form.anchor = ''
     },
 
     // modal 显示状态发生变化时触发
@@ -687,11 +748,13 @@ export default {
       if (!value) {
         this.isEdit = false;
         this.$refs["form"].resetFields();
+        this.form.anchor = ''
       }
     },
   },
   created() {
     this.getTikTokOrder();
+    this.getWechatVideoOrderLiveAnchorId()
   },
 };
 </script>

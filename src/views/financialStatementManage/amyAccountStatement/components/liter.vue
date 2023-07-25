@@ -474,21 +474,45 @@ export default {
                         // 已对账服务费合计(信息服务费金额+系统使用费金额)
                         // this.form.totalServiceFeeReconciled = (Number(this.form.informationServiceFeePrice) +  Number(this.form.systemUsageFeePrice)).toFixed(2)
                         this.form.totalServiceFeeReconciled = checkSettlePrice
+
                         // // 当前信息服务费
                         // this.form.currentInformationServiceFee = (this.form.checkBuyAgainPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
                         // // 当前系统服务费
                         // this.form.currentSystemUsagefee = (this.form.checkBuyAgainPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
 
+                        // // // 当前信息服务费
+                        // this.form.currentInformationServiceFee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
+                        // // 当前系统服务费
+                        // // this.form.currentSystemUsagefee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+                        // let price2 = (Number(this.form.checkBuyAgainPrice) * this.form.systemUsageFeeProportion)*100/10000
+                        // this.form.currentSystemUsagefee = price2.toFixed(2)
+                        // // 服务费合计
+                        // this.form.checkSettlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+                        // // 客服结算服务费
+                        // this.form.customerServiceSettlePrice =  Number(proportionOfInformationServiceFee)+Number(systemUsageFeeProportion) <=30 ?  Number(this.form.checkSettlePrice) :  (Number(this.form.checkBuyAgainPrice)*0.3).toFixed(2)
+
+
+
                         // // 当前信息服务费
-                        this.form.currentInformationServiceFee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
+                        let price1 = Math.round( (Math.round(Math.abs(Number(this.form.checkBuyAgainPrice))*100*this.form.proportionOfInformationServiceFee)/10000) *100 )/100
+                        if(this.form.checkBuyAgainPrice<0){
+                          this.form.currentInformationServiceFee = -price1
+                        }else{
+                          this.form.currentInformationServiceFee = price1
+                        }
                         // 当前系统服务费
-                        // this.form.currentSystemUsagefee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
-                        let price2 = (Number(this.form.checkBuyAgainPrice) * this.form.systemUsageFeeProportion)*100/10000
-                        this.form.currentSystemUsagefee = price2.toFixed(2)
+                        // 计算方式 Math.round( (Math.round(Math.abs(Number(this.form.checkBuyAgainPrice))*100*this.form.systemUsageFeeProportion)/10000) *100 )/100
+                        let price2 = Math.round( (Math.round(Math.abs(Number(this.form.checkBuyAgainPrice))*100*this.form.systemUsageFeeProportion)/10000) *100 )/100
+                        if(this.form.checkBuyAgainPrice<0){
+                          this.form.currentSystemUsagefee = -price2
+                        }else{
+                          this.form.currentSystemUsagefee = price2
+                        }
                         // 服务费合计
                         this.form.checkSettlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
                         // 客服结算服务费
                         this.form.customerServiceSettlePrice =  Number(proportionOfInformationServiceFee)+Number(systemUsageFeeProportion) <=30 ?  Number(this.form.checkSettlePrice) :  (Number(this.form.checkBuyAgainPrice)*0.3).toFixed(2)
+
 
                         // 成交服务费合计
                         // 为负数情况
@@ -520,14 +544,35 @@ export default {
   methods: {
     checkPriceChange(){
       // 当前服务费金额
-      this.form.currentInformationServiceFee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
+      // this.form.currentInformationServiceFee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
       // 当前系统服务费
       // this.form.currentSystemUsagefee = Math.round((Number(this.form.checkBuyAgainPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
-      let price2 = (Number(this.form.checkBuyAgainPrice) * this.form.systemUsageFeeProportion)*100/10000
-      this.form.currentSystemUsagefee = price2.toFixed(2)
-      this.form.checkSettlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
-      // 客服结算服务费
-      this.form.customerServiceSettlePrice =  Number(proportionOfInformationServiceFee)+Number(systemUsageFeeProportion) <=30 ?  Number(this.form.checkSettlePrice) :  (Number(this.form.checkBuyAgainPrice)*0.3).toFixed(2)
+      // let price2 = (Number(this.form.checkBuyAgainPrice) * this.form.systemUsageFeeProportion)*100/10000
+      // this.form.currentSystemUsagefee = price2.toFixed(2)
+      // this.form.checkSettlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+      // // 客服结算服务费
+      // this.form.customerServiceSettlePrice =  Number(this.form.proportionOfInformationServiceFee)+Number(this.form.systemUsageFeeProportion) <=30 ?  Number(this.form.checkSettlePrice) :  (Number(this.form.checkBuyAgainPrice)*0.3).toFixed(2)
+      // 当前信息服务费
+      let price1 = Math.round( (Math.round(Math.abs(Number(this.form.checkBuyAgainPrice))*100*this.form.proportionOfInformationServiceFee)/10000) *100 )/100
+      if(this.form.checkBuyAgainPrice<0){
+        this.form.currentInformationServiceFee = -price1
+      }else{
+        this.form.currentInformationServiceFee = price1
+      }
+
+      // 当前系统服务费
+      let price2 = Math.round( (Math.round(Math.abs(Number(this.form.checkBuyAgainPrice))*100*this.form.systemUsageFeeProportion)/10000) *100 )/100
+      if(this.form.checkBuyAgainPrice<0){
+        this.form.currentSystemUsagefee = -price2
+      }else{
+        this.form.currentSystemUsagefee = price2
+      }
+
+      // 服务费合计
+      this.form.checkSettlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+
+      // // 客服结算服务费
+      this.form.customerServiceSettlePrice = Number(this.form.proportionOfInformationServiceFee)+Number(this.form.systemUsageFeeProportion) <=30 ?  Number(this.form.checkSettlePrice) :  (Number(this.form.checkBuyAgainPrice)*0.3).toFixed(2)
       // this.form.currentInformationServiceFee = (this.form.checkBuyAgainPrice * (Number(this.form.proportionOfInformationServiceFee) / 100)).toFixed(2)
       // this.form.currentSystemUsagefee = (this.form.checkBuyAgainPrice * (Number(this.form.systemUsageFeeProportion) / 100)).toFixed(2)
       // this.form.checkSettlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
@@ -573,8 +618,8 @@ export default {
           };
           // 已对账金额+当前对账金额不能大于成交金额
           // 取绝对值判断 防止为负数时无法对账
-          let res = Math.abs((Number(this.form.checkPriceNum)+Number(this.form.checkBuyAgainPrice)))
-          let res2 = Math.abs(Number(this.form.checkPriceRight))
+          let res = (Number(this.form.checkPriceNum)+Number(this.form.checkBuyAgainPrice))
+          let res2 = Number(this.form.checkPriceRight)
           if(res>res2){
               this.$Message.warning({
                 content:'已对账金额和当前对账金额合计不能大于成交金额！',

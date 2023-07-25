@@ -587,16 +587,41 @@ export default {
                         this.form.totalServiceFeeReconciled = settlePrice
                         // // 当前信息服务费
                         // this.form.currentInformationServiceFee = (this.form.checkPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
-                        this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
+                        // this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
+                        let price1 = Math.round( (Math.round(Math.abs(Number(this.form.checkPrice))*100*this.form.proportionOfInformationServiceFee)/10000) *100 )/100
+                        if(this.form.checkPrice<0){
+                          this.form.currentInformationServiceFee = -price1
+                        }else{
+                          this.form.currentInformationServiceFee = price1
+                        }
                         // 当前系统服务费
                         // 正确的保留两位小数
-                        let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
-                        this.form.currentSystemUsagefee = price2.toFixed(2)
-                        // 服务费合计
+                        // let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
+                        // this.form.currentSystemUsagefee = price2.toFixed(2)
+                        // 计算方式 Math.round( (Math.round(Math.abs(Number(this.form.checkPrice))*100*this.form.systemUsageFeeProportion)/10000) *100 )/100
+                        let price2 = Math.round( (Math.round(Math.abs(Number(this.form.checkPrice))*100*this.form.systemUsageFeeProportion)/10000) *100 )/100
+                        if(this.form.checkPrice<0){
+                          this.form.currentSystemUsagefee = -price2
+                        }else{
+                          this.form.currentSystemUsagefee = price2
+                        }
+                        // // 服务费合计
                         this.form.settlePrice = (this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
+                        // // this.form.settlePrice = (this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
+                        // if(this.form.checkPrice<0){
+                        //   this.form.settlePrice = -(this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
+                        // }else{
+                        //   this.form.settlePrice = (this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
+                        // }
 
-                        // // 客服结算服务费
-                        this.form.customerServiceSettlePrice =  proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
+                        // // // 客服结算服务费
+                        this.form.customerServiceSettlePrice = proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
+                        // // this.form.customerServiceSettlePrice =  proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
+                        // if(this.form.checkPrice<0){
+                        //   this.form.customerServiceSettlePrice = -proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
+                        // }else{
+                        //   this.form.customerServiceSettlePrice = proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
+                        // }
 
 
 
@@ -649,12 +674,37 @@ export default {
       // 当前服务费金额
       // this.form.currentInformationServiceFee = (this.form.checkPrice * (Number(this.form.proportionOfInformationServiceFee) / 100)).toFixed(2)
       // this.form.currentSystemUsagefee = (this.form.checkPrice * (this.form.systemUsageFeeProportion / 100)).toFixed(2)
-      this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
-      let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
-      this.form.currentSystemUsagefee = price2.toFixed(2)
-      // this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+      // this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
+      // let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
+      // this.form.currentSystemUsagefee = price2.toFixed(2)
+      // // this.form.currentSystemUsagefee = Math.round((Number(this.form.checkPrice) * (this.form.systemUsageFeeProportion / 100))*100)/100
+      // this.form.settlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+      // this.form.customerServiceSettlePrice = this.form.proportionOfInformationServiceFee+this.form.systemUsageFeeProportion <=30 ?  this.form.settlePrice :  this.form.checkPrice*0.3
+      
+      // 当前信息服务费
+      let price1 = Math.round( (Math.round(Math.abs(Number(this.form.checkPrice))*100*this.form.proportionOfInformationServiceFee)/10000) *100 )/100
+      if(this.form.checkPrice<0){
+        this.form.currentInformationServiceFee = -price1
+      }else{
+        this.form.currentInformationServiceFee = price1
+      }
+
+      // 当前系统服务费
+      let price2 = Math.round( (Math.round(Math.abs(Number(this.form.checkPrice))*100*this.form.systemUsageFeeProportion)/10000) *100 )/100
+      if(this.form.checkPrice<0){
+        this.form.currentSystemUsagefee = -price2
+      }else{
+        this.form.currentSystemUsagefee = price2
+      }
+
+      // 服务费合计
       this.form.settlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
+
+      // // 客服结算服务费
       this.form.customerServiceSettlePrice = this.form.proportionOfInformationServiceFee+this.form.systemUsageFeeProportion <=30 ?  this.form.settlePrice :  this.form.checkPrice*0.3
+
+
+      
    },
     // 取消
     cancelSubmit(name) {
@@ -703,74 +753,20 @@ export default {
           // 已对账金额+当前对账金额不能大于成交金额
           // 取绝对值判断 防止为负数时无法对账
           //                        已对账金额+对账金额
-          let res = Math.abs((Number(this.form.checkPriceNum)+Number(this.form.checkPrice)))
-          //       成交金额
-          let res2 = Math.abs(Number(this.form.checkPriceRight))
-          // if((Number(this.form.checkPriceNum)+Number(this.form.checkPrice))>Number(this.form.checkPriceRight)){
+          // let res = Math.abs((Number(this.form.checkPriceNum)+Number(this.form.checkPrice)))
+          let res = (Number(this.form.checkPriceNum)+Number(this.form.checkPrice))
+          // 成交金额
+          let res2 = Number(this.form.checkPriceRight)
           if(res>res2){
-              this.$Message.warning({
-                content:'已对账金额和当前对账金额合计不能大于成交金额！',
-                duration: 3,
-              });
-              return
-            }
+            this.$Message.warning({
+              content:'已对账金额和当前对账金额合计不能大于成交金额！',
+              duration: 3,
+            });
+            return
+          }
           // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
-          // (Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100) > Number(this.form.totalServiceFee)*100
           let num1 = Math.abs((Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100))
           let num2 = Math.abs(Number(this.form.totalServiceFee)*100)
-          // if(num1 > num2){
-          //   // this.$Message.warning({
-          //   //   content:'已对账服务费合计和当前对账单服务费合计不能大于成交服务费合计',
-          //   //   duration: 3,
-          //   // });
-          //   // return
-          //   this.$Modal.confirm({
-          //     title: "确认提示",
-          //     content:  "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
-          //     onOk: () => {
-          //       this.isConfim = true
-          //     },
-          //     onCancel: () => {},
-          //   });
-          // }
-          // // 成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
-          // if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
-          //   this.$Modal.confirm({
-          //     title: "审核确认提示",
-          //     content: "当前成交单与对账单的对账金额或服务费合计不一致，是否仍要审核通过？",
-          //     onOk: () => {
-          //       this.isConfim = true
-          //     },
-          //     onCancel: () => {},
-          //   });
-          // }
-
-          // if(num1 > num2){
-          //   this.$Modal.confirm({
-          //     title: "确认提示",
-          //     content:  "当前服务费合计加上已对账服务费合计已经" + "<span style='color:red'>超过</span>"  + "成交服务费合计定额，是否仍然通过审核？",
-          //     onOk: () => {
-          //       console.log(1)
-          //       this.isConfim = true
-          //       return
-          //     },
-          //     onCancel: () => {},
-          //   });
-          //   // 成交金额 不等于 对账金额 或者 成交服务费合计 不等于 服务费合计
-          //   if(checkPriceRight != checkPrice || totalServiceFee !=settlePrice){
-          //     this.$Modal.confirm({
-          //       title: "审核确认提示",
-          //       content: "当前成交单与对账单的对账金额或服务费合计不一致，是否仍要审核通过？",
-          //       onOk: () => {
-          //       console.log(2)
-          //         this.isConfim = true
-          //         return
-          //       },
-          //       onCancel: () => {},
-          //     });
-          //   }
-          //   return
-          // }
           let content=""
           // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
           if(num1 > num2)

@@ -206,6 +206,16 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="带货时间" prop="takeGoodsDate" key="takeGoodsDate">
+              <DatePicker
+                type="date"
+                placeholder="带货时间"
+                :value="form.takeGoodsDate"
+                v-model="form.takeGoodsDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="带货类型" prop="takeGoodsType">
               <Select
                 v-model="form.takeGoodsType"
@@ -259,6 +269,7 @@
               ></Input>
             </FormItem>
           </Col>
+          
           <Col span="8">
             <FormItem label="备注" prop="remark" key="remark">
               <Input
@@ -302,20 +313,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         columns: [
-          {
-            title: "创建时间",
-            key: "createDate",
-            width: 180,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.createDate
-                  ? this.$moment(params.row.createDate).format("YYYY-MM-DD HH:mm:ss")
-                  : ""
-              );
-            },
-          },
+          
           {
             title: "主播平台",
             key: "contentPlatFormName",
@@ -350,6 +348,20 @@ export default {
             align: "center",
             minWidth: 200,
             tooltip: true,
+          },
+          {
+            title: "带货时间",
+            key: "takeGoodsDate",
+            width: 150,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.takeGoodsDate
+                  ? this.$moment(params.row.takeGoodsDate).format("YYYY-MM-DD")
+                  : ""
+              );
+            },
           },
           {
             title: "带货类型",
@@ -438,6 +450,21 @@ export default {
                   },
                 });
               }
+            },
+          },
+          
+          {
+            title: "创建时间",
+            key: "createDate",
+            width: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.createDate
+                  ? this.$moment(params.row.createDate).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              );
             },
           },
           {
@@ -577,9 +604,17 @@ export default {
         takeGoodsType: null,
         // 备注
         remark: "",
+        // 带货时间
+        takeGoodsDate:this.$moment().subtract(1, "days").format("YYYY-MM-DD")
       },
 
       ruleValidate: {
+        takeGoodsDate: [
+          {
+            required: true,
+            message: "请选择带货时间",
+          },
+        ],
         brandId: [
           {
             required: true,
@@ -852,8 +887,23 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
+            const {id,brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark} = this.form
+            const data = {
+              id,
+              takeGoodsDate:this.$moment(takeGoodsDate).format("YYYY-MM-DD") ,
+              brandId,
+              categoryId,
+              contentPlatFormId,
+              liveAnchorId,
+              itemId,
+              singlePrice,
+              takeGoodsQuantity,
+              totalPrice,
+              takeGoodsType,
+              remark
+            }
             // 修改
-            api.updateLivingDailyTakeGoods(this.form).then((res) => {
+            api.updateLivingDailyTakeGoods(data).then((res) => {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
@@ -865,8 +915,22 @@ export default {
               }
             });
           } else {
+            const {brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark} = this.form
+            const data = {
+              takeGoodsDate:this.$moment(takeGoodsDate).format("YYYY-MM-DD") ,
+              brandId,
+              categoryId,
+              contentPlatFormId,
+              liveAnchorId,
+              itemId,
+              singlePrice,
+              takeGoodsQuantity,
+              totalPrice,
+              takeGoodsType,
+              remark
+            }
             // 添加
-            api.addLivingDailyTakeGoods(this.form).then((res) => {
+            api.addLivingDailyTakeGoods(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");
                 this.getHospitalInfo();

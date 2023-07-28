@@ -301,8 +301,54 @@ export default {
           {
             title: "手机号",
             key: "phone",
-            minWidth: 150,
+            minWidth: 170,
             align:'center',
+            render: (h, params) => {
+                return params.row.phone ?  h(
+                  "div",
+                  {
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                    },
+                  },
+                  [
+                    h(
+                      "span",
+                      {
+                        style: {
+                          marginRight: "10px",
+                        },
+                      },
+                      params.row.phone
+                    ),
+                    h("span", {
+                      style: {
+                        color: "#2d8cf0",
+                        fontSize: "20px",
+                      },
+                      class: !params.row.bool
+                        ? "iconfont icon-biyan"
+                        : "iconfont icon-see",
+                      on: {
+                        click: () => {
+                          if (params.row.bool) return;
+                          const { encryptPhone } = params.row;
+                          const data = {
+                            encryptPhone
+                          }
+                          orderApi.decryptoPhonesNew(data).then((res) => {
+                            if (res.code === 0) {
+                              params.row.phone = res.data.phone;
+                              params.row.bool = true;
+                            }
+                          });
+                        },
+                      },
+                    }),
+                  ]
+                ): '';
+            }
           },
           
           {

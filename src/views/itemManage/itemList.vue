@@ -63,6 +63,7 @@
       :title="title"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
+      width="1000"
     >
       <Form
         ref="form"
@@ -71,82 +72,190 @@
         label-position="left"
         :label-width="110"
       >
-        <FormItem label="天猫商品编号" prop="otherAppItemId" key="otherAppItemId">
-          <Input
-            v-model="form.otherAppItemId"
-            style="width: 100%"
-            placeholder="请输入天猫商品编号"
-          ></Input>
-        </FormItem>
-        <FormItem label="项目名称" prop="name" key="name">
-          <Input v-model="form.name" placeholder="请输入项目名称"></Input>
-        </FormItem>
-        <FormItem label="科室" prop="hospitalDepartmentId">
-          <Select v-model="form.hospitalDepartmentId" placeholder="请选择科室" filterable>
-            <Option
-              v-for="item in AmiyaHospitalDepartmentList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.departmentName }}</Option
+        <Row :gutter="30">
+          
+          <Col span="8">
+            <FormItem label="渠道" prop="appType">
+              <Select
+                v-model="form.appType"
+                placeholder="请选择渠道"
+                filterable
+              >
+                <Option
+                  v-for="item in orderAppTypes"
+                  :value="item.orderType"
+                  :key="item.orderType"
+                  >{{ item.appTypeText }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+         <Col span="8">
+            <FormItem label="品牌" prop="brandId">
+              <Select
+                v-model="form.brandId"
+                placeholder="请选择品牌"
+                @on-change="contentPlateChange(form.brandId)"
+                filterable
+              >
+                <Option
+                  v-for="item in supplierBrandList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+           <Col span="8">
+            <FormItem label="品类" prop="categoryId">
+              <Select
+                v-model="form.categoryId"
+                placeholder="请选择品类"
+                :disabled="form.brandId === '' "
+                filterable
+              >
+                <Option
+                  v-for="(item,index) in supplierCategoryList"
+                  :value="item.id"
+                  :key="index"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="商品编号"
+              prop="otherAppItemId"
+              key="otherAppItemId"
             >
-          </Select>
-        </FormItem>
-        <FormItem label="缩略图" prop="thumbPicUrl" key="thumbPicUrl">
-          <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
-        </FormItem>
-        <FormItem label="售价" prop="salePrice" key="salePrice">
-          <InputNumber
-            :min="1"
-            v-model="form.salePrice"
-            style="width: 100%"
-            placeholder="请输入项目售价"
-          ></InputNumber>
-        </FormItem>
-        <FormItem label="直播价" prop="livePrice" key="livePrice">
-          <InputNumber
-            :min="1"
-            v-model="form.livePrice"
-            style="width: 100%"
-            placeholder="请输入直播价"
-          ></InputNumber>
-        </FormItem>
-        <FormItem label="是否限购" prop="isLimitBuy" key="isLimitBuy">
-          <i-switch v-model="form.isLimitBuy" />
-        </FormItem>
-        <FormItem label="限购数量" prop="limitBuyQuantity" v-if="form.isLimitBuy" key="limitBuyQuantity">
-          <InputNumber
-            :min="1"
-            v-model="form.limitBuyQuantity"
-            style="width: 100%"
-            placeholder="请输入限购数量"
-          ></InputNumber>
-        </FormItem>
-        <FormItem label="项目简介" prop="description" key="description">
-          <Input
-            type="textarea"
-            :autosize="true"
-            v-model="form.description"
-            placeholder="请输入项目简介"
-          ></Input>
-        </FormItem>
-        <FormItem label="项目规格" prop="standard" key="standard">
-          <Input v-model="form.standard" placeholder="请输入项目规格"></Input>
-        </FormItem>
-        <!-- <FormItem label="治疗部位" prop="parts" key="parts">
+              <Input
+                v-model="form.otherAppItemId"
+                style="width: 100%"
+                placeholder="请输入商品编号"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="项目名称" prop="name" key="name">
+              <Input v-model="form.name" placeholder="请输入项目名称"></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="项目规格" prop="standard" key="standard">
+              <Input
+                v-model="form.standard"
+                placeholder="请输入项目规格"
+              ></Input>
+            </FormItem>
+          </Col>
+          
+          <Col span="8">
+            <FormItem label="缩略图" prop="thumbPicUrl" key="thumbPicUrl">
+              <upload
+                :uploadObj="uploadObj"
+                @uploadChange="handleUploadChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="售价" prop="salePrice" key="salePrice">
+              <InputNumber
+                :min="1"
+                v-model="form.salePrice"
+                style="width: 100%"
+                placeholder="请输入项目售价"
+              ></InputNumber>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="直播价" prop="livePrice" key="livePrice">
+              <InputNumber
+                :min="1"
+                v-model="form.livePrice"
+                style="width: 100%"
+                placeholder="请输入直播价"
+              ></InputNumber>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否限购" prop="isLimitBuy" key="isLimitBuy">
+              <i-switch v-model="form.isLimitBuy" />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isLimitBuy">
+            <FormItem
+              label="限购数量"
+              prop="limitBuyQuantity"
+              key="limitBuyQuantity"
+            >
+              <InputNumber
+                :min="1"
+                v-model="form.limitBuyQuantity"
+                style="width: 100%"
+                placeholder="请输入限购数量"
+              ></InputNumber>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="项目简介" prop="description" key="description">
+              <Input
+                type="textarea"
+                :autosize="true"
+                v-model="form.description"
+                placeholder="请输入项目简介"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="科室" prop="hospitalDepartmentId">
+              <Select
+                v-model="form.hospitalDepartmentId"
+                placeholder="请选择科室"
+                filterable
+              >
+                <Option
+                  v-for="item in AmiyaHospitalDepartmentList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.departmentName }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          
+          <Col span="8">
+            <!-- <FormItem label="治疗部位" prop="parts" key="parts">
           <Input v-model="form.parts" placeholder="请输入治疗部位"></Input>
         </FormItem> -->
-        <FormItem label="承诺" prop="commitment" key="commitment">
-          <Input v-model="form.commitment" placeholder="请输入承诺"></Input>
-        </FormItem>
-        <FormItem label="预约须知" prop="appointmentNotice" key="appointmentNotice">
-          <Input
-            v-model="form.appointmentNotice"
-            placeholder="请输入预约须知"
-          ></Input>
-        </FormItem>
-        <FormItem label="是否有效" prop="valid" v-show="isEdit === true" key="valid">
-          <i-switch v-model="form.valid" />
-        </FormItem>
+            <FormItem label="承诺" prop="commitment" key="commitment">
+              <Input v-model="form.commitment" placeholder="请输入承诺"></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="预约须知"
+              prop="appointmentNotice"
+              key="appointmentNotice"
+            >
+              <Input
+                v-model="form.appointmentNotice"
+                placeholder="请输入预约须知"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="是否有效"
+              prop="valid"
+              v-show="isEdit === true"
+              key="valid"
+            >
+              <i-switch v-model="form.valid" />
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -157,6 +266,9 @@
 </template>
 <script>
 import * as api from "@/api/itemManage";
+import * as orderApi from "@/api/orderManage";
+import * as supplierCategoryApi from "@/api/supplierCategory";
+import * as supplierBrandApi from "@/api/supplierBrand";
 import upload from "@/components/upload/upload";
 export default {
   components: {
@@ -164,8 +276,10 @@ export default {
   },
   data() {
     return {
+      // 渠道
+      orderAppTypes:[],
       // 获取科室列表（下拉框）
-      AmiyaHospitalDepartmentList:[],
+      AmiyaHospitalDepartmentList: [],
       uploadObj: {
         // 是否开启多图
         multiple: false,
@@ -174,76 +288,139 @@ export default {
         // 文件列表
         uploadList: [],
       },
-      validList:[{
-          valid:'true',
-          name:'有效'
-        },{
-          valid:'false',
-          name:'无效'
-        }],
+      validList: [
+        {
+          valid: "true",
+          name: "有效",
+        },
+        {
+          valid: "false",
+          name: "无效",
+        },
+      ],
       // 查询
       query: {
-        valid:'true',
+        valid: "true",
         keyword: "",
         pageNum: 1,
         pageSize: 10,
         columns: [
           {
-            title: "天猫商品编号",
+            title: "渠道",
+            key: "appTypeText",
+            minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "商品编号",
             key: "otherAppItemId",
             minWidth: 150,
           },
           {
-            title: "项目名称",
-            key: "name",
-            minWidth: 250,
+            title: "品牌",
+            key: "brandName",
+            minWidth: 150,
+            align:'center'
           },
           {
-            title: "科室",
-            key: "departmentName",
-            minWidth: 100,
+            title: "品类",
+            key: "categoryName",
+            minWidth: 150,
+            align:'center'
           },
           {
-            title: "缩略图",
+            title: "商品",
             key: "thumbPicUrl",
-            align: "center",
-            minWidth: 100,
+            minWidth: 300,
             render: (h, params) => {
-              return h("viewer", {}, [
-                h("img", {
+              return h(
+                "viewer",
+                {
+                  props: {
+                    zoomable: false,
+                  },
                   style: {
-                    width: "50px",
-                    height: "50px",
-                    margin: "5px 0",
-                    verticalAlign: "middle",
+                    display: "flex",
                   },
-                  attrs: {
-                    src: params.row.thumbPicUrl,
-                  },
-                }),
-              ]);
+                },
+                [
+                  h("img", {
+                    style: {
+                      width: "3.125rem",
+                      height: "3.125rem",
+                      margin: ".3125rem .9375rem .3125rem .3125rem",
+                      verticalAlign: "middle",
+                    },
+                    attrs: {
+                      src: params.row.thumbPicUrl,
+                    },
+                  }),
+                  h("div", params.row.name),
+                ]
+              );
             },
           },
+          // {
+          //   title: "商品名称",
+          //   key: "name",
+          //   minWidth: 250,
+            
+          // },
+          
+          // {
+          //   title: "缩略图",
+          //   key: "thumbPicUrl",
+          //   align: "center",
+          //   minWidth: 100,
+          //   render: (h, params) => {
+          //     return h("viewer", {}, [
+          //       h("img", {
+          //         style: {
+          //           width: "50px",
+          //           height: "50px",
+          //           margin: "5px 0",
+          //           verticalAlign: "middle",
+          //         },
+          //         attrs: {
+          //           src: params.row.thumbPicUrl,
+          //         },
+          //       }),
+          //     ]);
+          //   },
+          // },
+          
           {
-            title: "售价",
-            key: "salePrice",
+            title: "规格",
+            key: "standard",
             minWidth: 100,
+            align:'center'
           },
-          {
-            title: "直播价",
-            key: "livePrice",
-            minWidth: 100,
-          },
+          
+          
           {
             title: "简介",
             key: "description",
             minWidth: 200,
           },
           {
-            title: "规格",
-            key: "standard",
+            title: "售价",
+            key: "salePrice",
             minWidth: 100,
+            align:'center'
           },
+          {
+            title: "直播价",
+            key: "livePrice",
+            minWidth: 100,
+            align:'center'
+          },
+          {
+            title: "科室",
+            key: "departmentName",
+            minWidth: 100,
+            align:'center'
+          },
+          
           // {
           //   title: "部位",
           //   key: "parts",
@@ -253,6 +430,7 @@ export default {
             title: "是否限购",
             key: "isLimitBuy",
             minWidth: 100,
+            align:'center',
             render: (h, params) => {
               if (params.row.isLimitBuy == true) {
                 return h("Icon", {
@@ -281,6 +459,7 @@ export default {
             title: "限购数量",
             key: "limitBuyQuantity",
             minWidth: 100,
+            align:'center'
           },
           {
             title: "承诺",
@@ -301,6 +480,7 @@ export default {
             title: "创建时间",
             key: "createDate",
             minWidth: 110,
+            align:'center',
             render: (h, params) => {
               params.row.createDate = params.row.createDate
                 ? params.row.createDate.substr(0, 10)
@@ -312,11 +492,13 @@ export default {
             title: "创建人",
             key: "createName",
             minWidth: 100,
+            align:'center'
           },
           {
             title: "修改时间",
             key: "updateDate",
             minWidth: 110,
+            align:'center',
             render: (h, params) => {
               params.row.updateDate = params.row.updateDate
                 ? params.row.updateDate.substr(0, 10)
@@ -328,11 +510,13 @@ export default {
             title: "修改人",
             key: "updateName",
             minWidth: 100,
+            align:'center'
           },
           {
             title: "是否有效",
             key: "valid",
             minWidth: 100,
+            align:'center',
             render: (h, params) => {
               if (params.row.valid == true) {
                 return h("Icon", {
@@ -382,6 +566,7 @@ export default {
                           if (res.code === 0) {
                             this.isEdit = true;
                             this.form = res.data.itemInfo;
+                            this.getLiveValidList(this.form.brandId);
                             this.uploadObj.uploadList = [this.form.thumbPicUrl];
                             this.controlModal = true;
                           }
@@ -445,7 +630,7 @@ export default {
         // 项目名称
         name: "",
         // 科室
-        hospitalDepartmentId:'',
+        hospitalDepartmentId: '',
         // 缩略图
         thumbPicUrl: "",
         // 售价
@@ -471,9 +656,33 @@ export default {
         id: "",
         // 是否有效
         valid: false,
+        // 渠道
+        appType:null,
+        // 品牌
+        brandId:'',
+        // 品类
+        categoryId:''
       },
 
       ruleValidate: {
+        appType: [
+          {
+            required: true,
+            message: "请选择渠道",
+          },
+        ],
+        brandId: [
+          {
+            required: true,
+            message: "请选择品牌",
+          },
+        ],
+        categoryId: [
+          {
+            required: true,
+            message: "请选择品类",
+          },
+        ],
         otherAppItemId: [
           {
             required: true,
@@ -529,25 +738,68 @@ export default {
           },
         ],
       },
+      // 品牌
+      supplierBrandList:[],
+      // 品类
+      supplierCategoryList:[]
     };
   },
+ 
   methods: {
-    // 获取医院科室
-    getDepartmentList(){
-      api.getDepartment().then((res) => {
+    // 获取品牌
+    getSupplierBrand(){
+      supplierBrandApi.getSupplierBrandList().then(res=>{
         if(res.code === 0){
-          const {AmiyaHospitalDepartmentList} = res.data
-          this.AmiyaHospitalDepartmentList = AmiyaHospitalDepartmentList
+          const {supplierBrandList} = res.data
+          this.supplierBrandList = supplierBrandList
         }
       })
+    },
+    contentPlateChange(value) {
+      if (!value) {
+        return;
+      }
+      this.form.categoryId = ''
+      this.getLiveValidList(value);
+    },
+    // 根据品牌获取品类
+    getLiveValidList(value) {
+      const data = {
+        brandId: value,
+      };
+      supplierCategoryApi.getSupplierCategoryListByBrandId(data).then((res) => {
+        if (res.code === 0) {
+          const { supplierCategoryList } = res.data;
+          this.supplierCategoryList = supplierCategoryList;
+        }
+      });
+    },
+    
+    // 渠道（下拉框）
+    getAppType(){
+      orderApi.getAppTypeList().then(res=>{
+        if(res.code === 0){
+          this.orderAppTypes = res.data.orderAppTypes
+        }
+      })
+    },
+    // 获取医院科室
+    getDepartmentList() {
+      api.getDepartment().then((res) => {
+        if (res.code === 0) {
+          const { AmiyaHospitalDepartmentList } = res.data;
+          this.AmiyaHospitalDepartmentList = AmiyaHospitalDepartmentList;
+          this.form.hospitalDepartmentId = this.AmiyaHospitalDepartmentList.find(item=>item.departmentName == '其它' || item.departmentName == '其他').id
+        }
+      });
     },
     // 获取项目列表
     getItemInfo() {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { keyword, pageNum, pageSize,valid } = this.query;
-      const data = { keyword, pageNum, pageSize ,valid};
+      const { keyword, pageNum, pageSize, valid } = this.query;
+      const data = { keyword, pageNum, pageSize, valid };
       api.ItemInfo(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.itemInfo;
@@ -559,8 +811,8 @@ export default {
 
     // 获取项目列表分页
     handlePageChange(pageNum) {
-      const { keyword, pageSize,valid } = this.query;
-      const data = { keyword, pageNum, pageSize,valid };
+      const { keyword, pageSize, valid } = this.query;
+      const data = { keyword, pageNum, pageSize, valid };
       api.ItemInfo(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.itemInfo;
@@ -615,6 +867,7 @@ export default {
       this.controlModal = false;
       this.uploadObj.uploadList = [];
       this.$refs[name].resetFields();
+      this.form.hospitalDepartmentId = this.AmiyaHospitalDepartmentList.find(item=>item.departmentName == '其它' || item.departmentName == '其他').id
     },
 
     // modal 显示状态发生变化时触发
@@ -622,22 +875,25 @@ export default {
       if (!value) {
         this.isEdit = false;
         this.$refs["form"].resetFields();
+        this.form.hospitalDepartmentId = this.AmiyaHospitalDepartmentList.find(item=>item.departmentName == '其它' || item.departmentName == '其他').id
       }
     },
   },
   created() {
     this.getItemInfo();
-    this.getDepartmentList()
+    this.getDepartmentList();
+    this.getAppType();
+    this.getSupplierBrand();
   },
-  watch:{
-    'form.isLimitBuy'(newVal){
-      if(!newVal) {
-        this.$nextTick(()=>{
+  watch: {
+    "form.isLimitBuy"(newVal) {
+      if (!newVal) {
+        this.$nextTick(() => {
           this.form.limitBuyQuantity = null;
-        })
+        });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

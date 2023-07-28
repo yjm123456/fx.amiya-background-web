@@ -19,6 +19,14 @@
             ref="importFiles"
           />
         </FormItem>
+        <Spin fix v-if="flag == true">
+          <Icon
+            type="ios-loading"
+            size="18"
+            class="demo-spin-icon-load"
+          ></Icon>
+          <div>加载中...</div>
+        </Spin>
         <div v-if="loading == true" style="color:red;text-align:center">数据正在上传中，请耐心等待......</div>
       </Form>
       <div slot="footer">
@@ -42,6 +50,7 @@ export default {
   },
   data() {
     return {
+      flag:false,
       control: false,
       importFileForm: {
         file: "",
@@ -82,9 +91,11 @@ export default {
             let formData = new FormData();
             //多个文件上传
             formData.append("file", file);
+            this.flag = true
             api.importReconciliationDocuments(formData).then((res) => {
               if (res.code === 0) {
-                setTimeout(()=>{
+                this.flag = false
+                // setTimeout(()=>{
                   this.handleCancel("importFileForm");
                   this.$emit("handleRefreshCustomerTrackList");
                   this.$Message.success({
@@ -92,7 +103,7 @@ export default {
                     duration: 3,
                   });
                   this.importFileForm.file = "";
-                },10000)
+                // },10000)
               } else {
                 this.$Message.warning({
                   content:

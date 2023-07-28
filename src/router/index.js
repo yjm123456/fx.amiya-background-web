@@ -118,16 +118,16 @@ const positionManage = [{
 ];
 
 /**
- * 项目管理
+ * 带货商品管理
  */
 const itemManage = [{
     path: "/itemList",
     name: "itemList",
     meta: {
-        title: "项目列表",
+        title: "带货商品列表",
         keepAlive: false,
         isTag: true,
-        openName: ['项目管理'],
+        openName: ['带货商品管理'],
     },
     component: () =>
         import ("@/views/itemManage/itemList.vue"),
@@ -1269,6 +1269,30 @@ const baseDataMaintenance = [{
         component: () =>
             import ("@/views/baseDataMaintenance/goodsShelves/goodsShelves.vue"),
     },
+    {
+        path: "/brandList",
+        name: "brandList",
+        meta: {
+            title: "品牌列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/brandList/brandList.vue"),
+    },
+    {
+        path: "/categoryList",
+        name: "categoryList",
+        meta: {
+            title: "品类列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/categoryList/categoryList.vue"),
+    },
 ];
 
 /**
@@ -1564,6 +1588,18 @@ const operationManage = [{
         },
         component: () =>
             import ("@/views/operationManage/videoClips/videoClips.vue"),
+    },
+    {
+        path: "/livingDailyTakeGoods",
+        name: "livingDailyTakeGoods",
+        meta: {
+            title: "直播带货数据记录",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/livingDailyTakeGoods/livingDailyTakeGoods.vue"),
     },
 ];
 /**

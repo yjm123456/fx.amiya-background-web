@@ -80,6 +80,7 @@
                 v-model="form.appType"
                 placeholder="请选择渠道"
                 filterable
+                multiple
               >
                 <Option
                   v-for="item in orderAppTypes"
@@ -125,28 +126,32 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem
-              label="商品编号"
-              prop="otherAppItemId"
-              key="otherAppItemId"
-            >
-              <Input
-                v-model="form.otherAppItemId"
-                style="width: 100%"
-                placeholder="请输入商品编号"
-              ></Input>
+            <FormItem label="科室" prop="hospitalDepartmentId">
+              <Select
+                v-model="form.hospitalDepartmentId"
+                placeholder="请选择科室"
+                filterable
+              >
+                <Option
+                  v-for="item in AmiyaHospitalDepartmentList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.departmentName }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          
+          <Col span="8">
+            <FormItem label="商品名称" prop="name" key="name">
+              <Input v-model="form.name" placeholder="请输入商品名称"></Input>
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="项目名称" prop="name" key="name">
-              <Input v-model="form.name" placeholder="请输入项目名称"></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="项目规格" prop="standard" key="standard">
+            <FormItem label="规格" prop="standard" key="standard">
               <Input
                 v-model="form.standard"
-                placeholder="请输入项目规格"
+                placeholder="请输入规格"
               ></Input>
             </FormItem>
           </Col>
@@ -209,19 +214,16 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="科室" prop="hospitalDepartmentId">
-              <Select
-                v-model="form.hospitalDepartmentId"
-                placeholder="请选择科室"
-                filterable
-              >
-                <Option
-                  v-for="item in AmiyaHospitalDepartmentList"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.departmentName }}</Option
-                >
-              </Select>
+            <FormItem
+              label="商品编号"
+              prop="otherAppItemId"
+              key="otherAppItemId"
+            >
+              <Input
+                v-model="form.otherAppItemId"
+                style="width: 100%"
+                placeholder="请输入商品编号"
+              ></Input>
             </FormItem>
           </Col>
           
@@ -308,8 +310,9 @@ export default {
           {
             title: "渠道",
             key: "appTypeText",
-            minWidth: 120,
-            align:'center'
+            minWidth: 160,
+            align:'center',
+            tooltip:true
           },
           {
             title: "商品编号",
@@ -566,6 +569,11 @@ export default {
                           if (res.code === 0) {
                             this.isEdit = true;
                             this.form = res.data.itemInfo;
+                            // this.form.appType = res.data.itemInfo.appType.split(",")
+                            let appType = res.data.itemInfo.appType.split(",")
+                            this.form.appType = appType.map(item=>{
+                              return Number(item)
+                            })
                             this.getLiveValidList(this.form.brandId);
                             this.uploadObj.uploadList = [this.form.thumbPicUrl];
                             this.controlModal = true;
@@ -627,7 +635,7 @@ export default {
       form: {
         // 对应天猫的商品编号
         otherAppItemId: null,
-        // 项目名称
+        // 商品名称
         name: "",
         // 科室
         hospitalDepartmentId: '',
@@ -643,7 +651,7 @@ export default {
         limitBuyQuantity: null,
         // 项目简介
         description: "",
-        // 项目规格
+        // 规格
         standard: "",
         // 治疗部位
         parts: "",
@@ -657,7 +665,7 @@ export default {
         // 是否有效
         valid: false,
         // 渠道
-        appType:null,
+        appType:[],
         // 品牌
         brandId:'',
         // 品类
@@ -683,16 +691,10 @@ export default {
             message: "请选择品类",
           },
         ],
-        otherAppItemId: [
-          {
-            required: true,
-            message: "请输入天猫商品编号",
-          },
-        ],
         name: [
           {
             required: true,
-            message: "请输入项目名称",
+            message: "请输入商品名称",
           },
         ],
         thumbPicUrl: [
@@ -722,7 +724,7 @@ export default {
         standard: [
           {
             required: true,
-            message: "请输入项目规格",
+            message: "请输入规格",
           },
         ],
         // parts: [
@@ -832,8 +834,13 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
+            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId} = this.form
+            const data = {
+              appType:appType.toString(),
+              otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,brandId,categoryId
+            }
             // 修改
-            api.updateItemInfo(this.form).then((res) => {
+            api.updateItemInfo(data).then((res) => {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
@@ -845,8 +852,14 @@ export default {
               }
             });
           } else {
+   
             // 添加
-            const { id, valid, ...data } = this.form;
+            // const { id, valid, ...data } = this.form;
+            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId} = this.form
+            const data = {
+              appType:appType.toString(),
+              otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,brandId,categoryId
+            }
             api.addItemInfo(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");

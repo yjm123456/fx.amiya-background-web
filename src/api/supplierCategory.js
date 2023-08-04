@@ -40,10 +40,9 @@ export const deleteSupplierCategory = (id) => {
     });
 };
 // 根据供应商商品品类id获取供应商品类
-export const getSupplierCategoryListByBrandId = (params) => {
+export const getSupplierCategoryList = () => {
     return http({
-        url: "/amiyabg/SupplierCategory/getSupplierCategoryListByBrandId",
+        url: "/amiyabg/SupplierCategory/getSupplierCategoryList",
         method: "get",
-        params
     });
 };

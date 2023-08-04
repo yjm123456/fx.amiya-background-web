@@ -21,6 +21,47 @@
               >{{ item.name }}</Option
             >
           </Select>
+          <Select
+              v-model="query.brandId"
+              placeholder="请选择品牌"
+              @on-change="contentPlateChangeQuery(query.brandId)"
+              filterable
+              style="width: 160px; margin-left: 10px"
+            >
+              <Option
+                v-for="item in supplierBrandListAll"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+                v-model="query.itemDetailsId"
+                placeholder="请选择品项"
+                :disabled="query.brandId == '' || query.brandId ==  -1"
+                filterable
+                style="width: 160px; margin-left: 10px"
+              >
+                <Option
+                  v-for="(item,index) in supplierItemDetailsList"
+                  :value="item.id"
+                  :key="index"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            <Select
+                v-model="query.categoryId"
+                placeholder="请选择品类"
+                filterable
+                style="width: 160px; margin-left: 10px"
+              >
+                <Option
+                  v-for="(item,index) in supplierCategoryListAll"
+                  :value="item.id"
+                  :key="index"
+                  >{{ item.name }}</Option
+                >
+              </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -109,11 +150,27 @@
             </FormItem>
           </Col>
            <Col span="8">
+            <FormItem label="品项" prop="itemDetailsId">
+              <Select
+                v-model="form.itemDetailsId"
+                placeholder="请选择品项"
+                :disabled="form.brandId === '' "
+                filterable
+              >
+                <Option
+                  v-for="(item,index) in supplierItemDetailsList"
+                  :value="item.id"
+                  :key="index"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="品类" prop="categoryId">
               <Select
                 v-model="form.categoryId"
                 placeholder="请选择品类"
-                :disabled="form.brandId === '' "
                 filterable
               >
                 <Option
@@ -271,6 +328,8 @@ import * as api from "@/api/itemManage";
 import * as orderApi from "@/api/orderManage";
 import * as supplierCategoryApi from "@/api/supplierCategory";
 import * as supplierBrandApi from "@/api/supplierBrand";
+import * as supplierItemDetailsApi from "@/api/supplierItemDetails";
+
 import upload from "@/components/upload/upload";
 export default {
   components: {
@@ -302,6 +361,9 @@ export default {
       ],
       // 查询
       query: {
+        brandId:-1,
+        itemDetailsId:'',
+        categoryId:-1,
         valid: "true",
         keyword: "",
         pageNum: 1,
@@ -322,6 +384,12 @@ export default {
           {
             title: "品牌",
             key: "brandName",
+            minWidth: 150,
+            align:'center'
+          },
+          {
+            title: "品项",
+            key: "itemDetailsName",
             minWidth: 150,
             align:'center'
           },
@@ -668,6 +736,8 @@ export default {
         appType:[],
         // 品牌
         brandId:'',
+        // 品项
+        itemDetailsId:'',
         // 品类
         categoryId:''
       },
@@ -683,6 +753,12 @@ export default {
           {
             required: true,
             message: "请选择品牌",
+          },
+        ],
+        itemDetailsId: [
+          {
+            required: true,
+            message: "请选择品项",
           },
         ],
         categoryId: [
@@ -742,8 +818,12 @@ export default {
       },
       // 品牌
       supplierBrandList:[],
+      supplierBrandListAll:[{id:-1,name:'全部品牌'}],
+      // 品项
+      supplierItemDetailsList:[],
       // 品类
-      supplierCategoryList:[]
+      supplierCategoryList:[],
+      supplierCategoryListAll:[{id:-1,name:'全部品类'}]
     };
   },
  
@@ -754,29 +834,47 @@ export default {
         if(res.code === 0){
           const {supplierBrandList} = res.data
           this.supplierBrandList = supplierBrandList
+          this.supplierBrandListAll = [...this.supplierBrandListAll,...supplierBrandList]
         }
       })
+    },
+    // 搜索方法
+    contentPlateChangeQuery(value) {
+      if (!value) {
+        return;
+      }
+      this.query.itemDetailsId = ''
+      this.getLiveValidList(value);
     },
     contentPlateChange(value) {
       if (!value) {
         return;
       }
-      this.form.categoryId = ''
+      this.form.itemDetailsId = ''
       this.getLiveValidList(value);
     },
-    // 根据品牌获取品类
+    // 根据品牌获取品项
     getLiveValidList(value) {
       const data = {
         brandId: value,
       };
-      supplierCategoryApi.getSupplierCategoryListByBrandId(data).then((res) => {
+      supplierItemDetailsApi.getSupplierItemDetailsListByBrandId(data).then((res) => {
         if (res.code === 0) {
-          const { supplierCategoryList } = res.data;
-          this.supplierCategoryList = supplierCategoryList;
+          const { supplierItemDetailsList } = res.data;
+          this.supplierItemDetailsList = supplierItemDetailsList;
         }
       });
     },
-    
+    // 获取品类
+    getSupplierCategoryList(){
+      supplierCategoryApi.getSupplierCategoryList().then(res=>{
+        if(res.code === 0){
+          const {supplierCategoryList} = res.data
+          this.supplierCategoryList = supplierCategoryList
+          this.supplierCategoryListAll = [...this.supplierCategoryListAll,...supplierCategoryList]
+        }
+      })
+    },
     // 渠道（下拉框）
     getAppType(){
       orderApi.getAppTypeList().then(res=>{
@@ -800,8 +898,8 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { keyword, pageNum, pageSize, valid } = this.query;
-      const data = { keyword, pageNum, pageSize, valid };
+      const { keyword, pageNum, pageSize, valid,brandId,itemDetailsId,categoryId } = this.query;
+      const data = { keyword, pageNum, pageSize, valid ,brandId : brandId == -1 ? '' : brandId,itemDetailsId,categoryId: categoryId == -1 ? '' : categoryId};
       api.ItemInfo(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.itemInfo;
@@ -813,8 +911,8 @@ export default {
 
     // 获取项目列表分页
     handlePageChange(pageNum) {
-      const { keyword, pageSize, valid } = this.query;
-      const data = { keyword, pageNum, pageSize, valid };
+      const { keyword, pageSize, valid,brandId,itemDetailsId,categoryId } = this.query;
+      const data = { keyword, pageNum, pageSize, valid ,brandId : brandId == -1 ? '' : brandId,itemDetailsId,categoryId: categoryId == -1 ? '' : categoryId};
       api.ItemInfo(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.itemInfo;
@@ -834,10 +932,10 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId} = this.form
+            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId,itemDetailsId} = this.form
             const data = {
               appType:appType.toString(),
-              otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,brandId,categoryId
+              otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,brandId,categoryId,itemDetailsId
             }
             // 修改
             api.updateItemInfo(data).then((res) => {
@@ -855,10 +953,10 @@ export default {
    
             // 添加
             // const { id, valid, ...data } = this.form;
-            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId} = this.form
+            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId,itemDetailsId} = this.form
             const data = {
               appType:appType.toString(),
-              otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,brandId,categoryId
+              otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,brandId,categoryId,itemDetailsId
             }
             api.addItemInfo(data).then((res) => {
               if (res.code === 0) {
@@ -897,6 +995,7 @@ export default {
     this.getDepartmentList();
     this.getAppType();
     this.getSupplierBrand();
+    this.getSupplierCategoryList()
   },
   watch: {
     "form.isLimitBuy"(newVal) {

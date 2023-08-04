@@ -7,16 +7,16 @@
             v-model="query.keyWord"
             placeholder="请输入关键字"
             style="width: 200px; "
-            @keyup.enter.native="getSupplierCategory()"
+            @keyup.enter.native="getSupplierItemDetails()"
           />
-          <!-- <Select v-model="query.brandId" style="width: 200px; margin-left: 10px">
+          <Select v-model="query.brandId" style="width: 200px; margin-left: 10px">
             <Option
               v-for="item in supplierBrandListAll"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
             >
-          </Select> -->
+          </Select>
           <Select v-model="query.valid" style="width: 200px; margin-left: 10px">
             <Option
               v-for="item in validList"
@@ -28,7 +28,7 @@
           <Button
             type="primary"
             style="margin-left: 10px"
-            @click="getSupplierCategory()"
+            @click="getSupplierItemDetails()"
             >查询</Button
           >
         </div>
@@ -75,7 +75,7 @@
         label-position="left"
         :label-width="80"
       >
-        <!-- <FormItem label="品牌" prop="brandId">
+        <FormItem label="品牌" prop="brandId">
           <Select v-model="form.brandId" placeholder="请选择品牌">
             <Option
               v-for="item in supplierBrandList"
@@ -84,9 +84,9 @@
               >{{ item.name }}</Option
             >
           </Select>
-        </FormItem> -->
-        <FormItem label="品类" prop="categoryName">
-          <Input v-model="form.categoryName" placeholder="请输入品类名称"></Input>
+        </FormItem>
+        <FormItem label="品项" prop="itemDetailsName">
+          <Input v-model="form.itemDetailsName" placeholder="请输入品项名称"></Input>
         </FormItem>
         <!-- <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
           <i-switch v-model="form.valid" />
@@ -100,22 +100,26 @@
   </div>
 </template>
 <script>
-import * as api from "@/api/supplierCategory";
+import * as api from "@/api/supplierItemDetails";
 import * as supplierBrandApi from "@/api/supplierBrand";
 export default {
   data() {
     return {
       // 查询
       query: {
-        // brandId:-1,
+        brandId:-1,
         keyWord: "",
         pageNum: 1,
         pageSize: 10,
         valid: "true",
         columns: [
+            {
+            title: "品牌",
+            key: "brandName",
+          },
           {
-            title: "品类",
-            key: "categoryName",
+            title: "品项",
+            key: "itemDetailsName",
           },
           {
             title: "是否有效",
@@ -164,16 +168,16 @@ export default {
                       click: () => {
                         const { id } = params.row;
                         this.title = "修改";
-                        api.byIdSupplierCategory(id).then((res) => {
+                        api.byIdSupplierItemDetails(id).then((res) => {
                           if (res.code === 0) {
                             const {
-                              // brandId,
-                              categoryName,
+                              brandId,
+                              itemDetailsName,
                               id,
-                            } = res.data.supplierCategoryInfo;
+                            } = res.data.supplierItemDetailsInfo;
                             this.isEdit = true;
-                            // this.form.brandId = brandId;
-                            this.form.categoryName = categoryName;
+                            this.form.brandId = brandId;
+                            this.form.itemDetailsName = itemDetailsName;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -197,9 +201,9 @@ export default {
                           content: "是否确认删除？",
                           onOk: () => {
                             const { id } = params.row;
-                            api.deleteSupplierCategory(id).then((res) => {
+                            api.deleteSupplierItemDetails(id).then((res) => {
                               if (res.code === 0) {
-                                this.getSupplierCategory();
+                                this.getSupplierItemDetails();
                                 this.$Message.success({
                                   content: "删除成功",
                                   duration: 3,
@@ -233,23 +237,23 @@ export default {
 
       form: {
         // 品牌
-        // brandId: "",
-        // 品类
-        categoryName:'',
+        brandId: "",
+        // 品项
+        itemDetailsName:'',
         id: "",
       },
 
       ruleValidate: {
-        // brandId: [
-        //   {
-        //     required: true,
-        //     message: "请选择品牌",
-        //   },
-        // ],
-        categoryName: [
+        brandId: [
           {
             required: true,
-            message: "请输入品类",
+            message: "请选择品牌",
+          },
+        ],
+        itemDetailsName: [
+          {
+            required: true,
+            message: "请输入品项",
           },
         ],
       },
@@ -273,29 +277,29 @@ export default {
             }
         })
     },
-    // 获取供应商品牌品类列表
-    getSupplierCategory() {
+    // 获取供应商品牌品项列表
+    getSupplierItemDetails() {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyWord, valid } = this.query;
-      const data = { pageNum, pageSize, keyWord, valid };
-      api.getSupplierCategory(data).then((res) => {
+      const { pageNum, pageSize, keyWord, valid,brandId } = this.query;
+      const data = { pageNum, pageSize, keyWord, valid ,brandId:brandId == -1 ? null : brandId};
+      api.getSupplierItemDetails(data).then((res) => {
         if (res.code === 0) {
-          const { list, totalCount } = res.data.supplierCategoryInfo;
+          const { list, totalCount } = res.data.supplierItemDetailsInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
         }
       });
     },
 
-    // 获取供应商品牌品类列表分页
+    // 获取供应商品牌品项列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyWord, valid } = this.query;
-      const data = { pageNum, pageSize, keyWord, valid  };
-      api.getSupplierCategory(data).then((res) => {
+      const { pageSize, keyWord, valid,brandId } = this.query;
+      const data = { pageNum, pageSize, keyWord, valid ,brandId:brandId == -1 ? null : brandId  };
+      api.getSupplierItemDetails(data).then((res) => {
         if (res.code === 0) {
-          const { list, totalCount } = res.data.supplierCategoryInfo;
+          const { list, totalCount } = res.data.supplierItemDetailsInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
         }
@@ -307,11 +311,11 @@ export default {
         if (valid) {
           if (this.isEdit) {
             // 修改
-            api.updateSupplierCategory(this.form).then((res) => {
+            api.updateSupplierItemDetails(this.form).then((res) => {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
-                this.getSupplierCategory();
+                this.getSupplierItemDetails();
                 this.$Message.success({
                   content: "修改成功",
                   duration: 3,
@@ -319,13 +323,13 @@ export default {
               }
             });
           } else {
-            const { categoryName  } = this.form;
-            const data = { categoryName  };
+            const { itemDetailsName,brandId  } = this.form;
+            const data = { itemDetailsName,brandId  };
             // 添加
-            api.addSupplierCategory(data).then((res) => {
+            api.addSupplierItemDetails(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");
-                this.getSupplierCategory();
+                this.getSupplierItemDetails();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
@@ -353,7 +357,7 @@ export default {
     },
   },
   created() {
-    this.getSupplierCategory();
+    this.getSupplierItemDetails();
     this.getsupplierBrand()
   },
 };

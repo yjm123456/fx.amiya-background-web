@@ -37,20 +37,34 @@
               >{{ item.name }}</Option
             >
           </Select>
+          
           <Select
-            v-model="query.categoryId"
-            placeholder="请选择品类"
+            v-model="query.itemDetailsId"
+            placeholder="请选择品项"
             :disabled="query.brandId == -1 || query.brandId == ''"
             filterable
             style="width: 150px; margin-left: 10px"
           >
             <Option
-              v-for="(item, index) in supplierCategoryList"
+              v-for="(item, index) in supplierItemDetailsList"
               :value="item.id"
               :key="index"
               >{{ item.name }}</Option
             >
           </Select>
+          <Select
+              v-model="query.categoryId"
+              placeholder="请选择品类"
+              filterable
+              style="width: 150px; margin-left: 10px"
+            >
+              <Option
+                v-for="(item, index) in supplierCategoryListAll"
+                :value="item.id"
+                :key="index"
+                >{{ item.name }}</Option
+              >
+            </Select>
           <Select
             v-model="query.createBy"
             style="width: 150px; margin-left: 10px"
@@ -154,6 +168,23 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="品类" prop="categoryId">
+              <Select
+                v-model="form.categoryId"
+                placeholder="请选择品类"
+                filterable
+                @on-change="categoryIdClick"
+              >
+                <Option
+                  v-for="(item, index) in supplierCategoryList"
+                  :value="item.id"
+                  :key="index"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="品牌" prop="brandId">
               <Select
                 v-model="form.brandId"
@@ -171,16 +202,16 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="品类" prop="categoryId">
+            <FormItem label="品项" prop="itemDetailsId">
               <Select
-                v-model="form.categoryId"
-                placeholder="请选择品类"
+                v-model="form.itemDetailsId"
+                placeholder="请选择品项"
                 :disabled="form.brandId === ''"
                 filterable
-                @on-change="categoryIdChange(form.categoryId)"
+                @on-change="categoryIdChange(form.itemDetailsId)"
               >
                 <Option
-                  v-for="(item, index) in supplierCategoryList"
+                  v-for="(item, index) in supplierItemDetailsList"
                   :value="item.id"
                   :key="index"
                   >{{ item.name }}</Option
@@ -188,6 +219,7 @@
               </Select>
             </FormItem>
           </Col>
+          
           <Col span="8">
             <FormItem label="商品" prop="itemId">
               <Select
@@ -280,9 +312,18 @@
               ></Input>
             </FormItem>
           </Col>
+          <Spin fix v-if="flag == true">
+            <Icon
+              type="ios-loading"
+              size="18"
+              class="demo-spin-icon-load"
+            ></Icon>
+            <div>加载中...</div>
+          </Spin>
         </Row>
       </Form>
       <div slot="footer">
+        <Button type="primary" @click="autoFill" v-if="platformName == '视频号'">自动填写</Button>
         <Button @click="cancelSubmit('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
@@ -296,6 +337,7 @@ import * as supplierBrandApi from "@/api/supplierBrand";
 import * as orderApi from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as emApi from "@/api/employeeManage";
+import * as supplierItemDetailsApi from "@/api/supplierItemDetails";
 
 export default {
   data() {
@@ -309,6 +351,8 @@ export default {
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         valid: "true",
         brandId: -1,
+        categoryId: -1,
+        itemDetailsId:'',
         keyWord: "",
         pageNum: 1,
         pageSize: 10,
@@ -331,6 +375,13 @@ export default {
           {
             title: "品牌",
             key: "brandName",
+            align: "center",
+            minWidth: 140,
+            tooltip: true,
+          },
+          {
+            title: "品项",
+            key: "itemDetailsName",
             align: "center",
             minWidth: 140,
             tooltip: true,
@@ -510,20 +561,25 @@ export default {
                               totalPrice,
                               remark,
                               takeGoodsType,
+                              itemDetailsId,
+                              takeGoodsDate
                             } = res.data.LivingDailyTakeGoodsInfo;
                             this.form.brandId = brandId;
+                            this.form.categoryId = categoryId;
                             this.contentPlateChange(contentPlatFormId);
                             this.brandIdChange(brandId);
-                            this.categoryIdChange(categoryId);
+                            this.categoryIdChange(itemDetailsId);
                             this.isEdit = true;
                             this.form.contentPlatFormId = contentPlatFormId;
                             this.form.liveAnchorId = liveAnchorId;
-                            this.form.categoryId = categoryId;
+                            this.form.itemDetailsId = itemDetailsId;
                             this.form.itemId = String(itemId);
                             this.form.singlePrice = singlePrice;
                             this.form.takeGoodsQuantity = takeGoodsQuantity;
                             this.form.totalPrice = totalPrice;
                             this.form.takeGoodsType = takeGoodsType;
+                            this.form.takeGoodsDate = this.$moment(takeGoodsDate).format("YYYY-MM-DD");
+                            
                             this.form.remark = remark;
                             this.form.id = id;
                             this.controlModal = true;
@@ -581,11 +637,15 @@ export default {
 
       // 是否是编辑
       isEdit: false,
+      // 用于是视频号时显示自动填写按钮
+      platformName:'',
 
       form: {
         id: "",
         // 品牌
         brandId: "",
+        // 品项
+        itemDetailsId:"",
         // 品类
         categoryId: "",
         // 主播平台
@@ -619,6 +679,12 @@ export default {
           {
             required: true,
             message: "请选择品牌",
+          },
+        ],
+        itemDetailsId: [
+          {
+            required: true,
+            message: "请选择品项",
           },
         ],
         categoryId: [
@@ -676,6 +742,9 @@ export default {
       supplierBrandListAll: [{ id: -1, name: "全部品牌" }],
       // 品类
       supplierCategoryList: [],
+      supplierCategoryListAll: [{ id: -1, name: "全部品类" }],
+      // 品项
+      supplierItemDetailsList:[],
       //   商品
       goodItem: [],
       // 平台
@@ -700,9 +769,80 @@ export default {
         { type: "true", name: "有效" },
         { type: "false", name: "无效" },
       ],
+      goodsName:'',
+      flag:false,
     };
   },
   methods: {
+    // 为防止选择品牌和品项 没选择品类时  清空数据
+    categoryIdClick(){
+      this.form.brandId = ''
+      this.form.itemDetailsId = ''
+      this.form.itemId = ''
+      this.supplierItemDetailsList = []
+      this.goodItem = []
+    },
+    // 获取品类
+    getSupplierCategoryList(){
+      supplierCategoryApi.getSupplierCategoryList().then(res=>{
+        if(res.code === 0){
+          const {supplierCategoryList} = res.data
+          this.supplierCategoryList = supplierCategoryList
+          this.supplierCategoryListAll = [...this.supplierCategoryListAll,...supplierCategoryList]
+        }
+      })
+    },
+    // 自动补全
+    autoFill(){
+      const {liveAnchorId, takeGoodsDate,brandId,categoryId,itemId,takeGoodsType} = this.form
+      if(!liveAnchorId){
+        this.$Message.warning('请选择主播！')
+        return
+      }
+      if(!takeGoodsDate){
+        this.$Message.warning('请选择带货时间！')
+        return
+      }
+      if(!brandId){
+        this.$Message.warning('请选择品牌！')
+        return
+      }
+      if(!categoryId){
+        this.$Message.warning('请选择品类！')
+        return
+      }
+      if(!itemId){
+        this.$Message.warning('请选择商品！')
+        return
+      }
+      if(takeGoodsType == null){
+        this.$Message.warning('请选择带货类型！')
+        return
+      }
+      
+      // 根据id查询商品名称
+      if(this.goodItem){
+        this.goodItem.map(item=>{
+          if(item.id == itemId){
+            this.goodsName = item.name
+          }
+        })
+      }
+      const data ={
+        date: this.$moment(takeGoodsDate).format("YYYY-MM-DD"),
+        liveAnchorId:liveAnchorId,
+        goodsName:this.goodsName,
+        takeGoodsType:takeGoodsType
+      }
+      api.autoCompleteData(data).then(res=>{
+        if(res.code === 0){
+          const {quantity,totalPrice} = res.data.data
+          this.form.takeGoodsQuantity = quantity
+          this.form.totalPrice = totalPrice
+          this.form.singlePrice = totalPrice == 0 || quantity == 0 ? 0 :  totalPrice/quantity
+        }
+      })
+    },
     // 获取所有员工
     getEmployeeByPositionId() {
       const data = {
@@ -726,7 +866,7 @@ export default {
       if (!value) {
         return;
       }
-      this.query.categoryId = "";
+      this.query.itemDetailsId = "";
       this.getcategoryId(value);
     },
     // 获取品牌
@@ -746,7 +886,7 @@ export default {
       if (!value) {
         return;
       }
-      this.form.categoryId = "";
+      this.form.itemDetailsId = "";
       this.form.itemId = "";
       this.getcategoryId(value);
     },
@@ -756,10 +896,16 @@ export default {
       const data = {
         brandId: value,
       };
-      supplierCategoryApi.getSupplierCategoryListByBrandId(data).then((res) => {
+      // supplierCategoryApi.getSupplierCategoryListByBrandId(data).then((res) => {
+      //   if (res.code === 0) {
+      //     const { supplierCategoryList } = res.data;
+      //     this.supplierCategoryList = supplierCategoryList;
+      //   }
+      // });
+      supplierItemDetailsApi.getSupplierItemDetailsListByBrandId(data).then((res) => {
         if (res.code === 0) {
-          const { supplierCategoryList } = res.data;
-          this.supplierCategoryList = supplierCategoryList;
+          const { supplierItemDetailsList } = res.data;
+          this.supplierItemDetailsList = supplierItemDetailsList;
         }
       });
     },
@@ -774,7 +920,8 @@ export default {
     getItem(value) {
       const data = {
         brandId: this.form.brandId,
-        categoryId: value,
+        categoryId: this.form.categoryId,
+        itemDetailsId:value
       };
       api.getItemNameByBrandIdAndCategoryId(data).then((res) => {
         if (res.code === 0) {
@@ -795,8 +942,12 @@ export default {
       if (!value) {
         return;
       }
+      
       this.form.liveAnchorId = null;
       this.getLiveValidList(value);
+      // 主播平台选择是视频号时展示自动填写按钮
+      let platformName = this.contentPalteForms.find(item=>item.id == value).contentPlatformName
+      this.platformName = platformName
     },
     // 根据平台id去获取IP
     getLiveValidList(value) {
@@ -826,6 +977,7 @@ export default {
         categoryId,
         startDate,
         endDate,
+        itemDetailsId
       } = this.query;
       const data = {
         pageNum,
@@ -834,11 +986,12 @@ export default {
         createBy:createBy == -1 ? null : createBy,
         valid,
         brandId: brandId == -1 ? "" : brandId,
-        categoryId,
+        categoryId: categoryId == -1 ? "" : categoryId,
         startDate: startDate
           ? this.$moment(startDate).format("YYYY-MM-DD")
           : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        itemDetailsId
       };
       api.getLivingDailyTakeGoods(data).then((res) => {
         if (res.code === 0) {
@@ -860,6 +1013,7 @@ export default {
         categoryId,
         startDate,
         endDate,
+        itemDetailsId
       } = this.query;
       const data = {
         pageNum,
@@ -868,11 +1022,12 @@ export default {
         createBy:createBy == -1 ? null : createBy,
         valid,
         brandId: brandId == -1 ? "" : brandId,
-        categoryId,
+        categoryId: categoryId == -1 ? "" : categoryId,
         startDate: startDate
           ? this.$moment(startDate).format("YYYY-MM-DD")
           : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        itemDetailsId
       };
       api.getLivingDailyTakeGoods(data).then((res) => {
         if (res.code === 0) {
@@ -887,7 +1042,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const {id,brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark} = this.form
+            const {id,brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark,itemDetailsId} = this.form
             const data = {
               id,
               takeGoodsDate:this.$moment(takeGoodsDate).format("YYYY-MM-DD") ,
@@ -900,11 +1055,14 @@ export default {
               takeGoodsQuantity,
               totalPrice,
               takeGoodsType,
-              remark
+              remark,
+              itemDetailsId
             }
+            this.flag = true;
             // 修改
             api.updateLivingDailyTakeGoods(data).then((res) => {
               if (res.code === 0) {
+                this.flag = false;
                 this.isEdit = false;
                 this.cancelSubmit("form");
                 this.getHospitalInfo();
@@ -912,10 +1070,14 @@ export default {
                   content: "修改成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
+                }
             });
           } else {
-            const {brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark} = this.form
+            const {brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark,itemDetailsId} = this.form
             const data = {
               takeGoodsDate:this.$moment(takeGoodsDate).format("YYYY-MM-DD") ,
               brandId,
@@ -927,18 +1089,25 @@ export default {
               takeGoodsQuantity,
               totalPrice,
               takeGoodsType,
-              remark
+              remark,
+              itemDetailsId
             }
+            this.flag = true;
             // 添加
             api.addLivingDailyTakeGoods(data).then((res) => {
               if (res.code === 0) {
+                this.flag = false;
                 this.cancelSubmit("form");
                 this.getHospitalInfo();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
+                }
             });
           }
         }
@@ -950,6 +1119,8 @@ export default {
       this.isEdit = false;
       this.controlModal = false;
       this.$refs[name].resetFields();
+      this.supplierItemDetailsList=[]
+      this.goodItem=[]
     },
 
     // modal 显示状态发生变化时触发
@@ -957,6 +1128,8 @@ export default {
       if (!value) {
         this.isEdit = false;
         this.$refs["form"].resetFields();
+        this.supplierItemDetailsList=[]
+        this.goodItem=[]
       }
     },
   },
@@ -965,6 +1138,7 @@ export default {
     this.getSupplierBrand();
     this.getContentValidList();
     this.getEmployeeByPositionId();
+    this.getSupplierCategoryList();
   },
 };
 </script>

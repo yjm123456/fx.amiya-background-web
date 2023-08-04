@@ -301,6 +301,26 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="今日退款GMV"
+              prop="refundGMV"
+              key="今日退款GMV"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日退款GMV',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.refundGMV"
+                placeholder="请输入今日退款GMV"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -416,6 +436,12 @@ export default {
             align: "center",
           },
           {
+            title: "今日去卡GMV",
+            key: "refundGMV",
+            minWidth: 130,
+            align: "center",
+          },
+          {
             title: "操作",
             key: "",
             width: 100,
@@ -455,7 +481,8 @@ export default {
                               recordDate,
                               gmv,
                               eliminateCardGMV,
-                              refundCard
+                              refundCard,
+                              refundGMV
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
@@ -468,6 +495,7 @@ export default {
                             this.form.cargoSettlementCommission = cargoSettlementCommission;
                             this.form.gmv = gmv;
                             this.form.eliminateCardGMV = eliminateCardGMV;
+                            this.form.refundGMV = refundGMV;
                             this.form.refundCard = refundCard;
                             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId ? livingTrackingEmployeeId : null;
                             this.form.recordDate = this.$moment(
@@ -614,7 +642,9 @@ export default {
         // 今日GMV
         gmv:null,
         // 今日去卡GMV
-        eliminateCardGMV:null
+        eliminateCardGMV:null,
+        // 今日退款GMV
+        refundGMV:null
       },
 
       ruleValidate: {
@@ -828,7 +858,8 @@ export default {
               cargoSettlementCommission,
               gmv,
               eliminateCardGMV,
-              refundCard
+              refundCard,
+              refundGMV
             } = this.form;
             const data = {
               id,
@@ -849,7 +880,8 @@ export default {
                 : 0,
                 gmv,
               eliminateCardGMV,
-              refundCard
+              refundCard,
+              refundGMV
             };
             this.isflag = true
             api.livingUpdate(data).then((res) => {
@@ -879,7 +911,8 @@ export default {
               livingTrackingEmployeeId,
               gmv,
               eliminateCardGMV,
-              refundCard
+              refundCard,
+              refundGMV
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -897,7 +930,8 @@ export default {
               livingTrackingEmployeeId,
               gmv,
               eliminateCardGMV,
-              refundCard
+              refundCard,
+              refundGMV
             };
             this.isflag = true
             // 添加

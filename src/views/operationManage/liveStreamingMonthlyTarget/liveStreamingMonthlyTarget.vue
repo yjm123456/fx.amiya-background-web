@@ -338,6 +338,29 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="退款GMV"
+              prop="refundGMVTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '退款GMV(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="退款GMV"
+            >
+              <Input
+                v-model="form.refundGMVTarget"
+                placeholder="请输入退款GMV"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -565,6 +588,30 @@ export default {
             },
           },
           {
+            title: "退款GMV目标",
+            key: "refundGMVTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月累计退款GMV",
+            key: "cumulativeRefundGMV",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "退款GMV目标完成率",
+            key: "refundGMVTargetCompleteRate",
+            minWidth: 170,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.refundGMVTargetCompleteRate + "%"
+              );
+            },
+          },
+          {
             title: "创建日期",
             key: "createDate",
             minWidth: 170,
@@ -626,7 +673,9 @@ export default {
                               // GMV目标
                               gmvTarget,
                               // 去卡GMV目标
-                              eliminateCardGMVTarget
+                              eliminateCardGMVTarget,
+                              // 退款GMV目标
+                              refundGMVTarget
                            
                             } = res.data.liveAnchorMonthlyTargetLivingInfo;
                             this.contentPlateChange(contentPlatFormId);
@@ -643,6 +692,7 @@ export default {
                             this.form.livingRefundCardTarget = livingRefundCardTarget;
                             this.form.gmvTarget = gmvTarget;
                             this.form.eliminateCardGMVTarget = eliminateCardGMVTarget;
+                            this.form.refundGMVTarget = refundGMVTarget;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -779,7 +829,9 @@ export default {
         // GMV目标
         gmvTarget:null,
         // 去卡GMV目标
-        eliminateCardGMVTarget:null
+        eliminateCardGMVTarget:null,
+        // 退卡GMV
+        refundGMVTarget:null
       },
 
       ruleValidate: {
@@ -942,7 +994,8 @@ export default {
               consultationTarget2,
               livingRefundCardTarget,
               gmvTarget,
-              eliminateCardGMVTarget
+              eliminateCardGMVTarget,
+              refundGMVTarget
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -955,7 +1008,8 @@ export default {
               consultationTarget2,
               livingRefundCardTarget,
               gmvTarget,
-              eliminateCardGMVTarget
+              eliminateCardGMVTarget,
+              refundGMVTarget
             };
             this.isflag = true
             // 添加

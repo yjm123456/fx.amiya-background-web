@@ -54,3 +54,11 @@ export const getItemNameByBrandIdAndCategoryId = (params) => {
         params
     });
 };
+// 自动填写视频号带货订单数据
+export const autoCompleteData = (params) => {
+    return http({
+        url: "/amiyabg/WeChatVideoOrder/autoCompleteData",
+        method: "get",
+        params
+    });
+};

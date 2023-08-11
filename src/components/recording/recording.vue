@@ -323,6 +323,23 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="获客方式" prop="getCustomerType">
+              <Select
+                v-model="form.getCustomerType"
+                placeholder="请选择获客方式"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in recordingParams.customerTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           
         </Row>
         <div class="h3">客户信息</div>
@@ -572,9 +589,17 @@ export default {
         // 辅助客服
         auxiliaryCustomerService:null,
         // 归属地
-        belongingPlace:1
+        belongingPlace:1,
+        // 获客方式
+        getCustomerType:[]
       },
       ruleValidates: {
+        getCustomerType: [
+          {
+            required: true,
+            message: "请选择获客方式",
+          },
+        ],
         city: [
           {
             required: true,
@@ -813,7 +838,8 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
-              belongingPlace
+              belongingPlace,
+              getCustomerType
             } = this.form;
             const data = {
               orderType,
@@ -847,7 +873,8 @@ export default {
               wechatNumber ,
               city,
               isCustomer,
-              auxiliaryCustomerService
+              auxiliaryCustomerService,
+              getCustomerType
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -911,7 +938,8 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
-              belongingPlace
+              belongingPlace,
+              getCustomerType
             } = this.form;
             const data = {
               orderType,
@@ -945,7 +973,8 @@ export default {
               wechatNumber ,
               city,
               isSupportOrder:isCustomer == '否'  ? false : true,
-              supportEmpId:auxiliaryCustomerService ? auxiliaryCustomerService : 0
+              supportEmpId:auxiliaryCustomerService ? auxiliaryCustomerService : 0,
+              getCustomerType
             };
             if (phone) {
               // 归属地 1是国内 2是国外
@@ -1076,6 +1105,7 @@ export default {
         this.form.liveAnchorWeChatNo =  this.shoppingCartRegistrationInfo.liveAnchorWechatNo ? this.recordingParams.weChatList.find(item=>this.shoppingCartRegistrationInfo.liveAnchorWechatNo == item.weChatNo).id : ''
         this.form.addOrderPrice = this.shoppingCartRegistrationInfo.price
         this.form.customerName = this.shoppingCartRegistrationInfo.customerNickName
+        this.form.getCustomerType = this.shoppingCartRegistrationInfo.getCustomerType
       }
       return
      }else{

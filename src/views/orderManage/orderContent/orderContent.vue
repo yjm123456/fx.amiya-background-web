@@ -184,7 +184,7 @@
               <Input
                 v-model="query.minAddOrderPrice"
                 placeholder="请输入最小下单金额"
-                style="width: 160px;margin-left: 10px"
+                style="width: 150px;margin-left: 10px"
                 type="number"
                 namber
               />
@@ -196,6 +196,20 @@
                 type="number"
                 namber
               />
+              <Select
+                v-model="query.getCustomerType"
+                style="width: 160px;margin-left: 10px"
+                placeholder="请选择获客方式"
+                filterable
+                transfer
+              >
+                <Option
+                  v-for="item in recordingParams.customerTypeListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+            </Select>
               <Select
                 v-model="query.appointmentHospital"
                 style="width: 180px;margin-left: 10px"
@@ -852,7 +866,10 @@ export default {
         // 弹窗标题
         title:'录单编辑',
         // 主播微信号
-        weChatList:[]
+        weChatList:[],
+        // 获客方式
+        customerTypeList:[],
+        customerTypeListAll:[{id:-1,name:'全部获客方式'}]
 
       },
       // 编辑录单
@@ -1110,6 +1127,8 @@ export default {
         ],
       },
       query: {
+        // 获客方式
+        getCustomerType:-1,
         baseLiveAnchorId:-1,
         liveAnchorWechatId:-1,
         belongMonth:null,
@@ -1206,6 +1225,12 @@ export default {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 500,
+            tooltip:true
+          },
+          {
+            title: "获客方式",
+            key: "getCustomerTypeText",
+            minWidth: 150,
             tooltip:true
           },
           {
@@ -1664,6 +1689,16 @@ export default {
     };
   },
   methods: {
+    // 主获客方式列表
+    getshoppingCartGetCustomerTypeList(){
+      api.shoppingCartGetCustomerTypeList().then((res) => {
+        if (res.code === 0) {
+          const {typeList} = res.data
+          this.recordingParams.customerTypeList = typeList
+          this.recordingParams.customerTypeListAll = [...this.recordingParams.customerTypeListAll,...typeList]
+        }
+      });
+    },
     // 主播基础数据列表
     getLiveAnchorBaseInfoValids(){
       liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
@@ -1844,7 +1879,7 @@ export default {
         belongMonth,
         minAddOrderPrice,
         maxAddOrderPrice,
-        baseLiveAnchorId
+        baseLiveAnchorId,
       } = this.query;
       const data = {
         keyword,
@@ -2270,7 +2305,8 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         liveAnchorWechatId,
-        baseLiveAnchorId
+        baseLiveAnchorId,
+        getCustomerType
       } = this.query;
       const data = {
         keyword,
@@ -2294,6 +2330,7 @@ export default {
         maxAddOrderPrice,
         liveAnchorWechatId: liveAnchorWechatId == -1 ? null : liveAnchorWechatId,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
+        getCustomerType: getCustomerType == -1 ? null : getCustomerType,
 
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
@@ -2326,7 +2363,8 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         liveAnchorWechatId,
-        baseLiveAnchorId
+        baseLiveAnchorId,
+        getCustomerType
       } = this.query;
       const data = {
         keyword,
@@ -2350,6 +2388,7 @@ export default {
         belongMonth,
         liveAnchorWechatId: liveAnchorWechatId == -1 ? null : liveAnchorWechatId,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
+        getCustomerType: getCustomerType == -1 ? null : getCustomerType,
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -2384,7 +2423,8 @@ export default {
     this.getcontentPlateFormOrderTypeList()
     this.getHospitalList();
     this.getWeChatList();
-    this.getLiveAnchorBaseInfoValids()
+    this.getLiveAnchorBaseInfoValids();
+    this.getshoppingCartGetCustomerTypeList()
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")

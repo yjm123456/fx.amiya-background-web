@@ -97,15 +97,17 @@
               <span>{{ detailObj.city }} </span>
           </div>
           
+          <div class="mr_top items">
+            <span class="title_bold">新老客业绩：</span>
+            <span>{{ detailObj.isOldCustomer == true ? '老客业绩' : '新客业绩'  }} </span>
+          </div>
+          </div>
           <div class="fl_end">
-            <div class="mr_top items">
-              <span class="title_bold">新老客业绩：</span>
-              <span>{{ detailObj.isOldCustomer == true ? '老客业绩' : '新客业绩'  }} </span>
+            <div class="mr_top">
+              <span class="title_bold">获客方式：</span>
+              <span>{{ detailObj.getCustomerTypeText }} </span>
             </div>
-            <div style="margin-left:120px;display:flex">
-              <!-- <Button type="primary" @click="customerClick(detailObj)"
-                style="margin-right:10px">生成预约日程</Button
-              > -->
+            <div style="display:flex;align-items:flex-end">
               <Button type="primary" @click="customerClick(detailObj)"
                 style="margin-right:10px">顾客信息</Button
               >
@@ -113,7 +115,6 @@
                 >查看顾客照片</Button
               >
             </div>
-          </div>
           </div>
         </div>
         
@@ -315,15 +316,22 @@
               <span>{{ detailObj.consultationTypeText }}</span>
             </div>
           </div>
+           <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">业绩类型：</span>
+            <span>{{ detailObj.dealPerformanceTypeText }}</span>
+            </div>
+            <!-- <div class="mr_top items">
+              <span class="title_bold">获客方式：</span>
+              <span>{{ detailObj.getCustomerTypeText }}</span>
+            </div> -->
+          </div>
          
           <div class="mr_top">
             <span class="title_bold">三方单号：</span>
             <span>{{ detailObj.otherContentPlatFormOrderId }}</span>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">业绩类型：</span>
-            <span>{{ detailObj.dealPerformanceTypeText }}</span>
-          </div>
+          
           <div class="mr_top">
             <span class="title_bold">咨询内容：</span>
             <span>{{ detailObj.consultingContent }} </span>

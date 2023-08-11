@@ -287,6 +287,23 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="获客方式" prop="getCustomerType">
+              <Select
+                v-model="form.getCustomerType"
+                placeholder="请选择获客方式"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in recordingParams.customerTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           
         </Row>
         <div class="h3">客户信息</div>
@@ -534,9 +551,17 @@ export default {
         // 辅助客服
         auxiliaryCustomerService:null,
         // 归属地
-        belongingPlace:null
+        belongingPlace:null,
+        // 获客方式
+        getCustomerType:null
       },
       ruleValidates: {
+        getCustomerType: [
+          {
+            required: true,
+            message: "请选择获客方式",
+          },
+        ],
         city: [
           {
             required: true,
@@ -775,7 +800,8 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
-              belongingPlace
+              belongingPlace,
+              getCustomerType
             } = this.form;
             const data = {
               orderType,
@@ -810,6 +836,7 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
+              getCustomerType
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -936,7 +963,8 @@ export default {
               wechatNumber,
               city,
               isCustomer,
-              auxiliaryCustomerService
+              auxiliaryCustomerService,
+              getCustomerType
             } = this.form;
             const data = {
               orderType,
@@ -970,7 +998,8 @@ export default {
               wechatNumber ,
               city,
               isCustomer,
-              auxiliaryCustomerService
+              auxiliaryCustomerService,
+              getCustomerType
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1066,7 +1095,8 @@ export default {
             : [];
         this.form.consultationType = info.consultationType;
         this.form.isCustomer = info.isSupportOrder == false ? '否' :'是'
-        this.form.auxiliaryCustomerService = info.supportEmpId
+        this.form.auxiliaryCustomerService = info.supportEmpId 
+        this.form.getCustomerType = info.getCustomerType 
 }
       const currentRole = JSON.parse(sessionStorage.getItem("permissions"));
       const flag = currentRole.some((ele) => {

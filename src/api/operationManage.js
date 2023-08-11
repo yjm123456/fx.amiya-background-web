@@ -414,8 +414,16 @@ export const byIdLiveAnchorMonthlyTargetAfterLiving = (id) => {
 };
 // 删除直播后月度运营目标情况  delete
 export const deleteLiveAnchorMonthlyTargetAfterLiving = (id) => {
+        return http({
+            url: `/amiyabg/LiveAnchorMonthlyTargetAfterLiving/${id}`,
+            method: "DELETE"
+        })
+    }
+    // 自动填写带货数据
+export const autoCompleteGMVData = (params) => {
     return http({
-        url: `/amiyabg/LiveAnchorMonthlyTargetAfterLiving/${id}`,
-        method: "DELETE"
-    })
-}
+        url: "/amiyabg/LivingDailyTakeGoods/autoCompleteGMVData",
+        method: "get",
+        params
+    });
+};

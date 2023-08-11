@@ -1846,7 +1846,7 @@ export default {
           this.confirmForm.consumptionType = 2
           return
         }else{
-          this.confirmForm.consumptionType = ''
+          this.confirmForm.consumptionType = null
         }
       // }else{
       //   this.confirmForm.consumptionType = 3
@@ -1989,7 +1989,7 @@ export default {
             commissionRatio: 0,
             invitationDocuments,
             dealPerformanceType,
-            consumptionType:consumptionType ? consumptionType : null,
+            consumptionType:consumptionType<0 ? null : consumptionType,
             addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList
           };
           if(isFinish == true){

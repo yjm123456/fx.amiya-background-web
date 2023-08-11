@@ -329,6 +329,7 @@
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
+        <Button type="primary" @click="autoFill">自动填写</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
@@ -694,6 +695,30 @@ export default {
     };
   },
   methods: {
+    // 自动填写
+    autoFill(){
+      const {recordDate,liveanchorMonthlyTargetId} = this.form
+      if(!liveanchorMonthlyTargetId){
+        this.$Message.warning('请选择月目标！')
+        return
+      }
+      if(!recordDate){
+        this.$Message.warning('请选择填报日期！')
+        return
+      }
+      const data ={
+        recordDate:this.$moment(new Date(recordDate)).format("YYYY-MM-DD"),
+        monthTargetId:liveanchorMonthlyTargetId
+      }
+      api.autoCompleteGMVData(data).then(res=>{
+        if(res.code === 0){
+          const {todayGMV,eliminateCardGMV,refundGMV} = res.data.data
+          this.form.gmv = todayGMV
+          this.form.eliminateCardGMV = eliminateCardGMV
+          this.form.refundGMV = refundGMV
+        }
+      })
+    },
     yearChange() {
       this.getLiveAnchorMonthlyTarget();
     },

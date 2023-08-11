@@ -151,6 +151,7 @@
                 v-model="query.belongCompanyId"
                 style="width: 170px;margin-left: .625rem"
                 placeholder="请选择开票公司"
+                filterable
               >
                 <Option
                   v-for="item in companyNameAllList"
@@ -197,6 +198,7 @@
               style="width: 150px; "
               placeholder="请选择绑定客服"
               :disabled="positionId == 2 || positionId == 4"
+              filterable
             >
               <Option
                 v-for="item in transactionParams.employee"
@@ -1168,6 +1170,7 @@ export default {
           let dealNum3 = []
           let dealNum4 = []
           let newCustomer = 0;
+          let newCustomerList = []
           let totalPerformance = 0;
           let cooperation =[]
           let independent = []
@@ -1183,6 +1186,10 @@ export default {
             // if (item.isOldCustomer == "新客业绩") {
             //   newCustomer += Number(item.price);
             // }
+            // 新客业绩
+            if(item.isOldCustomer == '新客业绩'){
+              newCustomer+=Number(item.price)
+            }
             if(item.consultationType == '协作完成'){
               cooperation.push(item)
             }else if(item.consultationType == '独立跟进'){
@@ -1235,8 +1242,8 @@ export default {
           this.deal3 = Math.floor(deal3 * 100) / 100;
           this.deal4 = Math.floor(deal4 * 100) / 100;
           this.deal5 = Math.floor(deal5 * 100) / 100;
-          this.newCustomer = Math.floor((deal1+deal2) * 100) / 100;
-          // this.totalPerformance = Math.floor((deal1+deal2+deal3) * 100) / 100;
+          // this.newCustomer = Math.floor((deal1+deal2) * 100) / 100;
+          this.newCustomer = Math.floor((newCustomer) * 100) / 100;
           this.paymentCollection = Math.floor(paymentCollection * 100) / 100;
           this.totalPerformance = Math.floor(totalPerformance * 100) / 100;
 

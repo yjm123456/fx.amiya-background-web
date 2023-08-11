@@ -301,6 +301,16 @@
               ></Input>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="订单量" prop="orderNum" key="orderNum">
+              <Input
+                v-model="form.orderNum"
+                placeholder="请输入订单量"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
           
           <Col span="8">
             <FormItem label="备注" prop="remark" key="remark">
@@ -466,6 +476,13 @@ export default {
             minWidth: 140,
             tooltip: true,
           },
+          {
+            title: "订单量",
+            key: "orderNum",
+            align: "center",
+            minWidth: 140,
+            tooltip: true,
+          },
 
           {
             title: "备注",
@@ -562,7 +579,8 @@ export default {
                               remark,
                               takeGoodsType,
                               itemDetailsId,
-                              takeGoodsDate
+                              takeGoodsDate,
+                              orderNum
                             } = res.data.LivingDailyTakeGoodsInfo;
                             this.form.brandId = brandId;
                             this.form.categoryId = categoryId;
@@ -577,6 +595,7 @@ export default {
                             this.form.singlePrice = singlePrice;
                             this.form.takeGoodsQuantity = takeGoodsQuantity;
                             this.form.totalPrice = totalPrice;
+                            this.form.orderNum = orderNum;
                             this.form.takeGoodsType = takeGoodsType;
                             this.form.takeGoodsDate = this.$moment(takeGoodsDate).format("YYYY-MM-DD");
                             
@@ -665,10 +684,18 @@ export default {
         // 备注
         remark: "",
         // 带货时间
-        takeGoodsDate:this.$moment().subtract(1, "days").format("YYYY-MM-DD")
+        takeGoodsDate:this.$moment().subtract(1, "days").format("YYYY-MM-DD"),
+        // 订单量
+        orderNum:null
       },
 
       ruleValidate: {
+        orderNum: [
+          {
+            required: true,
+            message: "请输入订单量",
+          },
+        ],
         takeGoodsDate: [
           {
             required: true,
@@ -1042,7 +1069,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const {id,brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark,itemDetailsId} = this.form
+            const {id,brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark,itemDetailsId,orderNum} = this.form
             const data = {
               id,
               takeGoodsDate:this.$moment(takeGoodsDate).format("YYYY-MM-DD") ,
@@ -1056,7 +1083,8 @@ export default {
               totalPrice,
               takeGoodsType,
               remark,
-              itemDetailsId
+              itemDetailsId,
+              orderNum
             }
             this.flag = true;
             // 修改
@@ -1077,7 +1105,7 @@ export default {
                 }
             });
           } else {
-            const {brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark,itemDetailsId} = this.form
+            const {brandId,categoryId,contentPlatFormId,liveAnchorId,itemId,singlePrice,takeGoodsQuantity,totalPrice,takeGoodsType,takeGoodsDate,remark,itemDetailsId,orderNum} = this.form
             const data = {
               takeGoodsDate:this.$moment(takeGoodsDate).format("YYYY-MM-DD") ,
               brandId,
@@ -1090,7 +1118,8 @@ export default {
               totalPrice,
               takeGoodsType,
               remark,
-              itemDetailsId
+              itemDetailsId,
+              orderNum
             }
             this.flag = true;
             // 添加

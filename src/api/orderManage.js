@@ -1557,3 +1557,10 @@ export const wechatVideoOrderLiveAnchorId = () => {
         method: "get",
     });
 };
+// 获客方式列表
+export const shoppingCartGetCustomerTypeList = () => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/shoppingCartGetCustomerTypeList`,
+        method: "get",
+    });
+};

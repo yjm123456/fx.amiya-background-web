@@ -253,6 +253,19 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+              <Select
+                v-model="query.createBy"
+                placeholder="请选择创建人"
+                filterable
+                style="width: 150px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in employeeCreat"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </div>
           </div>
           <div>
@@ -562,6 +575,28 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8" v-if="title == '修改'">
+            <FormItem label="更新人" prop="createBy" :rules="[
+                    {
+                      required:true,
+                      message: '请输入更新人',
+                    },
+                  ]">
+              <Select
+                v-model="form.createBy"
+                placeholder="请选择更新人"
+                filterable
+                :disabled="isDirector == 'false'"
+              >
+                <Option
+                  v-for="item in employeeLists"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem label="重要程度" prop="emergencyLevel">
               <Select
@@ -789,6 +824,7 @@ import * as apis from "@/api/baseDataMaintenance";
 import * as orderApi from "@/api/orderManage";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
 import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
+import * as employeeManageApi from "@/api/employeeManage";
 import assign from "./components/assign.vue";
 import batchAssignment from "./components/batchAssignment.vue";
 import importFile from "./components/importModel.vue";
@@ -814,6 +850,8 @@ export default {
       phoneCopy: "00000000000",
       // 查询
       query: {
+        // 创建人
+        createBy:-1,
         // 客户来源
         source:-1,
         // 主播
@@ -883,7 +921,7 @@ export default {
             align: "center",
           },
           {
-            title: "创建人",
+            title: "更新人",
             key: "createBy",
             minWidth: 120,
             align: "center",
@@ -1481,7 +1519,8 @@ export default {
                               subPhone,
                               source,
                               productType,
-                              getCustomerType
+                              getCustomerType,
+                              createByEmpId
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1507,6 +1546,7 @@ export default {
                             }
                             this.isEdit = true;
                             this.form.recordDate = recordDate;
+                            this.form.createBy = createByEmpId;
                             this.form.contentPlatFormId = contentPlatFormId;
                             this.form.contentPlateFormId = contentPlatFormId;
                             this.form.liveAnchorId = liveAnchorId;
@@ -1715,7 +1755,9 @@ export default {
         // 产品类型
         productType:null,
         // 获客方式
-        getCustomerType:null
+        getCustomerType:null,
+        // 创建人
+        createBy:Number(sessionStorage.getItem('employeeId'))
       },
 
       ruleValidate: {
@@ -1989,6 +2031,7 @@ export default {
       //指派
       employeeList: [],
       employee: [{ name: "全部指派人员", id: 0 },{ name: "未指派", id: -1 }],
+      employeeCreat:[{ name: "全部更新人", id: -1 }],
       // 微信号
       weChatList: [],
       // 紧急程度
@@ -2004,11 +2047,26 @@ export default {
       // 面诊方式
       typeList:[],
       // 获客方式
-      getCustomerTypeList:[]
+      getCustomerTypeList:[],
+      // 所有员工
+      employeeLists:[],
+      // 是否是管理员
+      isDirector:sessionStorage.getItem('isDirector')
       
     };
   },
   methods: {
+    // 获取所有员工
+    getEmployeeByPositionId(){
+      const data = {
+        positionId:null
+      }
+      employeeManageApi.getEmployeeByPositionId(data).then(res=>{
+        if(res.code === 0){
+          this.employeeLists = res.data.employee
+        }
+      })
+    },
     // 获客方式列表
     getShoppingCartGetCustomerTypeList() {
       api.shoppingCartGetCustomerTypeList().then((res) => {
@@ -2223,6 +2281,7 @@ export default {
         if (res.code === 0) {
           const { employee } = res.data;
           this.employee = [...this.employee, ...employee];
+          this.employeeCreat = [...this.employeeCreat, ...employee];
           this.employeeList = employee;
           this.assignParams.employeeList = employee;
         }
@@ -2286,7 +2345,8 @@ export default {
         endBadReviewTime,
         emergencyLevel,
         baseLiveAnchorId,
-        source
+        source,
+        createBy
       } = this.query;
       const data = {
         pageNum,
@@ -2335,6 +2395,7 @@ export default {
         emergencyLevel: emergencyLevel == -1 ? null : emergencyLevel,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
         source: source == -1 ? null : source,
+        createBy: createBy == -1 ? null : createBy,
       };
       if (!startDate || !endDate) {
         this.$Message.warning("请选择日期");
@@ -2397,7 +2458,8 @@ export default {
         endBadReviewTime,
         emergencyLevel,
         baseLiveAnchorId,
-        source
+        source,
+        createBy
       } = this.query;
       const data = {
         pageNum,
@@ -2446,6 +2508,7 @@ export default {
         emergencyLevel: emergencyLevel == -1 ? null : emergencyLevel,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
         source: source == -1 ? null : source,
+        createBy: createBy == -1 ? null : createBy,
       };
       if (!startDate || !endDate) {
         this.$Message.warning("请选择日期");
@@ -2505,7 +2568,8 @@ export default {
               source,
               belongingPlace,
               productType,
-              getCustomerType
+              getCustomerType,
+              createBy
               
             } = this.form;
             const data = {
@@ -2548,7 +2612,8 @@ export default {
               subPhone,
               source,
               productType:source == 6 ? productType : 0,
-              getCustomerType
+              getCustomerType,
+              createBy
             };
             // if (this.form.phone) {
             //   if (this.form.phone == "00000000000") {
@@ -2877,7 +2942,8 @@ export default {
     this.getconsultationTypeList();
     this.getWeChatList();
     this.getshoppingCartTakeGoodsProductTypeList();
-    this.getShoppingCartGetCustomerTypeList()
+    this.getShoppingCartGetCustomerTypeList();
+    this.getEmployeeByPositionId()
   },
 };
 </script>

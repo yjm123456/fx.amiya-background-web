@@ -131,7 +131,8 @@
               <span>{{ shoppingCartRegistrationInfo.emergencyLevelText }} </span>
             </div>
             <div class="mr_top items">
-              
+              <span class="title_bold">获客方式：</span>
+              <span>{{ shoppingCartRegistrationInfo.getCustomerTypeText }} </span>
             </div>
           </div>
           <div class="mr_top">

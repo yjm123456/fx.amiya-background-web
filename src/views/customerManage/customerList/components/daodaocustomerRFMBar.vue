@@ -31,6 +31,13 @@
         </div>
       </Card>
     </div>
+    <!--客户信息  -->
+    <customerMessage :customerMessageModel.sync="customerMessageModel" :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
+     <!-- 追踪回访 -->
+    <trackReturnVisit
+      @resetControlTrackReturnVisitDisplay="resetControlTrackReturnVisitDisplay"
+      :params="trackReturnVisitComParams"
+    />
     
   </div>
 </template>
@@ -41,9 +48,16 @@ import { on, off } from "@/utils/util";
 import tdTheme from "./theme.json";
 import * as echarts from "echarts";
 import * as orderApi from "@/api/orderManage";
+import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import customerMessage from "@/components/customerMessage/customerMessage"
+import * as customerManageApi from "@/api/customerManage";
 
 echarts.registerTheme("tdTheme", tdTheme);
 export default {
+  components:{
+    trackReturnVisit,
+    customerMessage
+  },
   props: {
     hospitalListData: Array,
     active:String,
@@ -51,6 +65,21 @@ export default {
   },
   data() {
     return {
+      customerMessageModel:false,
+      // 客户信息组件参数
+      customerInfoComParams2: {
+        userId: "",
+        encryptPhone: "",
+        tabGlag:false
+      },
+      customerMessageObj:{},
+      // 追踪回访组件参数
+      trackReturnVisitComParams: {
+        device: "",
+        encryptPhone: "",
+        controlTrackReturnVisitDisplay: false,
+      },
+
       dataAll:[],
       numAll:0,
       myChart: "",
@@ -163,9 +192,72 @@ export default {
           {
             title: "RFM类型",
             key: "rfmTypeText",
-            minWidth:140,
+            minWidth:180,
             tooltip:true,
             align:'center'
+          },
+          {
+            title: "操作",
+            width: 140,
+            fixed: "right",
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { encryptPhone,userId } = params.row;
+                        // 
+                        let data = {
+                          encryptPhone:encryptPhone
+                        }
+                        
+                        customerManageApi.getBaseAndBindCustomerInfoByEncryptPhone(data).then((res) => {
+                          if(res.code === 0){
+                            this.customerInfoComParams2.userId = userId;
+                            this.customerInfoComParams2.encryptPhone = encryptPhone;
+                            this.customerInfoComParams2.tabGlag = true;
+                            this.customerMessageModel = true
+                            this.customerMessageObj = res.data.customer
+                          }
+                        })
+                      },
+                    },
+                  },
+                  "详情"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { encryptPhone } = params.row;
+                        this.trackReturnVisitComParams.encryptPhone = encryptPhone;
+                        this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
+                      },
+                    },
+                  },
+                  "回访"
+                ),
+                
+              ]);
+            },
           },
           
         ],
@@ -187,6 +279,9 @@ export default {
     },
   },
   methods: {
+     resetControlTrackReturnVisitDisplay() {
+      this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = false;
+    },
     myEcharts(value) {
       
       let data = [];

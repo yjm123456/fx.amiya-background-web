@@ -75,6 +75,7 @@
               <Col span="12">
                 <FormItem label="设置下次回访">
                   <i-switch v-model="controlNextReturnVisit" />
+                  <span class="text" >【注】：若不需要下次回访，可关闭此按钮</span>
                 </FormItem>
               </Col>
             </Row>
@@ -230,7 +231,7 @@ export default {
       controlModal: false,
 
       // 下次回访情况
-      controlNextReturnVisit: false,
+      controlNextReturnVisit: true,
 
       form: {
         // 加密手机号
@@ -537,7 +538,7 @@ export default {
         // 下次回访主题
         trackThemeId: "",
       },
-      this.controlNextReturnVisit = false;
+      this.controlNextReturnVisit = true;
       this.$store.commit("callCenter/resetCallSuccessMsg")
       this.$emit("resetControlTrackReturnVisitDisplay")
     },
@@ -734,5 +735,9 @@ export default {
       min-height: 150px;
     }
   }
+  
 }
+.text{
+    color:red;margin-left:10px
+  }
 </style>

@@ -69,6 +69,14 @@
                 disabled
               />
             </FormItem>
+            <FormItem label="对账医院" prop="hospitalName">
+              <Input
+                v-model="reconciliationParams.hospitalName"
+                placeholder="请输入服务费合计"
+               
+                disabled
+              />
+            </FormItem>
           </div>
           <div class="form_left">
             <div class="form_title">成交对账单已对账数据</div>
@@ -748,7 +756,8 @@ export default {
             reconciliationDocumentsId: this.reconciliationParams.id,
             informationPrice:currentInformationServiceFee,
             systemUpdatePrice:currentSystemUsagefee,
-            customerServiceSettlePrice
+            customerServiceSettlePrice,
+            hospitalId:this.reconciliationParams.hospitalId
           };
           // 已对账金额+当前对账金额不能大于成交金额
           // 取绝对值判断 防止为负数时无法对账

@@ -1613,6 +1613,18 @@ const operationManage = [{
         component: () =>
             import ("@/views/operationManage/livingDailyTakeGoods/livingDailyTakeGoods.vue"),
     },
+    {
+        path: "/liveReplay",
+        name: "liveReplay",
+        meta: {
+            title: "直播复盘表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/liveReplay/liveReplay.vue"),
+    },
 ];
 /**
  * 财务对账单

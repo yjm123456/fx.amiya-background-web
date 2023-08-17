@@ -69,6 +69,13 @@
                 disabled
               />
             </FormItem>
+            <FormItem label="对账医院" prop="hospitalName">
+              <Input
+                v-model="reconciliationParams.hospitalName"
+                placeholder="请输入服务费合计"
+                disabled
+              />
+            </FormItem>
           </div>
           <div class="form_left">
             <div class="form_title">成交单已对账数据</div>
@@ -487,17 +494,18 @@ export default {
                         let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
                         this.form.currentSystemUsagefee = price2.toFixed(2)
                         // 服务费合计
-                        this.form.settlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
+                        this.form.settlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
 
                         // 成交服务费合计
                         // 为负数情况
                         if(Number(checkPriceRight) <0){
-                          let num = ((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000).toFixed(2)
+                          let num = ((Math.abs(Number(checkPriceRight))*100 *(Number(proportionOfInformationServiceFee)+Number(systemUsageFeeProportion)))/10000).toFixed(2)
                           this.form.totalServiceFee = (-num).toFixed(2)
+
                           // console.log(this.form.totalServiceFee,'为负数情况')
                           return
                         }else{
-                          this.form.totalServiceFee = Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000).toFixed(2))
+                          this.form.totalServiceFee = Number(((Number(checkPriceRight)*100)*(Number(proportionOfInformationServiceFee)+Number(systemUsageFeeProportion))/10000).toFixed(2))
                           // console.log(this.form.totalServiceFee,'为正数情况')
                           return
                         }
@@ -528,7 +536,7 @@ export default {
       let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
       this.form.currentSystemUsagefee = price2.toFixed(2)
       // 服务费合计
-      this.form.settlePrice = (this.form.currentInformationServiceFee + this.form.currentSystemUsagefee).toFixed(2)
+      this.form.settlePrice = (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)).toFixed(2)
 
    },
     // 取消
@@ -570,6 +578,7 @@ export default {
             checkRemark,
             checkPicture,
             reconciliationDocumentsId: this.reconciliationParams.id,
+            hospitalId:this.reconciliationParams.hospitalId
             // informationPrice:currentInformationServiceFee,
             // systemUpdatePrice:currentSystemUsagefee,
             

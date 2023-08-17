@@ -3,90 +3,112 @@
     <Card :dis-hover="true">
       <div class="header_wrap">
         <div class="left">
-          <Input
-            v-model="query.keyWord"
-            placeholder="请输入关键字"
-            style="width: 180px; "
-            @keyup.enter.native="getHospitalInfo()"
-          />
-          <DatePicker
-            type="date"
-            placeholder="开始日期"
-            style="width: 150px; margin-left: .625rem"
-            :value="query.startDate"
-            v-model="query.startDate"
-          ></DatePicker>
-          <DatePicker
-            type="date"
-            placeholder="结束时间"
-            style="width: 150px;margin-left: .625rem;"
-            :value="query.endDate"
-            v-model="query.endDate"
-          ></DatePicker>
-          <Select
-            v-model="query.brandId"
-            placeholder="请选择品牌"
-            @on-change="queryBrandIdChange(query.brandId)"
-            filterable
-            style="width: 150px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in supplierBrandListAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          
-          <Select
-            v-model="query.itemDetailsId"
-            placeholder="请选择品项"
-            :disabled="query.brandId == -1 || query.brandId == ''"
-            filterable
-            style="width: 150px; margin-left: 10px"
-          >
-            <Option
-              v-for="(item, index) in supplierItemDetailsList"
-              :value="item.id"
-              :key="index"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-              v-model="query.categoryId"
-              placeholder="请选择品类"
-              filterable
-              style="width: 150px; margin-left: 10px"
-            >
-              <Option
-                v-for="(item, index) in supplierCategoryListAll"
-                :value="item.id"
-                :key="index"
-                >{{ item.name }}</Option
+          <div class="top">
+            <div class="left_top">
+              <Input
+                v-model="query.keyWord"
+                placeholder="请输入关键字"
+                style="width: 200px; "
+                @keyup.enter.native="getHospitalInfo()"
+              />
+              <DatePicker
+                type="date"
+                placeholder="开始日期"
+                style="width: 180px; margin-left: .625rem"
+                :value="query.startDate"
+                v-model="query.startDate"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="结束时间"
+                style="width: 180px;margin-left: .625rem;"
+                :value="query.endDate"
+                v-model="query.endDate"
+              ></DatePicker>
+              <Select
+                v-model="query.createBy"
+                style="width: 180px; margin-left: 10px"
               >
-            </Select>
-          <Select
-            v-model="query.createBy"
-            style="width: 150px; margin-left: 10px"
-          >
-            <Option v-for="item in employee" :value="item.id" :key="item.id">{{
-              item.name
-            }}</Option>
-          </Select>
-          <Select v-model="query.valid" style="width: 150px; margin-left: 10px">
-            <Option
-              v-for="item in validList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
+                <Option v-for="item in employee" :value="item.id" :key="item.id">{{
+                  item.name
+                }}</Option>
+              </Select>
+              
+            </div>
+            
+            <div class="left_bottom">
+              <Select
+                v-model="query.brandId"
+                placeholder="请选择品牌"
+                @on-change="queryBrandIdChange(query.brandId)"
+                filterable
+                style="width: 200px;"
+              >
+                <Option
+                  v-for="item in supplierBrandListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.itemDetailsId"
+                placeholder="请选择品项"
+                :disabled="query.brandId == -1 || query.brandId == ''"
+                filterable
+                style="width: 180px; margin-left: 10px"
+              >
+                <Option
+                  v-for="(item, index) in supplierItemDetailsList"
+                  :value="item.id"
+                  :key="index"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                  v-model="query.categoryId"
+                  placeholder="请选择品类"
+                  filterable
+                  style="width: 180px; margin-left: 10px"
+                >
+                  <Option
+                    v-for="(item, index) in supplierCategoryListAll"
+                    :value="item.id"
+                    :key="index"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+              
+              <Select v-model="query.valid" style="width: 180px; margin-left: 10px">
+                <Option
+                  v-for="item in validList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </div>
+          </div>
+          <div class="right_con">
+            <Button
+              type="primary"
+              style="margin-left: 10px"
+              @click="getHospitalInfo()"
+              >查询</Button
             >
-          </Select>
+            <Button
+            type="primary"
+            @click="LivingDailyTakeGoodsExportClick"
+            style="margin-left: 10px"
+            >导出模板</Button
+          >
           <Button
             type="primary"
             style="margin-left: 10px"
-            @click="getHospitalInfo()"
-            >查询</Button
+            @click="importControlModal = true"
+            >导入</Button
           >
+          </div>
         </div>
         <div class="right">
           <Button
@@ -173,7 +195,6 @@
                 v-model="form.categoryId"
                 placeholder="请选择品类"
                 filterable
-                @on-change="categoryIdClick"
               >
                 <Option
                   v-for="(item, index) in supplierCategoryList"
@@ -338,6 +359,11 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 导入 -->
+    <importFile
+      :importControlModal.sync="importControlModal"
+      @handleRefreshCustomerTrackList="getHospitalInfo()"
+    ></importFile>
   </div>
 </template>
 <script>
@@ -348,8 +374,13 @@ import * as orderApi from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as emApi from "@/api/employeeManage";
 import * as supplierItemDetailsApi from "@/api/supplierItemDetails";
+import { download } from "@/utils/util";
+import importFile from "./components/importModel.vue";
 
 export default {
+  components:{
+    importFile
+  },
   data() {
     return {
       // 查询
@@ -650,6 +681,8 @@ export default {
 
       // 控制 modal
       controlModal: false,
+      // 导入model
+      importControlModal:false,
 
       // modal title
       title: "添加",
@@ -801,6 +834,12 @@ export default {
     };
   },
   methods: {
+    LivingDailyTakeGoodsExportClick() {
+      api.LivingDailyTakeGoodsExport().then((res) => {
+        let name = "直播带货数据模板";
+        download(res, name);
+      });
+    },
     // 为防止选择品牌和品项 没选择品类时  清空数据
     categoryIdClick(){
       this.form.brandId = ''
@@ -947,7 +986,6 @@ export default {
     getItem(value) {
       const data = {
         brandId: this.form.brandId,
-        categoryId: this.form.categoryId,
         itemDetailsId:value
       };
       api.getItemNameByBrandIdAndCategoryId(data).then((res) => {
@@ -1183,5 +1221,12 @@ export default {
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.left{
+  display: flex;
+  align-items: center;
+}
+.left_bottom{
+  margin-top: 10px;
 }
 </style>

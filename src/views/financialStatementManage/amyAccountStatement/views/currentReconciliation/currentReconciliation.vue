@@ -197,7 +197,9 @@ export default {
         returnBackPrice:"",
         returnBackPricePercent:null,
         systemUpdatePricePercent:null,
-        tabFlag:false
+        tabFlag:false,
+        hospitalId:null,
+        hospitalName:''
       },
       // 查询
       query: {
@@ -361,7 +363,9 @@ export default {
                           returnBackTotalPrice,
                           returnBackPrice,
                           returnBackPricePercent,
-                          systemUpdatePricePercent
+                          systemUpdatePricePercent,
+                          hospitalId,
+                          hospitalName
                         } = params.row;
                         this.reconciliationParams.idList = [id];
                         this.reconciliationParams.reconciliationState = 3;
@@ -372,6 +376,8 @@ export default {
                         this.reconciliationParams.returnBackPrice = returnBackPrice;
                         this.reconciliationParams.returnBackPricePercent = returnBackPricePercent;
                         this.reconciliationParams.systemUpdatePricePercent = systemUpdatePricePercent;
+                        this.reconciliationParams.hospitalId = hospitalId;
+                        this.reconciliationParams.hospitalName = hospitalName;
                         this.reconciliationParams.id = id;
                         this.reconciliationCompletionListModel = true;
                         this.reconciliationParams.tabFlag =  true

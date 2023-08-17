@@ -62,3 +62,20 @@ export const autoCompleteData = (params) => {
         params
     });
 };
+// 直播带货数据记录导出
+export const LivingDailyTakeGoodsExport = (params) => {
+    return http({
+        url: "/amiyabg/LivingDailyTakeGoods/template",
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};
+//导入机构网咨运营数据分析
+export const importTakeGoodsData = (data) => {
+    return http({
+        url: `/amiyabg/LivingDailyTakeGoods/importTakeGoodsData`,
+        method: "post",
+        data,
+    });
+};

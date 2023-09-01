@@ -23,7 +23,7 @@
             <Button style="margin-left:10px" type="primary" @click="controlAlreadyReceiveGiftModal = true" ghost>已领取礼品</Button>
           </div>
           <Divider/>
-          <div class="top">
+          <!-- <div class="top"> -->
             <Row :gutter="16">
               <Col span="12">
                 <FormItem label="回访工具" prop="trackToolId">
@@ -68,9 +68,9 @@
                 </FormItem>
               </Col>
             </Row>
-          </div>
+          <!-- </div> -->
           <Divider/>
-          <div class="bottom">
+          <!-- <div class="bottom"> -->
             <Row :gutter="30">
               <Col span="12">
                 <FormItem label="设置下次回访">
@@ -126,7 +126,7 @@
                 <Button type="primary" @click="addTemplateChange"  v-if="controlNextReturnVisit">添加</Button>
               </Col>
             </Row>
-          </div>
+          <!-- </div> -->
           <div class="list"  v-if="controlNextReturnVisit">
             <Table border :columns="query.columns" :data="form.addWaitTrackCustomer"   height="300"></Table>
           </div>
@@ -739,5 +739,8 @@ export default {
 }
 .text{
     color:red;margin-left:10px
+  }
+  .bottom{
+
   }
 </style>

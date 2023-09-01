@@ -1,1398 +1,760 @@
 <template>
   <div>
-     <Card>
-        <div>
-            <DatePicker
-              type="date"
-              placeholder="请选择日期"
-              style="width: 160px;margin-right: .625rem"
-              :value="query.startDate"
-              v-model="query.startDate"
-            ></DatePicker>
-            <Button type="primary" @click="handleSubmitClick()">查询</Button>
+    <Card>
+      <div>
+        <DatePicker
+          type="date"
+          placeholder="请选择日期"
+          style="width: 160px;margin-right: .625rem"
+          :value="params.date"
+          v-model="params.date"
+        ></DatePicker>
+        <Select
+          v-model="params.contentplatformId"
+          placeholder="请选择平台"
+          @on-change="contentPlateChange(params.contentplatformId)"
+          filterable
+          style="width: 160px; margin-left: 10px"
+        >
+          <Option
+            v-for="item in params.contentPalteForms"
+            :value="item.id"
+            :key="item.id"
+            >{{ item.contentPlatformName }}</Option
+          >
+        </Select>
+        <Select
+          v-model="params.liveAnchorId"
+          placeholder="请选择主播IP"
+          filterable
+          style="width: 160px; margin: 0 10px"
+          :disabled="params.contentplatformId == null"
+        >
+          <Option
+            v-for="item in params.liveAnchors"
+            :value="item.id"
+            :key="item.id"
+            >{{ item.hostAccountName }}</Option
+          >
+        </Select>
+        <Button type="primary" @click="queryClick()">查询</Button>
+      </div>
+      <div class="item">
+        <div class="h3_con">
+          <span></span>
+          <span class="h3">基础数据</span>
+          <span><Button type="primary" @click="addClick">添加</Button></span>
         </div>
-        <div class="item">
-            <div class="h3_con">
-                <span></span>
-                <span class="h3">基础数据</span>
-                <span><Button type="primary" @click="handleSubmitClick()">编辑</Button></span>
-            </div>
-            <div class="table">
-                <Table border :columns="query.columns1" :data="query.data1"   ></Table>
-            </div>
+        <Table border :columns="query.columns" :data="query.data"></Table>
+      </div>
+      <div class="item">
+        <div class="h3_con">
+          <span></span>
+          <span class="h3">直播分析-成交数据</span>
+          <span><Button type="primary" @click="dealDataClick">编辑</Button></span>
         </div>
-        <div  class="item">
-            <div class="h3_con">
-                <span></span>
-                <span class="h3">直播分析-成交数据</span>
-                <span><Button type="primary" @click="handleSubmitClick()">编辑</Button></span>
-            </div>
-            <div class="table">
-                <Table border :columns="query.columns" :data="query.data"   ></Table>
-            </div>
+        <dealData :params="params" :dealDataModel.sync="dealDataModel" ref="dealData" />
+      </div>
+      <div class="item">
+        <div class="h3_con">
+          <span></span>
+          <span class="h3">直播分析-互动数据</span>
+          <span><Button type="primary" @click="interactionClick">编辑</Button></span>
         </div>
-        <div  class="item">
-            <div class="h3_con">
-                <span></span>
-                <span class="h3">直播分析-互动数据</span>
-                <span><Button type="primary" @click="handleSubmitClick()">编辑</Button></span>
-            </div>
-            <div class="table">
-                <Table border :columns="query.columns2" :data="query.data2"   ></Table>
-            </div>
+        <interaction :params="params" :interactionModel.sync="interactionModel" ref="interaction" />
+      </div>
+      <div class="item">
+        <div class="h3_con">
+          <span></span>
+          <span class="h3">直播分析-单品TOP10数据</span>
+          <span><Button type="primary" @click="goodsTop10Click">编辑</Button></span>
         </div>
-        <div  class="item">
-            <div class="h3_con">
-                <span><Button type="primary" @click="handleSubmitClick()">自动生成</Button></span>
-                <span class="h3">直播分析-单品TOP10数据</span>
-                <span><Button type="primary" @click="handleSubmitClick()">编辑</Button></span>
-            </div>
-            <div class="table">
-                <Table border :columns="query.columns3" :data="query.data3"   ></Table>
-            </div>
+        <goodsTop10 :params="params" :goodsTop10Model.sync="goodsTop10Model" ref="goodsTop10" />
+      </div>
+      <div class="item">
+        <div class="h3_con">
+          <span></span>
+          <span class="h3">直播分析-流量优化</span>
+          <span><Button type="primary" @click="flowClick">编辑</Button></span>
         </div>
-        <div  class="item">
-            <div class="h3_con">
-                <span></span>
-                <span class="h3">直播分析-流量优化数据</span>
-                <span><Button type="primary" @click="handleSubmitClick()">编辑</Button></span>
-            </div>
-            <div class="table">
-                <Table border :columns="query.columns4" :data="query.data4"   ></Table>
-            </div>
+        <flow :params="params" :flowModel.sync="flowModel" ref="flow" />
+      </div>
+      <div class="item">
+        <div class="h3_con">
+          <span></span>
+          <span class="h3">直播分析-话术内容</span>
+          <span><Button type="primary" @click="contentClick">编辑</Button></span>
         </div>
-        <div  class="item">
-            <div class="h3_con">
-                <span></span>
-                <span class="h3">直播分析-话术内容</span>
-                <span><Button type="primary" @click="handleSubmitClick()">编辑</Button></span>
-            </div>
-            <div class="table">
-                <Table border :columns="query.columns5" :data="query.data5"   ></Table>
-            </div>
-        </div>
-      </Card>
+        <contents :params="params" :contentModel.sync="contentModel" ref="content" />
+      </div>
+      
+      
+    </Card>
+    <Modal
+      v-model="foundationModel"
+      :title="title"
+      :mask-closable="false"
+      @on-visible-change="handleModalVisibleChange"
+      width="50%"
+    >
+      <Form
+        ref="form"
+        :model="form"
+        :rules="ruleValidate"
+        label-position="left"
+        :label-width="80"
+      >
+        <Row :gutter="30">
+          <Col span="8">
+            <FormItem label="平台" prop="contentPlatformId">
+              <Select
+                v-model="form.contentPlatformId"
+                placeholder="请选择平台"
+                @on-change="formContentPlateChange(form.contentPlatformId)"
+                filterable
+              >
+                <Option
+                  v-for="item in params.contentPalteForms"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.contentPlatformName }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="主播IP" prop="liveAnchorId">
+              <Select
+                v-model="form.liveAnchorId"
+                placeholder="请选择主播IP"
+                filterable
+                :disabled="form.contentPlatformId == null"
+              >
+                <Option
+                  v-for="item in params.liveAnchors"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.hostAccountName }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="直播日期" prop="liveDate">
+              <DatePicker
+                type="date"
+                placeholder="请选择直播日期"
+                style="width: 100%;"
+                :value="form.liveDate"
+                v-model="form.liveDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="直播时长" prop="liveDuration">
+              <Input
+                v-model="form.liveDuration"
+                placeholder="请输入直播时长"
+                type="number"
+                number
+                style="width:80%"
+              ></Input>
+              <span style="font-size:16px"> (min)</span>
+              
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="团队成员" prop="livePersonnels">
+              <Select
+                v-model="form.livePersonnels"
+                placeholder="请选择团队成员"
+                filterable
+                multiple
+              >
+                <Option
+                  v-for="item in params.employee"
+                  :value="item.name"
+                  :key="item.name"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="GMV" prop="gmv">
+              <Input
+                v-model="form.gmv"
+                placeholder="请输入GMV"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Spin fix v-if="isLoading == true">
+            <Icon
+              type="ios-loading"
+              size="18"
+              class="demo-spin-icon-load"
+            ></Icon>
+            <div>加载中...</div>
+          </Spin>
+        </Row>
+      </Form>
+      <div slot="footer">
+        <Button @click="cancelSubmit('form')">取消</Button>
+        <Button type="primary" @click="handleSubmit('form')">确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
+import * as orderApi from "@/api/orderManage";
+import * as contentPlatForm from "@/api/baseDataMaintenance";
+import * as api from "@/api/shootingAndClip";
+import * as liveReplayApi from "@/api/liveReplay";
+
+import dealData from "./components/dealData.vue"
+import flow from "./components/flow.vue"
+import contents from "./components/content.vue"
+import interaction from "./components/interaction.vue"
+import goodsTop10 from "./components/goodsTop10.vue"
 export default {
-  props: {
-    memberModel: Boolean,
-    memberRankNames: Array,
-    goodsInfo: Object
+  components: {
+    dealData,
+    flow,
+    contents,
+    interaction,
+    goodsTop10
   },
   data() {
     return {
-      height:'120px',
-      form: {
-        memberRankId: null,
-        price: null,
+      params: {
+        date:this.$moment().subtract(1, "days").format("YYYY-MM-DD"),
+        // date: this.$moment().format("YYYY-MM-DD"),
+        contentplatformId:  '',
+        liveAnchorId: null,
+        // 平台数据
+        contentPalteForms: [],
+        // 主播
+        liveAnchors: [],
+        // 团队成员
+        employee:[],
+        title:'添加'
       },
-      hispitalModel: false,
+      // 基础数据model
+      foundationModel:false,
+      // 成交数据model
+      dealDataModel:false,
+      // 流量优化model
+      flowModel:false,
+      // 话术内容model
+      contentModel:false,
+      // 互动数据model
+      interactionModel:false,
+      // top10数据
+      goodsTop10Model:false,
+      mainTableId:sessionStorage.getItem('mainTableId'),
       query: {
-        startDate:this.$moment().subtract(1,'days').format("YYYY-MM-DD"),
-        data: [{
-            name:'商品曝光量',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'342342342',
-            index:0
-        },{
-            name:'商品点击量',
-            num1:0,
-            num2:100,
-            num3:30,
-            text1:'',
-            text2:'',
-            index:1
-        },{
-            name:'商品曝光-点击率',
-            num1:50,
-            num2:30,
-            num3:20,
-            text1:'',
-            text2:'sdasdad',
-            index:2
-        },{
-            name:'创建订单量',
-            num1:0,
-            num2:0,
-            num3:0,
-            text1:'',
-            text2:'',
-            index:3
-        },{
-            name:'点击-生单率',
-            num1:450,
-            num2:56,
-            num3:34,
-            text1:'',
-            text2:'',
-            index:4
-        },{
-            name:'成交量',
-            num1:34,
-            num2:3,
-            num3:4,
-            text1:'',
-            text2:'',
-            index:5,
-            cellClassName: {
-                num1: 'demo-table-info-cell-num1',
-                num2: 'demo-table-info-cell-num1'
-            }
-        },{
-            name:'成交额',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:6,
-            cellClassName: {
-                num1: 'demo-table-info-cell-num1',
-                num2: 'demo-table-info-cell-num1'
-            }
-        },{
-            name:'生单-成交转化率',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:7
-        }],
+        // contentplatformId:'',
+        // liveAnchorId:null,
+        // date:'',
         columns: [
           {
-            title: "复盘指标",
-            key: "name",
+            title: "平台",
+            key: "contentPlatformName",
           },
           {
-            title: "数据指标",
-            key: "num1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num1
-            //     },
-            //     style: {
-            //       width: "150px",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         console.log(value)
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             console.log(index ,params.index)
-            //             this.query.data[params.index].num1 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
+            title: "主播",
+            key: "liveAnchorName",
           },
           {
-            title: "同比数据",
-            key: "num2",
-            align: "center",
-            className: 'colored',
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num2
-            //     },
-            //     style: {
-            //       width: "150px",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num2 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "同比增长",
-            key: "num3",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num3
-            //     },
-            //     style: {
-            //       width: "150px",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num3 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "问题分析",
-            key: "text1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text1,
-            //                 type:'textarea',
-            //                 rows:2
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //                 padding:'10px 0'
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     console.log(val)
-            //                     this.query.data[params.index].text1 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
-          },
-          {
-            title: "后续解决",
-            key: "text2",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text2,
-            //                 type:'textarea',
-            //                 rows:2
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     this.query.data[params.index].text2 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
-          },
-        ],
-        data1:[
-            {
-                name:'刀刀',
-                name2:'daodao',
-                date:'2023-08-12',
-                GMV:2000,
-                name3:'100',
-                name4:'张三'
-            }
-        ],
-        columns1: [
-            {
-                title: "平台",
-                key: "name",
-            },
-            {
-                title: "主播IP",
-                key: "name2",
-            },
-            {
-                title: "直播时间",
-                key: "date",
-            },
-            {
-                title: "直播时长（分）",
-                key: "name3",
-            },
-            {
-                title: "GMV",
-                key: "GMV",
-            },
-            {
-                title: "团队成员",
-                key: "name4",
-            },
-            
-        ],
-        data2: [{
-            name:'曝光值',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'342342342',
-            index:0
-        },{
-            name:'直播间进入量',
-            num1:0,
-            num2:100,
-            num3:30,
-            text1:'',
-            text2:'',
-            index:1
-        },{
-            name:'直播间曝光-进入率',
-            num1:50,
-            num2:30,
-            num3:20,
-            text1:'',
-            text2:'sdasdad',
-            index:2
-        },{
-            name:'平均停留时长',
-            num1:0,
-            num2:0,
-            num3:0,
-            text1:'',
-            text2:'',
-            index:3
-        },{
-            name:'人气高点（最高在线）',
-            num1:450,
-            num2:56,
-            num3:34,
-            text1:'',
-            text2:'',
-            index:4
-        },{
-            name:'人气低点（最低在线人数）',
-            num1:34,
-            num2:3,
-            num3:4,
-            text1:'',
-            text2:'',
-            index:5,
-            
-        },{
-            name:'新增关注量',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:6,
-            
-        },{
-            name:'新增关注率',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:7
-        },{
-            name:'评论量',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:8
-        },{
-            name:'评论率',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:9
-        },{
-            name:'点赞量',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:10
-        },{
-            name:'点赞率',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:11
-        },{
-            name:'新加粉丝团数量',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:12
-        },{
-            name:'新加团率',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'',
-            text2:'',
-            index:13
-        }],
-        columns2: [
-          {
-            title: "复盘指标",
-            key: "name",
-          },
-          {
-            title: "数据指标",
-            key: "num1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num1,
-            //       // disabled:params.row.index == 11 ? true : false
-            //     },
-            //     style: {
-            //       width: "150px",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         console.log(value)
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             console.log(index ,params.index)
-            //             this.query.data[params.index].num1 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "同比数据",
-            key: "num2",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-          
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num2,
-            //       // disabled:params.row.index == 11 ? true : false
-            //     },
-            //     style: {
-            //       width: "150px",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num2 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "同比增长",
-            key: "num3",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num3
-            //     },
-            //     style: {
-            //       width: "150px",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num3 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "问题分析",
-            key: "text1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text1,
-            //                 type:'textarea',
-            //                 rows:2
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //                 padding:'10px 0'
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     console.log(val)
-            //                     this.query.data[params.index].text1 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
-          },
-          {
-            title: "后续解决",
-            key: "text2",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text2,
-            //                 type:'textarea',
-            //                 rows:2,
-                            
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     this.query.data[params.index].text2 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
-          },
-        ],
-        columns3: [
-          {
-            title: "商品",
-            key: "name",
-          },
-          {
-            title: "GMV(按此列排序)",
-            key: "num1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num1,
-            //       // disabled:params.row.index == 11 ? true : false
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         console.log(value)
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             console.log(index ,params.index)
-            //             this.query.data[params.index].num1 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "创建订单量",
-            key: "num2",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-          
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num2,
-            //       // disabled:params.row.index == 11 ? true : false
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num2 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "成交量",
-            key: "num3",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num3
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num3 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "商品曝光-点击率",
-            key: "num4",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num4
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num4 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "商品曝光量",
-            key: "num5",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num5
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num5 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "商品点击-生单转化率",
-            key: "num6",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num6
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num6 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "商品浏览量",
-            key: "num7",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num7
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num7 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "生单-成交转化率",
-            key: "num8",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num8
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num8 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "商品问题",
-            key: "text1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text1,
-            //                 type:'textarea',
-            //                 rows:2
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //                 padding:'10px 0'
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     console.log(val)
-            //                     this.query.data[params.index].text1 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
-          },
-        ],
-        data3: [{
-            name:'商品1',
-            num1:100,
-            num2:200,
-            num3:300,
-            num4:300,
-            num5:300,
-            num6:300,
-            num7:300,
-            num8:300,
-            text1:'112123123',
-            index:0
-        },{
-            name:'商品2',
-            num1:100,
-            num2:200,
-            num3:300,
-            num4:300,
-            num5:300,
-            num6:300,
-            num7:300,
-            num8:300,
-            text1:'112123123',
-            index:1
-        }],
-        data4: [{
-            name:'推荐feed',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:0
-        },{
-            name:'开播通知',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:1
-        },{
-            name:'分享',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:2
-        },{
-            name:'直播广场',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:3
-        },{
-            name:'同城feed',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:4
-        },{
-            name:'关注tab',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:5
-        },{
-            name:'其他流量',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:6
-        },{
-            name:'个人主页',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:7
-        },{
-            name:'抖音商城',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:8
-        },{
-            name:'DOU+广告',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:9
-        },{
-            name:'其他竞价广告',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:10
-        },{
-            name:'千川PC版',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:11
-        },{
-            name:'小店随心推',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:12
-        },{
-            name:'品牌广告',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:13
-        },{
-            name:'品牌广告-其他',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:14
-        },{
-            name:'微信豆',
-            num1:100,
-            num2:200,
-            num3:300,
-            text1:'112123123',
-            text2:'112123123',
-            index:15
-        }],
-        columns4: [
-          {
-            title: "流量来源",
-            key: "name",
-          },
-          {
-            title: "所占比例",
-            key: "num1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num1,
-            //       // disabled:params.row.index == 11 ? true : false
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         console.log(value)
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             console.log(index ,params.index)
-            //             this.query.data[params.index].num1 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "引流人数",
-            key: "num2",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-          
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num2,
-            //       // disabled:params.row.index == 11 ? true : false
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num2 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          {
-            title: "上一场引流人数/上一场占比对比",
-            key: "num3",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //   return h("InputNumber", {
-            //     props: {
-            //       value: params.row.num3
-            //     },
-            //     style: {
-            //       width: "100%",
-            //     },
-            //     on: {
-            //       "on-change": (value) => {
-            //         this.query.data.map((item,index)=>{
-            //           if(index=== params.index){
-            //             this.query.data[params.index].num3 = value;
-            //           }
-            //         })
-            //       },
-            //     },
-            //   });
-            // },
-          },
-          
-          {
-            title: "问题分析",
-            key: "text1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text1,
-            //                 type:'textarea',
-            //                 rows:2
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //                 padding:'10px 0'
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     console.log(val)
-            //                     this.query.data[params.index].text1 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
-          },
-          {
-            title: "后续解决方案",
-            key: "text2",
-            align: "center",
-            min: 0,
+            title: "直播时间",
+            key: "liveDate",
             render: (h, params) => {
-                    return h("Input", {
-                        props: {
-                            value: params.row.text2,
-                            type:'textarea',
-                            rows:2
-                        },
-                        style: {
-                            width: "100%",
-                            padding:'10px 0'
-                        },
-                        on: {
-                            input: (val) => {
-                                this.query.data[params.index].text2 =  val
+              return h(
+                "div",
+                params.row.liveDate
+                  ? this.$moment(params.row.liveDate).format("YYYY-MM-DD")
+                  : ""
+              );
+            },
+          },
+          {
+            title: "直播时长(min)",
+            key: "liveDuration",
+          },
+          {
+            title: "GMV",
+            key: "gmv",
+          },
+          {
+            title: "团队成员",
+            key: "livePersonnels",
+            render: (h, params) => {
+              return h("div", params.row.livePersonnels.toString()
+                
+              );
+            },
+          },
+          {
+            title: "操作",
+            key: "",
+            width: 150,
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.title = "修改";
+                        liveReplayApi.byIdLiveReplay(id).then((res) => {
+                          if (res.code === 0) {
+                            const {
+                              id,
+                              liveAnchorId,
+                              contentPlatformId,
+                              liveDate,
+                              livePersonnels,
+                              gmv,
+                              liveDuration,
+                            } = res.data.data;
+                            this.contentPlateChange(contentPlatformId);
+                            this.form.liveAnchorId = liveAnchorId;
+                            this.form.contentPlatformId = contentPlatformId;
+                            this.form.liveDate = this.$moment(liveDate).format(
+                              "YYYY-MM-DD"
+                            );
+
+                            this.form.livePersonnels = livePersonnels;
+                            this.form.gmv = gmv;
+                            this.form.liveDuration = liveDuration;
+                            this.form.id = id;
+                            this.foundationModel = true;
+                          }
+                        });
+                      },
+                    },
+                  },
+                  "修改"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "error",
+                      size: "small",
+                    },
+                    on: {
+                      click: () => {
+                        this.$Modal.confirm({
+                          title: "删除提示",
+                          content: "是否确认删除？",
+                          onOk: () => {
+                            const { id } = params.row;
+                            const data ={
+                                id:id
                             }
-                        },
-                    });
-                },
+                            liveReplayApi.deleteLiveReplay(data).then((res) => {
+                              if (res.code === 0) {
+                                this.title = '添加'
+                                this.getFoundationData();
+                                this.$Message.success({
+                                  content: "删除成功",
+                                  duration: 3,
+                                });
+                              }
+                            });
+                          },
+                          onCancel: () => {},
+                        });
+                      },
+                    },
+                  },
+                  "删除"
+                ),
+              ]);
+            },
           },
         ],
-        data5:[{
-            name:'互动是否给观众理由',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:0
-        },{
-            name:'互动频率是否足够',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:1
-        },{
-            name:'互动环节操作是否麻烦',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:2
-        },{
-            name:'是否按照四环节进行介绍',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:3
-        },{
-            name:'是否通过场景化描述进行介绍',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:4
-        },{
-            name:'是否有效体现客户需求及痛点',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:5
-        },{
-            name:'控场话术是否有效',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:6
-        },{
-            name:'话术是否出现重大失误',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:7
-        },{
-            name:'话术是否出现违规行为',
-            text1:'112123123',
-            text2:'112123123',
-            text3:'112123123',
-            text4:'112123123',
-            index:8
-        }],
-        columns5: [
+        data: [],
+        totalCount: 0,
+      },
+      form: {
+        // 平台
+        contentPlatformId: "",
+        // 主播IP
+        liveAnchorId: null,
+        // 直播日期
+        liveDate: "",
+        // 直播时长
+        liveDuration: null,
+        // gmv
+        gmv: null,
+        // 直播人员
+        livePersonnels: [],
+        id: "",
+      },
+
+      ruleValidate: {
+        contentPlatformId: [
           {
-            title: "流量来源",
-            key: "name",
+            required: true,
+            message: "请选择平台",
           },
+        ],
+        liveAnchorId: [
           {
-            title: "复盘内容",
-            key: "text1",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text1,
-            //                 type:'textarea',
-            //                 rows:5
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //                 padding:'10px 0'
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     console.log(val)
-            //                     this.query.data[params.index].text1 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
+            required: true,
+            message: "请选择主播IP",
           },
+        ],
+        liveDate: [
           {
-            title: "话术表现",
-            key: "text2",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text2,
-            //                 type:'textarea',
-            //                 rows:5
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //                 padding:'10px 0'
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     console.log(val)
-            //                     this.query.data[params.index].text2 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
+            required: true,
+            message: "请选择直播日期",
           },
+        ],
+        livePersonnels: [
           {
-            title: "问题分析",
-            key: "text3",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text3,
-            //                 type:'textarea',
-            //                 rows:5
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //                 padding:'10px 0'
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     console.log(val)
-            //                     this.query.data[params.index].text3 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
+            required: true,
+            message: "请选择团队成员",
           },
+        ],
+        gmv: [
           {
-            title: "后续解决方案",
-            key: "text4",
-            align: "center",
-            min: 0,
-            // render: (h, params) => {
-            //         return h("Input", {
-            //             props: {
-            //                 value: params.row.text4,
-            //                 type:'textarea',
-            //                 rows:5
-            //             },
-            //             style: {
-            //                 width: "100%",
-            //                 padding:'10px 0'
-            //             },
-            //             on: {
-            //                 input: (val) => {
-            //                     console.log(val)
-            //                     this.query.data[params.index].text4 =  val
-            //                 }
-            //             },
-            //         });
-            //     },
+            required: true,
+            message: "请输入gmv",
+          },
+        ],
+        liveDuration: [
+          {
+            required: true,
+            message: "请输入直播时长",
           },
         ],
       },
+      isLoading:false,
+      title:'添加'
     };
   },
-  mounted(){
-    this.$nextTick(()=>{ // 页面渲染完成后的回调
-        // console.log(this.$refs.tableHeight)
-    })
-    
-  },
-  created(){
-    //给同比数据那一列添加颜色
-    this.query.columns[2].className = "colored";
-    // this.query.columns[1]
-    console.log(this.query.columns[2])
-  },
   methods: {
-    // 确认添加
-    handleAddSubmitClick() {
-      const { memberRankId, price } = this.form;
-      let hospitalArr = [] 
-      if(!memberRankId){
-        this.$Message.error('请选择会员等级')
+    
+    // 添加基础数据
+    addClick(){
+      if(this.query.data == 0){
+        this.foundationModel = true
+        return
+      }else{
+        this.$Message.warning('基础数据已存在！')
         return
       }
-      if(!price){
-        this.$Message.error('请输入价格')
+    },
+    // 查询
+    queryClick(){
+        const { date,contentplatformId,liveAnchorId } = this.params
+      if(!date){
+        this.$Message.warning('请选择日期！')
         return
+      }
+      if(!contentplatformId){
+        this.$Message.warning('请选择平台！')
+        return
+      }
+      if(!liveAnchorId){
+        this.$Message.warning('请选择主播IP！')
+        return
+      }
+      this.getFoundationData()
+      // this.$nextTick(()=>{
+      //   this.$refs.dealData.getLiveReplayProductDealData()
+      // })
+      
+    },
+    // 直播分析-成交数据 编辑
+    dealDataClick(){
+      if(this.query.data == [] || this.query.data.length == 0){
+          this.$Message.warning('请添加基础信息！')
+        return
+      }else{
+        // 没有数据情况清空输入框数据赋值为空
+        this.$refs.dealData.getData()
+        this.dealDataModel=true
+        this.$refs.dealData.getLiveReplayProductDealData()
+        return
+      }
+    },
+    // 直播分析-流量优化 编辑
+    flowClick(){
+      if(this.query.data == [] || this.query.data.length == 0){
+          this.$Message.warning('请添加基础信息！')
+        return
+      }else{
+        // 没有数据情况清空输入框数据赋值为空
+        this.$refs.flow.getData()
+        this.flowModel=true
+        this.$refs.flow.getLiveReplayFlowOptimize()
+        return
+      }
+    },
+    // 直播分析-话术内容 编辑
+    contentClick(){
+      if(this.query.data == [] || this.query.data.length == 0){
+          this.$Message.warning('请添加基础信息！')
+        return
+      }else{
+        // 没有数据情况清空输入框数据赋值为空
+        this.$refs.content.getData()
+        this.contentModel=true
+        this.$refs.content.getLiveReplayWordAnalyse()
+        return
+      }
+    },
+    // 直播分析-互动数据
+    interactionClick(){
+      if(this.query.data == [] || this.query.data.length == 0){
+          this.$Message.warning('请添加基础信息！')
+        return
+      }else{
+        // 没有数据情况清空输入框数据赋值为空
+        this.$refs.interaction.getData()
+        this.interactionModel=true
+        this.$refs.interaction.getLiveReplayInteractionlData()
+        return
+      }
+    },
+    // 直播分析-单品top10
+    goodsTop10Click(){
+      if(this.query.data == [] || this.query.data.length == 0){
+          this.$Message.warning('请添加基础信息！')
+        return
+      }else{
+        // 没有数据情况清空输入框数据赋值为空
+        this.$refs.goodsTop10.query.data2=[]
+        this.goodsTop10Model=true
+        // 获取列表
+        this.$refs.goodsTop10.getLiveReplayMerchandiseTopData()
+        // 获取商品
+        this.$refs.goodsTop10.getItemNameByBrandIdAndCategoryId()
+        return
+      }
+    },
+    // 获取直播间
+    getEmployeeByPositionId() {
+      const data = {
+        // 线上测试都是9
+        positionId: 9,
       };
-    if (this.query.data.find(item=> item.memberRankId === memberRankId)) {
-            this.$Message.error('请勿重复添加')
-            return
-      }else{
-        // 没有重复的往数组里添加
-        hospitalArr.push({memberRankId:memberRankId,price:Number(price)})
-    }
-      // 判断医院id和添加的id是否相同 相同添加一个price字段
-      this.memberRankNames.map(hospitalnameListItem=>{
-        hospitalArr.map(item=>{
-          if(item.memberRankId === hospitalnameListItem.id){
-            this.query.data.push({
-              memberCardName: hospitalnameListItem.name,
-              memberRankId:item.memberRankId,
-              price:item.price,
+      api.getEmployeeByPositionId(data).then((res) => {
+        if (res.code === 0) {
+          const { employee } = res.data;
+          this.params.employee = employee;
+        }
+      });
+    },
+    //   获取平台（下拉框）
+    getContentValidList() {
+      contentPlatForm.getContentPlatFormValidList().then((res) => {
+        if (res.code === 0) {
+          const { contentPalteForms } = res.data;
+          this.params.contentPalteForms = contentPalteForms;
+          // this.params.contentplatformId = contentPalteForms[0].id 
+          // this.contentPlateChange(contentPalteForms[0].id)
+        }
+      });
+    },
+    formContentPlateChange(value) {
+      if (!value) {
+        return;
+      }
+      this.getLiveValidList(value);
+    },
+    contentPlateChange(value) {
+      if (!value) {
+        return;
+      }
+      this.getLiveValidList(value);
+    },
+    // 根据平台id去获取IP账号
+    getLiveValidList(value) {
+      const data = {
+        contentPlatFormId: value,
+      };
+      orderApi.getLiveValidList(data).then((res) => {
+        if (res.code === 0) {
+          const { liveAnchors } = res.data;
+          this.params.liveAnchors = liveAnchors;
+          // this.params.liveAnchorId = liveAnchors[0].id
+          // this.$nextTick(()=>{
+          //   this.$refs.foundation.getFoundationData()
+          // })
+        }
+      });
+    },
+    // 获取复盘基础信息列表
+    getFoundationData() {
+      const { contentplatformId, liveAnchorId, date } = this.params;
+      const data = {
+        contentplatformId: contentplatformId,
+        liveAnchorId: liveAnchorId,
+        date: this.$moment(date).format("YYYY-MM-DD"),
+      };
+      liveReplayApi.getLiveReplay(data).then((res) => {
+        if (res.code === 0) {
+          const { data } = res.data;
+          
+          
+          if(data.length>0){
+            sessionStorage.setItem('mainId',data[0].id)
+            // 获取商品接口
+            this.$refs.goodsTop10.getItemNameByBrandIdAndCategoryId();
+          }else{
+            // 先删除存储的id 防止下一次查询时获取的还是上一次的ID
+            sessionStorage.removeItem('mainId')
+            // 获取基础数据
+            this.$refs.dealData.getData()
+          }
+          this.query.data = data;
+          // 接口方法
+          this.$refs.dealData.getLiveReplayProductDealData();
+          this.$refs.flow.getLiveReplayFlowOptimize();
+          this.$refs.content.getLiveReplayWordAnalyse();
+          this.$refs.interaction.getLiveReplayInteractionlData();
+          this.$refs.goodsTop10.getLiveReplayMerchandiseTopData();
+          // 计算方法 单独调用不放在接口里面调用 防止计算数据手动填写时也调用该方法
+          this.$refs.dealData.lastLivingDataNum();
+          this.$refs.flow.lastLivingDataNum();
+          this.$refs.interaction.lastLivingDataNum();
+          this.$refs.goodsTop10.lastLivingDataNum();
+        }
+      });
+    },
+    // 确认
+    handleSubmit(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          const {
+            contentPlatformId,
+            liveAnchorId,
+            liveDate,
+            liveDuration,
+            livePersonnels,
+            gmv,
+            id,
+          } = this.form;
+          const data = {
+            contentPlatformId,
+            liveAnchorId,
+            liveDate: this.$moment(liveDate).format("YYYY-MM-DD"),
+            liveDuration,
+            livePersonnels,
+            gmv,
+            id,
+          };
+          if (this.title == "修改") {
+            this.isLoading = true;
+            // 修改
+            liveReplayApi.updateLiveReplay(data).then((res) => {
+              if (res.code === 0) {
+                
+                this.isLoading = false;
+                this.cancelSubmit("form");
+                this.getFoundationData();
+                this.$Message.success({
+                  content: "修改成功",
+                  duration: 3,
+                });
+              } else {
+                setTimeout(() => {
+                  this.isLoading = false;
+                }, 3000);
+              }
+            });
+          } else {
+            const {
+              contentPlatformId,
+              liveAnchorId,
+              liveDate,
+              liveDuration,
+              livePersonnels,
+              gmv,
+            } = this.form;
+            const data = {
+              contentPlatformId,
+              liveAnchorId,
+              liveDate: this.$moment(liveDate).format("YYYY-MM-DD"),
+              liveDuration,
+              livePersonnels,
+              gmv,
+            };
+            // 添加
+            this.isLoading = true;
+            liveReplayApi.addLiveReplay(data).then((res) => {
+              if (res.code === 0) {
+                this.contentPlateChange(contentPlatformId)
+                this.params.date=this.$moment(liveDate).format("YYYY-MM-DD")
+                this.params.contentplatformId=contentPlatformId
+                this.params.liveAnchorId=liveAnchorId
+                this.isLoading = false;
+                this.cancelSubmit("form");
+                this.getFoundationData();
+                this.$Message.success({
+                  content: "添加成功",
+                  duration: 3,
+                });
+              } else {
+                setTimeout(() => {
+                  this.isLoading = false;
+                }, 3000);
+              }
             });
           }
-        })
-      })
-      this.form = {}
-    },
-
-    // modal 显示状态发生变化时触发
-    addHispitalChange(value) {
-      if (!value) {
-        this.handleCancelClick("form");
-      }
+        }
+      });
     },
 
     // 取消
-    handleCancelClick(name) {
-      this.$emit("update:memberModel", false);
-      this.form = {}
+    cancelSubmit(name) {
+      this.isEdit = false;
+      this.$refs[name].resetFields();
+      this.foundationModel = false
     },
 
-    // 提交
-    handleSubmitClick() {
-      // if(!this.query.data.length) {
-      //   this.$Message.error('请选择会员等级')
-      //   return
-      // }
-      const hospitalData = this.query.data.map(item=> {
-        return {
-          memberRankId:item.memberRankId,
-          price:item.price,
-        }
-      })
-      this.$emit('addmemberPrice',this.query.data)
-      this.$emit("update:memberModel", false);
-    }
-  },
-  watch: {
-    memberModel(value) {
-      this.hispitalModel = value;
-      if(this.goodsInfo) {
-        // 回显
-        this.query.data = this.goodsInfo.goodsMemberRankPrices 
-      } 
+    // modal 显示状态发生变化时触发
+    handleModalVisibleChange(value) {
+      if (!value) {
+        this.isEdit = false;
+        this.$refs["form"].resetFields();
+        this.foundationModel = false
+      }
     },
   },
+  created() {
+    this.getContentValidList();
+    this.getEmployeeByPositionId();
+  },
+  
 };
 </script>
 <style scoped lang="less">
-.h3_con{
-    display: flex;
-    justify-content: space-between;
+.h3_con {
+  display: flex;
+  justify-content: space-between;
 }
-.h3{
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #000;
-
+.h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #000;
 }
-.item{
-    margin-bottom: 40px;
+.item {
+  margin-bottom: 40px;
 }
-/deep/.ivu-table td.colored{
-    color: orange;
-}
-
-
-/deep/.ivu-table .demo-table-info-cell-num1 {
-    color: orange;
-}
-// /deep/.ivu-input-number-input-wrap .ivu-input-number-input{
-// color: orange;
-// }
-
 </style>

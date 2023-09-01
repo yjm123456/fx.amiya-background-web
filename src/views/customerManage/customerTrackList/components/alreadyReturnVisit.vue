@@ -50,6 +50,7 @@ export default {
         {
           title: "回访计划",
           key: "trackPlan",
+          tooltip:true
         },
         {
           title: "回访主题",
@@ -155,7 +156,14 @@ export default {
       });
       const { keyword, startDate, endDate, employeeId } = this.params;
       const { pageNum, pageSize } = this;
-      const data = { keyword, startDate, endDate, employeeId, pageNum, pageSize };
+      const data = { 
+        keyword, 
+        startDate:this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
+        endDate:this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
+        employeeId, 
+        pageNum, 
+        pageSize 
+      };
       api.getAlreadyReturnVisitList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.trackRecord;
@@ -194,7 +202,14 @@ export default {
     handlePageChange(pageNum) {
       const { keyword, startDate, endDate, employeeId } = this.params;
       const { pageSize } = this;
-      const data = { keyword, startDate, endDate, employeeId, pageNum, pageSize };
+      const data = { 
+        keyword, 
+        startDate:this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
+        endDate:this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
+        employeeId, 
+        pageNum, 
+        pageSize 
+      };
       api.getAlreadyReturnVisitList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.trackRecord;

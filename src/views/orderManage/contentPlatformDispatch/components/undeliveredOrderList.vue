@@ -78,12 +78,13 @@
               item.hostAccountName
             }}</Option>
           </Select>
+            <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
           <Select
             v-model="query.employeeId"
             style="width: 200px;margin-left: 10px"
-            v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
             placeholder="请选择客服"
             filterable
+            :disabled="isDirector == 'false' && isCustomerService == 'true'"
           >
             <Option v-for="item in employee" :value="item.id" :key="item.id">{{
               item.name
@@ -295,6 +296,11 @@ export default {
   },
   data() {
     return {
+      employeeId:sessionStorage.getItem('employeeId'),
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
       detailList:[],
       detailModel:false,
       // 查看图片 
@@ -304,7 +310,7 @@ export default {
         { orderSource: -1, orderSourceText: "全部订单来源" },
       ],
       flag: false,
-      employee: [{ name: "全部客服", id: -1 }],
+      employee: [{ name: "全部归属客服", id: -1 }],
       employeeList:[],
       query: {
         baseLiveAnchorId:-1,
@@ -337,6 +343,18 @@ export default {
             title: "客户昵称",
             key: "customerName",
             minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "手机号",
+            key: "phone",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "归属客服",
+            key: "belongEmpName",
+            minWidth: 160,
             align: "center",
           },
           {
@@ -497,12 +515,7 @@ export default {
           //   minWidth: 140,
           //   align: "center",
           // },
-          {
-            title: "手机号",
-            key: "phone",
-            minWidth: 160,
-            align: "center",
-          },
+          
           {
             title: "订单来源",
             key: "orderSourceText",
@@ -694,7 +707,7 @@ export default {
         
         appType: -1,
         contentPlateFormId: "",
-        employeeId: -1,
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
         pageNum: 1,
         pageSize: 10,
         totalCount: 0,

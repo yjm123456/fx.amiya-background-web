@@ -53,13 +53,16 @@
             </span>
           </div>
           <div>
-            <span style="width: 200px;margin-right: 19px" v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }">客服</span>
+            <span style="width: 200px;margin-right: 19px">客服</span>
+                <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
             <span>
               <Select
                 v-model="query.employeeId"
                 style="width: 210px;"
-                v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
                 placeholder="请选择客服"
+                filterable
+                :disabled="isDirector == 'false' && isCustomerService == 'true'"
+
               >
                 <Option
                   v-for="item in employee"
@@ -88,13 +91,17 @@ import * as api from "@/api/customerManage";
 export default {
   data() {
     return {
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
       employee: [{ name: "全部", id: -1 }],
       query: {
         type: "待追踪回访客户列表",
         keyword: "",
         startDate: new Date(),
         endDate: new Date(),
-        employeeId: -1
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1
       },
     };
   },
@@ -118,10 +125,10 @@ export default {
       this.$emit("handleSearch", this.query);
     },
     isAuthority() {
-      let currentRole = JSON.parse(sessionStorage.getItem("permissions")) ? JSON.parse(sessionStorage.getItem("permissions")) : [];
-      if (!currentRole.includes("fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE")) {
-        this.query.employeeId = null;
-      }
+      // let currentRole = JSON.parse(sessionStorage.getItem("permissions")) ? JSON.parse(sessionStorage.getItem("permissions")) : [];
+      // if (!currentRole.includes("fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE")) {
+      //   this.query.employeeId = null;
+      // }
       this.$emit("handleSearch", this.query);
     }
   },

@@ -69,6 +69,14 @@ export const byActivityIdGetItemList = (params) => {
         params
     });
 };
+// 根据品牌品类id，品项id获取项目id和名称
+export const getItemNameByBrandIdAndCategoryId = (params) => {
+    return http({
+        url: `/amiyabg/ItemInfo/getItemNameByBrandIdAndCategoryId`,
+        method: "get",
+        params
+    });
+};
 
 /**
  * 项目上架

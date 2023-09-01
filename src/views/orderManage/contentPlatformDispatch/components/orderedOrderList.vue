@@ -135,7 +135,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 160px; margin-left: 10px"
+              style="width: 150px; margin-left: 10px"
               :disabled="query.liveAnchorPlatform === null"
               filterable
             >
@@ -173,13 +173,14 @@
               >
             </Select>
 
+              <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
             <Select
               v-model="query.employeeId"
-              style="width: 150px;margin-left: 10px"
-              v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
+              style="width: 160px;margin-left: 10px"
               placeholder="请选择归属客服"
               filterable
               transfer
+              :disabled="isDirector == 'false' && isCustomerService == 'true'"
             >
               <Option
                 v-for="item in employee"
@@ -704,6 +705,10 @@ export default {
   },
   data() {
     return {
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
       editLoading:false,
       isLoading:false,
       detailList: [],
@@ -942,7 +947,7 @@ export default {
         ],
         orderAppTypes: [{ orderType: -1, appTypeText: "全部平台" }],
         appType: -1,
-        employeeId: -1,
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
         pageNum: 1,
         pageSize: 10,
         totalCount: 0,
@@ -1015,6 +1020,12 @@ export default {
                 ]
               );
             },
+          },
+          {
+            title: "归属客服",
+            key: "belongEmpName",
+            minWidth: 160,
+            align: "center",
           },
           {
             title: "派单医院",

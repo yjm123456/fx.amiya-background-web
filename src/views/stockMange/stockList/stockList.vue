@@ -195,6 +195,15 @@
             @on-change="totalPriceChange"
           ></Input>
         </FormItem>
+        <FormItem label="到期时间" prop="expireDate">
+          <DatePicker
+            type="date"
+            placeholder="到期时间"
+            style="width: 100%;"
+            :value="form.expireDate"
+            v-model="form.expireDate"
+          ></DatePicker>
+        </FormItem>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -274,6 +283,31 @@ export default {
           {
             title: "总价",
             key: "totalPrice",
+          },
+          {
+            title: "可用时间",
+            key: "hasUsedTime",
+            align:'center',
+            render: (h, params) => {
+              return h("span", {
+                domProps: {
+                  innerHTML: params.row.hasUsedTime,
+                },
+              });
+            },
+          },
+          {
+            title: "到期日期",
+            key: "expireDate",
+            align:'center',
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.expireDate
+                  ? this.$moment(params.row.expireDate).format("YYYY-MM-DD")
+                  : ""
+              );
+            },
           },
           {
             title: "操作",
@@ -372,7 +406,8 @@ export default {
                               singlePrice,
                               totalPrice,
                               unit,
-                              storageRacksId
+                              storageRacksId,
+                              expireDate
                             } = res.data.amiyaWareHouseInfo;
                             this.goodsSourceIdChange(goodsSourceId)
                             this.isEdit = true;
@@ -382,6 +417,7 @@ export default {
                             this.form.storageRacksId = storageRacksId;
                             this.form.singlePrice = singlePrice;
                             this.form.totalPrice = totalPrice;
+                            this.form.expireDate = expireDate;
                             this.form.unit = unit;
                             this.form.id = id;
                             this.controlModal = true;
@@ -472,10 +508,18 @@ export default {
         // 是否有效
         valid: false,
         id: "",
+        // 到期时间
+        expireDate:''
       },
       getIdAndNameList: [],
       getIdAndNameListAll: [{ id: -1, name: "全部仓库" }],
       ruleValidate: {
+        expireDate: [
+          {
+            required: true,
+            message: "请选择到期时间",
+          },
+        ],
         storageRacksId: [
           {
             required: true,
@@ -629,13 +673,14 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const { id, unit, goodsName, goodsSourceId,storageRacksId } = this.form;
+            const { id, unit, goodsName, goodsSourceId,storageRacksId ,expireDate} = this.form;
             const data = {
               id,
               unit,
               goodsName,
               goodsSourceId,
-              storageRacksId
+              storageRacksId,
+              expireDate:this.$moment(expireDate).format("YYYY-MM-DD")
               // singlePrice:0,
               // amount:0,
               // totalPrice:0
@@ -660,7 +705,8 @@ export default {
               singlePrice,
               amount,
               totalPrice,
-              storageRacksId
+              storageRacksId,
+              expireDate
             } = this.form;
             const data = {
               unit,
@@ -669,7 +715,8 @@ export default {
               singlePrice,
               amount,
               totalPrice,
-              storageRacksId
+              storageRacksId,
+              expireDate:this.$moment(expireDate).format("YYYY-MM-DD")
             };
             // 添加
             api.addAmiyaWareHouse(data).then((res) => {

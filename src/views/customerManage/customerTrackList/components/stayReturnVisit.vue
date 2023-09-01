@@ -54,6 +54,7 @@ export default {
         {
           title: "回访计划",
           key: "trackPlan",
+          tooltip:true
         },
         {
           title: "回访主题",
@@ -150,8 +151,8 @@ export default {
       const { pageNum, pageSize } = this;
       const data = {
         keyword,
-        startDate,
-        endDate,
+        startDate:this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
+        endDate:this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
         employeeId,
         pageNum,
         pageSize,
@@ -171,8 +172,8 @@ export default {
       const { pageSize } = this;
       const data = {
         keyword,
-        startDate,
-        endDate,
+        startDate:this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
+        endDate:this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
         employeeId,
         pageNum,
         pageSize,

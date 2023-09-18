@@ -1077,7 +1077,7 @@ export default {
             isAcompanying,
             commissionRatio: 0,
             invitationDocuments,
-            dealPerformanceType,
+            dealPerformanceType:dealPerformanceType ? dealPerformanceType : 0,
             consumptionType:consumptionType <0 ? null : consumptionType,
             // addContentPlatFormOrderDealDetailsVoList:isFinish == false ? [] : addContentPlatFormOrderDealDetailsVoList
             addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoLists
@@ -1087,13 +1087,14 @@ export default {
               this.isLoading = true
               api.updateContentPlatFormOrderDealInfo(data).then((res) => {
                 if (res.code === 0) {
-                  this.isLoading = false
-                  this.handleCancelClick("confirmForm");
-                  this.geTransactionStatus();
                   this.$Message.success({
                     content: "修改成功",
                     duration: 3,
                   });
+                  this.isLoading = false
+                  this.handleCancelClick("confirmForm");
+                  this.geTransactionStatus();
+                  
                 }else {
                   setTimeout(() => {
                     this.isLoading = false;
@@ -1118,13 +1119,14 @@ export default {
                 this.isLoading = true
               api.updateContentPlatFormOrderDealInfo(data).then((res) => {
                 if (res.code === 0) {
-                  this.isLoading = false
-                  this.handleCancelClick("confirmForm");
-                  this.geTransactionStatus();
                   this.$Message.success({
                     content: "修改成功",
                     duration: 3,
                   });
+                  this.isLoading = false
+                  this.handleCancelClick("confirmForm");
+                  this.geTransactionStatus();
+                  
                 }else {
                   setTimeout(() => {
                     this.isLoading = false;
@@ -1137,13 +1139,13 @@ export default {
           this.isLoading = true
           api.updateContentPlatFormOrderDealInfo(data).then((res) => {
             if (res.code === 0) {
-              this.isLoading = false
-              this.handleCancelClick("confirmForm");
-              this.geTransactionStatus();
               this.$Message.success({
                 content: "修改成功",
                 duration: 3,
               });
+              this.isLoading = false
+              this.handleCancelClick("confirmForm");
+              this.geTransactionStatus();
             }else {
                   setTimeout(() => {
                     this.isLoading = false;

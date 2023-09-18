@@ -491,7 +491,7 @@ const orderManage = [{
         path: "/orderData",
         name: "orderData",
         meta: {
-            title: "订单数据",
+            title: "今日订单动态",
             keepAlive: false,
             isTag: true,
             openName: ['订单管理'],
@@ -1772,6 +1772,18 @@ const financialStatementManage = [{
         },
         component: () =>
             import ("@/views/financialStatementManage/financialSignage/financialSignage.vue"),
+    },
+    {
+        path: "/salaryReviewForm",
+        name: "salaryReviewForm",
+        meta: {
+            title: "薪资审核表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/salaryReviewForm/salaryReviewForm.vue"),
     },
 
 ];

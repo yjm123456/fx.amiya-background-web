@@ -28,6 +28,8 @@
 
 <script>
 import * as api from "@/api/customerManage";
+import * as orderApi from "@/api/orderManage";
+
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
 export default {
   components: { trackReturnVisit },
@@ -63,6 +65,55 @@ export default {
         {
           title: "电话",
           key: "phone",
+          render: (h, params) => {
+              
+              
+                return h(
+                  "div",
+                  {
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                    },
+                  },
+                  [
+                    h(
+                      "span",
+                      {
+                        style: {
+                          marginRight: "10px",
+                        },
+                      },
+                      params.row.phone
+                    ),
+                    h("span", {
+                      style: {
+                        color: "#2d8cf0",
+                        fontSize: "20px",
+                      },
+                      class: !params.row.bool
+                        ? "iconfont icon-biyan"
+                        : "iconfont icon-see",
+                      on: {
+                        click: () => {
+                          if (params.row.bool) return;
+                          const { encryptPhone } = params.row;
+                          const data = {
+                            encryptPhone
+                          }
+                          orderApi.decryptoPhonesNew(data).then((res) => {
+                            if (res.code === 0) {
+                              params.row.phone = res.data.phone;
+                              params.row.bool = true;
+                            }
+                          });
+                        },
+                      },
+                    }),
+                  ]
+                );
+            }
+
         },
         {
           title: "回访类型",
@@ -111,12 +162,14 @@ export default {
                         id,
                         trackTypeId,
                         trackThemeId,
+                        phone
                       } = params.row;
                       this.trackReturnVisitComParams.encryptPhone = encryptPhone;
                       this.trackReturnVisitComParams.waitTrackId = id;
                       this.trackReturnVisitComParams.trackTypeId = trackTypeId;
                       this.trackReturnVisitComParams.trackThemeId = trackThemeId;
                       this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
+                      this.trackReturnVisitComParams.phone = phone;
                     },
                   },
                 },
@@ -138,6 +191,7 @@ export default {
         controlTrackReturnVisitDisplay: false,
         trackTypeThemeModel:[],
         hasModel:false,
+        phone:''
       },
     };
   },

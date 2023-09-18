@@ -1999,7 +1999,7 @@ export default {
             isAcompanying,
             commissionRatio: 0,
             invitationDocuments,
-            dealPerformanceType,
+            dealPerformanceType:dealPerformanceType ? dealPerformanceType : 0,
             consumptionType:consumptionType<0 ? null : consumptionType,
             addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList
           };

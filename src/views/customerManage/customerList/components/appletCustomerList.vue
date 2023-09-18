@@ -824,9 +824,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                     const { encryptPhone } = params.row;
+                     const { encryptPhone,phone } = params.row;
                         this.trackReturnVisitComParams.encryptPhone = encryptPhone;
                         this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
+                        this.trackReturnVisitComParams.phone = phone;
                       
                     },
                   },
@@ -998,6 +999,7 @@ export default {
         device: "",
         encryptPhone: "",
         controlTrackReturnVisitDisplay: false,
+        phone:''
       },
 
       // 客户信息组件参数

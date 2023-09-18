@@ -17,3 +17,19 @@ export const exportReconciliationDocumentsDetails = (params) => {
         responseType: 'blob'
     });
 };
+// 分页获取对账单审核记录（助理薪资审核相关数据）
+export const getListWithPageByCustomerCompensation = (params) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/GetListWithPageByCustomerCompensation",
+        method: "get",
+        params
+    });
+};
+// 审核助理薪资
+export const checkReconciliationDocumentsSettle = (data) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/CheckReconciliationDocumentsSettle",
+        method: "put",
+        data
+    });
+};

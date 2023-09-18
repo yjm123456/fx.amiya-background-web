@@ -15,6 +15,7 @@
           label-position="left"
           :label-width="110"
         >
+          <div  class="phone" v-if="params.phone">{{params.phone}} <i class="iconfont  yanjing" :class="eyeFlag == false ? 'icon-yanjing-biyan' :''" @click="eyeClick" ></i></div>
           <div class="tool">
             <Button type="primary" @click="controlTrackRetrunVisitRecordModal = true" ghost>追踪回访记录</Button>
             <Button style="margin-left:10px" type="primary" @click="controlOrderInfoModal = true" ghost>下单订单信息</Button>
@@ -179,6 +180,7 @@
 import * as customerManage from "@/api/customerManage";
 import * as api from "@/api/common";
 import * as baseApi from "@/api/baseDataMaintenance";
+import * as orderApi from "@/api/orderManage";
 
 import trackRetrunVisitRecord from "@/components/trackRetrunVisitRecord/trackRetrunVisitRecord";
 import orderInfo from "@/components/orderInfo/orderInfo";
@@ -401,10 +403,23 @@ export default {
 
       controlAppointmentModal:false,
 
-      controlAlreadyReceiveGiftModal:false
+      controlAlreadyReceiveGiftModal:false,
+      // 控制眼睛展示
+      eyeFlag:false
     };
   },
   methods: {
+    eyeClick(){
+      const data = {
+        encryptPhone:this.params.encryptPhone
+      }
+      orderApi.decryptoPhonesNew(data).then((res) => {
+        if (res.code === 0) {
+          this.params.phone = res.data.phone;
+          this.eyeFlag = true
+        }
+      });
+    },
     // 添加模板
     addTemplateChange(){
       const {planTrackDate ,trackTypeId,trackThemeId, trackPlan,otherTrackEmployeeId} = this.form.addWaitTrackCustomerObj
@@ -525,6 +540,7 @@ export default {
           this.close(name);
         },
       });
+      this.eyeFlag = false
     },
 
     close(name) {
@@ -740,7 +756,16 @@ export default {
 .text{
     color:red;margin-left:10px
   }
-  .bottom{
+.phone{
+  font-size:14px;
+  font-weight:bold;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.yanjing{
+  font-size: 24px;
+  margin-left: 5px;
 
-  }
+}
 </style>

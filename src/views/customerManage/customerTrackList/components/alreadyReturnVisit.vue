@@ -40,6 +40,8 @@ export default {
         {
           title: "回访时间",
           key: "trackDate",
+          minWidth:180,
+          align:'center',
           render: (h, params) => {
             return h(
               "div",
@@ -50,37 +52,52 @@ export default {
         {
           title: "回访计划",
           key: "trackPlan",
-          tooltip:true
+          tooltip:true,
+          minWidth:180,
+          
         },
         {
           title: "回访主题",
           key: "trackTheme",
+          minWidth:200,
+          tooltip:true,
         },
         {
           title: "电话号",
           key: "phone",
+          minWidth:150,
+          align:'center',
         },
         
         {
           title: "回访内容",
           key: "trackContent",
-          tooltip:true
+          tooltip:true,
+          minWidth:200,
         },
         {
           title: "回访类型",
           key: "trackTypeName",
+          minWidth:180,
+          align:'center',
         },
         {
           title: "回访工具",
           key: "trackToolName",
+          minWidth:150,
+          align:'center',
         },
         {
           title: "回访人",
           key: "employeeName",
+          minWidth:180,
+          align:'center',
         },
         {
           title: "是否有效",
           key: "valid",
+          minWidth:120,
+          align:'center',
           render: (h, params) => {
             if (params.row.valid == true) {
               return h("Icon", {
@@ -109,6 +126,7 @@ export default {
           title: "操作",
           key: "play",
           align: "center",
+          minWidth:180,
           render: (h, params) => {
             if (params.row.isConnect) {
               return h("div", [
@@ -167,7 +185,9 @@ export default {
       api.getAlreadyReturnVisitList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.trackRecord;
-          this.matcCallRecord(list,totalCount)
+          // this.matcCallRecord(list,totalCount)
+          this.data = list
+          this.totalCount = totalCount
         }
       });
     },  
@@ -213,14 +233,16 @@ export default {
       api.getAlreadyReturnVisitList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.trackRecord;
-          this.matcCallRecord(list,totalCount,()=>{
-            if(this.$refs.aplayer) {
-              const index = this.data.findIndex(item=> item.callRecordId === this.playParams.row.callRecordId);
-              if(index !== -1) {
-                this.data[index].play = this.currentPlayState;
-              }
-            }
-          })
+          this.data = list
+          this.totalCount = totalCount
+          // this.matcCallRecord(list,totalCount,()=>{
+          //   if(this.$refs.aplayer) {
+          //     const index = this.data.findIndex(item=> item.callRecordId === this.playParams.row.callRecordId);
+          //     if(index !== -1) {
+          //       this.data[index].play = this.currentPlayState;
+          //     }
+          //   }
+          // })
         }
       });
     },

@@ -105,6 +105,9 @@ export default {
                   this.importFileForm.file = "";
                 // },10000)
               } else {
+               setTimeout(()=>{
+                this.flag = false
+               },3000)
                 this.$Message.warning({
                   content:
                     "请另外新建一个excel文件 .xlsx 后将填写好的数据复制到新文件中上传，勿采用当前导出文件进行上传！",

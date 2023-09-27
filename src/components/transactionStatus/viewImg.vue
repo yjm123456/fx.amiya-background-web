@@ -18,9 +18,11 @@
             <img :src="item.customerPicture" alt="" class="img_o" />
           </viewer>
         </div>
-        
       </div>
       <div v-if="customerPhotos.length == 0" class="no_date">暂无图片</div>
+
+      <div class="title mr" >喜报栏</div>
+      <Button type="primary" @click="goodsNewsModel =true">生成喜报</Button>
 
       <div class="title2">成交明细</div>
       <Table
@@ -33,13 +35,16 @@
           <Button @click="cancel" style="margin-right: 10px" >取消</Button>
       </div>
     </Modal>
+    <!-- 生成喜报 -->
+    <goodNews :goodsNewsModel.sync="goodsNewsModel" :goodsNewsObj="viewImgParams.contentPlatFormOrderDealDetails"/>
   </div>
 </template>
 <script>
 import * as api from "@/api/orderManage";
+import goodNews from "./goodNews.vue"
 export default {
   components:{
-      
+      goodNews
   },
   props: {
     viewCustomerPhotosModel: Boolean,
@@ -47,6 +52,7 @@ export default {
   },
   data() {
     return {
+      goodsNewsModel:false,
       viewCustomerPhotosModels:false,
       customerPhotos:[],
       query:{
@@ -162,5 +168,8 @@ export default {
 }
 .title2{
  margin-top: 30px;
+}
+.mr{
+  margin-top: 20px;
 }
 </style>

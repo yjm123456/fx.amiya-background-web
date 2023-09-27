@@ -25,3 +25,11 @@ export const addCustomerConsumptionCredentials = (data) => {
         data
     });
 };
+// 修改绑定助理
+export const updateAssistant = (data) => {
+    return http({
+        url: "/amiyabg/CustomerConsumptionCredentials/updateAssistant",
+        method: "put",
+        data
+    });
+};

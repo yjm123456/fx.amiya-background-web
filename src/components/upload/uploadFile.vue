@@ -78,7 +78,8 @@ export default {
     handleSuccess(res, file) {
       this.showProgress = false;
       this.uploadList.push(res.data.url);
-      this.uploadListName.push(file.name)
+      // this.uploadListName.push(file.name)
+       this.uploadListName=[file.name]
       this.$emit("uploadChange", this.uploadList,this.uploadListName);
     },
     handleFormatError(file) {

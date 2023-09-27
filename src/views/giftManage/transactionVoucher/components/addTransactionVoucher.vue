@@ -52,6 +52,38 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="基础主播" prop="baseLiveAnchorId">
+              <Select
+                v-model="form.baseLiveAnchorId"
+                placeholder="请选择基础主播"
+                filterable
+              >
+                <Option
+                  v-for="item in addTransactionVoucherParams.liveAnchorBaseInfos"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+            </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="助理" prop="assistantId">
+              <Select
+                v-model="form.assistantId"
+                placeholder="请选择基础主播"
+                filterable
+              >
+                <Option
+                  v-for="item in addTransactionVoucherParams.employeeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+            </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem
               label="消费凭证1"
               prop="payVoucherPicture1"
@@ -203,6 +235,10 @@ export default {
         payVoucherPicture4: "",
         // 消费凭证截图5
         payVoucherPicture5: "",
+        // 基础主播
+        baseLiveAnchorId:'',
+        // 助理
+        assistantId:null
       },
 
       ruleValidate: {
@@ -284,6 +320,8 @@ export default {
             payVoucherPicture3,
             payVoucherPicture4,
             payVoucherPicture5,
+            baseLiveAnchorId,
+            assistantId
           } = this.form;
           // 添加
           const data = {
@@ -296,6 +334,8 @@ export default {
             payVoucherPicture3,
             payVoucherPicture4,
             payVoucherPicture5,
+            baseLiveAnchorId,
+            assistantId
           };
           if (bindPhone) {
             if (!/^1[3456789]\d{9}$/.test(bindPhone)) {

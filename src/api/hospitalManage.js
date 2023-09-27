@@ -436,3 +436,46 @@ export const UpdateContractUrl = (data) => {
         data
     });
 };
+/**
+ *医院合同
+ */
+// 根据医院id获取合同列表
+export const getContractList = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/getContractList",
+        method: "get",
+        params
+    });
+};
+// 添加合同
+export const addContract = (data) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/addContract`,
+        method: "post",
+        data
+    });
+};
+// 修改合同
+export const UpdateContract = (data) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/UpdateContract`,
+        method: "put",
+        data
+    });
+};
+// 根据合同id获取合同详情
+export const getInfoByContractId = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/getInfoByContractId",
+        method: "get",
+        params
+    });
+};
+// 删除合同
+export const deleteById = (params) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/deleteById`,
+        method: "delete",
+        params
+    });
+};

@@ -763,15 +763,30 @@ export default {
           // 取绝对值判断 防止为负数时无法对账
           //                        已对账金额+对账金额
           // let res = Math.abs((Number(this.form.checkPriceNum)+Number(this.form.checkPrice)))
+          // let res = (Number(this.form.checkPriceNum)+Number(this.form.checkPrice))
+          // // 成交金额
+          // let res2 = Number(this.form.checkPriceRight)
+          // if(res>res2){
+          //   this.$Message.warning({
+          //     content:'已对账金额和当前对账金额合计不能大于成交金额！',
+          //     duration: 3,
+          //   });
+          //   return
+          // }
           let res = (Number(this.form.checkPriceNum)+Number(this.form.checkPrice))
-          // 成交金额
           let res2 = Number(this.form.checkPriceRight)
-          if(res>res2){
+          if(res <0 && res2 <0){
+              if(Math.abs((Number(this.form.checkPriceNum)+Number(this.form.checkPrice)))>Math.abs(Number(this.form.checkPriceRight))){
+                this.$Message.warning({
+                  content:'已对账金额和当前对账金额合计不能大于成交金额！',
+                  duration: 3,
+                });
+              }
+          }else if(res>res2){
             this.$Message.warning({
-              content:'已对账金额和当前对账金额合计不能大于成交金额！',
-              duration: 3,
-            });
-            return
+                content:'已对账金额和当前对账金额合计不能大于成交金额！',
+                duration: 3,
+              });
           }
           // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
           let num1 = Math.abs((Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100))

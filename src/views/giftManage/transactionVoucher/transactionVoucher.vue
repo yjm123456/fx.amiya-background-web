@@ -107,19 +107,25 @@
     <checkImg :checkImgControlModal.sync="checkImgControlModal" :checkImgParams="checkImgParams"/>
     <!-- 添加凭证 -->
     <addTransactionVoucher :addTransactionVoucherModal.sync="addTransactionVoucherModal" :addTransactionVoucherParams="addTransactionVoucherParams" @getHospitalInfo="getHospitalInfo"/>
+    <!-- 编辑助理 -->
+    <editAssistant :editAssistantModal.sync="editAssistantModal" :editAssistantParams="editAssistantParams" @getHospitalInfo="getHospitalInfo"/>
   </div>
 </template>
 <script>
 import * as api from "@/api/customerConsumptionCredentials";
 import * as orderApi from "@/api/customerManage.js";
+import * as orderManage from "@/api/orderManage.js";
+import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
+
 import checkImg from "./components/checkImg.vue"
 import addTransactionVoucher from "./components/addTransactionVoucher.vue"
-
+import editAssistant from "./components/editAssistant.vue"
 
 export default {
   components:{
     checkImg,
-    addTransactionVoucher
+    addTransactionVoucher,
+    editAssistant
   },
   data() {
     return {
@@ -134,23 +140,32 @@ export default {
           {
             title: "客户姓名",
             key: "customerName",
-            width: 150,
+            minWidth: 150,
+            align:'center',
           },
           {
             title: "留院电话",
             key: "toHospitalPhone",
-            width: 150,
+            minWidth: 130,
+            align:'center',
           },
           {
             title: "归属主播",
             key: "liveAnchor",
-            width: 170,
+            minWidth: 150,
+            align:'center',
+          },
+          {
+            title: "助理",
+            key: "assistantName",
+            minWidth: 150,
+            align:'center',
           },
           {
             title: "消费日期",
             key: "consumeDate",
             align:'center',
-            width: 120,
+            minWidth: 120,
             render: (h, params) => {
               return h(
                 "div",
@@ -161,7 +176,8 @@ export default {
           {
             title: "审核状态",
             key: "checkState",
-            width: 120,
+            minWidth: 120,
+            align:'center',
             // render: (h, params) => {
             //   return h(
             //     "div",
@@ -225,12 +241,13 @@ export default {
           {
             title: "审核人",
             key: "checkByEmpname",
-            width: 150,
+            minWidth: 130,
+            align:'center',
           },
           {
             title: "审核日期",
             key: "checkDate",
-            width: 180,
+            minWidth: 170,
             align:'center',
             render: (h, params) => {
               return h(
@@ -242,14 +259,70 @@ export default {
           {
             title: "审核备注",
             key: "checkRemark",
+            minWidth: 200,
+            tooltip:true
           },
           {
             title: "操作",
             key: "",
-            width: 200,
+            minWidth: 320,
             align:'center',
+            fixed:'right',
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { toHospitalPhone } = params.row;
+                        const data = {
+                          phone:toHospitalPhone
+                        }
+                            orderManage.getCustomerServiceNameByPhone(data).then((res) => {
+                              if(res.code===0){
+                                const {CustomerServiceNameByPhone} = res.data
+                                if(CustomerServiceNameByPhone  == '未绑定'){
+                                  this.$Message.warning('暂未绑定助理')
+                                  return
+                                }else{
+                                  this.$Message.success('绑定助理：' + CustomerServiceNameByPhone)
+                                }
+                                
+                              }
+                            })
+                      },
+                    },
+                  },
+                  "查询助理"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                            const { id } = params.row;
+                            this.editAssistantModal = true
+                            this.editAssistantParams.id = id
+                      },
+                    },
+                  },
+                  "编辑助理"
+                ),
                 h(
                   "Button",
                   {
@@ -347,10 +420,43 @@ export default {
       checkImgParams:{},
       // 添加凭证
       addTransactionVoucherModal:false,
-      addTransactionVoucherParams:{}
+      addTransactionVoucherParams:{
+        // 基础主播
+        liveAnchorBaseInfos:[],
+        // 助理
+        employeeList:[]
+      },
+
+      
+      // 编辑助理model
+      editAssistantModal:false,
+      editAssistantParams:{
+        // 客服
+        employeeList:[],
+        id:''
+      }
     };
   },
   methods: {
+    // 主播基础数据列表
+    getLiveAnchorBaseInfoValids(){
+      liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if (res.code === 0) {
+          const {liveAnchorBaseInfos} = res.data
+          this.addTransactionVoucherParams.liveAnchorBaseInfos = liveAnchorBaseInfos
+        }
+      });
+    },
+    // 获取客服列表
+    getCustomerServiceList() {
+      orderManage.getCustomerServiceList().then((res) => {
+        if (res.code === 0) {
+          const {employee} = res.data
+          this.editAssistantParams.employeeList = employee
+          this.addTransactionVoucherParams.employeeList = employee
+        }
+      });
+    },
     // 获取审核情况（下拉框）
     getCheckStateList() {
       orderApi.getCheckStateList().then((res) => {
@@ -438,7 +544,9 @@ export default {
   },
   created() {
     this.getHospitalInfo();
-    this.getCheckStateList()
+    this.getCheckStateList();
+    this.getCustomerServiceList()
+    this.getLiveAnchorBaseInfoValids()
   },
 };
 </script>

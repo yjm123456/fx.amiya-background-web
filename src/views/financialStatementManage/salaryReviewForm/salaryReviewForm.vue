@@ -40,7 +40,7 @@ export default {
         // 客服
         employeeList:[],
         // 全部客服
-        employeeAll:[{id:-1,name:'全部归属客服'}],
+        employeeAll:[{id:-1,name:'全部助理'}],
         // 医院
         hospitalInfo:[],
         // 全部医院

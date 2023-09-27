@@ -154,7 +154,8 @@ export default {
             title: "首次项目需求",
             key: "firstOrderInfo",
             align:'center',
-            minWidth:160
+            minWidth:160,
+            tooltip:true
           },
           {
             title: "首次消费时间",
@@ -178,7 +179,7 @@ export default {
             render: (h, params) => {
               return h(
                 "div",
-                  params.row.newConsumptionPlatFormId == 0 ?  '' : this.$moment(params.row.newConsumptionTime).format(
+                  params.row.newConsumptionPlatFormId == 0 ||  params.row.newConsumptionTime == null?  '' : this.$moment(params.row.newConsumptionTime).format(
                     "YYYY-MM-DD HH:mm:ss"
                   ) 
               );
@@ -194,19 +195,22 @@ export default {
             title: "最新消费所属主播",
             key: "newLiveAnchorName",
             align:'center',
-            minWidth:150
+            minWidth:150,
+            tooltip:true
           },
           {
             title: "最新消费所属微信",
             key: "newWechatNo",
             align:'center',
-            minWidth:150
+            minWidth:150,
+            tooltip:true
           },
           {
             title: "最新消费渠道",
             key: "newConsumptionPlatFormAppTypeText",
             align:'center',
-            minWidth:130
+            minWidth:130,
+            tooltip:true
           },
           
           {

@@ -214,7 +214,7 @@ export default {
           },
           
           {
-            title: "归属客服",
+            title: "助理",
             key: "belongEmpName",
             minWidth: 150,
             align: "center",

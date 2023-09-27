@@ -81,13 +81,22 @@
             @click="getListWithPageByCustomerCompensation()"
             >查询</Button
           >
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="invoiceClick()"
+            >生成薪资</Button
+          >
         </div>
       </div>
     </Card>
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data"></Table>
+        <Table border :columns="query.columns" :data="query.data" @on-select="handleSelect"
+          @on-select-cancel="handleCancels"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"></Table>
       </div>
       <div class="page_wrap">
         <Page
@@ -103,15 +112,17 @@
         />
       </div>
     </Card>
+    <!-- 生成薪资 -->
+    <generateSalary :generateSalaryModel.sync="generateSalaryModel" :generateSalaryParams="generateSalaryParams" :params="params" @getListWithPageByCustomerCompensation="getListWithPageByCustomerCompensation"/>
   </div>
 </template>
 <script>
 import * as api from "@/api/reconciliationDocumentsSettle";
-import examine from "../components/examine.vue";
+import generateSalary from "../components/generateSalary.vue";
 
 export default {
   components: {
-    examine
+    generateSalary
   },
   props: {
     activeName: String,
@@ -133,6 +144,12 @@ export default {
         pageNum: 1,
         pageSize: 10,
         columns: [
+          {
+            type: "selection",
+            key: "_checked",
+            align: "center",
+            minWidth: 60,
+          },
           {
             title: "对账单编号",
             key: "recommandDocumentId",
@@ -206,7 +223,7 @@ export default {
             tooltip:true
           },
           {
-            title: "归属客服",
+            title: "助理",
             key: "belongEmpName",
             minWidth: 120,
             align: "center",
@@ -269,6 +286,20 @@ export default {
             },
           },
           {
+            title: "薪资单状态",
+            key: "customerServiceCompensationId",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.customerServiceCompensationId
+                  ? '已生成薪资单'
+                  : "未生成薪资单"
+              );
+            },
+          },
+          {
             title: "最终归属客服",
             key: "checkBelongEmpName",
             minWidth: 140,
@@ -299,11 +330,70 @@ export default {
         ],
         data: [],
         totalCount: 0,
+
       },
+      // 审核客服业绩金额
+      returnBackPrice:0,
+      // 生成薪资参数
+      generateSalaryParams:{
+        generateSalaryList: new Set(),
+        // 
+        returnBackPrice:0
+      },
+      // 生成薪资model
+      generateSalaryModel:false,
+     
      
     };
   },
   methods: {
+    // 生成薪资
+    invoiceClick() {
+      if (!this.generateSalaryParams.generateSalaryList.length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      for (var i = 0; i < this.generateSalaryParams.generateSalaryList.length; i++) {
+          if (this.generateSalaryParams.generateSalaryList[i].customerServiceCompensationId) {
+            this.$Message.warning("您选中的订单存在已经生成过的薪资单，请认真核对后重试！");
+            this.generateSalaryModel = false
+            break;
+          }else{
+              this.generateSalaryModel = true
+            }
+      }
+        //  this.generateSalaryModel =  (this.isModel == 1 || !this.generateSalaryParams.generateSalaryList) ? false : true ;
+        this.generateSalaryParams.returnBackPrice =this.returnBackPrice == 0 ? 0 : this.returnBackPrice.toFixed(2);
+      
+    },
+    handleSelect(selection, row) {
+      this.returnBackPrice += row.returnBackPrice
+      // 生成薪资单
+      this.generateSalaryParams.generateSalaryList = selection
+    },
+    handleCancels(selection, row) {
+      // 生成薪资单
+      this.generateSalaryParams.generateSalaryList = selection
+      this.returnBackPrice = this.returnBackPrice - row.returnBackPrice
+    },
+
+    handleSelectAll(selection) {
+      if (selection && selection.length === 0) {
+        this.form.reconciliationDocumentsIdList.clear();
+        // 生成薪资单
+        this.generateSalaryParams.generateSalaryList = []
+
+        this.returnBackPrice = 0
+      } else {
+        this.generateSalaryParams.generateSalaryList = selection
+        selection.forEach((item) => {
+          this.returnBackPrice += item.returnBackTotalPrice
+        });
+      }
+    },
     // 获取薪资审核表
     getListWithPageByCustomerCompensation() {
       this.$nextTick(() => {
@@ -338,6 +428,7 @@ export default {
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {
+          this.generateSalaryParams.generateSalaryList = []
           const { list, totalCount } = res.data.reconciliationDocumentsSettleInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;

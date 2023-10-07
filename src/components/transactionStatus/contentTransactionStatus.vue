@@ -528,6 +528,7 @@ export default {
             title: "登记日期",
             key: "createDate",
             minWidth: 170,
+            align:'center',
             render: (h, params) => {
               return h(
                 "div",
@@ -585,11 +586,13 @@ export default {
             title: "到院类型",
             key: "toHospitalTypeText",
             minWidth: 120,
+            align:'center',
           },
           {
             title: "到院时间",
             key: "tohospitalDate",
             minWidth: 150,
+            align:'center',
             render: (h, params) => {
               return h(
                 "div",
@@ -652,6 +655,7 @@ export default {
             title: "成交时间",
             key: "dealDate",
             minWidth: 120,
+            align:'center',
             render: (h, params) => {
               return h(
                 "div",
@@ -665,11 +669,13 @@ export default {
             title: "成交金额",
             key: "price",
             minWidth: 140,
+            align:'center',
           },
           {
             title: "消费类型",
             key: "consumptionTypeText",
             minWidth: 120,
+            align:'center',
           },
           
           {
@@ -688,6 +694,7 @@ export default {
             title: "业绩类型",
             key: "dealPerformanceTypeText",
             minWidth: 120,
+            align:'center',
           },
 
           // {
@@ -706,6 +713,7 @@ export default {
             title: "截图",
             key: "dealPicture",
             minWidth: 140,
+            align:'center',
             render: (h, params) => {
               return params.row.dealPicture
                 ? h(
@@ -741,6 +749,7 @@ export default {
             title: "三方单号",
             key: "otherOrderId",
             minWidth: 150,
+            align:'center',
           },
           {
             title: "备注",

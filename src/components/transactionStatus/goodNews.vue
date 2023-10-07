@@ -27,7 +27,6 @@
         <div class="time" v-if="goodsNewsObjs.createDate">
           {{ this.$moment(goodsNewsObjs.createDate).format("YYYY-MM-DD") }}
         </div>
-        <div class="pos">复购</div>
       </div>
     </Modal>
   </div>
@@ -101,7 +100,7 @@ export default {
   box-shadow: 4px 4px 15px -3px #666;
 }
 .container {
-  background: url(https://ameiya.oss-cn-hangzhou.aliyuncs.com/75d780bcea4245f38493b9e27121a5a5.jpg)
+  background: url(https://ameiya.oss-cn-hangzhou.aliyuncs.com/1c7f19ade830413bbef97adeef3443ef.png)
     no-repeat no-repeat;
   background-size: 100% 100%;
   height: 800px;

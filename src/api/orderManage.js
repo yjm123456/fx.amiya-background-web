@@ -1564,3 +1564,11 @@ export const shoppingCartGetCustomerTypeList = () => {
         method: "get",
     });
 };
+// 导入
+export const importTikTokLocalOrder = (data) => {
+    return http({
+        url: `/amiyabg/Order/importTikTokLocalOrder`,
+        method: "post",
+        data
+    });
+};

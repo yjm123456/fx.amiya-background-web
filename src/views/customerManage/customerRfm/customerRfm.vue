@@ -417,7 +417,7 @@ export default {
             key: "rfmTagText",
             align:'center',
             tooltip:true,
-            minWidth:140
+            minWidth:180
           },
           
           {

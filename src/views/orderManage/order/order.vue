@@ -96,6 +96,12 @@
         </div>
         <div class="head_right">
           <Button type="primary" style="margin-left: .625rem" @click="getOrderInfo()">查询</Button>
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="importControlModal = true"
+            >导入</Button
+          >
           <!-- 导出 
             v-if="amiyaPositionId==1"-->
           <span
@@ -564,6 +570,11 @@
     </Modal>
     <!-- 订单详情 -->
     <detail :detailModel.sync ="detailModel" :detailList ="detailList"></detail>
+    <!-- 导入 -->
+    <importFile
+      :importControlModal.sync="importControlModal"
+      @handleRefreshCustomerTrackList="getOrderInfo()"
+    ></importFile>
   </div>
 </template>
 
@@ -574,14 +585,18 @@ import * as contentPlatForm from "@/api/baseDataMaintenance"
 import detail from "@/components/orderDetail/detail.vue"
 import upload from "@/components/upload/upload";
 import { download } from "@/utils/util";
+import importFile from "./components/importModel.vue";
+
 export default {
   components: {
     upload,
-    detail
+    detail,
+    importFile
   },
   data() {
     
     return {
+      importControlModal: false,
       addtitle:'录单',
       detailList:[],
       detailModel:false,
@@ -945,8 +960,9 @@ export default {
           {
             title: "下单平台",
             key: "appTypeText",
-            minWidth: 100,
+            minWidth: 130,
             align:'center',
+            tooltip:true
           },
           
           {

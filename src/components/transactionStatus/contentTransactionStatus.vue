@@ -1284,7 +1284,7 @@ export default {
 .page {
   display: flex;
   margin: 20px 0;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 .footer {
   display: flex;

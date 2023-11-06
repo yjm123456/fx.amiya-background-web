@@ -220,7 +220,13 @@ export default {
             align: "center",
             tooltip:true
           },
-          
+          {
+            title: "上传人",
+            key: "createEmpName",
+            minWidth: 120,
+            align: "center",
+            tooltip:true
+          },
           {
             title: "新/老客业绩",
             key: "isOldCustomerText",

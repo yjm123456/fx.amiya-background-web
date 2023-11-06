@@ -1625,6 +1625,18 @@ const operationManage = [{
         component: () =>
             import ("@/views/operationManage/liveReplay/liveReplay.vue"),
     },
+    {
+        path: "/tiktokShortVideo",
+        name: "tiktokShortVideo",
+        meta: {
+            title: "抖音短视频数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/tiktokShortVideo/tiktokShortVideo.vue"),
+    },
 ];
 /**
  * 财务对账单
@@ -1928,6 +1940,18 @@ const businessMange = [{
         },
         component: () =>
             import ("@/views/businessMange/supplyChainAnalysisKanban/supplyChainAnalysisKanban.vue"),
+    },
+    {
+        path: "/performanceKanban",
+        name: "performanceKanban",
+        meta: {
+            title: "达人业绩看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/performanceKanban/performanceKanban.vue"),
     }
 ];
 

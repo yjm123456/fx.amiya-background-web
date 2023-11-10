@@ -7,3 +7,11 @@ export const shortVideoData = (params) => {
         params
     });
 };
+// 刷新短视频数据
+export const refreshData = (params) => {
+    return http({
+        url: "/amiyabg/FeishuMultidimensionalTable/refreshData",
+        method: "get",
+        params
+    });
+};

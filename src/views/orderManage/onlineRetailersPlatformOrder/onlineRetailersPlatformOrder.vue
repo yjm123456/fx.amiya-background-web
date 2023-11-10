@@ -25,7 +25,7 @@
           @keyup.enter.native="getHospitalSendOrderList()"
         />
         <Button type="primary" @click="getHospitalSendOrderList()">查询</Button>
-        <Button type="primary" @click="exportOfHospital()" style="margin-left:10px">导出</Button>
+        <Button type="primary" @click="exportOfHospital()" style="margin-left:10px" v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
       </div>
       <div style="margin-top: 10px">
         <Table border :columns="query.columns" :data="query.data"></Table>
@@ -378,6 +378,7 @@ export default {
     },
   },
   created() {
+    this.getHospitalSendOrderList();
   },
   watch:{
     activeName: {

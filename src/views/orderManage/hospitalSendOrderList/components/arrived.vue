@@ -84,6 +84,7 @@
             type="primary"
             @click="exportOfContentPlatFormHospital()"
             style="margin-left:10px"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           > -->
         </div>

@@ -86,6 +86,7 @@
             @click="exportChange"
             style="margin-left: 10px"
             v-if="employeeType == 'amiyaEmployee'"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           >
          

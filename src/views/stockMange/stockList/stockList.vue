@@ -47,6 +47,7 @@
             type="primary"
             style="margin-left: .625rem"
             @click="handleExportClick()"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           >
         </div>

@@ -27,6 +27,7 @@
         type="primary"
         @click="exportOrderChange"
         style="margin-left: 10px"
+        v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
         >导出</Button
       >
       <Button type="primary" @click="addOderChange" style="margin-left: 10px"

@@ -494,3 +494,11 @@ export const customerInternelPercent = (params) => {
         params
     });
 };
+// 客服发放礼品
+export const customerServiceSendGift = (data) => {
+    return http({
+        url: `/amiyabg/Gift/customerServiceSendGift`,
+        method: "post",
+        data,
+    });
+};

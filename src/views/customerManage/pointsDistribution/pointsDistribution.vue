@@ -33,6 +33,7 @@
             type="primary"
             style="margin-left: 10px"
             @click="exportRecordListClick"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           >
         </div>

@@ -191,16 +191,16 @@ export default {
         endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
         isSendGoodsList: [
           {
-            name: "已发货",
-            value: "true",
+            name: "全部发货状态",
+            value: "null",
           },
           {
             name: "未发货",
             value: "false",
           },
           {
-            name: "全部",
-            value: "null",
+            name: "已发货",
+            value: "true",
           },
         ],
         keyword: "",
@@ -208,6 +208,12 @@ export default {
         pageNum: 1,
         pageSize: 10,
         columns: [
+          {
+            title: "创建人",
+            key: "createBy",
+            minWidth: 120,
+            align:'center',
+          },
           {
             title: "缩略图",
             key: "thumbPicUrl",
@@ -243,6 +249,12 @@ export default {
             align:'center'
           },
           {
+            title: "礼品数量",
+            key: "quantity",
+            minWidth:150,
+            align:'center'
+          },
+          {
             title: "领取人电话",
             key: "phone",
             minWidth: 130,
@@ -265,6 +277,7 @@ export default {
             key: "address",
             minWidth: 300,
           },
+
           {
             title: "领取时间",
             key: "date",
@@ -276,6 +289,12 @@ export default {
                 this.$moment(params.row.date).format("YYYY-MM-DD HH:mm:ss")
               );
             },
+          },
+          {
+            title: "发放类型",
+            key: "sendType",
+            minWidth: 120,
+            align:'center',
           },
           {
             title: "绑定订单号",

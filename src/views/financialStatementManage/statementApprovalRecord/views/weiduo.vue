@@ -57,6 +57,7 @@
           <Button
             type="primary"
             @click="exportReconciliation"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           >
         </div>

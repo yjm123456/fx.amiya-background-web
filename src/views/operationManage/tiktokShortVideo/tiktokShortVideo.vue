@@ -28,6 +28,12 @@
             @click="getshortVideoData()"
             >查询</Button
           >
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="refreshClick()"
+            >刷新</Button
+          >
         </div>
       </div>
     </Card>
@@ -106,6 +112,10 @@ export default {
     };
   },
   methods: {
+    // 刷新
+    refreshClick(){
+      api.refreshData().then((res) => {})
+    },
     // 获取抖音短视频列表
     getshortVideoData() {
       this.$nextTick(() => {

@@ -89,24 +89,28 @@
         />
       </div>
     </Card>
-
-  
+    <!-- 发放礼品 -->
+    <sendGift :params="params" :giftModel.sync="giftModel" @handleRefreshCustomerList="bindCustomerConsumptionServerList()"/>
   </div>
 </template>
 
 <script>
 import * as api from "@/api/customerManage";
 import * as baseApi from "@/api/baseDataMaintenance";
-import customerInfo from "@/components/customerInfo/customerInfo";
-import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import * as giftCategoryApi from "@/api/giftCategory";
+import * as orderApi from "@/api/orderManage";
 
+// import customerInfo from "@/components/customerInfo/customerInfo";
+// import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import sendGift from "./components/sendGift.vue"
 export default {
   props: {
     activeName: String,
   },
   components: {
-    customerInfo,
-    trackReturnVisit,
+    // customerInfo,
+    // trackReturnVisit,
+    sendGift
   },
   data() {
     return {
@@ -225,6 +229,67 @@ export default {
             align:'center',
             minWidth:120
           },
+          {
+            title: "礼品赠送次数",
+            key: "systemSendGiftTime",
+            align:'center',
+            minWidth:150
+          },
+          {
+            title: "最新赠送时间",
+            key: "newSystemSendGiftDate",
+            align:'center',
+            minWidth:150,
+            render: (h, params) => {
+              return h(
+                "div",
+                  params.row.newSystemSendGiftDate ?  this.$moment(params.row.newSystemSendGiftDate).format(
+                    "YYYY-MM-DD"
+                  ) : ''
+              );
+            },
+          },
+          {
+            title: "操作",
+            key: "",
+            width: 130,
+            fixed:'right',
+            align:'center',
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { encryptPhone,id } = params.row;
+                        
+                          const data = {
+                            encryptPhone
+                          }
+
+                          orderApi.decryptoPhonesNew(data).then((res) => {
+                            if (res.code === 0) {
+                              this.params.phone = res.data.phone;
+                              this.giftModel = true
+                              this.params.id = id
+                            }
+                          });
+                      },
+                    },
+                  },
+                  "发放礼品"
+                ),
+              ]);
+            },
+          },
           
         ],
         data: [],
@@ -271,9 +336,25 @@ export default {
         type: 2,
         totalCount: 0,
       },
+      // 发放礼品参数
+      params:{
+        // 礼品分类
+        giftCategoryNameList:[],
+        phone:"",
+        id:''
+      },
+      giftModel:false
     };
   },
   methods: {
+    // 获取礼品分类（下拉框）
+    getGiftCategoryNameList() {
+      giftCategoryApi.getGiftCategoryNameList().then((res) => {
+        if (res.code === 0) {
+          this.params.giftCategoryNameList = res.data.nameList;
+        }
+      });
+    },
       // 获取消费等级id和名称
     getConsumptionLevelList(){
       baseApi.getConsumptionLevelList().then((res) => {
@@ -369,7 +450,8 @@ export default {
   created() {
     this.getCustomerServiceList();
     this.bindCustomerConsumptionServerList();
-    this.getConsumptionLevelList()
+    this.getConsumptionLevelList();
+    this.getGiftCategoryNameList();
   },
  
 };

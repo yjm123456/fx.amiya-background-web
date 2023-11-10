@@ -19,6 +19,8 @@
                 }}</div>
                     <div  class="top_right">性别：{{customerMessageObjs.sex}}</div>
                     <div  class="top_right">消费总计：{{customerMessageObjs.allPrice}}</div>
+                    <div  class="top_right">礼品赠送次数：{{customerMessageObjs.systemSendGiftTime ? customerMessageObjs.systemSendGiftTime : 0}}</div>
+                    <div  class="top_right">最新赠送时间：{{customerMessageObjs.newSystemSendGiftDate ? this.$moment(customerMessageObjs.newSystemSendGiftDate).format("YYYY-MM-DD") : ''}}</div>
                     <div class="top_right">会员号：{{customerMessageObjs.memberCardNo}}</div>
                     <div  class="top_right">会员等级：{{customerMessageObjs.memberRankName}}</div>
                     <div  class="icon_content"> 

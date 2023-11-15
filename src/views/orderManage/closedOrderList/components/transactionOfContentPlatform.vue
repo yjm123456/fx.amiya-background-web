@@ -753,8 +753,9 @@ export default {
           {
             title: "备注",
             key: "remark",
-            minWidth: 200,
-            align:'center'
+            minWidth: 300,
+            align:'center',
+            tooltip:true
           },
           {
             title: "是否重单深度",

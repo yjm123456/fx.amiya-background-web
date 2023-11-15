@@ -147,6 +147,9 @@
             type="textarea"
           ></Input>
         </FormItem>
+        <FormItem label="是否为主派医院" key="是否为主派医院">
+          <i-switch v-model="form.isMainHospital" disabled/>
+        </FormItem>
       </Form>
       <div slot="footer">
         <Button @click="cancel('form')">取消</Button>
@@ -207,14 +210,51 @@ export default {
         totalCount: 0,
         columns: [
           {
+            title: "派单编号",
+            key: "id",
+            minWidth: 100,
+            align:'center',
+          },
+          {
             title: "订单编号",
             key: "orderId",
             minWidth: 200,
+            align:'center',
           },
           {
             title: "下单平台",
             key: "appTypeText",
             minWidth: 160,
+            align:'center',
+          },
+          {
+            title: "是否为主派医院",
+            key: "isMainHospital",
+            minWidth: 140,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isMainHospital == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
           },
           {
             title: "派单医院",
@@ -225,6 +265,7 @@ export default {
             title: "预约时间",
             key: "appointmentDate",
             minWidth: 150,
+            align:'center',
             render: (h, params) => {
               return h("div",params.row.appointmentDate ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") + params.row.time : params.row.time);
             },
@@ -233,6 +274,7 @@ export default {
             title: "商品",
             key: "thumbPicUrl",
             minWidth: 400,
+            align:'center',
             render: (h, params) => {
               return h("viewer",{
                   props: {
@@ -263,6 +305,7 @@ export default {
             title: "订单状态",
             key: "statusText",
             minWidth: 200,
+            align:'center',
           },
           {
             title: "描述",
@@ -273,26 +316,31 @@ export default {
             title: "规格",
             key: "standard",
             minWidth: 100,
+            align:'center',
           },
           {
             title: "采购单价",
             key: "purchaseSinglePrice",
             minWidth: 100,
+            align:'center',
           },
           {
             title: "采购数量",
             key: "purchaseNum",
             minWidth: 100,
+            align:'center',
           },
           {
             title: "实付款",
             key: "actualPayment",
             minWidth: 100,
+            align:'center',
           },
           {
             title: "电话",
             key: "phone",
             minWidth: 200,
+            align:'center',
             render:(h,params)=> {
               const {phone, isHospitalCheckPhone} = params.row;
               return h(
@@ -321,11 +369,13 @@ export default {
             title: "派单人姓名",
             minWidth: 150,
             key: "sendName",
+            align:'center',
           },
           {
             title: "派单时间",
             key: "sendDate",
             minWidth: 200,
+            align:'center',
             render: (h, params) => {
               return h("div",this.$moment(params.row.sendDate).format("YYYY-MM-DD HH:mm:ss"));
             },
@@ -393,7 +443,7 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id, orderId, goodsId } = params.row;
+                        const { id, orderId, goodsId,isMainHospital } = params.row;
                         this.form.id = id;
                         this.form.orderId = orderId;
                         this.byGoodsIdGetpartakeItemHospitalList(goodsId,() => {
@@ -435,6 +485,7 @@ export default {
                                 this.form.timeType = timeType;
                                 this.form.content = content;
                                 this.form.isUncertainDate = isUncertainDate;
+                                this.form.isMainHospital = isMainHospital
                                 this.controlModal = true;
                               }
                             });
@@ -559,7 +610,9 @@ export default {
         // 采购数量
         purchaseNum:null,
         // 采购单价
-        purchaseSinglePrice:null
+        purchaseSinglePrice:null,
+        // 是否为主派单医院
+        isMainHospital:false
       },
 
       // 医院列表

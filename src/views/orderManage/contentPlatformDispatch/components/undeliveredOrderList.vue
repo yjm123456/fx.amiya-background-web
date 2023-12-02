@@ -185,12 +185,28 @@
           </Select>
         </FormItem>
         <FormItem
-          label="所有医院"
+          label="主派医院"
           prop="hospitalId"
           v-if="openAllHospital === true"
-          key="所有医院"
+          key="主派医院"
+          
         >
           <Select v-model="form.hospitalId" placeholder="请选择医院" filterable>
+            <Option
+              v-for="item in hospitalInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
+        <FormItem
+          label="次派医院"
+          prop="otherHospitalId"
+          key="次派医院"
+          
+        >
+          <Select v-model="form.otherHospitalId" placeholder="请选择次派医院" filterable multiple>
             <Option
               v-for="item in hospitalInfo"
               :value="item.id"
@@ -734,6 +750,8 @@ export default {
       form: {
         orderId: "",
         hospitalId: "",
+        // 次派医院
+        otherHospitalId:[],
         appointmentDate: "",
         timeType: "",
         // 备注
@@ -1014,7 +1032,8 @@ export default {
             timeType,
             remark,
             isUncertainDate,
-            sendBy
+            sendBy,
+            otherHospitalId
           } = this.form;
           const data = {
             orderId,
@@ -1027,26 +1046,60 @@ export default {
             // timeType:isUncertainDate ? null : (timeType ? timeType : null),
             remark,
             isUncertainDate,
-            sendBy
+            sendBy,
+            otherHospitalId
           };
-          this.flag = true;
-          api.AddContentPlateFormSendOrder(data).then((res) => {
-            if (res.code === 0) {
-              this.flag = false;
-              this.cancel("form");
-              this.getUnSendOrderList();
-              this.$Message.success({
-                content: "派单成功",
-                duration: 3,
+          
+          if(otherHospitalId == [] || otherHospitalId.length == 0){
+              this.flag = true;
+              api.AddContentPlateFormSendOrder(data).then((res) => {
+                if (res.code === 0) {
+                  this.flag = false;
+                  this.cancel("form");
+                  this.getUnSendOrderList();
+                  this.$Message.success({
+                    content: "派单成功",
+                    duration: 3,
+                  });
+                }else if (res.code != -1 || res.code !=0){
+                  this.$Message.error('操作失败，请联系管理员')
+                } else {
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
+                }
               });
-            }else if (res.code != -1 || res.code !=0){
-              this.$Message.error('操作失败，请联系管理员')
-            } else {
-              setTimeout(() => {
-                this.flag = false;
-              }, 3000);
+              return
+            }else{
+                for(var i = 0;i<otherHospitalId.length;i++){
+                  console.log(otherHospitalId[i])
+                  if(otherHospitalId[i] == hospitalId){
+                    let hostpital = this.hospitalInfo.find(item=>item.id == hospitalId).name
+                    this.$Message.warning( hostpital+ '已存在于主派医院中，请勿重复选择')
+                   break
+                  }else{
+                    this.flag = true;
+                    api.AddContentPlateFormSendOrder(data).then((res) => {
+                      if (res.code === 0) {
+                        this.flag = false;
+                        this.cancel("form");
+                        this.getUnSendOrderList();
+                        this.$Message.success({
+                          content: "派单成功",
+                          duration: 3,
+                        });
+                      }else if (res.code != -1 || res.code !=0){
+                        this.$Message.error('操作失败，请联系管理员')
+                      } else {
+                        setTimeout(() => {
+                          this.flag = false;
+                        }, 3000);
+                      }
+                    });
+                    return
+                  }
+                }
             }
-          });
         }
       });
     },

@@ -320,6 +320,9 @@
             >
           </Select>
         </FormItem>
+        <FormItem label="是否为主派医院" key="是否为主派医院">
+          <i-switch v-model="form.isMainHospital" disabled/>
+        </FormItem>
         <!-- <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
           <i-switch v-model="form.isUncertainDate" />
         </FormItem>
@@ -953,6 +956,13 @@ export default {
         totalCount: 0,
         columns: [
           {
+            title: "派单编号",
+            key: "id",
+            minWidth: 100,
+            align: "center",
+            tooltip:true
+          },
+          {
             title: "订单编号",
             key: "orderId",
             minWidth: 170,
@@ -1026,6 +1036,35 @@ export default {
             key: "belongEmpName",
             minWidth: 160,
             align: "center",
+          },
+          {
+            title: "是否为主派医院",
+            key: "isMainHospital",
+            minWidth: 140,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isMainHospital == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
           },
           {
             title: "派单医院",
@@ -1561,7 +1600,7 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id, orderId, goodsId } = params.row;
+                        const { id, orderId, goodsId ,isMainHospital} = params.row;
                         this.form.id = id;
                         this.form.orderId = orderId;
                         // this.byGoodsIdGetpartakeItemHospitalList(goodsId,() => {
@@ -1601,6 +1640,7 @@ export default {
                             this.form.timeType = timeType;
                             this.form.content = content;
                             this.form.isUncertainDate = isUncertainDate;
+                            this.form.isMainHospital = isMainHospital
                             this.controlModal = true;
                           }
                           // });

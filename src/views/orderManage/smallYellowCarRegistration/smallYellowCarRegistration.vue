@@ -266,6 +266,19 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+              <Select
+                v-model="query.shoppingCartRegistrationCustomerType"
+                placeholder="请选择获客类型"
+                filterable
+                style="width: 150px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in shoppingCartRegistrationCustomerTypeListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </div>
           </div>
           <div>
@@ -575,6 +588,28 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8" >
+            <FormItem label="获客类型" prop="shoppingCartRegistrationCustomerType" :rules="[
+                    {
+                      required:true,
+                      message: '请输入获客类型',
+                    },
+                  ]">
+              <Select
+                v-model="form.shoppingCartRegistrationCustomerType"
+                placeholder="请选择获客类型"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in shoppingCartRegistrationCustomerTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="8" v-if="title == '修改'">
             <FormItem label="更新人" prop="createBy" :rules="[
                     {
@@ -833,6 +868,9 @@ export default {
   components: { assign,batchAssignment,importFile },
   data() {
     return {
+      // 获客类型
+      shoppingCartRegistrationCustomerTypeList:[],
+      shoppingCartRegistrationCustomerTypeListAll:[{id:-1,name:'全部获客类型'}],
       // 产品类型
       productTypeList:[],
       // 导入
@@ -850,6 +888,7 @@ export default {
       phoneCopy: "00000000000",
       // 查询
       query: {
+        shoppingCartRegistrationCustomerType:-1,
         // 创建人
         createBy:-1,
         // 客户来源
@@ -1052,6 +1091,12 @@ export default {
           {
             title: "获客方式",
             key: "getCustomerTypeText",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "获客类型",
+            key: "shoppingCartRegistrationCustomerTypeText",
             minWidth: 130,
             align: "center",
           },
@@ -1520,7 +1565,8 @@ export default {
                               source,
                               productType,
                               getCustomerType,
-                              createByEmpId
+                              createByEmpId,
+                              shoppingCartRegistrationCustomerType
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1578,6 +1624,7 @@ export default {
                             this.form.subPhone = subPhone;
                             this.form.getCustomerType = getCustomerType;
                             this.form.id = id;
+                            this.form.shoppingCartRegistrationCustomerType = shoppingCartRegistrationCustomerType;
                             this.controlModal = true;
 
                             let index = recordDate.indexOf("T");
@@ -1757,7 +1804,9 @@ export default {
         // 获客方式
         getCustomerType:null,
         // 创建人
-        createBy:Number(sessionStorage.getItem('employeeId'))
+        createBy:Number(sessionStorage.getItem('employeeId')),
+        // 获客类型
+        shoppingCartRegistrationCustomerType:null
       },
 
       ruleValidate: {
@@ -2077,6 +2126,17 @@ export default {
         }
       });
     },
+    // 获客类型列表
+    getcustomerTypeList() {
+      api.customerTypeList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.shoppingCartRegistrationCustomerTypeList = sourceList
+          this.shoppingCartRegistrationCustomerTypeListAll = [...this.shoppingCartRegistrationCustomerTypeListAll,...sourceList]
+          
+        }
+      });
+    },
     // 获取产品类型列表列表
     getshoppingCartTakeGoodsProductTypeList() {
       api.shoppingCartTakeGoodsProductTypeList().then((res) => {
@@ -2346,7 +2406,8 @@ export default {
         emergencyLevel,
         baseLiveAnchorId,
         source,
-        createBy
+        createBy,
+        shoppingCartRegistrationCustomerType
       } = this.query;
       const data = {
         pageNum,
@@ -2368,6 +2429,7 @@ export default {
         isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
         isSendOrder: isSendOrder == -1 ? null : isSendOrder,
         isBadReview: isBadReview == -1 ? null : isBadReview,
+        shoppingCartRegistrationCustomerType: shoppingCartRegistrationCustomerType == -1 ? null : shoppingCartRegistrationCustomerType,
         startRefundTime:
           isReturnBackPrice == "true"
             ? startRefundTime
@@ -2459,7 +2521,8 @@ export default {
         emergencyLevel,
         baseLiveAnchorId,
         source,
-        createBy
+        createBy,
+        shoppingCartRegistrationCustomerType
       } = this.query;
       const data = {
         pageNum,
@@ -2481,6 +2544,7 @@ export default {
         isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
         isSendOrder: isSendOrder == -1 ? null : isSendOrder,
         isBadReview: isBadReview == -1 ? null : isBadReview,
+        shoppingCartRegistrationCustomerType: shoppingCartRegistrationCustomerType == -1 ? null : shoppingCartRegistrationCustomerType,
         startRefundTime:
           isReturnBackPrice == "true"
             ? startRefundTime
@@ -2569,7 +2633,8 @@ export default {
               belongingPlace,
               productType,
               getCustomerType,
-              createBy
+              createBy,
+              shoppingCartRegistrationCustomerType
               
             } = this.form;
             const data = {
@@ -2613,7 +2678,8 @@ export default {
               source,
               productType:source == 6 ? productType : 0,
               getCustomerType,
-              createBy
+              createBy,
+              shoppingCartRegistrationCustomerType
             };
             // if (this.form.phone) {
             //   if (this.form.phone == "00000000000") {
@@ -2766,7 +2832,8 @@ export default {
               source,
               belongingPlace,
               productType,
-              getCustomerType
+              getCustomerType,
+              shoppingCartRegistrationCustomerType
             } = this.form;
             const data = {
               recordDate: time
@@ -2807,7 +2874,8 @@ export default {
               subPhone,
               source,
               productType:source == 6 ? productType : 0,
-              getCustomerType
+              getCustomerType,
+              shoppingCartRegistrationCustomerType
             };
             
             // 归属地 国内是1 国外是2
@@ -2943,7 +3011,8 @@ export default {
     this.getWeChatList();
     this.getshoppingCartTakeGoodsProductTypeList();
     this.getShoppingCartGetCustomerTypeList();
-    this.getEmployeeByPositionId()
+    this.getEmployeeByPositionId();
+    this.getcustomerTypeList()
   },
 };
 </script>

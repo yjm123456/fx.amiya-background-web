@@ -251,7 +251,7 @@ export default {
           {
             title: "商品",
             key: "thumbPicUrl",
-            minWidth: 300,
+            minWidth: 340,
             align:'center',
             render: (h, params) => {
               return h(
@@ -401,8 +401,9 @@ export default {
           {
             title: "归属主播",
             key: "belongLiveAnchorName",
-            minWidth: 120,
+            minWidth: 180,
             align:'center',
+            tooltip:true
           },
         ],
         data: [],

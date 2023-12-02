@@ -805,6 +805,12 @@ export default {
             align: "center",
           },
           {
+            title: "抖音今日橱窗收入",
+            key: "tikTokShowcaseIncome",
+            minWidth: 140,
+            align: "center",
+          },
+          {
             title: "小红书运营人员",
             key: "xiaoHongShuOperationEmployeeName",
             minWidth: 150,

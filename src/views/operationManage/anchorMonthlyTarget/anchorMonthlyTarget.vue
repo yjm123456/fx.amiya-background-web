@@ -324,6 +324,29 @@
           </Col>
           <Col span="8">
             <FormItem
+              label="抖音橱窗收入目标"
+              prop="tikTokShowcaseIncomeTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '抖音橱窗收入目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="抖音橱窗收入目标"
+            >
+              <Input
+                v-model="form.tikTokShowcaseIncomeTarget"
+                placeholder="请输入抖音橱窗收入目标"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
               label="小红书发布目标"
               prop="xiaoHongShuReleaseTarget"
               :rules="[
@@ -470,6 +493,7 @@
               />
             </FormItem>
           </Col>
+          
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -574,6 +598,27 @@ export default {
             align: "center",
             render: (h, params) => {
               return h("div", params.row.tikTokFlowinvestmentCompleteRate + "%");
+            },
+          },
+          {
+            title: "抖音橱窗收入目标",
+            key: "tikTokShowcaseIncomeTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计抖音橱窗收入",
+            key: "cumulativeTikTokShowcaseIncome",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "抖音橱窗收入完成率",
+            key: "tikTokShowcaseIncomeCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.tikTokShowcaseIncomeCompleteRate + "%");
             },
           },
           {
@@ -860,6 +905,8 @@ export default {
                               releaseTarget,
                               // 投流目标
                               flowInvestmentTarget,
+                              // 抖音橱窗收入目标
+                              tikTokShowcaseIncomeTarget
                             } = res.data.liveAnchorMonthlyTargetBeforeLivingInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.form.id = id;
@@ -867,6 +914,7 @@ export default {
                             this.form.year = String(year);
                             this.form.month = month;
                             this.form.monthlyTargetName = monthlyTargetName;
+                            this.form.tikTokShowcaseIncomeTarget = tikTokShowcaseIncomeTarget;
                             this.form.contentPlatFormId = contentPlatFormId;
                             this.form.liveAnchorId = liveAnchorId;
                             this.form.zhihuReleaseTarget = zhihuReleaseTarget;
@@ -1028,6 +1076,10 @@ export default {
         releaseTarget: null,
         // 投流目标
         flowInvestmentTarget: null,
+        // 抖音橱窗收入目标
+        tikTokShowcaseIncomeTarget: null,
+        // 抖音投流费用目标
+        tikTokFlowinvestmentTarget: null,
         id:''
       },
 
@@ -1254,6 +1306,8 @@ export default {
               sinaWeiBoFlowinvestmentTarget,
               releaseTarget,
               flowInvestmentTarget,
+              tikTokShowcaseIncomeTarget,
+              
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -1272,6 +1326,7 @@ export default {
               sinaWeiBoFlowinvestmentTarget,
               releaseTarget,
               flowInvestmentTarget,
+              tikTokShowcaseIncomeTarget
             };
             this.isflag = true
             // 添加

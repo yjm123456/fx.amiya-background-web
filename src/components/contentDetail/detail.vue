@@ -154,20 +154,18 @@
           </div>
           <div  class="item_list">
             <div class="mr_top items">
-              <span class="title_bold">派单医院：</span>
-              <span>{{ detailObj.sendHospitalName }} </span>
-            </div>
-            <div class="mr_top">
+              <!-- <span class="title_bold">派单医院：</span>
+              <span>{{ detailObj.sendHospitalName }} </span> -->
               <span class="title_bold">是否到院：</span>
               <i-switch v-model="detailObj.isToHospital" disabled />
+            </div>
+            <div class="mr_top">
+              <span class="title_bold">到院类型：</span>
+              <span>{{ detailObj.toHospitalTypeText }} </span>
             </div>
           </div>
           <div  class="item_list">
             <div class="mr_top items">
-              <span class="title_bold">到院类型：</span>
-              <span>{{ detailObj.toHospitalTypeText }} </span>
-            </div>
-            <div class="mr_top">
               <span class="title_bold">到院时间：</span>
               <span
                 >{{
@@ -178,6 +176,10 @@
                     : ""
                 }}
               </span>
+            </div>
+            <div class="mr_top">
+              <span class="title_bold">到院医院：</span>
+              <span>{{ detailObj.lastDealHospitalName }} </span>
             </div>
           </div>
           <div  class="item_list">
@@ -194,12 +196,6 @@
               </span>
             </div>
             <div class="mr_top items">
-              <span class="title_bold">到院医院：</span>
-              <span>{{ detailObj.lastDealHospitalName }} </span>
-            </div>
-          </div>
-          <div  class="item_list">
-            <div class="mr_top items">
               <span class="title_bold">医院网咨人员：</span>
               <span
                 >{{
@@ -207,22 +203,28 @@
                 }}
               </span>
             </div>
+          </div>
+          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">医院现场咨询人员：</span>
               <span>{{ detailObj.sceneConsulationName }} </span>
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">是否生成过预约日程：</span>
               <i-switch v-model="customerAppointmentScheduleInfo.isCustomerAppointmentSchedule" disabled />
             </div>
+          </div>
+          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">预约日期：</span>
               <span>{{ customerAppointmentScheduleInfo.appointmentDate }} </span>
             </div>
+            <div class="mr_top items">
+              
+            </div>
           </div>
           <div class="appoint"  style="display:flex;justify-content:flex-end;margin-top:10px;margin-right:-5px">
+            <Button type="primary" @click="dispatchClick(detailObj.id)" style="margin-right:10px">派单情况</Button>
             <Button type="primary" @click="appointmentScheduleClick(detailObj.id)" style="margin-right:10px">生成预约日程</Button>
             <Button type="primary" @click="messageClick" style="margin-right:10px" v-if="detailObj.orderStatusText != '未派单'">留言板</Button>
           </div>
@@ -529,6 +531,8 @@
     <appointmentSchedule :appointmentScheduleModel.sync="appointmentScheduleModel" :appointmentParams="appointmentParams" :detailObj="detailObj" ref="appointmentSchedule"/>
     <!-- 留言板 -->
     <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
+    <!-- 派单情况 -->
+    <dispatch :dispatchModel.sync="dispatchModel" ref="dispatch" :id="id"/>
   </div>
 </template>
 <script>
@@ -537,7 +541,7 @@ import * as OrderCheckPictureApi from "@/api/OrderCheckPicture.js";
 import * as customerManageApi from "@/api/customerManage";
 import * as customerApi from "@/api/customerAppointmentSchedule";
 import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
-
+import dispatch from "./dispatch.vue"
 import { time } from "echarts";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import viewPic from "@/components/viewPic/viewPic";
@@ -559,10 +563,13 @@ export default {
     goodsNews,
     customerMessage,
     appointmentSchedule,
-    messageBoard
+    messageBoard,
+    dispatch
   },
   data() {
     return {
+      // 派单情况model
+      dispatchModel:false,
       isShow:false,
       // 是否生成预约日程
       customerAppointmentScheduleInfo:{
@@ -681,6 +688,11 @@ export default {
   },
 
   methods: {
+    // 派单情况
+    dispatchClick(id){
+      this.dispatchModel = true
+      this.id = id
+    },
     // 生成预约日程
     appointmentScheduleClick(orderId){
       this.appointmentScheduleModel =true

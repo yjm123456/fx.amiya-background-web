@@ -184,6 +184,16 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="抖音橱窗收入" prop="tikTokShowcaseIncome">
+              <Input
+                v-model="form.tikTokShowcaseIncome"
+                placeholder="请输入抖音橱窗收入"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -267,6 +277,12 @@ export default {
             align: "center",
           },
           {
+            title: "抖音今日橱窗收入",
+            key: "tikTokShowcaseIncome",
+            minWidth: 170,
+            align: "center",
+          },
+          {
             title: "今日加V人数",
             key: "addWechatNum",
             minWidth: 130,
@@ -334,10 +350,12 @@ export default {
                               sinaWeiBoSendNum,
                               videoSendNum,
 
+
                               zhihuFlowInvestmentNum,
                               xiaoHongShuFlowInvestmentNum,
                               sinaWeiBoFlowInvestmentNum,
-                              videoFlowInvestmentNum
+                              videoFlowInvestmentNum,
+                              tikTokShowcaseIncome
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
@@ -347,6 +365,7 @@ export default {
                             this.form.tikTokOperationEmployeeId = tikTokOperationEmployeeId==0 ?  null : tikTokOperationEmployeeId ;
                             this.form.tikTokSendNum = tikTokSendNum;
                             this.form.tikTokFlowInvestmentNum = tikTokFlowInvestmentNum;
+                            this.form.tikTokShowcaseIncome = tikTokShowcaseIncome;
                             this.form.todaySendNum = Number(zhihuSendNum)+Number(xiaoHongShuSendNum)+Number(sinaWeiBoSendNum)+Number(videoSendNum)
                             this.form.alltodaySendNum = Math.floor(this.form.todaySendNum * 100) / 100;
                             this.form.flowInvestmentNum = Number(zhihuFlowInvestmentNum)+Number(xiaoHongShuFlowInvestmentNum)
@@ -490,7 +509,9 @@ export default {
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
         allflowInvestmentNum:null,
-        alltodaySendNum:null
+        alltodaySendNum:null,
+        // 抖音橱窗收入目标
+        tikTokShowcaseIncome:null
       },
 
       ruleValidate: {
@@ -516,6 +537,12 @@ export default {
           {
             required: true,
             message: "请输入抖音今日投流费用",
+          },
+        ],
+        tikTokShowcaseIncome: [
+          {
+            required: true,
+            message: "请输入抖音橱窗收入",
           },
         ],
         todaySendNum: [
@@ -711,7 +738,8 @@ export default {
               flowInvestmentNum,
               recordDate,
               allflowInvestmentNum,
-              alltodaySendNum
+              alltodaySendNum,
+              tikTokShowcaseIncome
             } = this.form;
             const data = {
               id,
@@ -726,6 +754,7 @@ export default {
                 "YYYY-MM-DD"
               ),
               flowInvestmentNum:Math.floor((allflowInvestmentNum + tikTokFlowInvestmentNum) * 100) /100,
+              tikTokShowcaseIncome
             };
             this.isflag = true;
             api.BeforeLivingTikTokUpdate(data).then((res) => {
@@ -753,6 +782,7 @@ export default {
               todaySendNum,
               flowInvestmentNum	,
               recordDate,
+              tikTokShowcaseIncome
              
             } = this.form;
             const data = {
@@ -765,6 +795,7 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
+              tikTokShowcaseIncome
             };
             this.isflag = true;
             // 添加

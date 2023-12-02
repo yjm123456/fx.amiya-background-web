@@ -109,3 +109,10 @@ export const shoppingCartGetCustomerTypeList = (params) => {
         params
     });
 };
+// 获客客户类型
+export const customerTypeList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/customerTypeList",
+        method: "get",
+    });
+};

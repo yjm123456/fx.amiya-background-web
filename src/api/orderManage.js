@@ -1572,3 +1572,11 @@ export const importTikTokLocalOrder = (data) => {
         data
     });
 };
+//根据派单id获取 
+export const sendOrderInfoList = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormSendOrder/sendOrderInfoList`,
+        method: "get",
+        params
+    });
+};

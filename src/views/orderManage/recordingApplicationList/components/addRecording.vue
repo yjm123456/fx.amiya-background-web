@@ -134,13 +134,16 @@ export default {
       isLoading:false,
       control: false,
       // recipientList:[{id:1,name:'管理员'}],
-      recipientList:[{id:104,name:'虞郑韡'}],
+      // recipientList:[{id:104,name:'虞郑韡'}],
+      recipientList:[{id:243,name:'陈飞'}],
       // recipientList:[{id:62,name:'余建明'}],
       // recipientList:[{id:220,name:'张凌玥'}],
       form: {
         // 接收人
         // 线上虞老师
-        acceptBy:104,
+        // acceptBy:104,
+        // 陈飞
+        acceptBy:243,
         // 线上张凌玥
         // acceptBy:220,
         // 测试管理员

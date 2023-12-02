@@ -103,14 +103,15 @@ export default {
       isLoading:false,
       control: false,
       // recipientList:[{id:1,name:'管理员'}],
-      recipientList:[{id:104,name:'虞郑韡'}],
+      // recipientList:[{id:104,name:'虞郑韡'}],
+      recipientList:[{id:243,name:'陈飞'}],
       // recipientList:[{id:62,name:'余建明'}],
       // recipientList:[{id:220,name:'张凌玥'}],
       form: {
         // // 接收人
         // acceptBy:104,
         // 记得改watch里面的字段
-        acceptBy:104,
+        acceptBy:243,
         // 手机号
         phone:'',
         // 医院
@@ -232,7 +233,9 @@ export default {
         // 测试 管理员
         //  this.form.acceptBy = 1
          //  线上虞老师id
-         this.form.acceptBy = 104
+        //  this.form.acceptBy = 104
+        //  线上陈飞
+         this.form.acceptBy = 243
         //  线上张凌玥id
         //  this.form.acceptBy = 220
          this.employee = this.recordingNormalParams.employee

@@ -268,7 +268,7 @@
               </Select>
               <Select
                 v-model="query.shoppingCartRegistrationCustomerType"
-                placeholder="请选择获客类型"
+                placeholder="请选择客户类型"
                 filterable
                 style="width: 150px; margin-left: 10px"
               >
@@ -589,15 +589,15 @@
             </FormItem>
           </Col>
           <Col span="8" >
-            <FormItem label="获客类型" prop="shoppingCartRegistrationCustomerType" :rules="[
+            <FormItem label="客户类型" prop="shoppingCartRegistrationCustomerType" :rules="[
                     {
                       required:true,
-                      message: '请输入获客类型',
+                      message: '请输入客户类型',
                     },
                   ]">
               <Select
                 v-model="form.shoppingCartRegistrationCustomerType"
-                placeholder="请选择获客类型"
+                placeholder="请选择客户类型"
                 filterable
                 
               >
@@ -868,9 +868,9 @@ export default {
   components: { assign,batchAssignment,importFile },
   data() {
     return {
-      // 获客类型
+      // 客户类型
       shoppingCartRegistrationCustomerTypeList:[],
-      shoppingCartRegistrationCustomerTypeListAll:[{id:-1,name:'全部获客类型'}],
+      shoppingCartRegistrationCustomerTypeListAll:[{id:-1,name:'全部客户类型'}],
       // 产品类型
       productTypeList:[],
       // 导入
@@ -1095,7 +1095,7 @@ export default {
             align: "center",
           },
           {
-            title: "获客类型",
+            title: "客户类型",
             key: "shoppingCartRegistrationCustomerTypeText",
             minWidth: 130,
             align: "center",
@@ -1805,7 +1805,7 @@ export default {
         getCustomerType:null,
         // 创建人
         createBy:Number(sessionStorage.getItem('employeeId')),
-        // 获客类型
+        // 客户类型
         shoppingCartRegistrationCustomerType:null
       },
 
@@ -2126,7 +2126,7 @@ export default {
         }
       });
     },
-    // 获客类型列表
+    // 客户类型列表
     getcustomerTypeList() {
       api.customerTypeList().then((res) => {
         if (res.code === 0) {

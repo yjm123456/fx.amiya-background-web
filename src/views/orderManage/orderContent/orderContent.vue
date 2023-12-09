@@ -821,6 +821,8 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as hospitalManage from "@/api/hospitalManage";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
 import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
+import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
+
 import upload from "@/components/upload/upload";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import { download } from "@/utils/util";
@@ -859,6 +861,10 @@ export default {
         consultationTypeList:[],
         // 
         belongMonthList:[],
+        // 客户类型
+      shoppingCartRegistrationCustomerTypeList:[],
+      // 客户来源
+      sourceList:[],
 
         // 录单编辑
         // 获取订单信息
@@ -1689,6 +1695,25 @@ export default {
     };
   },
   methods: {
+    // 客户来源
+    getcustomerSourceList() {
+      shoppingCartRegistrationApi.customerSourceList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.recordingParams.sourceList = sourceList;
+        }
+      });
+    },
+    // 客户类型列表
+    getcustomerTypeList() {
+      shoppingCartRegistrationApi.customerTypeList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.recordingParams.shoppingCartRegistrationCustomerTypeList = sourceList
+          
+        }
+      });
+    },
     // 主获客方式列表
     getshoppingCartGetCustomerTypeList(){
       api.shoppingCartGetCustomerTypeList().then((res) => {
@@ -2424,7 +2449,9 @@ export default {
     this.getHospitalList();
     this.getWeChatList();
     this.getLiveAnchorBaseInfoValids();
-    this.getshoppingCartGetCustomerTypeList()
+    this.getshoppingCartGetCustomerTypeList();
+    this.getcustomerTypeList();
+    this.getcustomerSourceList()
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")

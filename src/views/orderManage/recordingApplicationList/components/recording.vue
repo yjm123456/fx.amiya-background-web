@@ -327,6 +327,62 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="获客方式" prop="getCustomerType">
+              <Select
+                v-model="form.getCustomerType"
+                placeholder="请选择获客方式"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in recordingNormalParams.customerTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          
+          <Col span="8" >
+            <FormItem label="客户类型" prop="customerType" :rules="[
+                    {
+                      required:true,
+                      message: '请输入客户类型',
+                    },
+                  ]">
+              <Select
+                v-model="form.customerType"
+                placeholder="请选择客户类型"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in recordingNormalParams.shoppingCartRegistrationCustomerTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="客户来源" prop="customerSource">
+              <Select
+                v-model="form.customerSource"
+                placeholder="请选择客户来源"
+                filterable
+              >
+                <Option
+                  v-for="item in recordingNormalParams.sourceList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
         </Row>
         <div class="h3">客户信息</div>
         <Row :gutter="30">
@@ -537,8 +593,32 @@ export default {
         isCustomer: "",
         // 辅助客服
         auxiliaryCustomerService: null,
+        // 获客方式
+        getCustomerType:null,
+        // 客户来源
+        customerSource:null,
+        // 客户类型
+        customerType:null,
       },
       ruleValidates: {
+        getCustomerType: [
+          {
+            required: true,
+            message: "请选择获客方式",
+          },
+        ],
+         customerSource: [
+          {
+            required: true,
+            message: "请选择客户来源",
+          },
+        ],
+        customerType: [
+          {
+            required: true,
+            message: "请选择客户类型",
+          },
+        ],
         city: [
           {
             required: true,
@@ -764,6 +844,9 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
+              getCustomerType,
+              customerSource,
+              customerType
             } = this.form;
             const data = {
               orderType,
@@ -802,6 +885,9 @@ export default {
               supportEmpId: auxiliaryCustomerService
                 ? auxiliaryCustomerService
                 : 0,
+                getCustomerType,
+              customerSource,
+              customerType
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {

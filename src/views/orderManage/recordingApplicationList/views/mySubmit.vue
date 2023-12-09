@@ -107,6 +107,7 @@ import * as api from "@/api/contentPlatFormOrderAddWork";
 import * as orderApi from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as emApi from "@/api/employeeManage";
+import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
 
 import editRecordingApplication from "@/components/recordingApplication/recordingApplication";
 import recording from "../components/recording.vue";
@@ -438,7 +439,13 @@ export default {
         // 是否为辅助客服
         isCustomer: "",
         // 辅助客服（接收人）
-        acceptBy:null
+        acceptBy:null,
+        // 客户类型
+        shoppingCartRegistrationCustomerTypeList:[],
+        // 客户来源
+        sourceList:[],
+        // 获客方式
+        customerTypeList:[]
       },
       // 商品
       AmiyaHospitalDepartmentList: [],
@@ -452,6 +459,34 @@ export default {
     };
   },
   methods: {
+    // 主获客方式列表
+    getshoppingCartGetCustomerTypeList(){
+      orderApi.shoppingCartGetCustomerTypeList().then((res) => {
+        if (res.code === 0) {
+          const {typeList} = res.data
+          this.recordingNormalParams.customerTypeList = typeList
+        }
+      });
+    },
+    // 客户来源
+    getcustomerSourceList() {
+      shoppingCartRegistrationApi.customerSourceList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.recordingNormalParams.sourceList = sourceList;
+        }
+      });
+    },
+    // 客户类型列表
+    getcustomerTypeList() {
+      shoppingCartRegistrationApi.customerTypeList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.recordingNormalParams.shoppingCartRegistrationCustomerTypeList = sourceList
+          
+        }
+      });
+    },
     // 获取申请类型
     getContentPlatformOrderAddWorkTypeList(){
       api.getContentPlatformOrderAddWorkTypeList().then(res=>{
@@ -691,7 +726,10 @@ export default {
     this.getCustomerServiceList();
     this.getContentValidList();
     this.getEmployeeByPositionId();
-    this.getContentPlatformOrderAddWorkTypeList()
+    this.getContentPlatformOrderAddWorkTypeList();
+    this.getcustomerTypeList();
+    this.getcustomerSourceList();
+    this.getshoppingCartGetCustomerTypeList();
   },
   watch: {
     activeName: {

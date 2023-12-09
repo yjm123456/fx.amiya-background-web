@@ -164,6 +164,78 @@
           </Col>
           <Col span="8">
             <FormItem 
+              label="抖+投流费用" 
+              prop="tikTokPlusNum"
+              :rules="[
+                { required: true, message: '请输入抖+投流费用',},
+                { message: '抖+投流费用只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
+              <Input
+                v-model="form.tikTokPlusNum"
+                placeholder="请输入抖+投流费用"
+                type="number"
+                number
+                @on-change="livingRoomFlowInvestmentNum()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem 
+              label="千川投流" 
+              prop="qianChuanNum"
+              :rules="[
+                { required: true, message: '请输入千川投流',},
+                { message: '千川投流只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
+              <Input
+                v-model="form.qianChuanNum"
+                placeholder="请输入千川投流"
+                type="number"
+                number
+                @on-change="livingRoomFlowInvestmentNum()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem 
+              label="随心推" 
+              prop="shuiXinTuiNum"
+              :rules="[
+                { required: true, message: '请输入随心推',},
+                { message: '随心推只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
+              <Input
+                v-model="form.shuiXinTuiNum"
+                placeholder="请输入随心推"
+                type="number"
+                number
+                @on-change="livingRoomFlowInvestmentNum()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem 
+              label="微信豆" 
+              prop="weiXinDou"
+              :rules="[
+                { required: true, message: '请输入微信豆',},
+                { message: '微信豆只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
+              <Input
+                v-model="form.weiXinDou"
+                placeholder="请输入微信豆"
+                type="number"
+                number
+                @on-change="livingRoomFlowInvestmentNum()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem 
               label="今日直播间投流费用" 
               prop="livingRoomFlowInvestmentNum"
               :rules="[
@@ -176,11 +248,10 @@
                 placeholder="请输入今日直播间投流费用"
                 type="number"
                 number
+                disabled
               />
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
           <Col span="8">
             <FormItem
               label="今日照片面诊卡下单数量"
@@ -395,11 +466,36 @@ export default {
             },
           },
           {
+            title: "抖+投流费用",
+            key: "tikTokPlusNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "千川投流",
+            key: "qianChuanNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "随心推",
+            key: "shuiXinTuiNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "微信豆",
+            key: "weiXinDou",
+            minWidth: 130,
+            align: "center",
+          },
+          {
             title: "今日直播间投流费用",
             key: "livingRoomFlowInvestmentNum",
             minWidth: 170,
             align: "center",
           },
+
           {
             title: "今日照片面诊卡下单数量",
             key: "consultation",
@@ -483,7 +579,11 @@ export default {
                               gmv,
                               eliminateCardGMV,
                               refundCard,
-                              refundGMV
+                              refundGMV,
+                              tikTokPlusNum,
+                              qianChuanNum,
+                              shuiXinTuiNum,
+                              weiXinDou
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
@@ -498,6 +598,10 @@ export default {
                             this.form.eliminateCardGMV = eliminateCardGMV;
                             this.form.refundGMV = refundGMV;
                             this.form.refundCard = refundCard;
+                            this.form.tikTokPlusNum = tikTokPlusNum;
+                            this.form.qianChuanNum = qianChuanNum;
+                            this.form.shuiXinTuiNum = shuiXinTuiNum;
+                            this.form.weiXinDou = weiXinDou;
                             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId ? livingTrackingEmployeeId : null;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
@@ -628,6 +732,14 @@ export default {
         year: this.$moment(new Date()).format("yyyy"),
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
+        // 抖+投流费用
+        tikTokPlusNum: null,
+        // 千川投流
+        qianChuanNum: null,
+        // 随心推
+        shuiXinTuiNum: null,
+        // 微信豆
+        weiXinDou: null,
         // 今日直播间投流费用量
         livingRoomFlowInvestmentNum: null,
         // 今日照片面诊卡数量
@@ -695,6 +807,11 @@ export default {
     };
   },
   methods: {
+    livingRoomFlowInvestmentNum(){
+      const {tikTokPlusNum,qianChuanNum,shuiXinTuiNum,weiXinDou} = this.form
+      this.form.livingRoomFlowInvestmentNum = tikTokPlusNum + qianChuanNum + shuiXinTuiNum + weiXinDou 
+
+    },
     // 自动填写
     autoFill(){
       const {recordDate,liveanchorMonthlyTargetId} = this.form
@@ -884,7 +1001,11 @@ export default {
               gmv,
               eliminateCardGMV,
               refundCard,
-              refundGMV
+              refundGMV,
+              tikTokPlusNum,
+              qianChuanNum,
+              shuiXinTuiNum,
+              weiXinDou
             } = this.form;
             const data = {
               id,
@@ -906,7 +1027,11 @@ export default {
                 gmv,
               eliminateCardGMV,
               refundCard,
-              refundGMV
+              refundGMV,
+              tikTokPlusNum,
+              qianChuanNum,
+              shuiXinTuiNum,
+              weiXinDou
             };
             this.isflag = true
             api.livingUpdate(data).then((res) => {
@@ -937,7 +1062,11 @@ export default {
               gmv,
               eliminateCardGMV,
               refundCard,
-              refundGMV
+              refundGMV,
+              tikTokPlusNum,
+              qianChuanNum,
+              shuiXinTuiNum,
+              weiXinDou
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -956,7 +1085,11 @@ export default {
               gmv,
               eliminateCardGMV,
               refundCard,
-              refundGMV
+              refundGMV,
+              tikTokPlusNum,
+              qianChuanNum,
+              shuiXinTuiNum,
+              weiXinDou
             };
             this.isflag = true
             // 添加

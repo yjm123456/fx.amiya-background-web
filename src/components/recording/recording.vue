@@ -341,6 +341,45 @@
             </FormItem>
           </Col>
           
+          <Col span="8" >
+            <FormItem label="客户类型" prop="customerType" :rules="[
+                    {
+                      required:true,
+                      message: '请输入客户类型',
+                    },
+                  ]">
+              <Select
+                v-model="form.customerType"
+                placeholder="请选择客户类型"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in recordingParams.shoppingCartRegistrationCustomerTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="客户来源" prop="customerSource">
+              <Select
+                v-model="form.customerSource"
+                placeholder="请选择客户来源"
+                filterable
+              >
+                <Option
+                  v-for="item in recordingParams.sourceList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          
         </Row>
         <div class="h3">客户信息</div>
         <Row :gutter="30">
@@ -591,9 +630,25 @@ export default {
         // 归属地
         belongingPlace:1,
         // 获客方式
-        getCustomerType:[]
+        getCustomerType:[],
+        // 客户来源
+        customerSource:null,
+        // 客户类型
+        customerType:null,
       },
       ruleValidates: {
+        customerSource: [
+          {
+            required: true,
+            message: "请选择客户来源",
+          },
+        ],
+        customerType: [
+          {
+            required: true,
+            message: "请选择客户类型",
+          },
+        ],
         getCustomerType: [
           {
             required: true,
@@ -839,7 +894,9 @@ export default {
               isCustomer,
               auxiliaryCustomerService,
               belongingPlace,
-              getCustomerType
+              getCustomerType,
+              customerSource,
+              customerType
             } = this.form;
             const data = {
               orderType,
@@ -874,7 +931,9 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
-              getCustomerType
+              getCustomerType,
+              customerSource,
+              customerType
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -939,7 +998,9 @@ export default {
               isCustomer,
               auxiliaryCustomerService,
               belongingPlace,
-              getCustomerType
+              getCustomerType,
+              customerSource,
+              customerType
             } = this.form;
             const data = {
               orderType,
@@ -974,7 +1035,9 @@ export default {
               city,
               isSupportOrder:isCustomer == '否'  ? false : true,
               supportEmpId:auxiliaryCustomerService ? auxiliaryCustomerService : 0,
-              getCustomerType
+              getCustomerType,
+              customerSource,
+              customerType
             };
             if (phone) {
               // 归属地 1是国内 2是国外
@@ -1106,6 +1169,8 @@ export default {
         this.form.addOrderPrice = this.shoppingCartRegistrationInfo.price
         this.form.customerName = this.shoppingCartRegistrationInfo.customerNickName
         this.form.getCustomerType = this.shoppingCartRegistrationInfo.getCustomerType
+        this.form.customerSource = this.shoppingCartRegistrationInfo.source
+        this.form.customerType = this.shoppingCartRegistrationInfo.shoppingCartRegistrationCustomerType
       }
       return
      }else{

@@ -164,7 +164,7 @@ export default {
             fixed: "right",
             align: "center",
             render: (h, params) => {
-              const { statusCode } = params.row;
+              const { statusCode ,courierNumber} = params.row;
               const currentRole = JSON.parse(
                 sessionStorage.getItem("permissions")
               );
@@ -225,7 +225,7 @@ export default {
                         props: {
                           type: "primary",
                           size: "small",
-                          disabled: statusCode != 'WAIT_BUYER_CONFIRM_GOODS',
+                          disabled: courierNumber == null || courierNumber == "",
                         },
                         style: {
                           marginRight: "5px",
@@ -249,13 +249,14 @@ export default {
                       "修改物流信息"
                     )
                   ,
+                  //  disabled: statusCode !== "WAIT_BUYER_CONFIRM_GOODS" ,
                   h(
                       "Button",
                       {
                         props: {
                           type: "primary",
                           size: "small",
-                          disabled: statusCode !== "WAIT_BUYER_CONFIRM_GOODS" ,
+                          disabled: courierNumber == null || courierNumber == "",
                         },
                         on: {
                           click: () => {

@@ -305,6 +305,45 @@
             </FormItem>
           </Col>
           
+          <Col span="8" >
+            <FormItem label="客户类型" prop="customerType" :rules="[
+                    {
+                      required:true,
+                      message: '请输入客户类型',
+                    },
+                  ]">
+              <Select
+                v-model="form.customerType"
+                placeholder="请选择客户类型"
+                filterable
+                
+              >
+                <Option
+                  v-for="item in recordingParams.shoppingCartRegistrationCustomerTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="客户来源" prop="customerSource">
+              <Select
+                v-model="form.customerSource"
+                placeholder="请选择客户来源"
+                filterable
+              >
+                <Option
+                  v-for="item in recordingParams.sourceList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          
         </Row>
         <div class="h3">客户信息</div>
         <Row :gutter="30">
@@ -553,9 +592,25 @@ export default {
         // 归属地
         belongingPlace:null,
         // 获客方式
-        getCustomerType:null
+        getCustomerType:null,
+        // 客户来源
+        customerSource:null,
+        // 客户类型
+        customerType:null,
       },
       ruleValidates: {
+        customerSource: [
+          {
+            required: true,
+            message: "请选择客户来源",
+          },
+        ],
+        customerType: [
+          {
+            required: true,
+            message: "请选择客户类型",
+          },
+        ],
         getCustomerType: [
           {
             required: true,
@@ -801,7 +856,9 @@ export default {
               isCustomer,
               auxiliaryCustomerService,
               belongingPlace,
-              getCustomerType
+              getCustomerType,
+              customerSource,
+              customerType
             } = this.form;
             const data = {
               orderType,
@@ -836,7 +893,9 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
-              getCustomerType
+              getCustomerType,
+              customerSource,
+              customerType
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -964,7 +1023,9 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
-              getCustomerType
+              getCustomerType,
+              customerSource,
+              customerType
             } = this.form;
             const data = {
               orderType,
@@ -999,7 +1060,9 @@ export default {
               city,
               isCustomer,
               auxiliaryCustomerService,
-              getCustomerType
+              getCustomerType,
+              customerSource,
+              customerType
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1097,6 +1160,8 @@ export default {
         this.form.isCustomer = info.isSupportOrder == false ? '否' :'是'
         this.form.auxiliaryCustomerService = info.supportEmpId 
         this.form.getCustomerType = info.getCustomerType 
+        this.form.customerSource = info.customerSource
+        this.form.customerType = info.customerType
 }
       const currentRole = JSON.parse(sessionStorage.getItem("permissions"));
       const flag = currentRole.some((ele) => {

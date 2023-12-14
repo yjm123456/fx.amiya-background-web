@@ -26,6 +26,7 @@
           v-model="query.belongEmpId"
           style="width: 200px;margin-left: 10px"
           placeholder="请选择归属客服"
+          :disabled="isDirector == 'false' && isCustomerService == 'true'"
         >
           <Option
             v-for="item in query.employee"
@@ -64,12 +65,16 @@ export default {
   },
   data() {
     return{
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
         paymentOrderReportModals:false,
         actualPaymentNum:0,
         quantityNum:0,
         pageCount:0,
         query:{
-          belongEmpId:null,
+          belongEmpId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
           employee: [{ name: "全部客服", id: -1 }],
           startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
           endDate:this.$moment(new Date()).format("YYYY-MM-DD"),

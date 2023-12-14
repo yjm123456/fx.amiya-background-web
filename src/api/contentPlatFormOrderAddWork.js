@@ -60,3 +60,11 @@ export const getContentPlatformOrderAddWorkTypeList = () => {
         method: "get",
     });
 };
+// 获取录单申请历史数据
+export const historyData = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderAddWork/historyData`,
+        method: "get",
+        params
+    });
+};

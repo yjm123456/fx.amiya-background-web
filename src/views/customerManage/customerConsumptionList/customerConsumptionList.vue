@@ -48,7 +48,7 @@
               style="width: 140px; margin-right: 10px"
               placeholder="请选择客服"
               filterable
-              :disabled ="query.positionName == '客服'" 
+              :disabled="isDirector == 'false' && isCustomerService == 'true'"
             >
               <Option
                 v-for="item in query.employee"
@@ -114,6 +114,10 @@ export default {
   },
   data() {
     return {
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
       phone:"",
       // 客户列表
       query: {
@@ -298,7 +302,7 @@ export default {
         keyword: "",
         orderId:'',
         employee: [{id:-1,name:'全部客服'}],
-        employeeId:-1,
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
         // employeeId: sessionStorage.getItem("positionName") == '客服' || sessionStorage.getItem("positionName") == '客服管理员' || sessionStorage.getItem("positionName") == '客服主管' ? sessionStorage.getItem("employeeId") : 97,
         cconsumptionLevelId:-1,
         channel:-1,

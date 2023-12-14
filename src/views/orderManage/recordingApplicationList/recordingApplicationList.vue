@@ -17,6 +17,14 @@
           ></myReceive>
         </div>
       </TabPane>
+      <TabPane label="历史记录" name="history" v-if="readDataCenter=='true'">
+        <div>
+          <history
+            :activeName="activeName"
+            :params="params"
+          ></history>
+        </div>
+      </TabPane>
     </Tabs>
   </div>
 </template>
@@ -27,14 +35,17 @@ import * as cusApi from "@/api/customerManage.js";
 
 import mySubmit from "./views/mySubmit.vue"
 import myReceive from "./views/myReceive.vue"
+import history from "./views/history.vue"
 
 export default {
   components:{
     mySubmit,
     myReceive,
+    history
   },
   data(){
     return {
+      readDataCenter:sessionStorage.getItem("readDataCenter"),
       activeName: "mySubmit",
       params:{
         // 客服
@@ -42,6 +53,7 @@ export default {
         // 全部客服
         employeeAll:[{id:-1,name:'全部提交人'}],
         employeeAll2:[{id:-1,name:'全部接收人'}],
+        employeeAll3:[{id:-1,name:'全部创建人'}],
         // 医院
         hospitalInfo:[],
         // 全部医院
@@ -71,6 +83,7 @@ export default {
           const { employee } = res.data;
           this.params.employeeAll = [...this.params.employeeAll, ...employee];
           this.params.employeeAll2 = [...this.params.employeeAll2, ...employee];
+          this.params.employeeAll3 = [...this.params.employeeAll3, ...employee];
           this.params.employeeList = employee;
         }
       });

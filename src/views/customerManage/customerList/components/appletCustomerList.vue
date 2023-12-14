@@ -11,11 +11,13 @@
               style="width: 220px; margin-right: 10px"
               @keyup.enter.native="getWeChatCustomerList()"
             />
+
+              <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
             <Select
-              v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
               v-model="query.employeeId"
               style="width: 180px; margin-right: 10px"
               placeholder="请选择客服"
+              :disabled="isDirector == 'false' && isCustomerService == 'true'"
             >
               <Option
                 v-for="item in query.employee"
@@ -325,6 +327,10 @@ export default {
   },
   data() {
     return {
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
       flag:false,
       flag2:false,
       // 根据id获取已选择的标签
@@ -985,7 +991,7 @@ export default {
         pageSize: 10,
         keyword: "",
         employee: [{ name: "全部客服", id: -1 }],
-        employeeId: -1,
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
         memberRankNames: [
           { name: "全部客户", id: -2 },
           { name: "普通客户", id: -1 },

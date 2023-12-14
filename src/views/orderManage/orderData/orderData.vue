@@ -95,7 +95,25 @@
         <Col
           style="float: left;height: 120px;padding-bottom: 10px;"
           :style="{
-            width: '25%',
+            width: '20%',
+          }"
+        >
+          <infor-card
+            icon="icon-zongdingdan"
+            background="orange"
+            title="总分诊"
+          >
+            <countTo
+              :startVal="0"
+              :endVal="orderData.totalShoppingCartRegistionCount"
+              :duration="3000"
+            ></countTo>
+          </infor-card>
+        </Col>
+        <Col
+          style="float: left;height: 120px;padding-bottom: 10px;"
+          :style="{
+            width: '20%',
           }"
         >
           <infor-card
@@ -113,7 +131,7 @@
         <Col
           style="float: left;height: 120px;padding-bottom: 10px;"
           :style="{
-            width: '25%',
+            width: '20%',
           }"
         >
           <infor-card
@@ -130,7 +148,7 @@
         <Col
           style="float: left;height: 120px;padding-bottom: 10px;"
           :style="{
-            width: '25%',
+            width: '20%',
           }"
         >
           <infor-card
@@ -147,7 +165,7 @@
         <Col
           style="float: left;height: 120px;padding-bottom: 10px;"
           :style="{
-            width:'25%',
+            width:'20%',
           }"
         >
           <infor-card

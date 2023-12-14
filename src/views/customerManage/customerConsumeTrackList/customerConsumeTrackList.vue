@@ -112,6 +112,7 @@
                 style="width: 160px; margin-left: 10px"
                 placeholder="跟进人员"
                 filterable
+                :disabled="isDirector == 'false' && isCustomerService == 'true'"
               >
                 <Option
                   v-for="item in query.employee"
@@ -454,6 +455,10 @@ export default {
   },
   data() {
     return {
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
       upgradeOrderDetailModel:false,
       upgradeOrderObj:null,
       isConfirmOrderList:[
@@ -679,7 +684,7 @@ export default {
         // 审核状态
         checkState:-1,
         // 跟进人员
-        addedBy:-1,
+        addedBy: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
         employee: [{ name: "全部客服", id: -1 },{ name: "医院添加", id: 0 }],
         // 升单类型
         buyAgainType:'',

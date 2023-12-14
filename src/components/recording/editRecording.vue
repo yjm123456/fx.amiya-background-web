@@ -599,6 +599,12 @@ export default {
         customerType:null,
       },
       ruleValidates: {
+        sex: [
+          {
+            required: true,
+            message: "请选择性别",
+          },
+        ],
         customerSource: [
           {
             required: true,

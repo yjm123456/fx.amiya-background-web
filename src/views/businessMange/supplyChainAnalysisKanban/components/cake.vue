@@ -12,6 +12,8 @@ echarts.registerTheme("tdTheme", tdTheme);
 export default {
   props: {
     performanceKanbanParams: Object,
+    name:String,
+    types:String
   },
   data() {
     return {
@@ -37,13 +39,13 @@ export default {
       let legend = this.order.map((_) => _.name);
       let option = {
         title: {
-          text: "下单GMV占比分析",
+          text: this.name,
           x: "30%",
           // x: "center",
         },
         tooltip: {
           trigger: "item",
-          formatter: "{b} : {c}元 ({d}%)",
+          formatter:this.name == "下单GMV占比分析"  || this.name == "实际GMV占比分析" || this.name == "退款GMV占比分析" || this.name == "品牌看板下单GMV占比分析" || this.name == "品项看板下单GMV占比分析" ? "{b} : {c}元 ({d}%)" : "{b} : {c}件 ({d}%)",
         },
         // legend: {
         //   data: legend,
@@ -86,49 +88,152 @@ export default {
   watch:{
     performanceKanbanParams: {
         handler(value) {
-            const {createOrderGMVAnalizeData} = value.categoryAnalizeData
-            // let createOrderGMVAnalizeData = [{
-            //   id:'生活类1',
-            //   name:'100'
-            // },{
-            //   id:'生活类2',
-            //   name:'200'
-            // },{
-            //   id:'生活类3',
-            //   name:'300'
-            // },{
-            //   id:'生活类4',
-            //   name:'400'
-            // },{
-            //   id:'生活类5',
-            //   name:'500'
-            // },{
-            //   id:'生活类6',
-            //   name:'600'
-            // },{
-            //   id:'生活类7',
-            //   name:'34'
-            // },{
-            //   id:'生活类8',
-            //   name:'546'
-            // },{
-            //   id:'生活类9',
-            //   name:'23'
-            // },{
-            //   id:'生活类10',
-            //   name:'343'
-            // }]
-            if(createOrderGMVAnalizeData){
-              this.order =  createOrderGMVAnalizeData.map((item) => {
-                  return {
-                    name: item.id,
-                    value: item.name,
-                  };
-                });
-                this.$nextTick(() => {
-                  this.myEcharts();
-                });
+            const {createOrderGMVAnalizeData,createOrderNumAnalizeData,actualGMVAnalizeData,actualNumAnalizeData,refundGMVAnalizeData,refundNumAnalizeData} = value.categoryAnalizeData
+            // 品类看板 下单GMV占比分析
+            if(this.name == '下单GMV占比分析'){
+              if(createOrderGMVAnalizeData){
+                this.order =  createOrderGMVAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
             }
+            // 品类看板 下单件数占比分析
+            if(this.name == '下单件数占比分析'){
+              if(createOrderNumAnalizeData){
+                this.order =  createOrderNumAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+            // 品类看板 实际GMV占比分析
+            if(this.name == '实际GMV占比分析'){
+              if(actualGMVAnalizeData){
+                this.order =  actualGMVAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+            // 品类看板 实际件数占比分析
+            if(this.name == '实际件数占比分析'){
+              if(actualNumAnalizeData){
+                this.order =  actualNumAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+            // 品类看板 退款GMV占比分析
+            if(this.name == '退款GMV占比分析'){
+              if(refundGMVAnalizeData){
+                this.order =  refundGMVAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+            // 品类看板 退款件数占比分析
+            if(this.name == '退款件数占比分析'){
+              if(refundNumAnalizeData){ 
+                this.order =  refundNumAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+
+
+
+
+            // 品牌看板 下单GMV占比分析
+            if(this.name == '下单GMV占比分析' && this.types == '品牌看板'){
+              if(value.brandAnalizeData.createOrderGMVAnalizeData){
+                this.order =  value.brandAnalizeData.createOrderGMVAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+            // 品牌看板 下单件数占比分析
+            if(this.name == '下单件数占比分析'&& this.types == '品牌看板'){
+              if(value.brandAnalizeData.createOrderNumAnalizeData){
+                this.order =  value.brandAnalizeData.createOrderNumAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+            // 品项看板 下单GMV占比分析
+            if(this.name == '下单GMV占比分析' && this.types == '品项看板'){
+              if(value.itemDetailsAnalizeData.createOrderGMVAnalizeData){
+                this.order =  value.itemDetailsAnalizeData.createOrderGMVAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+            // 品项看板 下单件数占比分析
+            if(this.name == '下单件数占比分析' && this.types == '品项看板'){
+              if(value.itemDetailsAnalizeData.createOrderNumAnalizeData){
+                this.order =  value.itemDetailsAnalizeData.createOrderNumAnalizeData.map((item) => {
+                    return {
+                      name: item.id,
+                      value: item.name,
+                    };
+                  });
+                  this.$nextTick(() => {
+                    this.myEcharts();
+                  });
+              }
+            }
+
             
         },
         deep: true,

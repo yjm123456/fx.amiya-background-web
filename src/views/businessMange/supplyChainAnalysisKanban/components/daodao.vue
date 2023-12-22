@@ -23,39 +23,39 @@
         <div class="titles">品类看板</div>
         <div class="list">
             <div class="item">
-                <cake :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单GMV占比分析" />
             </div>
             <div class="item">
-                <cake2 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake2 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单件数占比分析" />
             </div>
             <div class="item3">
-                <cake3 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake3 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单件单价分析"/>
             </div>
         </div>
     </div>
     <div class="content2">
         <div class="list2">
             <div class="item">
-                <cake4 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake4 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="实际GMV占比分析"/>
             </div>
             <div class="item">
-                <cake5 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake5 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="实际件数占比分析"/>
             </div>
             <div class="item3">
-                <cake6 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake6 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="实际件单价分析"/>
             </div>
         </div>
     </div>
     <div class="content2">
         <div class="list2">
             <div class="item">
-                <cake7 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake7 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="退款GMV占比分析"/>
             </div>
             <div class="item">
-                <cake8 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake8 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="退款件数占比分析"/>
             </div>
             <div class="item3">
-                <cake9 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                <cake9 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="退款件单价分析"/>
             </div>
         </div>
     </div>
@@ -63,18 +63,18 @@
     <div class="brand_con">
         <div class="titles">品牌看板</div>
         <div >
-            <tables  :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams"/>
+            <tables  :performanceKanbanParams="performanceKanbanParams"/>
         </div>
         <div class="content2">
             <div class="list2">
                 <div class="item">
-                    <cake10 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                    <cake10 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单GMV占比分析" types="品牌看板"/>
                 </div>
                 <div class="item">
-                    <cake11 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                    <cake11 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单件数占比分析" types="品牌看板"/>
                 </div>
                 <div class="item3">
-                    <cake12 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                    <cake12 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单件单价分析" types="品牌看板"/>
                 </div>
             </div>
         </div>
@@ -83,24 +83,22 @@
     <div class="brand_con">
         <div class="titles">品项看板</div>
         <div >
-            <tables2  :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams"/>
+            <tables2  :performanceKanbanParams="performanceKanbanParams"/>
         </div>
         <div class="content2">
             <div class="list2">
                 <div class="item">
-                    <cake13 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                    <cake13 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单GMV占比分析" types="品项看板"/>
                 </div>
                 <div class="item">
-                    <cake14 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                    <cake14 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单件数占比分析" types="品项看板"/>
                 </div>
                 <div class="item3">
-                    <cake15 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" />
+                    <cake15 :performanceKanbanParams="performanceKanbanParams" v-if="performanceKanbanParams" name="下单件单价分析" types="品项看板"/>
                 </div>
             </div>
         </div>
-        
     </div>
-
   </div>
 </template>
 <script>
@@ -108,21 +106,24 @@ import * as api from "@/api/takeGoodsDataBoard";
 import performanceKanban from "./performanceKanban.vue";
 import packagesDataKanBan from "./packagesDataKanBan.vue";
 import performanceTrends from "./performanceTrends.vue"
+// 饼图
 import cake from "./cake.vue"
-import cake2 from "./cake2.vue"
+import cake2 from "./cake.vue"
+import cake4 from "./cake.vue"
+import cake5 from "./cake.vue"
+import cake7 from "./cake.vue"
+import cake8 from "./cake.vue"
+import cake10 from "./cake.vue"
+import cake11 from "./cake.vue"
+import cake13 from "./cake.vue"
+import cake14 from "./cake.vue"
+
+// 折线图
 import cake3 from "./cake3.vue"
-import cake4 from "./cake4.vue"
-import cake5 from "./cake5.vue"
-import cake6 from "./cake6.vue"
-import cake7 from "./cake7.vue"
-import cake8 from "./cake8.vue"
-import cake9 from "./cake9.vue"
-import cake10 from "./cake10.vue"
-import cake11 from "./cake11.vue"
-import cake12 from "./cake12.vue"
-import cake13 from "./cake13.vue"
-import cake14 from "./cake14.vue"
-import cake15 from "./cake15.vue"
+import cake6 from "./cake3.vue"
+import cake9 from "./cake3.vue"
+import cake12 from "./cake3.vue"
+import cake15 from "./cake3.vue"
 import tables from "./tables.vue"
 import tables2 from "./tables2.vue"
 export default {

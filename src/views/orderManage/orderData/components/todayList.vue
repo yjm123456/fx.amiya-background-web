@@ -89,10 +89,32 @@ export default {
             tooltip: true,
           },
           {
+            title: "下单金额",
+            key: "addOrderPrice",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "成交金额",
+            key: "dealPrice",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "新老客业绩",
+            key: "isOldCustomer",
+            minWidth: 150,
+            align: "center",
+            tooltip: true,
+          },
+          {
             title: "操作",
             key: "",
             width: 100,
             align: "center",
+            fixed:'right',
 
             render: (h, params) => {
               return h("div", [

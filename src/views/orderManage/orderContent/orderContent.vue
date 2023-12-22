@@ -2132,12 +2132,7 @@ export default {
                     content: "修改成功",
                     duration: 3,
                   });
-                } else if (res.code != -1 || res.code !=0){
-                  this.$Message.error('操作失败，请联系管理员')
-                  setTimeout(() => {
-                    this.flag = false;
-                  }, 3000);
-                }else {
+                } else {
                   setTimeout(() => {
                     this.flag = false;
                   }, 3000);
@@ -2222,12 +2217,7 @@ export default {
                     content: "添加成功",
                     duration: 3,
                   });
-                } else if (res.code != -1 || res.code !=0){
-                  this.$Message.error('操作失败，请联系管理员')
-                  setTimeout(() => {
-                    this.flag = false;
-                  }, 3000);
-                }else {
+                } else {
                   setTimeout(() => {
                     this.flag = false;
                   }, 3000);
@@ -2363,8 +2353,6 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrder;
           this.query.data = list;
           this.query.totalCount = totalCount;
-        }else if (res.code != -1 || res.code !=0){
-          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },
@@ -2422,8 +2410,6 @@ export default {
           this.query.totalCount = totalCount;
           // 修改时 保留在当前页面
           // sessionStorage.setItem("pageNumEdit", pageNum);
-        }else if (res.code != -1 || res.code !=0){
-          this.$Message.error('操作失败，请联系管理员')
         }
       });
     },

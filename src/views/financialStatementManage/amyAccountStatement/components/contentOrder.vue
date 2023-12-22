@@ -954,29 +954,7 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
-          // let settlePriceNum = 0
-          // this.query.data.map(item=>{
-          //   if(this.reconciliationParams.id == item.reconciliationDocumentsId){
-          //     if(item.checkStateText=='审核通过' || item.checkState == '审核中'){
-          //       settlePriceNum +=item.settlePrice
-          //     }
-          //   }
-          // })
-          // this.settlePriceNum = settlePriceNum
-          // this.$emit('settlePriceChange2',settlePriceNum)
-          // const data = {
-          //   recommandId:this.reconciliationParams.id
-          // }
-          // reconapi.getTotalCheckReturnBackPriceById(data).then((res) => {
-            
-          //   if(res.code === 0){
-
-          //     this.$emit('settlePriceChange',res.data.TotalCheckReturnBackPriceById)
-          //   }
-          // })
-        } else if (res.code != -1 || res.code != 0) {
-          this.$Message.error("操作失败，请联系管理员");
-        }
+        } 
       });
     },
     // 获取内容平台已成交列表分页
@@ -1074,29 +1052,8 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
-          // let settlePriceNum = 0
-          // this.query.data.map(item=>{
-          //   if(this.reconciliationParams.id == item.reconciliationDocumentsId){
-          //     if(item.checkStateText=='审核通过' || item.checkState == '审核中'){
-          //       settlePriceNum +=item.settlePrice
-          //     }
-          //   }
-          // })
-          // this.settlePriceNum = settlePriceNum
-          // this.$emit('settlePriceChange2',settlePriceNum)
-          // const data = {
-          //   recommandId:this.reconciliationParams.id
-          // }
-          // reconapi.getTotalCheckReturnBackPriceById(data).then((res) => {
-            
-          //   if(res.code === 0){
-
-          //     this.$emit('settlePriceChange',res.data.TotalCheckReturnBackPriceById)
-          //   }
-          // })
-        } else if (res.code != -1 || res.code != 0) {
-          this.$Message.error("操作失败，请联系管理员");
-        }
+        
+        } 
       });
     },
     // modal 显示状态发生变化时触发

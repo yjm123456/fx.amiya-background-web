@@ -12,11 +12,14 @@ echarts.registerTheme("tdTheme", tdTheme);
 export default {
   props: {
     performanceKanbanParams: Object,
+    name:String,
+    types:String
   },
   data() {
     return {
       myChart: "",
       order: [],
+      nameList:[]
     };
   },
   computed: {
@@ -34,57 +37,18 @@ export default {
   methods: {
     // 订单状态分布
     myEcharts(value) {
-      const {createOrderSinglePriceAnalizeData} = value.categoryAnalizeData
-      // let createOrderSinglePriceAnalizeData = [{
-      //         id:'生活类1',
-      //         name:'100'
-      //       },{
-      //         id:'生活类2',
-      //         name:'200'
-      //       },{
-      //         id:'生活类3',
-      //         name:'300'
-      //       },{
-      //         id:'生活类4',
-      //         name:'400'
-      //       },{
-      //         id:'生活类5',
-      //         name:'500'
-      //       },{
-      //         id:'生活类6',
-      //         name:'600'
-      //       },{
-      //         id:'生活类7',
-      //         name:'34'
-      //       },{
-      //         id:'生活类8',
-      //         name:'546'
-      //       },{
-      //         id:'生活类9',
-      //         name:'23'
-      //       },{
-      //         id:'生活类10',
-      //         name:'343'
-      //       }]
-      let name = []
-      let values = []
-      if(createOrderSinglePriceAnalizeData){
-        createOrderSinglePriceAnalizeData.map(item=>{
-          name.push(item.id)
-          values.push(item.name)
-        })
-      }
+      
       
       // let legend = this.order.map((_) => _.name);
       let option = {
         title: {
-          text: "下单件单价分析",
+          text: this.name,
           x: "center",
           
         },
        xAxis: {
           type: 'category',
-          data: name,
+          data: this.nameList,
           name: '品类',
         },
         yAxis: {
@@ -110,7 +74,7 @@ export default {
           },
         series: [
           {
-            data: values,
+            data: this.order,
             type: 'bar',
             barWidth:'15px'
           }
@@ -127,20 +91,88 @@ export default {
   watch:{
     performanceKanbanParams: {
         handler(value) {
-            // const {createOrderGMVAnalizeData} = value.categoryAnalizeData
-            // if(createOrderGMVAnalizeData){
-            //   // this.order =  createOrderGMVAnalizeData.map((item) => {
-            //   //     return {
-            //   //       name: item.id,
-            //   //       value: item.name,
-            //   //     };
-            //   //   });
+          const {createOrderSinglePriceAnalizeData,actualSinglePriceAnalizeData,refundSinglePriceAnalizeData} = value.categoryAnalizeData
+          // 下单件单价分析
+          if(this.name == '下单件单价分析'){
+              let name = []
+              let values = []
+              if(createOrderSinglePriceAnalizeData){
+                createOrderSinglePriceAnalizeData.map(item=>{
+                  name.push(item.id)
+                  values.push(item.name)
+                })
+              }
+              this.nameList = name
+              this.order = values
+              this.$nextTick(() => {
+                this.myEcharts();
+              });
+          }
+          // 实际件单价分析
+          if(this.name == '实际件单价分析'){
+            let name = []
+            let values = []
+            if(actualSinglePriceAnalizeData){
+              actualSinglePriceAnalizeData.map(item=>{
+                name.push(item.id)
+                values.push(item.name)
+              })
+              this.nameList = name
+              this.order = values
+              this.$nextTick(() => {
+                this.myEcharts();
+              });
+            }
+          }
+          // 退款件单价分析
+          if(this.name == '退款件单价分析'){
+              let name = []
+              let values = []
+              if(refundSinglePriceAnalizeData){
+                refundSinglePriceAnalizeData.map(item=>{
+                  name.push(item.id)
+                  values.push(item.name)
+                })
+              }
+              this.nameList = name
+              this.order = values
+              this.$nextTick(() => {
+                this.myEcharts();
+              });
+          }
+          // 品牌看板 下单件单价分析
+          if(this.name == '下单件单价分析' && this.types == '品牌看板'){
+              let name = []
+              let values = []
+              if(value.brandAnalizeData.createOrderSinglePriceAnalizeData){
+                value.brandAnalizeData.createOrderSinglePriceAnalizeData.map(item=>{
+                  name.push(item.id)
+                  values.push(item.name)
+                })
+              }
+              this.nameList = name
+              this.order = values
+              this.$nextTick(() => {
+                this.myEcharts();
+              });
+          }
+          // 品项看板 下单件单价分析
+          if(this.name == '下单件单价分析' && this.types == '品项看板'){
+              let name = []
+              let values = []
+              if(value.itemDetailsAnalizeData.createOrderSinglePriceAnalizeData){
+                value.itemDetailsAnalizeData.createOrderSinglePriceAnalizeData.map(item=>{
+                  name.push(item.id)
+                  values.push(item.name)
+                })
+              }
+              this.nameList = name
+              this.order = values
+              this.$nextTick(() => {
+                this.myEcharts();
+              });
               
-                this.$nextTick(() => {
-                  this.myEcharts(value);
-                });
-            // }
-            
+          }
         },
         deep: true,
     },

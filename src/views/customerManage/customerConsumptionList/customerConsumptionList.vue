@@ -228,7 +228,7 @@ export default {
             minWidth:140
           },
           {
-            title: "总单数",
+            title: "消费次数",
             key: "createdOrderNum",
             align:'center',
             minWidth:120

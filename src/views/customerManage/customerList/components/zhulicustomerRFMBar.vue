@@ -207,8 +207,15 @@ export default {
             align:'center'
           },
           {
-            title: "总单数",
+            title: "消费次数",
             key: "allOrderCount",
+            minWidth:140,
+            tooltip:true,
+            align:'center'
+          },
+          {
+            title: "消费周期",
+            key: "consumerCycle",
             minWidth:140,
             tooltip:true,
             align:'center'

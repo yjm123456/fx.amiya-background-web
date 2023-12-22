@@ -66,10 +66,9 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-             
             </div>
             <div style="margin:10px 0 ">
-               <Select
+              <Select
                 v-model="query.isWriteOff"
                 placeholder="请选择核销状态"
                 filterable
@@ -148,8 +147,6 @@
                   >{{ item.emergencyLevelText }}</Option
                 >
               </Select>
-
-              
             </div>
             <div>
               <Input
@@ -453,7 +450,7 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="8" >
+          <Col span="8">
             <FormItem
               label="归属地"
               prop="belongingPlace"
@@ -468,7 +465,6 @@
                 v-model="form.belongingPlace"
                 placeholder="请选择归属地"
                 filterable
-                
               >
                 <Option
                   v-for="item in belongingPlaceList"
@@ -509,8 +505,12 @@
 
           <Col span="8">
             <FormItem label="下单金额" prop="price">
-              <Input v-model="form.price" placeholder="请输入下单金额" type="number"
-                namber></Input>
+              <Input
+                v-model="form.price"
+                placeholder="请输入下单金额"
+                type="number"
+                namber
+              ></Input>
             </FormItem>
           </Col>
           <!-- <Col span="8">
@@ -545,17 +545,20 @@
             </FormItem>
           </Col>
           <Col span="8" v-show="form.source == 6">
-            <FormItem label="产品类型" prop="productType" :rules="[
-                    {
-                      required: form.source == 6 ? true : false,
-                      message: '请输入产品类型',
-                    },
-                  ]">
+            <FormItem
+              label="产品类型"
+              prop="productType"
+              :rules="[
+                {
+                  required: form.source == 6 ? true : false,
+                  message: '请输入产品类型',
+                },
+              ]"
+            >
               <Select
                 v-model="form.productType"
                 placeholder="请选择产品类型"
                 filterable
-                
               >
                 <Option
                   v-for="item in productTypeList"
@@ -566,18 +569,21 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="8" >
-            <FormItem label="获客方式" prop="getCustomerType" :rules="[
-                    {
-                      required:true,
-                      message: '请输入获客方式',
-                    },
-                  ]">
+          <Col span="8">
+            <FormItem
+              label="获客方式"
+              prop="getCustomerType"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入获客方式',
+                },
+              ]"
+            >
               <Select
                 v-model="form.getCustomerType"
                 placeholder="请选择获客方式"
                 filterable
-                
               >
                 <Option
                   v-for="item in getCustomerTypeList"
@@ -588,18 +594,21 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="8" >
-            <FormItem label="客户类型" prop="shoppingCartRegistrationCustomerType" :rules="[
-                    {
-                      required:true,
-                      message: '请输入客户类型',
-                    },
-                  ]">
+          <Col span="8">
+            <FormItem
+              label="客户类型"
+              prop="shoppingCartRegistrationCustomerType"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入客户类型',
+                },
+              ]"
+            >
               <Select
                 v-model="form.shoppingCartRegistrationCustomerType"
                 placeholder="请选择客户类型"
                 filterable
-                
               >
                 <Option
                   v-for="item in shoppingCartRegistrationCustomerTypeList"
@@ -611,12 +620,16 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="title == '修改'">
-            <FormItem label="更新人" prop="createBy" :rules="[
-                    {
-                      required:true,
-                      message: '请输入更新人',
-                    },
-                  ]">
+            <FormItem
+              label="更新人"
+              prop="createBy"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入更新人',
+                },
+              ]"
+            >
               <Select
                 v-model="form.createBy"
                 placeholder="请选择更新人"
@@ -803,7 +816,6 @@
               ></Input>
             </FormItem>
           </Col>
-          
         </Row>
         <Row :gutter="30">
           <!-- <Col span="8">
@@ -845,7 +857,11 @@
       @getSmallCar="getSmallCar"
     />
     <!-- 批量指派 -->
-    <batchAssignment :batchAssignmentModel.sync="batchAssignmentModel" :assignParams="assignParams" @getSmallCar="getSmallCar"/>
+    <batchAssignment
+      :batchAssignmentModel.sync="batchAssignmentModel"
+      :assignParams="assignParams"
+      @getSmallCar="getSmallCar"
+    />
     <!-- 导入 -->
     <importFile
       :importControlModal.sync="importControlModal"
@@ -865,18 +881,20 @@ import batchAssignment from "./components/batchAssignment.vue";
 import importFile from "./components/importModel.vue";
 
 export default {
-  components: { assign,batchAssignment,importFile },
+  components: { assign, batchAssignment, importFile },
   data() {
     return {
       // 客户类型
-      shoppingCartRegistrationCustomerTypeList:[],
-      shoppingCartRegistrationCustomerTypeListAll:[{id:-1,name:'全部客户类型'}],
+      shoppingCartRegistrationCustomerTypeList: [],
+      shoppingCartRegistrationCustomerTypeListAll: [
+        { id: -1, name: "全部客户类型" },
+      ],
       // 产品类型
-      productTypeList:[],
+      productTypeList: [],
       // 导入
-      importControlModal:false,
+      importControlModal: false,
       // 批量删除
-      batchAssignmentModel:false,
+      batchAssignmentModel: false,
       // 指派
       assignModel: false,
       assignParams: {
@@ -888,13 +906,13 @@ export default {
       phoneCopy: "00000000000",
       // 查询
       query: {
-        shoppingCartRegistrationCustomerType:-1,
+        shoppingCartRegistrationCustomerType: -1,
         // 创建人
-        createBy:-1,
+        createBy: -1,
         // 客户来源
-        source:-1,
+        source: -1,
         // 主播
-        baseLiveAnchorId:-1,
+        baseLiveAnchorId: -1,
         // 重要程度
         emergencyLevel: -1,
         // 退款开始时间
@@ -1464,7 +1482,7 @@ export default {
             align: "center",
             tooltip: true,
           },
-          
+
           {
             title: "创建日期",
             key: "createDate",
@@ -1566,7 +1584,7 @@ export default {
                               productType,
                               getCustomerType,
                               createByEmpId,
-                              shoppingCartRegistrationCustomerType
+                              shoppingCartRegistrationCustomerType,
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1584,11 +1602,10 @@ export default {
                               this.form.refundType = refundReason;
                               this.form.refundReason = "";
                             } else {
-                              if(isReturnBackPrice == true && refundReason){
+                              if (isReturnBackPrice == true && refundReason) {
                                 this.form.refundType = "其他";
                                 this.form.refundReason = refundReason.slice(3);
                               }
-                              
                             }
                             this.isEdit = true;
                             this.form.recordDate = recordDate;
@@ -1716,14 +1733,14 @@ export default {
         ],
       },
       // 归属地
-      belongingPlaceList:[
+      belongingPlaceList: [
         {
-          id:1,
-          name:'国内'
+          id: 1,
+          name: "国内",
         },
         {
-          id:2,
-          name:'国外'
+          id: 2,
+          name: "国外",
         },
       ],
       flag: false,
@@ -1796,21 +1813,20 @@ export default {
         // 辅助电话
         subPhone: "",
         // 客户来源
-        source:null,
+        source: null,
         // 归属地
-        belongingPlace:1,
+        belongingPlace: 1,
         // 产品类型
-        productType:null,
+        productType: null,
         // 获客方式
-        getCustomerType:null,
+        getCustomerType: null,
         // 创建人
-        createBy:Number(sessionStorage.getItem('employeeId')),
+        createBy: Number(sessionStorage.getItem("employeeId")),
         // 客户类型
-        shoppingCartRegistrationCustomerType:null
+        shoppingCartRegistrationCustomerType: null,
       },
 
       ruleValidate: {
-        
         source: [
           {
             required: true,
@@ -2079,50 +2095,51 @@ export default {
       ],
       //指派
       employeeList: [],
-      employee: [{ name: "全部指派人员", id: 0 },{ name: "未指派", id: -1 }],
-      employeeCreat:[{ name: "全部更新人", id: -1 }],
+      employee: [
+        { name: "全部指派人员", id: 0 },
+        { name: "未指派", id: -1 },
+      ],
+      employeeCreat: [{ name: "全部更新人", id: -1 }],
       // 微信号
       weChatList: [],
       // 紧急程度
       emergencyLevelsList: [],
       // 根据主播id获取客服
-      baseEmployee:[],
+      baseEmployee: [],
       // 客户来源
-      sourceList:[],
+      sourceList: [],
       // 客户来源
-      sourceListAll:[{ name: "全部客户来源", id: -1}],
+      sourceListAll: [{ name: "全部客户来源", id: -1 }],
       // 主播
-      liveAnchorBaseInfos:[{ name: "全部主播", id: -1}],
+      liveAnchorBaseInfos: [{ name: "全部主播", id: -1 }],
       // 面诊方式
-      typeList:[],
+      typeList: [],
       // 获客方式
-      getCustomerTypeList:[],
+      getCustomerTypeList: [],
       // 所有员工
-      employeeLists:[],
+      employeeLists: [],
       // 是否是管理员
-      isDirector:sessionStorage.getItem('isDirector')
-      
+      isDirector: sessionStorage.getItem("isDirector"),
     };
   },
   methods: {
     // 获取所有员工
-    getEmployeeByPositionId(){
+    getEmployeeByPositionId() {
       const data = {
-        positionId:null
-      }
-      employeeManageApi.getEmployeeByPositionId(data).then(res=>{
-        if(res.code === 0){
-          this.employeeLists = res.data.employee
+        positionId: null,
+      };
+      employeeManageApi.getEmployeeByPositionId(data).then((res) => {
+        if (res.code === 0) {
+          this.employeeLists = res.data.employee;
         }
-      })
+      });
     },
     // 获客方式列表
     getShoppingCartGetCustomerTypeList() {
       api.shoppingCartGetCustomerTypeList().then((res) => {
         if (res.code === 0) {
           const { typeList } = res.data;
-          this.getCustomerTypeList = typeList
-          
+          this.getCustomerTypeList = typeList;
         }
       });
     },
@@ -2131,9 +2148,11 @@ export default {
       api.customerTypeList().then((res) => {
         if (res.code === 0) {
           const { sourceList } = res.data;
-          this.shoppingCartRegistrationCustomerTypeList = sourceList
-          this.shoppingCartRegistrationCustomerTypeListAll = [...this.shoppingCartRegistrationCustomerTypeListAll,...sourceList]
-          
+          this.shoppingCartRegistrationCustomerTypeList = sourceList;
+          this.shoppingCartRegistrationCustomerTypeListAll = [
+            ...this.shoppingCartRegistrationCustomerTypeListAll,
+            ...sourceList,
+          ];
         }
       });
     },
@@ -2142,8 +2161,7 @@ export default {
       api.shoppingCartTakeGoodsProductTypeList().then((res) => {
         if (res.code === 0) {
           const { sourceList } = res.data;
-          this.productTypeList = sourceList
-          
+          this.productTypeList = sourceList;
         }
       });
     },
@@ -2152,8 +2170,7 @@ export default {
       api.consultationTypeList().then((res) => {
         if (res.code === 0) {
           const { typeList } = res.data;
-          this.typeList = typeList
-          
+          this.typeList = typeList;
         }
       });
     },
@@ -2162,8 +2179,10 @@ export default {
       liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
         if (res.code === 0) {
           const { liveAnchorBaseInfos } = res.data;
-          this.liveAnchorBaseInfos = [...this.liveAnchorBaseInfos,...liveAnchorBaseInfos];
-          
+          this.liveAnchorBaseInfos = [
+            ...this.liveAnchorBaseInfos,
+            ...liveAnchorBaseInfos,
+          ];
         }
       });
     },
@@ -2173,20 +2192,19 @@ export default {
         if (res.code === 0) {
           const { sourceList } = res.data;
           this.sourceList = sourceList;
-          this.sourceListAll = [...this.sourceListAll,...sourceList]
+          this.sourceListAll = [...this.sourceListAll, ...sourceList];
         }
       });
     },
     // 根据主播id获取客服名称列表
     getcustomerServiceNameList(value) {
       const data = {
-        baseLiveAnchorId:value ? value : ''
-      }
+        baseLiveAnchorId: value ? value : "",
+      };
       api.customerServiceNameList(data).then((res) => {
         if (res.code === 0) {
           const { employee } = res.data;
           this.baseEmployee = employee;
-          
         }
       });
     },
@@ -2307,26 +2325,26 @@ export default {
       this.form.liveAnchorWeChatNo = "";
       this.form.liveAnchorWechatNo = "";
       // this.getWeChatList(value);
-      if(value){
-        if(this.title == '添加'){
+      if (value) {
+        if (this.title == "添加") {
           // 根据id获取寻找liveAnchorBaseId
-          this.liveAnchors.map(item=>{
-            if(item.id == value){
-              this.getcustomerServiceNameList(item.liveAnchorBaseId)
-              return
+          this.liveAnchors.map((item) => {
+            if (item.id == value) {
+              this.getcustomerServiceNameList(item.liveAnchorBaseId);
+              return;
             }
-          })
-          return
-        }else{
-          this.getcustomerServiceNameList()
-          return
+          });
+          return;
+        } else {
+          this.getcustomerServiceNameList();
+          return;
         }
       }
     },
     //  根据主播获取主播微信号
     getWeChatList(value) {
       const data = {
-        liveanchorId: '',
+        liveanchorId: "",
       };
       liveAnchorApi.getvalidList(data).then((res) => {
         if (res.code === 0) {
@@ -2352,8 +2370,6 @@ export default {
         return;
       }
       this.getLiveValidList(value);
-      
-
     },
     // 根据平台id去获取IP账号
     getLiveValidList(value) {
@@ -2407,7 +2423,7 @@ export default {
         baseLiveAnchorId,
         source,
         createBy,
-        shoppingCartRegistrationCustomerType
+        shoppingCartRegistrationCustomerType,
       } = this.query;
       const data = {
         pageNum,
@@ -2429,7 +2445,10 @@ export default {
         isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
         isSendOrder: isSendOrder == -1 ? null : isSendOrder,
         isBadReview: isBadReview == -1 ? null : isBadReview,
-        shoppingCartRegistrationCustomerType: shoppingCartRegistrationCustomerType == -1 ? null : shoppingCartRegistrationCustomerType,
+        shoppingCartRegistrationCustomerType:
+          shoppingCartRegistrationCustomerType == -1
+            ? null
+            : shoppingCartRegistrationCustomerType,
         startRefundTime:
           isReturnBackPrice == "true"
             ? startRefundTime
@@ -2489,8 +2508,6 @@ export default {
           this.query.data = list;
           this.query.totalCount = totalCount;
           this.assignParams.idList.clear();
-        } else if (res.code != -1 || res.code != 0) {
-          this.$Message.error("操作失败，请联系管理员");
         }
       });
     },
@@ -2522,7 +2539,7 @@ export default {
         baseLiveAnchorId,
         source,
         createBy,
-        shoppingCartRegistrationCustomerType
+        shoppingCartRegistrationCustomerType,
       } = this.query;
       const data = {
         pageNum,
@@ -2544,7 +2561,10 @@ export default {
         isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
         isSendOrder: isSendOrder == -1 ? null : isSendOrder,
         isBadReview: isBadReview == -1 ? null : isBadReview,
-        shoppingCartRegistrationCustomerType: shoppingCartRegistrationCustomerType == -1 ? null : shoppingCartRegistrationCustomerType,
+        shoppingCartRegistrationCustomerType:
+          shoppingCartRegistrationCustomerType == -1
+            ? null
+            : shoppingCartRegistrationCustomerType,
         startRefundTime:
           isReturnBackPrice == "true"
             ? startRefundTime
@@ -2586,8 +2606,6 @@ export default {
           this.query.totalCount = totalCount;
           // 修改时 保留在当前页面
           // sessionStorage.setItem("smallpageNumEdit", pageNum);
-        } else if (res.code != -1 || res.code != 0) {
-          this.$Message.error("操作失败，请联系管理员");
         }
       });
     },
@@ -2595,211 +2613,174 @@ export default {
       this.query.pageSize = pageSize;
       this.getSmallCar();
     },
+    // 修改
+    editgetJoddle() {
+      const {
+        id,
+        recordDate,
+        contentPlatFormId,
+        liveAnchorId,
+        liveAnchorWechatNo,
+        customerNickName,
+        phone,
+        price,
+        consultationType,
+        isWriteOff,
+        isConsultation,
+        isReturnBackPrice,
+        remark,
+        IsAddWeChat,
+        time,
+        refundDate,
+        refundReason,
+        isBadReview,
+        badReviewDate,
+        badReviewReason,
+        badReviewContent,
+        isReContent,
+        reContent,
+        assignEmpId,
+        emergencyLevel,
+        consultationDate,
+        refundType,
+        subPhone,
+        source,
+        belongingPlace,
+        productType,
+        getCustomerType,
+        createBy,
+        shoppingCartRegistrationCustomerType,
+      } = this.form;
+      const data = {
+        recordDate: time
+          ? this.$moment(recordDate).format("YYYY-MM-DD") + "T" + time
+          : this.$moment(recordDate).format("YYYY-MM-DD") + "T" + "00:00:00",
+        contentPlatFormId,
+        liveAnchorId,
+        liveAnchorWechatNo: this.form.liveAnchorWeChatNo,
+        customerNickName,
+        phone,
+        price,
+        consultationType: 4,
+        isWriteOff,
+        isConsultation,
+        isReturnBackPrice,
+        remark,
+        IsAddWeChat,
+        id,
+        refundDate: refundDate
+          ? this.$moment(refundDate).format("YYYY-MM-DD")
+          : null,
+        refundReason:
+          refundType != "其他" ? refundType : "其他：" + refundReason,
+        isBadReview,
+        badReviewDate: badReviewDate
+          ? this.$moment(badReviewDate).format("YYYY-MM-DD")
+          : null,
+        badReviewReason,
+        badReviewContent,
+        isReContent,
+        reContent,
+        assignEmpId,
+        emergencyLevel,
+        consultationDate: consultationDate
+          ? this.$moment(consultationDate).format("YYYY-MM-DD")
+          : null,
+        subPhone,
+        source,
+        productType: source == 6 ? productType : 0,
+        getCustomerType,
+        createBy,
+        shoppingCartRegistrationCustomerType,
+      };
+      // 归属地 国内是1 国外是2
+      if (belongingPlace == 1) {
+        // 国内手机号分为00000000000和正常手机号
+        if (phone == "00000000000") {
+          this.flag = true;
+          // 修改
+          api.editShoppingCartRegistration(data).then((res) => {
+            if (res.code === 0) {
+              this.isEdit = false;
+              this.flag = false;
+              this.cancelSubmit("form");
+              // this.getSmallCar();
+              this.handlePageChange(this.$refs.pages.currentPage);
+              this.$Message.success({
+                content: "修改成功",
+                duration: 3,
+              });
+            }
+          });
+          return;
+        } else {
+          if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
+            this.$Message.error("请确认归属地和手机号是否正确！");
+            return false;
+          }
+          this.flag = true;
+          // 修改
+          api.editShoppingCartRegistration(data).then((res) => {
+            if (res.code === 0) {
+              this.isEdit = false;
+              this.flag = false;
+              this.cancelSubmit("form");
+              // this.getSmallCar();
+              this.handlePageChange(this.$refs.pages.currentPage);
+              this.$Message.success({
+                content: "修改成功",
+                duration: 3,
+              });
+            } else if (res.code == -1) {
+              setTimeout(() => {
+                this.flag = false;
+              }, 3000);
+            }
+          });
+        }
+      } else {
+        this.flag = true;
+        // 修改
+        api.editShoppingCartRegistration(data).then((res) => {
+          if (res.code === 0) {
+            this.isEdit = false;
+            this.flag = false;
+            this.cancelSubmit("form");
+            // this.getSmallCar();
+            this.handlePageChange(this.$refs.pages.currentPage);
+            this.$Message.success({
+              content: "修改成功",
+              duration: 3,
+            });
+          } else if (res.code == -1) {
+            setTimeout(() => {
+              this.flag = false;
+            }, 3000);
+          }
+        });
+      }
+    },
     // 确认
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const {
-              id,
-              recordDate,
-              contentPlatFormId,
-              liveAnchorId,
-              liveAnchorWechatNo,
-              customerNickName,
-              phone,
-              price,
-              consultationType,
-              isWriteOff,
-              isConsultation,
-              isReturnBackPrice,
-              remark,
-              IsAddWeChat,
-              time,
-              refundDate,
-              refundReason,
-              isBadReview,
-              badReviewDate,
-              badReviewReason,
-              badReviewContent,
-              isReContent,
-              reContent,
-              assignEmpId,
-              emergencyLevel,
-              consultationDate,
-              refundType,
-              subPhone,
-              source,
-              belongingPlace,
-              productType,
-              getCustomerType,
-              createBy,
-              shoppingCartRegistrationCustomerType
-              
-            } = this.form;
-            const data = {
-              recordDate: time
-                ? this.$moment(recordDate).format("YYYY-MM-DD") + "T" + time
-                : this.$moment(recordDate).format("YYYY-MM-DD") +
-                  "T" +
-                  "00:00:00",
-              contentPlatFormId,
-              liveAnchorId,
-              liveAnchorWechatNo: this.form.liveAnchorWeChatNo,
-              customerNickName,
-              phone,
-              price,
-              consultationType:4,
-              isWriteOff,
-              isConsultation,
-              isReturnBackPrice,
-              remark,
-              IsAddWeChat,
-              id,
-              refundDate: refundDate
-                ? this.$moment(refundDate).format("YYYY-MM-DD")
-                : null,
-              refundReason:
-                refundType != "其他" ? refundType : "其他：" + refundReason,
-              isBadReview,
-              badReviewDate: badReviewDate
-                ? this.$moment(badReviewDate).format("YYYY-MM-DD")
-                : null,
-              badReviewReason,
-              badReviewContent,
-              isReContent,
-              reContent,
-              assignEmpId,
-              emergencyLevel,
-              consultationDate: consultationDate
-                ? this.$moment(consultationDate).format("YYYY-MM-DD")
-                : null,
-              subPhone,
-              source,
-              productType:source == 6 ? productType : 0,
-              getCustomerType,
-              createBy,
-              shoppingCartRegistrationCustomerType
-            };
-            // if (this.form.phone) {
-            //   if (this.form.phone == "00000000000") {
-            //     if (!data.liveAnchorWechatNo) {
-            //       this.$Message.warning("请选择微信号");
-            //       return;
-            //     }
-            //     // 修改
-            //     api.editShoppingCartRegistration(data).then((res) => {
-            //       if (res.code === 0) {
-            //         this.isEdit = false;
-            //         this.cancelSubmit("form");
-            //         // this.getSmallCar();
-            //         this.handlePageChange(this.$refs.pages.currentPage);
-            //         this.$Message.success({
-            //           content: "修改成功",
-            //           duration: 3,
-            //         });
-            //       } else if (res.code != -1 || res.code != 0) {
-            //         this.$Message.error("操作失败，请联系管理员");
-            //       }
-            //     });
-            //     return;
-            //   } else {
-            //     if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
-            //       this.$Message.error("请输入正确的手机号");
-            //       return false;
-            //     } else {
-            //       if (!data.liveAnchorWechatNo) {
-            //         this.$Message.warning("请选择微信号");
-            //         return;
-            //       }
-            //       // 修改
-            //       api.editShoppingCartRegistration(data).then((res) => {
-            //         if (res.code === 0) {
-            //           this.isEdit = false;
-            //           this.cancelSubmit("form");
-            //           // this.getSmallCar();
-            //           this.handlePageChange(this.$refs.pages.currentPage);
-            //           this.$Message.success({
-            //             content: "修改成功",
-            //             duration: 3,
-            //           });
-            //         } else if (res.code != -1 || res.code != 0) {
-            //           this.$Message.error("操作失败，请联系管理员");
-            //         }
-            //       });
-            //     }
-            //   }
-            // }
-            // 归属地 国内是1 国外是2
-            if(belongingPlace == 1){
-              // 国内手机号分为00000000000和正常手机号
-              if(phone == '00000000000'){
-                this.flag = true
-                // 修改
-                api.editShoppingCartRegistration(data).then((res) => {
-                  if (res.code === 0) {
-                    this.isEdit = false;
-                    this.flag = false
-                    this.cancelSubmit("form");
-                    // this.getSmallCar();
-                    this.handlePageChange(this.$refs.pages.currentPage);
-                    this.$Message.success({
-                      content: "修改成功",
-                      duration: 3,
-                    });
-                  } else if (res.code != -1 || res.code != 0) {
-                    this.$Message.error("操作失败，请联系管理员");
-                    this.flag = false
-                    return
-                  }
-                });
-                return
-              }else{
-                if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
-                  this.$Message.error("请确认归属地和手机号是否正确！");
-                  return false;
-                } 
-                this.flag = true
-                // 修改
-                api.editShoppingCartRegistration(data).then((res) => {
-                  if (res.code === 0) {
-                    this.isEdit = false;
-                    this.flag = false
-                    this.cancelSubmit("form");
-                    // this.getSmallCar();
-                    this.handlePageChange(this.$refs.pages.currentPage);
-                    this.$Message.success({
-                      content: "修改成功",
-                      duration: 3,
-                    });
-                  } else if (res.code != -1 || res.code != 0) {
-                    this.$Message.error("操作失败，请联系管理员");
-                    this.flag = false
-                    return
-                  }
-                });
-              }
-            }else{
-              this.flag = true
-              // 修改
-              api.editShoppingCartRegistration(data).then((res) => {
-                if (res.code === 0) {
-                  this.isEdit = false;
-                  this.flag = false
-                  this.cancelSubmit("form");
-                  // this.getSmallCar();
-                  this.handlePageChange(this.$refs.pages.currentPage);
-                  this.$Message.success({
-                    content: "修改成功",
-                    duration: 3,
-                  });
-                } else if (res.code != -1 || res.code != 0) {
-                  this.$Message.error("操作失败，请联系管理员");
-                  this.flag = false
-                  return
-                }
+            const { createBy } = this.form;
+            // 判断登录id和创建id是否一样
+            if (sessionStorage.getItem("employeeId") == createBy) {
+              this.editgetJoddle();
+            } else {
+              this.$Modal.confirm({
+                title: "确认提示",
+                content:
+                  "因当前登录账号和创建人不一致,该部分数据只有加V与备注修改生效，是否确认修改？",
+                onOk: () => {
+                  this.editgetJoddle();
+                },
+                onCancel: () => {},
               });
             }
+            return;
           } else {
             const {
               recordDate,
@@ -2833,7 +2814,7 @@ export default {
               belongingPlace,
               productType,
               getCustomerType,
-              shoppingCartRegistrationCustomerType
+              shoppingCartRegistrationCustomerType,
             } = this.form;
             const data = {
               recordDate: time
@@ -2847,7 +2828,7 @@ export default {
               customerNickName,
               phone,
               price,
-              consultationType:4,
+              consultationType: 4,
               isWriteOff,
               isConsultation,
               isReturnBackPrice,
@@ -2873,112 +2854,74 @@ export default {
                 : null,
               subPhone,
               source,
-              productType:source == 6 ? productType : 0,
+              productType: source == 6 ? productType : 0,
               getCustomerType,
-              shoppingCartRegistrationCustomerType
+              shoppingCartRegistrationCustomerType,
             };
-            
+
             // 归属地 国内是1 国外是2
-            if(belongingPlace == 1){
+            if (belongingPlace == 1) {
               // 国内手机号分为00000000000和正常手机号
-              if(phone == '00000000000'){
-                this.flag = true
+              if (phone == "00000000000") {
+                this.flag = true;
                 // 添加
                 api.addShoppingCartRegistration(data).then((res) => {
                   if (res.code === 0) {
-                    this.flag = false
+                    this.flag = false;
                     this.cancelSubmit("form");
                     this.getSmallCar();
                     this.$Message.success({
                       content: "添加成功",
                       duration: 3,
                     });
-                  } else if (res.code != -1 || res.code != 0) {
-                    this.$Message.warning("操作失败，请联系管理员");
-                    return
+                  } else if (res.code == -1) {
+                    setTimeout(() => {
+                      this.flag = false;
+                    }, 3000);
                   }
                 });
-              }else{
+              } else {
                 if (!/^1[3456789]\d{9}$/.test(this.form.phone)) {
                   this.$Message.error("请确认归属地和手机号是否正确！");
                   return false;
-                } 
-                this.flag = true
+                }
+                this.flag = true;
                 // 添加
                 api.addShoppingCartRegistration(data).then((res) => {
                   if (res.code === 0) {
-                    this.flag = false
+                    this.flag = false;
                     this.cancelSubmit("form");
                     this.getSmallCar();
                     this.$Message.success({
                       content: "添加成功",
                       duration: 3,
                     });
-                  } else if (res.code != -1 || res.code != 0) {
-                    this.$Message.warning("操作失败，请联系管理员");
-                    return
+                  } else if (res.code == -1) {
+                    setTimeout(() => {
+                      this.flag = false;
+                    }, 3000);
                   }
                 });
               }
-            }else{
-              this.flag = true
+            } else {
+              this.flag = true;
               // 添加
               api.addShoppingCartRegistration(data).then((res) => {
                 if (res.code === 0) {
-                  this.flag = false
+                  this.flag = false;
                   this.cancelSubmit("form");
                   this.getSmallCar();
                   this.$Message.success({
                     content: "添加成功",
                     duration: 3,
                   });
-                } else if (res.code != -1 || res.code != 0) {
-                  this.$Message.warning("操作失败，请联系管理员");
-                  return
+                } else if (res.code == -1) {
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
                 }
               });
             }
-            // if (phone === "00000000000") {
-            //   // 添加
-            //   api.addShoppingCartRegistration(data).then((res) => {
-            //     if (res.code === 0) {
-            //       this.cancelSubmit("form");
-            //       this.getSmallCar();
-            //       this.$Message.success({
-            //         content: "添加成功",
-            //         duration: 3,
-            //       });
-            //     } else if (res.code != -1 || res.code != 0) {
-            //       this.$Message.warning("操作失败，请联系管理员");
-            //     }
-            //   });
-            //   return;
-            // } else {
-            //   if (phone) {
-            //     if (!/^1[3456789]\d{9}$/.test(phone)) {
-            //       this.$Message.warning("请输入正确的手机号");
-            //       return false;
-            //     } else {
-            //       if (!data.liveAnchorWechatNo) {
-            //         this.$Message.warning("请选择微信号");
-            //         return;
-            //       }
-            //       // 添加
-            //       api.addShoppingCartRegistration(data).then((res) => {
-            //         if (res.code === 0) {
-            //           this.cancelSubmit("form");
-            //           this.getSmallCar();
-            //           this.$Message.success({
-            //             content: "添加成功",
-            //             duration: 3,
-            //           });
-            //         } else if (res.code != -1 || res.code != 0) {
-            //           this.$Message.warning("操作失败，请联系管理员");
-            //         }
-            //       });
-            //     }
-            //   }
-            // }
           }
         }
       });
@@ -3012,7 +2955,7 @@ export default {
     this.getshoppingCartTakeGoodsProductTypeList();
     this.getShoppingCartGetCustomerTypeList();
     this.getEmployeeByPositionId();
-    this.getcustomerTypeList()
+    this.getcustomerTypeList();
   },
 };
 </script>

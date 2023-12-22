@@ -1489,9 +1489,7 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
-        } else if (res.code != -1 || res.code !=0){
-          this.$Message.error('操作失败，请联系管理员')
-        }
+        } 
       });
     },
 
@@ -1576,9 +1574,7 @@ export default {
           const { list, totalCount } = res.data.contentPlatFormOrderDealInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
-        } else if (res.code != -1 || res.code !=0){
-          this.$Message.error('操作失败，请联系管理员')
-        }
+        } 
       });
     },
     // 审核
@@ -1617,9 +1613,7 @@ export default {
                 content: "提交成功",
                 duration: 3,
               });
-            } else if (res.code != -1 || res.code !=0){
-              this.$Message.error('操作失败，请联系管理员')
-            }else{
+            } else{
                setTimeout(() => {
                 this.flag = false;
               }, 3000);

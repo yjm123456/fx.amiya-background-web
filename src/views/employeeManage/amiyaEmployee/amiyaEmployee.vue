@@ -157,13 +157,13 @@
                 >
               </Select>
             </FormItem>
-            <FormItem label="新客提成(%)" prop="newCustomerCommission">
+            <FormItem label="新客提成(%)" prop="newCustomerCommission"  v-if="form.isCustomerService == true">
               <Input v-model="form.newCustomerCommission" placeholder="请输入新客提成" type="number" number></Input>
             </FormItem>
-            <FormItem label="老客提成(%)" prop="oldCustomerCommission">
+            <FormItem label="老客提成(%)" prop="oldCustomerCommission"  v-if="form.isCustomerService == true">
               <Input v-model="form.oldCustomerCommission" placeholder="请输入老客提成" type="number" number></Input>
             </FormItem>
-            <FormItem label="稽查提成(%)" prop="inspectionCommission">
+            <FormItem label="稽查提成(%)" prop="inspectionCommission"  v-if="form.isCustomerService == true">
               <Input v-model="form.inspectionCommission" placeholder="请输入稽查提成" type="number" number></Input>
             </FormItem>
             <FormItem label="是否有效" prop="valid" v-show="isEdit === true">

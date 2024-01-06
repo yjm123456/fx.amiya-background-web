@@ -2,7 +2,6 @@
 <template>
   <div>
     
-    
     <Card :dis-hover="true">
       <div class="head">
         <div class="content">

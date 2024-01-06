@@ -24,7 +24,7 @@
 import * as api from "@/api/orderManage";
 import * as hospitalManage from "@/api/hospitalManage";
 import * as cusApi from "@/api/customerManage.js";
-
+import * as reconciliationDocumentsSettleApi from "@/api/reconciliationDocumentsSettle";
 import audit from "./views/audit.vue"
 import audited from "./views/audited.vue"
 
@@ -37,6 +37,8 @@ export default {
     return {
       activeName: "audit",
       params:{
+        // 全部上传人
+        creteEmpNameList:[{id:-1,name:'全部上传人'}],
         // 客服
         employeeList:[],
         // 全部客服
@@ -74,6 +76,15 @@ export default {
     }
   },
   methods:{
+    // 获取上传人列表
+    getcreateEmpNameList() {
+      reconciliationDocumentsSettleApi.createEmpNameList().then((res) => {
+        if (res.code === 0) {
+          const {creteEmpNameList} =res.data
+          this.params.creteEmpNameList = [...this.params.creteEmpNameList,...creteEmpNameList]
+        }
+      });
+    },
     // 获取客服列表
     getCustomerServiceList() {
       api.getCustomerServiceList().then((res) => {
@@ -110,6 +121,7 @@ export default {
     this.getCustomerServiceList()
     this.getHospitalInfonameList()
     this.getCheckStateList()
+    this.getcreateEmpNameList()
   }
 }
 </script>

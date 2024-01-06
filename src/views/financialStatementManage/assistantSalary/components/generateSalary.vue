@@ -37,23 +37,132 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="总金额" prop="totalPrice">
+            <FormItem label="底薪" prop="salary">
               <Input
-                v-model="form.totalPrice"
-                placeholder="请输入总金额"
+                v-model="form.salary"
+                placeholder="请输入底薪"
                 type="number"
                 number
-                disabled
+                @on-change="amountChange"
               ></Input>
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="其他金额" prop="otherPrice">
+            <FormItem label="提成金额" prop="customerServicePerformance">
               <Input
-                v-model="form.otherPrice"
-                placeholder="请输入其他金额"
+                v-model="form.customerServicePerformance"
+                placeholder="请输入提成金额"
                 type="number"
                 number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="上门率(%)" prop="toHospitalRate">
+              <Input
+                v-model="form.toHospitalRate"
+                placeholder="请输入上门率"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="上门率奖励" prop="toHospitalRateReword">
+              <Input
+                v-model="form.toHospitalRateReword"
+                placeholder="请输入上门率奖励"
+                type="number"
+                number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="复购率(%)" prop="repeatPurchasesRate">
+              <Input
+                v-model="form.repeatPurchasesRate"
+                placeholder="请输入复购率"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="复购率奖励" prop="repeatPurchasesRateReword">
+              <Input
+                v-model="form.repeatPurchasesRateReword"
+                placeholder="请输入复购率奖励"
+                type="number"
+                number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="新客上门奖励" prop="newCustomerToHospitalReword">
+              <Input
+                v-model="form.newCustomerToHospitalReword"
+                placeholder="请输入新客上门奖励"
+                type="number"
+                number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="老客上门奖励" prop="oldCustomerToHospitalReword">
+              <Input
+                v-model="form.oldCustomerToHospitalReword"
+                placeholder="请输入老客上门奖励"
+                type="number"
+                number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="目标达成奖励" prop="targetFinishReword">
+              <Input
+                v-model="form.targetFinishReword"
+                placeholder="请输入目标达成奖励"
+                type="number"
+                number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="其他奖励" prop="otherPrice">
+              <Input
+                v-model="form.otherPrice"
+                placeholder="请输入其他奖励"
+                type="number"
+                number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="其他扣款" prop="otherChargebacks">
+              <Input
+                v-model="form.otherChargebacks"
+                placeholder="请输入其他扣款"
+                type="number"
+                number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="合计" prop="totalPrice">
+              <Input
+                v-model="form.totalPrice"
+                placeholder="请输入合计"
+                type="number"
+                number
+                disabled
               ></Input>
             </FormItem>
           </Col>
@@ -102,7 +211,27 @@ export default {
         otherPrice: null,
         // 备注
         remark: "",
-        id:''
+        id:'',
+        // 底薪
+        salary:null,
+        // 提成金额
+        customerServicePerformance:null,
+        // 上门率
+        toHospitalRate:null,
+        // 上门率奖励
+        toHospitalRateReword:null,
+        // 复购率
+        repeatPurchasesRate:null,
+        // 复购率奖励
+        repeatPurchasesRateReword:null,
+        // 新客上门奖励
+        newCustomerToHospitalReword:null,
+        // 老客上门奖励
+        oldCustomerToHospitalReword:null,
+        // 目标达成奖励
+        targetFinishReword:null,
+        // 其他扣款
+        otherChargebacks:null,
       },
 
       ruleValidate: {
@@ -127,13 +256,79 @@ export default {
         otherPrice: [
           {
             required: true,
-            message: "请输入其他金额",
+            message: "请输入其他奖励",
+          },
+        ],
+        salary: [
+          {
+            required: true,
+            message: "请输入底薪",
+          },
+        ],
+        customerServicePerformance: [
+          {
+            required: true,
+            message: "请输入提成金额",
+          },
+        ],
+        toHospitalRate: [
+          {
+            required: true,
+            message: "请输入上门率",
+          },
+        ],
+        toHospitalRateReword: [
+          {
+            required: true,
+            message: "请输入上门率奖励",
+          },
+        ],
+        repeatPurchasesRate: [
+          {
+            required: true,
+            message: "请输入复购率",
+          },
+        ],
+        repeatPurchasesRateReword: [
+          {
+            required: true,
+            message: "请输入复购率奖励",
+          },
+        ],
+        newCustomerToHospitalReword: [
+          {
+            required: true,
+            message: "请输入新客上门奖励",
+          },
+        ],
+        oldCustomerToHospitalReword: [
+          {
+            required: true,
+            message: "请输入老客上门奖励",
+          },
+        ],
+        targetFinishReword: [
+          {
+            required: true,
+            message: "请输入目标达成奖励",
+          },
+        ],
+        otherChargebacks: [
+          {
+            required: true,
+            message: "请输入其他扣款",
           },
         ],
       },
     };
   },
   methods: {
+    // 合计
+    amountChange(){
+      const {salary,customerServicePerformance,toHospitalRateReword,repeatPurchasesRateReword,newCustomerToHospitalReword,oldCustomerToHospitalReword,targetFinishReword,otherPrice,otherChargebacks} = this.form
+      let price = salary+customerServicePerformance+toHospitalRateReword+repeatPurchasesRateReword+newCustomerToHospitalReword+oldCustomerToHospitalReword+targetFinishReword+otherPrice-otherChargebacks
+      this.form.totalPrice = Math.round(price * 100) / 100 
+    },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
@@ -176,13 +371,24 @@ export default {
     controlModal(value) {
       this.control = value;
       if(value === true){
-        const {name,belongEmpId,totalPrice,otherPrice,remark,id} = this.params.detailObj
+        const {name,belongEmpId,totalPrice,otherPrice,remark,id,salary,customerServicePerformance,toHospitalRate,toHospitalRateReword,repeatPurchasesRate,repeatPurchasesRateReword,newCustomerToHospitalReword,oldCustomerToHospitalReword,targetFinishReword,otherChargebacks} = this.params.detailObj
         this.form.name = name
         this.form.belongEmpId = belongEmpId
         this.form.totalPrice = totalPrice
         this.form.otherPrice = otherPrice
         this.form.remark = remark
         this.form.id = id
+        this.form.salary = salary
+        this.form.customerServicePerformance = customerServicePerformance
+        this.form.toHospitalRate = toHospitalRate
+        this.form.toHospitalRateReword = toHospitalRateReword
+        this.form.repeatPurchasesRate = repeatPurchasesRate
+        this.form.repeatPurchasesRateReword = repeatPurchasesRateReword
+        this.form.newCustomerToHospitalReword = newCustomerToHospitalReword
+        this.form.oldCustomerToHospitalReword = oldCustomerToHospitalReword
+        this.form.targetFinishReword = targetFinishReword
+        this.form.otherChargebacks = otherChargebacks
+        
       }
       
     },

@@ -339,22 +339,6 @@ export default {
             minWidth: 180,
             align: "center",
           },
-          // {
-          //   title: "预约时间",
-          //   key: "appointmentDate",
-          //   minWidth: 120,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return h(
-          //       "div",
-          //       params.row.appointmentDate == "未确认时间"
-          //         ? "未确认时间"
-          //         : this.$moment(params.row.appointmentDate).format(
-          //             "YYYY-MM-DD"
-          //           )
-          //     );
-          //   },
-          // },
           {
             title: "客户昵称",
             key: "customerName",
@@ -412,13 +396,6 @@ export default {
               );
             },
           },
-          
-          // {
-          //   title: "面诊员",
-          //   minWidth: 120,
-          //   key: "consultationEmpName",
-          //   align:'center'
-          // },
           {
             title: "咨询内容",
             key: "consultingContent",
@@ -512,49 +489,17 @@ export default {
               }
             },
           },
-
-          // {
-          //   title: "订单类型",
-          //   key: "orderTypeText",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          // {
-          //   title: "定金金额",
-          //   key: "depositAmount",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          // {
-          //   title: "成交金额",
-          //   key: "dealAmount",
-          //   minWidth: 140,
-          //   align: "center",
-          // },
-          
           {
             title: "订单来源",
             key: "orderSourceText",
             minWidth: 120,
             align: "center",
           },
-          // {
-          //   title: "接诊咨询",
-          //   key: "acceptConsulting",
-          //   minWidth: 200,
-          //   align: "center",
-          // },
           {
             title: "未派单原因",
             key: "unSendReason",
             minWidth: 400,
           },
-          // {
-          //   title: "后期铺垫",
-          //   key: "lateProjectStage",
-          //   minWidth: 400,
-          // },
-
           {
             title: "备注",
             key: "remark",
@@ -573,7 +518,6 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      // disabled:params.row.statusText != '交易成功'
                     },
                     style: {
                       marginRight: ".3125rem",

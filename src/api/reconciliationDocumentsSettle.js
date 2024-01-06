@@ -33,3 +33,10 @@ export const checkReconciliationDocumentsSettle = (data) => {
         data
     });
 };
+// 获取上传人名称列表
+export const createEmpNameList = () => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/createEmpNameList",
+        method: "get",
+    });
+};

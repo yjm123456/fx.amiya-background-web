@@ -121,34 +121,131 @@ export default {
             title: "创建人",
             key: "createByEmpName",
             align:'center',
+            minWidth:150,
+            tooltip:true
           },
           {
             title: "名称",
             key: "name",
+            minWidth:180,
+            tooltip:true
           },
           {
             title: "助理",
             key: "belongEmpName",
             align:'center',
+            minWidth:150,
+            tooltip:true
           },
           {
-            title: "总金额",
-            key: "totalPrice",
+            title: "底薪",
+            key: "salary",
             align:'center',
+            minWidth:120,
+            tooltip:true
           },
           {
-            title: "其他费用",
+            title: "提成金额",
+            key: "customerServicePerformance",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "上门率",
+            key: "toHospitalRate",
+            align:'center',
+            minWidth:120,
+            tooltip:true,
+            render: (h, params) => {
+              return h(
+                "div",
+                 params.row.toHospitalRate ? params.row.toHospitalRate + '%' : 0
+                  
+              );
+            },
+          },
+          {
+            title: "上门率奖励",
+            key: "toHospitalRateReword",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "复购率",
+            key: "repeatPurchasesRate",
+            align:'center',
+            minWidth:120,
+            tooltip:true,
+            render: (h, params) => {
+              return h(
+                "div",
+                 params.row.repeatPurchasesRate ? params.row.repeatPurchasesRate + '%' : 0
+                  
+              );
+            },
+          },
+          {
+            title: "复购率奖励",
+            key: "repeatPurchasesRateReword",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "新客上门奖励",
+            key: "newCustomerToHospitalReword",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "老客上门奖励",
+            key: "oldCustomerToHospitalReword",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "目标达成奖励",
+            key: "targetFinishReword",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "其他奖励",
             key: "otherPrice",
             align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "其他扣款",
+            key: "otherChargebacks",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "合计",
+            key: "totalPrice",
+            align:'center',
+            minWidth:150,
+            tooltip:true
           },
           {
             title: "费用备注",
             key: "remark",
+            minWidth:300,
+            tooltip:true
           },
           {
             title: "是否有效",
             key: "valid",
             align:'center',
+            minWidth:120,
             render: (h, params) => {
               if (params.row.valid == true) {
                 return h("Icon", {

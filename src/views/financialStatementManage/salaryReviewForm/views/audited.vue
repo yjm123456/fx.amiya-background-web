@@ -62,6 +62,19 @@
               >{{ item.name }}</Option
             >
           </Select> 
+          <Select
+            v-model="query.createEmpId"
+            placeholder="请选择上传人"
+            filterable
+            style="width: 150px;margin-left:10px"
+          >
+            <Option
+              v-for="item in params.creteEmpNameList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select> 
           <!-- <Select
             v-model="query.checkState"
             placeholder="请选择审核状态"
@@ -141,6 +154,7 @@ export default {
         isOldCustoemr:-1,
         belongEmpId:-1,
         checkState:2,
+        createEmpId:-1,
         pageNum: 1,
         pageSize: 10,
         columns: [
@@ -206,6 +220,25 @@ export default {
           {
             title: "对账金额",
             key: "returnBackPrice",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "提成比例",
+            key: "performancePercent",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                 params.row.performancePercent ? params.row.performancePercent + '%' : 0
+                  
+              );
+            },
+          },
+          {
+            title: "提成金额",
+            key: "customerServicePerformance",
             minWidth: 160,
             align: "center",
           },
@@ -373,32 +406,34 @@ export default {
             }
       }
         //  this.generateSalaryModel =  (this.isModel == 1 || !this.generateSalaryParams.generateSalaryList) ? false : true ;
-        this.generateSalaryParams.returnBackPrice =this.returnBackPrice == 0 ? 0 : this.returnBackPrice.toFixed(2);
+        // this.generateSalaryParams.returnBackPrice =this.returnBackPrice == 0 ? 0 : this.returnBackPrice.toFixed(2);
       
     },
     handleSelect(selection, row) {
-      this.returnBackPrice += row.returnBackPrice
+      // console.log(row.returnBackPrice)
+      //   this.returnBackPrice += row.returnBackPrice
+      // console.log(this.returnBackPrice)
       // 生成薪资单
       this.generateSalaryParams.generateSalaryList = selection
     },
     handleCancels(selection, row) {
       // 生成薪资单
       this.generateSalaryParams.generateSalaryList = selection
-      this.returnBackPrice = this.returnBackPrice - row.returnBackPrice
+      // this.returnBackPrice = this.returnBackPrice - row.returnBackPrice
     },
 
     handleSelectAll(selection) {
       if (selection && selection.length === 0) {
-        this.form.reconciliationDocumentsIdList.clear();
+        // this.form.reconciliationDocumentsIdList.clear();
         // 生成薪资单
         this.generateSalaryParams.generateSalaryList = []
 
-        this.returnBackPrice = 0
+        // this.returnBackPrice = 0
       } else {
         this.generateSalaryParams.generateSalaryList = selection
-        selection.forEach((item) => {
-          this.returnBackPrice += item.returnBackTotalPrice
-        });
+        // selection.forEach((item) => {
+        //   this.returnBackPrice += item.returnBackTotalPrice
+        // });
       }
     },
     // 获取薪资审核表
@@ -416,7 +451,8 @@ export default {
         chooseHospitalId,
         checkState,
         belongEmpId,
-        isOldCustoemr
+        isOldCustoemr,
+        createEmpId
       } = this.query;
       const data = {
         pageNum,
@@ -432,6 +468,7 @@ export default {
         checkState,
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
+        createEmpId: createEmpId == -1 ? null : createEmpId,
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {
@@ -453,7 +490,8 @@ export default {
         chooseHospitalId,
         checkState,
         belongEmpId,
-        isOldCustoemr
+        isOldCustoemr,
+        createEmpId
       } = this.query;
       const data = {
         pageNum,
@@ -469,6 +507,7 @@ export default {
         checkState,
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
+        createEmpId: createEmpId == -1 ? null : createEmpId,
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {

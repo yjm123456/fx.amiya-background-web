@@ -9,12 +9,16 @@
             style="width: 200px"
             @keyup.enter.native="getAmiyaEmployeeList()"
           />
-          <Select v-model="query.positionId" placeholder="请选择职位" style="width: 160px; margin-left: 10px" filterable>
+          <Select
+            v-model="query.positionId"
+            placeholder="请选择职位"
+            style="width: 160px; margin-left: 10px"
+            filterable
+          >
             <Option
               v-for="item in positionInfo"
               :value="item.id"
               :key="item.id"
-              
               >{{ item.name }}</Option
             >
           </Select>
@@ -80,63 +84,97 @@
         label-position="left"
         :label-width="110"
       >
-        <FormItem label="姓名" prop="name">
-          <Input v-model="form.name" placeholder="请输入姓名"></Input>
-        </FormItem>
-        <FormItem label="用户名" prop="userName">
-          <Input v-model="form.userName" placeholder="请输入手机号"></Input>
-        </FormItem>
-        <FormItem label="用户密码" prop="password" v-if="isEdit === false">
-          <Input v-model="form.password" placeholder="请输入用户密码"></Input>
-        </FormItem>
-        <FormItem label="邮箱" prop="email">
-          <Input v-model="form.email" placeholder="请输入邮箱"></Input>
-        </FormItem>
-        <FormItem label="职位" prop="positionId">
-          <Select v-model="form.positionId" placeholder="请选择职位">
-            <Option
-              v-for="item in positionInfo"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+            <FormItem label="姓名" prop="name">
+              <Input v-model="form.name" placeholder="请输入姓名"></Input>
+            </FormItem>
+            <FormItem label="用户名" prop="userName">
+              <Input v-model="form.userName" placeholder="请输入用户名"></Input>
+            </FormItem>
+            <FormItem label="用户密码" prop="password" v-if="isEdit === false">
+              <Input
+                v-model="form.password"
+                placeholder="请输入用户密码"
+              ></Input>
+            </FormItem>
+            <FormItem label="邮箱" prop="email">
+              <Input v-model="form.email" placeholder="请输入邮箱"></Input>
+            </FormItem>
+            <FormItem label="职位" prop="positionId">
+              <Select v-model="form.positionId" placeholder="请选择职位" filterable>
+                <Option
+                  v-for="item in positionInfo"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+            <FormItem label="是否客服" prop="isCustomerService">
+              <i-switch v-model="form.isCustomerService" @on-change="isCustomerServiceChange"/>
+            </FormItem>
+            <!-- 客服所属主播 (form.positionId === 2 && form.isCustomerService === true) || (form.positionId === 19 && form.isCustomerService === true)-->
+            <FormItem
+              label="主播"
+              prop="liveAnchorIds"
+              v-if="
+                (title == '修改' &&
+                  form.positionId === 2 && form.isCustomerService === true) ||
+                  (title == '修改' && form.positionId === 19) ||
+                  (title == '修改' && form.positionId === 30)
+              "
+              key="主播"
             >
-          </Select>
-        </FormItem>
-        <FormItem label="是否客服" prop="isCustomerService">
-          <i-switch v-model="form.isCustomerService" />
-        </FormItem>
-        <!-- 客服所属主播 (form.positionId === 2 && form.isCustomerService === true) || (form.positionId === 19 && form.isCustomerService === true)-->
-        <FormItem label="主播" prop="liveAnchorIds" v-if="(title == '修改' && (form.positionId === 2 && form.isCustomerService === true)) || (title == '修改' && form.positionId === 19) || (title == '修改' && form.positionId === 30)" key="主播">
-          <Select v-model="form.liveAnchorIds" multiple filterable placeholder="请选择主播">
-            <Option
-              v-for="item in liveAnchors"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Select
+                v-model="form.liveAnchorIds"
+                multiple
+                filterable
+                placeholder="请选择主播"
+              >
+                <Option
+                  v-for="item in liveAnchors"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+            <FormItem
+              label="主播基础信息"
+              prop="liveAnchorBaseId"
+              v-if="form.isCustomerService == true"
+              key="liveAnchorBaseId"
             >
-          </Select>
-        </FormItem>
-        <FormItem label="主播基础信息" prop="liveAnchorBaseId" v-if="form.isCustomerService == true" key="liveAnchorBaseId" >
-          <Select v-model="form.liveAnchorBaseId"   placeholder="请选择主播基础信息">
-            <Option
-              v-for="item in liveAnchorBaseInfos"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-        </FormItem>
-      
-        <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
-          <i-switch v-model="form.valid" />
-        </FormItem>
+              <Select
+                v-model="form.liveAnchorBaseId"
+                placeholder="请选择主播基础信息"
+                filterable
+              >
+                <Option
+                  v-for="item in liveAnchorBaseInfos"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+            <FormItem label="新客提成(%)" prop="newCustomerCommission">
+              <Input v-model="form.newCustomerCommission" placeholder="请输入新客提成" type="number" number></Input>
+            </FormItem>
+            <FormItem label="老客提成(%)" prop="oldCustomerCommission">
+              <Input v-model="form.oldCustomerCommission" placeholder="请输入老客提成" type="number" number></Input>
+            </FormItem>
+            <FormItem label="稽查提成(%)" prop="inspectionCommission">
+              <Input v-model="form.inspectionCommission" placeholder="请输入稽查提成" type="number" number></Input>
+            </FormItem>
+            <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
+              <i-switch v-model="form.valid" />
+            </FormItem>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
-
 
     <!-- 修改密码 -->
     <Modal
@@ -153,12 +191,21 @@
         :label-width="100"
       >
         <FormItem label="用户密码" prop="password">
-          <Input v-model="updateAmiyaEmployeePasswordform.password" placeholder="请输入用户密码"></Input>
+          <Input
+            v-model="updateAmiyaEmployeePasswordform.password"
+            placeholder="请输入用户密码"
+          ></Input>
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="cancleUpdatePasswordSubmit('updateAmiyaEmployeeForm')">取消</Button>
-        <Button type="primary" @click="handleUpdatePasswordSubmit('updateAmiyaEmployeeForm')">确定</Button>
+        <Button @click="cancleUpdatePasswordSubmit('updateAmiyaEmployeeForm')"
+          >取消</Button
+        >
+        <Button
+          type="primary"
+          @click="handleUpdatePasswordSubmit('updateAmiyaEmployeeForm')"
+          >确定</Button
+        >
       </div>
     </Modal>
   </div>
@@ -172,17 +219,20 @@ export default {
       // 查询
       query: {
         keyword: "",
-        valid:'true',
-        positionId:'',
+        valid: "true",
+        positionId: "",
         pageNum: 1,
         pageSize: 10,
-        validList:[{
-          valid:'true',
-          name:'有效'
-        },{
-          valid:'false',
-          name:'无效'
-        }],
+        validList: [
+          {
+            valid: "true",
+            name: "有效",
+          },
+          {
+            valid: "false",
+            name: "无效",
+          },
+        ],
         columns: [
           {
             title: "员工编号",
@@ -235,7 +285,7 @@ export default {
             title: "操作",
             key: "",
             width: 210,
-            align:'center',
+            align: "center",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -250,8 +300,8 @@ export default {
                     },
                     on: {
                       click: () => {
-                       this.updateAmiyaEmployeePasswordformModal = true;
-                       this.updateAmiyaEmployeePasswordform.id = params.row.id;
+                        this.updateAmiyaEmployeePasswordformModal = true;
+                        this.updateAmiyaEmployeePasswordform.id = params.row.id;
                       },
                     },
                   },
@@ -282,7 +332,10 @@ export default {
                               valid,
                               email,
                               liveAnchorIds,
-                              liveAnchorBaseId
+                              liveAnchorBaseId,
+                              newCustomerCommission,
+                              oldCustomerCommission,
+                              inspectionCommission
                             } = res.data.employeeInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -293,6 +346,9 @@ export default {
                             this.form.isCustomerService = isCustomerService;
                             this.form.liveAnchorIds = liveAnchorIds;
                             this.form.liveAnchorBaseId = liveAnchorBaseId;
+                            this.form.newCustomerCommission = newCustomerCommission;
+                            this.form.oldCustomerCommission = oldCustomerCommission;
+                            this.form.inspectionCommission = inspectionCommission;
                             this.form.valid = valid;
                             this.controlModal = true;
                           }
@@ -341,7 +397,7 @@ export default {
         totalCount: 0,
       },
       // 主播平台
-      liveAnchors:[],
+      liveAnchors: [],
       // 控制 modal
       controlModal: false,
 
@@ -362,7 +418,7 @@ export default {
         // 密码
         password: "",
         // 邮箱
-        email:"",
+        email: "",
         // 职位编号
         positionId: "",
         id: "",
@@ -373,11 +429,36 @@ export default {
         // 主播id
         liveAnchorIds:[],
         // 主播基础信息
-        liveAnchorBaseId:''
+        liveAnchorBaseId: "",
+        // 新客提成
+        newCustomerCommission:null,
+        // 老客提成
+        oldCustomerCommission:null,
+        // 稽查提成
+        inspectionCommission:null,
+
       },
 
       ruleValidate: {
-        liveAnchorBaseId:[
+        newCustomerCommission: [
+          {
+            required: true,
+            message: "请输入新客提成",
+          },
+        ],
+        oldCustomerCommission: [
+          {
+            required: true,
+            message: "请输入老客提成",
+          },
+        ],
+        inspectionCommission: [
+          {
+            required: true,
+            message: "请输入稽查提成",
+          },
+        ],
+        liveAnchorBaseId: [
           {
             required: true,
             message: "请选择主播基础信息",
@@ -421,15 +502,15 @@ export default {
         ],
       },
 
-      updateAmiyaEmployeePasswordformModal:false,
+      updateAmiyaEmployeePasswordformModal: false,
 
-      updateAmiyaEmployeePasswordform:{
+      updateAmiyaEmployeePasswordform: {
         // 密码
         password: "",
-        id:""
+        id: "",
       },
 
-      updateAmiyaEmployeePasswordformRuleValidate:{
+      updateAmiyaEmployeePasswordformRuleValidate: {
         password: [
           {
             required: true,
@@ -438,35 +519,47 @@ export default {
         ],
       },
       // 主播基础信息
-      liveAnchorBaseInfos:[]
+      liveAnchorBaseInfos: [],
     };
   },
   methods: {
+    // 清空主播基础信息下拉框
+    isCustomerServiceChange(){
+      if(this.form.isCustomerService == false){
+        this.form.liveAnchorBaseId = ""
+      }
+    },
     // 获取主播基础信息列表
-    getLiveAnchorBaseInfoValid(){
+    getLiveAnchorBaseInfoValid() {
       liveApi.getLiveAnchorBaseInfoValid().then((res) => {
-        if(res.code === 0){
-          const {liveAnchorBaseInfos} = res.data
-          this.liveAnchorBaseInfos = liveAnchorBaseInfos
+        if (res.code === 0) {
+          const { liveAnchorBaseInfos } = res.data;
+          this.liveAnchorBaseInfos = liveAnchorBaseInfos;
         }
-      })
+      });
     },
     // 获取有效的主播列表
-    getLiveAnchorValid(){
+    getLiveAnchorValid() {
       api.liveAnchorValid().then((res) => {
-        if(res.code === 0){
-          const {liveAnchors} = res.data
-          this.liveAnchors = liveAnchors
+        if (res.code === 0) {
+          const { liveAnchors } = res.data;
+          this.liveAnchors = liveAnchors;
         }
-      })
+      });
     },
     // 获取阿美雅员工列表
     getAmiyaEmployeeList() {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { keyword, pageNum, pageSize,valid,positionId } = this.query;
-      const data = { keyword, pageNum, pageSize ,valid,positionId: positionId ? positionId : null};
+      const { keyword, pageNum, pageSize, valid, positionId } = this.query;
+      const data = {
+        keyword,
+        pageNum,
+        pageSize,
+        valid,
+        positionId: positionId ? positionId : null,
+      };
       api.AmiyaEmployee(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.employeeInfo;
@@ -478,8 +571,14 @@ export default {
 
     // 阿美雅员工列表分页
     handlePageChange(pageNum) {
-      const { keyword, pageSize,valid,positionId } = this.query;
-      const data = { keyword, pageNum, pageSize ,valid,positionId: positionId ? positionId : null};
+      const { keyword, pageSize, valid, positionId } = this.query;
+      const data = {
+        keyword,
+        pageNum,
+        pageSize,
+        valid,
+        positionId: positionId ? positionId : null,
+      };
       api.AmiyaEmployee(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.employeeInfo;
@@ -503,7 +602,21 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { name, userName, password, positionId, isCustomerService, id, valid , email,liveAnchorIds,liveAnchorBaseId} = this.form;
+          const {
+            name,
+            userName,
+            password,
+            positionId,
+            isCustomerService,
+            id,
+            valid,
+            email,
+            liveAnchorIds,
+            liveAnchorBaseId,
+            newCustomerCommission,
+            oldCustomerCommission,
+            inspectionCommission
+          } = this.form;
           if (this.isEdit) {
             // 修改
             const data = {
@@ -515,8 +628,16 @@ export default {
               valid,
               email,
               // liveAnchorIds:(positionId === 2 || positionId === 19) && isCustomerService === true ? liveAnchorIds : []
-              liveAnchorIds:(positionId === 2 && isCustomerService === true ) || (positionId === 19&& isCustomerService === true)  || (positionId === 30&& isCustomerService === true) ? liveAnchorIds : [],
-              liveAnchorBaseId
+              liveAnchorIds:
+                (positionId === 2 && isCustomerService === true) ||
+                (positionId === 19 && isCustomerService === true) ||
+                (positionId === 30 && isCustomerService === true)
+                  ? liveAnchorIds
+                  : [],
+              liveAnchorBaseId,
+              newCustomerCommission,
+              oldCustomerCommission,
+            inspectionCommission
             };
             api.updateAmiyaEmployee(data).then((res) => {
               if (res.code === 0) {
@@ -538,14 +659,21 @@ export default {
               positionId,
               isCustomerService,
               email,
-              liveAnchorBaseId
+              liveAnchorBaseId,
+              newCustomerCommission,
+              oldCustomerCommission,
+            inspectionCommission
             };
-            if(email){
-              if (!(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(email))){
+            if (email) {
+              if (
+                !/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(
+                  email
+                )
+              ) {
                 this.$Message.error({
                   content: "请输入正确的邮箱",
                   duration: 3,
-                })
+                });
                 return false;
               }
               api.addAmiyaEmployee(data).then((res) => {
@@ -578,7 +706,7 @@ export default {
         this.$refs["form"].resetFields();
       }
     },
-  
+
     // 提交修改密码
     handleUpdatePasswordSubmit(name) {
       this.$refs[name].validate((valid) => {
@@ -614,13 +742,13 @@ export default {
       if (!value) {
         this.$refs["updateAmiyaEmployeeForm"].resetFields();
       }
-    }
+    },
   },
   created() {
     this.getAmiyaEmployeeList();
     this.getAmiyaPositionInfo();
     this.getLiveAnchorValid();
-    this.getLiveAnchorBaseInfoValid()
+    this.getLiveAnchorBaseInfoValid();
   },
 };
 </script>

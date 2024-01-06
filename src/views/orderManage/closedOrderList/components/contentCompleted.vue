@@ -525,7 +525,8 @@ export default {
             title: "预约医院",
             key: "appointmentHospitalName",
             minWidth: 220,
-            align:'center'
+            align:'center',
+            tooltip: true
           },
           // {
           //   title: "面诊员",

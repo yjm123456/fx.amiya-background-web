@@ -102,7 +102,8 @@ export default {
             title: "订单号",
             key: "orderId",
             align:'center',
-            minWidth:180
+            minWidth:180,
+            tooltip:true
           },
           {
             title: "发放时间",

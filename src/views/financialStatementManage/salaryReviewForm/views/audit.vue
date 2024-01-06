@@ -62,6 +62,19 @@
               >{{ item.name }}</Option
             >
           </Select> 
+          <Select
+            v-model="query.createEmpId"
+            placeholder="请选择上传人"
+            filterable
+            style="width: 150px;margin-left:10px"
+          >
+            <Option
+              v-for="item in params.creteEmpNameList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select> 
           <!-- <Select
             v-model="query.checkState"
             placeholder="请选择审核状态"
@@ -107,7 +120,7 @@
     <examine
       :examineModel.sync="examineModel"
       :params="params"
-      :id="id"
+      :checkedParams="checkedParams"
       @getListWithPageByCustomerCompensation="getListWithPageByCustomerCompensation"
     />
   </div>
@@ -137,6 +150,7 @@ export default {
         isOldCustoemr:-1,
         belongEmpId:-1,
         checkState:0,
+        createEmpId:-1,
         pageNum: 1,
         pageSize: 10,
         columns: [
@@ -303,9 +317,11 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id } = params.row;
+                        const { id,isOldCustomerText, customerServiceSettlePrice} = params.row;
                         this.examineModel = true;
-                        this.id = id;
+                        this.checkedParams.id = id;
+                        this.checkedParams.isOldCustomerText = isOldCustomerText
+                        this.checkedParams.customerServiceSettlePrice = customerServiceSettlePrice
                       },
                     },
                   },
@@ -320,7 +336,15 @@ export default {
         totalCount: 0,
       },
       examineModel:false,
-      id:''
+      
+      // 审核参数
+      checkedParams:{
+        // 新老客业绩
+        isOldCustomerText:'',
+        id:'',
+        // 订单金额
+        customerServiceSettlePrice:0
+      }
     };
   },
   methods: {
@@ -339,7 +363,8 @@ export default {
         chooseHospitalId,
         checkState,
         belongEmpId,
-        isOldCustoemr
+        isOldCustoemr,
+        createEmpId
       } = this.query;
       const data = {
         pageNum,
@@ -355,6 +380,7 @@ export default {
         checkState,
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
+        createEmpId: createEmpId == -1 ? null : createEmpId,
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {
@@ -375,7 +401,8 @@ export default {
         chooseHospitalId,
         checkState,
         belongEmpId,
-        isOldCustoemr
+        isOldCustoemr,
+        createEmpId
       } = this.query;
       const data = {
         pageNum,
@@ -391,6 +418,7 @@ export default {
         checkState,
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
+        createEmpId: createEmpId == -1 ? null : createEmpId,
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {

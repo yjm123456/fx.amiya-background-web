@@ -1,15 +1,40 @@
 <template>
   <div>
     <Card :dis-hover="true">
-      <Button
+      <div class="content">
+        <div class="left">
+      <Select
+          v-model="query.provinceId"
+          placeholder="请选择省份"
+          filterable
+          style="width:200px;margin-right:10px"
+        >
+          <Option
+            v-for="item in provincesList"
+            :value="item.id"
+            :key="item.id"
+            >{{ item.name }}</Option
+          >
+        </Select>
+        <Button
+        type="primary"
+       @click="getCooperativeHospitalCity()"
+        style="margin-right:10px"
+        >查询</Button
+      >
+      </div>
+
+      <!-- <Button
         type="primary"
         @click="
           controlModal = true;
           title = '添加';
         "
         >添加</Button
-      >
+      > -->
+      </div>
     </Card>
+    
 
     <Card class="container">
       <div>
@@ -35,9 +60,12 @@
         :rules="ruleValidate"
         label-position="left"
         :label-width="100"
-      >
+      > 
+      <FormItem label="序号" prop="sort">
+          <Input v-model="form.sort" placeholder="请输入序号" type="number" number disabled></Input>
+        </FormItem>
         <FormItem label="城市名称" prop="name">
-          <Input v-model="form.name"></Input>
+          <Input v-model="form.name" placeholder="请输入城市名称"></Input>
         </FormItem>
         <FormItem label="省份" prop="provinceId">
           <Select
@@ -75,15 +103,19 @@ export default {
     return {
       // 查询
       query: {
+        provinceId:-1,
         columns: [
-          
           {
-            title: "城市名称",
-            key: "name",
+            title: "序号",
+            key: "sort",
           },
           {
             title: "省份名称",
             key: "provinceName",
+          },
+          {
+            title: "城市名称",
+            key: "name",
           },
           {
             title: "是否热门",
@@ -161,12 +193,13 @@ export default {
                         this.title = "修改";
                         api.byIdCooperativeHospitalCity(id).then((res) => {
                           if (res.code === 0) {
-                            const { id, name, valid , provinceId , isHot,provinceName} = res.data.city;
+                            const { id, name, valid , provinceId , isHot,provinceName,sort} = res.data.city;
                             this.isEdit = true;
                             this.form.id = id;
                             this.form.name = name;
                             this.form.provinceId = provinceId
                             this.form.provinceName = provinceName
+                            this.form.sort = sort
                             this.form.isHot = isHot
                             this.form.valid = valid;
                             this.controlModal = true;
@@ -241,9 +274,17 @@ export default {
         id: "",
         // 是否有效
         valid: false,
+        // 序号
+        sort:null
       },
 
       ruleValidate: {
+        sort: [
+          {
+            required: true,
+            message: "请输入序号",
+          },
+        ],
         name: [
           {
             required: true,
@@ -258,6 +299,7 @@ export default {
           },
         ],
       },
+    provincesList:[{id:-1,name:'全部省份'}]
     };
   },
   methods: {
@@ -267,6 +309,7 @@ export default {
         if (res.code === 0) {
           const { provinces } = res.data;
           this.provinces = provinces;
+          this.provincesList = [...this.provincesList,...provinces];
         }
       });
     },
@@ -275,10 +318,11 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize } = this.query;
+      const { pageNum, pageSize,provinceId } = this.query;
       const data = {
         pageNum,
         pageSize,
+        provinceId:provinceId == -1 ? null :provinceId
       };
       api.getCooperativeHospitalCity(data).then((res) => {
         if (res.code === 0) {
@@ -291,10 +335,11 @@ export default {
 
     // 获取合作医院城市列表（分页）
     handlePageChange(pageNum) {
-      const { pageSize } = this.query;
+      const { pageSize,provinceId } = this.query;
       const data = {
         pageNum,
         pageSize,
+        provinceId:provinceId == -1 ? null :provinceId
       };
       api.getCooperativeHospitalCity(data).then((res) => {
         if (res.code === 0) {
@@ -315,7 +360,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { id, name, valid , provinceId , isHot} = this.form;
+          const { id, name, valid , provinceId , isHot,sort} = this.form;
           if (this.isEdit) {
             // 修改
             const data = {
@@ -323,7 +368,8 @@ export default {
               name,
               valid,
               provinceId , 
-              isHot
+              isHot,
+              sort
             };
             api.updateCooperativeHospitalCity(data).then((res) => {
               if (res.code === 0) {
@@ -341,7 +387,8 @@ export default {
             const data = {
               name,
               provinceId , 
-              isHot
+              isHot,
+              sort
             };
             api.addCooperativeHospitalCity(data).then((res) => {
               if (res.code === 0) {
@@ -378,5 +425,9 @@ export default {
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.content{
+  display: flex;
+  justify-content: space-between;
 }
 </style>

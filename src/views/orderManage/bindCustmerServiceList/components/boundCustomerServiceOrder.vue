@@ -25,6 +25,7 @@
           v-model="query.appType"
           style="width: 200px; margin-left: 10px"
           placeholder="请选择下单平台"
+          filterable
         >
           <Option
             v-for="item in query.orderAppTypes"
@@ -76,7 +77,7 @@
     <Modal v-model="controlModal" title="修改绑定客服" :mask-closable="false">
       <Form ref="form" :model="form" label-position="left" :label-width="60">
         <FormItem label="客服" prop="hospitalId">
-          <Select v-model="form.customerServiceId" placeholder="请选择客服">
+          <Select v-model="form.customerServiceId" placeholder="请选择客服" filterable>
             <Option v-for="item in employee" :value="item.id" :key="item.id">{{
               item.name
             }}</Option>

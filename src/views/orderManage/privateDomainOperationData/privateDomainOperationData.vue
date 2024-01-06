@@ -174,7 +174,6 @@ export default {
         tabEcharts(){
             this.isEchartsReser = !this.isEchartsReser
             this.isEcharts = !this.isEcharts
-            console.log(this.isEcharts,this.isEchartsReser)
         },
         // 近7天
         sevenDays(){

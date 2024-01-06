@@ -9,12 +9,26 @@
             style="width: 200px"
             @keyup.enter.native="getGiftlist()"
           />
+          <Select
+            v-model="query.categoryId"
+            style="width: 200px; margin-left: 10px"
+            placeholder="请选择礼品分类"
+            filterable
+          >
+            <Option
+              v-for="item in giftCategoryNameList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
             @click="getGiftlist()"
             >查询</Button
           >
+          
         </div>
         <div class="right">
           <Button
@@ -57,6 +71,20 @@
         <FormItem label="名称" prop="name">
           <Input v-model="form.name" placeholder="请输入名称"></Input>
         </FormItem>
+        <FormItem label="礼品分类" prop="categoryId">
+          <Select
+            v-model="form.categoryId"
+            placeholder="请选择礼品分类"
+            filterable
+          >
+            <Option
+              v-for="item in giftCategoryNameList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
         <FormItem label="缩略图" prop="thumbPicUrl">
           <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
         </FormItem>
@@ -81,6 +109,7 @@
 </template>
 <script>
 import * as api from "@/api/giftManage";
+import * as giftCategoryApi from "@/api/giftCategory";
 import upload from "@/components/upload/upload";
 export default {
   components: {
@@ -99,6 +128,7 @@ export default {
 
       // 查询
       query: {
+        categoryId:'',
         name: "",
         pageNum: 1,
         pageSize: 10,
@@ -106,6 +136,10 @@ export default {
           {
             title: "名称",
             key: "name",
+          },
+          {
+            title: "礼品分类",
+            key: "categoryName",
           },
           {
             title: "缩略图",
@@ -172,6 +206,9 @@ export default {
           {
             title: "修改时间",
             key: "updateDate",
+            render: (h, params) => {
+              return h("div",params.row.updateDate ? this.$moment(params.row.updateDate).format("YYYY-MM-DD HH:mm:ss") : '');
+            },
           },
           {
             title: "修改人",
@@ -270,9 +307,17 @@ export default {
         quantity: null,
         // 是否有效
         valid: false,
+        // 礼品分类
+        categoryId:''
       },
 
       ruleValidate: {
+        categoryId: [
+          {
+            required: true,
+            message: "请选择礼品分类",
+          },
+        ],
         name: [
           {
             required: true,
@@ -302,16 +347,26 @@ export default {
           },
         ],
       },
+      // 礼品分类
+      giftCategoryNameList:[]
     };
   },
   methods: {
+    // 获取礼品分类（下拉框）
+    getGiftCategoryNameList() {
+      giftCategoryApi.getGiftCategoryNameList().then((res) => {
+        if (res.code === 0) {
+          this.giftCategoryNameList= res.data.nameList;
+        }
+      });
+    },
     // 获取礼品列表
     getGiftlist() {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { name, pageNum, pageSize } = this.query;
-      const data = { name, pageNum, pageSize };
+      const { name, pageNum, pageSize ,categoryId} = this.query;
+      const data = { name, pageNum, pageSize,categoryId };
       api.getGiftlist(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.giftInfo;
@@ -323,8 +378,8 @@ export default {
 
     // 获取礼品列表（分页）
     handlePageChange(pageNum) {
-      const { name, pageSize } = this.query;
-      const data = { name, pageNum, pageSize };
+      const { name, pageSize ,categoryId} = this.query;
+      const data = { name, pageNum, pageSize ,categoryId};
       api.getGiftlist(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.giftInfo;
@@ -343,7 +398,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { id, name, thumbPicUrl, quantity, valid } = this.form;
+          const { id, name, thumbPicUrl, quantity, valid,categoryId } = this.form;
           if (this.isEdit) {
             // 修改
             const data = {
@@ -352,6 +407,7 @@ export default {
               thumbPicUrl,
               quantity,
               valid,
+              categoryId
             };
             api.editGift(data).then((res) => {
               if (res.code === 0) {
@@ -370,6 +426,7 @@ export default {
               name,
               thumbPicUrl,
               quantity,
+              categoryId
             };
             api.addGift(data).then((res) => {
               if (res.code === 0) {
@@ -396,6 +453,7 @@ export default {
   },
   created() {
     this.getGiftlist();
+    this.getGiftCategoryNameList()
   },
 };
 </script>

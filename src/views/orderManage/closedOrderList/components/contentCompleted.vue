@@ -7,14 +7,14 @@
             <DatePicker
               type="date"
               placeholder="成交日期（始）"
-              style="width: 140px;"
+              style="width: 180px;"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="成交日期（末）"
-              style="width: 140px; margin-left: .625rem"
+              style="width: 180px; margin-left: .625rem"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
@@ -26,8 +26,8 @@
             />
             <Select
               v-model="query.contentPlateFormId"
-              placeholder="请选择订单(下单)平台"
-              style="width: 170px;margin-left: .625rem"
+              placeholder="请选择(订单)下单平台"
+              style="width: 180px;margin-left: .625rem"
               filterable
             >
               <Option
@@ -37,10 +37,10 @@
                 >{{ item.contentPlatformName }}</Option
               >
             </Select>
-            <Select
+            <!-- <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
-              style="width: 140px; margin-left: 10px"
+              style="width: 130px; margin-left: 10px"
               filterable
             >
               <Option
@@ -49,13 +49,27 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
+            </Select> -->
+            <Select
+              v-model="query.toHospitalType"
+              placeholder="请选择到院类型"
+              clearable
+              style="width: 200px; margin-left: 10px"
+              filterable
+            >
+              <Option
+                v-for="item in toHospitalTypeList"
+                :value="item.orderType"
+                :key="item.orderType"
+                >{{ item.orderTypeText }}</Option
+              >
             </Select>
           </div>
           <div style="margin-top:10px">
             <Select
               v-model="query.checkState"
               placeholder="审核状态"
-              style="width: 140px;"
+              style="width: 180px;"
             >
               <Option
                 v-for="item in checkStateListAll"
@@ -68,7 +82,7 @@
             <Select
               v-model="query.ReturnBackPriceState"
               placeholder="回款状态"
-              style="width: 140px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
             >
               <Option
                 v-for="item in query.ReturnBackPriceStateList"
@@ -81,7 +95,7 @@
               v-model="query.contentPlatFormId"
               placeholder="请选择主播平台"
               @on-change="contentPlateChange(query.contentPlatFormId)"
-              style="width: 140px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
               filterable
             >
               <Option
@@ -94,7 +108,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 150px; margin-left: 10px"
+              style="width: 180px; margin-left: 10px"
               :disabled="query.contentPlatFormId === null"
               filterable
             >
@@ -174,18 +188,18 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="审核金额" prop="checkPrice">
+        <FormItem label="对账金额" prop="checkPrice">
           <Input
             v-model="form.checkPrice"
-            placeholder="请输入审核金额"
+            placeholder="请输入对账金额"
             type="number"
             number
           />
         </FormItem>
-        <FormItem label="结算金额" prop="settlePrice">
+        <FormItem label="服务费合计" prop="settlePrice">
           <Input
             v-model="form.settlePrice"
-            placeholder="请输入结算金额"
+            placeholder="请输入服务费合计"
             type="number"
             number
           />
@@ -242,6 +256,8 @@ export default {
   },
   data() {
     return {
+      // 到院状态
+      toHospitalTypeList:[{orderType:-1,orderTypeText:'全部到院类型'}],
       detailList:[],
       detailModel:false,
       // 回款 传给子组件的值
@@ -273,6 +289,7 @@ export default {
       //   审核状态
       checkStateList: [],
       query: {
+        toHospitalType:-1,
         ReturnBackPriceState:'-1',
         ReturnBackPriceStateList:[
             {
@@ -308,6 +325,7 @@ export default {
             minWidth: 180,
             align:'center'
           },
+          
           {
             title: "定金金额",
             key: "depositAmount",
@@ -400,14 +418,14 @@ export default {
             },
           },
           {
-            title: "审核金额",
+            title: "对账金额",
             key: "checkPrice",
             minWidth: 120,
             align:'center'
           },
 
           {
-            title: "结算金额",
+            title: "服务费合计",
             key: "settlePrice",
             minWidth: 120,
             align:'center'
@@ -472,13 +490,13 @@ export default {
           {
             title: "回款时间",
             key: "returnBackDate",
-            minWidth: 180,
+            minWidth: 110,
             align:'center',
             render: (h, params) => {
               return params.row.returnBackDate
                 ? h(
                     "div",
-                    this.$moment(params.row.returnBackDate).format("YYYY-MM-DD HH:mm:ss")
+                    this.$moment(params.row.returnBackDate).format("YYYY-MM-DD")
                   )
                 : "";
             },
@@ -509,12 +527,12 @@ export default {
             minWidth: 220,
             align:'center'
           },
-          {
-            title: "面诊员",
-            key: "consultationEmpName",
-            minWidth: 120,
-            align:'center'
-          },
+          // {
+          //   title: "面诊员",
+          //   key: "consultationEmpName",
+          //   minWidth: 120,
+          //   align:'center'
+          // },
           {
             title: "项目",
             key: "thumbPictureUrl",
@@ -552,6 +570,13 @@ export default {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 300,
+            tooltip: true
+          },
+          {
+            title: "面诊类型",
+            key: "consultationTypeText",
+            minWidth: 120,
+            align: "center",
           },
           {
             title: "下单时间",
@@ -579,7 +604,52 @@ export default {
             minWidth: 130,
             align:'center'
           },
-
+          {
+            title: "主播微信号",
+            key: "liveAnchorWeChatNo",
+            minWidth: 160,
+            align:'center'
+          },
+          {
+            title: "新老客业绩",
+            key: "isOldCustomer",
+            minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "是否陪诊",
+            minWidth: 100,
+            key: "isAcompanying",
+            align:'center',
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isAcompanying,
+                    size: "default",
+                    disabled:
+                      params.row.isAcompanying === true || params.row.isAcompanying === false,
+                  },
+                },
+                h("span", { isAcompanying: "open" }, "开"),
+                h("span", { isAcompanying: "close" }, "关")
+              );
+            },
+          },
+          // {
+          //   title: "佣金比例(%)",
+          //   minWidth: 120,
+          //   key: "commissionRatio",
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
+          //         )
+          //       ;
+          //   }
+          // },
           {
             title: "订单类型",
             key: "orderTypeText",
@@ -656,7 +726,7 @@ export default {
             },
           },
           {
-            title: "抖店订单号",
+            title: "三方单号",
             key: "otherContentPlatFormOrderId",
             minWidth: 180,
             align: "center",
@@ -666,21 +736,24 @@ export default {
             title: "未成交原因",
             key: "unDealReason",
             minWidth: 300,
+            tooltip: true
           },
           {
             title: "后期铺垫",
             key: "lateProjectStage",
             minWidth: 300,
+            tooltip: true
           },
           {
             title: "备注",
             key: "remark",
             minWidth: 300,
+            tooltip: true
           },
           {
             title: "操作",
             align: "center",
-            minWidth: 240,
+            minWidth: 140,
             fixed: "right",
             render: (h, params) => {
               const currentRole = JSON.parse(
@@ -725,33 +798,13 @@ export default {
                   },
                   "订单详情"
               ),
-                isFlag ? h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: params.row.checkStateText == "审核通过",
-                    },
-                    style: {
-                      marginRight: ".3125rem",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.controlModal = true;
-                        this.form.id = id;
-                      },
-                    },
-                  },
-                  "审核"
-                ): null,
-                // h(
+                // isFlag ? h(
                 //   "Button",
                 //   {
                 //     props: {
                 //       type: "primary",
                 //       size: "small",
+                //       disabled: params.row.checkStateText == "审核通过",
                 //     },
                 //     style: {
                 //       marginRight: ".3125rem",
@@ -759,53 +812,38 @@ export default {
                 //     on: {
                 //       click: () => {
                 //         const { id } = params.row;
-                //         const data = {
-                //           OrderId:id,
-                //           OrderFrom:2,
-                //           pageNum:1,
-                //           pageSize:10
-                //         }
-                //         OrderCheckPictureApi.OrderCheckPicture(data).then((res) => {
-                //           if (res.code === 0) {
-                //             const { list } = res.data.orderCheckPictureInfo;
-                //             this.viewPicList = list;
-                //             if(this.viewPicList.length>0){
-                //               this.viewPicModel = true
-                //             }else{
-                //               this.$Message.warning('暂无审核图片')
-                //             }
-                //           }
-                //         });
+                //         this.controlModal = true;
+                //         this.form.id = id;
                 //       },
                 //     },
                 //   },
-                //   "查看审核图片"
-                // ),
-                isPayment ? h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      disabled: params.row.checkStateText !=='审核通过' || params.row.isReturnBackPrice == true,
-                    },
-                    style: {
-                      marginRight: ".3125rem",
-                    },
-                    on: {
-                      click: () => {
-                        const { id,settlePrice } = params.row;
-                        this.paymentCollectionModel = true
-                        this.paymentCollectionObj = {
-                          orderId:id,
-                          returnBackPrice:settlePrice,
-                          type:'content'
-                        }
-                      },
-                    },
-                  },
-                  "回款"
-                ):null,
+                //   "审核"
+                // ): null,
+                // isPayment ? h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       disabled: params.row.checkStateText !=='审核通过' || params.row.isReturnBackPrice == true,
+                //     },
+                //     style: {
+                //       marginRight: ".3125rem",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { id,settlePrice } = params.row;
+                //         this.paymentCollectionModel = true
+                //         this.paymentCollectionObj = {
+                //           orderId:id,
+                //           returnBackPrice:settlePrice,
+                //           type:'content'
+                //         }
+                //       },
+                //     },
+                //   },
+                //   "回款"
+                // ):null,
               ]);
             },
           },
@@ -824,9 +862,9 @@ export default {
         id: null,
         // 审核状态
         checkState: "",
-        // 审核金额
+        // 对账金额
         checkPrice: null,
-        // 结算金额
+        // 服务费合计
         settlePrice: null,
         // 审核备注
         checkRemark: "",
@@ -845,19 +883,28 @@ export default {
         checkPrice: [
           {
             required: true,
-            message: "请输入审核金额",
+            message: "请输入对账金额",
           },
         ],
         settlePrice: [
           {
             required: true,
-            message: "请输入结算金额",
+            message: "请输入服务费合计",
           },
         ],
       },
     };
   },
   methods: {
+    //   获取订单到院类型
+    getcontentPlateFormOrderToHospitalTypeList() {
+      api.contentPlateFormOrderToHospitalTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderTypes } = res.data;
+          this.toHospitalTypeList = [...this.toHospitalTypeList,...orderTypes]
+        }
+      });
+    },
     // 图片
     handleUploadChange(values) {
       this.form.checkPicture = values;
@@ -927,7 +974,8 @@ export default {
         hospitalId,
         liveAnchorId,
         consultationEmpId,
-        ReturnBackPriceState
+        ReturnBackPriceState,
+        toHospitalType
       } = this.query;
       const data = {
         pageNum,
@@ -942,14 +990,15 @@ export default {
         hospitalId: hospitalId == -1 ? null : hospitalId,
         liveAnchorId,
         consultationEmpId:consultationEmpId==-1?null:consultationEmpId,
-        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+        toHospitalType:toHospitalType== -1 ? null : toHospitalType
       };
       api.contentPlateFormOrderDealLlistWithPage(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.contentPlatFormOrder;
           this.query.data = list;
           this.query.totalCount = totalCount;
-        }
+        } 
       });
     },
 
@@ -965,7 +1014,8 @@ export default {
         hospitalId,
         liveAnchorId,
         consultationEmpId,
-        ReturnBackPriceState
+        ReturnBackPriceState,
+        toHospitalType
       } = this.query;
       const data = {
         pageNum,
@@ -980,7 +1030,8 @@ export default {
         hospitalId: hospitalId == -1 ? null : hospitalId,
         liveAnchorId,
         consultationEmpId:consultationEmpId==-1?null:consultationEmpId,
-        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+        toHospitalType:toHospitalType== -1 ? null : toHospitalType
       };
       api.contentPlateFormOrderDealLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -1053,6 +1104,7 @@ export default {
     this.getContentValidList();
     this.getHospitalList();
     this.getconsultationNameList()
+    this.getcontentPlateFormOrderToHospitalTypeList()
   },
   watch: {
     activeName: {

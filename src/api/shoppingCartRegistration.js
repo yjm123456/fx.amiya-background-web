@@ -39,3 +39,80 @@ export const detelShoppingCartRegistration = (id) => {
         method: "delete",
     });
 };
+// 紧急程度列表下拉框
+export const emergencyLevels = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/emergencyLevels",
+        method: "get",
+    });
+};
+// 指派给
+export const ShoppingCartRegistrationAssign = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/assign`,
+        method: "put",
+        data,
+    });
+};
+// 批量指派给
+export const ShoppingCartRegistrationassignList = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/assignList`,
+        method: "put",
+        data,
+    });
+};
+// 客户来源列表
+export const customerSourceList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/customerSourceList",
+        method: "get",
+    });
+};
+// 获取客服姓名列表
+export const customerServiceNameList = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaEmployee/customerServiceNameList",
+        method: "get",
+        params
+    });
+};
+// 获取面诊方式
+export const consultationTypeList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/consultationTypeList",
+        method: "get",
+
+    });
+};
+// 导入小黄车登记列表
+export const importShoppingCartRegistionData = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/importShoppingCartRegistionData`,
+        method: "put",
+        data,
+    });
+};
+// 获取带货产品类型列表
+export const shoppingCartTakeGoodsProductTypeList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/shoppingCartTakeGoodsProductTypeList",
+        method: "get",
+
+    });
+};
+// 获客方式列表
+export const shoppingCartGetCustomerTypeList = (params) => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/shoppingCartGetCustomerTypeList",
+        method: "get",
+        params
+    });
+};
+// 获客客户类型
+export const customerTypeList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/customerTypeList",
+        method: "get",
+    });
+};

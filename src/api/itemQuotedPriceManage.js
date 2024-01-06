@@ -69,6 +69,14 @@ export const byActivityIdGetItemList = (params) => {
         params
     });
 };
+// 根据品牌品类id，品项id获取项目id和名称
+export const getItemNameByBrandIdAndCategoryId = (params) => {
+    return http({
+        url: `/amiyabg/ItemInfo/getItemNameByBrandIdAndCategoryId`,
+        method: "get",
+        params
+    });
+};
 
 /**
  * 项目上架
@@ -269,5 +277,15 @@ export const exportHospitalBrandApply = (params) => {
         method: "get",
         params,
         responseType: 'blob'
+    });
+};
+/**
+ * 课程报名
+ */
+export const AmiyaLessonApply = (params) => {
+    return http({
+        url: `/amiyabg/AmiyaLessonApply/infoList`,
+        method: "get",
+        params,
     });
 };

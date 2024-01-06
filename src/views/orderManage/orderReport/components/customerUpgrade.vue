@@ -11,40 +11,40 @@
         <Input
             v-model="query.customerName"
             placeholder="请输入客户昵称"
-            style="width: 200px;"
+            style="width: 180px;"
             @keyup.enter.native="getcustomerUpgrade()"
         />
         <DatePicker
           type="date"
           placeholder="下单开始日期"
-          style="width: 160px;margin-left: 10px"
+          style="width: 140px;margin-left: 10px"
           :value="query.startDate"
           v-model="query.startDate"
         ></DatePicker>
         <DatePicker
           type="date"
           placeholder="下单结束日期"
-          style="width: 160px; margin-left: 10px"
+          style="width: 140px; margin-left: 10px"
           :value="query.endDate"
           v-model="query.endDate"
         ></DatePicker>
         <DatePicker
           type="date"
           placeholder="审核开始日期"
-          style="width: 160px;margin-left: 10px"
+          style="width: 140px;margin-left: 10px"
           :value="query.checkDateStart"
           v-model="query.checkDateStart"
         ></DatePicker>
         <DatePicker
           type="date"
           placeholder="审核结束日期"
-          style="width: 160px; margin-left: 10px"
+          style="width: 140px; margin-left: 10px"
           :value="query.checkDateEnd"
           v-model="query.checkDateEnd"
         ></DatePicker>
         <Select
             v-model="query.channel"
-            style="width: 160px; margin-left: 10px"
+            style="width: 140px; margin-left: 10px"
             placeholder="升单渠道"
           >
             <Option
@@ -57,7 +57,7 @@
           <Select
             v-model="query.checkState"
             placeholder="审核状态"
-            style="width: 160px; margin-left: 10px"
+            style="width: 140px; margin-left: 10px"
           >
             <Option
               v-for="item in query.checkStateListAll"
@@ -68,7 +68,7 @@
           </Select>
           <Select
             v-model="query.hospitalId"
-            style="width: 210px; margin-left: 10px"
+            style="width: 180px; margin-left: 10px"
             placeholder="医院"
             filterable
           >
@@ -79,8 +79,32 @@
               >{{ item.name }}</Option
             >
           </Select>
+          <Select
+                v-model="query.isCreateBill"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="是否开票"
+              >
+                <Option
+                  v-for="item in query.isCreateBillList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.belongCompanyId"
+                style="width: 180px;margin-left: .625rem"
+                placeholder="请选择开票公司"
+              >
+                <Option
+                  v-for="item in companyNameAllList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
       <Button type="primary" style="margin:0 10px" @click="getcustomerUpgrade">查询</Button>
-      <Button type="primary" @click="exportcustomerUpgrade">导出</Button>
+      <Button type="primary" @click="exportcustomerUpgrade"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
       <Card class="container">
         <div>
             <Table border :columns="query.columns" :data="query.data" height="700"></Table>
@@ -108,7 +132,8 @@ export default {
     },
     hospitalNameList:{
       type:Array
-    }
+    },
+    companyNameAllList:Array
   },
   data() {
     return{
@@ -118,6 +143,8 @@ export default {
         pageCount:0,
         customerUpgradeModels:false,
         query:{
+          isCreateBill:-1,
+          belongCompanyId:-1,
           hospitalId:-1,
           // 审核状态
           checkState:-1,
@@ -166,7 +193,7 @@ export default {
 
             },
             {
-              title: "抖店订单号",
+              title: "三方单号",
               key: "otherContentPlatFormOrderId",
               minWidth: 180,
               align:'center'
@@ -357,7 +384,7 @@ export default {
 
             },
             {
-              title: "审核结算金额",
+              title: "服务费合计",
               key: "checkSettlePrice",
               minWidth: 140,
               align:'center'
@@ -380,6 +407,18 @@ export default {
               key: "checkRemark",
               minWidth: 300,
             },
+            {
+            title: "是否开票",
+            key: "isCreateBill",
+            minWidth: 100,
+            align:'center'
+          },
+           {
+            title: "开票公司",
+            key: "belongCompanyName",
+            minWidth: 220,
+            align:'center'
+          },
             {
               title: "是否回款",
               key: "isReturnBackPrice",
@@ -441,6 +480,20 @@ export default {
             },
           ],
           data: [],
+          isCreateBillList:[
+            {
+              type:-1,
+              name:'全部开票状态'
+            },
+            {
+              type:'true',
+              name:'已开票'
+            },
+            {
+              type:'false',
+              name:'未开票'
+            },
+          ],
         }
     }
   },
@@ -465,7 +518,7 @@ export default {
     },
     // 获取客户预约报表
     getcustomerUpgrade() {
-      const { startDate,endDate  ,customerName,channel,checkDateStart,checkDateEnd,checkState,hospitalId} = this.query;
+      const { startDate,endDate  ,customerName,channel,checkDateStart,checkDateEnd,checkState,hospitalId,isCreateBill,belongCompanyId} = this.query;
       const data = { 
             startDate: this.$moment(startDate).format("YYYY-MM-DD")  ,
             endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
@@ -474,7 +527,9 @@ export default {
             customerName,
             channel,
             checkState:checkState == -1 ? null : checkState,
-            hospitalId:hospitalId == -1 ? null : hospitalId
+            hospitalId:hospitalId == -1 ? null : hospitalId,
+            isCreateBill : isCreateBill == -1 ? null : isCreateBill,
+            belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId
         };
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -495,7 +550,7 @@ export default {
     },
     // 导出
     exportcustomerUpgrade(){
-      const { startDate,endDate  ,customerName,channel,checkDateStart,checkDateEnd,checkState,hospitalId} = this.query;
+      const { startDate,endDate  ,customerName,channel,checkDateStart,checkDateEnd,checkState,hospitalId,isCreateBill,belongCompanyId} = this.query;
       const data = { 
         startDate: this.$moment(startDate).format("YYYY-MM-DD")  ,
         endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
@@ -504,7 +559,9 @@ export default {
         customerName,
         channel,
         checkState:checkState == -1 ? null : checkState,
-        hospitalId:hospitalId == -1 ? null : hospitalId
+        hospitalId:hospitalId == -1 ? null : hospitalId,
+        isCreateBill : isCreateBill == -1 ? null : isCreateBill,
+        belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId
       };
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -527,6 +584,8 @@ export default {
           this.query.endDate =  this.$moment(new Date()).format("YYYY-MM-DD")
           this.query.customerName = ''
           this.query.channel = ''
+          this.query.isCreateBill = -1
+          this.query.belongCompanyId = -1
           this.$emit("update:customerUpgradeModel", false);
       }
     },
@@ -539,6 +598,8 @@ export default {
       this.query.endDate =  this.$moment(new Date()).format("YYYY-MM-DD")
       this.query.customerName = ''
       this.query.channel = ''
+      this.query.isCreateBill = -1
+      this.query.belongCompanyId = -1
       this.$emit("update:customerUpgradeModel", false);
     },
   },

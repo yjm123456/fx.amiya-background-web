@@ -1,0 +1,1012 @@
+<template>
+  <div>
+    <Modal
+      v-model="moneyReportModels"
+      :mask-closable="false"
+      @on-visible-change="handleModalVisibleChange"
+      width="100%"
+      fullscreen
+      :footer-hide="false"
+      title="客户订单应收款统计"
+    >
+      <div class="top" style="margin-top:60px">
+        <Tabs ref="tabs" v-model="activeName" @on-click="tabChange">
+          <TabPane label="交易成功订单" name="orderDistribution">
+            <div>
+              <Input
+                v-model="query.customerName"
+                placeholder="请输入客户昵称"
+                style="width: 200px;"
+                @keyup.enter.native="getcustomerOrderReceivableReports()"
+              />
+              <DatePicker
+                type="date"
+                placeholder="核销开始日期"
+                style="width: 160px; margin-left: 10px"
+                :value="query.startDate"
+                v-model="query.startDate"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="核销结束日期"
+                style="width: 160px; margin-left: 10px"
+                :value="query.endDate"
+                v-model="query.endDate"
+              ></DatePicker>
+              <Select
+                v-model="query.checkState"
+                placeholder="审核状态"
+                style="width: 140px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in checkStateListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.ReturnBackPriceState"
+                placeholder="回款状态"
+                style="width: 140px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in query.ReturnBackPriceStateList"
+                  :value="item.status"
+                  :key="item.status"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.appType"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="请选择下单平台"
+              >
+                <Option
+                  v-for="item in appTypeList"
+                  :value="item.orderType"
+                  :key="item.orderType"
+                  >{{ item.appTypeText }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.isCreateBill"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="是否开票"
+              >
+                <Option
+                  v-for="item in query.isCreateBillList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.belongCompanyId"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="请选择开票公司"
+              >
+                <Option
+                  v-for="item in companyNameAllList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Button
+                type="primary"
+                style="margin:0 10px"
+                @click="getcustomerOrderReceivableReports"
+                >查询</Button
+              >
+              <Button
+                type="primary"
+                @click="exportsendOrder"
+                v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
+                >导出</Button
+              >
+              <Card class="container">
+                <div>
+                  <Table
+                    border
+                    :columns="query.columns"
+                    :data="query.data"
+                    :span-method="handleSpan"
+                    height="700"
+                  ></Table>
+                </div>
+              </Card>
+            </div>
+          </TabPane>
+          <TabPane label="买家已付款订单" name="contentDispatch">
+            <div>
+              <Input
+                v-model="contentInfo.customerName"
+                placeholder="请输入客户昵称"
+                style="width: 200px;"
+                @keyup.enter.native="getcustomerOrderReceivableReports()"
+              />
+              <DatePicker
+                type="date"
+                placeholder="下单开始日期"
+                style="width: 160px; margin-left: 10px"
+                :value="contentInfo.startDate"
+                v-model="contentInfo.startDate"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="下单结束日期"
+                style="width: 160px; margin-left: 10px"
+                :value="contentInfo.endDate"
+                v-model="contentInfo.endDate"
+              ></DatePicker>
+              <Select
+                v-model="contentInfo.checkState"
+                placeholder="审核状态"
+                style="width: 140px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in checkStateListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="contentInfo.ReturnBackPriceState"
+                placeholder="回款状态"
+                style="width: 140px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in contentInfo.ReturnBackPriceStateList"
+                  :value="item.status"
+                  :key="item.status"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Button
+                type="primary"
+                style="margin:0 10px"
+                @click="customerPaidOrderReceivableReport"
+                >查询</Button
+              >
+              <Button
+                type="primary"
+                @click="exportContent2"
+                v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
+                >导出</Button
+              >
+              <Card class="container">
+                <div>
+                  <Table
+                    border
+                    :columns="contentInfo.columns"
+                    :data="contentInfo.data"
+                    :span-method="handleSpan"
+                    height="700"
+                  ></Table>
+                </div>
+              </Card>
+            </div>
+          </TabPane>
+        </Tabs>
+      </div>
+      <div slot="footer" class="footer"></div>
+      <div slot="footer" class=" foot">
+        <div style="display:flex" v-if="activeName == 'orderDistribution'">
+          <div class="num">订单价格总额：<div style="color:red">{{actualPaymentNum}}</div></div>
+          <div class="num">派单价格总额：<div style="color:red">{{sendOrderPirceNum}}</div></div>
+          <div class="num">应收款总额：<div style="color:red">{{accountReceivableNum}}</div></div>
+
+          <div class="num">合计数量：<div style="color:red">{{quantityNum}}</div></div>
+          <div class="num">总条数：<div style="color:red">{{pageCount}}</div></div>
+        </div>
+        <div v-else style="display:flex">
+          <div class="num">订单价格总额：<div style="color:red">{{contentInfo.actualPaymentNum}}</div></div>
+            <div class="num">派单价格总额：<div style="color:red">{{contentInfo.sendOrderPirceNum}}</div></div>
+            <div class="num">应收款总额：<div style="color:red">{{contentInfo.accountReceivableNum}}</div></div>
+
+            <div class="num">合计数量：<div style="color:red">{{contentInfo.quantityNum}}</div></div>
+            <div class="num">总条数：<div style="color:red">{{contentInfo.pageCount}}</div></div>
+        </div>
+        <Button @click="cancelSubmits()">关闭页面</Button>
+      </div>
+    </Modal>
+  </div>
+</template>
+
+<script>
+import * as api from "@/api/orderManage";
+import * as contentPlatForm from "@/api/baseDataMaintenance";
+import { download } from "@/utils/util";
+export default {
+  props: {
+    moneyReportModel2: {
+        type: Boolean,
+    },
+    checkStateListAll:{
+      type:Array
+    },
+    appTypeList:Array,
+    companyNameAllList:Array
+  },
+  data() {
+    return {
+      activeName: "orderDistribution",
+      moneyReportModels:false,
+        actualPaymentNum:0,
+        sendOrderPirceNum:0,
+        accountReceivableNum:0,
+        quantityNum:0,
+        // 总订单数量
+        pageCount:0,
+        // 交易完成订单
+        query:{
+          isCreateBillList:[
+            {
+              type:-1,
+              name:'全部开票状态'
+            },
+            {
+              type:'true',
+              name:'已开票'
+            },
+            {
+              type:'false',
+              name:'未开票'
+            },
+          ],
+          isCreateBill:-1,
+          belongCompanyId:-1,
+          appType:-1,
+          checkState:-1,
+          ReturnBackPriceState:'-1',
+          ReturnBackPriceStateList:[
+              {
+                status:'-1',
+                name:'全部回款状态'
+              },
+              {
+                status:'true',
+                name:'已回款'
+              },
+              {
+                status:'false',
+                name:'未回款'
+              }
+          ],
+          customerName:"",
+          startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
+          endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
+          columns: [
+            {
+              title: "客户昵称",
+              key: "nickName",
+              minWidth: 160,
+            },
+            {
+              title: "客户手机",
+              key: "encryptPhone",
+              minWidth: 140,
+            },
+            {
+              title: "订单号",
+              key: "id",
+              minWidth: 200,
+            },
+            {
+              title: "下单平台",
+              key: "appTypeText",
+              minWidth: 100,
+              
+            },
+            {
+              title: "下单时间",
+              tooltip:true,
+              minWidth: 180,
+              key: "createDate",
+              render: (h, params) => {
+                return h(
+                  "div",
+                  this.$moment(params.row.createDate).format(
+                    "YYYY-MM-DD HH:mm:ss"
+                  )
+                );
+              },
+            },
+            {
+              title: "核销时间",
+              tooltip:true,
+              minWidth: 180,
+              key: "writeOffDate",
+              render: (h, params) => {
+                return h(
+                  "div",
+                  this.$moment(params.row.writeOffDate).format(
+                    "YYYY-MM-DD HH:mm:ss"
+                  )
+                );
+              },
+            },
+            {
+              title: "商品名称",
+              key: "goodsName",
+              minWidth: 300,
+            },
+            {
+              title: "订单价格",
+              key: "acturalPayment",
+              minWidth: 150,
+            },
+            
+            {
+              title: "应收款",
+              key: "accountReceivable",
+              minWidth: 150,
+            },
+            {
+              title: "派单价格",
+              key: "sendOrderPirce",
+              minWidth: 150,
+            },
+            {
+              title: "购买数量",
+              key: "quantity",
+              minWidth: 100,
+            },
+            {
+              title: "订单状态",
+              key: "statusText",
+              minWidth: 120,
+            },
+            {
+              title: "预约医院",
+              key: "appointmentHospital",
+              minWidth: 220,
+            },
+            {
+              title: "派单医院",
+              key: "sendOrderHospital",
+              minWidth: 220,
+            },
+            {
+              title: "最终消费医院",
+              key: "finalConsumptionHospital",
+              minWidth: 220,
+            },
+            {
+              title: "派单人员",
+              key: "sendHospitalEmployeeName",
+              minWidth: 120,
+            },
+            {
+              title: "归属客服",
+              key: "belongEmployeeName",
+              minWidth: 120,
+            },
+            {
+            title: "审核时间",
+            key: "checkDate",
+            minWidth: 170,
+            align:'center',
+            render: (h, params) => {
+              return params.row.checkDate ? h("div",this.$moment(params.row.checkDate).format("YYYY-MM-DD HH:mm:ss")) : '';
+            },
+          },
+          {
+            title: "审核状态",
+            key: "checkState",
+            minWidth: 120,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.checkState == "审核通过") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#04B05D",
+                    },
+                  },
+                  params.row.checkState
+                );
+              } else if (params.row.checkState == "未审核") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.checkState
+                );
+              } else if (params.row.checkState == "审核不通过") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "blue",
+                    },
+                  },
+                  params.row.checkState
+                );
+              } else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.checkState
+                );
+              }
+            },
+          },
+          {
+            title: "对账金额",
+            key: "checkPrice",
+            minWidth: 100,
+            align:'center'
+          },
+          {
+            title: "服务费合计",
+            key: "settlePrice",
+            minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "审核人",
+            key: "checkByEmpName",
+            minWidth: 100,
+            align:'center'
+          },
+          {
+            title: "审核备注",
+            key: "checkRemark",
+            minWidth: 200,
+            align:'center'
+          },
+          {
+            title: "是否开票",
+            key: "isCreateBill",
+            minWidth: 100,
+            align:'center'
+          },
+           {
+            title: "开票公司",
+            key: "belongCompanyName",
+            minWidth: 220,
+            align:'center'
+          },
+          {
+            title: "是否回款",
+            key: "isReturnBackPrice",
+            minWidth: 120,
+            align:'center',
+          },
+          {
+            title: "回款金额",
+            key: "returnBackPrice",
+            minWidth: 100,
+            align:'center'
+          },
+          {
+            title: "回款时间",
+            key: "returnBackDate",
+            minWidth: 170,
+            align:'center',
+            render: (h, params) => {
+              return params.row.returnBackDate ? h("div",this.$moment(params.row.returnBackDate).format("YYYY-MM-DD HH:mm:ss")) : '';
+            },
+          },
+            
+          ],
+          data: [],
+        },
+      // 买家已付款
+      contentInfo:{
+          actualPaymentNum:0,
+          sendOrderPirceNum:0,
+          accountReceivableNum:0,
+          quantityNum:0,
+          // 总订单数量
+          pageCount:0,
+          checkState:-1,
+          ReturnBackPriceState:'-1',
+          ReturnBackPriceStateList:[
+              {
+                status:'-1',
+                name:'全部回款状态'
+              },
+              {
+                status:'true',
+                name:'已回款'
+              },
+              {
+                status:'false',
+                name:'未回款'
+              }
+          ],
+          customerName:"",
+          startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
+          endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
+          columns: [
+            {
+              title: "客户昵称",
+              key: "nickName",
+              minWidth: 160,
+            },
+            {
+              title: "客户手机",
+              key: "encryptPhone",
+              minWidth: 140,
+            },
+            {
+              title: "订单号",
+              key: "id",
+              minWidth: 200,
+            },
+            {
+              title: "下单平台",
+              key: "appTypeText",
+              minWidth: 100,
+              
+            },
+            {
+              title: "下单时间",
+              tooltip:true,
+              minWidth: 180,
+              key: "createDate",
+              render: (h, params) => {
+                return h(
+                  "div",
+                  this.$moment(params.row.createDate).format(
+                    "YYYY-MM-DD HH:mm:ss"
+                  )
+                );
+              },
+            },
+            {
+              title: "商品名称",
+              key: "goodsName",
+              minWidth: 300,
+            },
+            {
+              title: "订单价格",
+              key: "acturalPayment",
+              minWidth: 150,
+            },
+            
+            {
+              title: "应收款",
+              key: "accountReceivable",
+              minWidth: 150,
+            },
+            {
+              title: "派单价格",
+              key: "sendOrderPirce",
+              minWidth: 150,
+            },
+            {
+              title: "购买数量",
+              key: "quantity",
+              minWidth: 100,
+            },
+            {
+              title: "订单状态",
+              key: "statusText",
+              minWidth: 120,
+            },
+            {
+              title: "预约医院",
+              key: "appointmentHospital",
+              minWidth: 220,
+            },
+            {
+              title: "派单医院",
+              key: "sendOrderHospital",
+              minWidth: 220,
+            },
+            {
+              title: "最终消费医院",
+              key: "finalConsumptionHospital",
+              minWidth: 220,
+            },
+            {
+              title: "派单人员",
+              key: "sendHospitalEmployeeName",
+              minWidth: 120,
+            },
+            {
+              title: "归属客服",
+              key: "belongEmployeeName",
+              minWidth: 120,
+            },
+            {
+            title: "审核时间",
+            key: "checkDate",
+            minWidth: 170,
+            align:'center',
+            render: (h, params) => {
+              return params.row.checkDate ? h("div",this.$moment(params.row.checkDate).format("YYYY-MM-DD HH:mm:ss")) : '';
+            },
+          },
+          {
+            title: "审核状态",
+            key: "checkState",
+            minWidth: 120,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.checkState == "审核通过") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#04B05D",
+                    },
+                  },
+                  params.row.checkState
+                );
+              } else if (params.row.checkState == "未审核") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.checkState
+                );
+              } else if (params.row.checkState == "审核不通过") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "blue",
+                    },
+                  },
+                  params.row.checkState
+                );
+              } else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.checkState
+                );
+              }
+            },
+          },
+          {
+            title: "对账金额",
+            key: "checkPrice",
+            minWidth: 100,
+            align:'center'
+          },
+          {
+            title: "服务费合计",
+            key: "settlePrice",
+            minWidth: 100,
+            align:'center'
+          },
+          {
+            title: "审核人",
+            key: "checkByEmpName",
+            minWidth: 100,
+            align:'center'
+          },
+          {
+            title: "审核备注",
+            key: "checkRemark",
+            minWidth: 200,
+            align:'center'
+          },
+           
+          {
+            title: "是否回款",
+            key: "isReturnBackPrice",
+            minWidth: 120,
+            align:'center',
+          },
+          {
+            title: "回款金额",
+            key: "returnBackPrice",
+            minWidth: 100,
+            align:'center'
+          },
+          {
+            title: "回款时间",
+            key: "returnBackDate",
+            minWidth: 170,
+            align:'center',
+            render: (h, params) => {
+              return params.row.returnBackDate ? h("div",this.$moment(params.row.returnBackDate).format("YYYY-MM-DD HH:mm:ss")) : '';
+            },
+          },
+            
+          ],
+          data: [],
+        },
+    };
+  },
+  methods: {
+    // 被整理的数组中相同nickName的元素需放在一块，否则还要再整理数据（暂未处理）
+    integratedData(data) {
+        let that = this;
+        // 获取所有的不同年龄值
+        let arrId = [];
+        data.forEach(i => {
+            !arrId.includes(i.nickName) ? arrId.push(i.nickName) : arrId;
+        });
+        // 提前为每个年龄值设置跨行数为0
+        let arrObj = [];
+        arrId.forEach(j => {
+            arrObj.push({
+                id: j,
+                num: 0
+            })
+        })
+        // 计算每个年龄的可跨行数
+        data.forEach(k => {
+            arrObj.forEach(l => {
+                k.nickName === l.id ? l.num ++ : l.num;
+            })
+        })
+        data.forEach(m => {
+            arrObj.forEach((n,index) => {
+                if(m.nickName === n.id){
+                    if(arrId.includes(m.nickName)){
+                        m.mergeCol = n.num;
+                        arrId.splice(arrId.indexOf(m.nickName),1);
+                    }else{
+                        m.mergeCol = 0;
+                    }
+                }
+            })
+        })
+        return data;
+    },
+    // 只针对相同nickName字段合并列，nickName位于第一列，columnIndex为0
+    handleSpan ({ row, column, rowIndex, columnIndex }) {
+        if (columnIndex === 0) {
+            return {
+                rowspan: row.mergeCol === 0 ? 0:row.mergeCol,
+                colspan: row.mergeCol === 0 ? 0:1
+            };
+        }
+    },
+    tabChange() {
+      if (this.activeName == "orderDistribution") {
+        // 下单平台
+        this.getcustomerOrderReceivableReports();
+        this.contentInfo.startDate =  this.$moment().startOf('month').format("YYYY-MM-DD")
+        this.contentInfo.endDate =  this.$moment(new Date()).format("YYYY-MM-DD")
+        this.contentInfo.customerName = ""
+        this.contentInfo.ReturnBackPriceState = '-1'
+        this.contentInfo.checkState = -1
+      } else {
+        // 内容平台
+        this.customerPaidOrderReceivableReport();
+        this.query.startDate =  this.$moment().startOf('month').format("YYYY-MM-DD")
+        this.query.endDate =  this.$moment(new Date()).format("YYYY-MM-DD")
+        this.query.customerName = ""
+        this.query.ReturnBackPriceState = '-1'
+        this.query.checkState = -1
+        this.query.isCreateBill = -1
+        this.query.belongCompanyId = -1
+      }
+    },
+    // 获取交易完成订单
+    getcustomerOrderReceivableReports(val) {
+      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState,appType,isCreateBill,belongCompanyId} = this.query;
+      const data = { 
+            startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+            endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
+            customerName,
+            checkState: checkState == -1 ? null : checkState,
+            ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+            appType:appType == -1 ? null :appType,
+            isCreateBill : isCreateBill == -1 ? null : isCreateBill,
+            belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId
+        };
+      if(!startDate || !endDate){
+        this.$Message.error('请选择日期')
+        return
+      }
+      api.getcustomerOrderReceivableReport(data).then((res) => {
+        if (res.code === 0) {
+          const { customerOrderReceivableReport} = res.data;
+          this.query.data = customerOrderReceivableReport;
+          this.integratedData(this.query.data)
+          let actualPaymentNum = 0
+          let accountReceivableNum=0
+          let sendOrderPirceNum = 0
+          let quantityNum = 0
+          this.pageCount = this.query.data.length
+          this.query.data.map((item,index)=>{
+            actualPaymentNum +=Number(item.acturalPayment)
+            accountReceivableNum +=Number(item.accountReceivable)
+            sendOrderPirceNum +=Number(item.sendOrderPirce)
+            
+            quantityNum +=Number(item.quantity)
+          })
+          this.actualPaymentNum = Math.floor(actualPaymentNum * 100) / 100
+          this.accountReceivableNum = Math.floor(accountReceivableNum * 100) / 100
+          this.sendOrderPirceNum = Math.floor(sendOrderPirceNum * 100) / 100
+
+          this.quantityNum = quantityNum
+        }
+      });
+    },
+    // 交易完成订单导出
+    exportsendOrder() {
+      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState,appType,isCreateBill,belongCompanyId} = this.query;
+      const data = { 
+        startDate: this.$moment(startDate).format("YYYY-MM-DD")  ,
+        endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
+        customerName,
+        checkState: checkState == -1 ? null : checkState,
+        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+        appType:appType == -1 ? null :appType,
+        isCreateBill : isCreateBill == -1 ? null : isCreateBill,
+        belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId
+      };
+      if(!startDate || !endDate){
+        this.$Message.error('请选择日期')
+        return
+      }
+      if(this.query.data.length==0){
+          this.$Message.error('没有数据时不支持导出')
+          return
+      }
+      api.getcustomerOrderReceivableExport(data).then((res) => {
+        let name = this.$moment(new Date(startDate)).format("YYYY-MM-DD") + '-' + this.$moment(new Date(endDate)).format("YYYY-MM-DD") + '交易完成订单'
+        download(res,name);
+      });
+    },
+    // 获取买家已付款订单
+    customerPaidOrderReceivableReport(val) {
+       const { startDate,endDate ,customerName,checkState,ReturnBackPriceState} = this.contentInfo;
+      const data = { 
+            startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+            endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
+            customerName,
+            checkState: checkState == -1 ? null : checkState,
+            ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+        };
+      if(!startDate || !endDate){
+        this.$Message.error('请选择日期')
+        return
+      }
+      api.customerPaidOrderReceivableReport(data).then((res) => {
+        if (res.code === 0) {
+          const { customerOrderReceivableReport} = res.data;
+          this.contentInfo.data = customerOrderReceivableReport;
+          this.integratedData(this.contentInfo.data)
+          let actualPaymentNum = 0
+          let accountReceivableNum=0
+          let sendOrderPirceNum = 0
+          let quantityNum = 0
+          this.pageCount = this.contentInfo.data.length
+          this.contentInfo.data.map((item,index)=>{
+            actualPaymentNum +=Number(item.acturalPayment)
+            accountReceivableNum +=Number(item.accountReceivable)
+            sendOrderPirceNum +=Number(item.sendOrderPirce)
+            
+            quantityNum +=Number(item.quantity)
+          })
+          this.contentInfo.actualPaymentNum = Math.floor(actualPaymentNum * 100) / 100
+          this.contentInfo.accountReceivableNum = Math.floor(accountReceivableNum * 100) / 100
+          this.contentInfo.sendOrderPirceNum = Math.floor(sendOrderPirceNum * 100) / 100
+          this.contentInfo.quantityNum = quantityNum
+        }
+      });
+    },
+    // 买家已付款订单导出
+    exportContent2() {
+      const { startDate,endDate ,customerName,checkState,ReturnBackPriceState} = this.contentInfo;
+      const data = { 
+        startDate: this.$moment(startDate).format("YYYY-MM-DD")  ,
+        endDate  :endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
+        customerName,
+        checkState: checkState == -1 ? null : checkState,
+        ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+      };
+      if(!startDate || !endDate){
+        this.$Message.error('请选择日期')
+        return
+      }
+      if(this.contentInfo.data.length==0){
+          this.$Message.error('没有数据时不支持导出')
+          return
+      }
+      api.customerPaidOrderReceivableExport(data).then((res) => {
+        let name = this.$moment(new Date(startDate)).format("YYYY-MM-DD") + '-' + this.$moment(new Date(endDate)).format("YYYY-MM-DD") + '买家已付款订单'
+        download(res,name);
+      });
+    },
+    handleModalVisibleChange(value) {
+      if (!value) {
+        this.query.data = []
+        this.query.startDate =  this.$moment().startOf('month').format("YYYY-MM-DD")
+        this.query.endDate =  this.$moment(new Date()).format("YYYY-MM-DD")
+        this.query.customerName = ""
+        this.query.ReturnBackPriceState = '-1'
+        this.query.checkState = -1
+        this.contentInfo.data = []
+        this.contentInfo.startDate =  this.$moment().startOf('month').format("YYYY-MM-DD")
+        this.contentInfo.endDate =  this.$moment(new Date()).format("YYYY-MM-DD")
+        this.contentInfo.customerName = ""
+        this.contentInfo.ReturnBackPriceState = '-1'
+        this.contentInfo.checkState = -1
+        this.query.isCreateBill = -1
+        this.query.belongCompanyId = -1
+        this.activeName = "orderDistribution";
+        this.$emit("update:moneyReportModel2", false);
+      }
+    },
+    // 取消
+    cancelSubmits(name) {
+      this.control = false;
+      this.query.data = []
+      this.query.startDate =  this.$moment().startOf('month').format("YYYY-MM-DD")
+      this.query.endDate =  this.$moment(new Date()).format("YYYY-MM-DD")
+      this.query.customerName = ""
+      this.query.ReturnBackPriceState = '-1'
+      this.query.checkState = -1
+      this.contentInfo.data = []
+      this.contentInfo.startDate =  this.$moment().startOf('month').format("YYYY-MM-DD")
+      this.contentInfo.endDate =  this.$moment(new Date()).format("YYYY-MM-DD")
+      this.contentInfo.customerName = ""
+      this.contentInfo.ReturnBackPriceState = '-1'
+      this.contentInfo.checkState = -1
+      this.query.isCreateBill = -1
+        this.query.belongCompanyId = -1
+      this.activeName = "orderDistribution";
+      this.$emit("update:moneyReportModel2", false);
+    },
+  },
+  created() {
+    // const positionName = sessionStorage.getItem("positionName");
+    // const employeeIds = sessionStorage.getItem("employeeId");
+    // this.query.positionName = positionName;
+    // this.query.employeeIds = employeeIds;
+  },
+  watch: {
+    moneyReportModel2(value) {
+      this.moneyReportModels = value;
+      // this.getCustomerServiceList()
+    },
+  },
+};
+</script>
+<style lang="less" scoped>
+.container{
+  margin-top:10px
+}
+.top {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.header {
+  margin-bottom: 20px;
+}
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.num {
+  margin-right: 20px;
+  font-size: 18px;
+  display: flex;
+}
+</style>

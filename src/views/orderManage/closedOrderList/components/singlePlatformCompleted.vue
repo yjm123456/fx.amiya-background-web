@@ -6,26 +6,26 @@
             <DatePicker
               type="date"
               placeholder="核销日期（始）"
-              style="width: 10rem;margin-left: .625rem"
+              style="width: 140px;"
               :value="query.writeOffStartDate"
               v-model="query.writeOffStartDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="核销日期（末）"
-              style="width: 10rem; margin-left: .625rem"
+              style="width: 140px; margin-left: .625rem"
               :value="query.writeOffEndDate"
               v-model="query.writeOffEndDate"
             ></DatePicker>
           <Input
             v-model="query.keyword"
             placeholder="请输入关键字"
-            style="width: 200px; margin-left: 10px"
+            style="width: 180px; margin-left: 10px"
             @keyup.enter.native="gettmallOrderFinishLlistWithPage()"
           />
           <Select
             v-model="query.appType"
-            style="width: 200px;margin-left: 10px"
+            style="width: 140px;margin-left: 10px"
             placeholder="请选择下单平台"
           >
             <Option
@@ -38,7 +38,7 @@
             <Select
               v-model="query.orderNature"
               placeholder="请选择订单性质"
-              style="width: 10rem;margin-left: .625rem"
+              style="width: 140px;margin-left: .625rem"
             >
               <Option
                 v-for="item in orderNatureList"
@@ -59,6 +59,30 @@
                 >{{ item.name }}</Option
               >
             </Select>
+            <Select
+                v-model="query.isCreateBill"
+                style="width: 140px;margin-left: .625rem"
+                placeholder="是否开票"
+              >
+                <Option
+                  v-for="item in isCreateBillList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.belongCompanyId"
+                style="width: 170px;margin-left: .625rem"
+                placeholder="请选择开票公司"
+              >
+                <Option
+                  v-for="item in companyNameAllList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             <Select
               v-model="query.ReturnBackPriceState"
               placeholder="回款状态"
@@ -188,6 +212,7 @@
 import * as api from "@/api/orderManage";
 import * as hospitalManage from "@/api/hospitalManage";
 import * as OrderCheckPictureApi from "@/api/OrderCheckPicture.js";
+
 import toExamine from "./components/toExamine.vue"
 import viewPic from "@/components/viewPic/viewPic"
 import detail from "@/components/orderDetail/detail.vue"
@@ -203,9 +228,24 @@ export default {
   props: {
     activeName:String,
     checkStateListAll:Array,
+    companyNameAllList:Array
   },
   data() {
     return {
+     isCreateBillList:[
+            {
+              type:-1,
+              name:'全部开票状态'
+            },
+            {
+              type:'true',
+              name:'已开票'
+            },
+            {
+              type:'false',
+              name:'未开票'
+            },
+          ],
       detailModel:false,
       detailList:[],
       // 回款 传给子组件的值
@@ -220,6 +260,10 @@ export default {
       toExamineModel:false,
       flag:false,
       query: {
+        // 是否开票
+        isCreateBill:-1,
+        // 开票公司
+        belongCompanyId:-1,
         checkState:-1,
         ReturnBackPriceState:'-1',
         ReturnBackPriceStateList:[
@@ -330,12 +374,6 @@ export default {
             align:'center'
           },
           {
-            title: "订单状态",
-            key: "statusText",
-            minWidth: 100,
-            align:'center'
-          },
-          {
             title: "审核时间",
             key: "checkDate",
             minWidth: 170,
@@ -394,15 +432,15 @@ export default {
             },
           },
           {
-            title: "审核金额",
+            title: "对账金额",
             key: "checkPrice",
             minWidth: 100,
             align:'center'
           },
           {
-            title: "结算金额",
+            title: "服务费合计",
             key: "settlePrice",
-            minWidth: 100,
+            minWidth: 120,
             align:'center'
           },
           {
@@ -414,10 +452,36 @@ export default {
           {
             title: "审核备注",
             key: "checkRemark",
-            minWidth: 200,
+            minWidth: 150,
             align:'center'
           },
-          
+          {
+            title: "是否开票",
+            key: "isCreateBill",
+            minWidth: 100,
+            align:'center',
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isCreateBill,
+                    size: "default",
+                    disabled:
+                      params.row.isCreateBill === true || params.row.isCreateBill === false,
+                  },
+                },
+                h("span", { isCreateBill: "open" }, "开"),
+                h("span", { isCreateBill: "close" }, "关")
+              );
+            },
+          },
+           {
+            title: "开票公司",
+            key: "creatBillCompany",
+            minWidth: 220,
+            align:'center'
+          },
           {
             title: "是否回款",
             key: "isReturnBackPrice",
@@ -466,10 +530,10 @@ export default {
           {
             title: "回款时间",
             key: "returnBackDate",
-            minWidth: 170,
+            minWidth: 110,
             align:'center',
             render: (h, params) => {
-              return params.row.returnBackDate ? h("div",this.$moment(params.row.returnBackDate).format("YYYY-MM-DD HH:mm:ss")) : '';
+              return params.row.returnBackDate ? h("div",this.$moment(params.row.returnBackDate).format("YYYY-MM-DD ")) : '';
             },
           },
           {
@@ -741,6 +805,7 @@ export default {
     };
   },
   methods: {
+    
     unTime(){
       if(this.form.isUncertainDate === true){
         this.form.appointmentDate = ''
@@ -791,7 +856,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize ,keyword,writeOffStartDate,writeOffEndDate,appType,orderNature,checkState,ReturnBackPriceState} = this.query;
+      const { pageNum, pageSize ,keyword,writeOffStartDate,writeOffEndDate,appType,orderNature,checkState,ReturnBackPriceState,isCreateBill,belongCompanyId} = this.query;
       const data = { 
           pageNum, 
           pageSize ,
@@ -801,7 +866,10 @@ export default {
           appType,
           orderNature,
           checkState: checkState == -1 ? null : checkState,
-          ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+          ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+          isCreateBill: isCreateBill == -1 ? null : isCreateBill,
+          belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
+
         };
       api.tmallOrderFinishLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -814,7 +882,7 @@ export default {
 
     // 获取内容平台已成交列表分页
     handlePageChange(pageNum) {
-      const { pageSize ,keyword,writeOffStartDate,writeOffEndDate,appType,orderNature,checkState,ReturnBackPriceState} = this.query;
+      const { pageSize ,keyword,writeOffStartDate,writeOffEndDate,appType,orderNature,checkState,ReturnBackPriceState,isCreateBill,belongCompanyId} = this.query;
       const data = { 
           pageNum, 
           pageSize ,
@@ -824,7 +892,9 @@ export default {
           appType,
           orderNature,
           checkState: checkState == -1 ? null : checkState,
-          ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState
+          ReturnBackPriceState:ReturnBackPriceState=='-1' ? null : ReturnBackPriceState,
+          isCreateBill: isCreateBill == -1 ? null : isCreateBill,
+          belongCompanyId: belongCompanyId == -1 ? null : belongCompanyId,
         };
         api.tmallOrderFinishLlistWithPage(data).then((res) => {
             if (res.code === 0) {
@@ -890,6 +960,7 @@ export default {
     this.getorderNatureList()
     this.getOrderPlatform()
     this.getHospitalInfonameList()
+    
   },
   watch:{
     activeName: {

@@ -57,6 +57,7 @@
             type="primary"
             style="margin-left: 10px"
             @click="handleExportClick"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           ></span
         >
@@ -344,44 +345,44 @@ export default {
         });
         return;
       }
-      if (!itemId) {
-        this.$Message.warning({
-          content: "请选择项目",
-          duration: 5,
-          closable: true,
-        });
-        return;
-      }
-      if (!cityId) {
-        this.$Message.warning({
-          content: "请选择城市",
-          duration: 5,
-          closable: true,
-        });
-        return;
-      }
+      // if (!itemId) {
+      //   this.$Message.warning({
+      //     content: "请选择项目",
+      //     duration: 5,
+      //     closable: true,
+      //   });
+      //   return;
+      // }
+      // if (!cityId) {
+      //   this.$Message.warning({
+      //     content: "请选择城市",
+      //     duration: 5,
+      //     closable: true,
+      //   });
+      //   return;
+      // }
       this.byCityIdAndItemIdGetPartakeHospitalList();
     },
 
     // 导出
     handleExportClick() {
       const { activityId, itemId, cityId } = this.hospitalInfo;
-      if (!itemId) {
+      if (!activityId) {
         this.$Message.warning({
-          content: "请选择项目",
+          content: "请选择报价名称",
           duration: 5,
           closable: true,
         });
         return;
       }
-      if (!cityId) {
-        this.$Message.warning({
-          content: "请选择城市",
-          duration: 5,
-          closable: true,
-        });
-        return;
-      }
+      // if (!cityId) {
+      //   this.$Message.warning({
+      //     content: "请选择城市",
+      //     duration: 5,
+      //     closable: true,
+      //   });
+      //   return;
+      // }
       const data = {
         activityId: activityId === -1 ? null : activityId,
         itemId,

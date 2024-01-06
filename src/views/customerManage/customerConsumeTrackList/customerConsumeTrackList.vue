@@ -8,7 +8,7 @@
               <Input
                   v-model="query.keyword"
                   placeholder="请输入关键字"
-                  style="width: 180px; margin-left: 10px"
+                  style="width: 180px;"
                   @keyup.enter.native="getCustomerHospitalConsume()"
                 />
                 <DatePicker
@@ -25,6 +25,35 @@
                   :value="query.endDate"
                   v-model="query.endDate"
                 ></DatePicker>
+                
+                <Select
+                  v-model="query.isConfirmOrder"
+                  style="width: 160px; margin-left: 10px"
+                  placeholder="确认升单状态"
+                >
+                  <Option
+                    v-for="item in isConfirmOrderList"
+                    :value="item.status"
+                    :key="item.status"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+                <DatePicker
+                  type="date"
+                  placeholder="升单开始日期"
+                  style="width: 160px; margin-left: 10px"
+                  :value="query.consumeStartDate"
+                  v-model="query.consumeStartDate"
+                  :disabled="query.isConfirmOrder!='true'"
+                ></DatePicker>
+                <DatePicker
+                  type="date"
+                  placeholder="升单结束日期"
+                  style="width: 160px; margin-left: 10px"
+                  :value="query.consumeEndDate"
+                  v-model="query.consumeEndDate"
+                  :disabled="query.isConfirmOrder!='true'"
+                ></DatePicker>
                 <Select
                   v-model="query.checkState"
                   placeholder="审核状态"
@@ -37,9 +66,12 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
+            </div>
+            <div style="margin-top:10px">
+              
                 <Select
                   v-model="query.consumeType"
-                  style="width: 160px; margin-left: 10px"
+                  style="width: 160px;"
                   placeholder="消费类型"
                 >
                   <Option
@@ -49,23 +81,9 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
-                <Select
-                  v-model="query.isConfirmOrder"
-                  style="width: 160px; margin-left: 10px"
-                  placeholder="确认状态"
-                >
-                  <Option
-                    v-for="item in isConfirmOrderList"
-                    :value="item.status"
-                    :key="item.status"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-            </div>
-            <div style="margin-top:10px">
               <Select
                 v-model="query.buyAgainType"
-                style="width: 140px; margin-left: 10px"
+                style="width: 180px; margin-left: 10px"
                 placeholder="升单类型"
                 filterable
               >
@@ -78,7 +96,7 @@
               </Select>
               <Select
                 v-model="query.channel"
-                style="width: 180px; margin-left: 10px"
+                style="width: 160px; margin-left: 10px"
                 placeholder="升单渠道"
                 filterable
               >
@@ -91,9 +109,10 @@
               </Select>
               <Select
                 v-model="query.addedBy"
-                style="width: 180px; margin-left: 10px"
+                style="width: 160px; margin-left: 10px"
                 placeholder="跟进人员"
                 filterable
+                :disabled="isDirector == 'false' && isCustomerService == 'true'"
               >
                 <Option
                   v-for="item in query.employee"
@@ -105,7 +124,7 @@
               <Select
                 v-model="query.liveAnchorId"
                 placeholder="请选择主播IP账号"
-                style="width: 180px; margin-left: 10px"
+                style="width: 160px; margin-left: 10px"
                 filterable
                 >
                 <Option
@@ -224,8 +243,8 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="抖店订单号" prop="otherContentPlatFormOrderId">
-              <Input v-model="form.otherContentPlatFormOrderId" placeholder="请输入抖店订单号"></Input>
+            <FormItem label="三方单号" prop="otherContentPlatFormOrderId">
+              <Input v-model="form.otherContentPlatFormOrderId" placeholder="请输入三方单号"></Input>
             </FormItem>
           </Col>
           
@@ -409,6 +428,8 @@
     <viewPic :viewPicModel.sync ="viewPicModel" :viewPicList ="viewPicList"></viewPic>
     <!-- 回款 -->
     <paymentCollection :paymentCollectionModel.sync ="paymentCollectionModel" :paymentCollectionObj="paymentCollectionObj" @hanPaymentChange="getCustomerHospitalConsume"></paymentCollection>
+    <!-- 订单详情 -->
+    <upgradeOrderDetail :upgradeOrderDetailModel.sync ="upgradeOrderDetailModel" :upgradeOrderObj="upgradeOrderObj"></upgradeOrderDetail>
   </div>
 </template>
 
@@ -421,7 +442,7 @@ import importFile from "./components/import.vue"
 import toExamine from "./components/toExamine.vue"
 import viewPic from "@/components/viewPic/viewPic"
 import paymentCollection from "@/components/paymentCollection/paymentCollection"
-
+import upgradeOrderDetail from "@/components/upgradeOrderDetail/upgradeOrderDetail"
 
 export default {
   components: {
@@ -429,10 +450,17 @@ export default {
     importFile,
     toExamine,
     viewPic,
-    paymentCollection
+    paymentCollection,
+    upgradeOrderDetail
   },
   data() {
     return {
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
+      upgradeOrderDetailModel:false,
+      upgradeOrderObj:null,
       isConfirmOrderList:[
         {
           status:-1,
@@ -549,7 +577,7 @@ export default {
           channel:'',
           // 主播IP
           liveAnchorId:'',
-          // 抖店订单号
+          // 三方单号
           otherContentPlatFormOrderId:''
         },
         // 获取有效的医院列表
@@ -643,6 +671,10 @@ export default {
         },
       // 查询
       query: {
+        // 升单开始时间
+        consumeStartDate:'',
+        // 升单结束时间
+        consumeEndDate:'',
         // 是否确认升单
         isConfirmOrder:-1,
         liveAnchorId:null,
@@ -652,7 +684,7 @@ export default {
         // 审核状态
         checkState:-1,
         // 跟进人员
-        addedBy:-1,
+        addedBy: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
         employee: [{ name: "全部客服", id: -1 },{ name: "医院添加", id: 0 }],
         // 升单类型
         buyAgainType:'',
@@ -747,7 +779,7 @@ export default {
             align:'center'
           },
           {
-            title: "抖店订单号",
+            title: "三方单号",
             key: "otherContentPlatFormOrderId",
             minWidth: 180,
             align:'center'
@@ -1133,7 +1165,7 @@ export default {
 
           },
           {
-            title: "审核结算金额",
+            title: "服务费合计",
             key: "checkSettlePrice",
             minWidth: 140,
             align:'center'
@@ -1211,7 +1243,7 @@ export default {
           {
             title: "操作",
             key: "",
-            minWidth: 430,
+            minWidth: 500,
             align:"center",
             fixed: "right",
             render: (h, params) => {
@@ -1231,6 +1263,30 @@ export default {
                 );
               });
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: ".3125rem",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.upgradeOrderDetailModel = true
+                        api.byCustomerHospitalConsume(id).then((res) => {
+                          if (res.code === 0) {
+                            this.upgradeOrderObj= res.data.CustomerManageUpdateconsume
+                          }
+                        })
+                      },
+                    },
+                  },
+                  "订单详情"
+                ),
                 h(
                   "Button",
                   {
@@ -1358,7 +1414,7 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: params.row.checkState =='审核通过'
+                      disabled: params.row.checkState =='审核通过' || params.row.isConfirmOrder == true
                     },
                     style: {
                       marginRight: "5px",
@@ -1437,6 +1493,7 @@ export default {
                     props: {
                       type: "error",
                       size: "small",
+                      disabled: params.row.checkState =='审核通过'
                     },
                     on: {
                       click: () => {
@@ -1557,7 +1614,9 @@ export default {
         checkState,
         channel,
         liveAnchorId,
-        isConfirmOrder
+        isConfirmOrder,
+        consumeStartDate,
+        consumeEndDate
       } = this.query;
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
@@ -1572,7 +1631,9 @@ export default {
         checkState,
         channel,
         liveAnchorId,
-        isConfirmOrder:isConfirmOrder==-1 ? null : isConfirmOrder
+        isConfirmOrder:isConfirmOrder==-1 ? null : isConfirmOrder,
+        consumeStartDate:isConfirmOrder =='true' ?  (consumeStartDate ? this.$moment(consumeStartDate).format("YYYY-MM-DD") : null) : null,
+        consumeEndDate:isConfirmOrder =='true' ?  (consumeEndDate ? this.$moment(consumeEndDate).format("YYYY-MM-DD") : null) : null
       };
       api.getCustomerHospitalConsume(data).then((res) => {
         if (res.code === 0) {
@@ -1597,7 +1658,9 @@ export default {
         checkState,
         channel,
         liveAnchorId,
-        isConfirmOrder
+        isConfirmOrder,
+        consumeStartDate,
+        consumeEndDate
       } = this.query;
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
@@ -1612,7 +1675,9 @@ export default {
         checkState,
         channel,
         liveAnchorId,
-        isConfirmOrder:isConfirmOrder==-1 ? null : isConfirmOrder
+        isConfirmOrder:isConfirmOrder==-1 ? null : isConfirmOrder,
+        consumeStartDate:isConfirmOrder =='true' ?  (consumeStartDate ? this.$moment(consumeStartDate).format("YYYY-MM-DD") : null) : null,
+        consumeEndDate:isConfirmOrder =='true' ?  (consumeEndDate ? this.$moment(consumeEndDate).format("YYYY-MM-DD") : null) : null
       };
       api.getCustomerHospitalConsume(data).then((res) => {
         if (res.code === 0) {

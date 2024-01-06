@@ -2,6 +2,7 @@
   <div id="app">
     <telephone v-if="control"></telephone>
     <router-view></router-view>
+    <!-- <button @click="handleClick">点击</button> -->
   </div>
 </template>
 
@@ -16,6 +17,11 @@ export default {
     control() {
       return this.$store.state.callCenter.control;
     },
+  },
+  methods:{
+    // handleClick() {
+    //   this.$store.dispatch("message/getMessage")
+    // }
   }
 };
 </script>

@@ -4,7 +4,7 @@
       <Card icon="log-in" title="欢迎登录" :bordered="false">
         <div class="form-con">
           <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">阿美雅技术支持</p>
+          <p class="login-tip">啊美雅技术支持</p>
         </div>
       </Card>
     </div>
@@ -42,7 +42,9 @@ export default {
           token,
           refreshToken,
           hospitalName,
-          hospitalId
+          hospitalId,
+          avatar,
+          readDataCenter
         } = hospitalEmployeeLoginRes.data.token;
         sessionStorage.setItem("positionId", hospitalPositionId);
         sessionStorage.setItem("positionName", hospitalPositionName);
@@ -53,6 +55,8 @@ export default {
         sessionStorage.setItem("refreshToken", refreshToken);
         sessionStorage.setItem("hospitalName", hospitalName);
         sessionStorage.setItem("hospitalId", hospitalId);
+        sessionStorage.setItem("avatar", avatar);
+        sessionStorage.setItem("readDataCenter", readDataCenter);
 
         // 权限
         const permissionRes = await permission();

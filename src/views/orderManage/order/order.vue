@@ -96,13 +96,20 @@
         </div>
         <div class="head_right">
           <Button type="primary" style="margin-left: .625rem" @click="getOrderInfo()">查询</Button>
-          <!-- 导出 -->
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="importControlModal = true"
+            >导入</Button
+          >
+          <!-- 导出 
+            v-if="amiyaPositionId==1"-->
           <span
           ><Button
             type="primary"
             style="margin-left: .625rem"
             @click="handleExportClick()"
-            v-if="amiyaPositionId==1"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           ></span>
           <Button type="primary" style="margin-left: .625rem" @click="recordingChange()">录单</Button>
@@ -117,7 +124,7 @@
             type="primary"
             @click="adjustCustomerService()"
             style="margin-left: 10px"
-            v-if="amiyaPositionId==1 || amiyaPositionId==14 || amiyaPositionId==16"
+            v-has="{ role: ['fx.amiya.permission.CHANGE_BIND_SERVICE'] }"
             >调整绑定客服</Button
           >
         </div>
@@ -324,7 +331,7 @@
         <Col span="8">
           <FormItem label="商品图片" prop="thumbPictureUrl" key="thumbPictureUrl" style="margin-top:10px">
             <div class="img_con">
-              <img src="https://img.alicdn.com/bao/uploaded/i3/2209451176576/O1CN012tXENx1yRrFEC3u8f_!!0-item_pic.jpg" style="width:60px;height:60px;margin-top:10px" v-if="form.thumbPictureUrl" @click="imageChange(1)">
+              <img :src="form.thumbPictureUrl" style="width:60px;height:60px;margin-top:10px" v-if="form.thumbPictureUrl" @click="imageChange(1)">
               <div class="no_img" v-else @click="imageChange(2)">暂无图片</div>
             </div>
           </FormItem>
@@ -563,6 +570,11 @@
     </Modal>
     <!-- 订单详情 -->
     <detail :detailModel.sync ="detailModel" :detailList ="detailList"></detail>
+    <!-- 导入 -->
+    <importFile
+      :importControlModal.sync="importControlModal"
+      @handleRefreshCustomerTrackList="getOrderInfo()"
+    ></importFile>
   </div>
 </template>
 
@@ -573,14 +585,18 @@ import * as contentPlatForm from "@/api/baseDataMaintenance"
 import detail from "@/components/orderDetail/detail.vue"
 import upload from "@/components/upload/upload";
 import { download } from "@/utils/util";
+import importFile from "./components/importModel.vue";
+
 export default {
   components: {
     upload,
-    detail
+    detail,
+    importFile
   },
   data() {
     
     return {
+      importControlModal: false,
       addtitle:'录单',
       detailList:[],
       detailModel:false,
@@ -842,6 +858,8 @@ export default {
         // 交易类型
         exchangeType:1,
         remark:'',
+        // 下单时间
+        createDate:null
         
 
       },
@@ -895,12 +913,12 @@ export default {
             message: "请输入手机号",
           },
         ],
-        appointmentHospital : [
-          {
-            required: true,
-            message: "请选择预约门店",
-          },
-        ],
+        // appointmentHospital : [
+        //   {
+        //     required: true,
+        //     message: "请选择预约门店",
+        //   },
+        // ],
         statusCode: [
           {
             required: true,
@@ -930,20 +948,21 @@ export default {
             type: "selection",
             key: "_checked",
             align: "center",
-            minWidth: 80,
+            minWidth: 60,
             
           },
           {
             title: "订单编号",
             key: "id",
-            minWidth: 170,
+            minWidth: 200,
             align:'center',
           },
           {
             title: "下单平台",
             key: "appTypeText",
-            minWidth: 100,
+            minWidth: 130,
             align:'center',
+            tooltip:true
           },
           
           {
@@ -1010,11 +1029,24 @@ export default {
               );
             },
           },
+          {
+            title: "规格",
+            key: "standard",
+            minWidth: 200,
+            align:'center',
+            tooltip:true
+          },
           // {
           //   title: "描述",
           //   key: "description",
           //   minWidth: 200,
           // },
+          {
+            title: "支付类型",
+            key: "exchangeTypeText",
+            minWidth: 120,
+            align:'center',
+          },
           {
             title: "实付款",
             key: "actualPayment",
@@ -1066,7 +1098,54 @@ export default {
           {
             title: "手机号",
             key: "phone",
-            minWidth: 140,
+            minWidth: 120,
+            align:'center',
+          },
+          {
+            title: "是否发货",
+            key: "isSendOrder",
+            minWidth: 100,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isSendOrder == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "预约时间",
+            key: "appointmentDate",
+            minWidth: 120,
+            align:'center',
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.appointmentDate ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") : ''
+              );
+            },
+          },
+          {
+            title: "预约城市",
+            key: "appointmentCity",
+            minWidth: 120,
             align:'center',
           },
           {
@@ -1074,6 +1153,13 @@ export default {
             key: "appointmentHospital",
             minWidth: 220,
             align:'center',
+          },
+          {
+            title: "备注",
+            key: "remark",
+            minWidth: 300,
+            align:'center',
+            tooltip:true
           },
           {
             title: "操作",
@@ -1325,6 +1411,10 @@ export default {
             value: "WAIT_BUYER_PAY",
           },
           {
+            name: "买家已付款",
+            value: "TRADE_BUYER_PAID",
+          },
+          {
             name: "等待卖家发货",
             value: "WAIT_SELLER_SEND_GOODS",
           },
@@ -1348,6 +1438,7 @@ export default {
             name: "买家已签收,货到付款专用",
             value: "TRADE_BUYER_SIGNED",
           },
+          
         ],
         statusCode: null,
         appTypeList:[
@@ -1535,6 +1626,7 @@ export default {
           this.form.quantity= orderData.quantity
           this.form.accountReceivable = orderData.accountReceivable
           this.form.exchangeType= 1
+          this.form.createDate = orderData.createDate
 
         }
       })
@@ -1563,7 +1655,8 @@ export default {
               quantity,
               exchangeType,
               remark,
-              accountReceivable
+              accountReceivable,
+              createDate
             } = this.form
             const data = {
               orderId,
@@ -1571,7 +1664,7 @@ export default {
               thumbPictureUrl,
               goodsId,
               phone,
-              appointmentHospital,
+              appointmentHospital:appointmentHospital ? appointmentHospital : null,
               statusCode,
               actualPayment,
               buyerNick,
@@ -1582,7 +1675,8 @@ export default {
               quantity,
               exchangeType,
               remark,
-              accountReceivable
+              accountReceivable,
+              createDate:createDate ? createDate : null
             }
             api.supplement(data).then((res) => {
               if(res.code ===0 ){

@@ -14,7 +14,7 @@
             <Input
               v-model="query.keyword"
               placeholder="请输入客户名称和手机尾号"
-              style="width: 180px; margin-right: 10px"
+              style="width: 200px; margin-right: 10px"
               @keyup.enter.native="bindCustomerConsumptionServerList()"
               :disabled="query.orderId !== ''"
             />
@@ -48,7 +48,7 @@
               style="width: 140px; margin-right: 10px"
               placeholder="请选择客服"
               filterable
-              :disabled ="query.positionName == '客服'" 
+              :disabled="isDirector == 'false' && isCustomerService == 'true'"
             >
               <Option
                 v-for="item in query.employee"
@@ -89,27 +89,35 @@
         />
       </div>
     </Card>
-
-  
+    <!-- 发放礼品 -->
+    <sendGift :params="params" :giftModel.sync="giftModel" @handleRefreshCustomerList="bindCustomerConsumptionServerList()"/>
   </div>
 </template>
 
 <script>
 import * as api from "@/api/customerManage";
 import * as baseApi from "@/api/baseDataMaintenance";
-import customerInfo from "@/components/customerInfo/customerInfo";
-import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import * as giftCategoryApi from "@/api/giftCategory";
+import * as orderApi from "@/api/orderManage";
 
+// import customerInfo from "@/components/customerInfo/customerInfo";
+// import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import sendGift from "./components/sendGift.vue"
 export default {
   props: {
     activeName: String,
   },
   components: {
-    customerInfo,
-    trackReturnVisit,
+    // customerInfo,
+    // trackReturnVisit,
+    sendGift
   },
   data() {
     return {
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
       phone:"",
       // 客户列表
       query: {
@@ -127,13 +135,13 @@ export default {
             title: "电话",
             key: "phone",
             align:'center',
-            width:150
+            minWidth:130
           },
           {
             title: "创建时间",
             key: "createDate",
             align:'center',
-            width:170,
+            minWidth:170,
             render: (h, params) => {
               return h(
                 "div",
@@ -148,18 +156,20 @@ export default {
             title: "绑定客服",
             key: "customerServiceName",
             align:'center',
-            width:120
+            minWidth:140
           },
           {
             title: "首次项目需求",
             key: "firstOrderInfo",
             align:'center',
+            minWidth:160,
+            tooltip:true
           },
           {
             title: "首次消费时间",
             key: "firstOrderCreateDate",
             align:'center',
-            width:180,
+            minWidth:170,
             render: (h, params) => {
               return h(
                 "div",
@@ -173,11 +183,11 @@ export default {
             title: "最新消费时间",
             key: "newConsumptionTime",
             align:'center',
-            width:170,
+            minWidth:170,
             render: (h, params) => {
               return h(
                 "div",
-                  params.row.newConsumptionPlatFormId == 0 ?  '' : this.$moment(params.row.newConsumptionTime).format(
+                  params.row.newConsumptionPlatFormId == 0 ||  params.row.newConsumptionTime == null?  '' : this.$moment(params.row.newConsumptionTime).format(
                     "YYYY-MM-DD HH:mm:ss"
                   ) 
               );
@@ -187,26 +197,102 @@ export default {
             title: "最新消费平台",
             key: "newConsumptionPlatForm",
             align:'center',
-            width:150
+            minWidth:130
+          },
+          {
+            title: "最新消费所属主播",
+            key: "newLiveAnchorName",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "最新消费所属微信",
+            key: "newWechatNo",
+            align:'center',
+            minWidth:150,
+            tooltip:true
           },
           {
             title: "最新消费渠道",
             key: "newConsumptionPlatFormAppTypeText",
             align:'center',
-            width:150
+            minWidth:130,
+            tooltip:true
           },
           
           {
             title: "累计消费",
             key: "allConsumptionPrice",
             align:'center',
-            width:120
+            minWidth:140
           },
           {
-            title: "总单数",
+            title: "消费次数",
             key: "createdOrderNum",
             align:'center',
-            width:120
+            minWidth:120
+          },
+          {
+            title: "礼品赠送次数",
+            key: "systemSendGiftTime",
+            align:'center',
+            minWidth:150
+          },
+          {
+            title: "最新赠送时间",
+            key: "newSystemSendGiftDate",
+            align:'center',
+            minWidth:150,
+            render: (h, params) => {
+              return h(
+                "div",
+                  params.row.newSystemSendGiftDate ?  this.$moment(params.row.newSystemSendGiftDate).format(
+                    "YYYY-MM-DD"
+                  ) : ''
+              );
+            },
+          },
+          {
+            title: "操作",
+            key: "",
+            width: 130,
+            fixed:'right',
+            align:'center',
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { encryptPhone,id } = params.row;
+                        
+                          const data = {
+                            encryptPhone
+                          }
+
+                          orderApi.decryptoPhonesNew(data).then((res) => {
+                            if (res.code === 0) {
+                              this.params.phone = res.data.phone;
+                              this.giftModel = true
+                              this.params.id = id
+                            }
+                          });
+                      },
+                    },
+                  },
+                  "发放礼品"
+                ),
+              ]);
+            },
           },
           
         ],
@@ -216,7 +302,7 @@ export default {
         keyword: "",
         orderId:'',
         employee: [{id:-1,name:'全部客服'}],
-        employeeId:-1,
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
         // employeeId: sessionStorage.getItem("positionName") == '客服' || sessionStorage.getItem("positionName") == '客服管理员' || sessionStorage.getItem("positionName") == '客服主管' ? sessionStorage.getItem("employeeId") : 97,
         cconsumptionLevelId:-1,
         channel:-1,
@@ -254,9 +340,25 @@ export default {
         type: 2,
         totalCount: 0,
       },
+      // 发放礼品参数
+      params:{
+        // 礼品分类
+        giftCategoryNameList:[],
+        phone:"",
+        id:''
+      },
+      giftModel:false
     };
   },
   methods: {
+    // 获取礼品分类（下拉框）
+    getGiftCategoryNameList() {
+      giftCategoryApi.getGiftCategoryNameList().then((res) => {
+        if (res.code === 0) {
+          this.params.giftCategoryNameList = res.data.nameList;
+        }
+      });
+    },
       // 获取消费等级id和名称
     getConsumptionLevelList(){
       baseApi.getConsumptionLevelList().then((res) => {
@@ -352,7 +454,8 @@ export default {
   created() {
     this.getCustomerServiceList();
     this.bindCustomerConsumptionServerList();
-    this.getConsumptionLevelList()
+    this.getConsumptionLevelList();
+    this.getGiftCategoryNameList();
   },
  
 };

@@ -92,14 +92,15 @@ export default {
       common.byEncryptPhoneGetReturnVisitList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.trackRecord;
-          // this.list = list
+          this.list = list
           this.pageNum++;
           callback && callback();
-          this.matcCallRecord(list,() =>{
-            if (this.list.length === totalCount) {
-              this.nextPage = false;
-            }
-          })
+          this.nextPage = false;
+          // this.matcCallRecord(list,() =>{
+          //   if (this.list.length === totalCount) {
+          //     this.nextPage = false;
+          //   }
+          // })
         }
       });
     },

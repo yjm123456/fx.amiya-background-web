@@ -7,18 +7,28 @@
             v-model="query.keyword"
             placeholder="请输入关键字"
             style="width: 200px; margin-left: 10px"
-            @keyup.enter.native="getHospitalBrandRegis()"
+          />
+          <Input
+            v-model="query.hospitalLinkMan"
+            placeholder="请输入医院联系人"
+            style="width: 200px; margin-left: 10px"
+          />
+          <Input
+            v-model="query.hospitalLinkManPhone"
+            placeholder="请输入医院联系电话"
+            style="width: 200px; margin-left: 10px"
           />
           <Button
             type="primary"
             style="margin-left: 10px"
-            @click="getHospitalBrandRegis()"
+            @click="getHospitalBrandRegis(1)"
             >查询</Button
           >
           <Button
             type="primary"
             style="margin-left: 10px"
             @click="exportHospitalMessage()"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           >
         </div>
@@ -48,7 +58,24 @@
                     <Input
                         v-model="form.hospitalName"
                         placeholder="请输入医院"
-                        maxlength="12"
+                    />
+                </FormItem>
+                <FormItem label="营业执照名称" prop="businessLicenseName">
+                    <Input
+                        v-model="form.businessLicenseName"
+                        placeholder="请输入营业执照名称"
+                    />
+                </FormItem>
+                <FormItem label="医院联系人" prop="hospitalLinkMan">
+                    <Input
+                        v-model="form.hospitalLinkMan"
+                        placeholder="请输入医院联系人"
+                    />
+                </FormItem>
+                <FormItem label="医院联系电话" prop="hospitalLinkManPhone">
+                    <Input
+                        v-model="form.hospitalLinkManPhone"
+                        placeholder="请输入医院联系电话"
                     />
                 </FormItem>
                 <FormItem label="产品类型" prop="goodsType">
@@ -161,6 +188,8 @@ export default {
     return {
       // 查询
       query: {
+        hospitalLinkManPhone:'',
+        hospitalLinkMan:'',
         keyword: "",
         pageNum: 1,
         pageSize: 10,
@@ -169,6 +198,18 @@ export default {
           {
             title: "医院",
             key: "hospitalName",
+          },
+          {
+            title: "营业执照名称",
+            key: "businessLicenseName",
+          },
+          {
+            title: "医院联系人",
+            key: "hospitalLinkMan",
+          },
+          {
+            title: "医院联系电话",
+            key: "hospitalLinkManPhone",
           },
           {
             title: "产品类型",
@@ -221,13 +262,19 @@ export default {
                               hospitalName,
                               goodsType,
                               allSaleNum,
-                              exceededReason
+                              exceededReason,
+                              hospitalLinkManPhone,
+                              hospitalLinkMan,
+                              businessLicenseName
                             } = res.data.hospitalBrandApplyInfo;
                             this.isEdit = true;
                             this.form.goodsId = goodsId;
                             this.form.goodsUrl = goodsUrl;
                             this.form.tmallGoodsSkuVo = tmallGoodsSkuVo;
                             this.form.hospitalName = hospitalName;
+                            this.form.hospitalLinkManPhone = hospitalLinkManPhone;
+                            this.form.hospitalLinkMan = hospitalLinkMan;
+                            this.form.businessLicenseName = businessLicenseName;
                             this.form.goodsType = goodsType;
                             this.form.allSaleNum = allSaleNum;
                             this.form.exceededReason = exceededReason;
@@ -404,7 +451,10 @@ export default {
             hospitalName:'',
             allSaleNum:null,
             goodsType:'',
-            exceededReason:''
+            exceededReason:'',
+            businessLicenseName:'',
+            hospitalLinkMan:'',
+            hospitalLinkManPhone:''
       },
 
       ruleValidate: {
@@ -448,12 +498,22 @@ export default {
             
         },
     // 获取医院品牌报名信息
-    getHospitalBrandRegis() {
+    getHospitalBrandRegis(val) {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize ,keyword} = this.query;
-      const data = { pageNum, pageSize ,keyword };
+      const { pageNum, pageSize ,keyword,hospitalLinkMan,hospitalLinkManPhone} = this.query;
+      const data = { pageNum, pageSize ,keyword ,hospitalLinkMan,hospitalLinkManPhone};
+      // if(val == 1){
+      //   if(!hospitalLinkMan){
+      //     this.$Message.warning('请输入医院联系人')
+      //     return
+      //   }
+      //   if(!hospitalLinkManPhone){
+      //     this.$Message.warning('请输入医院联系电话')
+      //     return
+      //   }
+      // }
       api.getHospitalBrandApply(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.hospitalBrandApplyInfo;
@@ -461,12 +521,14 @@ export default {
           this.query.totalCount = totalCount;
         }
       });
+      
+      
     },
 
     // 获取医院品牌报名信息分页
     handlePageChange(pageNum) {
-        const {  pageSize ,keyword} = this.query;
-        const data = { pageNum, pageSize ,keyword };
+        const {  pageSize ,keyword,hospitalLinkMan,hospitalLinkManPhone} = this.query;
+        const data = { pageNum, pageSize ,keyword ,hospitalLinkMan,hospitalLinkManPhone};
         api.getHospitalBrandApply(data).then((res) => {
             if (res.code === 0) {
             const { list, totalCount } = res.data.hospitalBrandApplyInfo;
@@ -495,7 +557,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-              const {id,hospitalName ,goodsId,goodsUrl,tmallGoodsSkuVo,goodsType,allSaleNum,exceededReason}  = this.form
+              const {id,hospitalName ,goodsId,goodsUrl,tmallGoodsSkuVo,goodsType,allSaleNum,exceededReason,businessLicenseName,hospitalLinkMan,hospitalLinkManPhone}  = this.form
               const data = {
                   tmallGoodsSkuDto:tmallGoodsSkuVo,
                   hospitalName,
@@ -504,7 +566,10 @@ export default {
                   id,
                   goodsType,
                   allSaleNum,
-                  exceededReason
+                  exceededReason,
+                  businessLicenseName,
+                  hospitalLinkManPhone,
+                  hospitalLinkMan
               }
             if(tmallGoodsSkuVo.length<=0){
               this.$Message.warning('请先添加规格')

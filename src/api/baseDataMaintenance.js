@@ -17,7 +17,13 @@ export const addTrackType = (data) => {
         data
     });
 };
-
+// 根据编号获取回访类型
+export const byIdTrack = (id) => {
+    return http({
+        url: `/amiyabg/Track/byId/${id}`,
+        method: "get",
+    });
+};
 // 修改回访类型   put
 export const updateTrackType = (data) => {
     return http({

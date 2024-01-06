@@ -11,11 +11,13 @@
               style="width: 220px; margin-right: 10px"
               @keyup.enter.native="getWeChatCustomerList()"
             />
+
+              <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
             <Select
-              v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
               v-model="query.employeeId"
               style="width: 180px; margin-right: 10px"
               placeholder="请选择客服"
+              :disabled="isDirector == 'false' && isCustomerService == 'true'"
             >
               <Option
                 v-for="item in query.employee"
@@ -65,10 +67,13 @@
             ></DatePicker>
           </div>
           <div class="price_content">
-            <div @change="amountTypeFlag(query.amountType)" style="margin-right:30px">
+            <div
+              @change="amountTypeFlag(query.amountType)"
+              style="margin-right:30px"
+            >
               <Radio-group v-model="query.amountType" vertical>
-                  <Radio label="0">下单金额</Radio>
-                  <Radio label="1">核销金额</Radio>
+                <Radio label="0">下单金额</Radio>
+                <Radio label="1">核销金额</Radio>
               </Radio-group>
             </div>
             <Input
@@ -85,9 +90,13 @@
               @keyup.enter.native="getWeChatCustomerList()"
             />
             <div @change="isUnTrackCheckbox(query.isUnTrack)">
-              <Checkbox v-model="query.isUnTrack" :disabled="query.disabled" style="margin-left:100px">
-                  <span v-if="query.isUnTrack">未回访客户</span>
-                  <span v-else>未回访客户</span>
+              <Checkbox
+                v-model="query.isUnTrack"
+                :disabled="query.disabled"
+                style="margin-left:100px"
+              >
+                <span v-if="query.isUnTrack">未回访客户</span>
+                <span v-else>未回访客户</span>
               </Checkbox>
               <DatePicker
                 type="date"
@@ -95,7 +104,7 @@
                 style="width: 200px;margin-right: 10px"
                 :value="query.unTrackStartDate"
                 v-model="query.unTrackStartDate"
-                :disabled="query.isUnTrack==false"
+                :disabled="query.isUnTrack == false"
               ></DatePicker>
               <DatePicker
                 type="date"
@@ -103,14 +112,25 @@
                 style="width: 200px;;margin-right: 10px"
                 :value="query.unTrackEndDate"
                 v-model="query.unTrackEndDate"
-                :disabled="query.isUnTrack==false"
+                :disabled="query.isUnTrack == false"
               ></DatePicker>
             </div>
           </div>
         </div>
         <div>
-          <Button type="primary" @click="getWeChatCustomerList()" style="margin-left:20px">查询</Button>
-          <Button type="primary" @click="expiredCustomerIntergration" style="margin-left:20px" v-if="amiyaPositionId==1  || amiyaPositionId==16">积分过期</Button>
+          <Button
+            type="primary"
+            @click="getWeChatCustomerList()"
+            style="margin-left:20px"
+            >查询</Button
+          >
+          <Button
+            type="primary"
+            @click="expiredCustomerIntergration"
+            style="margin-left:20px"
+            v-if="amiyaPositionId == 1 || amiyaPositionId == 16"
+            >积分过期</Button
+          >
         </div>
       </div>
     </Card>
@@ -143,7 +163,12 @@
       @resetControlTrackReturnVisitDisplay="resetControlTrackReturnVisitDisplay"
       :params="trackReturnVisitComParams"
     />
-
+    <!--客户信息  -->
+    <customerMessage
+      :customerMessageModel.sync="customerMessageModel"
+      :customerMessageObj="customerMessageObj"
+      :customerInfoComParams2="customerInfoComParams2"
+    ></customerMessage>
     <!-- 发送会员卡 -->
     <Modal
       v-model="sendMemberCardForm.controlModal"
@@ -174,8 +199,11 @@
           </Select>
         </FormItem>
         <template v-if="sendMemberCardForm.memberRankName === '黑卡会员'">
-          <FormItem label="会员卡号" prop="memberCardNum" >
-            <Input v-model="sendMemberCardForm.memberCardNum" placeholder="请输入会员卡号"></Input>
+          <FormItem label="会员卡号" prop="memberCardNum">
+            <Input
+              v-model="sendMemberCardForm.memberCardNum"
+              placeholder="请输入会员卡号"
+            ></Input>
           </FormItem>
         </template>
       </Form>
@@ -199,17 +227,17 @@
         :label-width="80"
       >
         <FormItem label="姓名" prop="name">
-            <Input
-              v-model="editCustomerForm.name"
-              placeholder="请输入姓名"
-              style="width: 380px; margin-right: 10px"
-            />
+          <Input
+            v-model="editCustomerForm.name"
+            placeholder="请输入姓名"
+            style="width: 380px; margin-right: 10px"
+          />
         </FormItem>
         <FormItem label="性别" prop="sex">
-          <div >
+          <div>
             <Radio-group v-model="editCustomerForm.sex">
-                <Radio label="男">男</Radio>
-                <Radio label="女">女</Radio>
+              <Radio label="男">男</Radio>
+              <Radio label="女">女</Radio>
             </Radio-group>
           </div>
         </FormItem>
@@ -224,10 +252,10 @@
         </FormItem>
         <FormItem label="职业" prop="occupation">
           <Input
-              v-model="editCustomerForm.occupation"
-              placeholder="请输入职业"
-              style="width: 380px; margin-right: 10px"
-            />
+            v-model="editCustomerForm.occupation"
+            placeholder="请输入职业"
+            style="width: 380px; margin-right: 10px"
+          />
         </FormItem>
         <FormItem label="微信号" prop="wechatNumber">
           <Input
@@ -249,13 +277,41 @@
         <Button type="primary" @click="handleEditSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 客户赠送积分 -->
+    <bonusPoint
+      :bonusPointsParams="bonusPointsParams"
+      :bonusPointsControlModal.sync="bonusPointsControlModal"
+      @getWeChatCustomerList="getWeChatCustomerList"
+      ref="bonusPoint"
+    />
+
+    <!-- 发优惠券 -->
+    <coupon
+      :couponModel.sync="couponModel"
+      :couponId="couponId"
+      :consumptionVoucherCodeNames="consumptionVoucherCodeNames"
+      @getWeChatCustomerList="getWeChatCustomerList"
+    />
+
+    <!-- 发放礼品 -->
+    <gift :giftModel.sync="giftModel" ref="gift" :giftParams="giftParams"/>
+
+    <!-- 添加标签 -->
+    <tag :tagModel.sync="tagModel" :tagParams="tagParams" :customerTagList="customerTagList"/>
   </div>
 </template>
 
 <script>
 import * as api from "@/api/customerManage";
+import * as customerTagInfoApi from "@/api/customerTagInfo";
 import customerInfo from "@/components/customerInfo/customerInfo";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import customerMessage from "@/components/customerMessage/customerMessageXCX";
+import bonusPoint from "./bonusPoints.vue";
+import coupon from "./coupon.vue";
+import gift from "./gifts.vue";
+import tag from "./tag.vue";
+
 export default {
   props: {
     activeName: String,
@@ -263,84 +319,133 @@ export default {
   components: {
     customerInfo,
     trackReturnVisit,
+    customerMessage,
+    bonusPoint,
+    coupon,
+    gift,
+    tag
   },
   data() {
     return {
-      amiyaPositionId:sessionStorage.getItem("amiyaPositionId"),
-      monthList:[
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
+      flag:false,
+      flag2:false,
+      // 根据id获取已选择的标签
+        customerTagList:[],
+      tagModel:false,
+      // 添加标签参数
+      tagParams:{
+        id:'',
+        customerTagNameList:[],
+        tagIds:[],
+        
+      },
+      giftModel: false,
+      // 发放礼品组件参数
+      giftParams: {
+        id: "",
+        encryptPhone: "",
+      },
+      consumptionVoucherCodeNames: [],
+      couponId: "",
+      couponModel: false,
+      customerMessageModel: false,
+      // 客户信息组件参数
+      customerInfoComParams2: {
+        userId: "",
+        encryptPhone: "",
+        tabGlag: false,
+        id:''
+      },
+      // 客户赠送积分
+      bonusPointsParams: {
+        encryptPhone: "",
+        orderId: "",
+        actualPayment: null,
+        id:''
+      },
+      bonusPointsControlModal: false,
+      customerMessageObj: {},
+      amiyaPositionId: sessionStorage.getItem("amiyaPositionId"),
+      monthList: [
         {
-          BirthMonth:0,
-          name:'全部'
+          BirthMonth: 0,
+          name: "全部",
         },
         {
-          BirthMonth:1,
-          name:'一月'
+          BirthMonth: 1,
+          name: "一月",
         },
         {
-          BirthMonth:2,
-          name:'二月'
+          BirthMonth: 2,
+          name: "二月",
         },
         {
-          BirthMonth:3,
-          name:'三月'
+          BirthMonth: 3,
+          name: "三月",
         },
         {
-          BirthMonth:4,
-          name:'四月'
+          BirthMonth: 4,
+          name: "四月",
         },
         {
-          BirthMonth:5,
-          name:'五月'
+          BirthMonth: 5,
+          name: "五月",
         },
         {
-          BirthMonth:6,
-          name:'六月'
+          BirthMonth: 6,
+          name: "六月",
         },
         {
-          BirthMonth:7,
-          name:'七月'
+          BirthMonth: 7,
+          name: "七月",
         },
         {
-          BirthMonth:8,
-          name:'八月'
-        },{
-          BirthMonth:9,
-          name:'九月'
-        }
-        ,{
-          BirthMonth:10,
-          name:'十月'
-        }
-        ,{
-          BirthMonth:11,
-          name:'十一月'
-        }
-        ,{
-          BirthMonth:12,
-          name:'十二月'
-        }
+          BirthMonth: 8,
+          name: "八月",
+        },
+        {
+          BirthMonth: 9,
+          name: "九月",
+        },
+        {
+          BirthMonth: 10,
+          name: "十月",
+        },
+        {
+          BirthMonth: 11,
+          name: "十一月",
+        },
+        {
+          BirthMonth: 12,
+          name: "十二月",
+        },
       ],
-      phone:"",
+      phone: "",
       // 客户列表
       query: {
-        BirthMonth:Number(this.$moment(new Date()).format("MM")),
+        BirthMonth: Number(this.$moment(new Date()).format("MM")),
         // 未回访
-        isUnTrack:false,
+        isUnTrack: false,
         // 最小金额
-        minPrice:"",
-        maxPrice:"",
+        minPrice: "",
+        maxPrice: "",
         //  amountType下单总额=0，核销总额=1
-        amountType:"0",
-        disabled:false,
+        amountType: "0",
+        disabled: false,
         startDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
-        unTrackStartDate:  null,
-        unTrackEndDate: null ,
+        unTrackStartDate: null,
+        unTrackEndDate: null,
         columns: [
           {
             title: "头像",
             key: "avatar",
-            width: 300,
+            width: 160,
+            tooltip:true,
             render: (h, params) => {
               return h(
                 "viewer",
@@ -369,139 +474,515 @@ export default {
           {
             title: "创建时间",
             key: "createDate",
+            width: 170,
+            tooltip:true,
             render: (h, params) => {
               return h(
                 "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD"
-                )
+                this.$moment(params.row.createDate).format("YYYY-MM-DD")
               );
             },
           },
           {
+            title: "归属小程序",
+            key: "appName",
+            width: 140,
+            tooltip:true,
+            align:'center'
+          },
+          {
             title: "电话",
             key: "phone",
+            width: 160,
+            align:'center'
           },
           {
             title: "省份",
             key: "province",
+            width: 120,
+            align:'center'
           },
           {
             title: "城市",
             key: "city",
+            width: 120,
+            align:'center'
           },
           {
             title: "积分余额",
             key: "integrationBalance",
+            width: 160,
+            align:'center'
           },
           {
             title: "会员级别",
             key: "memberRank",
+            width: 200,
+            align:'center'
           },
           {
             title: "会员卡号",
             key: "memberCardNum",
+            width: 120,
+            align:'center'
           },
           {
             title: "操作",
-            width: 400,
+            width: 280,
             fixed: "right",
             align: "center",
+            // render: (h, params) => {
+            //   const currentRole = JSON.parse(
+            //     sessionStorage.getItem("permissions")
+            //   );
+            //   const flag = currentRole.some((ele) => {
+            //     return "fx.amiya.permission.SEND_MEMBER_CARD".includes(ele);
+            //   });
+            //   // 发优惠券
+            //   const flag2 = currentRole.some((ele) => {
+            //     return "fx.amiya.permission.SEND_MEMBE_CARD".includes(ele);
+            //   });
+            //   return h("div", [
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { encryptPhone, userId } = params.row;
+            //             //
+            //             let data = {
+            //               encryptPhone: encryptPhone,
+            //             };
+
+            //             api
+            //               .getBaseAndBindCustomerInfoByEncryptPhone(data)
+            //               .then((res) => {
+            //                 if (res.code === 0) {
+            //                   this.customerInfoComParams2.userId = userId;
+            //                   this.customerInfoComParams2.encryptPhone = encryptPhone;
+            //                   this.customerInfoComParams2.tabGlag = true;
+            //                   this.customerMessageModel = true;
+            //                   this.customerMessageObj = res.data.customer;
+            //                 }
+            //               });
+            //           },
+            //         },
+            //       },
+            //       "客户信息"
+            //     ),
+            //     // h(
+            //     //   "Button",
+            //     //   {
+            //     //     props: {
+            //     //       type: "primary",
+            //     //       size: "small",
+            //     //     },
+            //     //     style: {
+            //     //       marginRight: "5px",
+            //     //     },
+            //     //     on: {
+            //     //       click: () => {
+            //     //         const { userId, encryptPhone } = params.row;
+            //     //         this.customerInfoComParams.userId = userId;
+            //     //         this.customerInfoComParams.encryptPhone = encryptPhone;
+            //     //         this.customerInfoComParams.controlCustomerInfoDisplay = true;
+            //     //       },
+            //     //     },
+            //     //   },
+            //     //   "客户详情"
+            //     // ),
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { encryptPhone } = params.row;
+            //             this.trackReturnVisitComParams.encryptPhone = encryptPhone;
+            //             this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
+            //           },
+            //         },
+            //       },
+            //       "追踪回访"
+            //     ),
+            //     flag
+            //       ? h(
+            //           "Button",
+            //           {
+            //             props: {
+            //               type: "primary",
+            //               size: "small",
+            //             },
+            //             style: {
+            //               marginRight: "5px",
+            //             },
+            //             on: {
+            //               click: () => {
+            //                 const { id } = params.row;
+            //                 this.sendMemberCardForm.customerId = id;
+            //                 this.sendMemberCardForm.controlModal = true;
+            //               },
+            //             },
+            //           },
+            //           "发会员卡"
+            //         )
+            //       : null,
+            //     flag2
+            //       ? h(
+            //           "Button",
+            //           {
+            //             props: {
+            //               type: "primary",
+            //               size: "small",
+            //             },
+            //             style: {
+            //               marginRight: "5px",
+            //             },
+            //             on: {
+            //               click: () => {
+            //                 const { id } = params.row;
+            //                 this.couponId = id;
+            //                 this.couponModel = true;
+            //               },
+            //             },
+            //           },
+            //           "发优惠券"
+            //         )
+            //       : "",
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { id, encryptPhone } = params.row;
+            //             this.giftModel = true;
+            //             this.giftParams.id = id;
+            //             this.giftParams.encryptPhone = encryptPhone;
+            //             this.$refs.gift.getSendGiftBaseInfos(encryptPhone);
+            //             this.$refs.gift.getAddressLists(id);
+            //           },
+            //         },
+            //       },
+            //       "发放礼品"
+            //     ),
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { encryptPhone } = params.row;
+            //             this.bonusPointsParams.encryptPhone = encryptPhone;
+            //             this.bonusPointsControlModal = true;
+            //           },
+            //         },
+            //       },
+            //       "赠送积分"
+            //     ),
+            //     h(
+            //       "Button",
+            //       {
+            //         props: {
+            //           type: "primary",
+            //           size: "small",
+            //         },
+            //         style: {
+            //           marginRight: "5px",
+            //         },
+            //         on: {
+            //           click: () => {
+            //             const { id } = params.row;
+            //             this.tagModel = true
+            //             this.tagParams.id= id
+            //             let tag = []
+            //             customerTagInfoApi.getCustomertagList(id).then((res) => {
+            //               if (res.code === 0) {
+            //                 res.data.customerTagList.map(item=>{
+            //                   tag.push(item.id)
+            //                 })
+            //                 this.customerTagList = tag
+            //               }
+            //             });
+            //           },
+            //         },
+            //       },
+            //       "用户标签"
+            //     ),
+            //     // h(
+            //     //   "Button",
+            //     //   {
+            //     //     props: {
+            //     //       type: "primary",
+            //     //       size: "small",
+            //     //     },
+            //     //     style: {
+            //     //       marginRight: "5px",
+            //     //     },
+            //     //     on: {
+            //     //       click: () => {
+            //     //         const { encryptPhone } = params.row;
+            //     //         this.editCustomerForm.encryptPhone = encryptPhone;
+            //     //         this.phone = encryptPhone
+            //     //         this.editCustomerForm.editCustomerModel = true
+            //     //         this.getBaseInfoByEncryptPhone(encryptPhone)
+            //     //       },
+            //     //     },
+            //     //   },
+            //     //   "编辑信息"
+            //     // ),
+            //   ]);
+            // },
             render: (h, params) => {
               const currentRole = JSON.parse(
                 sessionStorage.getItem("permissions")
               );
+              // 发会员卡
               const flag = currentRole.some((ele) => {
-                return "fx.amiya.permission.SEND_MEMBER_CARD".includes(
-                  ele
-                );
+                return "fx.amiya.permission.SEND_MEMBER_CARD".includes(ele);
               });
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { userId, encryptPhone } = params.row;
-                        this.customerInfoComParams.userId = userId;
-                        this.customerInfoComParams.encryptPhone = encryptPhone;
-                        this.customerInfoComParams.controlCustomerInfoDisplay = true;
-                      },
+              // 发优惠券
+              const flag2 = currentRole.some((ele) => {
+                return "fx.amiya.permission.SEND_MEMBE_CARD".includes(ele);
+              });
+              let check = h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    // icon: "md-eye",
+                    size: "small",
+                  },
+                  style: {
+                    fontSize: "14px",
+                    color: "#fff",
+                    background: "#007fff",
+                    marginRight: "14px",
+                    cursor: "pointer",
+                    width: "70px",
+                    height: "27px",
+                  },
+                  on: {
+                    click: () => {
+                      const { encryptPhone, userId,id } = params.row;
+                        //
+                      let data = {
+                        customerId: id,
+                      };
+
+                      api.getBaseAndBindCustomerInfoByCustomerId(data).then((res) => {
+                          if (res.code === 0) {
+                            this.customerInfoComParams2.userId = userId;
+                            this.customerInfoComParams2.encryptPhone = encryptPhone;
+                            this.customerInfoComParams2.tabGlag = true;
+                            this.customerInfoComParams2.id = id;
+                            this.customerMessageModel = true;
+                            this.customerMessageObj = res.data.customer;
+                          }
+                        });
+                      
                     },
                   },
-                  "客户详情"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { encryptPhone } = params.row;
+                },
+                "客户信息"
+              );
+              let check2 = h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    // icon: "md-eye",
+                    size: "small",
+                  },
+                  style: {
+                    fontSize: "14px",
+                    color: "#fff",
+                    background: "#007fff",
+                    marginRight: "14px",
+                    cursor: "pointer",
+                    width: "70px",
+                    height: "27px",
+                  },
+                  on: {
+                    click: () => {
+                     const { encryptPhone,phone } = params.row;
                         this.trackReturnVisitComParams.encryptPhone = encryptPhone;
                         this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
-                      },
+                        this.trackReturnVisitComParams.phone = phone;
+                      
                     },
                   },
-                  "追踪回访"
-                ), flag ?
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
+                },
+                "追踪回访"
+              );
+              let send_order = h(
+                "Dropdown",
+                {
+                  props: {
+                    placement: "bottom",
+                    transfer: true,
+                  },
+                  on: {
+                    "on-click": (name) => {
+                      if (name == "lookCustomerImg") {
+                        // 发会员卡
                         const { id } = params.row;
-                        this.sendMemberCardForm.customerId = id;
-                        this.sendMemberCardForm.controlModal = true;
-                      },
+                            this.sendMemberCardForm.customerId = id;
+                            this.sendMemberCardForm.controlModal = true;
+                      } else if (name == "deal") {
+                        // 发优惠券
+                        const { id } = params.row;
+                            this.couponId = id;
+                            this.couponModel = true;
+                      } else if (name == "remark") {
+                        // 发放礼品
+                         const { id, encryptPhone } = params.row;
+                        this.giftModel = true;
+                        this.giftParams.id = id;
+                        this.giftParams.encryptPhone = encryptPhone;
+                        this.$refs.gift.getSendGiftBaseInfos(encryptPhone);
+                        this.$refs.gift.getAddressLists(id);
+                      } else if (name == "confirm") {
+                        //赠送积分
+                        const { encryptPhone ,id} = params.row;
+                        this.bonusPointsParams.encryptPhone = encryptPhone;
+                        this.bonusPointsParams.id = id;
+                        this.bonusPointsControlModal = true;
+                        this.$refs.bonusPoint.getCustomerInternelPercent(id)
+                      } else if (name == "goodNews") {
+                        //用户标签
+                        const { id } = params.row;
+                        this.tagModel = true
+                        this.tagParams.id= id
+                        let tag = []
+                        customerTagInfoApi.getCustomertagList(id).then((res) => {
+                          if (res.code === 0) {
+                            res.data.customerTagList.map(item=>{
+                              tag.push(item.id)
+                            })
+                            this.customerTagList = tag
+                          }
+                        });
+                      }
                     },
                   },
-                  "发会员卡"
-                )
-                : null,
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { encryptPhone } = params.row;
-                        this.editCustomerForm.encryptPhone = encryptPhone;
-                        this.phone = encryptPhone
-                        this.editCustomerForm.editCustomerModel = true
-                        this.getBaseInfoByEncryptPhone(encryptPhone)
+                },
+                [
+                  h(
+                    "a",
+                    {
+                      style: {
+                        color: "#007fff",
                       },
                     },
-                  },
-                  "编辑信息"
-                ),
-              ]);
+                    [
+                      "更多",
+                      h("Icon", {
+                        props: {
+                          type: "ios-arrow-down",
+                        },
+                        style: {
+                          marginLeft: "5px",
+                          color: "#3A64FF",
+                        },
+                      }),
+                    ]
+                  ),
+                  h(
+                    "DropdownMenu",
+                    {
+                      slot: "list",
+                      props: {
+                        trigger: "hover",
+                      },
+                    },
+                    [
+                      flag  ? h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "lookCustomerImg",
+                            // disabled: this.flag != 'fx.amiya.permission.SEND_MEMBER_CARD' ,
+                          },
+                        },
+                        "发会员卡"
+                      ) : null,
+
+                      flag2  ? h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "deal",
+                            // disabled:this.flag2 != 'fx.amiya.permission.SEND_MEMBE_CARD',
+                          },
+                        },
+                        "发优惠券"
+                      ):null,
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "remark",
+                          },
+                        },
+                        "发放礼品"
+                      ),
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "confirm",
+                          },
+                        },
+                        "赠送积分"
+                      ),
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "goodNews",
+                          },
+                        },
+                        "用户标签"
+                      ),
+                    ]
+                  ),
+                ]
+              );
+              let option = [];
+              // option.push(message);
+              option.push(check);
+              option.push(check2);
+              option.push(send_order);
+              return h("div", option);
             },
           },
         ],
@@ -510,9 +991,12 @@ export default {
         pageSize: 10,
         keyword: "",
         employee: [{ name: "全部客服", id: -1 }],
-        employeeId: -1,
-        memberRankNames:[{ name: "全部客户", id: -2 },{ name: "普通客户", id: -1 }],
-        memberRankId:"",
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
+        memberRankNames: [
+          { name: "全部客户", id: -2 },
+          { name: "普通客户", id: -1 },
+        ],
+        memberRankId: "",
         totalCount: 0,
       },
 
@@ -521,6 +1005,7 @@ export default {
         device: "",
         encryptPhone: "",
         controlTrackReturnVisitDisplay: false,
+        phone:''
       },
 
       // 客户信息组件参数
@@ -536,20 +1021,20 @@ export default {
         customerId: "",
         memberRankInfos: [],
         memberRankId: "",
-        memberRankName:"",
+        memberRankName: "",
         // 会员卡号
-        memberCardNum:""
+        memberCardNum: "",
       },
       // 编辑客户信息
-      editCustomerForm:{
-        editCustomerModel:false,
-        name:"",
-        sex:"",
-        encryptPhone:"",
-        birthday:null,
-        occupation:"",
-        wechatNumber:"",
-        city:""
+      editCustomerForm: {
+        editCustomerModel: false,
+        name: "",
+        sex: "",
+        encryptPhone: "",
+        birthday: null,
+        occupation: "",
+        wechatNumber: "",
+        city: "",
       },
       ruleValidate: {
         memberRankId: [
@@ -562,49 +1047,73 @@ export default {
     };
   },
   methods: {
+    // 获取所有标签
+    getCustomerTagNameList() {
+      customerTagInfoApi.customerTagNameList().then((res) => {
+        if (res.code === 0) {
+          const { customerTagNameList } = res.data;
+          this.tagParams.customerTagNameList = customerTagNameList;
+        }
+      });
+    },
+    // 优惠券列表
+    codeList(even) {
+      api.codeList().then((res) => {
+        if (res.code === 0) {
+          const { consumptionVoucherCodeNames } = res.data;
+          this.consumptionVoucherCodeNames = consumptionVoucherCodeNames;
+        }
+      });
+    },
     // 积分过期
-    expiredCustomerIntergration(){
+    expiredCustomerIntergration() {
       this.$Modal.confirm({
-          title: '是否确认清除所有用户积分？',
-          content: '<p>该操作将会清空小程序客户的账户中所有积分，点击后无法恢复，请确认无误后操作！</p>',
-          onOk: () => {
-              api.expiredCustomerIntergration().then((res) => {
-                if(res.code === 0){
-                  this.$Message.success('操作成功')
-                }
-              })
-          },
-          onCancel: () => {
-            
-          }
+        title: "是否确认清除所有用户积分？",
+        content:
+          "<p>该操作将会清空小程序客户的账户中所有积分，点击后无法恢复，请确认无误后操作！</p>",
+        onOk: () => {
+          api.expiredCustomerIntergration().then((res) => {
+            if (res.code === 0) {
+              this.$Message.success("操作成功");
+            }
+          });
+        },
+        onCancel: () => {},
       });
     },
     // 根据加密电话号获取客户基础信息
-    getBaseInfoByEncryptPhone(even){
-      const { encryptPhone } = this.editCustomerForm
+    getBaseInfoByEncryptPhone(even) {
+      const { encryptPhone } = this.editCustomerForm;
       const data = {
-        encryptPhone
-      }
+        encryptPhone,
+      };
       api.getBaseInfoByEncryptPhone(data).then((res) => {
-        if(res.code === 0){
+        if (res.code === 0) {
           const { customerBaseInfo } = res.data;
           this.editCustomerForm = customerBaseInfo;
-          this.editCustomerForm.editCustomerModel = true
+          this.editCustomerForm.editCustomerModel = true;
         }
-      })
+      });
     },
     // 编辑客户信息 确定
-    handleEditSubmit(){
-      const {name ,sex  ,birthday ,occupation ,wechatNumber ,city} = this.editCustomerForm
-      const data = {
-        name ,
-        sex , 
-        encryptPhone :this.phone,
-        birthday : birthday? this.$moment(birthday).format("YYYY-MM-DD") : null,
-        occupation ,
-        wechatNumber ,
+    handleEditSubmit() {
+      const {
+        name,
+        sex,
+        birthday,
+        occupation,
+        wechatNumber,
         city,
-      }
+      } = this.editCustomerForm;
+      const data = {
+        name,
+        sex,
+        encryptPhone: this.phone,
+        birthday: birthday ? this.$moment(birthday).format("YYYY-MM-DD") : null,
+        occupation,
+        wechatNumber,
+        city,
+      };
       api.editCustomerBaseInfo(data).then((res) => {
         if (res.code === 0) {
           this.cancelSubmit("form");
@@ -614,24 +1123,23 @@ export default {
             duration: 3,
           });
         }
-      })
-
+      });
     },
     // 切换下单或者是核销清空输入框的值
-    amountTypeFlag(data){
-      if(data===0 ){
-        this.query.minAmount = ""
-        this.query.maxAmount = ""
-      }else{
-        this.query.minAmount = ""
-        this.query.maxAmount = ""
+    amountTypeFlag(data) {
+      if (data === 0) {
+        this.query.minAmount = "";
+        this.query.maxAmount = "";
+      } else {
+        this.query.minAmount = "";
+        this.query.maxAmount = "";
       }
     },
     // 未回访的时候清空日期
-    isUnTrackCheckbox(data){
-      if(data==false){
-        this.query.unTrackStartDate  = null
-        this.query.unTrackEndDate  = null
+    isUnTrackCheckbox(data) {
+      if (data == false) {
+        this.query.unTrackStartDate = null;
+        this.query.unTrackEndDate = null;
       }
     },
     isAuthority() {
@@ -658,11 +1166,14 @@ export default {
 
     // 获取会员卡级别名称列表
     getMemberRankLevelList() {
-      api.getMemberRankLevelList().then(res=>{
-        if(res.code === 0) {
-          this.query.memberRankNames = [...this.query.memberRankNames,...res.data.memberRankNames];
+      api.getMemberRankLevelList().then((res) => {
+        if (res.code === 0) {
+          this.query.memberRankNames = [
+            ...this.query.memberRankNames,
+            ...res.data.memberRankNames,
+          ];
         }
-      })
+      });
     },
 
     // 获取微信客户列表
@@ -670,7 +1181,22 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyword, employeeId, memberRankId , startDate , endDate , amountType ,isUnTrack , minAmount ,maxAmount ,unTrackStartDate ,unTrackEndDate ,BirthMonth} = this.query;
+      const {
+        pageNum,
+        pageSize,
+        keyword,
+        employeeId,
+        memberRankId,
+        startDate,
+        endDate,
+        amountType,
+        isUnTrack,
+        minAmount,
+        maxAmount,
+        unTrackStartDate,
+        unTrackEndDate,
+        BirthMonth,
+      } = this.query;
 
       const data = {
         pageNum,
@@ -678,15 +1204,21 @@ export default {
         keyword,
         employeeId: !this.isAuthority() ? null : employeeId,
         memberRankId: memberRankId === -2 ? null : memberRankId,
-        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
-        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null ,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         amountType,
         isUnTrack,
         minAmount,
         maxAmount,
-        unTrackStartDate : unTrackStartDate ? this.$moment(unTrackStartDate).format("YYYY-MM-DD") : null,
-        unTrackEndDate : unTrackEndDate ? this.$moment(unTrackEndDate).format("YYYY-MM-DD") : null ,
-        BirthMonth:BirthMonth == 0 ? "" : Number(BirthMonth)
+        unTrackStartDate: unTrackStartDate
+          ? this.$moment(unTrackStartDate).format("YYYY-MM-DD")
+          : null,
+        unTrackEndDate: unTrackEndDate
+          ? this.$moment(unTrackEndDate).format("YYYY-MM-DD")
+          : null,
+        BirthMonth: BirthMonth == 0 ? "" : Number(BirthMonth),
       };
       api.getWeChatCustomerList(data).then((res) => {
         if (res.code === 0) {
@@ -699,21 +1231,40 @@ export default {
 
     // 获取微信客户列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyword, employeeId, memberRankId , startDate , endDate , amountType ,isUnTrack , minAmount ,maxAmount , unTrackStartDate,unTrackEndDate} = this.query;
+      const {
+        pageSize,
+        keyword,
+        employeeId,
+        memberRankId,
+        startDate,
+        endDate,
+        amountType,
+        isUnTrack,
+        minAmount,
+        maxAmount,
+        unTrackStartDate,
+        unTrackEndDate,
+      } = this.query;
       const data = {
         pageNum,
         pageSize,
         keyword,
         employeeId: !this.isAuthority() ? null : employeeId,
         memberRankId: memberRankId === -2 ? null : memberRankId,
-        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
-        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null ,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         amountType,
         isUnTrack,
-        minAmount ,
+        minAmount,
         maxAmount,
-        unTrackStartDate : unTrackStartDate ? this.$moment(unTrackStartDate).format("YYYY-MM-DD") : null,
-        unTrackEndDate : unTrackEndDate ? this.$moment(unTrackEndDate).format("YYYY-MM-DD") : null 
+        unTrackStartDate: unTrackStartDate
+          ? this.$moment(unTrackStartDate).format("YYYY-MM-DD")
+          : null,
+        unTrackEndDate: unTrackEndDate
+          ? this.$moment(unTrackEndDate).format("YYYY-MM-DD")
+          : null,
       };
       api.getWeChatCustomerList(data).then((res) => {
         if (res.code === 0) {
@@ -743,29 +1294,33 @@ export default {
 
     // 选择会员卡
     handleSelectMemberCard(e) {
-      if(!e) return;
+      if (!e) return;
       const { value, label } = e;
       this.sendMemberCardForm.memberRankId = value;
       this.sendMemberCardForm.memberRankName = label;
     },
-  
+
     // 取消
     cancelSubmit(name) {
       this.sendMemberCardForm.controlModal = false;
-      this.editCustomerForm.editCustomerModel = false
+      this.editCustomerForm.editCustomerModel = false;
       this.$refs[name].resetFields();
-      this.sendMemberCardForm.memberRankName = '';
+      this.sendMemberCardForm.memberRankName = "";
     },
 
     // 确认
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { customerId, memberRankId, memberCardNum } = this.sendMemberCardForm;
+          const {
+            customerId,
+            memberRankId,
+            memberCardNum,
+          } = this.sendMemberCardForm;
           const data = {
             customerId,
             memberRankId,
-            memberCardNum
+            memberCardNum,
           };
           api.sendMemberCard(data).then((res) => {
             if (res.code === 0) {
@@ -790,7 +1345,8 @@ export default {
     this.getMemberRankInfoList();
     this.getMemberRankLevelList();
     this.getCustomerServiceList();
-
+    this.codeList();
+    this.getCustomerTagNameList()
   },
   watch: {
     activeName: {
@@ -808,13 +1364,13 @@ export default {
       immediate: true,
     },
     // 监听会员卡名称
-    'sendMemberCardForm.memberRankName':{
+    "sendMemberCardForm.memberRankName": {
       handler(memberRankName) {
-        if(memberRankName !== '黑卡会员') {
-          this.sendMemberCardForm.memberCardNum = '';
+        if (memberRankName !== "黑卡会员") {
+          this.sendMemberCardForm.memberCardNum = "";
         }
       },
-    }
+    },
   },
 };
 </script>
@@ -830,15 +1386,15 @@ export default {
   margin-top: 16px;
   text-align: right;
 }
-.content{
+.content {
   display: flex;
   align-items: center;
 }
-.conter{
+.conter {
   display: flex;
   flex-direction: column;
 }
-.price_content{
+.price_content {
   margin-top: 30px;
   display: flex;
   align-items: center;

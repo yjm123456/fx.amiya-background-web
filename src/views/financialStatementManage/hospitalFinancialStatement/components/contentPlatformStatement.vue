@@ -27,6 +27,7 @@
         type="primary"
         @click="exportOrderChange"
         style="margin-left: 10px"
+        v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
         >导出</Button
       >
       <Button type="primary" @click="addOderChange" style="margin-left: 10px"
@@ -355,12 +356,12 @@ export default {
             },
           },
           {
-            title: "审核金额",
+            title: "对账金额",
             key: "checkPrice",
             minWidth: 120,
           },
           {
-            title: "结算金额",
+            title: "服务费合计",
             key: "settlePrice",
             minWidth: 120,
           },

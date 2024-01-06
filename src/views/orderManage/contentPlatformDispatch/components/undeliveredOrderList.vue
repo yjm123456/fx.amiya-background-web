@@ -2,12 +2,12 @@
   <div>
     <Card>
       <div class="container">
-        <div class="content">
-          <div>
+        <div class="content1">
+          <div class="">
             <DatePicker
               type="date"
               placeholder="开始日期"
-              style="width: 130px;"
+              style="width: 150px;"
               :value="query.startDate"
               v-model="query.startDate"
               transfer
@@ -15,7 +15,7 @@
             <DatePicker
               type="date"
               placeholder="结束日期"
-              style="width: 130px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               :value="query.endDate"
               v-model="query.endDate"
               transfer
@@ -29,7 +29,7 @@
             <Select
               v-model="query.contentPlateFormId"
               style="width: 180px;margin-left: 10px"
-              placeholder="请选择订单(下单)平台"
+              placeholder="请选择(订单)下单平台"
               filterable
             >
               <Option
@@ -78,21 +78,22 @@
               item.hostAccountName
             }}</Option>
           </Select>
+            <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
           <Select
             v-model="query.employeeId"
-            style="width: 150px;margin-left: 10px"
-            v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
+            style="width: 200px;margin-left: 10px"
             placeholder="请选择客服"
             filterable
+            :disabled="isDirector == 'false' && isCustomerService == 'true'"
           >
             <Option v-for="item in employee" :value="item.id" :key="item.id">{{
               item.name
             }}</Option>
           </Select>
-          <Select
+          <!-- <Select
             v-model="query.consultationEmpId"
             placeholder="请选择面诊员"
-            style="width: 160px;margin-left: 10px"
+            style="width: 180px;margin-left: 10px"
             filterable
           >
             <Option
@@ -101,10 +102,10 @@
               :key="item.id"
               >{{ item.name }}</Option
             >
-          </Select>
+          </Select> -->
           <Select
             v-model="query.orderSource"
-            style="width: 160px;margin-left: 10px"
+            style="width: 180px;margin-left: 10px"
             placeholder="请选择订单状态"
           >
             <Option
@@ -114,14 +115,30 @@
               >{{ item.orderSourceText }}</Option
             >
           </Select>
+          <Select
+              v-model="query.baseLiveAnchorId"
+              style="width: 150px;margin-left: 10px"
+              placeholder="请选择基础主播"
+              filterable
+              transfer
+            >
+              <Option
+                v-for="item in liveAnchorBaseInfos"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+          </Select>
           </div>
         </div>
-        <Button
-          type="primary"
-          style="margin-left: 10px"
-          @click="getUnSendOrderList()"
-          >查询</Button
-        >
+        <div>
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="getUnSendOrderList()"
+            >查询</Button
+          >
+        </div>
       </div>
       <div style="margin-top:10px">
         <Table border :columns="query.columns" :data="query.data"></Table>
@@ -168,10 +185,11 @@
           </Select>
         </FormItem>
         <FormItem
-          label="所有医院"
+          label="主派医院"
           prop="hospitalId"
           v-if="openAllHospital === true"
-          key="所有医院"
+          key="主派医院"
+          
         >
           <Select v-model="form.hospitalId" placeholder="请选择医院" filterable>
             <Option
@@ -182,9 +200,24 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
-          <i-switch v-model="form.isUncertainDate" />
+        <FormItem
+          label="次派医院"
+          prop="otherHospitalId"
+          key="次派医院"
+          
+        >
+          <Select v-model="form.otherHospitalId" placeholder="请选择次派医院" filterable multiple>
+            <Option
+              v-for="item in hospitalInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
         </FormItem>
+        <!-- <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
+          <i-switch v-model="form.isUncertainDate" />
+        </FormItem> -->
         <FormItem label="派单人员" prop="sendBy" key="派单人员">
           <Select
             v-model="form.sendBy"
@@ -196,7 +229,7 @@
             }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="接诊咨询">
+        <!-- <FormItem label="接诊咨询">
           <Input
             v-model="form.acceptConsulting"
             :placeholder="
@@ -204,12 +237,11 @@
             "
             disabled
           ></Input>
-          <!-- <div>{{form.acceptConsulting? form.acceptConsulting : '暂无咨询'}}</div> -->
           <div style="color:red">
             如需修改接诊咨询，请在内容平台订单列表修改
           </div>
-        </FormItem>
-        <FormItem
+        </FormItem> -->
+        <!-- <FormItem
           label="预约日期"
           prop="appointmentDate"
           v-if="form.isUncertainDate === false"
@@ -220,7 +252,7 @@
             style="width: 100%"
             v-model="form.appointmentDate"
           ></DatePicker>
-        </FormItem>
+        </FormItem> -->
         <FormItem label="派单留言">
           <Input
             v-model="form.remark"
@@ -271,7 +303,8 @@ export default {
   // props: ["activeName"],
   props:{
     activeName:String,
-    consultationNameList:Array
+    consultationNameList:Array,
+    liveAnchorBaseInfos:Array,
   },
   components: {
     viewCustomerPhotos,
@@ -279,6 +312,11 @@ export default {
   },
   data() {
     return {
+      employeeId:sessionStorage.getItem('employeeId'),
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
       detailList:[],
       detailModel:false,
       // 查看图片 
@@ -288,9 +326,10 @@ export default {
         { orderSource: -1, orderSourceText: "全部订单来源" },
       ],
       flag: false,
-      employee: [{ name: "全部客服", id: -1 }],
+      employee: [{ name: "全部归属客服", id: -1 }],
       employeeList:[],
       query: {
+        baseLiveAnchorId:-1,
         consultationEmpId:-1,
         orderSource: -1,
         columns: [
@@ -320,6 +359,18 @@ export default {
             title: "客户昵称",
             key: "customerName",
             minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "手机号",
+            key: "phone",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "归属客服",
+            key: "belongEmpName",
+            minWidth: 160,
             align: "center",
           },
           {
@@ -361,16 +412,24 @@ export default {
               );
             },
           },
-          {
-            title: "面诊员",
-            minWidth: 120,
-            key: "consultationEmpName",
-            align:'center'
-          },
+          
+          // {
+          //   title: "面诊员",
+          //   minWidth: 120,
+          //   key: "consultationEmpName",
+          //   align:'center'
+          // },
           {
             title: "咨询内容",
             key: "consultingContent",
             minWidth: 400,
+            tooltip:true
+          },
+          {
+            title: "面诊类型",
+            key: "consultationTypeText",
+            minWidth: 120,
+            align: "center",
           },
           {
             title: "所属平台",
@@ -472,12 +531,7 @@ export default {
           //   minWidth: 140,
           //   align: "center",
           // },
-          {
-            title: "手机号",
-            key: "phone",
-            minWidth: 160,
-            align: "center",
-          },
+          
           {
             title: "订单来源",
             key: "orderSourceText",
@@ -508,7 +562,7 @@ export default {
           },
           {
             title: "操作",
-            width: 300,
+            width: 250,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -669,7 +723,7 @@ export default {
         
         appType: -1,
         contentPlateFormId: "",
-        employeeId: -1,
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
         pageNum: 1,
         pageSize: 10,
         totalCount: 0,
@@ -696,6 +750,8 @@ export default {
       form: {
         orderId: "",
         hospitalId: "",
+        // 次派医院
+        otherHospitalId:[],
         appointmentDate: "",
         timeType: "",
         // 备注
@@ -866,7 +922,8 @@ export default {
         endDate,
         liveAnchorId,
         orderSource,
-        consultationEmpId
+        consultationEmpId,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         keyword,
@@ -881,7 +938,8 @@ export default {
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         liveAnchorId,
         orderSource,
-        consultationEmpId:consultationEmpId == -1 ? null :consultationEmpId
+        consultationEmpId:consultationEmpId == -1 ? null :consultationEmpId,
+        baseLiveAnchorId:baseLiveAnchorId == -1 ? '' :baseLiveAnchorId,
       };
       api.getUnContentPlatFormSendOrderList(data).then((res) => {
         if (res.code === 0) {
@@ -905,7 +963,8 @@ export default {
         endDate,
         liveAnchorId,
         orderSource,
-        consultationEmpId
+        consultationEmpId,
+        baseLiveAnchorId
       } = this.query;
       const data = {
         keyword,
@@ -920,7 +979,8 @@ export default {
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         liveAnchorId,
         orderSource,
-        consultationEmpId:consultationEmpId == -1 ? null :consultationEmpId
+        consultationEmpId:consultationEmpId == -1 ? null :consultationEmpId,
+        baseLiveAnchorId:baseLiveAnchorId == -1 ? '' :baseLiveAnchorId,
       };
       api.getUnContentPlatFormSendOrderList(data).then((res) => {
         if (res.code === 0) {
@@ -968,7 +1028,8 @@ export default {
             timeType,
             remark,
             isUncertainDate,
-            sendBy
+            sendBy,
+            otherHospitalId
           } = this.form;
           const data = {
             orderId,
@@ -981,24 +1042,56 @@ export default {
             // timeType:isUncertainDate ? null : (timeType ? timeType : null),
             remark,
             isUncertainDate,
-            sendBy
+            sendBy,
+            otherHospitalId
           };
-          this.flag = true;
-          api.AddContentPlateFormSendOrder(data).then((res) => {
-            if (res.code === 0) {
-              this.flag = false;
-              this.cancel("form");
-              this.getUnSendOrderList();
-              this.$Message.success({
-                content: "派单成功",
-                duration: 3,
+          
+          if(otherHospitalId == [] || otherHospitalId.length == 0){
+              this.flag = true;
+              api.AddContentPlateFormSendOrder(data).then((res) => {
+                if (res.code === 0) {
+                  this.flag = false;
+                  this.cancel("form");
+                  this.getUnSendOrderList();
+                  this.$Message.success({
+                    content: "派单成功",
+                    duration: 3,
+                  });
+                }else {
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
+                }
               });
-            } else {
-              setTimeout(() => {
-                this.flag = false;
-              }, 3000);
+              return
+            }else{
+                for(var i = 0;i<otherHospitalId.length;i++){
+                  console.log(otherHospitalId[i])
+                  if(otherHospitalId[i] == hospitalId){
+                    let hostpital = this.hospitalInfo.find(item=>item.id == hospitalId).name
+                    this.$Message.warning( hostpital+ '已存在于主派医院中，请勿重复选择')
+                   break
+                  }else{
+                    this.flag = true;
+                    api.AddContentPlateFormSendOrder(data).then((res) => {
+                      if (res.code === 0) {
+                        this.flag = false;
+                        this.cancel("form");
+                        this.getUnSendOrderList();
+                        this.$Message.success({
+                          content: "派单成功",
+                          duration: 3,
+                        });
+                      } else {
+                        setTimeout(() => {
+                          this.flag = false;
+                        }, 3000);
+                      }
+                    });
+                    return
+                  }
+                }
             }
-          });
         }
       });
     },
@@ -1055,5 +1148,9 @@ export default {
 .container{
   display: flex;
   align-items: center;
+}
+.content1{
+  display: flex;
+  flex-direction: column;
 }
 </style>

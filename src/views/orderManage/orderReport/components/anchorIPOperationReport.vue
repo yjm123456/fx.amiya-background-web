@@ -23,7 +23,7 @@
         v-model="query.endDate"
       ></DatePicker>
       <Button type="primary" style="margin:0 10px" @click="getliveAnchorOperatingReport">查询</Button>
-      <Button type="primary" @click="exportsendOrder">导出</Button>
+      <Button type="primary" @click="exportsendOrder"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
       <Card class="container">
         <div>
             <Table border :columns="query.columns" :data="query.data" height="700"></Table>
@@ -32,7 +32,9 @@
         <div slot="footer" class=" foot">
           <div style="display:flex">
             <div class="num">总条数：<div style="color:red">{{pageCount}}</div></div>
+            <div class="bottom_title">往期数据已存储，请进行新数据填写，若需要更早期数据可联系研发部</div>
           </div>
+          
           <Button @click="cancelSubmits()">关闭页面</Button>
           <!-- <Button type="primary" @click="handleSubmit()">确定</Button> -->
         </div>
@@ -74,6 +76,288 @@ export default {
                 align:'center'
             },
             {
+                title: "抖音运营人员",
+                key: "tikTokOperationEmployeeName",
+                minWidth: 160,
+                align:'center'
+            },
+            {
+                title: "抖音直播前运营数据更新时间",
+                key: "tikTokUpdateDate",
+                minWidth: 250,
+                align:'center',
+                render: (h, params) => {
+                    return h(
+                        "div",
+                        params.row.tikTokUpdateDate ? this.$moment(params.row.tikTokUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+                    );
+                },
+            },
+            {
+              title: "今日抖音发布量",
+              key: "tikTokSendNum",
+              minWidth: 160,
+              align: "center",
+            },
+            {
+              title: "月抖音发布目标",
+              key: "tikTokReleaseTarget",
+              minWidth: 160,
+              align: "center",
+            },
+            {
+              title: "月累计抖音发布条数",
+              key: "tikTokCumulativeRelease",
+              minWidth: 180,
+              align: "center",
+            },
+            {
+              title: "抖音发布目标完成率",
+              key: "tikTokReleaseCompleteRate",
+              minWidth: 180,
+              align: "center",
+            },
+            {
+              title: "抖音今日投流费用",
+              key: "tikTokFlowInvestmentNum",
+              minWidth: 160,
+              align: "center",
+            },
+            {
+              title: "抖音投流费用目标",
+              key: "tikTokFlowinvestmentTarget",
+              minWidth: 160,
+              align: "center",
+            },
+            {
+              title: "累计抖音投流费用",
+              key: "cumulativeTikTokFlowinvestment",
+              minWidth: 180,
+              align: "center",
+            },
+            {
+              title: "抖音投流费用完成率",
+              key: "tikTokFlowinvestmentCompleteRate",
+              minWidth: 180,
+              align: "center",
+            },
+            {
+              title: "小红书运营人员",
+              key: "xiaoHongShuOperationEmployeeName",
+              minWidth: 160,
+              align: "center",
+          },
+            {
+              title: "今日小红书发布量",
+              key: "xiaoHongShuSendNum",
+              minWidth: 160,
+              align: "center",
+          },
+          {
+            title: "月小红书发布目标",
+            key: "xiaoHongShuReleaseTarget",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "月累计小红书发布条数",
+            key: "xiaoHongShuCumulativeRelease",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "小红书发布目标完成率",
+            key: "xiaoHongShuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+              title: "小红书今日投流费用",
+              key: "xiaoHongShuFlowInvestmentNum",
+              minWidth: 170,
+              align: "center",
+          },
+          {
+            title: "小红书投流费用目标",
+            key: "xiaoHongShuFlowinvestmentTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计小红书投流费用",
+            key: "cumulativeXiaoHongShuFlowinvestment",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "小红书投流费用完成率",
+            key: "xiaoHongShuFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "微博运营人员",
+            key: "sinaWeiBoOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日微博发布量",
+            key: "sinaWeiBoSendNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月微博发布目标",
+            key: "sinaWeiBoReleaseTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月累计微博发布条数",
+            key: "sinaWeiBoCumulativeRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博发布目标完成率",
+            key: "sinaWeiBoReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "微博今日投流费用",
+            key: "sinaWeiBoFlowInvestmentNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "微博投流费用目标",
+            key: "sinaWeiBoFlowinvestmentTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计微博投流费用",
+            key: "cumulativeSinaWeiBoFlowinvestment",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博投流费用完成率",
+            key: "sinaWeiBoFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "视频号运营人员",
+            key: "videoOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日视频号发布量",
+            key: "videoSendNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月视频号发布目标",
+            key: "videoReleaseTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月累计视频号发布条数",
+            key: "videoCumulativeRelease",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "视频号发布目标完成率",
+            key: "videoReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "视频号今日投流费用",
+            key: "videoFlowInvestmentNum",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "视频号投流费用目标",
+            key: "videoFlowinvestmentTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计视频号投流费用",
+            key: "cumulativeVideoFlowinvestment",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "视频号投流费用完成率",
+            key: "videoFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎运营人员",
+            key: "zhihuOperationEmployeeName",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "今日知乎发布量",
+            key: "zhihuSendNum",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "月知乎发布目标",
+            key: "zhihuReleaseTarget",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "月累计知乎发布条数",
+            key: "zhihuCumulativeRelease",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎发布目标完成率",
+            key: "zhihuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎今日投流费用",
+            key: "zhihuFlowInvestmentNum",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎投流费用目标",
+            key: "zhihuFlowinvestmentTarget",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "累计知乎投流费用",
+            key: "cumulativeZhihuFlowinvestment",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "知乎投流费用完成率",
+            key: "zhihuFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+          },
+            {
                 title: "今日发布量",
                 key: "todaySendNum",
                 minWidth: 120,
@@ -98,51 +382,51 @@ export default {
                 align:'center'
             },
             {
-                title: "今日视频号投流量",
+                title: "今日运营渠道投流费用",
                 key: "flowInvestmentNum",
-                minWidth: 150,
-                align:'center'
-            },
-            {
-                title: "视频号投流目标",
-                key: "flowInvestmentTarget",
-                minWidth: 150,
-                align:'center'
-            },
-            {
-                title: "月累计视频号投流数量",
-                key: "cumulativeFlowInvestment",
                 minWidth: 180,
                 align:'center'
             },
             {
-                title: "视频号投流完成率",
+                title: "运营渠道投流费用目标",
+                key: "flowInvestmentTarget",
+                minWidth: 180,
+                align:'center'
+            },
+            {
+                title: "月累计运营渠道投流费用数",
+                key: "cumulativeFlowInvestment",
+                minWidth: 210,
+                align:'center'
+            },
+            {
+                title: "运营渠道投流费用完成率",
                 key: "flowInvestmentCompleteRate",
-                minWidth: 160,
+                minWidth: 200,
                 align:'center'
             },
             {
-                title: "今日直播间投流量",
+                title: "今日直播间投流费用",
                 key: "livingRoomFlowInvestmentNum",
-                minWidth: 150,
+                minWidth: 190,
                 align:'center'
             },
             {
-                title: "直播间投流目标",
+                title: "直播间投流费用目标",
                 key: "livingRoomFlowInvestmentTarget",
-                minWidth: 150,
+                minWidth: 190,
                 align:'center'
             },
             {
-                title: "月累计直播间投流数量",
+                title: "月累计直播间投流费用",
                 key: "livingRoomCumulativeFlowInvestment",
                 minWidth: 180,
                 align:'center'
             },
             {
-                title: "直播间投流完成率",
+                title: "直播间投流费用完成率",
                 key: "livingRoomFlowInvestmentCompleteRate",
-                minWidth: 160,
+                minWidth: 200,
                 align:'center'
             },
             {
@@ -220,50 +504,98 @@ export default {
                 align:'center',
             },
             {
-                title: "今日面诊卡下单数",
+                title: "照片今日面诊卡下单数",
                 key: "consultation",
-                minWidth: 160,
-                align:'center',
-            },
-            {
-                title: "面诊卡下单数量目标",
-                key: "consultationTarget",
-                minWidth: 170,
-                align:'center',
-            },
-            {
-                title: "累计面诊卡下单数量",
-                key: "cumulativeConsultation",
-                minWidth: 170,
-                align:'center',
-            },
-            {
-                title: "面诊卡下单数量完成率",
-                key: "consultationCompleteRate",
                 minWidth: 180,
                 align:'center',
             },
             {
-                title: "今日消耗卡数量",
-                key: "consultationCardConsumed",
-                minWidth: 150,
+                title: "照片面诊卡下单数量目标",
+                key: "consultationTarget",
+                minWidth: 200,
                 align:'center',
             },
             {
-                title: "消耗卡目标",
+                title: "照片累计面诊卡下单数量",
+                key: "cumulativeConsultation",
+                minWidth: 200,
+                align:'center',
+            },
+            {
+                title: "照片面诊卡下单数量完成率",
+                key: "consultationCompleteRate",
+                minWidth: 210,
+                align:'center',
+            },
+            {
+                title: "视频今日面诊卡下单数",
+                key: "consultation2",
+                minWidth: 190,
+                align:'center',
+            },
+            {
+                title: "视频面诊卡下单数量目标",
+                key: "consultationTarget2",
+                minWidth: 200,
+                align:'center',
+            },
+            {
+                title: "视频累计面诊卡下单数量",
+                key: "cumulativeConsultation2",
+                minWidth: 200,
+                align:'center',
+            },
+            {
+                title: "视频面诊卡下单数量完成率",
+                key: "consultationCompleteRate2",
+                minWidth: 220,
+                align:'center',
+            },
+            {
+                title: "照片今日消耗卡数量",
+                key: "consultationCardConsumed",
+                minWidth: 180,
+                align:'center',
+            },
+            {
+                title: "照片消耗卡目标",
                 key: "consultationCardConsumedTarget",
                 minWidth: 150,
                 align:'center',
             },
             {
-                title: "累计消耗卡",
+                title: "照片累计消耗卡",
                 key: "cumulativeConsultationCardConsumed",
                 minWidth: 150,
                 align:'center',
             },
             {
-                title: "消耗卡完成率",
+                title: "照片消耗卡完成率",
                 key: "consultationCardConsumedCompleteRate",
+                minWidth: 150,
+                align:'center',
+            },
+            {
+                title: "视频今日消耗卡数量",
+                key: "consultationCardConsumed2",
+                minWidth: 170,
+                align:'center',
+            },
+            {
+                title: "视频消耗卡目标",
+                key: "consultationCardConsumedTarget2",
+                minWidth: 150,
+                align:'center',
+            },
+            {
+                title: "视频累计消耗卡",
+                key: "cumulativeConsultationCardConsumed2",
+                minWidth: 150,
+                align:'center',
+            },
+            {
+                title: "视频消耗卡完成率",
+                key: "consultationCardConsumedCompleteRate2",
                 minWidth: 150,
                 align:'center',
             },
@@ -520,17 +852,23 @@ export default {
                 align:'center',
             },
             {
-                title: "运营人员",
-                key: "operationEmployeeName",
-                minWidth: 140,
-                align:'center',
-            },
-            {
                 title: "直播中人员",
                 key: "livingTrackingEmployeeName",
                 minWidth: 150,
                 align: "center",
             },    
+            {
+                title: "直播中运营数据更新时间",
+                key: "livingUpdateDate",
+                minWidth: 200,
+                align:'center',
+                render: (h, params) => {
+                    return h(
+                        "div",
+                        params.row.livingUpdateDate ? this.$moment(params.row.livingUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+                    );
+                },
+            },
             {
                 title: "网咨人员",
                 key: "netWorkConsultingEmployeeName",
@@ -538,14 +876,14 @@ export default {
                 minWidth: 140,
             },
             {
-                title: "创建日期",
-                key: "createDate",
+                title: "直播后运营数据更新时间",
+                key: "afterLivingUpdateDate",
                 minWidth: 200,
                 align:'center',
                 render: (h, params) => {
                     return h(
                         "div",
-                        this.$moment(params.row.createDate).format("YYYY-MM-DD HH:mm:ss")
+                        params.row.afterLivingUpdateDate ? this.$moment(params.row.afterLivingUpdateDate).format("YYYY-MM-DD HH:mm:ss") : ''
                     );
                 },
             },
@@ -643,5 +981,11 @@ export default {
   margin-right: 20px ;
   font-size: 18px;
   display: flex;
+}
+.bottom_title{
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  margin: 3px 0 0 10px;
 }
 </style>

@@ -18,32 +18,6 @@
             v-model="query.endDate"
           ></DatePicker>
           <Select
-            v-model="query.operationEmpId"
-            placeholder="请选择运营人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in employeeAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.netWorkConEmpId"
-            placeholder="请选择网咨人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in netWorkConsultingNameListAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
             v-model="query.contentPlatFormId"
             placeholder="请选择主播平台"
             @on-change="contentPlateChange(query.contentPlatFormId)"
@@ -79,7 +53,7 @@
           >
         </div>
         <div class="right">
-          <Button type="primary" @click="controlModal = true">添加</Button>
+          <Button type="primary" @click="controlModal = true;getLiveAnchorMonthlyTarget()">添加</Button>
         </div>
       </div>
     </Card>
@@ -99,6 +73,7 @@
           @on-change="handlePageChange"
         />
       </div>
+      <div class="bottom_title">往期数据已存储，请进行新数据填写，若需要更早期数据可联系研发部</div>
     </Card>
 
     <Modal
@@ -127,7 +102,7 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="月份选择" prop="year">
+            <FormItem label="月份选择" prop="month">
               <Select
                 v-model="form.month"
                 placeholder="请选择生日月份"
@@ -187,35 +162,131 @@
               ></DatePicker>
             </FormItem>
           </Col>
-           <Col span="8">
-            <FormItem label="今日直播间投流" prop="livingRoomFlowInvestmentNum">
+          <Col span="8">
+            <FormItem 
+              label="抖+投流费用" 
+              prop="tikTokPlusNum"
+              :rules="[
+                { required: true, message: '请输入抖+投流费用',},
+                { message: '抖+投流费用只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
+              <Input
+                v-model="form.tikTokPlusNum"
+                placeholder="请输入抖+投流费用"
+                type="number"
+                number
+                @on-change="livingRoomFlowInvestmentNum()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem 
+              label="千川投流" 
+              prop="qianChuanNum"
+              :rules="[
+                { required: true, message: '请输入千川投流',},
+                { message: '千川投流只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
+              <Input
+                v-model="form.qianChuanNum"
+                placeholder="请输入千川投流"
+                type="number"
+                number
+                @on-change="livingRoomFlowInvestmentNum()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem 
+              label="随心推" 
+              prop="shuiXinTuiNum"
+              :rules="[
+                { required: true, message: '请输入随心推',},
+                { message: '随心推只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
+              <Input
+                v-model="form.shuiXinTuiNum"
+                placeholder="请输入随心推"
+                type="number"
+                number
+                @on-change="livingRoomFlowInvestmentNum()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem 
+              label="微信豆" 
+              prop="weiXinDou"
+              :rules="[
+                { required: true, message: '请输入微信豆',},
+                { message: '微信豆只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
+              <Input
+                v-model="form.weiXinDou"
+                placeholder="请输入微信豆"
+                type="number"
+                number
+                @on-change="livingRoomFlowInvestmentNum()"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem 
+              label="今日直播间投流费用" 
+              prop="livingRoomFlowInvestmentNum"
+              :rules="[
+                { required: true, message: '请输入今日直播间投流费用',},
+                { message: '直播间投流只能是大于0的整数', trigger:'blur', pattern:/^[0-9]+$/}
+              ]"
+            >
               <Input
                 v-model="form.livingRoomFlowInvestmentNum"
-                placeholder="请输入今日直播间投流"
+                placeholder="请输入今日直播间投流费用"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日照片面诊卡下单数量"
+              prop="consultation"
+              :rules="[
+                {
+                  required: title === '修改' ? true : false,
+                  message: '请输入今日照片面诊卡下单数量',
+                },
+              ]"
+              key="今日照片面诊卡下单数量"
+            >
+              <Input
+                v-model="form.consultation"
+                placeholder="请输入今日照片面诊卡下单数量"
                 type="number"
                 number
               />
             </FormItem>
           </Col>
-          
-        </Row>
-        <Row :gutter="30">
-         
           <Col span="8">
             <FormItem
-              label="今日面诊卡下单数量"
-              prop="consultation"
+              label="今日视频面诊卡下单数量"
+              prop="consultation2"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日面诊卡下单数量',
+                  message: '请输入视频今日面诊卡下单数量',
                 },
               ]"
-              key="今日面诊卡下单数量"
+              key="今日视频面诊卡下单数量"
             >
               <Input
-                v-model="form.consultation"
-                placeholder="请输入今日面诊卡下单数量"
+                v-model="form.consultation2"
+                placeholder="请输入今日视频面诊卡下单数量"
                 type="number"
                 number
               />
@@ -241,10 +312,95 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="今日退卡量"
+              prop="refundCard"
+              key="今日退卡量"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日退卡量',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.refundCard"
+                placeholder="请输入今日退卡量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日GMV"
+              prop="gmv"
+              key="今日GMV"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日GMV',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.gmv"
+                placeholder="请输入今日GMV"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日去卡GMV"
+              prop="eliminateCardGMV"
+              key="今日去卡GMV"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日去卡GMV',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.eliminateCardGMV"
+                placeholder="请输入今日去卡GMV"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日退款GMV"
+              prop="refundGMV"
+              key="今日退款GMV"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日退款GMV',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.refundGMV"
+                placeholder="请输入今日退款GMV"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Spin fix v-if="isflag==true">
+              <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+              <div>加载中...</div>
+          </Spin>
         </Row>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
+        <Button type="primary" @click="autoFill">自动填写</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
@@ -258,15 +414,12 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
-      employeeList:[],
+      isflag:false,
+      employeeList: [],
       // 查询
       query: {
         contentPlatFormId: null,
         liveAnchorId: null,
-        // 运营人员
-        operationEmpId: "",
-        // 网咨人员
-        netWorkConEmpId: "",
         startDate: this.$moment()
           .subtract(1, "days")
           .format("YYYY-MM-DD"),
@@ -279,7 +432,7 @@ export default {
           {
             title: "填报日期",
             key: "recordDate",
-            minWidth: 150,
+            minWidth: 110,
             align: "center",
             render: (h, params) => {
               return h(
@@ -296,20 +449,63 @@ export default {
           },
           {
             title: "直播中人员",
-            key: "livingTrackingEmployeeName",
+            key: "operationEmpName",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "今日直播间投流量",
+            title: "更新时间",
+            key: "updateDate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.updateDate ? this.$moment(params.row.updateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+              );
+            },
+          },
+          {
+            title: "抖+投流费用",
+            key: "tikTokPlusNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "千川投流",
+            key: "qianChuanNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "随心推",
+            key: "shuiXinTuiNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "微信豆",
+            key: "weiXinDou",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日直播间投流费用",
             key: "livingRoomFlowInvestmentNum",
-            minWidth: 150,
+            minWidth: 170,
+            align: "center",
+          },
+
+          {
+            title: "今日照片面诊卡下单数量",
+            key: "consultation",
+            minWidth: 200,
             align: "center",
           },
           {
-            title: "今日面诊卡下单数量",
-            key: "consultation",
-            minWidth: 170,
+            title: "今日视频面诊卡下单数量",
+            key: "consultation2",
+            minWidth: 200,
             align: "center",
           },
           {
@@ -318,25 +514,34 @@ export default {
             minWidth: 160,
             align: "center",
           },
-          
           {
-            title: "创建日期",
-            key: "createDate",
-            minWidth: 170,
+            title: "今日退卡量",
+            key: "refundCard",
+            minWidth: 120,
             align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
-              );
-            },
+          },
+          {
+            title: "今日GMV",
+            key: "gmv",
+            minWidth: 100,
+            align: "center",
+          },
+          {
+            title: "今日去卡GMV",
+            key: "eliminateCardGMV",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日去卡GMV",
+            key: "refundGMV",
+            minWidth: 130,
+            align: "center",
           },
           {
             title: "操作",
             key: "",
-            width: 120,
+            width: 100,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -356,75 +561,48 @@ export default {
                         const { id } = params.row;
                         this.title = "修改";
                         this.flag = true;
-                        api.byIdLiveAnchorDailyTarget(id).then((res) => {
+                        const data = {
+                          id:id,
+                          type:6
+                        }
+                        api.byIdLiveAnchorDailyTarget(data).then((res) => {
                           if (res.code === 0) {
                             const {
                               id,
                               liveanchorMonthlyTargetId,
-                              operationEmployeeId,
-                              netWorkConsultingEmployeeId,
-                              todaySendNum,
-                              flowInvestmentNum,
-                              addWechatNum,
-                              sendOrderNum,
-                              visitNum,
-                              dealNum,
-                              performanceNum,
-                              recordDate,
-                              addFansNum,
-                              cluesNum,
                               livingRoomFlowInvestmentNum,
                               consultation,
+                              consultation2,
                               cargoSettlementCommission,
-                              newVisitNum,
-                              subsequentVisitNum,
-                              oldCustomerVisitNum,
-                              newDealNum,
-                              subsequentDealNum,
-                              newPerformanceNum,
-                              subsequentPerformanceNum,
-                              oldCustomerPerformanceNum,
-                              newCustomerPerformanceCountNum,
-                              oldCustomerDealNum,
-                              miniVanBadReviews,
-                              minivanRefund,
-                              consultationCardConsumed,
-                              activateHistoricalConsultation,
-                              livingTrackingEmployeeId
+                              livingTrackingEmployeeId,
+                              recordDate,
+                              gmv,
+                              eliminateCardGMV,
+                              refundCard,
+                              refundGMV,
+                              tikTokPlusNum,
+                              qianChuanNum,
+                              shuiXinTuiNum,
+                              weiXinDou
                             } = res.data.liveAnchorDailyTargetInfo;
+                            this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId;
-                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
-                            this.form.todaySendNum = todaySendNum;
-                            this.form.flowInvestmentNum = flowInvestmentNum;
-                            this.form.addWechatNum = addWechatNum;
-                            this.form.sendOrderNum = sendOrderNum;
-                            this.form.visitNum = visitNum;
-                            this.form.dealNum = dealNum;
-                            this.form.performanceNum = performanceNum;
-                            this.form.addFansNum = addFansNum;
-                            this.form.cluesNum = cluesNum;
                             this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
                             this.form.consultation = consultation;
+                            this.form.consultation2 = consultation2;
                             this.form.cargoSettlementCommission = cargoSettlementCommission;
-                            this.form.newVisitNum = newVisitNum;
-                            this.form.subsequentVisitNum = subsequentVisitNum;
-                            this.form.oldCustomerVisitNum = oldCustomerVisitNum;
-                            this.form.newDealNum = newDealNum;
-                            this.form.subsequentDealNum = subsequentDealNum;
-                            this.form.newPerformanceNum = newPerformanceNum;
-                            this.form.subsequentPerformanceNum = subsequentPerformanceNum;
-                            this.form.oldCustomerPerformanceNum = oldCustomerPerformanceNum;
-                            this.form.newCustomerPerformanceCountNum = newCustomerPerformanceCountNum;
-                            this.form.oldCustomerDealNum = oldCustomerDealNum;
-                            this.form.miniVanBadReviews = miniVanBadReviews;
-                            this.form.minivanRefund = minivanRefund;
-                            this.form.consultationCardConsumed = consultationCardConsumed;
-                            this.form.activateHistoricalConsultation = activateHistoricalConsultation;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId
+                            this.form.gmv = gmv;
+                            this.form.eliminateCardGMV = eliminateCardGMV;
+                            this.form.refundGMV = refundGMV;
+                            this.form.refundCard = refundCard;
+                            this.form.tikTokPlusNum = tikTokPlusNum;
+                            this.form.qianChuanNum = qianChuanNum;
+                            this.form.shuiXinTuiNum = shuiXinTuiNum;
+                            this.form.weiXinDou = weiXinDou;
+                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId ? livingTrackingEmployeeId : null;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -523,8 +701,8 @@ export default {
           name: "十二月",
         },
       ],
-      // 直播中 
-      employeeList:[],
+      // 直播中
+      employeeList: [],
       //   下单平台
       contentPalteForms: [],
       // ip账号
@@ -548,71 +726,38 @@ export default {
       form: {
         // 主播月目标关联id
         liveanchorMonthlyTargetId: "",
-        // 运营人员Id
-        operationEmployeeId: "",
-        // 网咨人员Id
-        netWorkConsultingEmployeeId: "",
-        // 今日发布量
-        todaySendNum: null,
-        // 今日投流量
-        flowInvestmentNum: null,
-        // 今日加V量
-        addWechatNum: null,
-        // 今日派单量
-        sendOrderNum: "",
-        // 今日上门人数
-        visitNum: "",
-        // 今日成交人数
-        dealNum: "",
-        // 今日业绩
-        performanceNum: "",
         // 填报日期
         recordDate: "",
         //年度
         year: this.$moment(new Date()).format("yyyy"),
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
-        // 今日涨粉量
-        addFansNum: null,
-        // 今日线索量
-        cluesNum: null,
-        // 今日直播间投流量
+        // 抖+投流费用
+        tikTokPlusNum: null,
+        // 千川投流
+        qianChuanNum: null,
+        // 随心推
+        shuiXinTuiNum: null,
+        // 微信豆
+        weiXinDou: null,
+        // 今日直播间投流费用量
         livingRoomFlowInvestmentNum: null,
-        // 今日面诊卡数量
+        // 今日照片面诊卡数量
         consultation: null,
+        // 今日视频面诊卡数量
+        consultation2: null,
         // 今日带货结算佣金
         cargoSettlementCommission: null,
-        // 新诊上门量
-        newVisitNum: null,
-        // 复诊上门
-        subsequentVisitNum: null,
-        // 老客上门
-        oldCustomerVisitNum: null,
-        // 今日新客成交人数
-        newDealNum: null,
-        // 今日复诊成交人数
-        subsequentDealNum: null,
-        // 今日新诊业绩
-        newPerformanceNum: null,
-        // 今日复诊业绩
-        subsequentPerformanceNum: null,
-        // 今日老客业绩
-        oldCustomerPerformanceNum: null,
-        // 老客成交
-        oldCustomerDealNum: null,
-        // 总新客业绩
-        newCustomerPerformanceCountNum: null,
-        // 今日小黄车差评量
-        miniVanBadReviews: null,
-        // 今日小黄车退款量
-        minivanRefund: null,
-        // 今日消耗卡数量
-        consultationCardConsumed: null,
-        // 今日激活历史面诊数量
-        activateHistoricalConsultation: null,
         // 直播中人员
-        livingTrackingEmployeeId:null
-        
+        livingTrackingEmployeeId: null,
+        // 今日退卡量
+        refundCard:null,
+        // 今日GMV
+        gmv:null,
+        // 今日去卡GMV
+        eliminateCardGMV:null,
+        // 今日退款GMV
+        refundGMV:null
       },
 
       ruleValidate: {
@@ -634,24 +779,6 @@ export default {
             message: "请选择运营人员",
           },
         ],
-        todaySendNum: [
-          {
-            required: true,
-            message: "请输入今日发布量",
-          },
-        ],
-        flowInvestmentNum: [
-          {
-            required: true,
-            message: "请输入今日投流量",
-          },
-        ],
-        addWechatNum: [
-          {
-            required: true,
-            message: "请输入今日加V量",
-          },
-        ],
         recordDate: [
           {
             required: true,
@@ -670,29 +797,45 @@ export default {
             message: "请选择月",
           },
         ],
-        cluesNum: [
-          {
-            required: true,
-            message: "请输入今日线索量",
-          },
-        ],
-        addFansNum: [
-          {
-            required: true,
-            message: "请输入今日涨粉量",
-          },
-        ],
         livingRoomFlowInvestmentNum: [
           {
             required: true,
-            message: "请输入今日直播间投流",
+            message: "请输入今日直播间投流费用",
           },
         ],
       },
     };
   },
   methods: {
-    
+    livingRoomFlowInvestmentNum(){
+      const {tikTokPlusNum,qianChuanNum,shuiXinTuiNum,weiXinDou} = this.form
+      this.form.livingRoomFlowInvestmentNum = tikTokPlusNum + qianChuanNum + shuiXinTuiNum + weiXinDou 
+
+    },
+    // 自动填写
+    autoFill(){
+      const {recordDate,liveanchorMonthlyTargetId} = this.form
+      if(!liveanchorMonthlyTargetId){
+        this.$Message.warning('请选择月目标！')
+        return
+      }
+      if(!recordDate){
+        this.$Message.warning('请选择填报日期！')
+        return
+      }
+      const data ={
+        recordDate:this.$moment(new Date(recordDate)).format("YYYY-MM-DD"),
+        monthTargetId:liveanchorMonthlyTargetId
+      }
+      api.autoCompleteGMVData(data).then(res=>{
+        if(res.code === 0){
+          const {todayGMV,eliminateCardGMV,refundGMV} = res.data.data
+          this.form.gmv = todayGMV
+          this.form.eliminateCardGMV = eliminateCardGMV
+          this.form.refundGMV = refundGMV
+        }
+      })
+    },
     yearChange() {
       this.getLiveAnchorMonthlyTarget();
     },
@@ -756,10 +899,17 @@ export default {
         year: this.$moment(new Date(year)).format("YYYY"),
         month,
       };
-      api.getLiveAnchorMonthlyTarget(data).then((res) => {
+      api.getLiveAnchorMonthlyTargetLivingName(data).then((res) => {
         if (res.code === 0) {
-          const { liveAnchorMonthlyTarget } = res.data;
-          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTarget;
+          const { liveAnchorMonthlyTargetLiving } = res.data;
+          if(liveAnchorMonthlyTargetLiving.length == 0 || !liveAnchorMonthlyTargetLiving){
+            this.$Message.warning({
+              content: "主播IP月目标暂未生成，无法填写数据，请联系管理员进行月目标数据完善！",
+              duration: 3,
+            });
+            return
+          }
+          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTargetLiving;
         }
       });
     },
@@ -772,8 +922,6 @@ export default {
         pageNum,
         pageSize,
         day,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -784,15 +932,13 @@ export default {
         // day: this.$moment(new Date(day)).format("YYYY-MM-DD"),
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
         return;
       } else {
-        api.getLiveAnchorDailyTarget(data).then((res) => {
+        api.livingListWithPage(data).then((res) => {
           if (res.code === 0) {
             const { list, totalCount } = res.data.liveAnchorDailyTargetInfo;
             this.query.data = list;
@@ -806,8 +952,6 @@ export default {
     handlePageChange(pageNum) {
       const {
         pageSize,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -817,11 +961,9 @@ export default {
         pageSize,
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
-      api.getLiveAnchorDailyTarget(data).then((res) => {
+      api.livingListWithPage(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.liveAnchorDailyTargetInfo;
           this.query.data = list;
@@ -830,10 +972,10 @@ export default {
       });
     },
     // 根据职位获取直播中人员
-    employeeManage(){
+    employeeManage() {
       const data = {
-        positionId:9
-      }
+        positionId: 9,
+      };
       employeeManageApi.getEmployeeByPositionId(data).then((res) => {
         if (res.code === 0) {
           const { employee } = res.data;
@@ -850,90 +992,51 @@ export default {
             const {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              netWorkConsultingEmployeeId,
-              todaySendNum,
-              flowInvestmentNum,
-              addWechatNum,
-              sendOrderNum,
-              visitNum,
-              dealNum,
-              performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
               livingRoomFlowInvestmentNum,
               consultation,
+              consultation2,
+              livingTrackingEmployeeId,
               cargoSettlementCommission,
-              newVisitNum,
-              subsequentVisitNum,
-              oldCustomerVisitNum,
-              newDealNum,
-              subsequentDealNum,
-              newPerformanceNum,
-              subsequentPerformanceNum,
-              oldCustomerPerformanceNum,
-              newCustomerPerformanceCountNum,
-              oldCustomerDealNum,
-              miniVanBadReviews,
-              minivanRefund,
-              consultationCardConsumed,
-              activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              gmv,
+              eliminateCardGMV,
+              refundCard,
+              refundGMV,
+              tikTokPlusNum,
+              qianChuanNum,
+              shuiXinTuiNum,
+              weiXinDou
             } = this.form;
             const data = {
               id,
               liveanchorMonthlyTargetId,
-              // 网咨和运营人员传0
-              operationEmployeeId:operationEmployeeId ? operationEmployeeId : 0,
-              netWorkConsultingEmployeeId:netWorkConsultingEmployeeId ? netWorkConsultingEmployeeId : 0,
-              todaySendNum:todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum:flowInvestmentNum ? flowInvestmentNum : 0,
-              addWechatNum: addWechatNum ? addWechatNum : 0,
-              sendOrderNum: sendOrderNum ? sendOrderNum : 0,
-              visitNum: visitNum ? visitNum : 0,
-              dealNum: dealNum ? dealNum : 0,
-              performanceNum: performanceNum ? performanceNum : 0,
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum:cluesNum ? cluesNum : 0,
-              addFansNum:addFansNum ? addFansNum : 0,
-              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum ? livingRoomFlowInvestmentNum : 0,
+              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum
+                ? livingRoomFlowInvestmentNum
+                : 0,
               consultation: consultation ? consultation : 0,
+              consultation2: consultation2 ? consultation2 : 0,
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
                 : 0,
-              newVisitNum: newVisitNum ? newVisitNum : 0,
-              subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
-              oldCustomerVisitNum: oldCustomerVisitNum
-                ? oldCustomerVisitNum
+              livingTrackingEmployeeId: livingTrackingEmployeeId
+                ? livingTrackingEmployeeId
                 : 0,
-              newDealNum: newDealNum ? newDealNum : 0,
-              subsequentDealNum: subsequentDealNum ? subsequentDealNum : 0,
-              newPerformanceNum: newPerformanceNum ? newPerformanceNum : 0,
-              subsequentPerformanceNum: subsequentPerformanceNum
-                ? subsequentPerformanceNum
-                : 0,
-              oldCustomerPerformanceNum: oldCustomerPerformanceNum
-                ? oldCustomerPerformanceNum
-                : 0,
-              newCustomerPerformanceCountNum: newCustomerPerformanceCountNum
-                ? newCustomerPerformanceCountNum
-                : 0,
-              oldCustomerDealNum: oldCustomerDealNum ? oldCustomerDealNum : 0,
-              miniVanBadReviews: miniVanBadReviews ? miniVanBadReviews : 0,
-              minivanRefund: minivanRefund ? minivanRefund : 0,
-              consultationCardConsumed: consultationCardConsumed
-                ? consultationCardConsumed
-                : 0,
-              activateHistoricalConsultation: activateHistoricalConsultation
-                ? activateHistoricalConsultation
-                : 0,
-              livingTrackingEmployeeId:livingTrackingEmployeeId ?livingTrackingEmployeeId:0
+                gmv,
+              eliminateCardGMV,
+              refundCard,
+              refundGMV,
+              tikTokPlusNum,
+              qianChuanNum,
+              shuiXinTuiNum,
+              weiXinDou
             };
-            api.editLiveAnchorDailyTarget(data).then((res) => {
+            this.isflag = true
+            api.livingUpdate(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false
                 this.isEdit = false;
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
@@ -941,101 +1044,69 @@ export default {
                   content: "修改成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           } else {
             const {
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              netWorkConsultingEmployeeId,
-              todaySendNum,
-              flowInvestmentNum,
-              addWechatNum,
-              sendOrderNum,
-              visitNum,
-              dealNum,
-              performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
               livingRoomFlowInvestmentNum,
               consultation,
+              consultation2,
               cargoSettlementCommission,
-              newVisitNum,
-              subsequentVisitNum,
-              oldCustomerVisitNum,
-              newDealNum,
-              subsequentDealNum,
-              newPerformanceNum,
-              subsequentPerformanceNum,
-              oldCustomerPerformanceNum,
-              newCustomerPerformanceCountNum,
-              oldCustomerDealNum,
-              miniVanBadReviews,
-              minivanRefund,
-              consultationCardConsumed,
-              activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              livingTrackingEmployeeId,
+              gmv,
+              eliminateCardGMV,
+              refundCard,
+              refundGMV,
+              tikTokPlusNum,
+              qianChuanNum,
+              shuiXinTuiNum,
+              weiXinDou
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
-              operationEmployeeId:operationEmployeeId ? operationEmployeeId : 0,
-              netWorkConsultingEmployeeId: netWorkConsultingEmployeeId ? netWorkConsultingEmployeeId : 0,
-              todaySendNum : todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum:flowInvestmentNum ? flowInvestmentNum :0,
-              addWechatNum: addWechatNum ? addWechatNum : 0,
-              sendOrderNum: sendOrderNum ? sendOrderNum : 0,
-              visitNum: visitNum ? visitNum : 0,
-              dealNum: dealNum ? dealNum : 0,
-              performanceNum: performanceNum ? performanceNum : 0,
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum:cluesNum ? cluesNum : 0,
-              addFansNum:addFansNum ? addFansNum :0,
-              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum ? livingRoomFlowInvestmentNum : 0,
+              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum
+                ? livingRoomFlowInvestmentNum
+                : 0,
               consultation: consultation ? consultation : 0,
+              consultation2: consultation2 ? consultation2 : 0,
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
                 : 0,
-              newVisitNum: newVisitNum ? newVisitNum : 0,
-              subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
-              oldCustomerVisitNum: oldCustomerVisitNum
-                ? oldCustomerVisitNum
-                : 0,
-              newDealNum: newDealNum ? newDealNum : 0,
-              subsequentDealNum: subsequentDealNum ? subsequentDealNum : 0,
-              newPerformanceNum: newPerformanceNum ? newPerformanceNum : 0,
-              subsequentPerformanceNum: subsequentPerformanceNum
-                ? subsequentPerformanceNum
-                : 0,
-              oldCustomerPerformanceNum: oldCustomerPerformanceNum
-                ? oldCustomerPerformanceNum
-                : 0,
-              newCustomerPerformanceCountNum: newCustomerPerformanceCountNum
-                ? newCustomerPerformanceCountNum
-                : 0,
-              oldCustomerDealNum: oldCustomerDealNum ? oldCustomerDealNum : 0,
-              miniVanBadReviews: miniVanBadReviews ? miniVanBadReviews : 0,
-              minivanRefund: minivanRefund ? minivanRefund : 0,
-              consultationCardConsumed: consultationCardConsumed
-                ? consultationCardConsumed
-                : 0,
-              activateHistoricalConsultation: activateHistoricalConsultation
-                ? activateHistoricalConsultation
-                : 0,
-              livingTrackingEmployeeId
+              livingTrackingEmployeeId,
+              gmv,
+              eliminateCardGMV,
+              refundCard,
+              refundGMV,
+              tikTokPlusNum,
+              qianChuanNum,
+              shuiXinTuiNum,
+              weiXinDou
             };
+            this.isflag = true
             // 添加
-            api.AddLiveAnchorDailyTarget(data).then((res) => {
+            api.livingAdd(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           }
         }
@@ -1064,8 +1135,8 @@ export default {
     this.getLiveAnchorDayList();
     this.getCustomerServiceList();
     this.getnetWorkConsultingNameList();
-    this.getLiveAnchorMonthlyTarget();
-    this.employeeManage()
+    // this.getLiveAnchorMonthlyTarget();
+    this.employeeManage();
   },
 };
 </script>
@@ -1081,5 +1152,12 @@ export default {
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.bottom_title{
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  text-align: end;
+  margin-top: 10px;
 }
 </style>

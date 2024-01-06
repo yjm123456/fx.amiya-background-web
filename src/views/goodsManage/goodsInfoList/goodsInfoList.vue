@@ -89,10 +89,6 @@ export default {
       // 是否有效列表
       validList: [
         {
-          name: "全部",
-          value: -1,
-        },
-        {
           name: "有效",
           value: 1,
         },
@@ -116,13 +112,20 @@ export default {
         },
       ],
       query: {
+        goodsInfopageNumEdit: 1,
         exchangeType:"",
         keyword: "",
         categoryId: -1,
-        valid: -1,
+        valid: 1,
         pageNum: 1,
         pageSize: 10,
         columns: [
+          {
+            title: "序号",
+            key: "sort",
+            minWidth: 100,
+            align:'center'
+          },
           {
             title: "商品名称",
             key: "name",
@@ -166,33 +169,39 @@ export default {
             key: "standard",
             minWidth: 150,
             tooltip:true,
+            align:'center'
           },
           {
             title: "支付类型",
             key: "exchangeTypeText",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "抵扣积分",
             key: "integrationQuantity",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "描述",
             key: "description",
             minWidth: 150,
             tooltip:true,
+            align:'center'
           },
           {
             title: "分类",
             key: "categoryName",
             minWidth: 150,
             tooltip:true,
+            align:'center'
           },
           {
             title: "是否有效",
             key: "valid",
             minWidth: 120,
+            align:'center',
             render: (h, params) => {
               if (params.row.valid == true) {
                 return h("Icon", {
@@ -218,34 +227,75 @@ export default {
             },
           },
           {
+            title: "是否限购",
+            key: "isLimitBuy",
+            minWidth: 120,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isLimitBuy == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "限购数量",
+            key: "limitBuyQuantity",
+            minWidth: 150,
+            align:'center'
+          },
+          {
             title: "库存",
             key: "inventoryQuantity",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "最大价格",
             key: "maxShowPrice",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "最小价格",
             key: "minShowPrice",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "销售价格",
             key: "salePrice",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "浏览量",
             key: "visitCount",
             minWidth: 150,
+            align:'center'
           },
           {
             title: "销量",
             key: "showSaleCount",
             minWidth: 150,
+            align:'center'
           },
           
           {
@@ -409,6 +459,8 @@ export default {
           const { list, totalCount } = res.data.goodsInfos;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          // 修改时 保留在当前页面
+          sessionStorage.setItem("goodsInfopageNumEdit", pageNum);
         }
       });
     },

@@ -64,7 +64,7 @@
               controlModal = true;
               title = '添加';
             "
-            v-if="positionId!=19 && positionId !=9 && positionId !=2"
+            v-if="positionId != 19 && positionId != 9 && positionId != 2"
             >添加</Button
           >
         </div>
@@ -73,7 +73,11 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="positionId ==19 ? query.columns1 : positionId ==9  ?  query.columns2 :  positionId ==2 ?  query.columns3 : query.columns" :data="query.data"></Table>
+        <Table
+          border
+          :columns="query.columns"
+          :data="query.data"
+        ></Table>
       </div>
       <div class="page_wrap">
         <Page
@@ -174,12 +178,280 @@
           </Col>
           <Col span="8">
             <FormItem
+              label="知乎发布目标"
+              prop="zhihuReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '知乎发布目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="知乎发布目标"
+            >
+              <Input
+                v-model="form.zhihuReleaseTarget"
+                placeholder="请输入知乎发布目标"
+                type="number"
+                number
+                @on-change="zhihuReleaseTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="知乎投流费用目标"
+              prop="zhihuFlowinvestmentTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '知乎投流费用目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="知乎投流费用目标"
+            >
+              <Input
+                v-model="form.zhihuFlowinvestmentTarget"
+                placeholder="请输入知乎投流费用目标"
+                type="number"
+                number
+                @on-change="zhihuFlowinvestmentTargetChange"
+              />
+            </FormItem>
+          </Col>
+
+          <Col span="8">
+            <FormItem
+              label="视频号发布目标"
+              prop="videoReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '视频号发布目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="视频号发布目标"
+            >
+              <Input
+                v-model="form.videoReleaseTarget"
+                placeholder="请输入视频号发布目标"
+                type="number"
+                number
+                @on-change="videoReleaseTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="视频号投流费用目标"
+              prop="videoFlowinvestmentTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '视频号投流费用目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="视频号投流费用目标"
+            >
+              <Input
+                v-model="form.videoFlowinvestmentTarget"
+                placeholder="请输入视频号投流费用目标"
+                type="number"
+                number
+                @on-change="videoFlowinvestmentTargetChange"
+              />
+            </FormItem>
+          </Col>
+
+          <Col span="8">
+            <FormItem
+              label="抖音发布目标"
+              prop="tikTokReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '抖音发布目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="抖音发布目标"
+            >
+              <Input
+                v-model="form.tikTokReleaseTarget"
+                placeholder="请输入抖音发布目标"
+                type="number"
+                number
+                @on-change="tikTokReleaseTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="抖音投流费用目标"
+              prop="tikTokFlowinvestmentTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '抖音投流费用目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="抖音投流费用目标"
+            >
+              <Input
+                v-model="form.tikTokFlowinvestmentTarget"
+                placeholder="请输入抖音投流费用目标"
+                type="number"
+                number
+                @on-change="tikTokFlowinvestmentTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="抖音橱窗收入目标"
+              prop="tikTokShowcaseIncomeTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '抖音橱窗收入目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="抖音橱窗收入目标"
+            >
+              <Input
+                v-model="form.tikTokShowcaseIncomeTarget"
+                placeholder="请输入抖音橱窗收入目标"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="小红书发布目标"
+              prop="xiaoHongShuReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '小红书发布目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="小红书发布目标"
+            >
+              <Input
+                v-model="form.xiaoHongShuReleaseTarget"
+                placeholder="请输入小红书发布目标"
+                type="number"
+                number
+                @on-change="xiaoHongShuReleaseTargetChange"
+                
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="小红书投流费用目标"
+              prop="xiaoHongShuFlowinvestmentTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '小红书投流费用目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="小红书投流费用目标"
+            >
+              <Input
+                v-model="form.xiaoHongShuFlowinvestmentTarget"
+                placeholder="请输入小红书投流费用目标"
+                type="number"
+                number
+                @on-change="xiaoHongShuFlowinvestmentTargetChange"
+                
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="微博发布目标"
+              prop="sinaWeiBoReleaseTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '微博发布目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="微博发布目标"
+            >
+              <Input
+                v-model="form.sinaWeiBoReleaseTarget"
+                placeholder="请输入微博发布目标"
+                type="number"
+                number
+                @on-change="sinaWeiBoReleaseTargetChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="微博投流费用目标"
+              prop="sinaWeiBoFlowinvestmentTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '微博投流费用目标(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="微博投流费用目标"
+            >
+              <Input
+                v-model="form.sinaWeiBoFlowinvestmentTarget"
+                placeholder="请输入微博投流费用目标"
+                type="number"
+                number
+                @on-change="sinaWeiBoFlowinvestmentTargetChange"
+              />
+            </FormItem>
+          </Col>
+          
+          <Col span="8">
+            <FormItem
               label="月发布目标"
               prop="releaseTarget"
               :rules="[
                 {
                   required: true,
-                  message: '请输入月度目标(最小是1)',
+                  message: '月发布目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
@@ -192,358 +464,40 @@
                 placeholder="请输入月发布目标"
                 type="number"
                 number
+                disabled
+
               />
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
           <Col span="8">
             <FormItem
-              label="视频号投流目标"
+              label="运营渠道投流费用目标"
               prop="flowInvestmentTarget"
               :rules="[
                 {
                   required: true,
-                  message: '视频号投流目标(最小是1)',
+                  message: '运营渠道投流费用目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="视频号投流目标"
+              key="运营渠道投流费用目标"
             >
               <Input
                 v-model="form.flowInvestmentTarget"
-                placeholder="请输入视频号投流目标"
+                placeholder="请输入运营渠道投流费用目标"
                 type="number"
                 number
+                disabled
               />
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem
-              label="直播间投流目标"
-              prop="livingRoomFlowInvestmentTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '直播间投流目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="直播间投流目标"
-            >
-              <Input
-                v-model="form.livingRoomFlowInvestmentTarget"
-                placeholder="请输入直播间投流目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="线索目标"
-              prop="cluesTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入线索目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="线索目标"
-            >
-              <Input
-                v-model="form.cluesTarget"
-                placeholder="请输入线索目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="30">
-          <Col span="8">
-            <FormItem
-              label="涨粉目标"
-              prop="addFansTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入涨粉目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="涨粉目标"
-            >
-              <Input
-                v-model="form.addFansTarget"
-                placeholder="请输入涨粉量"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="目标加V量"
-              prop="addWechatTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入目标加V量(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="目标加V量"
-            >
-              <Input
-                v-model="form.addWechatTarget"
-                placeholder="请输入目标加V量"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="面诊卡下单数量目标"
-              prop="consultationTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '面诊卡下单数量目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="面诊卡下单数量目标"
-            >
-              <Input
-                v-model="form.consultationTarget"
-                placeholder="请输入面诊卡下单数量目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="消耗卡目标"
-              prop="consultationCardConsumedTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '消耗卡目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="消耗卡目标"
-            >
-              <Input
-                v-model="form.consultationCardConsumedTarget"
-                placeholder="请输入消耗卡目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="激活历史面诊数量目标"
-              prop="activateHistoricalConsultationTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '激活历史面诊数量目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="激活历史面诊数量目标"
-            >
-              <Input
-                v-model="form.activateHistoricalConsultationTarget"
-                placeholder="请输入激活历史面诊数量目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="派单目标"
-              prop="sendOrderTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入派单目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="派单目标"
-            >
-              <Input
-                v-model="form.sendOrderTarget"
-                placeholder="请输入派单目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="上门目标"
-              prop="visitTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入上门目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="上门目标"
-            >
-              <Input
-                v-model="form.visitTarget"
-                placeholder="请输入上门目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="成交人数目标"
-              prop="dealTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入成交人数(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="成交人数目标"
-            >
-              <Input
-                v-model="form.dealTarget"
-                placeholder="请输入成交人数目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="带货结算佣金目标"
-              prop="cargoSettlementCommissionTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '带货结算佣金(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="带货结算佣金目标"
-            >
-              <Input
-                v-model="form.cargoSettlementCommissionTarget"
-                placeholder="请输入带货结算佣金目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="业绩目标"
-              prop="performanceTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入业绩目标(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="业绩目标"
-            >
-              <Input
-                v-model="form.performanceTarget"
-                placeholder="请输入业绩目标"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="小黄车退单量上限"
-              prop="minivanRefundTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入小黄车退单量上限(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="小黄车退单量上限"
-            >
-              <Input
-                v-model="form.minivanRefundTarget"
-                placeholder="请输入小黄车退单量上限"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem
-              label="差评总量上限"
-              prop="miniVanBadReviewsTarget"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入差评总量上限(最小是1)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 1,
-                },
-              ]"
-              key="差评总量上限"
-            >
-              <Input
-                v-model="form.miniVanBadReviewsTarget"
-                placeholder="请输入差评总量上限"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
+          
+          <Spin fix v-if="isflag==true">
+              <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+              <div>加载中...</div>
+          </Spin>
         </Row>
       </Form>
       <div slot="footer">
@@ -560,7 +514,8 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
-      positionId:sessionStorage.getItem("positionId"),
+      isflag:false,
+      positionId: sessionStorage.getItem("positionId"),
       // 查询
       query: {
         contentPlatFormId: null,
@@ -570,7 +525,8 @@ export default {
         keyword: "",
         pageNum: 1,
         pageSize: 10,
-        // 其他角色展示
+        
+        // 运营咨询（直播前）
         columns: [
           {
             title: "主播名称",
@@ -599,8 +555,240 @@ export default {
           {
             title: "经营目标名称",
             key: "monthlyTargetName",
+            minWidth: 240,
+            align: "center",
+          },
+          {
+            title: "抖音发布目标",
+            key: "tikTokReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计抖音发布条数",
+            key: "cumulativeTikTokRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "抖音发布目标完成率",
+            key: "tikTokReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.tikTokReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "抖音投流费用目标",
+            key: "tikTokFlowinvestmentTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计抖音投流费用",
+            key: "cumulativeTikTokFlowinvestment",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "抖音投流费用完成率",
+            key: "tikTokFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.tikTokFlowinvestmentCompleteRate + "%");
+            },
+          },
+          {
+            title: "抖音橱窗收入目标",
+            key: "tikTokShowcaseIncomeTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计抖音橱窗收入",
+            key: "cumulativeTikTokShowcaseIncome",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "抖音橱窗收入完成率",
+            key: "tikTokShowcaseIncomeCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.tikTokShowcaseIncomeCompleteRate + "%");
+            },
+          },
+          {
+            title: "知乎发布目标",
+            key: "zhihuReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计知乎发布条数",
+            key: "cumulativeZhihuRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "知乎发布目标完成率",
+            key: "zhihuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.zhihuReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "知乎投流费用目标",
+            key: "zhihuFlowinvestmentTarget",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "累计知乎投流费用",
+            key: "cumulativeZhihuFlowinvestment",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "知乎投流费用完成率",
+            key: "zhihuFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.zhihuFlowinvestmentCompleteRate + "%");
+            },
+          },
+          {
+            title: "视频号发布目标",
+            key: "videoReleaseTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "月累计视频号发布条数",
+            key: "cumulativeVideoRelease",
             minWidth: 190,
             align: "center",
+          },
+          {
+            title: "视频号发布目标完成率",
+            key: "videoReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.videoReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "视频号投流费用目标",
+            key: "videoFlowinvestmentTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计视频号投流费用",
+            key: "cumulativeVideoFlowinvestment",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "视频号投流费用完成率",
+            key: "videoFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.videoFlowinvestmentCompleteRate + "%");
+            },
+          },
+          
+          {
+            title: "小红书发布目标",
+            key: "xiaoHongShuReleaseTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "月累计小红书发布条数",
+            key: "cumulativeXiaoHongShuRelease",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "小红书发布目标完成率",
+            key: "xiaoHongShuReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.xiaoHongShuReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "小红书投流费用目标",
+            key: "xiaoHongShuFlowinvestmentTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "累计小红书投流费用",
+            key: "cumulativeXiaoHongShuFlowinvestment",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "小红书投流费用完成率",
+            key: "xiaoHongShuFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.xiaoHongShuFlowinvestmentCompleteRate + "%");
+            },
+          },
+          {
+            title: "微博发布目标",
+            key: "sinaWeiBoReleaseTarget",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "月累计微博发布条数",
+            key: "cumulativeSinaWeiBoRelease",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博发布目标完成率",
+            key: "sinaWeiBoReleaseCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.sinaWeiBoReleaseCompleteRate + "%");
+            },
+          },
+          {
+            title: "微博投流费用目标",
+            key: "sinaWeiBoFlowinvestmentTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计微博投流费用",
+            key: "cumulativeSinaWeiBoFlowinvestment",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博投流费用完成率",
+            key: "sinaWeiBoFlowinvestmentCompleteRate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.sinaWeiBoFlowinvestmentCompleteRate + "%");
+            },
           },
           {
             title: "月发布目标",
@@ -624,328 +812,26 @@ export default {
             },
           },
           {
-            title: "视频号投流目标",
+            title: "运营渠道投流费用目标",
             key: "flowInvestmentTarget",
-            minWidth: 140,
+            minWidth: 190,
             align: "center",
           },
           {
-            title: "月累计视频号投流数量",
+            title: "月累计运营渠道投流数量",
             key: "cumulativeFlowInvestment",
-            minWidth: 180,
+            minWidth: 200,
             align: "center",
           },
           {
-            title: "视频号投流完成率",
+            title: "运营渠道投流完成率",
             key: "flowInvestmentCompleteRate",
-            minWidth: 150,
+            minWidth: 170,
             align: "center",
             render: (h, params) => {
               return h("div", params.row.flowInvestmentCompleteRate + "%");
             },
           },
-          {
-            title: "直播间投流目标",
-            key: "livingRoomFlowInvestmentTarget",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "月累计直播间投流数量",
-            key: "livingRoomCumulativeFlowInvestment",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "直播间投流完成率",
-            key: "livingRoomFlowInvestmentCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.livingRoomFlowInvestmentCompleteRate + "%"
-              );
-            },
-          },
-          {
-            title: "目标线索量",
-            key: "cluesTarget",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "月累计线索量",
-            key: "cumulativeClues",
-            minWidth: 130,
-            align: "center",
-          },
-          {
-            title: "线索完成率",
-            key: "cluesCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.cluesCompleteRate + "%");
-            },
-          },
-          {
-            title: "涨粉目标",
-            key: "addFansTarget",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "累计涨粉量",
-            key: "cumulativeAddFans",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "涨粉完成率",
-            key: "addFansCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.addFansCompleteRate + "%");
-            },
-          },
-          {
-            title: "目标加V量",
-            key: "addWechatTarget",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "月加V累计",
-            key: "cumulativeAddWechat",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "加V完成率",
-            key: "addWechatCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.addWechatCompleteRate + "%");
-            },
-          },
-          {
-            title: "面诊卡下单数量目标",
-            key: "consultationTarget",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "累计面诊卡下单数量",
-            key: "cumulativeConsultation",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "面诊卡下单数量完成率",
-            key: "consultationCompleteRate",
-            minWidth: 180,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.consultationCompleteRate + "%");
-            },
-          },
-          {
-            title: "消耗卡目标",
-            key: "consultationCardConsumedTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "累计消耗卡",
-            key: "cumulativeConsultationCardConsumed",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "消耗卡完成率",
-            key: "consultationCardConsumedCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.consultationCardConsumedCompleteRate + "%");
-            },
-          },
-          {
-            title: "激活历史面诊数量目标",
-            key: "activateHistoricalConsultationTarget",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "累计激活历史面诊数量",
-            key: "cumulativeActivateHistoricalConsultation",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "激活历史面诊数量完成率",
-            key: "activateHistoricalConsultationCompleteRate",
-            minWidth: 200,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.activateHistoricalConsultationCompleteRate + "%");
-            },
-          },
-          {
-            title: "派单目标",
-            key: "sendOrderTarget",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "累计派单",
-            key: "cumulativeSendOrder",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "派单完成率",
-            key: "sendOrderCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.sendOrderCompleteRate + "%");
-            },
-          },
-          {
-            title: "上门目标",
-            key: "visitTarget",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "累计上门数",
-            key: "cumulativeVisit",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "上门完成率",
-            key: "visitCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.visitCompleteRate + "%");
-            },
-          },
-          {
-            title: "成交人数目标",
-            key: "dealTarget",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "累计成交人数",
-            key: "cumulativeDealTarget",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "成交率",
-            key: "dealRate",
-            minWidth: 100,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.dealRate + "%");
-            },
-          },
-          {
-            title: "带货结算佣金目标",
-            key: "cargoSettlementCommissionTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "月累计带货结算佣金",
-            key: "cumulativeCargoSettlementCommission",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "带货结算佣金完成率",
-            key: "cargoSettlementCommissionCompleteRate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.cargoSettlementCommissionCompleteRate + "%"
-              );
-            },
-          },
-          {
-            title: "业绩目标",
-            key: "performanceTarget",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "月累计业绩金额",
-            key: "cumulativePerformance",
-            minWidth: 140,
-            align: "center",
-          },
-          
-          {
-            title: "业绩完成率",
-            key: "performanceCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.performanceCompleteRate + "%");
-            },
-          },
-          {
-            title: "小黄车退单量上限",
-            key: "minivanRefundTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "月累计小黄车退款",
-            key: "cumulativeMinivanRefund",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "小黄车退款率",
-            key: "minivanRefundCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.minivanRefundCompleteRate + "%");
-            },
-          },
-          {
-            title: "差评总量上限",
-            key: "miniVanBadReviewsTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "月累计小黄车差评",
-            key: "cumulativeMiniVanBadReviews",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "小黄车差评率",
-            key: "miniVanBadReviewsCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.miniVanBadReviewsCompleteRate + "%");
-            },
-          },
-
           {
             title: "创建日期",
             key: "createDate",
@@ -982,7 +868,7 @@ export default {
                       click: () => {
                         const { id } = params.row;
                         this.title = "修改";
-                        api.byIdLiveAnchorMonthlyTargets(id).then((res) => {
+                        api.byIdLiveAnchorMonthlyTargetBeforeLiving(id).then((res) => {
                           if (res.code === 0) {
                             const {
                               id,
@@ -995,63 +881,54 @@ export default {
                               contentPlatFormId,
                               // 主播ID,
                               liveAnchorId,
+                              // 知乎发布目标
+                              zhihuReleaseTarget,
+                              // 知乎投流费用目标
+                              zhihuFlowinvestmentTarget,
+                              // 抖音发布目标
+                              tikTokReleaseTarget,
+                              // 抖音投流费用目标
+                              tikTokFlowinvestmentTarget,
+                              // 视频号发布目标
+                              videoReleaseTarget,
+                              // 视频号投流费用目标
+                              videoFlowinvestmentTarget,
+                              // 小红书发布目标
+                              xiaoHongShuReleaseTarget,
+                              // 小红书投流费用目标
+                              xiaoHongShuFlowinvestmentTarget,
+                              // 微博发布目标
+                              sinaWeiBoReleaseTarget,
+                              // 微博投流费用目标
+                              sinaWeiBoFlowinvestmentTarget,
                               // 月发布目标
                               releaseTarget,
                               // 投流目标
                               flowInvestmentTarget,
-                              // 目标加V量
-                              addWechatTarget,
-                              // 派单目标
-                              sendOrderTarget,
-                              // 上门目标
-                              visitTarget,
-                              // 成交人数目标
-                              dealTarget,
-                              // 业绩目标
-                              performanceTarget,
-                              // 涨粉目标
-                              addFansTarget,
-                              // 目标线索量
-                              cluesTarget,
-                              // 直播间投流目标
-                              livingRoomFlowInvestmentTarget,
-                              // 面诊卡目标
-                              consultationTarget,
-                              // 带货结算佣金目标
-                              cargoSettlementCommissionTarget,
-                              // 消耗卡目标
-                              consultationCardConsumedTarget,
-                              // 激活历史面诊数量目标
-                              activateHistoricalConsultationTarget,
-                              // 小黄车退单量上限
-                              minivanRefundTarget	,
-                              // 差评总量上限
-                              miniVanBadReviewsTarget
-                            } = res.data.liveAnchorMonthlyTargetInfo;
+                              // 抖音橱窗收入目标
+                              tikTokShowcaseIncomeTarget
+                            } = res.data.liveAnchorMonthlyTargetBeforeLivingInfo;
                             this.contentPlateChange(contentPlatFormId);
+                            this.form.id = id;
                             this.isEdit = true;
                             this.form.year = String(year);
                             this.form.month = month;
                             this.form.monthlyTargetName = monthlyTargetName;
+                            this.form.tikTokShowcaseIncomeTarget = tikTokShowcaseIncomeTarget;
                             this.form.contentPlatFormId = contentPlatFormId;
                             this.form.liveAnchorId = liveAnchorId;
+                            this.form.zhihuReleaseTarget = zhihuReleaseTarget;
+                            this.form.tikTokReleaseTarget = tikTokReleaseTarget;
+                            this.form.xiaoHongShuReleaseTarget = xiaoHongShuReleaseTarget;
+                            this.form.sinaWeiBoReleaseTarget = sinaWeiBoReleaseTarget;
+                            this.form.zhihuFlowinvestmentTarget = zhihuFlowinvestmentTarget;
+                            this.form.videoReleaseTarget = videoReleaseTarget;
+                            this.form.videoFlowinvestmentTarget = videoFlowinvestmentTarget;
+                            this.form.tikTokFlowinvestmentTarget = tikTokFlowinvestmentTarget;
+                            this.form.xiaoHongShuFlowinvestmentTarget = xiaoHongShuFlowinvestmentTarget;
+                            this.form.sinaWeiBoFlowinvestmentTarget = sinaWeiBoFlowinvestmentTarget;
                             this.form.releaseTarget = releaseTarget;
                             this.form.flowInvestmentTarget = flowInvestmentTarget;
-                            this.form.addWechatTarget = addWechatTarget;
-                            this.form.sendOrderTarget = sendOrderTarget;
-                            this.form.visitTarget = visitTarget;
-                            this.form.dealTarget = dealTarget;
-                            this.form.performanceTarget = performanceTarget;
-                            this.form.addFansTarget = addFansTarget;
-                            this.form.cluesTarget = cluesTarget;
-                            this.form.livingRoomFlowInvestmentTarget = livingRoomFlowInvestmentTarget;
-                            this.form.consultationTarget = consultationTarget;
-                            this.form.cargoSettlementCommissionTarget = cargoSettlementCommissionTarget;
-                            this.form.consultationCardConsumedTarget = consultationCardConsumedTarget;
-                            this.form.activateHistoricalConsultationTarget = activateHistoricalConsultationTarget;
-                            this.form.minivanRefundTarget = minivanRefundTarget;
-                            this.form.miniVanBadReviewsTarget = miniVanBadReviewsTarget;
-                            this.form.id = id;
                             this.controlModal = true;
                           }
                         });
@@ -1075,7 +952,7 @@ export default {
                           onOk: () => {
                             const { id } = params.row;
                             api
-                              .deleteLiveAnchorMonthlyTarget(id)
+                              .deleteLiveAnchorMonthlyTargetBeforeLiving(id)
                               .then((res) => {
                                 if (res.code === 0) {
                                   this.getLiveAnchorMonthlyTargetInfo();
@@ -1097,497 +974,7 @@ export default {
             },
           },
         ],
-        // 运营咨询（直播前）
-        columns1: [
-          {
-            title: "主播名称",
-            key: "liveAnchorName",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "年份",
-            key: "year",
-            minWidth: 90,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.year + "年");
-            },
-          },
-          {
-            title: "月份",
-            key: "month",
-            minWidth: 80,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.month + "月");
-            },
-          },
-          {
-            title: "经营目标名称",
-            key: "monthlyTargetName",
-            minWidth: 190,
-            align: "center",
-          },
-          {
-            title: "月发布目标",
-            key: "releaseTarget",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "月累计发布条数",
-            key: "cumulativeRelease",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "发布目标完成率",
-            key: "releaseCompleteRate",
-            minWidth: 140,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.releaseCompleteRate + "%");
-            },
-          },
-          {
-            title: "视频号投流目标",
-            key: "flowInvestmentTarget",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "月累计视频号投流数量",
-            key: "cumulativeFlowInvestment",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "视频号投流完成率",
-            key: "flowInvestmentCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.flowInvestmentCompleteRate + "%");
-            },
-          },
-          {
-            title: "目标线索量",
-            key: "cluesTarget",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "月累计线索量",
-            key: "cumulativeClues",
-            minWidth: 130,
-            align: "center",
-          },
-          {
-            title: "线索完成率",
-            key: "cluesCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.cluesCompleteRate + "%");
-            },
-          },
-          {
-            title: "涨粉目标",
-            key: "addFansTarget",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "累计涨粉量",
-            key: "cumulativeAddFans",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "涨粉完成率",
-            key: "addFansCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.addFansCompleteRate + "%");
-            },
-          },
-          {
-            title: "创建日期",
-            key: "createDate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
-              );
-            },
-          },
-        
-        ],
-        // 直播间（直播中）
-        columns2: [
-          {
-            title: "主播名称",
-            key: "liveAnchorName",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "年份",
-            key: "year",
-            minWidth: 90,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.year + "年");
-            },
-          },
-          {
-            title: "月份",
-            key: "month",
-            minWidth: 80,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.month + "月");
-            },
-          },
-          {
-            title: "经营目标名称",
-            key: "monthlyTargetName",
-            minWidth: 190,
-            align: "center",
-          },
-          
-          {
-            title: "直播间投流目标",
-            key: "livingRoomFlowInvestmentTarget",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "月累计直播间投流数量",
-            key: "livingRoomCumulativeFlowInvestment",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "直播间投流完成率",
-            key: "livingRoomFlowInvestmentCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.livingRoomFlowInvestmentCompleteRate + "%"
-              );
-            },
-          },
-          
-          {
-            title: "面诊卡下单数量目标",
-            key: "consultationTarget",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "累计面诊卡下单数量",
-            key: "cumulativeConsultation",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "面诊卡下单数量完成率",
-            key: "consultationCompleteRate",
-            minWidth: 180,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.consultationCompleteRate + "%");
-            },
-          },
-          
-          {
-            title: "带货结算佣金目标",
-            key: "cargoSettlementCommissionTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "月累计带货结算佣金",
-            key: "cumulativeCargoSettlementCommission",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "带货结算佣金完成率",
-            key: "cargoSettlementCommissionCompleteRate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.cargoSettlementCommissionCompleteRate + "%"
-              );
-            },
-          },
-          {
-            title: "创建日期",
-            key: "createDate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
-              );
-            },
-          },
-         
-        ],
-        // 客服（直播后）
-        columns3: [
-          {
-            title: "主播名称",
-            key: "liveAnchorName",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "年份",
-            key: "year",
-            minWidth: 90,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.year + "年");
-            },
-          },
-          {
-            title: "月份",
-            key: "month",
-            minWidth: 80,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.month + "月");
-            },
-          },
-          {
-            title: "经营目标名称",
-            key: "monthlyTargetName",
-            minWidth: 190,
-            align: "center",
-          },
-          
-          {
-            title: "目标加V量",
-            key: "addWechatTarget",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "月加V累计",
-            key: "cumulativeAddWechat",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "加V完成率",
-            key: "addWechatCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.addWechatCompleteRate + "%");
-            },
-          },
-          {
-            title: "消耗卡目标",
-            key: "consultationCardConsumedTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "累计消耗卡",
-            key: "cumulativeConsultationCardConsumed",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "消耗卡完成率",
-            key: "consultationCardConsumedCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.consultationCardConsumedCompleteRate + "%");
-            },
-          },
-          {
-            title: "激活历史面诊数量目标",
-            key: "activateHistoricalConsultationTarget",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "累计激活历史面诊数量",
-            key: "cumulativeActivateHistoricalConsultation",
-            minWidth: 180,
-            align: "center",
-          },
-          {
-            title: "激活历史面诊数量完成率",
-            key: "activateHistoricalConsultationCompleteRate",
-            minWidth: 200,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.activateHistoricalConsultationCompleteRate + "%");
-            },
-          },
-          {
-            title: "派单目标",
-            key: "sendOrderTarget",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "累计派单",
-            key: "cumulativeSendOrder",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "派单完成率",
-            key: "sendOrderCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.sendOrderCompleteRate + "%");
-            },
-          },
-          {
-            title: "上门目标",
-            key: "visitTarget",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "累计上门数",
-            key: "cumulativeVisit",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "上门完成率",
-            key: "visitCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.visitCompleteRate + "%");
-            },
-          },
-          {
-            title: "成交人数目标",
-            key: "dealTarget",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "累计成交人数",
-            key: "cumulativeDealTarget",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "成交率",
-            key: "dealRate",
-            minWidth: 100,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.dealRate + "%");
-            },
-          },
-          {
-            title: "业绩目标",
-            key: "performanceTarget",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "月累计业绩金额",
-            key: "cumulativePerformance",
-            minWidth: 140,
-            align: "center",
-          },
-          
-          {
-            title: "业绩完成率",
-            key: "performanceCompleteRate",
-            minWidth: 110,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.performanceCompleteRate + "%");
-            },
-          },
-          {
-            title: "小黄车退单量上限",
-            key: "minivanRefundTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "月累计小黄车退款",
-            key: "cumulativeMinivanRefund",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "小黄车退款率",
-            key: "minivanRefundCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.minivanRefundCompleteRate + "%");
-            },
-          },
-          {
-            title: "差评总量上限",
-            key: "miniVanBadReviewsTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "月累计小黄车差评",
-            key: "cumulativeMiniVanBadReviews",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "小黄车差评率",
-            key: "miniVanBadReviewsCompleteRate",
-            minWidth: 150,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.miniVanBadReviewsCompleteRate + "%");
-            },
-          },
-
-          {
-            title: "创建日期",
-            key: "createDate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
-              );
-            },
-          },
-        ],
+      
         data: [],
         totalCount: 0,
       },
@@ -1665,39 +1052,35 @@ export default {
         contentPlatFormId: "",
         // 主播ID,
         liveAnchorId: "",
+        // 知乎发布目标
+        zhihuReleaseTarget:null,
+        // 知乎投流费用目标
+        zhihuFlowinvestmentTarget:null,
+        // 视频号发布目标
+        videoReleaseTarget:null,
+        // 视频号投流费用目标
+        videoFlowinvestmentTarget:null,
+        // 抖音发布目标
+        tikTokReleaseTarget:null,
+        // 抖音投流费用目标
+        tikTokFlowinvestmentTarget:null,
+        // 小红书发布目标
+        xiaoHongShuReleaseTarget:null,
+        // 小红书投流费用目标
+        xiaoHongShuFlowinvestmentTarget:null,
+        // 微博发布目标
+        sinaWeiBoReleaseTarget:null,
+        // 微博投流费用目标
+        sinaWeiBoFlowinvestmentTarget:null,
         // 月发布目标
         releaseTarget: null,
         // 投流目标
         flowInvestmentTarget: null,
-        // 目标加V量
-        addWechatTarget: null,
-        // 派单目标
-        sendOrderTarget: null,
-        // 上门目标
-        visitTarget: null,
-        // 成交人数目标
-        dealTarget: null,
-        // 业绩目标
-        performanceTarget: null,
-        id: "",
-        // 涨粉目标
-        addFansTarget: null,
-        // 投流目标
-        cluesTarget: null,
-        // 直播间投流目标
-        livingRoomFlowInvestmentTarget: null,
-        // 面诊卡目标
-        consultationTarget: null,
-        // 带货结算佣金目标
-        cargoSettlementCommissionTarget: null,
-        // 小黄车退单量上限
-        minivanRefundTarget:null,
-        // 差评总量上限
-        miniVanBadReviewsTarget:null,
-        // 消耗卡目标
-        consultationCardConsumedTarget:null,
-        // 激活历史面诊数量目标
-        activateHistoricalConsultationTarget:null
+        // 抖音橱窗收入目标
+        tikTokShowcaseIncomeTarget: null,
+        // 抖音投流费用目标
+        tikTokFlowinvestmentTarget: null,
+        id:''
       },
 
       ruleValidate: {
@@ -1731,82 +1114,85 @@ export default {
             message: "请选择主播ID",
           },
         ],
-        // releaseTarget: [
-        //   {
-        //     required: true,
-        //     message: "请输入月发布目标",
-        //   },
-        // ],
+       
         flowInvestmentTarget: [
           {
             required: true,
-            message: "请输入视频号投流目标",
-          },
-        ],
-        addWechatTarget: [
-          {
-            required: true,
-            message: "请输入目标加V量",
-          },
-        ],
-        sendOrderTarget: [
-          {
-            required: true,
-            message: "请输入派单目标",
-          },
-        ],
-        visitTarget: [
-          {
-            required: true,
-            message: "请输入上门目标",
-          },
-        ],
-        dealTarget: [
-          {
-            required: true,
-            message: "请输入成交人数目标",
-          },
-        ],
-        performanceTarget: [
-          {
-            required: true,
-            message: "请输入业绩目标",
-          },
-        ],
-        addFansTarget: [
-          {
-            required: true,
-            message: "请输入涨粉目标",
-          },
-        ],
-        cluesTarget: [
-          {
-            required: true,
-            message: "请输入线索目标",
-          },
-        ],
-        livingRoomFlowInvestmentTarget: [
-          {
-            required: true,
-            message: "请输入直播间投流目标",
-          },
-        ],
-        consultationTarget: [
-          {
-            required: true,
-            message: "请输入面诊卡目标",
-          },
-        ],
-        cargoSettlementCommissionTarget: [
-          {
-            required: true,
-            message: "请输入带货结算佣金目标",
+            message: "请输入运营渠道投流费用目标",
           },
         ],
       },
     };
   },
   methods: {
+    zhihuFlowinvestmentTargetChange(){
+      this.form.flowInvestmentTarget = Number(this.form.zhihuFlowinvestmentTarget) + Number(this.form.videoFlowinvestmentTarget) +  Number(this.form.tikTokFlowinvestmentTarget)
+      +Number(this.form.xiaoHongShuFlowinvestmentTarget)+Number(this.form.sinaWeiBoFlowinvestmentTarget)
+      this.form.flowInvestmentTarget = Math.floor(this.form.flowInvestmentTarget * 100) / 100;
+    },
+    videoFlowinvestmentTargetChange(){
+      this.form.flowInvestmentTarget = Number(this.form.zhihuFlowinvestmentTarget) + Number(this.form.videoFlowinvestmentTarget) +  Number(this.form.tikTokFlowinvestmentTarget)
+      +Number(this.form.xiaoHongShuFlowinvestmentTarget)+Number(this.form.sinaWeiBoFlowinvestmentTarget)
+      this.form.flowInvestmentTarget = Math.floor(this.form.flowInvestmentTarget * 100) / 100;
+    },
+    tikTokFlowinvestmentTargetChange(){
+      this.form.flowInvestmentTarget = Number(this.form.zhihuFlowinvestmentTarget) + Number(this.form.videoFlowinvestmentTarget) +  Number(this.form.tikTokFlowinvestmentTarget)
+      +Number(this.form.xiaoHongShuFlowinvestmentTarget)+Number(this.form.sinaWeiBoFlowinvestmentTarget)
+      this.form.flowInvestmentTarget = Math.floor(this.form.flowInvestmentTarget * 100) / 100;
+    },
+    xiaoHongShuFlowinvestmentTargetChange(){
+      this.form.flowInvestmentTarget = Number(this.form.zhihuFlowinvestmentTarget) + Number(this.form.videoFlowinvestmentTarget) +  Number(this.form.tikTokFlowinvestmentTarget)
+      +Number(this.form.xiaoHongShuFlowinvestmentTarget)+Number(this.form.sinaWeiBoFlowinvestmentTarget)
+      this.form.flowInvestmentTarget = Math.floor(this.form.flowInvestmentTarget * 100) / 100;
+    },
+    sinaWeiBoFlowinvestmentTargetChange(){
+      this.form.flowInvestmentTarget = Number(this.form.zhihuFlowinvestmentTarget) + Number(this.form.videoFlowinvestmentTarget) +  Number(this.form.tikTokFlowinvestmentTarget)
+      +Number(this.form.xiaoHongShuFlowinvestmentTarget)+Number(this.form.sinaWeiBoFlowinvestmentTarget)
+      this.form.flowInvestmentTarget = Math.floor(this.form.flowInvestmentTarget * 100) / 100;
+    },
+
+
+    tikTokReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)
+      +Number(this.form.tikTokReleaseTarget)+Number(this.form.videoReleaseTarget)
+    },
+    videoReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)
+      +Number(this.form.tikTokReleaseTarget)+Number(this.form.videoReleaseTarget)
+    },
+    zhihuReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)
+      +Number(this.form.tikTokReleaseTarget)+Number(this.form.videoReleaseTarget)
+    },
+    xiaoHongShuReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)
+      +Number(this.form.tikTokReleaseTarget)+Number(this.form.videoReleaseTarget)
+    },
+    sinaWeiBoReleaseTargetChange(){
+      this.form.releaseTarget = Number(this.form.zhihuReleaseTarget) + Number(this.form.xiaoHongShuReleaseTarget) +  Number(this.form.sinaWeiBoReleaseTarget)
+      +Number(this.form.tikTokReleaseTarget)+Number(this.form.videoReleaseTarget)
+    },
+    newCustomerDealTargetChange(){
+      this.form.dealTarget = Number(this.form.newCustomerDealTarget) + Number(this.form.oldCustomerDealTarget)
+    },
+    oldCustomerDealTargetChange(){
+      this.form.dealTarget = Number(this.form.newCustomerDealTarget) + Number(this.form.oldCustomerDealTarget)
+    },
+    newCustomerVisitTargetChange(){
+      this.form.visitTarget = Number(this.form.newCustomerVisitTarget) + Number(this.form.oldCustomerVisitTarget)
+    },
+    oldCustomerVisitTargetChange(){
+      this.form.visitTarget = Number(this.form.newCustomerVisitTarget) + Number(this.form.oldCustomerVisitTarget)
+    },
+    newCustomerPerformanceTargetChange(){
+      this.form.performanceTarget = Number(this.form.newCustomerPerformanceTarget) + Number(this.form.subsequentPerformanceTarget) + Number(this.form.oldCustomerPerformanceTarget)
+    },
+    subsequentPerformanceTargetChange(){
+      this.form.performanceTarget = Number(this.form.newCustomerPerformanceTarget) + Number(this.form.subsequentPerformanceTarget) + Number(this.form.oldCustomerPerformanceTarget)
+    },
+    oldCustomerPerformanceTargetChange(){
+      this.form.performanceTarget = Number(this.form.newCustomerPerformanceTarget) + Number(this.form.subsequentPerformanceTarget) + Number(this.form.oldCustomerPerformanceTarget)
+    },
     //   获取平台（下拉框）
     getContentValidList() {
       contentPlatForm.getContentPlatFormValidList().then((res) => {
@@ -1851,9 +1237,9 @@ export default {
         this.$Message.error("请选择年份");
         return;
       } else {
-        api.getLiveAnchorMonthlyTargetList(data).then((res) => {
+        api.getLiveAnchorMonthlyTargetBeforeLiving(data).then((res) => {
           if (res.code === 0) {
-            const { list, totalCount } = res.data.liveAnchorMonthlyTargetInfo;
+            const { list, totalCount } = res.data.liveAnchorMonthlyTargetBeforeLivingInfo;
             this.query.data = list;
             this.query.totalCount = totalCount;
           }
@@ -1871,9 +1257,9 @@ export default {
         year: Number(this.$moment(new Date(year)).format("yyyy")),
         liveAnchorId,
       };
-      api.getLiveAnchorMonthlyTargetList(data).then((res) => {
+      api.getLiveAnchorMonthlyTargetBeforeLiving(data).then((res) => {
         if (res.code === 0) {
-          const { list, totalCount } = res.data.liveAnchorMonthlyTargetInfo;
+          const { list, totalCount } = res.data.liveAnchorMonthlyTargetBeforeLivingInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
         }
@@ -1884,9 +1270,11 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
+            this.isflag = true
             // 修改
-            api.editLiveAnchorMonthlyTarget(this.form).then((res) => {
+            api.editLiveAnchorMonthlyTargetBeforeLiving(this.form).then((res) => {
               if (res.code === 0) {
+                this.isflag = false
                 this.isEdit = false;
                 this.cancelSubmit("form");
                 this.getLiveAnchorMonthlyTargetInfo();
@@ -1894,7 +1282,11 @@ export default {
                   content: "修改成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           } else {
             const {
@@ -1902,56 +1294,56 @@ export default {
               month,
               monthlyTargetName,
               liveAnchorId,
+              zhihuReleaseTarget,
+              zhihuFlowinvestmentTarget,
+              videoReleaseTarget,
+              videoFlowinvestmentTarget,
+              tikTokReleaseTarget,
+              tikTokFlowinvestmentTarget,
+              xiaoHongShuReleaseTarget,
+              xiaoHongShuFlowinvestmentTarget,
+              sinaWeiBoReleaseTarget,
+              sinaWeiBoFlowinvestmentTarget,
               releaseTarget,
               flowInvestmentTarget,
-              addWechatTarget,
-              sendOrderTarget,
-              visitTarget,
-              dealTarget,
-              performanceTarget,
-              cluesTarget,
-              addFansTarget,
-              livingRoomFlowInvestmentTarget,
-              consultationTarget,
-              cargoSettlementCommissionTarget,
-              consultationCardConsumedTarget,
-              activateHistoricalConsultationTarget,
-              minivanRefundTarget,
-              miniVanBadReviewsTarget
-
+              tikTokShowcaseIncomeTarget,
+              
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
               month,
               monthlyTargetName,
               liveAnchorId: Number(liveAnchorId),
+              zhihuReleaseTarget,
+              zhihuFlowinvestmentTarget,
+              videoReleaseTarget,
+              videoFlowinvestmentTarget,
+              tikTokReleaseTarget,
+              tikTokFlowinvestmentTarget,
+              xiaoHongShuReleaseTarget,
+              xiaoHongShuFlowinvestmentTarget,
+              sinaWeiBoReleaseTarget,
+              sinaWeiBoFlowinvestmentTarget,
               releaseTarget,
               flowInvestmentTarget,
-              addWechatTarget,
-              sendOrderTarget,
-              visitTarget,
-              dealTarget,
-              performanceTarget,
-              cluesTarget,
-              addFansTarget,
-              livingRoomFlowInvestmentTarget,
-              consultationTarget,
-              cargoSettlementCommissionTarget,
-              consultationCardConsumedTarget,
-              activateHistoricalConsultationTarget,
-              minivanRefundTarget,
-              miniVanBadReviewsTarget
+              tikTokShowcaseIncomeTarget
             };
+            this.isflag = true
             // 添加
-            api.AddLiveAnchorMonthlyTarget(data).then((res) => {
+            api.AddLiveAnchorMonthlyTargetBeforeLiving(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false
                 this.cancelSubmit("form");
                 this.getLiveAnchorMonthlyTargetInfo();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           }
         }

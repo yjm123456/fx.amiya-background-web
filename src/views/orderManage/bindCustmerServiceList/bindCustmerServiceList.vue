@@ -16,6 +16,11 @@
           <customerServiceContentPlatformBound :activeName="activeName"></customerServiceContentPlatformBound>
         </div>
       </TabPane>
+      <TabPane label="已绑定客户池客服手机号" name="customerPool">
+        <div>
+          <customerPool :activeName="activeName"></customerPool>
+        </div>
+      </TabPane>
     </Tabs>
   </div>
 </template>
@@ -24,8 +29,9 @@
 import bindCustomerService from "./components/bindCustomerService";
 import boundCustomerServiceOrder from "./components/boundCustomerServiceOrder";
 import customerServiceContentPlatformBound from "./components/customerServiceContentPlatformBound.vue"
+import customerPool from "./components/customerPool.vue"
 export default {
-  components: { bindCustomerService, boundCustomerServiceOrder,customerServiceContentPlatformBound },
+  components: { bindCustomerService, boundCustomerServiceOrder,customerServiceContentPlatformBound,customerPool },
   data() {
     return { activeName: "bindCustomerService" };
   },

@@ -6,6 +6,7 @@
           <undeliveredOrderList
             :activeName="activeName"
             :consultationNameList="consultationNameList"
+            :liveAnchorBaseInfos="liveAnchorBaseInfos"
             @handleCustomerInfoComParams="handleCustomerInfoComParams"
           ></undeliveredOrderList>
         </div>
@@ -15,6 +16,7 @@
           <orderedOrderList
             :activeName="activeName"
             :consultationNameList="consultationNameList"
+            :liveAnchorBaseInfos="liveAnchorBaseInfos"
             @handleCustomerInfoComParams="handleCustomerInfoComParams"
           ></orderedOrderList>
         </div>
@@ -31,6 +33,8 @@
 
 <script>
 import * as api from "@/api/orderManage";
+import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
+
 import undeliveredOrderList from "./components/undeliveredOrderList";
 import orderedOrderList from "./components/orderedOrderList";
 import customerInfo from "@/components/customerInfo/customerInfo";
@@ -47,9 +51,20 @@ export default {
         encryptPhone: "",
         controlCustomerInfoDisplay: false,
       },
+      // 全部基础主播id
+      liveAnchorBaseInfos:[{id:-1,name:'全部基础主播'}]
     };
   },
   methods: {
+    // 主播基础数据列表
+    getLiveAnchorBaseInfoValids(){
+      liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if (res.code === 0) {
+          const {liveAnchorBaseInfos} = res.data
+          this.liveAnchorBaseInfos = [...this.liveAnchorBaseInfos,...liveAnchorBaseInfos]
+        }
+      });
+    },
     getconsultationNameList(){
       api.consultationNameList().then((res) => {
         if (res.code === 0) {
@@ -68,6 +83,7 @@ export default {
   },
   created(){
     this.getconsultationNameList()
+    this.getLiveAnchorBaseInfoValids()
   }
 };
 </script>

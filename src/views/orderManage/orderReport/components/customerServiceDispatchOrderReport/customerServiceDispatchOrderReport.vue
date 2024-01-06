@@ -36,7 +36,7 @@
                   :disabled="query.positionName == '客服'"
                 >
                   <Option
-                    v-for="(item,index) in query.employee"
+                    v-for="(item, index) in query.employee"
                     :value="item.id"
                     :key="index"
                     >{{ item.name }}</Option
@@ -50,7 +50,7 @@
                   :disabled="query.positionName == '客服'"
                 >
                   <Option
-                    v-for="(item,a) in query.belongEmpList"
+                    v-for="(item, a) in query.belongEmpList"
                     :value="item.id"
                     :key="a"
                     >{{ item.name }}</Option
@@ -63,7 +63,7 @@
                   filterable
                 >
                   <Option
-                    v-for="(item,sta) in query.statusCodeList"
+                    v-for="(item, sta) in query.statusCodeList"
                     :value="item.status"
                     :key="sta"
                     >{{ item.statusText }}</Option
@@ -75,7 +75,7 @@
                   @click="getCustomerServiceDispatchedOrders(1)"
                   >查询</Button
                 >
-                <Button type="primary" @click="exportsendOrder">导出</Button>
+                <Button type="primary" @click="exportsendOrder"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
               </div>
               <Table
                 border
@@ -88,110 +88,198 @@
           <TabPane label="内容平台已派单报表" name="contentDispatch">
             <div>
               <div class="header">
-                <DatePicker
-                  type="date"
-                  placeholder="派单开始日期"
-                  style="width: 160px; margin-left: 10px"
-                  :value="contentInfo.startDate"
-                  v-model="contentInfo.startDate"
-                ></DatePicker>
-                <DatePicker
-                  type="date"
-                  placeholder="派单结束日期"
-                  style="width: 160px; margin-left: 10px"
-                  :value="contentInfo.endDate"
-                  v-model="contentInfo.endDate"
-                ></DatePicker>
-                <Select
-                  v-model="contentInfo.hospitalId"
-                  style="width: 200px;margin-left: 10px"
-                  placeholder="请选择派单医院"
-                  filterable
-                >
-                  <Option
-                    v-for="(item,ie) in dispatchHospital"
-                    :value="item.id"
-                    :key="ie"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-                <Select
-                  v-model="contentInfo.employeeId"
-                  style="width: 200px;margin-left: 10px"
-                  placeholder="请选择派单客服"
-                  filterable
-                  :disabled="contentInfo.isDisabled == true"
-                >
-                  <Option
-                    v-for="(item,i) in contentInfo.employee"
-                    :value="item.id"
-                    :key="i"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-                <Select
-                  v-model="contentInfo.belongEmpId"
-                  style="width: 200px;margin-left: 10px"
-                  placeholder="请选择归属客服"
-                  filterable
-                  :disabled="contentInfo.isDisabled == true"
-                >
-                  <Option
-                    v-for="(item,j) in contentInfo.belongEmpList"
-                    :value="item.id"
-                    :key="j"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-                <Select
-                  v-model="contentInfo.contentPlatFormId"
-                  placeholder="请选择主播平台"
-                  @on-change="
-                    contentPlateChange(contentInfo.contentPlatFormId)
-                  "
-                  style="width: 180px; margin-left: 10px"
-                  filterable
-                >
-                  <Option
-                    v-for="(item,ind) in contentInfo.contentPalteForms"
-                    :value="item.id"
-                    :key="ind"
-                    >{{ item.contentPlatformName }}</Option
-                  >
-                </Select>
-                <Select
-                  v-model="contentInfo.liveAnchorId"
-                  placeholder="请选择主播IP账号"
-                  style="width: 180px; margin-left: 10px"
-                  :disabled="contentInfo.contentPlatFormId === null"
-                  filterable
-                >
-                  <Option
-                    v-for="(item,b) in contentInfo.liveAnchors"
-                    :value="item.id"
-                    :key="b"
-                    >{{ item.hostAccountName }}</Option
-                  >
-                </Select>
-                <Select
-                  v-model="contentInfo.orderStatus"
-                  placeholder="请选择订单状态"
-                  style="width:200px;margin-left:10px"
-                >
-                  <Option
-                    v-for="(item,c) in contentInfo.orderStatusList"
-                    :value="item.orderStatus"
-                    :key="c"
-                    >{{ item.orderStatusText }}</Option
-                  >
-                </Select>
-                <Button
-                  type="primary"
-                  style="margin:0 10px"
-                  @click="getcustomerunContentPlatFormSendOrderList(2)"
-                  >查询</Button
-                >
-                <Button type="primary" @click="exportContent">导出</Button>
+                <div class="content_con">
+                  <div class="content_left">
+                    <div style="margin-bottom:10px">
+                      <DatePicker
+                        type="date"
+                        placeholder="派单开始日期"
+                        style="width: 160px; margin-left: 10px"
+                        :value="contentInfo.startDate"
+                        v-model="contentInfo.startDate"
+                      ></DatePicker>
+                      <DatePicker
+                        type="date"
+                        placeholder="派单结束日期"
+                        style="width: 160px; margin-left: 10px"
+                        :value="contentInfo.endDate"
+                        v-model="contentInfo.endDate"
+                      ></DatePicker>
+                      <!-- <Input
+                        v-model="contentInfo.commissionRatio"
+                        placeholder="请输入佣金比例(%)"
+                        type="number"
+                        number
+                        style="width:160px;margin-left: 10px"
+                        @keyup.enter.native="getcustomerunContentPlatFormSendOrderList(2)"
+                      /> -->
+                      <Select
+                        v-model="contentInfo.employeeId"
+                        style="width: 160px;margin-left: 10px"
+                        placeholder="请选择派单客服"
+                        filterable
+                        :disabled="contentInfo.isDisabled == true"
+                      >
+                        <Option
+                          v-for="(item, i) in contentInfo.employee"
+                          :value="item.id"
+                          :key="i"
+                          >{{ item.name }}</Option
+                        >
+                      </Select>
+                      <Select
+                        v-model="contentInfo.belongEmpId"
+                        style="width: 160px;margin-left: 10px"
+                        placeholder="请选择归属客服"
+                        filterable
+                        :disabled="contentInfo.isDisabled == true"
+                      >
+                        <Option
+                          v-for="(item, j) in contentInfo.belongEmpList"
+                          :value="item.id"
+                          :key="j"
+                          >{{ item.name }}</Option
+                        >
+                      </Select>
+                      <Select
+                        v-model="contentInfo.contentPlatFormId"
+                        placeholder="请选择主播平台"
+                        @on-change="
+                          contentPlateChange(contentInfo.contentPlatFormId)
+                        "
+                        style="width: 160px; margin-left: 10px"
+                        filterable
+                      >
+                        <Option
+                          v-for="(item, ind) in contentInfo.contentPalteForms"
+                          :value="item.id"
+                          :key="ind"
+                          >{{ item.contentPlatformName }}</Option
+                        >
+                      </Select>
+                      <Select
+                        v-model="contentInfo.liveAnchorId"
+                        placeholder="请选择主播IP账号"
+                        style="width: 160px; margin-left: 10px"
+                        :disabled="contentInfo.contentPlatFormId === null"
+                        filterable
+                      >
+                        <Option
+                          v-for="(item, b) in contentInfo.liveAnchors"
+                          :value="item.id"
+                          :key="b"
+                          >{{ item.hostAccountName }}</Option
+                        >
+                      </Select>
+                      <Select
+                        v-model="contentInfo.orderStatus"
+                        placeholder="请选择订单状态"
+                        style="width:160px;margin-left:10px"
+                      >
+                        <Option
+                          v-for="(item, c) in contentInfo.orderStatusList"
+                          :value="item.orderStatus"
+                          :key="c"
+                          >{{ item.orderStatusText }}</Option
+                        >
+                      </Select>
+                    </div>
+                    <div>
+                      <Select
+                        v-model="contentInfo.IsToHospital"
+                        style="width: 160px;margin-left: 10px"
+                        placeholder="请选择到院状态"
+                      >
+                        <Option
+                          v-for="item in contentInfo.toTheHospitalList"
+                          :value="item.id"
+                          :key="item.id"
+                          >{{ item.name }}</Option
+                        >
+                      </Select>
+                      <DatePicker
+                        type="date"
+                        placeholder="到院开始日期"
+                        style="width: 160px;margin-left: 10px"
+                        :value="contentInfo.toHospitalStartDate"
+                        v-model="contentInfo.toHospitalStartDate"
+                        transfer
+                        :disabled="contentInfo.IsToHospital != 'true'"
+                      ></DatePicker>
+                      <DatePicker
+                        type="date"
+                        placeholder="到院结束日期"
+                        style="width: 160px; margin-left: 10px"
+                        :value="contentInfo.toHospitalEndDate"
+                        v-model="contentInfo.toHospitalEndDate"
+                        transfer
+                        :disabled="contentInfo.IsToHospital != 'true'"
+                      ></DatePicker>
+                      <Select
+                        v-model="contentInfo.toHospitalType"
+                        style="width: 160px;margin-left: 10px"
+                        placeholder="请选择到院类型"
+                        :disabled="contentInfo.IsToHospital != 'true'"
+                        clearable
+                        filterable
+                      >
+                        <Option
+                          v-for="item in toHospitalTypeList"
+                          :value="item.orderType"
+                          :key="item.orderType"
+                          >{{ item.orderTypeText }}</Option
+                        >
+                      </Select>
+                      <Select
+                        v-model="contentInfo.isAcompanying"
+                        style="width: 160px;margin-left:10px"
+                        placeholder="请选择陪诊状态"
+                      >
+                        <Option
+                          v-for="item in contentInfo.isAcompanyingList"
+                          :value="item.type"
+                          :key="item.type"
+                          >{{ item.name }}</Option
+                        >
+                      </Select>
+                      <Select
+                        v-model="contentInfo.isOldCustomer"
+                        style="width: 160px;margin-left:10px"
+                        placeholder="请选择新老客业绩状态"
+                      >
+                        <Option
+                          v-for="item in contentInfo.isOldCustomerList"
+                          :value="item.type"
+                          :key="item.type"
+                          >{{ item.name }}</Option
+                        >
+                      </Select>
+                      <Select
+                        v-model="contentInfo.hospitalId"
+                        style="width: 200px;margin-left: 10px"
+                        placeholder="请选择派单医院"
+                        filterable
+                      >
+                        <Option
+                          v-for="(item, ie) in dispatchHospital"
+                          :value="item.id"
+                          :key="ie"
+                          >{{ item.name }}</Option
+                        >
+                      </Select>
+                    </div>
+                  
+                  </div>
+                  <div class="content_right">
+                    <Button
+                      type="primary"
+                      style="margin:0 10px"
+                      @click="getcustomerunContentPlatFormSendOrderList(2)"
+                      >查询</Button
+                    >
+                    <Button type="primary" @click="exportContent"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
+                  </div>
+                </div>
               </div>
               <Table
                 border
@@ -256,10 +344,12 @@ export default {
     customerServiceDispatchOrderModel: {
       type: Boolean,
     },
-    dispatchHospital:Array
+    dispatchHospital: Array,
   },
   data() {
     return {
+      // 到院状态
+      toHospitalTypeList: [],
       activeName: "orderDistribution",
       customerServiceDispatchOrderModels: false,
       // 下单平台
@@ -273,8 +363,10 @@ export default {
         positionName: "",
         employee: [{ name: "全部派单客服", id: -1 }],
         belongEmpList: [{ name: "全部归属客服", id: -1 }],
-        startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
-        endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
+        startDate: this.$moment()
+          .startOf("month")
+          .format("YYYY-MM-DD"),
+        endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         employeeId: -1,
         belongEmpId: -1,
         orderStatus: "",
@@ -282,6 +374,10 @@ export default {
           {
             statusText: "等待买家付款",
             status: "WAIT_BUYER_PAY",
+          },
+          {
+            statusText: "买家已付款",
+            status: "TRADE_BUYER_PAID",
           },
           {
             statusText: "等待卖家发货",
@@ -424,9 +520,15 @@ export default {
       },
       // 内容平台
       contentInfo: {
-        hospitalId:-1,
+        // 是否陪诊
+        isAcompanying:-1,
+        // 新老客业绩
+        isOldCustomer:-1,
+        // 佣金比例
+        commissionRatio:null,
+        hospitalId: -1,
         // 是否禁用
-        isDisabled:false,
+        isDisabled: false,
         orderStatus: null,
         liveAnchors: [],
         contentPalteForms: [],
@@ -441,12 +543,64 @@ export default {
         positionName: "",
         employee: [{ name: "全部派单客服", id: -1 }],
         belongEmpList: [{ name: "全部归属客服", id: -1 }],
-        belongEmpId:-1,
-        startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
-        endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
+        belongEmpId: -1,
+        startDate: this.$moment()
+          .startOf("month")
+          .format("YYYY-MM-DD"),
+        endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
+        toHospitalStartDate: "",
+        toHospitalEndDate: "",
+        IsToHospital: -1,
+        toHospitalType: null,
         employeeId: -1,
         // 订单状态
         orderStatusList: [],
+        // 是否到院数组
+        toTheHospitalList: [
+          {
+            id: -1,
+            name: "全部到院状态",
+          },
+          {
+            id: 'true',
+            name: "已到院",
+          },
+          {
+            id: 'false',
+            name: "未到院",
+          },
+        ],
+        // 是否陪诊
+        isAcompanyingList:[
+          {
+            type:-1,
+            name:'全部陪诊状态'
+          },
+          {
+            type:'true',
+            name:'是'
+          },
+          {
+            type:'false',
+            name:'否'
+          }
+        ],
+        // 是否为老客
+        isOldCustomerList:[
+          {
+            type:-1,
+            name:'全部客户业绩'
+          },
+          {
+            type:'true',
+            name:'老客'
+          },
+          {
+            type:'false',
+            name:'新客'
+          }
+        ],
+        IsToHospital: -1,
         columns: [
           {
             title: "派单人员",
@@ -462,9 +616,38 @@ export default {
             render: (h, params) => {
               return h(
                 "div",
-                  params.row.sendDate ? this.$moment(params.row.sendDate).format(
+                params.row.sendDate
+                  ? this.$moment(params.row.sendDate).format(
                       "YYYY-MM-DD HH:mm:ss"
-                    ):''
+                    )
+                  : ""
+              );
+            },
+          },
+          {
+            title: "是否到院",
+            key: "isToHospital",
+            minWidth: 100,
+            align: "center",
+          },
+          {
+            title: "到院类型",
+            key: "toHospitalTypeText",
+            minWidth: 120,
+            align: "center",
+            
+          },
+          {
+            title: "到院时间",
+            key: "toHospitalDate",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.toHospitalDate
+                  ? this.$moment(params.row.toHospitalDate).format("YYYY-MM-DD")
+                  : ""
               );
             },
           },
@@ -493,15 +676,33 @@ export default {
             align: "center",
           },
           {
+            title: "主播微信号",
+            key: "liveAnchorWeChatNo",
+            minWidth: 160,
+            align: "center",
+          },
+          {
             title: "项目",
             key: "goodsName",
             minWidth: 160,
             align: "center",
           },
           {
+            title: "新老客业绩",
+            key: "isOldCustomer",
+            minWidth: 150,
+            align: "center",
+          },
+          {
             title: "客户姓名",
             key: "customerName",
             minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "是否陪诊",
+            key: "isAcompanying",
+            minWidth: 120,
             align: "center",
           },
           {
@@ -523,7 +724,7 @@ export default {
             align: "center",
           },
           {
-            title: "抖店订单号",
+            title: "三方单号",
             key: "otherContentPlatFormOrderId",
             minWidth: 180,
             align: "center",
@@ -540,6 +741,19 @@ export default {
             minWidth: 140,
             align: "center",
           },
+          // {
+          //   title: "佣金比例(%)",
+          //   key: "commissionRatio",
+          //   minWidth: 140,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.commissionRatio  ? params.row.commissionRatio + '%' : '0%'
+          //         )
+          //       ;
+          //   }
+          // },
           // {
           //   title: "成交时间",
           //   key: "dealDate",
@@ -560,7 +774,7 @@ export default {
           //   minWidth: 220,
           //   align: "center",
           // },
-           {
+          {
             title: "派单医院",
             key: "sendHospital",
             minWidth: 220,
@@ -604,13 +818,21 @@ export default {
           //   key: "hospitalRemark",
           //   minWidth: 300,
           // },
-          
         ],
         data: [],
       },
     };
   },
   methods: {
+    //   获取订单到院类型
+    getcontentPlateFormOrderToHospitalTypeList() {
+      api.contentPlateFormOrderToHospitalTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderTypes } = res.data;
+          this.toHospitalTypeList = orderTypes;
+        }
+      });
+    },
     tabChange() {
       if (this.activeName == "orderDistribution") {
         // 下单平台
@@ -620,8 +842,14 @@ export default {
         this.contentInfo.contentPlatFormId = "";
         this.contentInfo.liveAnchorId = "";
         // 如果是客服 则只能查询该客服的订单
-        this.query.employeeId = sessionStorage.getItem("positionName") == '客服' ? Number(sessionStorage.getItem("employeeId")) : -1;
-        this.query.belongEmpId  = sessionStorage.getItem("positionName") == '客服' ? Number(sessionStorage.getItem("employeeId")) : -1;
+        this.query.employeeId =
+          sessionStorage.getItem("positionName") == "客服"
+            ? Number(sessionStorage.getItem("employeeId"))
+            : -1;
+        this.query.belongEmpId =
+          sessionStorage.getItem("positionName") == "客服"
+            ? Number(sessionStorage.getItem("employeeId"))
+            : -1;
         this.contentInfo.startDate = this.$moment()
           .startOf("month")
           .format("YYYY-MM-DD");
@@ -634,13 +862,20 @@ export default {
         this.getContentValidList();
         this.getContentPlateFormOrderStatusList();
         // 如果是客服 则只能查询该客服的订单
-        this.contentInfo.employeeId = sessionStorage.getItem("positionName") == '客服' ? Number(sessionStorage.getItem("employeeId")) : -1;
-        this.contentInfo.belongEmpId  = sessionStorage.getItem("positionName") == '客服' ? Number(sessionStorage.getItem("employeeId")): -1;
-        this.contentInfo.isDisabled = sessionStorage.getItem("positionName") == '客服' ? true : false
-        this.query.orderStatus = '',
-        this.query.startDate = this.$moment()
-          .startOf("month")
-          .format("YYYY-MM-DD");
+        this.contentInfo.employeeId =
+          sessionStorage.getItem("positionName") == "客服"
+            ? Number(sessionStorage.getItem("employeeId"))
+            : -1;
+        this.contentInfo.belongEmpId =
+          sessionStorage.getItem("positionName") == "客服"
+            ? Number(sessionStorage.getItem("employeeId"))
+            : -1;
+        this.contentInfo.isDisabled =
+          sessionStorage.getItem("positionName") == "客服" ? true : false;
+        (this.query.orderStatus = ""),
+          (this.query.startDate = this.$moment()
+            .startOf("month")
+            .format("YYYY-MM-DD"));
         this.query.endDate = this.$moment(new Date()).format("YYYY-MM-DD");
       }
     },
@@ -651,22 +886,31 @@ export default {
           const { employee } = res.data;
           this.query.employee = [...this.query.employee, ...employee];
           this.query.belongEmpList = [...this.query.belongEmpList, ...employee];
-          this.contentInfo.employee = [...this.contentInfo.employee, ...employee];
-          this.contentInfo.belongEmpList = [...this.contentInfo.belongEmpList, ...employee];
+          this.contentInfo.employee = [
+            ...this.contentInfo.employee,
+            ...employee,
+          ];
+          this.contentInfo.belongEmpList = [
+            ...this.contentInfo.belongEmpList,
+            ...employee,
+          ];
           this.query.employee.map((item) => {
             if (this.query.positionName == "客服") {
               if (item.id == this.query.employeeIds) {
                 this.query.employeeId = item.id;
-                this.query.belongEmpId = item.id
+                this.query.belongEmpId = item.id;
               }
             }
           });
-           this.contentInfo.employee.map((item) => {
+          this.contentInfo.employee.map((item) => {
             if (this.contentInfo.positionName == "客服") {
               if (item.id == this.contentInfo.employeeIds) {
                 this.contentInfo.employeeId = item.id;
-                this.contentInfo.belongEmpId = item.id
-                this.contentInfo.isDisabled = sessionStorage.getItem("positionName") == '客服' ? true : false
+                this.contentInfo.belongEmpId = item.id;
+                this.contentInfo.isDisabled =
+                  sessionStorage.getItem("positionName") == "客服"
+                    ? true
+                    : false;
               }
             }
           });
@@ -686,8 +930,8 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
-        belongEmpId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? null : belongEmpId),
         orderStatus,
       };
       if (!startDate || !endDate) {
@@ -731,8 +975,8 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
-        belongEmpId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? null : employeeId),
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? null : belongEmpId),
         orderStatus,
       };
       if (!startDate || !endDate) {
@@ -798,20 +1042,51 @@ export default {
         liveAnchorId,
         orderStatus,
         belongEmpId,
-        hospitalId
+        hospitalId,
+        toHospitalStartDate,
+        toHospitalEndDate,
+        IsToHospital,
+        toHospitalType,
+        isAcompanying,
+        isOldCustomer,
+        commissionRatio
       } = this.contentInfo;
       const data = {
-        startDate: this.$moment(startDate).format("YYYY-MM-DD"),
-        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? -1 : employeeId),
         contentPlatFormId: contentPlatFormId ? contentPlatFormId : "",
         liveAnchorId,
         orderStatus,
-        belongEmpId,
-        hospitalId:hospitalId==-1 ? null : hospitalId
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? -1 : belongEmpId),
+        hospitalId: hospitalId == -1 ? null : hospitalId,
+        IsToHospital:IsToHospital== -1 ? null : IsToHospital,
+        toHospitalStartDate:
+          IsToHospital != 'true'
+            ? null
+            : toHospitalStartDate
+            ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
+            : null,
+        toHospitalEndDate:
+          IsToHospital != 'true'
+            ? null
+            : toHospitalEndDate
+            ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
+            : null,
+        toHospitalType:
+          IsToHospital != 'true'
+            ? null
+            : toHospitalType == -1
+            ? null
+            : toHospitalType,
+        isAcompanying: isAcompanying == -1 ? null : isAcompanying,
+        isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
+        commissionRatio
       };
       if (!startDate || !endDate) {
-        this.$Message.error("请选择日期");
+        this.$Message.error("请选择派单日期");
         return;
       }
       api.customerSendContentPlatFormOrderReport(data).then((res) => {
@@ -842,19 +1117,48 @@ export default {
         contentPlatFormId,
         liveAnchorId,
         orderStatus,
-        belongEmpId
+        belongEmpId,
+        toHospitalStartDate,
+        toHospitalEndDate,
+        IsToHospital,
+        toHospitalType,
+        isAcompanying,
+        isOldCustomer,
+        commissionRatio
       } = this.contentInfo;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
-        employeeId,
+        employeeId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(employeeId == -1 ? -1 : employeeId),
         contentPlatFormId,
         liveAnchorId,
         orderStatus,
-        belongEmpId
+        belongEmpId:sessionStorage.getItem("positionName") == "客服" ? Number(sessionStorage.getItem("employeeId")) :(belongEmpId == -1 ? -1 : belongEmpId),
+        IsToHospital:IsToHospital==-1?null:IsToHospital,
+        toHospitalStartDate:
+          IsToHospital != 'true'
+            ? null
+            : toHospitalStartDate
+            ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
+            : null,
+        toHospitalEndDate:
+          IsToHospital != 'true'
+            ? null
+            : toHospitalEndDate
+            ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
+            : null,
+        toHospitalType:
+          IsToHospital != 'true'
+            ? null
+            : toHospitalType == -1
+            ? null
+            : toHospitalType,
+        isAcompanying: isAcompanying == -1 ? null : isAcompanying,
+        isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
+        commissionRatio
       };
       if (!startDate || !endDate) {
-        this.$Message.error("请选择日期");
+        this.$Message.error("请选择派单日期");
         return;
       }
       if (this.contentInfo.data.length == 0) {
@@ -883,8 +1187,8 @@ export default {
         this.contentInfo.orderStatus = null;
         this.contentInfo.contentPlatFormId = "";
         this.contentInfo.liveAnchorId = "";
-        this.contentInfo.hospitalId = -1
-        this.activeName =  "orderDistribution"
+        this.contentInfo.hospitalId = -1;
+        this.activeName = "orderDistribution";
         this.$emit("update:customerServiceDispatchOrderModel", false);
       }
     },
@@ -902,8 +1206,8 @@ export default {
       this.contentInfo.orderStatus = null;
       this.contentInfo.contentPlatFormId = "";
       this.contentInfo.liveAnchorId = "";
-      this.contentInfo.hospitalId = -1
-      this.activeName =  "orderDistribution"
+      this.contentInfo.hospitalId = -1;
+      this.activeName = "orderDistribution";
       this.$emit("update:customerServiceDispatchOrderModel", false);
     },
   },
@@ -912,6 +1216,7 @@ export default {
     const employeeIds = sessionStorage.getItem("employeeId");
     this.query.positionName = positionName;
     this.query.employeeIds = employeeIds;
+    this.getcontentPlateFormOrderToHospitalTypeList();
   },
   watch: {
     customerServiceDispatchOrderModel(value) {
@@ -943,5 +1248,9 @@ export default {
   margin-right: 20px;
   font-size: 18px;
   display: flex;
+}
+.content_con {
+  display: flex;
+  align-items: center;
 }
 </style>

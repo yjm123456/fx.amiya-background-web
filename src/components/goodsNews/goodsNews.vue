@@ -87,7 +87,7 @@ export default {
   box-shadow: 4px 4px 15px -3px #666;
 }
 .container {
-  background: url(https://ameiya.oss-cn-hangzhou.aliyuncs.com/dfc701175539438d8a66203329af2780.jpg)
+  background: url(https://ameiya.oss-cn-hangzhou.aliyuncs.com/75d780bcea4245f38493b9e27121a5a5.jpg)
     no-repeat no-repeat;
   background-size: 100% 100%;
   height: 800px;
@@ -114,6 +114,7 @@ export default {
 }
 .name {
   // margin-top: 46%;
+  width: 100%;
   font-size: 26px;
   font-weight: bold;
   text-align: center;

@@ -155,7 +155,46 @@ export const byEncryptPhoneGetCustomerConsumptionTrackList = (params) => {
         params,
     });
 };
-
+// 医院端 医院客户列表 接单客户（所有客户）
+export const allCustomerListWithPage = (params) => {
+    return http({
+        url: "/amiyabg/HospitalCustomer/allCustomerListWithPage",
+        method: "get",
+        params,
+    });
+};
+// 医院端 医院客户列表 我的客户
+export const myFollowListWithPage = (params) => {
+    return http({
+        url: "/amiyabg/HospitalCustomer/myFollowListWithPage",
+        method: "get",
+        params,
+    });
+};
+// 医院端 医院客户列表 （待查重客户，重单客户）
+export const waitingConfirmCustomerHospital = (params) => {
+    return http({
+        url: "/amiyabg/ContentPlateFormSendOrder/waitingConfirmCustomerHospital",
+        method: "get",
+        params,
+    });
+};
+// 发优惠券   post
+export const sendVoucher = (data) => {
+    return http({
+        url: `/amiyabg/api/ConsumptionVoucher/sendVoucher`,
+        method: "post",
+        data,
+    });
+};
+// 优惠券列表（下拉框）
+export const codeList = (params) => {
+    return http({
+        url: "/amiyabg/api/ConsumptionVoucher/codeList",
+        method: "get",
+        params,
+    });
+};
 /**
  * 客户消费追踪
  */
@@ -294,6 +333,172 @@ export const customerReturnBackOrder = (data) => {
     return http({
         url: `/amiyabg/CustomerHospitalConsume/returnBackOrder`,
         method: "put",
+        data,
+    });
+};
+
+/**
+ * 医院客户接口
+ */
+// 获取医院客户信息列表 分页
+export const getHospitalCustomerInfo = (params) => {
+    return http({
+        url: `/amiyabg/HospitalCustomerInfo/listWithPage`,
+        method: "get",
+        params
+    });
+};
+
+// 根据客户编号获取消费记录分页
+export const getOrderByCustomerIdlistWithPage = (params) => {
+    return http({
+        url: `/amiyabg/HospitalCustomerInfo/getOrderByCustomerIdlistWithPage`,
+        method: "get",
+        params
+    });
+};
+
+// 获取医院客户信息列表分页
+export const getOrderlistWithPage = (params) => {
+    return http({
+        url: `/amiyabg/HospitalCustomerInfo/GetOrderlistWithPage`,
+        method: "get",
+        params
+    });
+};
+// 获取已配置对接订单客户的医院信息
+export const getDockingHospitalInfo = () => {
+    return http({
+        url: `/amiyabg/HospitalCustomerInfo/GetDockingHospitalInfo`,
+        method: "get",
+    });
+};
+// 根据加密电话查询客户资料
+export const getBaseAndBindCustomerInfoByEncryptPhone = (params) => {
+    return http({
+        url: `/amiyabg/Customer/getBaseAndBindCustomerInfoByEncryptPhone`,
+        method: "get",
+        params
+    });
+};
+// 根据id查询客户资料
+export const getBaseAndBindCustomerInfoByCustomerId = (params) => {
+    return http({
+        url: `/amiyabg/Customer/getBaseAndBindCustomerInfoByCustomerId`,
+        method: "get",
+        params
+    });
+};
+// 根据id编辑客户基础信息
+export const updateById = (data) => {
+    return http({
+        url: `/amiyabg/Customer/updateById`,
+        method: "put",
+        data,
+    });
+};
+// 小程序根据customerId编辑客户基础信息
+export const updateByCustomerId = (data) => {
+    return http({
+        url: `/amiyabg/Customer/updateByCustomerId`,
+        method: "put",
+        data,
+    });
+};
+// 客户赠送积分
+export const addCustomerIntergration = (data) => {
+    return http({
+        url: `/amiyabg/Customer/addCustomerIntergration`,
+        method: "put",
+        data,
+    });
+};
+// 对账单 升单列表
+export const listByCustomerPhone = (params) => {
+    return http({
+        url: `/amiyabg/CustomerHospitalConsume/listByCustomerPhone`,
+        method: "get",
+        params
+    });
+};
+// 根据加密手机号获取发放礼品的初始数据
+export const getSendGiftBaseInfo = (params) => {
+    return http({
+        url: `/amiyabg/Gift/SendGiftBaseInfo`,
+        method: "get",
+        params,
+    });
+};
+// 根据礼品类别获取礼品名称列表
+export const giftNameList = (params) => {
+    return http({
+        url: `/amiyabg/Gift/giftNameList`,
+        method: "get",
+        params
+    });
+};
+// 获取收货地址列表
+export const getAddressList = (params) => {
+    return http({
+        url: `/amiyabg/Address/list`,
+        method: "get",
+        params
+    });
+};
+// 手动发放礼品
+export const SendGift = (data) => {
+    return http({
+        url: `/amiyabg/Gift/SendGift`,
+        method: "post",
+        data,
+    });
+};
+// 添加标签
+export const addCustomerTag = (data) => {
+    return http({
+        url: `/amiyabg/Customer/addCustomerTag`,
+        method: "post",
+        data,
+    });
+};
+// 积分列表
+export const IntegrationGenerateRecord = (params) => {
+    return http({
+        url: `/amiyabg/IntegrationGenerateRecord/list`,
+        method: "get",
+        params
+    });
+};
+// 修改积分
+export const editIntegrationGenerateRecord = (data) => {
+    return http({
+        url: `/amiyabg/IntegrationGenerateRecord/editIntegrationGenerateRecord`,
+        method: "post",
+        data,
+    });
+};
+// 导出积分发放记录
+export const exportRecordList = (params) => {
+    return http({
+        url: "/amiyabg/IntegrationGenerateRecord/exportRecordList",
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};
+// 客户积分生成比例
+export const customerInternelPercent = (params) => {
+    return http({
+        url: `/amiyabg/Customer/customerInternelPercent`,
+        method: "get",
+        params
+    });
+};
+// 客服发放礼品
+export const customerServiceSendGift = (data) => {
+    return http({
+        url: `/amiyabg/Gift/customerServiceSendGift`,
+        method: "post",
         data,
     });
 };

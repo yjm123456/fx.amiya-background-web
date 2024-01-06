@@ -9,7 +9,15 @@
             style="width: 200px"
             @keyup.enter.native="getDoctor()"
           />
-          <Select v-model="query.hospitalId" placeholder="请选择医院" filterable  :disabled = "employeeType == 'hospitalEmployee'" style="width: 240px;margin-left:10px">
+            
+          <!--:disabled="employeeType == 'hospitalEmployee'"  -->
+          <Select
+            v-model="query.hospitalId"
+            placeholder="请选择医院"
+            filterable
+            style="width: 240px;margin-left:10px"
+            v-if="employeeType != 'hospitalEmployee'"
+          >
             <Option
               v-for="item in hospitalInfo"
               :value="item.id"
@@ -17,9 +25,25 @@
               >{{ item.name }}</Option
             >
           </Select>
-          <Button type="primary" style="margin-left: 10px" @click="getDoctor()"
-            >查询</Button
-          >
+          <div class="type_con">
+            <span class="type">在职状态</span>
+            <RadioGroup v-model="query.isLeaveOffice" style="margin-bottom:2px">
+              <Radio label="全部">
+                  <span>全部</span>
+              </Radio>
+              <Radio label="在职">
+                  <span>在职</span>
+              </Radio>
+              <Radio label="离职">
+                  <span>离职</span>
+              </Radio>
+          </RadioGroup>
+          </div>
+          <div class="type_con">
+            <span class="type">仅主推</span>
+            <Checkbox v-model="query.isMain" style="border-radius:50%">主推</Checkbox>
+          </div>
+          <Button type="primary" style="margin-left: 10px" @click="getDoctor()">查询</Button>
         </div>
         <div class="right">
           <Button
@@ -36,7 +60,34 @@
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data"></Table>
+        <!-- <Table border :columns="query.columns" :data="query.data"></Table> -->
+        <div class="list" >
+          <div v-for="(item,index) in query.data" :key="index">
+            <div class="item">
+              <div class="item_con">
+                <div class="item_top">
+                  <viewer>
+                  <img
+                    :src="item.picUrl"
+                    alt=""
+                    class="item_img"
+                  />
+                  </viewer>
+                  <div>
+                    <div class="item_name">{{item.name}}</div>
+                    <div class="item_position">担任职务：{{item.position}}</div>
+                  </div>
+                  <div class="item_type green">{{item.isMain == 1 ? '主推' : ''}}</div>
+                  <div class="item_job " :class="item.isLeaveOffice == 1 ? 'green' : 'position_orange'">{{item.isLeaveOffice == 1 ? '在职' : '离职'}}</div>
+                </div>
+                <div class="item_bottom">
+                  <div class="edit_data"  @click="editDoctorMessage(item.id)">修改资料</div>
+                  <div class="edit_type" @click="editDoctorType(item.id)">修改在职状态</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="page_wrap">
         <Page
@@ -70,7 +121,7 @@
         <FormItem label="缩略图" prop="picUrl">
           <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
         </FormItem>
-        
+
         <FormItem label="从业年份" prop="obtainEmploymentYear">
           <DatePicker
             v-model="form.obtainEmploymentYear"
@@ -81,7 +132,11 @@
           ></DatePicker>
         </FormItem>
         <FormItem label="科室" prop="departmentId">
-          <Select v-model="form.departmentId" placeholder="请选择科室" filterable>
+          <Select
+            v-model="form.departmentId"
+            placeholder="请选择科室"
+            filterable
+          >
             <Option
               v-for="item in AmiyaHospitalDepartmentListDepartment"
               :value="item.id"
@@ -94,9 +149,18 @@
           <Input v-model="form.position" placeholder="请输入职称"></Input>
         </FormItem>
         <!-- 如果是医院端不选择医院 直接传递id -->
-        <FormItem label="医院" prop="hospitalId" v-if="employeeType == 'amiyaEmployee'">
+        <FormItem
+          label="医院"
+          prop="hospitalId"
+          v-if="employeeType == 'amiyaEmployee'"
+        >
           <!-- :disabled = "!employeeType == 'hospitalEmployee'" -->
-          <Select v-model="form.hospitalId" placeholder="请选择医院" filterable   key="医院">
+          <Select
+            v-model="form.hospitalId"
+            placeholder="请选择医院"
+            filterable
+            key="医院"
+          >
             <Option
               v-for="item in hospitalInfo"
               :value="item.id"
@@ -106,13 +170,23 @@
           </Select>
         </FormItem>
         <FormItem label="简介" prop="description">
-          <Input v-model="form.description" placeholder="请输入简介" type="textarea"></Input>
+          <Input
+            v-model="form.description"
+            placeholder="请输入简介"
+            type="textarea"
+          ></Input>
         </FormItem>
         <FormItem label="是否主推" prop="isMain">
           <i-switch v-model="form.isMain" />
         </FormItem>
+        <FormItem label="是否在职" prop="isLeaveOffice">
+          <i-switch v-model="form.isLeaveOffice" />
+        </FormItem>
         <FormItem label="医生详情图" prop="projectPicture">
-          <upload :uploadObj="mainUploadObj" @uploadChange="mainHandleUploadChange" />
+          <upload
+            :uploadObj="mainUploadObj"
+            @uploadChange="mainHandleUploadChange"
+          />
         </FormItem>
         <Spin fix v-if="flag == true">
           <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
@@ -125,21 +199,27 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 修改在职状态 -->
+    <editDoctorType :editDoctorTypeModel.sync="editDoctorTypeModel" :id="id" @getDoctor="getDoctor"></editDoctorType>
   </div>
 </template>
 <script>
 import * as api from "@/api/hospitalManage";
 import * as orderApi from "@/api/orderManage";
 import upload from "@/components/upload/upload";
+import editDoctorType from "./components/editDoctorStatus.vue"
 export default {
   components: {
     upload,
+    editDoctorType
   },
   data() {
     return {
-      flag:false,
-      employeeType:sessionStorage.getItem("employeeType"),
-      hospitalId:sessionStorage.getItem("hospitalId"),
+      id:null,
+      editDoctorTypeModel:false,
+      flag: false,
+      employeeType: sessionStorage.getItem("employeeType"),
+      hospitalId: sessionStorage.getItem("hospitalId"),
       // 缩略图
       uploadObj: {
         // 是否开启多图
@@ -159,26 +239,28 @@ export default {
         uploadList: [],
       },
       // 科室
-      AmiyaHospitalDepartmentListDepartment:[],
+      AmiyaHospitalDepartmentListDepartment: [],
 
       // 查询
       query: {
-        hospitalId:null,
+        isMain:null,
+        isLeaveOffice:'全部',
+        hospitalId: null,
         keyword: "",
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 20,
         columns: [
           {
             title: "医生姓名",
             key: "name",
-            width:'140',
-            align:'center'
+            width: "140",
+            align: "center",
           },
           {
             title: "缩略图",
             key: "picUrl",
             align: "center",
-            width:'120',
+            width: "120",
             render: (h, params) => {
               return h("viewer", {}, [
                 h("img", {
@@ -199,57 +281,59 @@ export default {
             title: "医生详情图",
             key: "projectPicture",
             align: "center",
-            width:'120',
+            width: "120",
             render: (h, params) => {
               return h("viewer", {}, [
-                params.row.projectPicture ? h("img", {
-                  style: {
-                    width: "50px",
-                    height: "50px",
-                    margin: "5px 0",
-                    verticalAlign: "middle",
-                  },
-                  attrs: {
-                    src: params.row.projectPicture,
-                  },
-                }): '',
+                params.row.projectPicture
+                  ? h("img", {
+                      style: {
+                        width: "50px",
+                        height: "50px",
+                        margin: "5px 0",
+                        verticalAlign: "middle",
+                      },
+                      attrs: {
+                        src: params.row.projectPicture,
+                      },
+                    })
+                  : "",
               ]);
             },
           },
           {
             title: "科室",
             key: "departmentName",
-            width:'120',
-            align:'center'
+            width: "120",
+            align: "center",
           },
           {
             title: "职称",
             key: "position",
-            width:'150',
-            align:'center'
+            width: "150",
+            align: "center",
           },
           {
             title: "从业年份",
             key: "obtainEmploymentYear",
-            width:'100',
-            align:'center'
+            width: "100",
+            align: "center",
           },
           {
             title: "医院名称",
             key: "hosptalName",
-            align:'center'
+            align: "center",
           },
           {
             title: "简介",
             key: "description",
-            align:'center',
-            tooltip:true
+            align: "center",
+            tooltip: true,
           },
           {
             title: "是否主推",
             key: "isMain",
-            width:'100',
-            align:'center',
+            width: "100",
+            align: "center",
             render: (h, params) => {
               if (params.row.isMain == 1) {
                 return h("Icon", {
@@ -278,7 +362,7 @@ export default {
             title: "操作",
             key: "",
             width: 150,
-            align:'center',
+            align: "center",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -310,21 +394,26 @@ export default {
                             );
                             this.form = data;
                             // this.hospitalInfo.map((item=>{
-                              if(this.employeeType == 'hospitalEmployee'){
-                                if(hospitalId == this.hospitalId){
-                                    this.form.hospitalId = hospitalId
-                                }
-                              }else{
-                                this.form.hospitalId = hospitalId
+                            if (this.employeeType == "hospitalEmployee") {
+                              if (hospitalId == this.hospitalId) {
+                                this.form.hospitalId = hospitalId;
                               }
-                            // }))
-                            if(isMain ==1 ){
-                              this.form.isMain = true
-                            }else{
-                              this.form.isMain = false
+                            } else {
+                              this.form.hospitalId = hospitalId;
                             }
-                            this.uploadObj.uploadList = this.form.picUrl ? [this.form.picUrl] : '';
-                            this.mainUploadObj.uploadList = this.form.projectPicture ? [this.form.projectPicture] : '';
+                            // }))
+                            if (isMain == 1) {
+                              this.form.isMain = true;
+                            } else {
+                              this.form.isMain = false;
+                            }
+                            this.uploadObj.uploadList = this.form.picUrl
+                              ? [this.form.picUrl]
+                              : "";
+                            this.mainUploadObj.uploadList = this.form
+                              .projectPicture
+                              ? [this.form.projectPicture]
+                              : "";
                             this.controlModal = true;
                           }
                         });
@@ -397,13 +486,15 @@ export default {
         hospitalId: "",
         id: "",
         // 科室
-        departmentId:'',
+        departmentId: "",
         // 简介
-        description:'',
+        description: "",
         // 是否主推
-        isMain:false,
+        isMain: false,
         // 主推项目图
-        projectPicture:'',
+        projectPicture: "",
+        // 是否在职
+        isLeaveOffice:true
       },
 
       ruleValidate: {
@@ -453,6 +544,59 @@ export default {
     };
   },
   methods: {
+    // 编辑医生信息
+    editDoctorMessage(id){
+      this.title = '编辑'
+      api.byIdGetDoctor(id).then((res) => {
+        if (res.code === 0) {
+          this.isEdit = true;
+          const {
+            hosptalName,
+            obtainEmploymentYear,
+            hospitalId,
+            isMain,
+            isLeaveOffice,
+            ...data
+          } = res.data.doctorInfo;
+          data.obtainEmploymentYear = String(
+            obtainEmploymentYear
+          );
+          this.form = data;
+          // this.hospitalInfo.map((item=>{
+          if (this.employeeType == "hospitalEmployee") {
+            if (hospitalId == this.hospitalId) {
+              this.form.hospitalId = hospitalId;
+            }
+          } else {
+            this.form.hospitalId = hospitalId;
+          }
+          // }))
+          if (isMain == 1) {
+            this.form.isMain = true;
+          } else {
+            this.form.isMain = false;
+          }
+          if (isLeaveOffice == 1) {
+            this.form.isLeaveOffice = true;
+          } else {
+            this.form.isLeaveOffice = false;
+          }
+          this.uploadObj.uploadList = this.form.picUrl
+            ? [this.form.picUrl]
+            : "";
+          this.mainUploadObj.uploadList = this.form
+            .projectPicture
+            ? [this.form.projectPicture]
+            : "";
+          this.controlModal = true;
+        }
+      });
+    },
+    // 修改在职状态
+    editDoctorType(value){
+      this.editDoctorTypeModel = true
+      this.id = value
+    },
     //   获取科室
     getAmiyaHospitalDepartmentListChange() {
       orderApi.getAmiyaHospitalDepartmentList().then((res) => {
@@ -467,12 +611,17 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { keyword, pageNum, pageSize ,hospitalId} = this.query;
-      const data = { 
-        keyword, 
-        pageNum, 
-        pageSize ,
-        hospitalId: sessionStorage.getItem("hospitalId") ? sessionStorage.getItem("hospitalId") : hospitalId
+      const { keyword, pageNum, pageSize, hospitalId ,isLeaveOffice,isMain} = this.query;
+      const data = {
+        keyword,
+        pageNum,
+        pageSize,
+        hospitalId: sessionStorage.getItem("hospitalId")
+          ? sessionStorage.getItem("hospitalId")
+          : hospitalId,
+        // isLeaveOffice:isLeaveOffice == '离职' ? 0 : 1,
+        isLeaveOffice:isLeaveOffice == '全部' ? '' :  isLeaveOffice == '离职' ? 0 : 1,
+        isMain:isMain == true ? 1 :  null
       };
       api.Doctor(data).then((res) => {
         if (res.code === 0) {
@@ -485,13 +634,17 @@ export default {
 
     // 医生信息列表分页
     handlePageChange(pageNum) {
-      const { keyword, pageSize ,hospitalId} = this.query;
-      const data = { 
-        keyword, 
-        pageNum, 
-        pageSize ,
-        hospitalId: sessionStorage.getItem("hospitalId") ? sessionStorage.getItem("hospitalId") : hospitalId
-        };
+      const { keyword, pageSize, hospitalId ,isLeaveOffice,isMain } = this.query;
+      const data = {
+        keyword,
+        pageNum,
+        pageSize,
+        hospitalId: sessionStorage.getItem("hospitalId")
+          ? sessionStorage.getItem("hospitalId")
+          : hospitalId,
+        isLeaveOffice:isLeaveOffice == '全部' ? '' :  isLeaveOffice == '离职' ? 0 : 1,
+        isMain:isMain == true ? 1 :  null
+      };
       api.Doctor(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.doctorInfo;
@@ -506,14 +659,14 @@ export default {
       api.HospitalInfonameList().then((res) => {
         if (res.code === 0) {
           this.hospitalInfo = res.data.hospitalInfo;
-          this.hospitalInfo.map((item=>{
-            if(this.employeeType == 'hospitalEmployee'){
-              if(item.id == this.hospitalId){
-                  this.query.hospitalId = item.id
-                  this.form.hospitalId = item.id
+          this.hospitalInfo.map((item) => {
+            if (this.employeeType == "hospitalEmployee") {
+              if (item.id == this.hospitalId) {
+                this.query.hospitalId = item.id;
+                this.form.hospitalId = item.id;
               }
             }
-          }))
+          });
         }
       });
     },
@@ -523,7 +676,7 @@ export default {
       this.form.picUrl = values[0];
     },
     // 项目主推案例图
-    mainHandleUploadChange(values){
+    mainHandleUploadChange(values) {
       this.form.projectPicture = values[0];
     },
 
@@ -532,20 +685,30 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const { obtainEmploymentYear, isMain,hospitalId, ...data } = this.form;
+            const {
+              obtainEmploymentYear,
+              isMain,
+              isLeaveOffice,
+              hospitalId,
+              ...data
+            } = this.form;
             const params = {
               obtainEmploymentYear: Number(
                 this.$moment(obtainEmploymentYear).format("YYYY")
               ),
-              isMain : isMain == true ? 1 : 0,
-              hospitalId:sessionStorage.getItem("employeeType") == 'amiyaEmployee' ? hospitalId : Number(sessionStorage.getItem("hospitalId")),
+              isMain: isMain == true ? 1 : 0,
+              isLeaveOffice: isLeaveOffice == true ? 1 : 0,
+              hospitalId:
+                sessionStorage.getItem("employeeType") == "amiyaEmployee"
+                  ? hospitalId
+                  : Number(sessionStorage.getItem("hospitalId")),
               ...data,
             };
-            this.flag = true
+            this.flag = true;
             // 修改
             api.updateDoctor(params).then((res) => {
               if (res.code === 0) {
-                this.flag = false
+                this.flag = false;
                 this.isEdit = false;
                 this.cancelSubmit();
                 this.getDoctor();
@@ -560,20 +723,31 @@ export default {
               }
             });
           } else {
-            let { id, obtainEmploymentYear,isMain,hospitalId, ...data } = this.form;
+            let {
+              id,
+              obtainEmploymentYear,
+              isMain,
+              isLeaveOffice,
+              hospitalId,
+              ...data
+            } = this.form;
             const params = {
               ...data,
               obtainEmploymentYear: Number(
                 this.$moment(obtainEmploymentYear).format("YYYY")
               ),
-              isMain : isMain == true ? 1 : 0,
-              hospitalId:sessionStorage.getItem("employeeType") == 'amiyaEmployee' ? hospitalId : Number(sessionStorage.getItem("hospitalId"))
+              isMain: isMain == true ? 1 : 0,
+              isLeaveOffice: isLeaveOffice == true ? 1 : 0,
+              hospitalId:
+                sessionStorage.getItem("employeeType") == "amiyaEmployee"
+                  ? hospitalId
+                  : Number(sessionStorage.getItem("hospitalId")),
             };
-            this.flag = true
+            this.flag = true;
             // 添加
             api.addDoctor(params).then((res) => {
               if (res.code === 0) {
-                this.flag = false
+                this.flag = false;
                 this.cancelSubmit();
                 this.getDoctor();
                 this.$Message.success({
@@ -609,7 +783,7 @@ export default {
   created() {
     this.getDoctor();
     this.getHospitalInfonameList();
-    this.getAmiyaHospitalDepartmentListChange()
+    this.getAmiyaHospitalDepartmentListChange();
   },
 };
 </script>
@@ -619,11 +793,109 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
+.left{
+  display: flex;
+  align-items: center;
+}
+.type_con{
+  margin-left: 30px;
+}
+.type{
+  font-weight: bold;
+  font-size: 14px;
+  color: #000;
+  margin-right: 10px;
+}
 .container {
   margin-top: 16px;
 }
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding-left:20px;
+  box-sizing: border-box;
+}
+.item {
+  border: 1px solid #ccc;
+  width: 300px;
+  height: 140px;
+  position: relative;
+  margin-right: 25px;
+  margin-bottom: 20px;
+  
+  .item_top {
+    position: relative;
+    display: flex;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .item_bottom {
+    display: flex;
+    flex: 1;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
+  .item_img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  .item_job {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    padding: 2px 7px;
+    box-sizing: border-box;
+    font-size: 10px;
+  }
+  .green {
+    color: green;
+    background: #edf8f3;
+  }
+  .position_orange{
+    color: #ebbb74;
+    background: #fff1e4;
+  }
+  .item_type {
+    position: absolute;
+    right: 60px;
+    top: 0;
+    font-size: 10px;
+    padding: 2px 7px;
+    box-sizing: border-box;
+  }
+  .item_position {
+    font-size: 10px;
+    color: #898588;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .edit_data {
+    width: 50%;
+    color: #566ca6;
+    border-right: 1px solid #ccc;
+  }
+  .edit_type {
+    width: 50%;
+    color: #566ca6;
+    text-align: center;
+  }
+  .item_name{
+    font-weight: bold;
+    color: #000;
+    margin: 5px 0 10px 0;
+  }
 }
 </style>

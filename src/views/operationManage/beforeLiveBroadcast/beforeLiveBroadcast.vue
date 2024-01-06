@@ -18,32 +18,6 @@
             v-model="query.endDate"
           ></DatePicker>
           <Select
-            v-model="query.operationEmpId"
-            placeholder="请选择运营人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in employeeAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.netWorkConEmpId"
-            placeholder="请选择网咨人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in netWorkConsultingNameListAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
             v-model="query.contentPlatFormId"
             placeholder="请选择主播平台"
             @on-change="contentPlateChange(query.contentPlatFormId)"
@@ -79,7 +53,7 @@
           >
         </div>
         <div class="right">
-          <Button type="primary" @click="controlModal = true">添加</Button>
+          <Button type="primary" @click="controlModal = true;getLiveAnchorMonthlyTarget()">添加</Button>
         </div>
       </div>
     </Card>
@@ -99,6 +73,7 @@
           @on-change="handlePageChange"
         />
       </div>
+      <div class="bottom_title">往期数据已存储，请进行新数据填写，若需要更早期数据可联系研发部</div>
     </Card>
 
     <Modal
@@ -127,7 +102,7 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="月份选择" prop="year">
+            <FormItem label="月份选择" prop="month">
               <Select
                 v-model="form.month"
                 placeholder="请选择生日月份"
@@ -162,10 +137,10 @@
         </Row>
         <Row :gutter="30">
           <Col span="8">
-            <FormItem label="运营人员" prop="operationEmployeeId">
+            <FormItem label="抖音运营人员" prop="tikTokOperationEmployeeId">
               <Select
-                v-model="form.operationEmployeeId"
-                placeholder="请选择运营人员"
+                v-model="form.tikTokOperationEmployeeId"
+                placeholder="请选择抖音运营人员"
                 filterable
               >
                 <Option
@@ -188,49 +163,42 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="今日发布量" prop="todaySendNum">
+            <FormItem label="抖音今日发布量" prop="tikTokSendNum">
               <Input
-                v-model="form.todaySendNum"
-                placeholder="请输入今日发布量"
+                v-model="form.tikTokSendNum"
+                placeholder="请输入抖音今日发布量"
+                type="number"
+                number
+                @on-change="tikTokSendNumChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="抖音今日投流费用" prop="tikTokFlowInvestmentNum">
+              <Input
+                v-model="form.tikTokFlowInvestmentNum"
+                placeholder="请输入抖音今日投流费用"
+                type="number"
+                number
+                @on-change="tikTokFlowInvestmentNumChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="抖音橱窗收入" prop="tikTokShowcaseIncome">
+              <Input
+                v-model="form.tikTokShowcaseIncome"
+                placeholder="请输入抖音橱窗收入"
                 type="number"
                 number
               />
             </FormItem>
           </Col>
+          <Spin fix v-if="isflag==true">
+              <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+              <div>加载中...</div>
+          </Spin>
         </Row>
-        <Row :gutter="30">
-          <Col span="8">
-            <FormItem label="今日视频号投流量" prop="flowInvestmentNum">
-              <Input
-                v-model="form.flowInvestmentNum"
-                placeholder="请输入今日视频号投流量"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="今日线索量" prop="cluesNum">
-              <Input
-                v-model="form.cluesNum"
-                placeholder="请输入今日线索量"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="今日涨粉量" prop="addFansNum">
-              <Input
-                v-model="form.addFansNum"
-                placeholder="请输入今日涨粉量"
-                type="number"
-                number
-              />
-            </FormItem>
-          </Col>
-        </Row>
-       
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -246,14 +214,11 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
+      isflag:false,
       // 查询
       query: {
         contentPlatFormId: null,
         liveAnchorId: null,
-        // 运营人员
-        operationEmpId: "",
-        // 网咨人员
-        netWorkConEmpId: "",
         startDate: this.$moment()
           .subtract(1, "days")
           .format("YYYY-MM-DD"),
@@ -275,62 +240,71 @@ export default {
               );
             },
           },
-         {
+          {
             title: "主播",
             key: "liveAnchor",
             minWidth: 160,
             align: "center",
           },
           {
-            title: "运营人员",
-            key: "operationEmployeeName",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "今日发布量",
-            key: "todaySendNum",
-            minWidth: 110,
-            align: "center",
-          },
-
-          {
-            title: "今日视频号投流量",
-            key: "flowInvestmentNum",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "今日线索量",
-            key: "cluesNum",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "今日涨粉量",
-            key: "addFansNum",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "今日加V量",
-            key: "addWechatNum",
-            minWidth: 110,
-            align: "center",
-          },
-          {
-            title: "创建日期",
-            key: "createDate",
+            title: "抖音运营人员",
+            key: "operationEmpName",
             minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "更新时间",
+            key: "updateDate",
+            minWidth: 180,
             align: "center",
             render: (h, params) => {
               return h(
                 "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
+                params.row.updateDate ? this.$moment(params.row.updateDate).format("YYYY-MM-DD HH:mm:ss") : ''
               );
             },
+          },
+          {
+            title: "抖音今日发布量",
+            key: "sendNum",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "抖音今日投流费用",
+            key: "flowInvestmentNum",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "抖音今日橱窗收入",
+            key: "tikTokShowcaseIncome",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "今日加V人数",
+            key: "addWechatNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日派单人数",
+            key: "sendOrderNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日成交人数",
+            key: "dealNum",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日总业绩",
+            key: "performanceNum",
+            minWidth: 120,
+            align: "center",
           },
           {
             title: "操作",
@@ -355,75 +329,48 @@ export default {
                         const { id } = params.row;
                         this.title = "修改";
                         this.flag = true;
-                        api.byIdLiveAnchorDailyTarget(id).then((res) => {
+                        const data = {
+                          id:id,
+                          type:1
+                        }
+                        api.byIdLiveAnchorDailyTarget(data).then((res) => {
                           if (res.code === 0) {
                             const {
                               id,
                               liveanchorMonthlyTargetId,
-                              operationEmployeeId,
-                              netWorkConsultingEmployeeId,
+                              tikTokOperationEmployeeId,
+                              tikTokSendNum,
+                              tikTokFlowInvestmentNum,
                               todaySendNum,
                               flowInvestmentNum,
-                              addWechatNum,
-                              sendOrderNum,
-                              visitNum,
-                              dealNum,
-                              performanceNum,
                               recordDate,
-                              addFansNum,
-                              cluesNum,
-                              livingRoomFlowInvestmentNum,
-                              consultation,
-                              cargoSettlementCommission,
-                              newVisitNum,
-                              subsequentVisitNum,
-                              oldCustomerVisitNum,
-                              newDealNum,
-                              subsequentDealNum,
-                              newPerformanceNum,
-                              subsequentPerformanceNum,
-                              oldCustomerPerformanceNum,
-                              newCustomerPerformanceCountNum,
-                              oldCustomerDealNum,
-                              miniVanBadReviews,
-                              minivanRefund,
-                              consultationCardConsumed,
-                              activateHistoricalConsultation,
-                              livingTrackingEmployeeId
+
+                              zhihuSendNum,
+                              xiaoHongShuSendNum,
+                              sinaWeiBoSendNum,
+                              videoSendNum,
+
+
+                              zhihuFlowInvestmentNum,
+                              xiaoHongShuFlowInvestmentNum,
+                              sinaWeiBoFlowInvestmentNum,
+                              videoFlowInvestmentNum,
+                              tikTokShowcaseIncome
                             } = res.data.liveAnchorDailyTargetInfo;
+                            this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId;
-                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
-                            this.form.todaySendNum = todaySendNum;
-                            this.form.flowInvestmentNum = flowInvestmentNum;
-                            this.form.addWechatNum = addWechatNum;
-                            this.form.sendOrderNum = sendOrderNum;
-                            this.form.visitNum = visitNum;
-                            this.form.dealNum = dealNum;
-                            this.form.performanceNum = performanceNum;
-                            this.form.addFansNum = addFansNum;
-                            this.form.cluesNum = cluesNum;
-                            this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
-                            this.form.consultation = consultation;
-                            this.form.cargoSettlementCommission = cargoSettlementCommission;
-                            this.form.newVisitNum = newVisitNum;
-                            this.form.subsequentVisitNum = subsequentVisitNum;
-                            this.form.oldCustomerVisitNum = oldCustomerVisitNum;
-                            this.form.newDealNum = newDealNum;
-                            this.form.subsequentDealNum = subsequentDealNum;
-                            this.form.newPerformanceNum = newPerformanceNum;
-                            this.form.subsequentPerformanceNum = subsequentPerformanceNum;
-                            this.form.oldCustomerPerformanceNum = oldCustomerPerformanceNum;
-                            this.form.newCustomerPerformanceCountNum = newCustomerPerformanceCountNum;
-                            this.form.oldCustomerDealNum = oldCustomerDealNum;
-                            this.form.miniVanBadReviews = miniVanBadReviews;
-                            this.form.minivanRefund = minivanRefund;
-                            this.form.consultationCardConsumed = consultationCardConsumed;
-                            this.form.activateHistoricalConsultation = activateHistoricalConsultation;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId
+                            this.form.tikTokOperationEmployeeId = tikTokOperationEmployeeId==0 ?  null : tikTokOperationEmployeeId ;
+                            this.form.tikTokSendNum = tikTokSendNum;
+                            this.form.tikTokFlowInvestmentNum = tikTokFlowInvestmentNum;
+                            this.form.tikTokShowcaseIncome = tikTokShowcaseIncome;
+                            this.form.todaySendNum = Number(zhihuSendNum)+Number(xiaoHongShuSendNum)+Number(sinaWeiBoSendNum)+Number(videoSendNum)
+                            this.form.alltodaySendNum = Math.floor(this.form.todaySendNum * 100) / 100;
+                            this.form.flowInvestmentNum = Number(zhihuFlowInvestmentNum)+Number(xiaoHongShuFlowInvestmentNum)
+                            +Number(sinaWeiBoFlowInvestmentNum)+Number(videoFlowInvestmentNum)
+                            this.form.allflowInvestmentNum = Math.floor(this.form.flowInvestmentNum * 100) / 100;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -546,67 +493,25 @@ export default {
         // 主播月目标关联id
         liveanchorMonthlyTargetId: "",
         // 运营人员Id
-        operationEmployeeId: "",
-        // 网咨人员Id
-        netWorkConsultingEmployeeId: "",
+        tikTokOperationEmployeeId: "",
+        // 抖音今日发布量
+        tikTokSendNum:null,
+        // 抖音今日投流费用
+        tikTokFlowInvestmentNum:null,
         // 今日发布量
         todaySendNum: null,
-        // 今日投流量
+        // 今日运营渠道投流费用
         flowInvestmentNum: null,
-        // 今日加V量
-        addWechatNum: null,
-        // 今日派单量
-        sendOrderNum: "",
-        // 今日上门人数
-        visitNum: "",
-        // 今日成交人数
-        dealNum: "",
-        // 今日业绩
-        performanceNum: "",
         // 填报日期
         recordDate: "",
         //年度
         year: this.$moment(new Date()).format("yyyy"),
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
-        // 今日涨粉量
-        addFansNum: null,
-        // 今日线索量
-        cluesNum: null,
-        // 今日直播间投流量
-        livingRoomFlowInvestmentNum: null,
-        // 今日面诊卡数量
-        consultation: null,
-        // 今日带货结算佣金
-        cargoSettlementCommission: null,
-        // 新诊上门量
-        newVisitNum: null,
-        // 复诊上门
-        subsequentVisitNum: null,
-        // 老客上门
-        oldCustomerVisitNum: null,
-        // 今日新客成交人数
-        newDealNum: null,
-        // 今日复诊成交人数
-        subsequentDealNum: null,
-        // 今日新诊业绩
-        newPerformanceNum: null,
-        // 今日复诊业绩
-        subsequentPerformanceNum: null,
-        // 今日老客业绩
-        oldCustomerPerformanceNum: null,
-        // 老客成交
-        oldCustomerDealNum: null,
-        // 总新客业绩
-        newCustomerPerformanceCountNum: null,
-        // 今日小黄车差评量
-        miniVanBadReviews: null,
-        // 今日小黄车退款量
-        minivanRefund: null,
-        // 今日消耗卡数量
-        consultationCardConsumed: null,
-        // 今日激活历史面诊数量
-        activateHistoricalConsultation: null,
+        allflowInvestmentNum:null,
+        alltodaySendNum:null,
+        // 抖音橱窗收入目标
+        tikTokShowcaseIncome:null
       },
 
       ruleValidate: {
@@ -616,10 +521,28 @@ export default {
             message: "请选择月目标名称",
           },
         ],
-        operationEmployeeId: [
+        tikTokOperationEmployeeId: [
           {
             required: true,
             message: "请选择运营人员",
+          },
+        ],
+        tikTokSendNum: [
+          {
+            required: true,
+            message: "请输入抖音今日发布量",
+          },
+        ],
+        tikTokFlowInvestmentNum: [
+          {
+            required: true,
+            message: "请输入抖音今日投流费用",
+          },
+        ],
+        tikTokShowcaseIncome: [
+          {
+            required: true,
+            message: "请输入抖音橱窗收入",
           },
         ],
         todaySendNum: [
@@ -632,12 +555,6 @@ export default {
           {
             required: true,
             message: "请输入今日投流量",
-          },
-        ],
-        addWechatNum: [
-          {
-            required: true,
-            message: "请输入今日加V量",
           },
         ],
         recordDate: [
@@ -658,28 +575,16 @@ export default {
             message: "请选择月",
           },
         ],
-        cluesNum: [
-          {
-            required: true,
-            message: "请输入今日线索量",
-          },
-        ],
-        addFansNum: [
-          {
-            required: true,
-            message: "请输入今日涨粉量",
-          },
-        ],
-        livingRoomFlowInvestmentNum: [
-          {
-            required: true,
-            message: "请输入今日直播间投流",
-          },
-        ],
       },
     };
   },
   methods: {
+    tikTokSendNumChange(){
+      this.form.todaySendNum = Number(this.form.tikTokSendNum) 
+    },
+    tikTokFlowInvestmentNumChange(){
+      this.form.flowInvestmentNum = Number(this.form.tikTokFlowInvestmentNum)
+    },
     yearChange() {
       this.getLiveAnchorMonthlyTarget();
     },
@@ -743,10 +648,17 @@ export default {
         year: this.$moment(new Date(year)).format("YYYY"),
         month,
       };
-      api.getLiveAnchorMonthlyTarget(data).then((res) => {
+      api.getLiveAnchorMonthlyTargetBeforeLivingName(data).then((res) => {
         if (res.code === 0) {
-          const { liveAnchorMonthlyTarget } = res.data;
-          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTarget;
+          const { liveAnchorMonthlyTargetBeforeLiving } = res.data;
+          if(liveAnchorMonthlyTargetBeforeLiving.length == 0 || !liveAnchorMonthlyTargetBeforeLiving){
+            this.$Message.warning({
+              content: "主播IP月目标暂未生成，无法填写数据，请联系管理员进行月目标数据完善！",
+              duration: 3,
+            });
+            return
+          }
+          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTargetBeforeLiving;
         }
       });
     },
@@ -759,8 +671,6 @@ export default {
         pageNum,
         pageSize,
         day,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -771,15 +681,14 @@ export default {
         // day: this.$moment(new Date(day)).format("YYYY-MM-DD"),
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
+        type:1
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
         return;
       } else {
-        api.getLiveAnchorDailyTarget(data).then((res) => {
+        api.getBeforeListWithPage(data).then((res) => {
           if (res.code === 0) {
             const { list, totalCount } = res.data.liveAnchorDailyTargetInfo;
             this.query.data = list;
@@ -793,8 +702,6 @@ export default {
     handlePageChange(pageNum) {
       const {
         pageSize,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -804,11 +711,10 @@ export default {
         pageSize,
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
+        type:1
       };
-      api.getLiveAnchorDailyTarget(data).then((res) => {
+      api.getBeforeListWithPage(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.liveAnchorDailyTargetInfo;
           this.query.data = list;
@@ -816,7 +722,7 @@ export default {
         }
       });
     },
-    
+
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
@@ -825,91 +731,35 @@ export default {
             const {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              netWorkConsultingEmployeeId,
+              tikTokOperationEmployeeId,
+              tikTokSendNum,
+              tikTokFlowInvestmentNum,
               todaySendNum,
               flowInvestmentNum,
-              addWechatNum,
-              sendOrderNum,
-              visitNum,
-              dealNum,
-              performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
-              livingRoomFlowInvestmentNum,
-              consultation,
-              cargoSettlementCommission,
-              newVisitNum,
-              subsequentVisitNum,
-              oldCustomerVisitNum,
-              newDealNum,
-              subsequentDealNum,
-              newPerformanceNum,
-              subsequentPerformanceNum,
-              oldCustomerPerformanceNum,
-              newCustomerPerformanceCountNum,
-              oldCustomerDealNum,
-              miniVanBadReviews,
-              minivanRefund,
-              consultationCardConsumed,
-              activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              allflowInvestmentNum,
+              alltodaySendNum,
+              tikTokShowcaseIncome
             } = this.form;
-            console.log(this.form)
             const data = {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId:operationEmployeeId ? operationEmployeeId : 0,
-              netWorkConsultingEmployeeId:netWorkConsultingEmployeeId ? netWorkConsultingEmployeeId : 0,
-              todaySendNum:todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum:flowInvestmentNum ? flowInvestmentNum : 0,
-              addWechatNum: addWechatNum ? addWechatNum : 0,
-              sendOrderNum: sendOrderNum ? sendOrderNum : 0,
-              visitNum: visitNum ? visitNum : 0,
-              dealNum: dealNum ? dealNum : 0,
-              performanceNum: performanceNum ? performanceNum : 0,
+              tikTokOperationEmployeeId: tikTokOperationEmployeeId
+                ? tikTokOperationEmployeeId
+                : 0,
+              tikTokSendNum: tikTokSendNum ? tikTokSendNum : 0,
+              tikTokFlowInvestmentNum: tikTokFlowInvestmentNum ? tikTokFlowInvestmentNum : 0,
+              todaySendNum:Number(alltodaySendNum)+Number(tikTokSendNum),
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum:cluesNum ? cluesNum : 0,
-              addFansNum:addFansNum ? addFansNum : 0,
-              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum ? livingRoomFlowInvestmentNum : 0,
-              consultation: consultation ? consultation : 0,
-              cargoSettlementCommission: cargoSettlementCommission
-                ? cargoSettlementCommission
-                : 0,
-              newVisitNum: newVisitNum ? newVisitNum : 0,
-              subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
-              oldCustomerVisitNum: oldCustomerVisitNum
-                ? oldCustomerVisitNum
-                : 0,
-              newDealNum: newDealNum ? newDealNum : 0,
-              subsequentDealNum: subsequentDealNum ? subsequentDealNum : 0,
-              newPerformanceNum: newPerformanceNum ? newPerformanceNum : 0,
-              subsequentPerformanceNum: subsequentPerformanceNum
-                ? subsequentPerformanceNum
-                : 0,
-              oldCustomerPerformanceNum: oldCustomerPerformanceNum
-                ? oldCustomerPerformanceNum
-                : 0,
-              newCustomerPerformanceCountNum: newCustomerPerformanceCountNum
-                ? newCustomerPerformanceCountNum
-                : 0,
-              oldCustomerDealNum: oldCustomerDealNum ? oldCustomerDealNum : 0,
-              miniVanBadReviews: miniVanBadReviews ? miniVanBadReviews : 0,
-              minivanRefund: minivanRefund ? minivanRefund : 0,
-              consultationCardConsumed: consultationCardConsumed
-                ? consultationCardConsumed
-                : 0,
-              activateHistoricalConsultation: activateHistoricalConsultation
-                ? activateHistoricalConsultation
-                : 0,
-              livingTrackingEmployeeId:livingTrackingEmployeeId ? livingTrackingEmployeeId :0
+              flowInvestmentNum:Math.floor((allflowInvestmentNum + tikTokFlowInvestmentNum) * 100) /100,
+              tikTokShowcaseIncome
             };
-            console.log(data)
-            api.editLiveAnchorDailyTarget(data).then((res) => {
+            this.isflag = true;
+            api.BeforeLivingTikTokUpdate(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false;
                 this.isEdit = false;
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
@@ -917,101 +767,52 @@ export default {
                   content: "修改成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           } else {
             const {
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              netWorkConsultingEmployeeId,
+              tikTokOperationEmployeeId,
+              tikTokSendNum,
+              tikTokFlowInvestmentNum,
               todaySendNum,
-              flowInvestmentNum,
-              addWechatNum,
-              sendOrderNum,
-              visitNum,
-              dealNum,
-              performanceNum,
+              flowInvestmentNum	,
               recordDate,
-              cluesNum,
-              addFansNum,
-              livingRoomFlowInvestmentNum,
-              consultation,
-              cargoSettlementCommission,
-              newVisitNum,
-              subsequentVisitNum,
-              oldCustomerVisitNum,
-              newDealNum,
-              subsequentDealNum,
-              newPerformanceNum,
-              subsequentPerformanceNum,
-              oldCustomerPerformanceNum,
-              newCustomerPerformanceCountNum,
-              oldCustomerDealNum,
-              miniVanBadReviews,
-              minivanRefund,
-              consultationCardConsumed,
-              activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              tikTokShowcaseIncome
+             
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
-              netWorkConsultingEmployeeId: netWorkConsultingEmployeeId ? netWorkConsultingEmployeeId : 0,
-              todaySendNum : todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum:flowInvestmentNum ? flowInvestmentNum :0,
-              addWechatNum: addWechatNum ? addWechatNum : 0,
-              sendOrderNum: sendOrderNum ? sendOrderNum : 0,
-              visitNum: visitNum ? visitNum : 0,
-              dealNum: dealNum ? dealNum : 0,
-              performanceNum: performanceNum ? performanceNum : 0,
+              tikTokOperationEmployeeId,
+              tikTokSendNum: tikTokSendNum ? tikTokSendNum : 0,
+              tikTokFlowInvestmentNum	: tikTokFlowInvestmentNum	 ? tikTokFlowInvestmentNum	 : 0,
+              todaySendNum,
+              flowInvestmentNum	,
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum:cluesNum ? cluesNum : 0,
-              addFansNum:addFansNum ? addFansNum :0,
-              livingRoomFlowInvestmentNum: livingRoomFlowInvestmentNum ? livingRoomFlowInvestmentNum : 0,
-              consultation: consultation ? consultation : 0,
-              cargoSettlementCommission: cargoSettlementCommission
-                ? cargoSettlementCommission
-                : 0,
-              newVisitNum: newVisitNum ? newVisitNum : 0,
-              subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
-              oldCustomerVisitNum: oldCustomerVisitNum
-                ? oldCustomerVisitNum
-                : 0,
-              newDealNum: newDealNum ? newDealNum : 0,
-              subsequentDealNum: subsequentDealNum ? subsequentDealNum : 0,
-              newPerformanceNum: newPerformanceNum ? newPerformanceNum : 0,
-              subsequentPerformanceNum: subsequentPerformanceNum
-                ? subsequentPerformanceNum
-                : 0,
-              oldCustomerPerformanceNum: oldCustomerPerformanceNum
-                ? oldCustomerPerformanceNum
-                : 0,
-              newCustomerPerformanceCountNum: newCustomerPerformanceCountNum
-                ? newCustomerPerformanceCountNum
-                : 0,
-              oldCustomerDealNum: oldCustomerDealNum ? oldCustomerDealNum : 0,
-              miniVanBadReviews: miniVanBadReviews ? miniVanBadReviews : 0,
-              minivanRefund: minivanRefund ? minivanRefund : 0,
-              consultationCardConsumed: consultationCardConsumed
-                ? consultationCardConsumed
-                : 0,
-              activateHistoricalConsultation: activateHistoricalConsultation
-                ? activateHistoricalConsultation
-                : 0,
-              livingTrackingEmployeeId:livingTrackingEmployeeId ? livingTrackingEmployeeId :0
+              tikTokShowcaseIncome
             };
+            this.isflag = true;
             // 添加
-            api.AddLiveAnchorDailyTarget(data).then((res) => {
+            api.BeforeTikTokLivingAdd(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false;
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           }
         }
@@ -1040,7 +841,7 @@ export default {
     this.getLiveAnchorDayList();
     this.getCustomerServiceList();
     this.getnetWorkConsultingNameList();
-    this.getLiveAnchorMonthlyTarget();
+    // this.getLiveAnchorMonthlyTarget();
   },
 };
 </script>
@@ -1056,5 +857,15 @@ export default {
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.bottom_title{
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  text-align: end;
+  margin-top: 10px;
+}
+.demo-spin-icon-load {
+  animation: ani-demo-spin 1s linear infinite;
 }
 </style>

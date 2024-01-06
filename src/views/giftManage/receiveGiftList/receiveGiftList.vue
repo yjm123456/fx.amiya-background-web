@@ -33,6 +33,19 @@
             >{{ item.name }}</Option
           >
         </Select>
+        <Select
+            v-model="query.categoryId"
+            style="width: 200px; margin-left: 10px"
+            placeholder="请选择礼品分类"
+            filterable
+          >
+            <Option
+              v-for="item in giftCategoryNameList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
         <Button
           type="primary"
           style="margin-left: 10px"
@@ -43,6 +56,7 @@
           type="primary"
           style="margin-left: 10px"
           @click="handleExportClick"
+          v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
           >导出</Button
         >
       </div>
@@ -159,30 +173,34 @@
 <script>
 import * as api from "@/api/giftManage";
 import * as apis from "@/api/orderManage";
+import * as giftCategoryApi from "@/api/giftCategory";
 import { download } from "@/utils/util";
 export default {
   data() {
     return {
+      // 礼品分类
+      giftCategoryNameList:[],
       orderExpressInfoVo:{},
       logisticsModel:false,
       // 物流信息
       ExpressList:[],
       // 查询
       query: {
+        categoryId:'',
         startDate:this.$moment().startOf('month').format("YYYY-MM-DD"),
         endDate:this.$moment(new Date()).format("YYYY-MM-DD"),
         isSendGoodsList: [
           {
-            name: "已发货",
-            value: "true",
+            name: "全部发货状态",
+            value: "null",
           },
           {
             name: "未发货",
             value: "false",
           },
           {
-            name: "全部",
-            value: "null",
+            name: "已发货",
+            value: "true",
           },
         ],
         keyword: "",
@@ -190,6 +208,12 @@ export default {
         pageNum: 1,
         pageSize: 10,
         columns: [
+          {
+            title: "创建人",
+            key: "createBy",
+            minWidth: 120,
+            align:'center',
+          },
           {
             title: "缩略图",
             key: "thumbPicUrl",
@@ -219,6 +243,18 @@ export default {
             align:'center',
           },
           {
+            title: "礼品分类",
+            key: "categoryName",
+            minWidth:150,
+            align:'center'
+          },
+          {
+            title: "礼品数量",
+            key: "quantity",
+            minWidth:150,
+            align:'center'
+          },
+          {
             title: "领取人电话",
             key: "phone",
             minWidth: 130,
@@ -241,6 +277,7 @@ export default {
             key: "address",
             minWidth: 300,
           },
+
           {
             title: "领取时间",
             key: "date",
@@ -252,6 +289,12 @@ export default {
                 this.$moment(params.row.date).format("YYYY-MM-DD HH:mm:ss")
               );
             },
+          },
+          {
+            title: "发放类型",
+            key: "sendType",
+            minWidth: 120,
+            align:'center',
           },
           {
             title: "绑定订单号",
@@ -438,13 +481,22 @@ export default {
     };
   },
   methods: {
+    // 获取礼品分类（下拉框）
+    getGiftCategoryNameList() {
+      giftCategoryApi.getGiftCategoryNameList().then((res) => {
+        if (res.code === 0) {
+          this.giftCategoryNameList= res.data.nameList;
+        }
+      });
+    },
     handleExportClick(){
-      const {keyword ,startDate ,endDate,isSendGoods} = this.query
+      const {keyword ,startDate ,endDate,isSendGoods,categoryId} = this.query
       const data = {
         keyword,
         startDate:startDate ? this.$moment(new Date(startDate)).format("YYYY-MM-DD") : '',
         endDate:endDate ? this.$moment(new Date(endDate)).format("YYYY-MM-DD") : '',
-        isSendGoods: JSON.parse(isSendGoods)
+        isSendGoods: JSON.parse(isSendGoods),
+        categoryId
       }
       if(!startDate || !endDate){
         this.$Message.error('请选择日期')
@@ -473,14 +525,15 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { keyword, isSendGoods, pageNum, pageSize,startDate,endDate } = this.query;
+      const { keyword, isSendGoods, pageNum, pageSize,startDate,endDate ,categoryId} = this.query;
       const data = {
         keyword,
         isSendGoods: JSON.parse(isSendGoods),
         pageNum,
         pageSize,
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : '',
-        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : ''
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : '',
+        categoryId
       };
       api.getReceiveGiftList(data).then((res) => {
         if (res.code === 0) {
@@ -493,14 +546,15 @@ export default {
 
     // 获取领取礼品列表（分页）
     handlePageChange(pageNum) {
-      const { keyword, isSendGoods, pageSize,startDate,endDate } = this.query;
+      const { keyword, isSendGoods, pageSize,startDate,endDate ,categoryId} = this.query;
       const data = {
         keyword,
         isSendGoods: JSON.parse(isSendGoods),
         pageNum,
         pageSize,
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : '',
-        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : ''
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : '',
+        categoryId
       };
       api.getReceiveGiftList(data).then((res) => {
         if (res.code === 0) {
@@ -590,6 +644,7 @@ export default {
   },
   created() {
     this.getReceiveGiftList();
+    this.getGiftCategoryNameList()
   },
 };
 </script>

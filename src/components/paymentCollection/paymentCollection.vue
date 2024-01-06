@@ -63,6 +63,7 @@ export default {
           returnBackPrice:null,
           type:'',
           returnBackDate: this.$moment(new Date()).format("YYYY-MM-DD"),
+          orderDealId:''
       },
       ruleValidate: {
         returnBackPrice: [
@@ -85,12 +86,13 @@ export default {
     submit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-            const {orderId,returnBackPrice,type,returnBackDate} = this.form
+            const {orderId,returnBackPrice,type,returnBackDate,orderDealId} = this.form
             const data = {
                 orderId,
                 returnBackPrice,
                 type,
-                returnBackDate:this.$moment(new Date(returnBackDate)).format("YYYY-MM-DD")
+                returnBackDate:this.$moment(new Date(returnBackDate)).format("YYYY-MM-DD"),
+                orderDealId
             }
             if(type=='content'){
                 // 内容平台回款
@@ -102,7 +104,7 @@ export default {
                             content: "回款成功",
                             duration: 3,
                         });
-                    }
+                    } 
                 });
             }else if(type=='ascendingOrder'){
               // 客户消费追踪回款
@@ -160,6 +162,7 @@ export default {
         this.form.returnBackPrice = val.returnBackPrice
         this.form.orderId = val.orderId
         this.form.type = val.type
+        this.form.orderDealId = val.orderDealId
       },
       deep: true,
     },

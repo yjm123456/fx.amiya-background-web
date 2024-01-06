@@ -220,6 +220,30 @@ export const BelongEmployeeOrder = (data) => {
         data
     });
 };
+// 根据成交情况编号获取成交情况信息
+export const ContentPlatFormOrderDealInfo = (id) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderDealInfo/byId/${id}`,
+        method: "get",
+    });
+};
+
+// 修改成交情况信息
+export const updateContentPlatFormOrderDealInfo = (data) => {
+    return http({
+        url: "/amiyabg/ContentPlateFormOrder/updateFinishContentPlateFormOrderByEmployee",
+        method: "put",
+        data
+    });
+};
+// 获取内容平台订单到院状态
+export const contentPlateFormOrderToHospitalTypeList = () => {
+    return http({
+        url: "/amiyabg/ContentPlateFormOrder/contentPlateFormOrderToHospitalTypeList",
+        method: "get",
+    });
+};
+
 /**
  * 派单列表
  */
@@ -757,7 +781,23 @@ export const customerunContentPlatFormSendOrderListExport = (params) => {
         responseType: 'blob'
     });
 };
-
+// 拍摄组数据报表
+export const shootingAndClipReport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/shootingAndClipReport`,
+        method: "get",
+        params,
+    });
+};
+// 拍摄组数据报表导出
+export const shootingAndClipReportExport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/shootingAndClipReportExport`,
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};
 // 客服下单平台已派单报表
 export const customerSendOrderReport = (params) => {
     return http({
@@ -795,6 +835,24 @@ export const OrderCenter = (params) => {
 export const customerSendContentPlatFormOrderExport = (params) => {
     return http({
         url: `/amiyabg/OrderReport/customerSendContentPlatFormOrderExport`,
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};
+
+// 客户订单应收款统计 买家已付款订单报表
+export const customerPaidOrderReceivableReport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/customerPaidOrderReceivableReport`,
+        method: "get",
+        params,
+    });
+};
+// 买家已付款订单报表导出
+export const customerPaidOrderReceivableExport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/customerPaidOrderReceivableExport`,
         method: "get",
         params,
         responseType: 'blob'
@@ -863,6 +921,24 @@ export const GetPrivateDomainOrderDetailsInfo = (params) => {
         url: `/amiyabg/OrderReport/GetPrivateDomainOrderDetailsInfo`,
         method: "get",
         params,
+    });
+};
+
+// 成交情况报表
+export const contentPlatFormOrderDealInfoReport = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/contentPlatFormOrderDealInfo`,
+        method: "get",
+        params,
+    });
+};
+// 成交情况报表导出
+export const exportContentPlatFormOrderDealInfo = (params) => {
+    return http({
+        url: `/amiyabg/OrderReport/exportContentPlatFormOrderDealInfo`,
+        method: "get",
+        params,
+        responseType: 'blob'
     });
 };
 /**
@@ -1094,6 +1170,14 @@ export const getHospitalContentPlateFormOrder = (params) => {
             params
         })
     }
+    // 医院内容平台派单列表(跟进中、已到院)
+export const getFollowingListOfHospital = (params) => {
+        return http({
+            url: "/amiyabg/ContentPlateFormSendOrder/followingListOfHospital",
+            method: "get",
+            params
+        })
+    }
     // 医院完成订单
 export const finishContentPlateFormOrder = (data) => {
     return http({
@@ -1241,5 +1325,258 @@ export const orderReturnBackOrder = (data) => {
         url: `/amiyabg/Order/returnBackOrder`,
         method: "put",
         data,
+    });
+};
+// 获取内容平台面诊类型
+export const getOrderConsultationTypeList = () => {
+        return http({
+            url: "/amiyabg/ContentPlateFormOrder/getOrderConsultationTypeList",
+            method: "get",
+        })
+    }
+    // 获取内容平台订单类型
+export const getcontentPlateFormOrderTypeList = () => {
+    return http({
+        url: "/amiyabg/ContentPlateFormOrder/contentPlateFormOrderTypeList",
+        method: "get",
+    });
+};
+// 解密手机号
+export const decryptoPhone = (encryptPhone) => {
+    return http({
+        url: `/amiyabg/Customer/decryptoPhone/${encryptPhone}`,
+        method: "get",
+    });
+};
+// 内容平台留言板
+export const allCustomerListWithPage = (params) => {
+        return http({
+            url: "/amiyabg/OrderRemark/getByOrderListWithPage",
+            method: "get",
+            params
+        })
+    }
+    // 内容平台 管理员端 添加留言
+export const internalAdd = (data) => {
+    return http({
+        url: `/amiyabg/OrderRemark/internalAdd`,
+        method: "post",
+        data
+    });
+};
+// 内容平台 医院端 添加留言
+export const tenantAdd = (data) => {
+    return http({
+        url: `/amiyabg/OrderRemark/tenantAdd`,
+        method: "post",
+        data
+    });
+};
+// 关闭重单可深度
+export const colseRepeatProfundityOrder = (data) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormOrder/colseRepeatProfundityOrder`,
+        method: "post",
+        data
+    });
+};
+// 业绩类型
+export const contentPlateFormOrderDealPerformanceType = () => {
+        return http({
+            url: "/amiyabg/ContentPlatFormOrderDealInfo/contentPlateFormOrderDealPerformanceType",
+            method: "get",
+        })
+    }
+    // 修改物流信息
+export const updateSendGoodsInfo = (data) => {
+    return http({
+        url: `/amiyabg/Order/updateSendGoodsInfo`,
+        method: "post",
+        data
+    });
+};
+// 获取物流信息
+export const getSendGoodsInfo = (tradeId, orderId) => {
+    return http({
+        url: `/amiyabg/Order/getSendGoodsInfo/${tradeId}/${orderId}`,
+        method: "get",
+    });
+};
+// 根据手机号筛选归属客服
+export const getCustomerServiceNameByPhone = (params) => {
+        return http({
+            url: "/amiyabg/BindCustomerService/getCustomerServiceNameByPhone",
+            method: "get",
+            params
+        })
+    }
+    // 获取视频号订单列表
+export const WeChatVideoOrder = (params) => {
+        return http({
+            url: "/amiyabg/WeChatVideoOrder/list",
+            method: "get",
+            params
+        })
+    }
+    // 视频号补单
+export const addWeChatVideoOrder = (data) => {
+    return http({
+        url: `/amiyabg/WeChatVideoOrder`,
+        method: "post",
+        data
+    });
+};
+// 根据订单id获取订单详情
+export const getByIdWeChatVideoOrder = (params) => {
+        return http({
+            url: "/amiyabg/WeChatVideoOrder/getById",
+            method: "get",
+            params
+        })
+    }
+    // 客户池客服手机号列表
+export const getPublicPoolPhone = (params) => {
+        return http({
+            url: "/amiyabg/BindCustomerService/getPublicPoolPhone",
+            method: "get",
+            params
+        })
+    }
+    // 客户池修改绑定客服
+export const updatePublicPoolPhone = (data) => {
+    return http({
+        url: `/amiyabg/BindCustomerService/updatePublicPoolPhone`,
+        method: "put",
+        data
+    });
+};
+
+// 根据录单申请手机号获取录单申请信息
+export const byPhoneContentPlatFormOrderAddWork = (phone) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderAddWork/byPhone/${phone}`,
+        method: "get",
+    });
+};
+// 根据小黄车登记手机号获取小窗车登记信息
+export const byEncryptPhone = (phone) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/byPhone/${phone}`,
+        method: "get",
+    });
+};
+// 根据客户手机号获取客户预约日程信息（单条）
+export const byCustomerAppointmentScheduleEncryptPhone = (params) => {
+    return http({
+        url: `/amiyabg/CustomerAppointmentSchedule/byEncryptPhone`,
+        method: "get",
+        params
+    });
+};
+// 根据客户手机号获取客户预约日程信息（单条）
+export const ContentPlatFormOrderDealInfotypeList = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderDealInfo/typeList`,
+        method: "get",
+        params
+    });
+};
+// 根据时间，成交情况编号，订单号获取内容平台成交详情列表
+export const getContentPlatFormOrderDealDetails = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderDealDetails/list`,
+        method: "get",
+        params
+    });
+};
+// 获取客户在院消费信息列表（分页
+export const getCustomerHospitalDealInfo = (params) => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealInfo/listWithPage`,
+        method: "get",
+        params
+    });
+};
+// 获取医院成交类型
+export const getHospitalDealTypeList = () => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealInfo/getHospitalDealTypeList`,
+        method: "get",
+    });
+};
+// 获取医院消费类型
+export const getHospitalConsumptionTypeList = () => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealInfo/getHospitalConsumptionTypeList`,
+        method: "get",
+    });
+};
+// 获取医院退款类型
+export const getHospitalRefundTypeList = () => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealInfo/getHospitalRefundTypeList`,
+        method: "get",
+    });
+};
+// 获取客户再远消费详情信息列表
+export const getCustomerHospitalDealDetails = (params) => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealDetails/listWithPage`,
+        method: "get",
+        params
+    });
+};
+// 解密手机号
+export const decryptoPhonesNew = (params) => {
+    return http({
+        url: `/amiyabg/Customer/decryptoPhone`,
+        method: "get",
+        params
+    });
+};
+// 根据客户在院消费id集合获取客户在院消费详情信息列表（分页）
+export const CustomerHospitalDealDetailsListByIds = (params) => {
+    return http({
+        url: `/amiyabg/CustomerHospitalDealDetails/listByIdsWithPage`,
+        method: "get",
+        params
+    });
+};
+// 根据加密手机号获取内容平台订单
+export const getContentPlateFormOrderSimpleInfo = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormOrder/getContentPlateFormOrderSimpleInfo`,
+        method: "get",
+        params
+    });
+};
+// 视频号主播ip列表接
+export const wechatVideoOrderLiveAnchorId = () => {
+    return http({
+        url: `/amiyabg/WeChatVideoOrder/wechatVideoOrderLiveAnchorId`,
+        method: "get",
+    });
+};
+// 获客方式列表
+export const shoppingCartGetCustomerTypeList = () => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/shoppingCartGetCustomerTypeList`,
+        method: "get",
+    });
+};
+// 导入
+export const importTikTokLocalOrder = (data) => {
+    return http({
+        url: `/amiyabg/Order/importTikTokLocalOrder`,
+        method: "post",
+        data
+    });
+};
+//根据派单id获取 
+export const sendOrderInfoList = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormSendOrder/sendOrderInfoList`,
+        method: "get",
+        params
     });
 };

@@ -81,7 +81,6 @@ export default {
    },
    methods:{
         handleSubmit(value){
-            console.log(value,this.form)
             const {amyPositionId,moduleId} = this.form
             const data = {
                 amyPositionId,

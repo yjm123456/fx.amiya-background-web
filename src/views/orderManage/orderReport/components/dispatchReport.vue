@@ -35,7 +35,7 @@
         v-model="query.endDate"
       ></DatePicker>
       <Button type="primary" style="margin:0 10px" @click="getsendOrderReport">查询</Button>
-      <Button type="primary" @click="exportsendOrder">导出</Button>
+      <Button type="primary" @click="exportsendOrder"  v-has="{ role: ['fx.amiya.permission.EXPORT'] }">导出</Button>
       <Card class="container">
         <div>
             <Table border :columns="query.columns" :data="query.data" height="700"></Table>
@@ -74,6 +74,10 @@ export default {
             {
               statusText:'等待买家付款',
               status:'WAIT_BUYER_PAY'
+            },
+            {
+              statusText: "买家已付款",
+              status: "TRADE_BUYER_PAID",
             },
             {
               statusText:'等待卖家发货',

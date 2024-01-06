@@ -46,7 +46,8 @@ export default {
       const data = {
         pageNum:1,
         pageSize:5,
-        contentPlatFormOrderId :this.contentPlatFormOrderId
+        contentPlatFormOrderId :this.contentPlatFormOrderId,
+        description:'顾客照片'
       };
       api.ContentPlatFormCustomerPicture(data).then((res) => {
         if (res.code === 0) {

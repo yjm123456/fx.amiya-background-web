@@ -18,32 +18,6 @@
             v-model="query.endDate"
           ></DatePicker>
           <Select
-            v-model="query.operationEmpId"
-            placeholder="请选择运营人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in employeeAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.netWorkConEmpId"
-            placeholder="请选择网咨人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in netWorkConsultingNameListAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
             v-model="query.contentPlatFormId"
             placeholder="请选择主播平台"
             @on-change="contentPlateChange(query.contentPlatFormId)"
@@ -78,9 +52,9 @@
             >查询</Button
           >
         </div>
-        <div class="right">
+        <!-- <div class="right">
           <Button type="primary" @click="controlModal = true">添加</Button>
-        </div>
+        </div> -->
       </div>
     </Card>
 
@@ -203,7 +177,6 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          
         </Row>
         <Row :gutter="30">
           <Col span="8">
@@ -296,19 +269,19 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日面诊卡下单数量"
+              label="今日照片面诊卡下单数量"
               prop="consultation"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日面诊卡下单数量',
+                  message: '请输入今日照片面诊卡下单数量',
                 },
               ]"
-              key="今日面诊卡下单数量"
+              key="今日照片面诊卡下单数量"
             >
               <Input
                 v-model="form.consultation"
-                placeholder="请输入今日面诊卡下单数量"
+                placeholder="请输入今日照片面诊卡下单数量"
                 type="number"
                 number
               />
@@ -316,19 +289,59 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日消耗卡数量"
+              label="今日视频面诊卡下单数量"
+              prop="consultation2"
+              :rules="[
+                {
+                  required: title === '修改' ? true : false,
+                  message: '请输入今日视频面诊卡下单数量',
+                },
+              ]"
+              key="今日视频面诊卡下单数量"
+            >
+              <Input
+                v-model="form.consultation2"
+                placeholder="请输入今日视频面诊卡下单数量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日照片消耗卡数量"
               prop="consultationCardConsumed"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日消耗卡数量',
+                  message: '请输入今日照片消耗卡数量',
                 },
               ]"
-              key="今日消耗卡数量"
+              key="今日照片消耗卡数量"
             >
               <Input
                 v-model="form.consultationCardConsumed"
-                placeholder="请输入今日消耗卡数量"
+                placeholder="请输入今日照片消耗卡数量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日视频消耗卡数量"
+              prop="consultationCardConsumed2"
+              :rules="[
+                {
+                  required: title === '修改' ? true : false,
+                  message: '请输入今日视频消耗卡数量',
+                },
+              ]"
+              key="今日视频消耗卡数量"
+            >
+              <Input
+                v-model="form.consultationCardConsumed2"
+                placeholder="请输入今日视频消耗卡数量"
                 type="number"
                 number
               />
@@ -711,15 +724,11 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
-      employeeList:[],
+      employeeList: [],
       // 查询
       query: {
         contentPlatFormId: null,
         liveAnchorId: null,
-        // 运营人员
-        operationEmpId: "",
-        // 网咨人员
-        netWorkConEmpId: "",
         startDate: this.$moment()
           .subtract(1, "days")
           .format("YYYY-MM-DD"),
@@ -747,13 +756,6 @@ export default {
             minWidth: 160,
             align: "center",
           },
-
-          {
-            title: "运营人员",
-            key: "operationEmployeeName",
-            minWidth: 150,
-            align: "center",
-          },
           {
             title: "直播中人员",
             key: "livingTrackingEmployeeName",
@@ -767,22 +769,117 @@ export default {
             align: "center",
           },
           {
+            title: "知乎运营人员",
+            key: "zhihuOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "知乎今日发布量",
+            key: "zhihuSendNum",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "知乎今日投流费用",
+            key: "zhihuFlowInvestmentNum",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "抖音运营人员",
+            key: "tikTokOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "抖音今日发布量",
+            key: "tikTokSendNum",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "抖音今日投流费",
+            key: "tikTokFlowInvestmentNum",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "抖音今日橱窗收入",
+            key: "tikTokShowcaseIncome",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "小红书运营人员",
+            key: "xiaoHongShuOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "小红书今日发布量",
+            key: "xiaoHongShuSendNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "小红书今日投流费用",
+            key: "xiaoHongShuFlowInvestmentNum",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "视频号运营人员",
+            key: "videoOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "视频号今日发布量",
+            key: "videoSendNum",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "视频号今日投流费用",
+            key: "videoFlowInvestmentNum",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "微博运营人员",
+            key: "sinaWeiBoOperationEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "微博今日发布量",
+            key: "sinaWeiBoSendNum",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "微博今日投流费用",
+            key: "sinaWeiBoFlowInvestmentNum",
+            minWidth: 160,
+            align: "center",
+          },
+          {
             title: "今日发布量",
             key: "todaySendNum",
             minWidth: 110,
             align: "center",
           },
-
           {
-            title: "今日视频号投流量",
+            title: "今日运营渠道投流费用",
             key: "flowInvestmentNum",
-            minWidth: 150,
+            minWidth: 180,
             align: "center",
           },
           {
-            title: "今日直播间投流量",
+            title: "今日直播间投流费用",
             key: "livingRoomFlowInvestmentNum",
-            minWidth: 150,
+            minWidth: 170,
             align: "center",
           },
           {
@@ -804,15 +901,27 @@ export default {
             align: "center",
           },
           {
-            title: "今日面诊卡下单数量",
+            title: "今日照片面诊卡下单数量",
             key: "consultation",
-            minWidth: 170,
+            minWidth: 200,
             align: "center",
           },
           {
-            title: "今日消耗卡数量",
+            title: "今日视频面诊卡下单数量",
+            key: "consultation2",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "今日照片消耗卡数量",
             key: "consultationCardConsumed",
-            minWidth: 150,
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "今日视频消耗卡数量",
+            key: "consultationCardConsumed2",
+            minWidth: 170,
             align: "center",
           },
           {
@@ -924,122 +1033,112 @@ export default {
             align: "center",
           },
           {
-            title: "创建日期",
-            key: "createDate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
-              );
-            },
-          },
-          {
             title: "操作",
             key: "",
-            minWidth: 200,
+            minWidth: 120,
             align: "center",
             fixed: "right",
             render: (h, params) => {
               return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id } = params.row;
-                        this.title = "修改";
-                        this.flag = true;
-                        api.byIdLiveAnchorDailyTarget(id).then((res) => {
-                          if (res.code === 0) {
-                            const {
-                              id,
-                              liveanchorMonthlyTargetId,
-                              operationEmployeeId,
-                              netWorkConsultingEmployeeId,
-                              todaySendNum,
-                              flowInvestmentNum,
-                              addWechatNum,
-                              sendOrderNum,
-                              visitNum,
-                              dealNum,
-                              performanceNum,
-                              recordDate,
-                              addFansNum,
-                              cluesNum,
-                              livingRoomFlowInvestmentNum,
-                              consultation,
-                              cargoSettlementCommission,
-                              newVisitNum,
-                              subsequentVisitNum,
-                              oldCustomerVisitNum,
-                              newDealNum,
-                              subsequentDealNum,
-                              newPerformanceNum,
-                              subsequentPerformanceNum,
-                              oldCustomerPerformanceNum,
-                              newCustomerPerformanceCountNum,
-                              oldCustomerDealNum,
-                              miniVanBadReviews,
-                              minivanRefund,
-                              consultationCardConsumed,
-                              activateHistoricalConsultation,
-                              livingTrackingEmployeeId
-                            } = res.data.liveAnchorDailyTargetInfo;
-                            this.isEdit = true;
-                            this.form.id = id;
-                            this.controlModal = true;
-                            this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId;
-                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
-                            this.form.todaySendNum = todaySendNum;
-                            this.form.flowInvestmentNum = flowInvestmentNum;
-                            this.form.addWechatNum = addWechatNum;
-                            this.form.sendOrderNum = sendOrderNum;
-                            this.form.visitNum = visitNum;
-                            this.form.dealNum = dealNum;
-                            this.form.performanceNum = performanceNum;
-                            this.form.addFansNum = addFansNum;
-                            this.form.cluesNum = cluesNum;
-                            this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
-                            this.form.consultation = consultation;
-                            this.form.cargoSettlementCommission = cargoSettlementCommission;
-                            this.form.newVisitNum = newVisitNum;
-                            this.form.subsequentVisitNum = subsequentVisitNum;
-                            this.form.oldCustomerVisitNum = oldCustomerVisitNum;
-                            this.form.newDealNum = newDealNum;
-                            this.form.subsequentDealNum = subsequentDealNum;
-                            this.form.newPerformanceNum = newPerformanceNum;
-                            this.form.subsequentPerformanceNum = subsequentPerformanceNum;
-                            this.form.oldCustomerPerformanceNum = oldCustomerPerformanceNum;
-                            this.form.newCustomerPerformanceCountNum = newCustomerPerformanceCountNum;
-                            this.form.oldCustomerDealNum = oldCustomerDealNum;
-                            this.form.miniVanBadReviews = miniVanBadReviews;
-                            this.form.minivanRefund = minivanRefund;
-                            this.form.consultationCardConsumed = consultationCardConsumed;
-                            this.form.activateHistoricalConsultation = activateHistoricalConsultation;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         const { id } = params.row;
+                //         this.title = "修改";
+                //         this.flag = true;
+                //         api.byIdLiveAnchorDailyTarget(id).then((res) => {
+                //           if (res.code === 0) {
+                //             const {
+                //               id,
+                //               liveanchorMonthlyTargetId,
+                //               operationEmployeeId,
+                //               netWorkConsultingEmployeeId,
+                //               todaySendNum,
+                //               flowInvestmentNum,
+                //               addWechatNum,
+                //               sendOrderNum,
+                //               visitNum,
+                //               dealNum,
+                //               performanceNum,
+                //               recordDate,
+                //               addFansNum,
+                //               cluesNum,
+                //               livingRoomFlowInvestmentNum,
+                //               consultation,
+                //               consultation2,
+                //               cargoSettlementCommission,
+                //               newVisitNum,
+                //               subsequentVisitNum,
+                //               oldCustomerVisitNum,
+                //               newDealNum,
+                //               subsequentDealNum,
+                //               newPerformanceNum,
+                //               subsequentPerformanceNum,
+                //               oldCustomerPerformanceNum,
+                //               newCustomerPerformanceCountNum,
+                //               oldCustomerDealNum,
+                //               miniVanBadReviews,
+                //               minivanRefund,
+                //               consultationCardConsumed,
+                //               consultationCardConsumed2,
+                //               activateHistoricalConsultation,
+                //               livingTrackingEmployeeId,
+                //             } = res.data.liveAnchorDailyTargetInfo;
+                //             this.isEdit = true;
+                //             this.form.id = id;
+                //             this.controlModal = true;
+                //             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
+                //             this.form.operationEmployeeId = operationEmployeeId;
+                //             this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
+                //             this.form.todaySendNum = todaySendNum;
+                //             this.form.flowInvestmentNum = flowInvestmentNum;
+                //             this.form.addWechatNum = addWechatNum;
+                //             this.form.sendOrderNum = sendOrderNum;
+                //             this.form.visitNum = visitNum;
+                //             this.form.dealNum = dealNum;
+                //             this.form.performanceNum = performanceNum;
+                //             this.form.addFansNum = addFansNum;
+                //             this.form.cluesNum = cluesNum;
+                //             this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
+                //             this.form.consultation = consultation;
+                //             this.form.consultation2 = consultation2;
+                //             this.form.cargoSettlementCommission = cargoSettlementCommission;
+                //             this.form.newVisitNum = newVisitNum;
+                //             this.form.subsequentVisitNum = subsequentVisitNum;
+                //             this.form.oldCustomerVisitNum = oldCustomerVisitNum;
+                //             this.form.newDealNum = newDealNum;
+                //             this.form.subsequentDealNum = subsequentDealNum;
+                //             this.form.newPerformanceNum = newPerformanceNum;
+                //             this.form.subsequentPerformanceNum = subsequentPerformanceNum;
+                //             this.form.oldCustomerPerformanceNum = oldCustomerPerformanceNum;
+                //             this.form.newCustomerPerformanceCountNum = newCustomerPerformanceCountNum;
+                //             this.form.oldCustomerDealNum = oldCustomerDealNum;
+                //             this.form.miniVanBadReviews = miniVanBadReviews;
+                //             this.form.minivanRefund = minivanRefund;
+                //             this.form.consultationCardConsumed = consultationCardConsumed;
+                //             this.form.consultationCardConsumed2 = consultationCardConsumed2;
+                //             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
+                //             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId;
 
-                            this.form.recordDate = this.$moment(
-                              new Date(recordDate)
-                            ).format("YYYY-MM-DD");
-                          }
-                        });
-                      },
-                    },
-                  },
-                  "修改"
-                ),
+                //             this.form.recordDate = this.$moment(
+                //               new Date(recordDate)
+                //             ).format("YYYY-MM-DD");
+                //           }
+                //         });
+                //       },
+                //     },
+                //   },
+                //   "修改"
+                // ),
                 h(
                   "Button",
                   {
@@ -1181,8 +1280,10 @@ export default {
         cluesNum: null,
         // 今日直播间投流量
         livingRoomFlowInvestmentNum: null,
-        // 今日面诊卡数量
+        // 今日照片面诊卡数量
         consultation: null,
+        // 今日视频面诊卡数量
+        consultation2: null,
         // 今日带货结算佣金
         cargoSettlementCommission: null,
         // 新诊上门量
@@ -1209,12 +1310,14 @@ export default {
         miniVanBadReviews: null,
         // 今日小黄车退款量
         minivanRefund: null,
-        // 今日消耗卡数量
+        // 今日照片消耗卡数量
         consultationCardConsumed: null,
+        // 今日视频消耗卡数量
+        consultationCardConsumed2: null,
         // 今日激活历史面诊数量
         activateHistoricalConsultation: null,
         // 直播中
-        livingTrackingEmployeeId:null
+        livingTrackingEmployeeId: null,
       },
 
       ruleValidate: {
@@ -1222,7 +1325,7 @@ export default {
           {
             required: true,
             message: "请选择直播中人员",
-          }
+          },
         ],
         liveanchorMonthlyTargetId: [
           {
@@ -1294,7 +1397,6 @@ export default {
     };
   },
   methods: {
-
     // 老客成交
     oldCustomerNumChange() {
       this.form.dealNum =
@@ -1369,10 +1471,10 @@ export default {
       this.getLiveAnchorMonthlyTarget();
     },
     // 根据职位获取直播中人员
-    employeeManage(){
+    employeeManage() {
       const data = {
-        positionId:9
-      }
+        positionId: 9,
+      };
       employeeManageApi.getEmployeeByPositionId(data).then((res) => {
         if (res.code === 0) {
           const { employee } = res.data;
@@ -1453,8 +1555,6 @@ export default {
         pageNum,
         pageSize,
         day,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -1465,8 +1565,6 @@ export default {
         // day: this.$moment(new Date(day)).format("YYYY-MM-DD"),
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
       if (!startDate || !endDate) {
@@ -1487,8 +1585,6 @@ export default {
     handlePageChange(pageNum) {
       const {
         pageSize,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -1498,8 +1594,6 @@ export default {
         pageSize,
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
       api.getLiveAnchorDailyTarget(data).then((res) => {
@@ -1533,6 +1627,7 @@ export default {
               addFansNum,
               livingRoomFlowInvestmentNum,
               consultation,
+              consultation2,
               cargoSettlementCommission,
               newVisitNum,
               subsequentVisitNum,
@@ -1547,8 +1642,9 @@ export default {
               miniVanBadReviews,
               minivanRefund,
               consultationCardConsumed,
+              consultationCardConsumed2,
               activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              livingTrackingEmployeeId,
             } = this.form;
             const data = {
               id,
@@ -1569,6 +1665,7 @@ export default {
               addFansNum,
               livingRoomFlowInvestmentNum,
               consultation: consultation ? consultation : 0,
+              consultation2: consultation2 ? consultation2 : 0,
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
                 : 0,
@@ -1595,10 +1692,13 @@ export default {
               consultationCardConsumed: consultationCardConsumed
                 ? consultationCardConsumed
                 : 0,
+              consultationCardConsumed2: consultationCardConsumed2
+                ? consultationCardConsumed2
+                : 0,
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
-                livingTrackingEmployeeId
+              livingTrackingEmployeeId,
             };
             if (!netWorkConsultingEmployeeId) {
               this.$Message.error("请选择网咨人员");
@@ -1633,6 +1733,7 @@ export default {
               addFansNum,
               livingRoomFlowInvestmentNum,
               consultation,
+              consultation2,
               cargoSettlementCommission,
               newVisitNum,
               subsequentVisitNum,
@@ -1647,8 +1748,9 @@ export default {
               miniVanBadReviews,
               minivanRefund,
               consultationCardConsumed,
+              consultationCardConsumed2,
               activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              livingTrackingEmployeeId,
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -1670,6 +1772,7 @@ export default {
               addFansNum,
               livingRoomFlowInvestmentNum,
               consultation: consultation ? consultation : 0,
+              consultation2: consultation2 ? consultation2 : 0,
               cargoSettlementCommission: cargoSettlementCommission
                 ? cargoSettlementCommission
                 : 0,
@@ -1696,10 +1799,13 @@ export default {
               consultationCardConsumed: consultationCardConsumed
                 ? consultationCardConsumed
                 : 0,
+              consultationCardConsumed2: consultationCardConsumed2
+                ? consultationCardConsumed2
+                : 0,
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
-              livingTrackingEmployeeId
+              livingTrackingEmployeeId,
             };
             // 添加
             api.AddLiveAnchorDailyTarget(data).then((res) => {
@@ -1740,7 +1846,7 @@ export default {
     this.getCustomerServiceList();
     this.getnetWorkConsultingNameList();
     this.getLiveAnchorMonthlyTarget();
-    this.employeeManage()
+    this.employeeManage();
   },
 };
 </script>

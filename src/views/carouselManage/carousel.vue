@@ -48,11 +48,24 @@
         label-position="left"
         :label-width="110"
       >
+        <FormItem label="归属小程序" prop="appId">
+          <Select v-model="form.appId" placeholder="请选择归属小程序">
+            <Option
+              v-for="item in miniprogramName"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
+        <FormItem label="跳转地址" prop="linkUrl" >
+          <Input v-model="form.linkUrl" placeholder="请输入跳转地址"></Input>
+        </FormItem>
         <FormItem label="缩略图" prop="picUrl">
           <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
         </FormItem>
         <FormItem label="显示位置" prop="displayIndex" v-if="isEdit === true">
-          <Input v-model="form.displayIndex" placeholder="请输入职称"></Input>
+          <Input v-model="form.displayIndex" placeholder="请输入显示位置"></Input>
         </FormItem>
       </Form>
       <div slot="footer">
@@ -64,6 +77,7 @@
 </template>
 <script>
 import * as api from "@/api/carouselManage";
+import * as goodApi from "@/api/goodsManage";
 import upload from "@/components/upload/upload";
 export default {
   components: {
@@ -83,6 +97,16 @@ export default {
       // 查询
       query: {
         columns: [
+          {
+            title: "小程序",
+            key: "appName",
+            align: "center",
+          },
+          {
+            title: "跳转地址",
+            key: "linkUrl",
+            align: "center",
+          },
           {
             title: "轮播图",
             key: "picUrl",
@@ -110,6 +134,7 @@ export default {
           {
             title: "创建日期",
             key: "createDate",
+            align: "center",
             render: (h, params) => {
               params.row.createDate = params.row.createDate
                 ? params.row.createDate.substr(0, 10)
@@ -212,9 +237,19 @@ export default {
         picUrl: "",
         id: "",
         displayIndex: "",
+        // 小程序
+        appId:'',
+        // 跳转地址
+        linkUrl:''
       },
 
       ruleValidate: {
+        linkUrl: [
+          {
+            required: true,
+            message: "请输入跳转地址",
+          },
+        ],
         picUrl: [
           {
             required: true,
@@ -228,9 +263,20 @@ export default {
           },
         ],
       },
+      // 小程序名字列表
+      miniprogramName:[]
     };
   },
   methods: {
+    // 获取小程序名称列表
+    getminiprogramNameList() {
+      goodApi.miniprogramNameList().then((res) => {
+        if (res.code === 0) {
+          const { nameList } = res.data;
+          this.miniprogramName = nameList;
+        }
+      });
+    },
     // 获取轮播图列表
     getCarouselImage() {
       api.CarouselImage().then((res) => {
@@ -302,6 +348,7 @@ export default {
   },
   created() {
     this.getCarouselImage();
+    this.getminiprogramNameList()
   },
 };
 </script>

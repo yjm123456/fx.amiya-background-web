@@ -12,6 +12,7 @@
           v-model="query.appType"
           style="width: 200px;margin-left: 10px"
           placeholder="请选择下单平台"
+          filterable
         >
           <Option
             v-for="item in query.orderAppTypes"
@@ -25,6 +26,7 @@
           style="width: 200px;margin-left: 10px"
           v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }"
           placeholder="请选择客服"
+          filterable
         >
           <Option
             v-for="item in employee"
@@ -79,8 +81,13 @@
             <Option v-for="item in hospital" :value="item.id" :key="item.id">{{item.name}}</Option>
           </Select>
         </FormItem>
-        <FormItem label="所有医院" prop="hospitalId" v-if="openAllHospital === true" key="所有医院">
-          <Select v-model="form.hospitalId" placeholder="请选择医院" filterable>
+        <FormItem label="主派单医院" prop="hospitalId" v-if="openAllHospital === true" key="主派单医院">
+          <Select v-model="form.hospitalId" placeholder="请选择主派单医院" filterable>
+            <Option v-for="item in hospitalInfo" :value="item.id" :key="item.id">{{item.name}}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="次派单医院" prop="otherHospitalId"  key="次派单医院">
+          <Select v-model="form.otherHospitalId" placeholder="请选择次派单医院" filterable multiple>
             <Option v-for="item in hospitalInfo" :value="item.id" :key="item.id">{{item.name}}</Option>
           </Select>
         </FormItem>
@@ -352,6 +359,8 @@ export default {
       form: {
         orderId: "",
         hospitalId: "",
+        // 次派单医院
+        otherHospitalId:[],
         appointmentDate: "",
         timeType: "",
         // 留言
@@ -538,7 +547,7 @@ export default {
     submit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const {orderId, hospitalId, appointmentDate, timeType, content, isUncertainDate ,purchaseNum ,purchaseSinglePrice} = this.form;
+          const {orderId, hospitalId, appointmentDate, timeType, content, isUncertainDate ,purchaseNum ,purchaseSinglePrice,otherHospitalId} = this.form;
           const data = {
             orderId,
             hospitalId,
@@ -547,25 +556,57 @@ export default {
             content,
             isUncertainDate,
             purchaseNum :Number(purchaseNum),
-            purchaseSinglePrice : Number(purchaseSinglePrice)
+            purchaseSinglePrice : Number(purchaseSinglePrice),
+            otherHospitalId:otherHospitalId ? otherHospitalId : []
           }
-          this.flag = true
-          api.sendOrder(data).then((res) => {
-            if (res.code === 0) {
-              this.flag = false
-              this.cancel("form");
-              this.getUnSendOrderList();
-              this.$Message.success({
-                content: "派单成功",
-                duration: 3,
+            if(otherHospitalId == [] || otherHospitalId.length == 0){
+              this.flag = true
+              api.sendOrder(data).then((res) => {
+                if (res.code === 0) {
+                  this.flag = false
+                  this.cancel("form");
+                  this.getUnSendOrderList();
+                  this.$Message.success({
+                    content: "派单成功",
+                    duration: 3,
+                  });
+                } else {
+                  setTimeout(() => {
+                    this.flag = false;
+                  }, 3000);
+                }
               });
-            } else {
-              setTimeout(() => {
-                this.flag = false;
-              }, 3000);
+              return
+            }else{
+                for(var i = 0;i<otherHospitalId.length;i++){
+                  console.log(otherHospitalId[i])
+                  if(otherHospitalId[i] == hospitalId){
+                    let hostpital = this.hospitalInfo.find(item=>item.id == hospitalId).name
+                    this.$Message.warning( hostpital+ '已存在于主派医院中，请勿重复选择')
+                   break
+                  }else{
+                    this.flag = true
+                    api.sendOrder(data).then((res) => {
+                      if (res.code === 0) {
+                        this.flag = false
+                        this.cancel("form");
+                        this.getUnSendOrderList();
+                        this.$Message.success({
+                          content: "派单成功",
+                          duration: 3,
+                        });
+                      } else {
+                        setTimeout(() => {
+                          this.flag = false;
+                        }, 3000);
+                      }
+                    });
+                    return
+                  }
+                }
             }
-          });
-        }
+          }
+          
       });
     },
 

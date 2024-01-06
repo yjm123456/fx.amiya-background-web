@@ -2,7 +2,7 @@
   <div>
     <Modal
       v-model="control"
-      title="发货"
+      :title="sendGoodstitle"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
     >
@@ -48,10 +48,14 @@ export default {
   props: {
     controlModal: Boolean,
     tradeId: String,
-    ExpressList:Array
+    ExpressList:Array,
+    sendGoodstitle:String,
+    sendInfo:Object,
+    orderId:String
   },
   data() {
     return {
+      title:'',
       control: false,
       sendGoods: {
         courierNumber: null,
@@ -84,18 +88,33 @@ export default {
           const data = {
             courierNumber,
             tradeId: this.tradeId,
-            expressId:id
+            expressId:id,
+            orderId:this.orderId
           };
-          api.sendGoods(data).then((res) => {
-            if (res.code === 0) {
-              this.handleCancel("form");
-              this.$emit("handleRefreshOrderList");
-              this.$Message.success({
-                content: "提交成功",
-                duration: 3,
-              });
-            }
-          });
+          if(this.sendGoodstitle == '发货'){
+            api.sendGoods(data).then((res) => {
+              if (res.code === 0) {
+                this.handleCancel("form");
+                this.$emit("handleRefreshOrderList");
+                this.$Message.success({
+                  content: "提交成功",
+                  duration: 3,
+                });
+              }
+            });
+          }else{
+            api.updateSendGoodsInfo(data).then((res) => {
+              if (res.code === 0) {
+                this.handleCancel("form");
+                this.$emit("handleRefreshOrderList");
+                this.$Message.success({
+                  content: "修改成功",
+                  duration: 3,
+                });
+              }
+            });
+          }
+          
         }
       });
     },
@@ -115,7 +134,14 @@ export default {
   watch: {
     controlModal(value) {
       this.control = value;
+     
     },
+    sendInfo(value){
+      const {expressId,courierNumber} = value
+      this.sendGoods.id = expressId
+      this.sendGoods.courierNumber = courierNumber
+    }
+   
   },
 };
 </script>

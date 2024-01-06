@@ -1,0 +1,398 @@
+<template>
+  <div>
+    <Card :dis-hover="true">
+      <div class="header_wrap">
+        <div class="left">
+          <Input
+            v-model="query.keyWord"
+            placeholder="请输入关键字"
+            style="width: 200px;"
+            @keyup.enter.native="getContractListClick()"
+          />
+          <DatePicker
+            type="date"
+            placeholder="开始日期"
+            style="width: 150px;margin-left: .625rem"
+            :value="query.startDate"
+            v-model="query.startDate"
+          ></DatePicker>
+          <DatePicker
+            type="date"
+            placeholder="结束日期"
+            style="width: 150px; margin-left: .625rem"
+            :value="query.endDate"
+            v-model="query.endDate"
+          ></DatePicker>
+
+          <Select
+            v-model="query.belongEmpId"
+            placeholder="请选择助理"
+            filterable
+            style="width: 180px;margin-left:10px"
+            :disabled="isDirector == 'false' && isCustomerService == 'true'"
+          >
+            <Option
+              v-for="item in employeeAll"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <!-- <Select
+            v-model="query.valid"
+            placeholder="请选择是否有效"
+            filterable
+            style="width: 150px;margin-left:10px"
+          >
+            <Option
+              v-for="item in validList"
+              :value="item.type"
+              :key="item.type"
+              >{{ item.name }}</Option
+            >
+          </Select> -->
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="getContractListClick()"
+            >查询</Button
+          >
+        </div>
+      </div>
+    </Card>
+
+    <Card class="container">
+      <div>
+        <Table border :columns="query.columns" :data="query.data"></Table>
+      </div>
+      <div class="page_wrap">
+        <Page
+          ref="pages"
+          :current="query.pageNum"
+          :page-size="query.pageSize"
+          :total="query.totalCount"
+          show-total
+          show-elevator
+          @on-change="handlePageChange"
+        />
+      </div>
+    </Card>
+    <!-- 编辑 -->
+    <generateSalary :controlModal.sync="controlModal" :params="params" @getContractListClick="getContractListClick"/>
+    <!-- 详情 -->
+    <detail :detailModal.sync="detailModal" :id="id" ref="detail"/>
+
+  </div>
+</template>
+<script>
+import * as api from "@/api/customerServiceCompensation";
+import * as orderApi from "@/api/orderManage";
+import generateSalary from "./components/generateSalary.vue"
+import detail from "./components/detail.vue"
+export default {
+  components:{
+    generateSalary,
+    detail
+  },
+  data() {
+    return {
+      // 是否为客服
+      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      // 是否为管理员
+      isDirector:sessionStorage.getItem('isDirector'),
+      // 查询
+      query: {
+        // 归属客服
+        belongEmpId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
+        // 是否有效
+        valid: "true",
+        // 开始时间
+        startDate: this.$moment()
+          .startOf("month")
+          .format("YYYY-MM-DD"),
+        //   结束时间
+        endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
+        // 关键字
+        keyWord: "",
+        pageNum: 1,
+        pageSize: 10,
+        columns: [
+          {
+            title: "创建人",
+            key: "createByEmpName",
+            align:'center',
+          },
+          {
+            title: "名称",
+            key: "name",
+          },
+          {
+            title: "助理",
+            key: "belongEmpName",
+            align:'center',
+          },
+          {
+            title: "总金额",
+            key: "totalPrice",
+            align:'center',
+          },
+          {
+            title: "其他费用",
+            key: "otherPrice",
+            align:'center',
+          },
+          {
+            title: "费用备注",
+            key: "remark",
+          },
+          {
+            title: "是否有效",
+            key: "valid",
+            align:'center',
+            render: (h, params) => {
+              if (params.row.valid == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "操作",
+            key: "",
+            width: 180,
+            align:'center',
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      // disabled:params.row.valid == false
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.id=id
+                        this.detailModal = true
+                        this.$nextTick(()=>{
+                          this.$refs.detail.getDetail()
+                        })
+                      },
+                    },
+                  },
+                  "详情"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled:this.isDirector == 'false' && this.isCustomerService == 'true'
+
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.title = "修改";
+                        api.byIdCustomerServiceCompensation(id).then((res) => {
+                          if (res.code === 0) {
+                            this.controlModal = true;
+                            this.params.detailObj = res.data.customerServiceCompensation
+                          }
+                        });
+                      },
+                    },
+                  },
+                  "修改"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "error",
+                      size: "small",
+                      disabled:params.row.valid == false || this.isDirector == 'false' && this.isCustomerService == 'true'
+                    },
+                    on: {
+                      click: () => {
+                        this.$Modal.confirm({
+                          title: "删除提示",
+                          content: "是否确认删除？",
+                          onOk: () => {
+                            const { id } = params.row;
+                            api.deleteCustomerServiceCompensation(id).then((res) => {
+                              if (res.code === 0) {
+                                this.getContractListClick();
+                                this.$Message.success({
+                                  content: "删除成功",
+                                  duration: 3,
+                                });
+                              }
+                            });
+                          },
+                          onCancel: () => {},
+                        });
+                      },
+                    },
+                  },
+                  "删除"
+                ),
+              ]);
+            },
+          },
+        ],
+        data: [],
+        totalCount: 0,
+      },
+
+      // 控制 modal
+      controlModal: false,
+      validList: [
+        {
+          type: "true",
+          name: "有效",
+        },
+        {
+          type: "false",
+          name: "无效",
+        },
+      ],
+      //   全部归属客服
+      employeeAll: [{ id: -1, name: "全部助理" }],
+      // 传给子组件的参数
+      params:{
+        // 归属客服
+        employeeList:[],
+        // 根据id获取详情
+        detailObj:{}
+      },
+      // 详情
+      detailModal:false,
+      id:''
+    };
+  },
+  methods: {
+    // 获取客服列表
+    getCustomerServiceList() {
+      orderApi.getCustomerServiceList().then((res) => {
+        if (res.code === 0) {
+          const { employee } = res.data;
+          this.employeeAll = [...this.employeeAll, ...employee];
+          this.params.employeeList = employee
+        }
+      });
+    },
+    // 获取助理薪资单列表
+    getContractListClick() {
+      this.$nextTick(() => {
+        this.$refs["pages"].currentPage = 1;
+      });
+      const {
+        pageNum,
+        pageSize,
+        keyWord,
+        belongEmpId,
+        valid,
+        startDate,
+        endDate,
+      } = this.query;
+      const data = {
+        pageNum,
+        pageSize,
+        keyWord,
+        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        valid,
+        startDate: startDate
+          ? this.$moment(new Date(startDate)).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate
+          ? this.$moment(new Date(endDate)).format("YYYY-MM-DD")
+          : null,
+      };
+      api.getCustomerServiceCompensation(data).then((res) => {
+        if (res.code === 0) {
+          const { list, totalCount } = res.data.customerServiceCompensation;
+          this.query.data = list;
+          this.query.totalCount = totalCount;
+        }
+      });
+    },
+
+    // 获取助理薪资单列表分页
+    handlePageChange(pageNum) {
+      const {
+        pageSize,
+        keyWord,
+        belongEmpId,
+        valid,
+        startDate,
+        endDate,
+      } = this.query;
+      const data = {
+        pageNum,
+        pageSize,
+        keyWord,
+        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        valid,
+        startDate: startDate
+          ? this.$moment(new Date(startDate)).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate
+          ? this.$moment(new Date(endDate)).format("YYYY-MM-DD")
+          : null,
+      };
+      api.getCustomerServiceCompensation(data).then((res) => {
+        if (res.code === 0) {
+          const { list, totalCount } = res.data.customerServiceCompensation;
+          this.query.data = list;
+          this.query.totalCount = totalCount;
+        }
+      });
+    },
+  },
+  created() {
+    this.getContractListClick();
+    this.getCustomerServiceList();
+  },
+};
+</script>
+<style lang="less" scoped>
+.header_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.container {
+  margin-top: 16px;
+}
+.page_wrap {
+  margin-top: 16px;
+  text-align: right;
+}
+</style>

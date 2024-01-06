@@ -15,7 +15,6 @@
       <div>
         <Table border :columns="query.columns" :data="query.data"></Table>
       </div>
-      
     </Card>
 
     <Modal
@@ -31,6 +30,16 @@
         label-position="left"
         :label-width="120"
       >
+        <FormItem label="归属小程序" prop="appId">
+          <Select v-model="form.appId" placeholder="请选择归属小程序">
+            <Option
+              v-for="item in params.miniprogramName"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
         <FormItem label="分类名称" prop="name">
           <Input v-model="form.name" placeholder="请输入分类名称"></Input>
         </FormItem>
@@ -50,6 +59,15 @@
         <FormItem label="简码" prop="simpleCode">
           <Input v-model="form.simpleCode" placeholder="请输入简码"></Input>
         </FormItem>
+        <FormItem label="类别图片" prop="categoryImg" key="categoryImg">
+          <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
+        </FormItem>
+        <FormItem label="是否是热卖分类" prop="isHot">
+          <i-switch v-model="form.isHot" />
+        </FormItem>
+        <FormItem label="是否是品牌分类" prop="isBrand">
+          <i-switch v-model="form.isBrand" />
+        </FormItem>
         <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
           <i-switch v-model="form.valid" />
         </FormItem>
@@ -63,47 +81,109 @@
 </template>
 <script>
 import * as api from "@/api/goodsManage";
+import upload from "@/components/upload/upload";
 export default {
-  props: ["activeName"],
+  components: {
+    upload,
+  },
+  props: {
+    activeName: String,
+    params: Object,
+  },
   data() {
     return {
+      uploadObj: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
       // 商品展示方向
-      exchangeTypes:[{
-        showDirectionType: 0,
-        showDirectionTypeText: "积分兑换"
-      }],
+      exchangeTypes: [
+        {
+          showDirectionType: 0,
+          showDirectionTypeText: "积分兑换",
+        },
+      ],
       query: {
         keyword: "",
         categoryId: "",
         valid: null,
         pageNum: 1,
         pageSize: 10,
-        showDirection:0,
+        showDirection: 0,
         columns: [
-            
           {
             title: "分类名称",
             key: "name",
-            tooltip:true,
+            tooltip: true,
             minWidth: 150,
-            fixed:"left",
+            fixed: "left",
+            align: "center",
+          },
+          {
+            title: "类别图片",
+            key: "categoryImg",
+            align: "center",
+            minWidth: 100,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "viewer",
+                {
+                  props: {
+                    options: {
+                      toolbar: false,
+                      title: false,
+                      navbar: false,
+                    },
+                  },
+                },
+                [
+                  params.row.categoryImg
+                    ? h("img", {
+                        style: {
+                          width: "50px",
+                          height: "50px",
+                          margin: "5px 0",
+                          verticalAlign: "middle",
+                        },
+                        attrs: {
+                          src: params.row.categoryImg,
+                        },
+                      })
+                    : "",
+                ]
+              );
+            },
           },
           {
             title: "简码",
             key: "simpleCode",
-            tooltip:true,
+            tooltip: true,
             minWidth: 150,
-            
+            align: "center",
           },
           {
             title: "展示方向",
             key: "showDirectionTypeName",
             minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "归属小程序",
+            key: "miniprogramName",
+            tooltip: true,
+            minWidth: 150,
+            align: "center",
           },
           {
             title: "是否有效",
             key: "valid",
             width: 100,
+            align: "center",
             minWidth: 150,
             render: (h, params) => {
               if (params.row.valid == true) {
@@ -130,9 +210,68 @@ export default {
             },
           },
           {
+            title: "是否是热卖分类",
+            key: "isHot",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isHot == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "是否是品牌分类",
+            key: "isBrand",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isBrand == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
             title: "创建时间",
             key: "createDate",
-            minWidth: 250,
+            minWidth: 180,
+            align: "center",
             render: (h, params) => {
               return h(
                 "div",
@@ -145,19 +284,22 @@ export default {
           {
             title: "创建人",
             key: "createName",
-            width: 120,
             minWidth: 150,
+            align: "center",
           },
           {
             title: "修改时间",
             key: "updateDate",
-            minWidth: 250,
+            minWidth: 180,
+            align: "center",
             render: (h, params) => {
               return h(
                 "div",
-                params.row.updateDate ? this.$moment(params.row.updateDate).format(
-                  "YYYY-MM-DD HH:mm:ss" 
-                ) : ''
+                params.row.updateDate
+                  ? this.$moment(params.row.updateDate).format(
+                      "YYYY-MM-DD HH:mm:ss"
+                    )
+                  : ""
               );
             },
           },
@@ -165,28 +307,30 @@ export default {
             title: "修改人",
             key: "updateName",
             minWidth: 150,
+            align: "center",
           },
           {
             title: "移动方向",
             align: "center",
             width: 260,
+
             render: (h, params) => {
               return h("div", [
                 h(
                   "i",
                   {
-                    class:"iconfont icon-zhiding fs",
+                    class: "iconfont icon-zhiding fs",
                     style: {
                       marginRight: "15px",
-                      cursor:"pointer",
-                      fontSize:"14px!important",
-                      color: "#515a6e"
+                      cursor: "pointer",
+                      fontSize: "14px!important",
+                      color: "#515a6e",
                     },
                     on: {
                       click: () => {
                         const { id } = params.row;
-                        let moveState = true
-                        this.topToBottomClass(id,moveState)
+                        let moveState = true;
+                        this.topToBottomClass(id, moveState);
                       },
                     },
                   },
@@ -195,19 +339,18 @@ export default {
                 h(
                   "i",
                   {
-                    class:"iconfont icon-xiangxiazhidi",
+                    class: "iconfont icon-xiangxiazhidi",
                     style: {
                       marginRight: "15px",
-                      cursor:"pointer",
-                      fontSize:"14px!important",
-                      color: "#515a6e"
-                      
+                      cursor: "pointer",
+                      fontSize: "14px!important",
+                      color: "#515a6e",
                     },
                     on: {
                       click: () => {
                         const { id } = params.row;
-                        let moveState = false
-                        this.topToBottomClass(id,moveState)
+                        let moveState = false;
+                        this.topToBottomClass(id, moveState);
                       },
                     },
                   },
@@ -216,18 +359,18 @@ export default {
                 h(
                   "i",
                   {
-                    class:"iconfont icon-xiangshang",
+                    class: "iconfont icon-xiangshang",
                     style: {
                       marginRight: "10px",
-                      cursor:"pointer",
-                      fontSize:"14px!important",
-                      color: "#515a6e"
+                      cursor: "pointer",
+                      fontSize: "14px!important",
+                      color: "#515a6e",
                     },
                     on: {
                       click: () => {
                         const { id } = params.row;
-                        let moveState = true
-                        this.moveUpAndDown(id,moveState)
+                        let moveState = true;
+                        this.moveUpAndDown(id, moveState);
                       },
                     },
                   },
@@ -236,18 +379,18 @@ export default {
                 h(
                   "i",
                   {
-                    class:"iconfont icon-xiangxia",
+                    class: "iconfont icon-xiangxia",
                     style: {
                       marginRight: "10px",
-                      cursor:"pointer",
-                      fontSize:"14px!important",
-                      color: "#515a6e"
+                      cursor: "pointer",
+                      fontSize: "14px!important",
+                      color: "#515a6e",
                     },
                     on: {
                       click: () => {
                         const { id } = params.row;
-                        let moveState = false
-                        this.moveUpAndDown(id,moveState)
+                        let moveState = false;
+                        this.moveUpAndDown(id, moveState);
                       },
                     },
                   },
@@ -260,7 +403,7 @@ export default {
             title: "操作",
             align: "center",
             width: 150,
-            fixed:"right",
+            fixed: "right",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -284,14 +427,23 @@ export default {
                               name,
                               simpleCode,
                               valid,
-                              showDirectionType
+                              showDirectionType,
+                              categoryImg,
+                              appId,
+                              isBrand,
+                              isHot
                             } = res.data.goodsCategory;
                             this.isEdit = true;
                             this.form.id = id;
                             this.form.name = name;
                             this.form.simpleCode = simpleCode;
                             this.form.valid = valid;
-                            this.form.showDirectionType = showDirectionType
+                            this.form.appId = appId;
+                            this.form.isBrand = isBrand;
+                            this.form.isHot = isHot;
+                            this.form.showDirectionType = showDirectionType;
+                            this.form.categoryImg = categoryImg;
+                            this.uploadObj.uploadList = [this.form.categoryImg];
                             this.controlModal = true;
                           }
                         });
@@ -354,13 +506,26 @@ export default {
         // 简码
         simpleCode: "",
         // 展示方向
-        showDirectionType:"",
+        showDirectionType: "",
         id: "",
         // 是否有效
         valid: false,
+        categoryImg: "",
+        // 小程序
+        appId: "",
+        // 是否为热卖
+        isHot: false,
+        // 是否是品牌分类
+        isBrand: false,
       },
 
       ruleValidate: {
+        categoryImg: [
+          {
+            required: true,
+            message: "请上传类别图片",
+          },
+        ],
         name: [
           {
             required: true,
@@ -383,53 +548,71 @@ export default {
     };
   },
   methods: {
+    // 图片
+    handleUploadChange(values) {
+      this.form.categoryImg = values[0];
+    },
     //   置顶/置底
-    topToBottomClass(id,moveState){
-        const data = {
-            id : id,
-            moveState : moveState
+    topToBottomClass(id, moveState) {
+      const data = {
+        id: id,
+        moveState: moveState,
+      };
+      api.topToBottomClass(data).then((res) => {
+        if (res.code === 0) {
+          if (moveState == true) {
+            this.$Message.success("置顶成功");
+          } else {
+            this.$Message.success("置底成功");
+          }
+          this.getGoodsCategoryList();
         }
-        api.topToBottomClass(data).then((res) => {
-            if(res.code === 0 ){
-                if(moveState == true){
-                    this.$Message.success('置顶成功')
-                }else{
-                    this.$Message.success('置底成功')
-                }
-                this.getGoodsCategoryList()
-            }
-        })
+      });
     },
     // 向上/向下
-    moveUpAndDown(id,moveState){
-        const data = {
-            id : id,
-            moveState : moveState
+    moveUpAndDown(id, moveState) {
+      const data = {
+        id: id,
+        moveState: moveState,
+      };
+      api.moveUpAndDown(data).then((res) => {
+        if (res.code === 0) {
+          if (moveState == true) {
+            this.$Message.success("向上移动成功");
+          } else {
+            this.$Message.success("向下移动成功");
+          }
+          this.getGoodsCategoryList();
         }
-        api.moveUpAndDown(data).then((res) => {
-            if(res.code === 0 ){
-                if(moveState == true){
-                    this.$Message.success('向上移动成功')
-                }else{
-                    this.$Message.success('向下移动成功')
-                }
-                this.getGoodsCategoryList()
-            }
-        })
+      });
     },
     // 获取商品展示方向
-    getExchangeTypeList(){
+    getExchangeTypeList() {
       api.getexchangeTypeList().then((res) => {
-        if(res.code === 0){
-          const {exchangeTypes} = res.data
-          this.exchangeTypes = exchangeTypes
+        if (res.code === 0) {
+          const { exchangeTypes } = res.data;
+          this.exchangeTypes = exchangeTypes;
         }
-      })
+      });
     },
     // 获取商品分类列表
     getGoodsCategoryList() {
-      const { keyword, categoryId, valid, pageNum, pageSize , showDirection  } = this.query;
-      const data = { keyword, categoryId, valid, pageNum, pageSize , showDirection  };
+      const {
+        keyword,
+        categoryId,
+        valid,
+        pageNum,
+        pageSize,
+        showDirection,
+      } = this.query;
+      const data = {
+        keyword,
+        categoryId,
+        valid,
+        pageNum,
+        pageSize,
+        showDirection,
+      };
       api.getGoodsCategoryList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.goodsCategorys;
@@ -443,7 +626,17 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { name, simpleCode, id, valid , showDirectionType} = this.form;
+          const {
+            name,
+            simpleCode,
+            id,
+            valid,
+            showDirectionType,
+            categoryImg,
+            appId,
+            isBrand,
+            isHot,
+          } = this.form;
           if (this.isEdit) {
             // 修改
             const data = {
@@ -451,7 +644,11 @@ export default {
               name,
               simpleCode,
               valid,
-              showDirectionType
+              showDirectionType,
+              categoryImg,
+              appId,
+              isBrand,
+              isHot,
             };
             api.modifyGoodsCategory(data).then((res) => {
               if (res.code === 0) {
@@ -469,7 +666,11 @@ export default {
             const data = {
               name,
               simpleCode,
-              showDirectionType
+              showDirectionType,
+              categoryImg,
+              appId,
+              isBrand,
+              isHot,
             };
             api.addGoodsCategory(data).then((res) => {
               if (res.code === 0) {
@@ -505,7 +706,7 @@ export default {
     // this.getGoodsCategoryList();
     // this.getExchangeTypeList()
   },
-  watch:{
+  watch: {
     activeName: {
       handler(value) {
         if (value === "pointExchange") {
@@ -514,7 +715,7 @@ export default {
       },
       immediate: true,
     },
-  }
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -525,6 +726,4 @@ export default {
   margin-top: 16px;
   text-align: right;
 }
-
-
 </style>

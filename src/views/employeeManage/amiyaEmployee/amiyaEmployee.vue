@@ -5,7 +5,7 @@
         <div class="left">
           <Input
             v-model="query.keyword"
-            placeholder="请输入阿美雅员工名称"
+            placeholder="请输入啊美雅员工名称"
             style="width: 200px"
             @keyup.enter.native="getAmiyaEmployeeList()"
           />
@@ -78,7 +78,7 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="100"
+        :label-width="110"
       >
         <FormItem label="姓名" prop="name">
           <Input v-model="form.name" placeholder="请输入姓名"></Input>
@@ -105,8 +105,8 @@
         <FormItem label="是否客服" prop="isCustomerService">
           <i-switch v-model="form.isCustomerService" />
         </FormItem>
-        <!-- 客服所属主播 -->
-        <FormItem label="主播" prop="liveAnchorIds" v-if="form.positionId === 2 && form.isCustomerService === true" key="主播">
+        <!-- 客服所属主播 (form.positionId === 2 && form.isCustomerService === true) || (form.positionId === 19 && form.isCustomerService === true)-->
+        <FormItem label="主播" prop="liveAnchorIds" v-if="(title == '修改' && (form.positionId === 2 && form.isCustomerService === true)) || (title == '修改' && form.positionId === 19) || (title == '修改' && form.positionId === 30)" key="主播">
           <Select v-model="form.liveAnchorIds" multiple filterable placeholder="请选择主播">
             <Option
               v-for="item in liveAnchors"
@@ -116,6 +116,17 @@
             >
           </Select>
         </FormItem>
+        <FormItem label="主播基础信息" prop="liveAnchorBaseId" v-if="form.isCustomerService == true" key="liveAnchorBaseId" >
+          <Select v-model="form.liveAnchorBaseId"   placeholder="请选择主播基础信息">
+            <Option
+              v-for="item in liveAnchorBaseInfos"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
+      
         <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
           <i-switch v-model="form.valid" />
         </FormItem>
@@ -154,6 +165,7 @@
 </template>
 <script>
 import * as api from "@/api/employeeManage";
+import * as liveApi from "@/api/liveAnchorBaseInfo";
 export default {
   data() {
     return {
@@ -269,7 +281,8 @@ export default {
                               isCustomerService,
                               valid,
                               email,
-                              liveAnchorIds
+                              liveAnchorIds,
+                              liveAnchorBaseId
                             } = res.data.employeeInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -279,6 +292,7 @@ export default {
                             this.form.positionId = positionId;
                             this.form.isCustomerService = isCustomerService;
                             this.form.liveAnchorIds = liveAnchorIds;
+                            this.form.liveAnchorBaseId = liveAnchorBaseId;
                             this.form.valid = valid;
                             this.controlModal = true;
                           }
@@ -357,10 +371,18 @@ export default {
         // 是否有效
         valid: false,
         // 主播id
-        liveAnchorIds:[]
+        liveAnchorIds:[],
+        // 主播基础信息
+        liveAnchorBaseId:''
       },
 
       ruleValidate: {
+        liveAnchorBaseId:[
+          {
+            required: true,
+            message: "请选择主播基础信息",
+          },
+        ],
         name: [
           {
             required: true,
@@ -414,10 +436,21 @@ export default {
             message: "请输入用户密码",
           },
         ],
-      }
+      },
+      // 主播基础信息
+      liveAnchorBaseInfos:[]
     };
   },
   methods: {
+    // 获取主播基础信息列表
+    getLiveAnchorBaseInfoValid(){
+      liveApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if(res.code === 0){
+          const {liveAnchorBaseInfos} = res.data
+          this.liveAnchorBaseInfos = liveAnchorBaseInfos
+        }
+      })
+    },
     // 获取有效的主播列表
     getLiveAnchorValid(){
       api.liveAnchorValid().then((res) => {
@@ -470,7 +503,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { name, userName, password, positionId, isCustomerService, id, valid , email,liveAnchorIds} = this.form;
+          const { name, userName, password, positionId, isCustomerService, id, valid , email,liveAnchorIds,liveAnchorBaseId} = this.form;
           if (this.isEdit) {
             // 修改
             const data = {
@@ -481,7 +514,9 @@ export default {
               isCustomerService,
               valid,
               email,
-              liveAnchorIds:positionId === 2 && isCustomerService === true ? liveAnchorIds : []
+              // liveAnchorIds:(positionId === 2 || positionId === 19) && isCustomerService === true ? liveAnchorIds : []
+              liveAnchorIds:(positionId === 2 && isCustomerService === true ) || (positionId === 19&& isCustomerService === true)  || (positionId === 30&& isCustomerService === true) ? liveAnchorIds : [],
+              liveAnchorBaseId
             };
             api.updateAmiyaEmployee(data).then((res) => {
               if (res.code === 0) {
@@ -502,7 +537,8 @@ export default {
               password,
               positionId,
               isCustomerService,
-              email
+              email,
+              liveAnchorBaseId
             };
             if(email){
               if (!(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(email))){
@@ -584,6 +620,7 @@ export default {
     this.getAmiyaEmployeeList();
     this.getAmiyaPositionInfo();
     this.getLiveAnchorValid();
+    this.getLiveAnchorBaseInfoValid()
   },
 };
 </script>

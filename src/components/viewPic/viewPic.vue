@@ -17,7 +17,7 @@
           </viewer>
         </div>
       </div>
-      <div v-if="customerPhotos.length == 0" class="no_date">暂无数据</div>
+      <div v-if="viewPicList.length == 0" class="no_date">暂无数据</div>
       <div class="footer" >
           <Button @click="cancel" style="margin-right: 10px" >取消</Button>
       </div>
@@ -37,26 +37,9 @@ export default {
   data() {
     return {
       viewPicModels:false,
-      customerPhotos:[],
     };
   },
   methods: {
-    // 获取客户照片
-    getCustomerPicture() {
-      const data = {
-        pageNum:1,
-        pageSize:5,
-        contentPlatFormOrderId :this.contentPlatFormOrderId
-      };
-      api.ContentPlatFormCustomerPicture(data).then((res) => {
-        if (res.code === 0) {
-          const { list } = res.data.contentPlatFormCustomerPictureInfo;
-          this.customerPhotos = list;
-        }
-      });
-    },
-
-   
     // 取消
     cancel(name) {
       this.$emit("update:viewPicModel", false);
@@ -75,16 +58,9 @@ export default {
     viewPicModel: {
       handler(viewPicModel) {
         this.viewPicModels = viewPicModel
-        this.getCustomerPicture()
       },
       deep: true,
     },
-    // contentPlatFormOrderId: {
-    //   handler(contentPlatFormOrderId) {
-    //     this.contentPlatFormOrderIds = contentPlatFormOrderId
-    //   },
-    //   deep: true,
-    // },
   },
 };
 </script>
@@ -101,11 +77,13 @@ export default {
   width: 150px;
   height: 150px;
   margin-right: 10px;
+  margin-bottom: 10px;
 }
 .no_date{
   text-align: center;
 }
 .img_cons{
   display: flex;
+  flex-wrap: wrap;
 }
 </style>

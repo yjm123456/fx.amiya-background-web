@@ -47,6 +47,7 @@
             type="primary"
             style="margin-left: 10px"
             @click="handleExportClick"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
           ></span
         >
@@ -290,10 +291,10 @@ export default {
 
     // 查询
     handleSearchClick() {
-      const { itemId } = this.hospitalInfo;
-      if (!itemId) {
+      const { itemId,activityId } = this.hospitalInfo;
+      if (!activityId) {
         this.$Message.warning({
-          content: "请选择项目",
+          content: "请选择报价名称",
           duration: 5,
           closable: true,
         });
@@ -305,9 +306,9 @@ export default {
     // 导出
     handleExportClick() {
       const { activityId, itemId } = this.hospitalInfo;
-      if (!itemId) {
+      if (!activityId) {
         this.$Message.warning({
-          content: "请选择项目",
+          content: "请选择报价名称",
           duration: 5,
           closable: true,
         });

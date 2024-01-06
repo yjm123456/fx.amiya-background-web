@@ -18,128 +18,37 @@
           <Step title="订单核销" :content="detailObj.writeOffDate ? this.$moment(detailObj.writeOffDate).format('YYYY-MM-DD HH:mm:ss') : ''"></Step>
       </Steps>
       </div>
-      <!-- <div class="order_message">
-        <div class="message_title"><span class="line"></span>订单信息</div>
-        <div class="order_content">
-          <div class="message_con">
-            <span class="title_bold">下单平台：</span>
-            <span>{{detailObj.appTypeText}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">订单状态：</span>
-            <span>{{detailObj.statusText}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">订单性质：</span>
-            <span>{{detailObj.orderNatureText}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">主播平台：</span>
-            <span>{{detailObj.liveAnchorPlatForm}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">归属主播：</span>
-            <span>{{detailObj.liveAnchor}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">归属客服：</span>
-            <span>{{detailObj.belongEmpName}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">客户昵称：</span>
-            <span>{{detailObj.nickName}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">手机号：</span>
-            <span>{{detailObj.phone}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">预约门店：</span>
-            <span>{{detailObj.appointmentHospital}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">派单门店：</span>
-            <span>{{detailObj.sendOrderHospital}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">核销门店：</span>
-            <span>{{detailObj.finalConsumptionHospital}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">是否已预约：</span>
-            <span>{{detailObj.isAppointment == true ? '已预约' : '未预约'}} </span>
-          </div>
-          
-          <div class="mr_top">
-            <span class="title_bold">实付款：</span>
-            <span>{{detailObj.actualPayment}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">应收款：</span>
-            <span>{{detailObj.accountReceivable}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">交易类型：</span>
-            <span>{{detailObj.exchangeTypeText}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核状态：</span>
-            <span>{{detailObj.checkState}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核金额：</span>
-            <span>{{detailObj.checkPrice}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核日期：</span>
-            <span>{{detailObj.checkDate ? this.$moment(detailObj.checkDate).format("YYYY-MM-DD HH:mm:ss") : ''}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">结算金额：</span>
-            <span>{{detailObj.settlePrice}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核人：</span>
-            <span>{{detailObj.checkByEmpName}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">审核备注：</span>
-            <span>{{detailObj.checkRemark}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">是否回款：</span>
-            <span>{{detailObj.isReturnBackPrice == true ? '已回款' : '未回款'}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">回款金额：</span>
-            <span>{{detailObj.returnBackPrice}} </span>
-          </div>
-         <div class="mr_top">
-            <span class="title_bold">回款时间：</span>
-            <span>{{detailObj.returnBackDate ? this.$moment(detailObj.returnBackDate).format("YYYY-MM-DD HH:mm:ss") : ''}} </span>
-          </div>
-          <div class="mr_top">
-            <span class="title_bold">描述：</span>
-            <span>{{detailObj.description }} </span>
-          </div>
-        </div>
-      </div> -->
       <div class="order_message">
         <div class="message_title"><span class="line"></span>客户信息</div>
         <div class="order_content">
-          <div class="mr_top">
+          <div class="message_con">
             <span class="title_bold">客户昵称：</span>
             <span>{{detailObj.nickName}} </span>
           </div>
+          <div class="dis_con">
+
+          
           <div class="mr_top">
             <span class="title_bold">手机号：</span>
             <span>{{detailObj.phone}} </span>
+          </div>
+          <Button type="primary" @click="customerClick(detailObj)"
+                style="margin-right:10px">顾客信息</Button
+              >
           </div>
         </div>
       </div>
       <div class="order_message">
         <div class="message_title"><span class="line"></span>门店信息</div>
         <div class="order_content">
+          <div class="message_con">
+            <span class="title_bold">预约时间：</span>
+            <span>{{detailObj.appointmentDate ? this.$moment(detailObj.appointmentDate).format("YYYY-MM-DD ") : ''}} </span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">预约城市：</span>
+            <span>{{detailObj.appointmentCity}} </span>
+          </div>
           <div class="mr_top">
             <span class="title_bold">预约门店：</span>
             <span>{{detailObj.appointmentHospital}} </span>
@@ -170,7 +79,10 @@
             <span class="title_bold">订单性质：</span>
             <span>{{detailObj.orderNatureText}} </span>
           </div>
-        
+          <div class="mr_top">
+            <span class="title_bold">是否发货：</span>
+            <span>{{detailObj.isSendOrder == true ? '已发货' : '未发货'}} </span>
+          </div>
           <div class="mr_top">
             <span class="title_bold">是否已预约：</span>
             <span>{{detailObj.isAppointment == true ? '已预约' : '未预约'}} </span>
@@ -190,6 +102,10 @@
           <div class="mr_top">
             <span class="title_bold">描述：</span>
             <span>{{detailObj.description }} </span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">备注：</span>
+            <span>{{detailObj.remark }} </span>
           </div>
         </div>
       </div>
@@ -219,7 +135,7 @@
             <span>{{detailObj.checkState}} </span>
           </div>
           <div class="mr_top">
-            <span class="title_bold">审核金额：</span>
+            <span class="title_bold">对账金额：</span>
             <span>{{detailObj.checkPrice}} </span>
           </div>
           <div class="mr_top">
@@ -227,7 +143,7 @@
             <span>{{detailObj.checkDate ? this.$moment(detailObj.checkDate).format("YYYY-MM-DD HH:mm:ss") : ''}} </span>
           </div>
           <div class="mr_top">
-            <span class="title_bold">结算金额：</span>
+            <span class="title_bold">服务费合计：</span>
             <span>{{detailObj.settlePrice}} </span>
           </div>
           <div class="mr_top">
@@ -237,6 +153,14 @@
           <div class="mr_top">
             <span class="title_bold">审核备注：</span>
             <span>{{detailObj.checkRemark}} </span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">是否开票：</span>
+            <span>{{detailObj.isCreateBill == true ? '已开票' : '未开票'}} </span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">开票公司：</span>
+            <span>{{detailObj.createBillCompany}} </span>
           </div>
           <div class="mr_top">
             <span class="title_bold">是否回款：</span>
@@ -259,6 +183,9 @@
         height="102"
         style="margin-top:10px"
       ></Table>
+      <!--客户信息  -->
+    <customerMessage :customerMessageModel.sync="customerMessageModel" 
+    :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
       <div slot="footer">
         <Button @click="handleCancelClick()">取消</Button>
       </div>
@@ -266,14 +193,28 @@
   </div>
 </template>
 <script>
+import customerMessage from "@/components/customerMessage/customerMessage"
+import * as customerManageApi from "@/api/customerManage";
+
 import { time } from 'echarts';
 export default {
   props: {
     detailModel: Boolean,
     detailList: Array,
   },
+  components:{
+    customerMessage
+  },
   data() {
     return {
+      customerMessageModel:false,
+      // 客户信息组件参数
+      customerInfoComParams2: {
+        userId: "",
+        encryptPhone: "",
+        tabGlag:false
+      },
+      customerMessageObj:{},
       time:null,
       detailObj:{},
       controlModel: false,
@@ -336,6 +277,21 @@ export default {
   },
 
   methods: {
+    customerClick(value){
+      const {userId,encryptPhone} = value
+      let data = {
+            encryptPhone:encryptPhone
+          }
+      customerManageApi.getBaseAndBindCustomerInfoByEncryptPhone(data).then((res) => {
+        if(res.code === 0){
+          this.customerInfoComParams2.userId = userId;
+          this.customerInfoComParams2.encryptPhone = encryptPhone;
+          this.customerInfoComParams2.tabGlag = true;
+          this.customerMessageModel = true
+          this.customerMessageObj = res.data.customer
+        }
+      })
+    },
     handleModalVisibleChange(value) {
       if (!value) {
         this.handleCancelClick();
@@ -375,14 +331,17 @@ export default {
 
 .line{
   width: 1px;
-  height: 30px;
+  height: 20px;
   border: 2px solid #4381e6;
   background: #4381e6;
   margin-right: 5px;
+  margin-left: 0;
 }
 .message_title{
   font-weight: bold;
   font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 .order_content{
   margin-top: 10px;
@@ -405,5 +364,9 @@ export default {
 }
 .mr{
   margin: 20px 0 10px;
+}
+.dis_con{
+  display: flex;
+  justify-content: space-between;
 }
 </style>

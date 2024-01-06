@@ -14,7 +14,7 @@ const employeeManage = [{
         path: "/amiyaEmployee",
         name: "amiyaEmployee",
         meta: {
-            title: "阿美雅员工",
+            title: "啊美雅员工",
             keepAlive: false,
             isTag: true,
             openName: ['员工管理'],
@@ -46,6 +46,30 @@ const employeeManage = [{
         component: () =>
             import ("@/views/employeeManage/iPAccount/iPAccount.vue"),
     },
+    {
+        path: "/anchorWechat",
+        name: "anchorWechat",
+        meta: {
+            title: "主播微信号",
+            keepAlive: false,
+            isTag: true,
+            openName: ['员工管理'],
+        },
+        component: () =>
+            import ("@/views/employeeManage/anchorWechat/anchorWechat.vue"),
+    },
+    {
+        path: "/anchor",
+        name: "anchor",
+        meta: {
+            title: "主播",
+            keepAlive: false,
+            isTag: true,
+            openName: ['员工管理'],
+        },
+        component: () =>
+            import ("@/views/employeeManage/anchor/anchor.vue"),
+    },
 ];
 
 /**
@@ -71,7 +95,7 @@ const positionManage = [{
         path: "/amiyaPosition",
         name: "amiyaPosition",
         meta: {
-            title: "阿美雅职列表",
+            title: "啊美雅职列表",
             keepAlive: false,
             isTag: true,
             openName: ['组织结构'],
@@ -94,16 +118,16 @@ const positionManage = [{
 ];
 
 /**
- * 项目管理
+ * 带货商品管理
  */
 const itemManage = [{
     path: "/itemList",
     name: "itemList",
     meta: {
-        title: "项目列表",
+        title: "带货商品列表",
         keepAlive: false,
         isTag: true,
-        openName: ['项目管理'],
+        openName: ['带货商品管理'],
     },
     component: () =>
         import ("@/views/itemManage/itemList.vue"),
@@ -230,6 +254,90 @@ const hospitalManage = [{
                 "@/views/hospitalManage/hospitalComplaintFeedback/hospitalComplaintFeedback.vue"
             ),
     },
+    {
+        path: "/institutionalIndicators",
+        name: "institutionalIndicators",
+        meta: {
+            title: "机构运营指标数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/institutionalIndicators/institutionalIndicators.vue"
+            ),
+    },
+    {
+        path: "/hospitalIndicatorsSummary",
+        name: "hospitalIndicatorsSummary",
+        meta: {
+            title: "医院指标数据汇总",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/hospitalIndicatorsSummary/hospitalIndicatorsSummary.vue"
+            ),
+    },
+    {
+        path: "/hospitalIndicators",
+        name: "hospitalIndicators",
+        meta: {
+            title: "医院指标数据填报",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/hospitalIndicators/hospitalIndicators.vue"
+            ),
+    },
+    {
+        path: "/excellentInstitutions",
+        name: "excellentInstitutions",
+        meta: {
+            title: "优秀机构健康指标",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/excellentInstitutions/excellentInstitutions.vue"
+            ),
+    },
+    {
+        path: "/goodHospitalDataFilling",
+        name: "goodHospitalDataFilling",
+        meta: {
+            title: "优秀机构数据填报",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/goodHospitalDataFilling/goodHospitalDataFilling.vue"
+            ),
+    },
+    {
+        path: "/supplyChainDispatchGuide",
+        name: "supplyChainDispatchGuide",
+        meta: {
+            title: "供应链派单指南",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import (
+                "@/views/hospitalManage/supplyChainDispatchGuide/supplyChainDispatchGuide.vue"
+            ),
+    },
 ];
 
 /**
@@ -246,6 +354,28 @@ const appointment = [{
     },
     component: () =>
         import ("@/views/appointment/appointmentList.vue"),
+}, {
+    path: "/appointmentCall",
+    name: "appointmentCall",
+    meta: {
+        title: "预约叫车",
+        keepAlive: false,
+        isTag: true,
+        openName: ['预约'],
+    },
+    component: () =>
+        import ("@/views/appointment/appointmentCall/appointmentCall.vue"),
+}, , {
+    path: "/customerAppointmentSchedule",
+    name: "customerAppointmentSchedule",
+    meta: {
+        title: "客户预约日程",
+        keepAlive: false,
+        isTag: true,
+        openName: ['预约'],
+    },
+    component: () =>
+        import ("@/views/appointment/customerAppointmentSchedule/customerAppointmentSchedule.vue"),
 }, ];
 
 
@@ -287,6 +417,18 @@ const customerService = [{
         },
         component: () =>
             import ("@/views/customerService/chatRecord/chatRecord.vue"),
+    },
+    {
+        path: "/appletAutoReplyTemplate",
+        name: "appletAutoReplyTemplate",
+        meta: {
+            title: "小程序自动回复模板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客服'],
+        },
+        component: () =>
+            import ("@/views/customerService/appletAutoReplyTemplate/appletAutoReplyTemplate.vue"),
     },
 ];
 
@@ -349,7 +491,7 @@ const orderManage = [{
         path: "/orderData",
         name: "orderData",
         meta: {
-            title: "订单数据",
+            title: "今日订单动态",
             keepAlive: false,
             isTag: true,
             openName: ['订单管理'],
@@ -527,6 +669,91 @@ const orderManage = [{
                 "@/views/orderManage/privateDomainOperationData/privateDomainOperationData.vue"
             ),
     },
+    {
+        path: "/hospitalCustomerOrder",
+        name: "hospitalCustomerOrder",
+        meta: {
+            title: "医院客户订单",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/hospitalCustomerOrder/hospitalCustomerOrder.vue"
+            ),
+    },
+    {
+        path: "/shakeShopOrderList",
+        name: "shakeShopOrderList",
+        meta: {
+            title: "抖店订单列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/shakeShopOrderList/shakeShopOrderList.vue"
+            ),
+    },
+    {
+        path: "/orderRefund",
+        name: "orderRefund",
+        meta: {
+            title: "订单退款",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/orderRefund/orderRefund.vue"
+            ),
+    },
+    {
+        path: "/onlineRetailersPlatformOrder",
+        name: "onlineRetailersPlatformOrder",
+        meta: {
+            title: "电商平台订单",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/onlineRetailersPlatformOrder/onlineRetailersPlatformOrder.vue"
+            ),
+    },
+    {
+        path: "/recordingApplicationList",
+        name: "recordingApplicationList",
+        meta: {
+            title: "录单申请列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/recordingApplicationList/recordingApplicationList.vue"
+            ),
+    },
+    {
+        path: "/vedioOrderList",
+        name: "vedioOrderList",
+        meta: {
+            title: "视频号订单列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/vedioOrderList/vedioOrderList.vue"
+            ),
+    },
+
 ];
 
 /**
@@ -572,7 +799,7 @@ const customerManage = [{
         path: "/hospitalCustomerList",
         name: "hospitalCustomerList",
         meta: {
-            title: "医院获取客户列表",
+            title: "医院客户列表",
             keepAlive: false,
             isTag: true,
             openName: ['客户管理'],
@@ -652,6 +879,67 @@ const customerManage = [{
         component: () =>
             import ("@/views/customerManage/assistInfollowUp/assistInfollowUp.vue"),
     },
+    {
+        path: "/hospitalClients",
+        name: "hospitalClients",
+        meta: {
+            title: "三方医院客户",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/hospitalClients/hospitalClients.vue"),
+    },
+
+    {
+        path: "/chatRoom",
+        name: "chatRoom",
+        meta: {
+            title: "聊天室",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/chatRoom/chatRoom.vue"),
+    },
+    {
+        path: "/pointsDistribution",
+        name: "pointsDistribution",
+        meta: {
+            title: "积分发放列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/pointsDistribution/pointsDistribution.vue"),
+    },
+    {
+        path: "/aestheticDesignReport",
+        name: "aestheticDesignReport",
+        meta: {
+            title: "美学设计报告",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/aestheticDesignReport/aestheticDesignReport.vue"),
+    },
+    {
+        path: "/customerRfm",
+        name: "customerRfm",
+        meta: {
+            title: "客户RFM分析",
+            keepAlive: false,
+            isTag: true,
+            openName: ['客户管理'],
+        },
+        component: () =>
+            import ("@/views/customerManage/customerRfm/customerRfm.vue"),
+    },
 ];
 
 /**
@@ -707,6 +995,18 @@ const itemQuotedPriceManage = [{
         component: () =>
             import ("@/views/itemQuotedPriceManage/hospitalBrandRegistration/hospitalBrandRegistration.vue"),
     },
+    {
+        path: "/courseRegistration",
+        name: "courseRegistration",
+        meta: {
+            title: "课程报名",
+            keepAlive: false,
+            isTag: true,
+            openName: ['项目报价管理'],
+        },
+        component: () =>
+            import ("@/views/itemQuotedPriceManage/courseRegistration/courseRegistration.vue"),
+    },
 ];
 
 /**
@@ -735,6 +1035,30 @@ const giftManage = [{
         },
         component: () =>
             import ("@/views/giftManage/receiveGiftList/receiveGiftList.vue"),
+    },
+    {
+        path: "/transactionVoucher",
+        name: "transactionVoucher",
+        meta: {
+            title: "已领取礼品列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['礼品管理'],
+        },
+        component: () =>
+            import ("@/views/giftManage/transactionVoucher/transactionVoucher.vue"),
+    },
+    {
+        path: "/giftClassification",
+        name: "giftClassification",
+        meta: {
+            title: "礼品分类",
+            keepAlive: false,
+            isTag: true,
+            openName: ['礼品管理'],
+        },
+        component: () =>
+            import ("@/views/giftManage/giftClassification/giftClassification.vue"),
     },
 ];
 
@@ -897,6 +1221,90 @@ const baseDataMaintenance = [{
         component: () =>
             import ("@/views/baseDataMaintenance/warehouseName/warehouseName.vue"),
     },
+    {
+        path: "/corporateManagement",
+        name: "corporateManagement",
+        meta: {
+            title: "公司管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/corporateManagement/corporateManagement.vue"),
+    },
+    {
+        path: "/customerLabel",
+        name: "customerLabel",
+        meta: {
+            title: "标签管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/customerLabel/customerLabel.vue"),
+    },
+    {
+        path: "/healthIndicators",
+        name: "healthIndicators",
+        meta: {
+            title: "健康指标填写",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/healthIndicators/healthIndicators.vue"),
+    },
+    {
+        path: "/goodsShelves",
+        name: "goodsShelves",
+        meta: {
+            title: "货架管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/goodsShelves/goodsShelves.vue"),
+    },
+    {
+        path: "/brandList",
+        name: "brandList",
+        meta: {
+            title: "品牌列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/brandList/brandList.vue"),
+    },
+    {
+        path: "/categoryList",
+        name: "categoryList",
+        meta: {
+            title: "品类列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/categoryList/categoryList.vue"),
+    },
+    {
+        path: "/Item",
+        name: "Item",
+        meta: {
+            title: "品项列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/Item/Item.vue"),
+    },
 ];
 
 /**
@@ -966,6 +1374,17 @@ const memberCardManage = [{
     },
     component: () =>
         import ("@/views/memberCardManage/memberRankList/memberRankList.vue"),
+}, {
+    path: "/listOfVouchers",
+    name: "listOfVouchers",
+    meta: {
+        title: "抵用券列表",
+        keepAlive: false,
+        isTag: true,
+        openName: ['会员卡管理'],
+    },
+    component: () =>
+        import ("@/views/memberCardManage/listOfVouchers/listOfVouchers.vue"),
 }];
 
 /**
@@ -1023,6 +1442,18 @@ const beautifulManage = [{
         component: () =>
             import ("@/views/beautifulManage/beautyDiaryManage/beautyDiaryManage.vue"),
     },
+    {
+        path: "/articleManagement",
+        name: "articleManagement",
+        meta: {
+            title: "文章管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['美丽日记'],
+        },
+        component: () =>
+            import ("@/views/beautifulManage/articleManagement/articleManagement.vue"),
+    },
 ];
 /**
  * 运营管理
@@ -1031,13 +1462,36 @@ const operationManage = [{
         path: "/anchorMonthlyTarget",
         name: "anchorMonthlyTarget",
         meta: {
-            title: "主播IP月度运营目标",
+            title: "直播前月度目标",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
         },
         component: () =>
             import ("@/views/operationManage/anchorMonthlyTarget/anchorMonthlyTarget.vue"),
+    }, {
+        path: "/liveStreamingMonthlyTarget",
+        name: "liveStreamingMonthlyTarget",
+        meta: {
+            title: "直播中月度目标",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/liveStreamingMonthlyTarget/liveStreamingMonthlyTarget.vue"),
+    },
+    {
+        path: "/afterLiveStreamingMonthlyTarget",
+        name: "afterLiveStreamingMonthlyTarget",
+        meta: {
+            title: "直播后月度目标",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/afterLiveStreamingMonthlyTarget/afterLiveStreamingMonthlyTarget.vue"),
     },
     {
         path: "/anchorDayData",
@@ -1055,7 +1509,7 @@ const operationManage = [{
         path: "/beforeLiveBroadcast",
         name: "beforeLiveBroadcast",
         meta: {
-            title: "直播前",
+            title: "直播前抖音数据",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
@@ -1064,10 +1518,58 @@ const operationManage = [{
             import ("@/views/operationManage/beforeLiveBroadcast/beforeLiveBroadcast.vue"),
     },
     {
+        path: "/beforeZhihuLiving",
+        name: "beforeZhihuLiving",
+        meta: {
+            title: "直播前知乎数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/beforeZhihuLiving/beforeZhihuLiving.vue"),
+    },
+    {
+        path: "/beforeSinaWeiBoLiving",
+        name: "beforeSinaWeiBoLiving",
+        meta: {
+            title: "直播前微博数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/beforeSinaWeiBoLiving/beforeSinaWeiBoLiving.vue"),
+    },
+    {
+        path: "/beforeXiaoHongShuLiving",
+        name: "beforeXiaoHongShuLiving",
+        meta: {
+            title: "直播前小红书数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/beforeXiaoHongShuLiving/beforeXiaoHongShuLiving.vue"),
+    },
+    {
+        path: "/beforeVideoLiving",
+        name: "beforeVideoLiving",
+        meta: {
+            title: "直播前视频号数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/beforeVideoLiving/beforeVideoLiving.vue"),
+    },
+    {
         path: "/liveBroadcast",
         name: "liveBroadcast",
         meta: {
-            title: "直播中",
+            title: "直播中经营数据",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
@@ -1079,13 +1581,61 @@ const operationManage = [{
         path: "/afterLiveBroadcast",
         name: "afterLiveBroadcast",
         meta: {
-            title: "直播后",
+            title: "直播后经营数据",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
         },
         component: () =>
             import ("@/views/operationManage/afterLiveBroadcast/afterLiveBroadcast.vue"),
+    },
+    {
+        path: "/videoClips",
+        name: "videoClips",
+        meta: {
+            title: "拍剪组数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/videoClips/videoClips.vue"),
+    },
+    {
+        path: "/livingDailyTakeGoods",
+        name: "livingDailyTakeGoods",
+        meta: {
+            title: "直播带货数据记录",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/livingDailyTakeGoods/livingDailyTakeGoods.vue"),
+    },
+    {
+        path: "/liveReplay",
+        name: "liveReplay",
+        meta: {
+            title: "直播复盘表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/liveReplay/liveReplay.vue"),
+    },
+    {
+        path: "/tiktokShortVideo",
+        name: "tiktokShortVideo",
+        meta: {
+            title: "抖音短视频数据",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/tiktokShortVideo/tiktokShortVideo.vue"),
     },
 ];
 /**
@@ -1098,7 +1648,7 @@ const financialStatementManage = [{
             title: "医院对账单",
             keepAlive: false,
             isTag: true,
-            openName: ['财务对账单'],
+            openName: ['财务管理'],
         },
         component: () =>
             import ("@/views/financialStatementManage/hospitalFinancialStatement/hospitalFinancialStatement.vue"),
@@ -1110,7 +1660,7 @@ const financialStatementManage = [{
             title: "主播IP日经营数据",
             keepAlive: false,
             isTag: true,
-            openName: ['财务对账单'],
+            openName: ['财务管理'],
         },
         component: () =>
             import ("@/views/financialStatementManage/amyFinancialStatement/amyFinancialStatement.vue"),
@@ -1122,7 +1672,7 @@ const financialStatementManage = [{
             title: "对账单记录",
             keepAlive: false,
             isTag: true,
-            openName: ['财务对账单'],
+            openName: ['财务管理'],
         },
         component: () =>
             import ("@/views/financialStatementManage/statementRecord/statementRecord.vue"),
@@ -1134,11 +1684,132 @@ const financialStatementManage = [{
             title: "对账单记录",
             keepAlive: false,
             isTag: true,
-            openName: ['财务对账单'],
+            openName: ['财务管理'],
         },
         component: () =>
             import ("@/views/financialStatementManage/lTMAccountStatement/lTMAccountStatement.vue"),
     },
+    {
+        path: "/accountStatement",
+        name: "accountStatement",
+        meta: {
+            title: "对账单列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/accountStatement/accountStatement.vue"),
+    },
+    {
+        path: "/amyAccountStatement",
+        name: "amyAccountStatement",
+        meta: {
+            title: "对账单列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/amyAccountStatement/amyAccountStatement.vue"),
+    },
+    {
+        path: "/unreconciledHospitalList",
+        name: "unreconciledHospitalList",
+        meta: {
+            title: "未对账机构列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/unreconciledHospitalList/unreconciledHospitalList.vue"),
+    },
+    {
+        path: "/statementApprovalRecord",
+        name: "statementApprovalRecord",
+        meta: {
+            title: "对账单审核记录",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/statementApprovalRecord/statementApprovalRecord.vue"),
+    },
+    {
+        path: "/statementListNotUploaded",
+        name: "statementListNotUploaded",
+        meta: {
+            title: "未上传对账单订单",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/statementListNotUploaded/statementListNotUploaded.vue"),
+    },
+    {
+        path: "/controlOverInvoices",
+        name: "controlOverInvoices",
+        meta: {
+            title: "发票管理",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/controlOverInvoices/controlOverInvoices.vue"),
+    },
+    {
+        path: "/invoiceCollectionRecord",
+        name: "invoiceCollectionRecord",
+        meta: {
+            title: "发票回款记录",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/invoiceCollectionRecord/invoiceCollectionRecord.vue"),
+    },
+    {
+        path: "/financialSignage",
+        name: "financialSignage",
+        meta: {
+            title: "财务看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/financialSignage/financialSignage.vue"),
+    },
+    {
+        path: "/salaryReviewForm",
+        name: "salaryReviewForm",
+        meta: {
+            title: "薪资审核表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/salaryReviewForm/salaryReviewForm.vue"),
+    },
+    {
+        path: "/assistantSalary",
+        name: "assistantSalary",
+        meta: {
+            title: "助理薪资",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/assistantSalary/assistantSalary.vue"),
+    },
+
 ];
 /**
  * 阿美雅
@@ -1150,10 +1821,21 @@ const ameiyaMange = [{
         title: "公司简介",
         keepAlive: false,
         isTag: true,
-        openName: ['阿美雅'],
+        openName: ['首页'],
     },
     component: () =>
         import ("@/views/ameiyaMange/ameiya/ameiya.vue"),
+}, {
+    path: "/home",
+    name: "home",
+    meta: {
+        title: "首页",
+        keepAlive: false,
+        isTag: true,
+        openName: ['首页'],
+    },
+    component: () =>
+        import ("@/views/ameiyaMange/home/home.vue"),
 }];
 /**
  * 库存管理
@@ -1207,7 +1889,116 @@ const stockMange = [{
             import ("@/views/stockMange/issueList/issueList.vue"),
     },
 ];
+// 经营看板
+/**
+ * 阿美雅
+ */
+const businessMange = [{
+        path: "/management",
+        name: "management",
+        meta: {
+            title: "啊美雅业绩看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/ameya.vue"),
+    },
+    {
+        path: "/mechanismKanBan",
+        name: "mechanismKanBan",
+        meta: {
+            title: "机构看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/mechanismKanBan.vue"),
+    },
+    {
+        path: "/performanceAnalysis",
+        name: "performanceAnalysis",
+        meta: {
+            title: "业绩分析看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/performanceAnalysis/performanceAnalysis.vue"),
+    },
+    {
+        path: "/supplyChainAnalysisKanban",
+        name: "supplyChainAnalysisKanban",
+        meta: {
+            title: "供应链分析看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/supplyChainAnalysisKanban/supplyChainAnalysisKanban.vue"),
+    },
+    {
+        path: "/performanceKanban",
+        name: "performanceKanban",
+        meta: {
+            title: "达人业绩看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/performanceKanban/performanceKanban.vue"),
+    }
+];
 
+/**
+ * 合作医院业绩看板
+ */
+// const cooperativeHospitalKanBan = [{
+//     path: "/mechanismKanBan",
+//     name: "mechanismKanBan",
+//     meta: {
+//         title: "机构看板",
+//         keepAlive: false,
+//         isTag: true,
+//         openName: ['合作医院业绩看板'],
+//     },
+//     component: () =>
+//         import ("@/views/mechanismManage/mechanismKanBan.vue"),
+// }];
+/**
+ * 系统设置
+ */
+const systemSettingsManage = [{
+        path: "/operationLog",
+        name: "operationLog",
+        meta: {
+            title: "操作日志",
+            keepAlive: false,
+            isTag: true,
+            openName: ['系统设置'],
+        },
+        component: () =>
+            import ("@/views/systemSettingsManage/operationLog/operationLog.vue"),
+    },
+    {
+        path: "/trends",
+        name: "trends",
+        meta: {
+            title: "动态",
+            keepAlive: false,
+            isTag: true,
+            openName: ['系统设置'],
+        },
+        component: () =>
+            import ("@/views/systemSettingsManage/trends/trends.vue"),
+    },
+
+];
 export const dynamicRouter = [{
     path: "/home",
     name: "home",
@@ -1258,7 +2049,9 @@ export const dynamicRouter = [{
         ...operationManage,
         ...financialStatementManage,
         ...ameiyaMange,
-        ...stockMange
+        ...stockMange,
+        ...businessMange,
+        ...systemSettingsManage
     ],
 }, ];
 

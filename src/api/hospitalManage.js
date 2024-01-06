@@ -354,3 +354,128 @@ export const detailsById = (id) => {
         method: "get",
     });
 };
+// 医院获取派单未处理信息条数
+export const getNotRepeatedSendOrder = () => {
+    return http({
+        url: "/amiyabg/ContentPlateFormSendOrder/getNotRepeatedSendOrder",
+        method: "get",
+    });
+};
+// 医院获取今日未处理数据
+export const getTodayNotRepeatedSendOrder = () => {
+    return http({
+        url: "/amiyabg/HospitalIndexData/getTodayNotRepeatedSendOrder",
+        method: "get",
+    });
+};
+// 首页机构数据
+export const getHospitalIndexDataHospitalData = () => {
+    return http({
+        url: "/amiyabg/HospitalIndexData/hospitalData",
+        method: "get",
+    });
+};
+// 首页机构数据比例数据
+export const gethospitalDataRatio = () => {
+    return http({
+        url: "/amiyabg/HospitalIndexData/hospitalDataRatio",
+        method: "get",
+    });
+};
+// 
+// 修改医生在职状态
+export const updateDoctorStatus = (data) => {
+    return http({
+        url: `/amiyabg/Doctor/updateDoctorStatus`,
+        method: "put",
+        data
+    });
+};
+// 获取接收消息信息
+export const getHospitalMessageRecieve = () => {
+    return http({
+        url: "/amiyabg/api/HospitalMessageRecieve",
+        method: "get",
+    });
+};
+// 修改接收消息信息
+export const updateHospitalMessageRecieve = (data) => {
+    return http({
+        url: `/amiyabg/api/HospitalMessageRecieve`,
+        method: "put",
+        data
+    });
+};
+// 派单顺序名称列表
+export const sendOrderList = () => {
+    return http({
+        url: "/amiyabg/HospitalInfo/sendOrderList",
+        method: "get",
+    });
+};
+// 年费或保证金缴纳状态列表
+export const payStatusList = () => {
+    return http({
+        url: "/amiyabg/HospitalInfo/payStatusList",
+        method: "get",
+    });
+};
+// 供应商派单指南
+export const getAmiyaTotalSendHospitalInstructions = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/getAmiyaTotalSendHospitalInstructions",
+        method: "get",
+        params
+    });
+};
+// 修改医院合同信息
+export const UpdateContractUrl = (data) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/UpdateContractUrl`,
+        method: "put",
+        data
+    });
+};
+/**
+ *医院合同
+ */
+// 根据医院id获取合同列表
+export const getContractList = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/getContractList",
+        method: "get",
+        params
+    });
+};
+// 添加合同
+export const addContract = (data) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/addContract`,
+        method: "post",
+        data
+    });
+};
+// 修改合同
+export const UpdateContract = (data) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/UpdateContract`,
+        method: "put",
+        data
+    });
+};
+// 根据合同id获取合同详情
+export const getInfoByContractId = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/getInfoByContractId",
+        method: "get",
+        params
+    });
+};
+// 删除合同
+export const deleteById = (params) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/deleteById`,
+        method: "delete",
+        params
+    });
+};

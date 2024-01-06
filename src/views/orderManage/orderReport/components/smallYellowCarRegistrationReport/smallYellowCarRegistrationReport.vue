@@ -8,104 +8,187 @@
       width="100%"
       fullscreen
     >
-      <DatePicker
-        type="date"
-        placeholder="开始日期"
-        style="width: 160px;"
-        :value="query.startDate"
-        v-model="query.startDate"
-      ></DatePicker>
-      <DatePicker
-        type="date"
-        placeholder="结束日期"
-        style="width: 160px; margin-left: 10px"
-        :value="query.endDate"
-        v-model="query.endDate"
-      ></DatePicker>
-      <Select
-        v-model="query.contentPlatFormId"
-        placeholder="请选择渠道"
-        @on-change="contentPlateChange(query.contentPlatFormId)"
-        filterable
-        style="width: 160px; margin-left: 10px"
-      >
-        <Option
-          v-for="item in contentPalteForms"
-          :value="item.id"
-          :key="item.id"
-          >{{ item.contentPlatformName }}</Option
-        >
-      </Select>
-      <Select
-        v-model="query.LiveAnchorId"
-        placeholder="请选择主播IP账号"
-        :disabled="query.contentPlatFormId === ''"
-        filterable
-        style="width: 160px; margin-left: 10px"
-      >
-        <Option v-for="item in liveAnchors" :value="item.id" :key="item.id">{{
-          item.hostAccountName
-        }}</Option>
-      </Select>
-      <Select
-            v-model="query.isAddWechat"
-            placeholder="请选择加v状态"
-            filterable
-            style="width: 140px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in isAddWeChatList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
+      <div class="content">
+        <div>
+          <div>
+            <DatePicker
+              type="date"
+              placeholder="开始日期"
+              style="width: 160px;"
+              :value="query.startDate"
+              v-model="query.startDate"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="结束日期"
+              style="width: 160px; margin-left: 10px"
+              :value="query.endDate"
+              v-model="query.endDate"
+            ></DatePicker>
+            <Select
+              v-model="query.contentPlatFormId"
+              placeholder="请选择渠道"
+              @on-change="contentPlateChange(query.contentPlatFormId)"
+              filterable
+              style="width: 160px; margin-left: 10px"
             >
-          </Select>
-          <Select
-            v-model="query.isWriteOff"
-            placeholder="请选择核销状态"
-            filterable
-            style="width: 140px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in isWriteOffList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in contentPalteForms"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.contentPlatformName }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.LiveAnchorId"
+              placeholder="请选择主播IP账号"
+              :disabled="query.contentPlatFormId === ''"
+              filterable
+              style="width: 160px; margin-left: 10px"
             >
-          </Select>
-          <Select
-            v-model="query.isConsultation"
-            placeholder="请选择面诊状态"
-            filterable
-            style="width: 140px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in isConsultationList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in liveAnchors"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.hostAccountName }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.isAddWechat"
+              placeholder="请选择加v状态"
+              filterable
+              style="width: 160px; margin-left: 10px"
             >
-          </Select>
-          <Select
-            v-model="query.isReturnBackPrice"
-            placeholder="请选择退款状态"
-            filterable
-            style="width: 140px; margin-left: 10px"
-          >
-            <Option
-              v-for="item in isReturnBackPriceList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in isAddWeChatList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.isWriteOff"
+              placeholder="请选择核销状态"
+              filterable
+              style="width: 160px; margin-left: 10px"
             >
-          </Select>
-      <Button
-        type="primary"
-        style="margin:0 10px"
-        @click="getshoppingCartRegistrationReport"
-        >查询</Button
-      >
-      <Button type="primary" @click="exportsendOrder">导出</Button>
+              <Option
+                v-for="item in isWriteOffList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.isConsultation"
+              placeholder="请选择面诊类型"
+              filterable
+              style="width: 160px; margin-left: 10px"
+            >
+              <Option
+                v-for="item in isConsultationList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
+          <div style="margin-top:10px">
+            <Select
+              v-model="query.isReturnBackPrice"
+              placeholder="请选择退款状态"
+              filterable
+              style="width: 160px; "
+            >
+              <Option
+                v-for="item in isReturnBackPriceList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.isCreateOrder"
+              placeholder="请选择录单触达"
+              filterable
+              style="width: 160px; margin-left: 10px"
+            >
+              <Option
+                v-for="item in query.isCreateOrderList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.isSendOrder"
+              placeholder="请选择派单触达"
+              filterable
+              style="width: 160px; margin-left: 10px"
+            >
+              <Option
+                v-for="item in query.isSendOrderList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.emergencyLevel"
+              placeholder="请选择重要程度"
+              filterable
+              style="width: 160px; margin-left: 10px"
+            >
+              <Option
+                v-for="item in emergencyLevelListAll"
+                :value="item.emergencyLevel"
+                :key="item.emergencyLevel"
+                >{{ item.emergencyLevelText }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.baseLiveAnchorId"
+              placeholder="请选择基础主播"
+              filterable
+              style="width: 160px; margin-left: 10px"
+            >
+              <Option
+                v-for="item in liveAnchorBaseInfos"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.source"
+              placeholder="请选择客户来源"
+              filterable
+              style="width: 160px; margin-left: 10px"
+            >
+              <Option
+                v-for="item in sourceListAll"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
+        </div>
+        <div>
+          <Button
+            type="primary"
+            style="margin:0 10px"
+            @click="getshoppingCartRegistrationReport"
+            >查询</Button
+          >
+          <Button
+            type="primary"
+            @click="exportsendOrder"
+            v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
+            >导出</Button
+          >
+        </div>
+      </div>
       <Card class="container">
         <div>
           <Table
@@ -135,6 +218,8 @@
 </template>
 <script>
 import * as api from "@/api/orderManage";
+import * as shoppingCartApi from "@/api/shoppingCartRegistration";
+
 import { download } from "@/utils/util";
 export default {
   props: {
@@ -142,60 +227,86 @@ export default {
       type: Boolean,
     },
     contentPalteForms: Array,
+    emergencyLevelListAll: Array,
+    liveAnchorBaseInfos: Array,
   },
   data() {
     return {
-        // 主播
-        liveAnchors:[],
+      // 主播
+      liveAnchors: [],
       smallYellowCarRegistrationModels: false,
       priceNum: 0,
       pageCount: 0,
       // 是否加v
-        isAddWeChatList:[{
-          type:-1,
-          name:'全部加V状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
-        isWriteOffList:[{
-          type:-1,
-          name:'全部核销状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
-        isConsultationList:[{
-          type:-1,
-          name:'全部面诊状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
-        isReturnBackPriceList:[{
-          type:-1,
-          name:'全部退款状态'
-        },{
-          type:'true',
-          name:'是'
-        },{
-          type:'false',
-          name:'否'
-        }],
+      isAddWeChatList: [
+        {
+          type: -1,
+          name: "全部加V状态",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
+      isWriteOffList: [
+        {
+          type: -1,
+          name: "全部核销状态",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
+      isConsultationList: [
+        {
+          type: -1,
+          name: "全部面诊类型",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
+      isReturnBackPriceList: [
+        {
+          type: -1,
+          name: "全部退款状态",
+        },
+        {
+          type: "true",
+          name: "是",
+        },
+        {
+          type: "false",
+          name: "否",
+        },
+      ],
       query: {
-        isAddWechat:-1,
-        isWriteOff:-1,
-        isConsultation:-1,
-        isReturnBackPrice:-1,
+        source: -1,
+        baseLiveAnchorId: -1,
+        // 重要程度
+        emergencyLevel: -1,
+        // 录单触达
+        isCreateOrder: -1,
+        // 派单触达
+        isSendOrder: -1,
+        isAddWechat: -1,
+        isWriteOff: -1,
+        isConsultation: -1,
+        isReturnBackPrice: -1,
         contentPlatFormId: "",
         LiveAnchorId: "",
         startDate: this.$moment()
@@ -226,8 +337,87 @@ export default {
             },
           },
           {
+            title: "重要程度",
+            key: "emergencyLevelText",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.emergencyLevelText == "非常重要") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "重要") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#ff9800",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "一般") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#2098ee",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "轻微") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#009688",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else if (params.row.emergencyLevelText == "可忽略") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "blue",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              } else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.emergencyLevelText
+                );
+              }
+            },
+          },
+          {
             title: "渠道",
             key: "contentPlatFormName",
+            minWidth: 100,
+          },
+          {
+            title: "客户来源",
+            key: "sourceText",
+            minWidth: 100,
+          },
+          {
+            title: "主播",
+            key: "baseLiveAnchorName",
             minWidth: 100,
           },
           {
@@ -257,15 +447,27 @@ export default {
           },
           {
             title: "面诊方式",
-            key: "consultationType",
+            key: "consultationTypeText",
             minWidth: 120,
             align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.consultationType == 1 ? "视频" : "图片"
-              );
-            },
+            // render: (h, params) => {
+            //   return h(
+            //     "div",
+            //     params.row.consultationType == 1 ? "视频" : "图片"
+            //   );
+            // },
+          },
+          {
+            title: "录单触达",
+            key: "isCreateOrder",
+            minWidth: 100,
+            align: "center",
+          },
+          {
+            title: "派单触达",
+            key: "isSendOrder",
+            minWidth: 100,
+            align: "center",
           },
           {
             title: "是否加V",
@@ -414,15 +616,58 @@ export default {
           },
         ],
         data: [],
+        // 录单触达
+        isCreateOrderList: [
+          {
+            type: -1,
+            name: "全部录单触达状态",
+          },
+          {
+            type: "true",
+            name: "是",
+          },
+          {
+            type: "false",
+            name: "否",
+          },
+        ],
+        // 派单触达
+        isSendOrderList: [
+          {
+            type: -1,
+            name: "全部派单触达状态",
+          },
+          {
+            type: "true",
+            name: "是",
+          },
+          {
+            type: "false",
+            name: "否",
+          },
+        ],
       },
+      // 客户来源
+      sourceListAll: [{ name: "全部客户来源", id: -1 }],
     };
   },
   methods: {
-      contentPlateChange(value) {
+    // 客户来源
+    getcustomerSourceList() {
+      shoppingCartApi.customerSourceList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.sourceListAll = [...this.sourceListAll, ...sourceList];
+        }
+      });
+    },
+    contentPlateChange(value) {
       if (!value) {
         return;
       }
       this.getLiveValidList(value);
+      
+
     },
     // 根据平台id去获取IP账号
     getLiveValidList(value) {
@@ -438,16 +683,35 @@ export default {
     },
     // 小黄陈登记报表
     getshoppingCartRegistrationReport() {
-      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice} = this.query;
+      const {
+        startDate,
+        endDate,
+        contentPlatFormId,
+        LiveAnchorId,
+        isAddWechat,
+        isWriteOff,
+        isConsultation,
+        isReturnBackPrice,
+        isCreateOrder,
+        isSendOrder,
+        emergencyLevel,
+        source,
+        baseLiveAnchorId,
+      } = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         contentPlatFormId,
         LiveAnchorId,
-        isAddWechat:isAddWechat == -1 ? null : isAddWechat,
-        isWriteOff:isWriteOff == -1 ? null : isWriteOff,
-        isConsultation:isConsultation == -1 ? null : isConsultation,
-        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice
+        isAddWechat: isAddWechat == -1 ? null : isAddWechat,
+        isWriteOff: isWriteOff == -1 ? null : isWriteOff,
+        isConsultation: isConsultation == -1 ? null : isConsultation,
+        isReturnBackPrice: isReturnBackPrice == -1 ? null : isReturnBackPrice,
+        isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
+        isSendOrder: isSendOrder == -1 ? null : isSendOrder,
+        emergencyLevel: emergencyLevel == -1 ? null : emergencyLevel,
+        source: source == -1 ? null : source,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -468,16 +732,35 @@ export default {
     },
     // 导出
     exportsendOrder() {
-      const { startDate, endDate, contentPlatFormId,LiveAnchorId,isAddWechat,isWriteOff,isConsultation,isReturnBackPrice} = this.query;
+      const {
+        startDate,
+        endDate,
+        contentPlatFormId,
+        LiveAnchorId,
+        isAddWechat,
+        isWriteOff,
+        isConsultation,
+        isReturnBackPrice,
+        isCreateOrder,
+        isSendOrder,
+        emergencyLevel,
+        source,
+        baseLiveAnchorId,
+      } = this.query;
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD"),
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         contentPlatFormId,
         LiveAnchorId,
-        isAddWechat:isAddWechat == -1 ? null : isAddWechat,
-        isWriteOff:isWriteOff == -1 ? null : isWriteOff,
-        isConsultation:isConsultation == -1 ? null : isConsultation,
-        isReturnBackPrice:isReturnBackPrice == -1 ? null : isReturnBackPrice
+        isAddWechat: isAddWechat == -1 ? null : isAddWechat,
+        isWriteOff: isWriteOff == -1 ? null : isWriteOff,
+        isConsultation: isConsultation == -1 ? null : isConsultation,
+        isReturnBackPrice: isReturnBackPrice == -1 ? null : isReturnBackPrice,
+        isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
+        isSendOrder: isSendOrder == -1 ? null : isSendOrder,
+        emergencyLevel: emergencyLevel == -1 ? null : emergencyLevel,
+        source: source == -1 ? null : source,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -506,9 +789,10 @@ export default {
         this.query.endDate = this.$moment(new Date()).format("YYYY-MM-DD");
         this.pageCount = 0;
         this.priceNum = 0;
-        this.query.contentPlatFormId = ''
-        this.query.LiveAnchorId = ''
+        this.query.contentPlatFormId = "";
+        this.query.LiveAnchorId = "";
         this.$emit("update:smallYellowCarRegistrationModel", false);
+        this.query.emergencyLevel = -1;
       }
     },
     // 取消
@@ -522,13 +806,14 @@ export default {
       this.query.endDate = this.$moment(new Date()).format("YYYY-MM-DD");
       this.pageCount = 0;
       this.priceNum = 0;
-      this.query.contentPlatFormId = ''
-      this.query.LiveAnchorId = ''
+      this.query.contentPlatFormId = "";
+      this.query.LiveAnchorId = "";
       this.$emit("update:smallYellowCarRegistrationModel", false);
+      this.query.emergencyLevel = -1;
     },
   },
   created() {
-    // this.getsendOrderReport()
+    this.getcustomerSourceList();
   },
   watch: {
     smallYellowCarRegistrationModel(value) {
@@ -554,5 +839,9 @@ export default {
   margin-right: 20px;
   font-size: 18px;
   display: flex;
+}
+.content {
+  display: flex;
+  align-items: center;
 }
 </style>

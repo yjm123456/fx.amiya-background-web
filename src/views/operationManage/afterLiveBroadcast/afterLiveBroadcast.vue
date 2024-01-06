@@ -18,32 +18,6 @@
             v-model="query.endDate"
           ></DatePicker>
           <Select
-            v-model="query.operationEmpId"
-            placeholder="请选择运营人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in employeeAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.netWorkConEmpId"
-            placeholder="请选择网咨人员"
-            style="width:200px;margin-left:10px"
-            filterable
-          >
-            <Option
-              v-for="item in netWorkConsultingNameListAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
             v-model="query.contentPlatFormId"
             placeholder="请选择主播平台"
             @on-change="contentPlateChange(query.contentPlatFormId)"
@@ -79,7 +53,7 @@
           >
         </div>
         <div class="right">
-          <Button type="primary" @click="controlModal = true">添加</Button>
+          <Button type="primary" @click="controlModal = true;getLiveAnchorMonthlyTarget()">添加</Button>
         </div>
       </div>
     </Card>
@@ -99,6 +73,7 @@
           @on-change="handlePageChange"
         />
       </div>
+      <div class="bottom_title">往期数据已存储，请进行新数据填写，若需要更早期数据可联系研发部</div>
     </Card>
 
     <Modal
@@ -127,7 +102,7 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="月份选择" prop="year">
+            <FormItem label="月份选择" prop="month">
               <Select
                 v-model="form.month"
                 placeholder="请选择生日月份"
@@ -198,19 +173,39 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日消耗卡数量"
+              label="今日照片消耗卡数量"
               prop="consultationCardConsumed"
               :rules="[
                 {
                   required: true,
-                  message: '请输入今日消耗卡数量',
+                  message: '请输入今日照片消耗卡数量',
                 },
               ]"
-              key="今日消耗卡数量"
+              key="今日照片消耗卡数量"
             >
               <Input
                 v-model="form.consultationCardConsumed"
-                placeholder="请输入今日消耗卡数量"
+                placeholder="请输入今日照片消耗卡数量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日视频消耗卡数量"
+              prop="consultationCardConsumed2"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日视频消耗卡数量',
+                },
+              ]"
+              key="今日视频消耗卡数量"
+            >
+              <Input
+                v-model="form.consultationCardConsumed2"
+                placeholder="请输入今日视频消耗卡数量"
                 type="number"
                 number
               />
@@ -260,6 +255,44 @@
               <Input
                 v-model="form.sendOrderNum"
                 placeholder="请输入今日派单量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日有效业绩"
+              prop="effectivePerformance"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日有效业绩',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.effectivePerformance"
+                placeholder="请输入今日潜在业绩"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
+              label="今日潜在业绩"
+              prop="potentialPerformance"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日潜在业绩',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.potentialPerformance"
+                placeholder="请输入今日潜在业绩"
                 type="number"
                 number
               />
@@ -566,9 +599,14 @@
               />
             </FormItem>
           </Col>
+          <Spin fix v-if="isflag==true">
+              <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+              <div>加载中...</div>
+          </Spin>
         </Row>
       </Form>
       <div slot="footer">
+        <Button type="primary" @click="autoFillSubmit">自动填写</Button>
         <Button @click="cancelSubmit('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
@@ -583,15 +621,12 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 export default {
   data() {
     return {
-      employeeList:[],
+      isflag:false,
+      employeeList: [],
       // 查询
       query: {
         contentPlatFormId: null,
         liveAnchorId: null,
-        // 运营人员
-        operationEmpId: "",
-        // 网咨人员
-        netWorkConEmpId: "",
         startDate: this.$moment()
           .subtract(1, "days")
           .format("YYYY-MM-DD"),
@@ -621,9 +656,21 @@ export default {
           },
           {
             title: "网咨人员",
-            key: "netWorkConsultingEmployeeName",
+            key: "operationEmpName",
             minWidth: 100,
             align: "center",
+          },
+          {
+            title: "更新时间",
+            key: "updateDate",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.updateDate ? this.$moment(params.row.updateDate).format("YYYY-MM-DD HH:mm:ss") : ''
+              );
+            },
           },
           {
             title: "今日加V量",
@@ -632,9 +679,15 @@ export default {
             align: "center",
           },
           {
-            title: "今日消耗卡数量",
+            title: "今日照片消耗卡数量",
             key: "consultationCardConsumed",
-            minWidth: 150,
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "今日视频消耗卡数量",
+            key: "consultationCardConsumed2",
+            minWidth: 180,
             align: "center",
           },
           {
@@ -647,6 +700,18 @@ export default {
             title: "今日派单量",
             key: "sendOrderNum",
             minWidth: 110,
+            align: "center",
+          },
+          {
+            title: "今日有效业绩",
+            key: "effectivePerformance",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "今日潜在业绩",
+            key: "potentialPerformance",
+            minWidth: 130,
             align: "center",
           },
           {
@@ -740,20 +805,6 @@ export default {
             align: "center",
           },
           {
-            title: "创建日期",
-            key: "createDate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.createDate).format(
-                  "YYYY-MM-DD HH:mm:ss"
-                )
-              );
-            },
-          },
-          {
             title: "操作",
             key: "",
             width: 120,
@@ -776,26 +827,22 @@ export default {
                         const { id } = params.row;
                         this.title = "修改";
                         this.flag = true;
-                        api.byIdLiveAnchorDailyTarget(id).then((res) => {
+                        const data = {
+                          id:id,
+                          type:7
+                        }
+                        api.byIdLiveAnchorDailyTarget(data).then((res) => {
                           if (res.code === 0) {
                             const {
                               id,
                               liveanchorMonthlyTargetId,
-                              operationEmployeeId,
                               netWorkConsultingEmployeeId,
-                              todaySendNum,
-                              flowInvestmentNum,
                               addWechatNum,
                               sendOrderNum,
                               visitNum,
                               dealNum,
                               performanceNum,
                               recordDate,
-                              addFansNum,
-                              cluesNum,
-                              livingRoomFlowInvestmentNum,
-                              consultation,
-                              cargoSettlementCommission,
                               newVisitNum,
                               subsequentVisitNum,
                               oldCustomerVisitNum,
@@ -809,27 +856,22 @@ export default {
                               miniVanBadReviews,
                               minivanRefund,
                               consultationCardConsumed,
+                              consultationCardConsumed2,
                               activateHistoricalConsultation,
-                              livingTrackingEmployeeId
+                              effectivePerformance,
+                              potentialPerformance
                             } = res.data.liveAnchorDailyTargetInfo;
+                            this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
-                            this.form.operationEmployeeId = operationEmployeeId;
-                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId;
-                            this.form.todaySendNum = todaySendNum;
-                            this.form.flowInvestmentNum = flowInvestmentNum;
+                            this.form.netWorkConsultingEmployeeId = netWorkConsultingEmployeeId== 0 ? null : netWorkConsultingEmployeeId;
                             this.form.addWechatNum = addWechatNum;
                             this.form.sendOrderNum = sendOrderNum;
                             this.form.visitNum = visitNum;
                             this.form.dealNum = dealNum;
                             this.form.performanceNum = performanceNum;
-                            this.form.addFansNum = addFansNum;
-                            this.form.cluesNum = cluesNum;
-                            this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
-                            this.form.consultation = consultation;
-                            this.form.cargoSettlementCommission = cargoSettlementCommission;
                             this.form.newVisitNum = newVisitNum;
                             this.form.subsequentVisitNum = subsequentVisitNum;
                             this.form.oldCustomerVisitNum = oldCustomerVisitNum;
@@ -843,12 +885,15 @@ export default {
                             this.form.miniVanBadReviews = miniVanBadReviews;
                             this.form.minivanRefund = minivanRefund;
                             this.form.consultationCardConsumed = consultationCardConsumed;
+                            this.form.consultationCardConsumed2 = consultationCardConsumed2;
                             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
-                            this.form.livingTrackingEmployeeId = livingTrackingEmployeeId
-
+                            this.form.effectivePerformance = effectivePerformance;
+                            this.form.potentialPerformance = potentialPerformance;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
+                            // this.liveanchorMonthlyTargetIdChange(this.form.liveanchorMonthlyTargetId)
+
                           }
                         });
                       },
@@ -967,14 +1012,8 @@ export default {
       form: {
         // 主播月目标关联id
         liveanchorMonthlyTargetId: "",
-        // 运营人员Id
-        operationEmployeeId: "",
         // 网咨人员Id
         netWorkConsultingEmployeeId: "",
-        // 今日发布量
-        todaySendNum: null,
-        // 今日投流量
-        flowInvestmentNum: null,
         // 今日加V量
         addWechatNum: null,
         // 今日派单量
@@ -991,16 +1030,6 @@ export default {
         year: this.$moment(new Date()).format("yyyy"),
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
-        // 今日涨粉量
-        addFansNum: null,
-        // 今日线索量
-        cluesNum: null,
-        // 今日直播间投流量
-        livingRoomFlowInvestmentNum: null,
-        // 今日面诊卡数量
-        consultation: null,
-        // 今日带货结算佣金
-        cargoSettlementCommission: null,
         // 新诊上门量
         newVisitNum: null,
         // 复诊上门
@@ -1025,20 +1054,34 @@ export default {
         miniVanBadReviews: null,
         // 今日小黄车退款量
         minivanRefund: null,
-        // 今日消耗卡数量
+        // 今日照片消耗卡数量
         consultationCardConsumed: null,
+        // 今日视频消耗卡数量
+        consultationCardConsumed2: null,
         // 今日激活历史面诊数量
         activateHistoricalConsultation: null,
-        // 直播中
-        livingTrackingEmployeeId:null
+        // 主播IP(自动填写用的字段)
+        liveAnchorId:null,
+        // 今日有效业绩
+        effectivePerformance:null,
+        // 今日潜在业绩
+        potentialPerformance:null,
+       
       },
 
       ruleValidate: {
+        
+        netWorkConsultingEmployeeId: [
+          {
+            required: true,
+            message: "请选择网咨人员",
+          },
+        ],
         livingTrackingEmployeeId: [
           {
             required: true,
             message: "请选择直播中人员",
-          }
+          },
         ],
         liveanchorMonthlyTargetId: [
           {
@@ -1110,7 +1153,62 @@ export default {
     };
   },
   methods: {
+    // 根据月名称获取主播id
+    liveanchorMonthlyTargetIdChange(value){
+      if(value){
+        api.byIdLiveAnchorMonthlyTargets(this.form.liveanchorMonthlyTargetId).then((res) => {
+          if (res.code === 0) {
+            this.form.liveAnchorId = res.data.liveAnchorMonthlyTargetInfo.liveAnchorId
+          }
+        })
+      }
+    },
+    // 自动填写
+    autoFillSubmit(){
+      const {liveanchorMonthlyTargetId , netWorkConsultingEmployeeId , recordDate,liveAnchorId} = this.form
+      if(!liveanchorMonthlyTargetId){
+        this.$Message.warning('请选择月目标名称')
+        return
+      } 
+      if(!netWorkConsultingEmployeeId){
+        this.$Message.warning('请选择网咨人员')
+        return
+      } 
+      if(!recordDate){
+        this.$Message.warning('请选择填报日期')
+        return
+      } 
+      const data = {
+        liveAnchorId:liveAnchorId,
+        recordDate:this.$moment(new Date(recordDate)).format("YYYY-MM-DD")
+      }
+      api.getLiveAnchorPerformance(data).then((res) => {
+       
+        this.form.addWechatNum = res.addWechatNum
+        this.form.sendOrderNum = res.sendOrderNum
+        this.form.visitNum = res.visitNum
+        this.form.dealNum = res.dealNum
+        this.form.performanceNum = res.performanceNum
+        this.form.newVisitNum = res.newVisitNum
+        this.form.subsequentVisitNum = res.subsequentVisitNum
+        this.form.oldCustomerVisitNum = res.oldCustomerVisitNum
+        this.form.newDealNum = res.newDealNum
+        this.form.subsequentDealNum = res.subsequentDealNum
+        this.form.newPerformanceNum = res.newPerformanceNum
+        this.form.subsequentPerformanceNum = res.subsequentPerformanceNum
+        this.form.oldCustomerPerformanceNum = res.oldCustomerPerformanceNum
+        this.form.newCustomerPerformanceCountNum = res.newCustomerPerformanceCountNum
+        this.form.oldCustomerDealNum = res.oldCustomerDealNum
+        this.form.miniVanBadReviews = res.miniVanBadReviews
+        this.form.minivanRefund = res.minivanRefund
+        this.form.consultationCardConsumed = res.consultationCardConsumed
+        this.form.consultationCardConsumed2 = res.consultationCardConsumed2
+        this.form.activateHistoricalConsultation = res.activateHistoricalConsultation
+        this.form.effectivePerformance = res.effectivePerformance
+        this.form.potentialPerformance = res.potentialPerformance
+      })
 
+    },
     // 老客成交
     oldCustomerNumChange() {
       this.form.dealNum =
@@ -1185,10 +1283,10 @@ export default {
       this.getLiveAnchorMonthlyTarget();
     },
     // 根据职位获取直播中人员
-    employeeManage(){
+    employeeManage() {
       const data = {
-        positionId:9
-      }
+        positionId: 9,
+      };
       employeeManageApi.getEmployeeByPositionId(data).then((res) => {
         if (res.code === 0) {
           const { employee } = res.data;
@@ -1253,10 +1351,17 @@ export default {
         year: this.$moment(new Date(year)).format("YYYY"),
         month,
       };
-      api.getLiveAnchorMonthlyTarget(data).then((res) => {
+      api.getLiveAnchorMonthlyTargetAfterLivingName(data).then((res) => {
         if (res.code === 0) {
-          const { liveAnchorMonthlyTarget } = res.data;
-          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTarget;
+          const { liveAnchorMonthlyTargetAfterLiving } = res.data;
+          if(liveAnchorMonthlyTargetAfterLiving.length == 0 || !liveAnchorMonthlyTargetAfterLiving){
+            this.$Message.warning({
+              content: "主播IP月目标暂未生成，无法填写数据，请联系管理员进行月目标数据完善！",
+              duration: 3,
+            });
+            return
+          }
+          this.liveAnchorMonthlyTarget = liveAnchorMonthlyTargetAfterLiving;
         }
       });
     },
@@ -1269,8 +1374,6 @@ export default {
         pageNum,
         pageSize,
         day,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -1281,15 +1384,13 @@ export default {
         // day: this.$moment(new Date(day)).format("YYYY-MM-DD"),
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
         return;
       } else {
-        api.getLiveAnchorDailyTarget(data).then((res) => {
+        api.afterLivingListWithPage(data).then((res) => {
           if (res.code === 0) {
             const { list, totalCount } = res.data.liveAnchorDailyTargetInfo;
             this.query.data = list;
@@ -1303,8 +1404,6 @@ export default {
     handlePageChange(pageNum) {
       const {
         pageSize,
-        operationEmpId,
-        netWorkConEmpId,
         startDate,
         endDate,
         liveAnchorId,
@@ -1314,11 +1413,9 @@ export default {
         pageSize,
         startDate: this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
-        operationEmpId,
-        netWorkConEmpId,
         liveAnchorId,
       };
-      api.getLiveAnchorDailyTarget(data).then((res) => {
+      api.afterLivingListWithPage(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.liveAnchorDailyTargetInfo;
           this.query.data = list;
@@ -1335,21 +1432,13 @@ export default {
             const {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
               netWorkConsultingEmployeeId,
-              todaySendNum,
-              flowInvestmentNum,
               addWechatNum,
               sendOrderNum,
               visitNum,
               dealNum,
               performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
-              livingRoomFlowInvestmentNum,
-              consultation,
-              cargoSettlementCommission,
               newVisitNum,
               subsequentVisitNum,
               oldCustomerVisitNum,
@@ -1363,17 +1452,18 @@ export default {
               miniVanBadReviews,
               minivanRefund,
               consultationCardConsumed,
+              consultationCardConsumed2,
               activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              effectivePerformance,
+              potentialPerformance
             } = this.form;
             const data = {
               id,
               liveanchorMonthlyTargetId,
-              operationEmployeeId:operationEmployeeId ? operationEmployeeId : 0,
-              netWorkConsultingEmployeeId:netWorkConsultingEmployeeId ? netWorkConsultingEmployeeId : 0,
-              todaySendNum :todaySendNum ? todaySendNum : 0,
-              flowInvestmentNum :flowInvestmentNum ? flowInvestmentNum :0,
-              addWechatNum:addWechatNum ? addWechatNum:0,
+              netWorkConsultingEmployeeId: netWorkConsultingEmployeeId
+                ? netWorkConsultingEmployeeId
+                : 0,
+              addWechatNum: addWechatNum ? addWechatNum : 0,
               sendOrderNum: sendOrderNum ? sendOrderNum : 0,
               visitNum: visitNum ? visitNum : 0,
               dealNum: dealNum ? dealNum : 0,
@@ -1381,13 +1471,6 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum:cluesNum ? cluesNum :0 ,
-              addFansNum:addFansNum ? addFansNum :0,
-              livingRoomFlowInvestmentNum:livingRoomFlowInvestmentNum?livingRoomFlowInvestmentNum:0,
-              consultation: consultation ? consultation : 0,
-              cargoSettlementCommission: cargoSettlementCommission
-                ? cargoSettlementCommission
-                : 0,
               newVisitNum: newVisitNum ? newVisitNum : 0,
               subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
               oldCustomerVisitNum: oldCustomerVisitNum
@@ -1411,13 +1494,19 @@ export default {
               consultationCardConsumed: consultationCardConsumed
                 ? consultationCardConsumed
                 : 0,
+              consultationCardConsumed2: consultationCardConsumed2
+                ? consultationCardConsumed2
+                : 0,
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
-                livingTrackingEmployeeId:livingTrackingEmployeeId ? livingTrackingEmployeeId :0
+                effectivePerformance,
+              potentialPerformance
             };
-            api.editLiveAnchorDailyTarget(data).then((res) => {
+            this.isflag = true
+            api.afterLivingUpdate(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false
                 this.isEdit = false;
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
@@ -1425,26 +1514,22 @@ export default {
                   content: "修改成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           } else {
             const {
               liveanchorMonthlyTargetId,
-              operationEmployeeId,
               netWorkConsultingEmployeeId,
-              todaySendNum,
-              flowInvestmentNum,
               addWechatNum,
               sendOrderNum,
               visitNum,
               dealNum,
               performanceNum,
               recordDate,
-              cluesNum,
-              addFansNum,
-              livingRoomFlowInvestmentNum,
-              consultation,
-              cargoSettlementCommission,
               newVisitNum,
               subsequentVisitNum,
               oldCustomerVisitNum,
@@ -1458,16 +1543,15 @@ export default {
               miniVanBadReviews,
               minivanRefund,
               consultationCardConsumed,
+              consultationCardConsumed2,
               activateHistoricalConsultation,
-              livingTrackingEmployeeId
+              effectivePerformance,
+              potentialPerformance
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
-              operationEmployeeId:operationEmployeeId ? operationEmployeeId : 0,
               netWorkConsultingEmployeeId,
-              todaySendNum : todaySendNum ? todaySendNum : 0 ,
-              flowInvestmentNum:flowInvestmentNum?flowInvestmentNum:0,
-              addWechatNum:addWechatNum ? addWechatNum:0,
+              addWechatNum: addWechatNum ? addWechatNum : 0,
               sendOrderNum: sendOrderNum ? sendOrderNum : 0,
               visitNum: visitNum ? visitNum : 0,
               dealNum: dealNum ? dealNum : 0,
@@ -1475,13 +1559,6 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              cluesNum:cluesNum?cluesNum:0,
-              addFansNum:addFansNum?addFansNum:0,
-              livingRoomFlowInvestmentNum:livingRoomFlowInvestmentNum?livingRoomFlowInvestmentNum:0,
-              consultation: consultation ? consultation : 0,
-              cargoSettlementCommission: cargoSettlementCommission
-                ? cargoSettlementCommission
-                : 0,
               newVisitNum: newVisitNum ? newVisitNum : 0,
               subsequentVisitNum: subsequentVisitNum ? subsequentVisitNum : 0,
               oldCustomerVisitNum: oldCustomerVisitNum
@@ -1505,21 +1582,31 @@ export default {
               consultationCardConsumed: consultationCardConsumed
                 ? consultationCardConsumed
                 : 0,
+              consultationCardConsumed2: consultationCardConsumed2
+                ? consultationCardConsumed2
+                : 0,
               activateHistoricalConsultation: activateHistoricalConsultation
                 ? activateHistoricalConsultation
                 : 0,
-              livingTrackingEmployeeId:livingTrackingEmployeeId?livingTrackingEmployeeId: 0
+              effectivePerformance,
+              potentialPerformance
             };
+            this.isflag = true
             // 添加
-            api.AddLiveAnchorDailyTarget(data).then((res) => {
+            api.afterLivingAdd(data).then((res) => {
               if (res.code === 0) {
+                this.isflag = false
                 this.cancelSubmit("form");
                 this.getLiveAnchorDayList();
                 this.$Message.success({
                   content: "添加成功",
                   duration: 3,
                 });
-              }
+              }else {
+                  setTimeout(() => {
+                    this.isflag = false;
+                  }, 3000);
+                }
             });
           }
         }
@@ -1548,8 +1635,8 @@ export default {
     this.getLiveAnchorDayList();
     this.getCustomerServiceList();
     this.getnetWorkConsultingNameList();
-    this.getLiveAnchorMonthlyTarget();
-    this.employeeManage()
+    // this.getLiveAnchorMonthlyTarget();
+    this.employeeManage();
   },
 };
 </script>
@@ -1565,5 +1652,12 @@ export default {
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.bottom_title{
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  text-align: end;
+  margin-top: 10px;
 }
 </style>

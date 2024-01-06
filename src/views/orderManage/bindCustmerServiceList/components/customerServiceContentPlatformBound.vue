@@ -25,7 +25,7 @@
         <Select
           v-model="query.customerServiceId"
           placeholder="请选择客服"
-          style="width: 200px; margin-left: 10px"
+          style="width: 180px; margin-left: 10px"
           filterable
         >
           <Option
@@ -39,7 +39,7 @@
           v-model="query.contentPlatFormId"
           placeholder="请选择主播平台"
           @on-change="contentPlateChange(query.contentPlatFormId)"
-          style="width: 200px; margin-left: 10px"
+          style="width: 180px; margin-left: 10px"
           filterable
         >
           <Option
@@ -52,7 +52,7 @@
         <Select
           v-model="query.liveAnchorId"
           placeholder="请选择主播IP账号"
-          style="width: 200px; margin-left: 10px"
+          style="width: 180px; margin-left: 10px"
           :disabled="query.contentPlatFormId === null"
           filterable
         >
@@ -61,6 +61,19 @@
             :value="item.id"
             :key="item.id"
             >{{ item.hostAccountName }}</Option
+          >
+        </Select>
+        <Select
+          v-model="query.liveAnchorWechatNoId"
+          placeholder="请选择主播微信号"
+          filterable
+          style="width: 180px; margin-left: 10px"
+        >
+          <Option
+            v-for="(item, indexs) in weChatList"
+            :value="item.weChatNo"
+            :key="indexs"
+            >{{ item.weChatNo }}</Option
           >
         </Select>
         <Button
@@ -79,7 +92,7 @@
     </Card>
 
     <Card style="margin-top: 10px">
-      <div>
+      <!-- <div>
         <Table
           border
           :columns="query.columns"
@@ -100,13 +113,37 @@
           show-elevator
           @on-change="handleProjectPageChange"
         />
+      </div> -->
+      <div>
+        <Table
+          border
+          :columns="query.columns"
+          :data="query.data"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancel"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"
+        ></Table>
+      </div>
+      <div class="page_wrap">
+        <Page
+          ref="pages"
+          :current="query.pageNum"
+          :page-size="query.pageSize"
+          :total="query.totalCount"
+          show-total
+          show-sizer
+          :page-size-opts="[10, 50, 100,200,500]"
+          @on-change="handleProjectPageChange"
+          @on-page-size-change="handlePageSizeChange"
+        />
       </div>
     </Card>
 
     <Modal v-model="controlModal" title="修改绑定客服" :mask-closable="false">
       <Form ref="form" :model="form" label-position="left" :label-width="60">
         <FormItem label="客服" prop="hospitalId">
-          <Select v-model="form.customerServiceId" placeholder="请选择客服">
+          <Select v-model="form.customerServiceId" placeholder="请选择客服" filterable>
             <Option v-for="item in employee" :value="item.id" :key="item.id">{{
               item.name
             }}</Option>
@@ -124,6 +161,8 @@
 <script>
 import * as api from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
+import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
+
 export default {
   props: ["activeName"],
   data() {
@@ -136,6 +175,7 @@ export default {
         keyword: "",
         employee: [{ name: "全部", id: "all" }],
         customerServiceId: null,
+        liveAnchorWechatNoId:'全部微信号',
         appTypeList: [
           {
             name: "全部平台",
@@ -160,7 +200,7 @@ export default {
             type: "selection",
             key: "_checked",
             align: "center",
-            minWidth: 100,
+            minWidth: 70,
           },
           {
             title: "录单时间",
@@ -179,17 +219,22 @@ export default {
           {
             title: "订单号",
             key: "id",
-            minWidth: 200,
+            minWidth: 180,
+            align: "center",
+            tooltip: true,
           },
           {
             title: "绑定客服",
             key: "customerServiceName",
             minWidth: 120,
+            align: "center",
+            tooltip: true,
           },
           {
             title: "项目",
             key: "thumbPictureUrl",
-            minWidth: 220,
+            minWidth: 180,
+            align: "center",
             render: (h, params) => {
               return h(
                 "viewer",
@@ -221,33 +266,44 @@ export default {
           {
             title: "下单平台",
             key: "contentPlatformName",
-            minWidth: 120,
+            minWidth: 100,
+             align: "center",
+             tooltip: true,
           },
           {
             title: "IP账号",
             key: "liveAnchorName",
             minWidth: 120,
+             align: "center",
+             tooltip: true,
           },
           {
             title: "姓名",
             key: "customerName",
             minWidth: 150,
+             align: "center",
+             tooltip: true,
           },
           {
             title: "手机号",
             key: "phone",
             minWidth: 140,
+             align: "center",
           },
           {
             title: "预约门店",
             key: "appointmentHospitalName",
-            minWidth: 220,
+            minWidth: 200,
+             align: "center",
+             tooltip: true,
           },
           
           {
-            title: "备注",
-            key: "remark",
-            minWidth: 200,
+            title: "主播微信号",
+            key: "liveAnchorWeChatNo",
+            minWidth: 180,
+            tooltip: true,
+            align: "center",
           },
         ],
         data: [],
@@ -265,9 +321,23 @@ export default {
         encryptPhoneList: new Set(),
         customerServiceId: "",
       },
+      // 微信号
+      weChatList:[{weChatNo:'全部微信号',name:'全部微信号'}]
     };
   },
   methods: {
+    //  主播微信号
+    getWeChatList() {
+      const data = {
+        liveanchorId: '',
+      };
+      liveAnchorApi.getvalidList(data).then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorWechatInfos } = res.data;
+          this.weChatList = [...this.weChatList,...liveAnchorWechatInfos];
+        }
+      });
+    },
     //   获取平台（下拉框）
     getContentValidList() {
       contentPlatForm.getContentPlatFormValidList().then((res) => {
@@ -329,7 +399,8 @@ export default {
         pageSize,
         liveAnchorId,
         startDate,
-        endDate
+        endDate,
+        liveAnchorWechatNoId
       } = this.query;
       if(!startDate){
         this.$Message.error('请选择开始时间')
@@ -347,7 +418,8 @@ export default {
         pageSize,
         liveAnchorId,
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
-        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null
+        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        liveAnchorWechatNoId:liveAnchorWechatNoId == '全部微信号' ? '' : liveAnchorWechatNoId
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {
@@ -365,14 +437,18 @@ export default {
 
     // 获取已绑定了客服的订单列表 分页
     handleProjectPageChange(pageNum) {
-      const { keyword, customerServiceId, pageSize,liveAnchorId } = this.query;
+      const { keyword, customerServiceId, pageSize,liveAnchorId,startDate,
+        endDate ,liveAnchorWechatNoId} = this.query;
       const data = {
         keyword,
         customerServiceId:
           customerServiceId === "all" ? null : customerServiceId,
         pageNum,
         pageSize,
-        liveAnchorId
+        liveAnchorId,
+        startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        liveAnchorWechatNoId:liveAnchorWechatNoId == '全部微信号' ? '' : liveAnchorWechatNoId
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {
@@ -393,7 +469,10 @@ export default {
         }
       });
     },
-
+    handlePageSizeChange(pageSize) {
+      this.query.pageSize = pageSize;
+      this.getbindCustomerServieOrderList();
+    },
     handleSelect(selection, row) {
       this.form.encryptPhoneList.add(row.encryptPhone);
     },
@@ -473,11 +552,12 @@ export default {
     this.getCustomerServiceList();
     // this.getOrderPlatform()
     this.getContentValidList()
+    this.getWeChatList()
   },
 };
 </script>
 <style lang="less" scoped>
-.pages {
+.page_wrap {
   margin-top: 16px;
   text-align: right;
 }

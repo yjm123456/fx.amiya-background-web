@@ -6,20 +6,20 @@
           <Input
             v-model="query.keyWord"
             placeholder="请输入关键字"
-            style="width: 200px; "
+            style="width: 170px; "
             @keyup.enter.native="getListWithPageByCustomerCompensation()"
           />
           <DatePicker
             type="date"
             placeholder="开始日期"
-            style="width: 150px;margin-left: .625rem"
+            style="width: 120px;margin-left: .625rem"
             :value="query.startDate"
             v-model="query.startDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="结束日期"
-            style="width: 150px; margin-left: .625rem"
+            style="width: 120px; margin-left: .625rem"
             :value="query.endDate"
             v-model="query.endDate"
           ></DatePicker>
@@ -27,7 +27,7 @@
             v-model="query.belongEmpId"
             placeholder="请选择归属客服"
             filterable
-            style="width: 200px;margin-left:10px"
+            style="width: 160px;margin-left:10px"
           >
             <Option
               v-for="item in params.employeeAll"
@@ -40,7 +40,7 @@
             v-model="query.chooseHospitalId"
             placeholder="请选择医院"
             filterable
-            style="width: 200px;margin-left:10px"
+            style="width: 160px;margin-left:10px"
           >
             <Option
               v-for="item in params.hospitallist"
@@ -53,7 +53,7 @@
             v-model="query.isOldCustoemr"
             placeholder="请选择业绩"
             filterable
-            style="width: 150px;margin-left:10px"
+            style="width: 140px;margin-left:10px"
           >
             <Option
               v-for="item in params.isOldCustoemrList"
@@ -66,10 +66,23 @@
             v-model="query.createEmpId"
             placeholder="请选择上传人"
             filterable
-            style="width: 150px;margin-left:10px"
+            style="width: 140px;margin-left:10px"
           >
             <Option
               v-for="item in params.creteEmpNameList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select> 
+          <Select
+            v-model="query.isGenerateSalry"
+            placeholder="请选择生成薪资状态"
+            filterable
+            style="width: 150px;margin-left:10px"
+          >
+            <Option
+              v-for="item in isGenerateSalryList"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
@@ -145,6 +158,7 @@ export default {
     return {
       // 查询
       query: {
+        isGenerateSalry:1,
         keyWord: "",
         startDate: this.$moment()
           .startOf("month")
@@ -382,6 +396,16 @@ export default {
       },
       // 生成薪资model
       generateSalaryModel:false,
+      isGenerateSalryList:[
+        {
+          id:1,
+          name:'未生成薪资单'
+        },
+        {
+          id:2,
+          name:'已生成薪资单'
+        }
+      ]
      
      
     };
@@ -452,7 +476,8 @@ export default {
         checkState,
         belongEmpId,
         isOldCustoemr,
-        createEmpId
+        createEmpId,
+        isGenerateSalry
       } = this.query;
       const data = {
         pageNum,
@@ -469,6 +494,7 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
+        isGenerateSalry
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {
@@ -491,7 +517,8 @@ export default {
         checkState,
         belongEmpId,
         isOldCustoemr,
-        createEmpId
+        createEmpId,
+        isGenerateSalry
       } = this.query;
       const data = {
         pageNum,
@@ -508,6 +535,7 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
+        isGenerateSalry
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {

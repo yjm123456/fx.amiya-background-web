@@ -103,22 +103,42 @@ export default {
               );
             },
           },
+          // {
+          //   title: "订单金额",
+          //   key: "orderPrice",
+          //   minWidth: 100,
+          //   align: "center",
+          // },
+          // {
+          //   title: "对账金额",
+          //   key: "returnBackPrice",
+          //   minWidth: 160,
+          //   align: "center",
+          // },
           {
-            title: "订单金额",
-            key: "orderPrice",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "对账金额",
-            key: "returnBackPrice",
-            minWidth: 160,
-            align: "center",
-          },
-          {
-            title: "审核客服业绩金额",
+            title: "审核业绩",
             key: "customerServiceSettlePrice",
             minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "提成比例",
+            key: "performancePercent",
+            minWidth: 100,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.performancePercent
+                  ? params.row.performancePercent + '%'
+                  : 0
+              );
+            },
+          },
+          {
+            title: "提成金额",
+            key: "customerServicePerformance",
+            minWidth: 150,
             align: "center",
           },
           {

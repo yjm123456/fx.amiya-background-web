@@ -48,7 +48,7 @@
           <Input v-model="form.customerServiceSettlePrice" placeholder="请输入审核客服业绩" type="number" number disabled></Input>
         </FormItem>
         <FormItem :label="proportionTitle" prop="performancePercent" v-if="form.checkBelongEmpId">
-          <Input v-model="form.performancePercent" placeholder="请输入提成比例" type="number" number disabled ></Input>
+          <Input v-model="form.performancePercent" placeholder="请输入提成比例" type="number" number :disabled="form.valid == false" @on-change="performancePercentChange"></Input>
         </FormItem>
         <FormItem :label="numTitle" prop="customerServicePerformance" v-if="form.checkBelongEmpId">
           <Input v-model="form.customerServicePerformance" placeholder="请输入提成金额" type="number" number></Input>
@@ -156,6 +156,12 @@ export default {
     };
   },
   methods: {
+    // 根据稽查比例计算
+    performancePercentChange(){
+      // 计算提成金额
+      let customerServiceSettlePrice = this.checkedParams.customerServiceSettlePrice == 0 ? 0 : this.checkedParams.customerServiceSettlePrice * (this.form.performancePercent / 100)
+      this.form.customerServicePerformance =  Math.round( customerServiceSettlePrice * 100) / 100
+    },
     // 切换Switch时title赋值
     validChange(value){
       // if(!this.form.checkBelongEmpId || this.form.checkBelongEmpId == null){

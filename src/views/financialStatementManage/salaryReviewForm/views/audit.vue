@@ -123,15 +123,22 @@
       :checkedParams="checkedParams"
       @getListWithPageByCustomerCompensation="getListWithPageByCustomerCompensation"
     />
+    <!-- 订单详情 -->
+    <detail :detailModel.sync="detailModel" :detailList="detailList"></detail>
   </div>
 </template>
 <script>
 import * as api from "@/api/reconciliationDocumentsSettle";
+import * as orderApi from "@/api/orderManage";
+
+
 import examine from "../components/examine.vue";
+import detail from "@/components/contentDetail/detail.vue";
 
 export default {
   components: {
-    examine
+    examine,
+    detail
   },
   props: {
     activeName: String,
@@ -139,6 +146,7 @@ export default {
   },
   data() {
     return {
+      
       // 查询
       query: {
         keyWord: "",
@@ -299,7 +307,7 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 120,
+            width: 180,
             align: "center",
             fixed:'right',
             render: (h, params) => {
@@ -327,6 +335,32 @@ export default {
                   },
                   "审核"
                 ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      // disabled:params.row.statusText != '交易成功'
+                    },
+                    style: {
+                      marginRight: ".3125rem",
+                    },
+                    on: {
+                      click: () => {
+                        const { orderId } = params.row;
+                        orderApi.byIdContentPlateForm(orderId).then((res) => {
+                          if (res.code === 0) {
+                            this.detailModel = true;
+                            const { orderInfo } = res.data;
+                            this.detailList = [orderInfo];
+                          }
+                        });
+                      },
+                    },
+                  },
+                  "订单详情"
+                ),
                
               ]);
             },
@@ -344,7 +378,12 @@ export default {
         id:'',
         // 订单金额
         customerServiceSettlePrice:0
-      }
+      },
+
+      // 订单详情model
+      detailModel:false,
+      // 订单详情参数
+      detailList:[],
     };
   },
   methods: {

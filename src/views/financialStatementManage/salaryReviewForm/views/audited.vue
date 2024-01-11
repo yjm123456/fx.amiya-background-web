@@ -125,6 +125,20 @@
           @on-select-all-cancel="handleSelectAll"></Table>
       </div>
       <div class="page_wrap">
+        <div class="bottom_title">
+          <span class="bottom_right">
+            <span class="title_00">合计提成金额：</span> 
+            <span style="color:red;font-weight:bold">{{
+              commissionPrice == 0 ? 0 : commissionPrice.toFixed(2)
+            }}</span></span
+          >
+          <span class="bottom_right">
+            <span  class="title_00">合计审核客服业绩：</span>
+            <span style="color:red;font-weight:bold">{{
+              checkedPrice == 0 ? 0 : checkedPrice.toFixed(2)
+            }}</span></span
+          >
+        </div>
         <Page
           ref="pages"
           :current="query.pageNum"
@@ -137,6 +151,7 @@
           @on-page-size-change="handlePageSizeChange"
         />
       </div>
+     
     </Card>
     <!-- 生成薪资 -->
     <generateSalary :generateSalaryModel.sync="generateSalaryModel" :generateSalaryParams="generateSalaryParams" :params="params" @getListWithPageByCustomerCompensation="getListWithPageByCustomerCompensation"/>
@@ -177,6 +192,7 @@ export default {
             key: "_checked",
             align: "center",
             minWidth: 60,
+            fixed:'left'
           },
           {
             title: "对账单编号",
@@ -405,7 +421,11 @@ export default {
           id:2,
           name:'已生成薪资单'
         }
-      ]
+      ],
+      // 提成金额
+      commissionPrice:0,
+      // 客服审核业绩
+      checkedPrice:0
      
      
     };
@@ -431,7 +451,6 @@ export default {
       }
         //  this.generateSalaryModel =  (this.isModel == 1 || !this.generateSalaryParams.generateSalaryList) ? false : true ;
         // this.generateSalaryParams.returnBackPrice =this.returnBackPrice == 0 ? 0 : this.returnBackPrice.toFixed(2);
-      
     },
     handleSelect(selection, row) {
       // console.log(row.returnBackPrice)
@@ -439,11 +458,19 @@ export default {
       // console.log(this.returnBackPrice)
       // 生成薪资单
       this.generateSalaryParams.generateSalaryList = selection
+      // 提成金额合计
+      this.commissionPrice+=row.customerServicePerformance
+      // 审核客服业绩合计
+      this.checkedPrice += row.customerServiceSettlePrice
     },
     handleCancels(selection, row) {
       // 生成薪资单
       this.generateSalaryParams.generateSalaryList = selection
       // this.returnBackPrice = this.returnBackPrice - row.returnBackPrice
+      // 提成金额合计
+      this.commissionPrice = this.commissionPrice - row.customerServicePerformance;
+      // 审核客服业绩合计
+      this.checkedPrice = this.checkedPrice - row.customerServiceSettlePrice;
     },
 
     handleSelectAll(selection) {
@@ -451,13 +478,24 @@ export default {
         // this.form.reconciliationDocumentsIdList.clear();
         // 生成薪资单
         this.generateSalaryParams.generateSalaryList = []
+        // 提成金额合计
+        this.commissionPrice = 0;
+        // 审核客服业绩合计
+        this.checkedPrice = 0;
 
         // this.returnBackPrice = 0
       } else {
         this.generateSalaryParams.generateSalaryList = selection
+        
         // selection.forEach((item) => {
         //   this.returnBackPrice += item.returnBackTotalPrice
         // });
+        selection.forEach((item) => {
+          // 提成金额合计
+          this.commissionPrice += item.customerServicePerformance;
+          // 审核客服业绩合计
+          this.checkedPrice += item.customerServiceSettlePrice;
+        });
       }
     },
     // 获取薪资审核表
@@ -502,6 +540,11 @@ export default {
           const { list, totalCount } = res.data.reconciliationDocumentsSettleInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          // 防止勾选了在进行调用接口时 数值没有清0
+          // 提成金额合计
+          this.commissionPrice = 0
+          // 审核客服业绩合计
+          this.checkedPrice  = 0
         }
       });
     },
@@ -542,6 +585,10 @@ export default {
           const { list, totalCount } = res.data.reconciliationDocumentsSettleInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          // 提成金额合计
+          this.commissionPrice = 0
+          // 审核客服业绩合计
+          this.checkedPrice  = 0
         }
       });
     },
@@ -558,6 +605,10 @@ export default {
       handler(value) {
         if (value === "audited") {
           this.getListWithPageByCustomerCompensation();
+          // 提成金额合计
+          this.commissionPrice = 0
+          // 审核客服业绩合计
+          this.checkedPrice  = 0
         }
       },
       immediate: true,
@@ -574,8 +625,24 @@ export default {
 .container {
   margin-top: 16px;
 }
+// .page_wrap {
+//   margin-top: 16px;
+//   text-align: right;
+// }
 .page_wrap {
-  margin-top: 16px;
   text-align: right;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+.bottom_title {
+  font-size: 16px;
+}
+.bottom_right {
+  margin-right: 20px;
+}
+.title_00{
+  color: #000;
 }
 </style>

@@ -1637,6 +1637,30 @@ const operationManage = [{
         component: () =>
             import ("@/views/operationManage/tiktokShortVideo/tiktokShortVideo.vue"),
     },
+    {
+        path: "/tiktokFansList",
+        name: "tiktokFansList",
+        meta: {
+            title: "抖音粉丝数据列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/tiktokFansList/tiktokFansList.vue"),
+    },
+    {
+        path: "/tiktokCommentsList",
+        name: "tiktokCommentsList",
+        meta: {
+            title: "抖音评论数据列表",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/tiktokCommentsList/tiktokCommentsList.vue"),
+    },
 ];
 /**
  * 财务对账单

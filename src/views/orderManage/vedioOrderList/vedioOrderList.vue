@@ -322,11 +322,11 @@ export default {
                       on: {
                         click: () => {
                           if (params.row.bool) return;
-                          const { encryptPhone } = params.row;
+                          const { id } = params.row;
                           const data = {
-                            encryptPhone
+                            orderId:id
                           }
-                          api.decryptoPhonesNew(data).then((res) => {
+                          api.byOrderIdEncryptPhone(data).then((res) => {
                             if (res.code === 0) {
                               params.row.phone = res.data.phone;
                               params.row.bool = true;

@@ -1580,3 +1580,11 @@ export const sendOrderInfoList = (params) => {
         params
     });
 };
+//根据订单号解密手机号
+export const byOrderIdEncryptPhone = (params) => {
+    return http({
+        url: `/amiyabg/WeChatVideoOrder/encryptPhone`,
+        method: "get",
+        params
+    });
+};

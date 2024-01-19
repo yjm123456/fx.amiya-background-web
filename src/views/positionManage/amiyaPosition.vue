@@ -28,7 +28,7 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="100"
+        :label-width="130"
       >
         <FormItem label="职称名称" prop="name">
           <Input v-model="form.name"></Input>
@@ -50,7 +50,16 @@
           <i-switch v-model="form.isDirector" />
         </FormItem>
         <FormItem label="查看数据中心" prop="readDataCenter" key="查看数据中心">
-          <i-switch v-model="form.readDataCenter" />
+          <i-switch v-model="form.readDataCenter" @on-change="readDataCenterChange"/>
+        </FormItem>
+        <FormItem label="是否查看自播达人" prop="readSelfLiveAnchorData" key="是否查看自播达人" v-if="form.readDataCenter == true">
+          <i-switch v-model="form.readSelfLiveAnchorData" />
+        </FormItem>
+        <FormItem label="是否查看合作达人" prop="readCooperateLiveAnchorData" key="是否查看合作达人" v-if="form.readDataCenter == true">
+          <i-switch v-model="form.readCooperateLiveAnchorData" />
+        </FormItem>
+        <FormItem label="是否查看带货板块" prop="readTakeGoodsData" key="是否查看带货板块" v-if="form.readDataCenter == true">
+          <i-switch v-model="form.readTakeGoodsData" />
         </FormItem>
         <FormItem label="查看主播数据" prop="readLiveAnchorData" key="查看主播数据">
           <i-switch v-model="form.readLiveAnchorData" />
@@ -120,17 +129,22 @@ export default {
           {
             title: "职称名称",
             key: "name",
-            align:'center'
+            align:'center',
+            minWidth:180,
+            tooltip:true,
           },
           {
             title: "所属部门",
             key: "departmentName",
-            align:'center'
+            align:'center',
+            minWidth:150,
+            tooltip:true,
           },
           {
             title: "创建日期",
             key: "createDate",
             align:'center',
+            minWidth:120,
             render: (h, params) => {
               params.row.createDate = params.row.createDate
                 ? params.row.createDate.substr(0, 10)
@@ -148,6 +162,7 @@ export default {
             title: "更新日期",
             key: "updateDate",
             align:'center',
+            minWidth:140,
             render: (h, params) => {
               params.row.updateDate = params.row.updateDate
                 ? params.row.updateDate.substr(0, 10)
@@ -164,12 +179,15 @@ export default {
           {
             title: "更新人",
             key: "updateName",
-            align:'center'
+            align:'center',
+            minWidth:120,
+            tooltip:true,
           },
           {
             title: "管理员权限",
             key: "isDirector",
             align:'center',
+            minWidth:120,
             render: (h, params) => {
               if (params.row.isDirector == true) {
                 return h("Icon", {
@@ -198,8 +216,96 @@ export default {
             title: "查看数据中心",
             key: "readDataCenter",
             align:'center',
+            minWidth:140,
             render: (h, params) => {
               if (params.row.readDataCenter == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "自播达人",
+            key: "readSelfLiveAnchorData",
+            align:'center',
+            minWidth:120,
+            render: (h, params) => {
+              if (params.row.readSelfLiveAnchorData == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "合作达人",
+            key: "readCooperateLiveAnchorData",
+            align:'center',
+            minWidth:120,
+            render: (h, params) => {
+              if (params.row.readCooperateLiveAnchorData == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "带货板块",
+            key: "readTakeGoodsData",
+            align:'center',
+            minWidth:120,
+            render: (h, params) => {
+              if (params.row.readTakeGoodsData == true) {
                 return h("Icon", {
                   props: {
                     type: "md-checkmark",
@@ -226,6 +332,7 @@ export default {
             title: "查看主播数据",
             key: "readLiveAnchorData",
             align:'center',
+            minWidth:140,
             render: (h, params) => {
               if (params.row.readLiveAnchorData == true) {
                 return h("Icon", {
@@ -255,6 +362,7 @@ export default {
             key: "",
             width: 400,
             align:"center",
+            fixed:'right',
             render: (h, params) => {
               return h("div", [
                 h(
@@ -273,7 +381,7 @@ export default {
                         this.title = "修改";
                         api.byIdGetAmiyaPositionInfo(id).then((res) => {
                           if (res.code === 0) {
-                            const { id, name, departmentId ,isDirector,readDataCenter,readLiveAnchorData } = res.data.positionInfo;
+                            const { id, name, departmentId ,isDirector,readDataCenter,readLiveAnchorData,readSelfLiveAnchorData,readCooperateLiveAnchorData,readTakeGoodsData } = res.data.positionInfo;
                             this.isEdit = true;
                             this.form.id = id;
                             this.form.name = name;
@@ -281,7 +389,12 @@ export default {
                             this.form.departmentId = departmentId;
                             this.form.readDataCenter = readDataCenter;
                             this.form.readLiveAnchorData = readLiveAnchorData;
+                            this.form.readSelfLiveAnchorData = readSelfLiveAnchorData;
+                            this.form.readCooperateLiveAnchorData = readCooperateLiveAnchorData;
+                            this.form.readTakeGoodsData = readTakeGoodsData;
                             this.controlModal = true;
+                            
+
                           }
                         });
                       },
@@ -426,9 +539,18 @@ export default {
         name: "",
         id: "",
         departmentId: "",
+        // 是否为管理员
         isDirector:false,
+        // 是否查看数据中心
         readDataCenter:false,
-        readLiveAnchorData:false
+        // 是否可查看主播数据
+        readLiveAnchorData:false,
+        // 是否查看自播达人数据
+        readSelfLiveAnchorData:false,
+        // 是否查看合作达人数据
+        readCooperateLiveAnchorData:false,
+        // 是否查看带货板块数据
+        readTakeGoodsData:false,
       },
 
       ruleValidate: {
@@ -458,6 +580,14 @@ export default {
     };
   },
   methods: {
+    // 查看数据中心为false时 自播达人、合作达人、带货板块都为false
+    readDataCenterChange(){
+      if(this.form.readDataCenter == false){
+        this.form.readSelfLiveAnchorData = false
+        this.form.readCooperateLiveAnchorData = false
+        this.form.readTakeGoodsData = false
+      }
+    },
     // 获取有效的按钮权限列表（下拉框）
     getSimplePermissionList(){
       api.getSimplePermissionList().then((res) => {
@@ -490,7 +620,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { name, id,departmentId ,isDirector,readDataCenter,readLiveAnchorData	} = this.form;
+          const { name, id,departmentId ,isDirector,readDataCenter,readLiveAnchorData	,readSelfLiveAnchorData,readCooperateLiveAnchorData,readTakeGoodsData} = this.form;
           if (this.isEdit) {
             // 修改
             const data = {
@@ -499,7 +629,10 @@ export default {
               departmentId,
               isDirector,
               readDataCenter,
-              readLiveAnchorData
+              readLiveAnchorData,
+              readSelfLiveAnchorData,
+              readCooperateLiveAnchorData,
+              readTakeGoodsData
             };
             api.updateAmiyaPositionInfo(data).then((res) => {
               if (res.code === 0) {
@@ -519,7 +652,10 @@ export default {
               departmentId,
               isDirector,
               readDataCenter,
-              readLiveAnchorData	
+              readLiveAnchorData,
+              readSelfLiveAnchorData,
+              readCooperateLiveAnchorData,
+              readTakeGoodsData
             };
             api.addAmiyaPositionInfo(data).then((res) => {
               if (res.code === 0) {

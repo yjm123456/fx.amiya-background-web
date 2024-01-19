@@ -123,22 +123,30 @@
       :checkedParams="checkedParams"
       @getListWithPageByCustomerCompensation="getListWithPageByCustomerCompensation"
     />
-    <!-- 订单详情 -->
+    <!-- 内容平台订单详情 -->
     <detail :detailModel.sync="detailModel" :detailList="detailList"></detail>
+    <!-- 消费追踪订单详情 -->
+    <upgradeOrderDetail :upgradeOrderDetailModel.sync ="upgradeOrderDetailModel" :upgradeOrderObj="upgradeOrderObj"></upgradeOrderDetail>
+    <!-- 下单平台订单详情 -->
+    <orderDetail :detailModel.sync ="orderDetailModel" :detailList ="detailList"></orderDetail>
   </div>
 </template>
 <script>
 import * as api from "@/api/reconciliationDocumentsSettle";
 import * as orderApi from "@/api/orderManage";
-
+import * as customerManageApi from "@/api/customerManage.js";
 
 import examine from "../components/examine.vue";
 import detail from "@/components/contentDetail/detail.vue";
+import upgradeOrderDetail from "@/components/upgradeOrderDetail/upgradeOrderDetail"
+import orderDetail from "@/components/orderDetail/detail.vue"
 
 export default {
   components: {
     examine,
-    detail
+    detail,
+    upgradeOrderDetail,
+    orderDetail
   },
   props: {
     activeName: String,
@@ -348,14 +356,38 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { orderId } = params.row;
-                        orderApi.byIdContentPlateForm(orderId).then((res) => {
-                          if (res.code === 0) {
-                            this.detailModel = true;
-                            const { orderInfo } = res.data;
-                            this.detailList = [orderInfo];
-                          }
-                        });
+                        const { orderId,orderFromText } = params.row;
+                        switch(orderFromText){
+                          case '内容平台':
+                            orderApi.byIdContentPlateForm(orderId).then((res) => {
+                              if (res.code === 0) {
+                                this.detailModel = true;
+                                const { orderInfo } = res.data;
+                                this.detailList = [orderInfo];
+                              }
+                            });
+                            break;
+                          case '消费追踪':
+                            customerManageApi.byCustomerHospitalConsume(orderId).then((res) => {
+                              if (res.code === 0) {
+                                this.upgradeOrderDetailModel = true
+                                this.upgradeOrderObj= res.data.CustomerManageUpdateconsume
+                              }
+                            })
+                            break;
+                          case '下单平台':
+                            orderApi.byIdGetOrderInfo(orderId).then((res) => {
+                              if (res.code === 0) {
+                                this.orderDetailModel = true
+                                const {order} = res.data;
+                                this.detailList= [order]
+                              }
+                            })
+                            break;
+                          default:
+                            break;
+                        }
+                      
                       },
                     },
                   },
@@ -380,10 +412,16 @@ export default {
         customerServiceSettlePrice:0
       },
 
-      // 订单详情model
+      // 内容平台订单详情model
       detailModel:false,
       // 订单详情参数
       detailList:[],
+      // 消费追踪订单详情model
+      upgradeOrderDetailModel:false,
+      upgradeOrderObj:{},
+      // 下单平台订单详情
+      orderDetailModel:false,
+      detailList:[]
     };
   },
   methods: {

@@ -30,7 +30,7 @@
             style="width: 160px;margin-left:10px"
           >
             <Option
-              v-for="item in params.employeeAll"
+              v-for="item in params.employeePositionAdmin"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
@@ -286,13 +286,6 @@ export default {
             tooltip:true
           },
           {
-            title: "助理",
-            key: "belongEmpName",
-            minWidth: 120,
-            align: "center",
-            tooltip:true
-          },
-          {
             title: "上传人",
             key: "createEmpName",
             minWidth: 120,
@@ -395,6 +388,71 @@ export default {
                   : ""
               );
             },
+          },
+           {
+            title: "提成比例",
+            key: "performancePercent",
+            minWidth: 120,
+            align: "center",
+            tooltip:true,
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.performancePercent
+                  ? params.row.performancePercent + '%'
+                  : 0
+              );
+            },
+          },
+          {
+            title: "提成金额",
+            key: "customerServicePerformance",
+            minWidth: 120,
+            align: "center",
+            tooltip:true
+          },
+          {
+            title: "薪资审核类型",
+            key: "checkTypeText",
+            minWidth: 140,
+            align: "center",
+            tooltip:true
+          },
+          {
+            title: "是否为稽查订单",
+            key: "isInspectPerformance",
+            minWidth: 140,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isInspectPerformance == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "助理确认业绩",
+            key: "customerServiceOrderPerformance",
+            minWidth: 140,
+            align: "center",
+            tooltip:true
           },
           
         ],

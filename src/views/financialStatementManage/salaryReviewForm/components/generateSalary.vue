@@ -234,6 +234,18 @@ export default {
         targetFinishReword:null,
         // 其他扣款
         otherChargebacks:null,
+        // 医美客资加V业绩
+        beautyAddWechatPrice:0,
+        // 带货客资加V业绩
+        takeGoodsAddWechatPrice:0,
+        // 引导面诊卡下单金额
+        consulationCardPrice:0,
+        // 引导面诊卡下单加v金额
+        consulationCardAddWechatPrice:0,
+        // 供应链达人派单提成金额
+        cooperationLiveAnchorSendOrderPrice:0,
+        // 供应链达人上门提成金额
+        cooperationLiveAnchorToHospitalPrice:0
       },
 
       ruleValidate: {

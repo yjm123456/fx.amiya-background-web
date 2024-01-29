@@ -184,6 +184,69 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="视频号涨粉" prop="videoIncreaseFans">
+              <Input
+                v-model="form.videoIncreaseFans"
+                placeholder="请输入视频号涨粉"
+                type="number"
+                number
+                @on-change="costChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="视频号涨粉付费" prop="videoIncreaseFansFees">
+              <Input
+                v-model="form.videoIncreaseFansFees"
+                placeholder="请输入视频号涨粉付费"
+                type="number"
+                number
+                @on-change="costChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="视频号涨粉成本" prop="videoIncreaseFansFeescost">
+              <Input
+                v-model="form.videoIncreaseFansFeescost"
+                placeholder="请输入视频号涨粉成本"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="视频号橱窗收入" prop="videoShowcaseIncome">
+              <Input
+                v-model="form.videoShowcaseIncome"
+                placeholder="请输入视频号橱窗收入"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="视频号橱窗付费" prop="videoShowcaseFee">
+              <Input
+                v-model="form.videoShowcaseFee"
+                placeholder="请输入视频号橱窗付费"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="视频号线索量" prop="videoClues">
+              <Input
+                v-model="form.videoClues"
+                placeholder="请输入视频号线索量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -238,7 +301,7 @@ export default {
           },
           {
             title: "视频号运营人员",
-            key: "videoOperationEmployeeName",
+            key: "operationEmpName",
             minWidth: 170,
             align: "center",
           },
@@ -255,15 +318,45 @@ export default {
             },
           },
           {
-            title: "视频号今日发布量",
+            title: "今日发布量",
             key: "sendNum",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "视频号今日投流费用",
+            title: "今日投流费用",
             key: "flowInvestmentNum",
-            minWidth: 170,
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日涨粉",
+            key: "increaseFans",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日涨粉付费",
+            key: "increaseFansFees",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日橱窗收入",
+            key: "tikTokShowcaseIncome",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日橱窗付费",
+            key: "showCaseFee",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日线索量",
+            key: "clues",
+            minWidth: 150,
             align: "center",
           },
           {
@@ -332,11 +425,15 @@ export default {
                               zhihuSendNum,
                               sinaWeiBoSendNum,
                               xiaoHongShuSendNum,
-
                               zhihuFlowInvestmentNum,
                               sinaWeiBoFlowInvestmentNum,
                               xiaoHongShuFlowInvestmentNum,
-                              tikTokFlowInvestmentNum
+                              tikTokFlowInvestmentNum,
+                              videoIncreaseFans,
+                              videoIncreaseFansFees,
+                              videoClues,
+                              videoShowcaseIncome,
+                              videoShowcaseFee
 
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
@@ -344,6 +441,11 @@ export default {
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
+                            this.form.videoIncreaseFans = videoIncreaseFans;
+                            this.form.videoIncreaseFansFees = videoIncreaseFansFees;
+                            this.form.videoShowcaseFee = videoShowcaseFee;
+                            this.form.videoClues = videoClues;
+                            this.form.videoShowcaseIncome = videoShowcaseIncome;
                             this.form.videoOperationEmployeeId = videoOperationEmployeeId==0 ?  null : videoOperationEmployeeId ;
                             this.form.videoSendNum = videoSendNum;
                             this.form.videoFlowInvestmentNum = videoFlowInvestmentNum;
@@ -353,6 +455,8 @@ export default {
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
+                            const price = this.form.videoIncreaseFansFees / this.form.videoIncreaseFans
+                            this.form.videoIncreaseFansFeescost =  Math.round(price * 100) / 100 
                           }
                         });
                       },
@@ -488,10 +592,58 @@ export default {
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
         allflowInvestmentNum:null,
-        alltodaySendNum:null
+        alltodaySendNum:null,
+         // 视频号橱窗收入目标
+        videoShowcaseIncome:null,
+        // 视频号涨粉
+        videoIncreaseFans:null,
+         // 视频号涨粉付费
+        videoIncreaseFansFees:null,
+         // 视频号线索量
+        videoClues:null,
+        // 涨粉成本
+        videoIncreaseFansFeescost:null,
+        // 视频号橱窗付费
+        videoShowcaseFee:null
       },
 
       ruleValidate: {
+        videoShowcaseFee: [
+          {
+            required: true,
+            message: "请输入视频号橱窗付费",
+          },
+        ],
+        videoShowcaseIncome: [
+          {
+            required: true,
+            message: "请输入视频号橱窗收入目标",
+          },
+        ],
+        videoIncreaseFans: [
+          {
+            required: true,
+            message: "请输入视频号涨粉",
+          },
+        ],
+        videoIncreaseFansFees: [
+          {
+            required: true,
+            message: "请输入视频号涨粉付费",
+          },
+        ],
+        videoClues: [
+          {
+            required: true,
+            message: "请输入视频号线索量",
+          },
+        ],
+        videoIncreaseFansFeescost: [
+          {
+            required: true,
+            message: "请输入视频号涨粉成本",
+          },
+        ],
         liveanchorMonthlyTargetId: [
           {
             required: true,
@@ -550,6 +702,11 @@ export default {
     };
   },
   methods: {
+    // 计算涨粉成本
+    costChange(){
+      const price = this.form.videoIncreaseFansFees / this.form.videoIncreaseFans
+      this.form.videoIncreaseFansFeescost =  Math.round(price * 100) / 100 
+    },
     videoSendNumChange(){
       this.form.todaySendNum = Number(this.form.videoSendNum) 
     },
@@ -709,7 +866,12 @@ export default {
               flowInvestmentNum,
               recordDate,
               allflowInvestmentNum,
-              alltodaySendNum
+              alltodaySendNum,
+              videoIncreaseFans,
+              videoIncreaseFansFees,
+              videoClues,
+              videoShowcaseIncome,
+              videoShowcaseFee
             } = this.form;
             const data = {
               id,
@@ -724,6 +886,11 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
+              videoIncreaseFans,
+              videoIncreaseFansFees,
+              videoClues,
+              videoShowcaseIncome,
+              videoShowcaseFee
             };
             this.isflag=true
             api.BeforeLivingVideoUpdate(data).then((res) => {
@@ -751,6 +918,11 @@ export default {
               todaySendNum,
               flowInvestmentNum	,
               recordDate,
+              videoIncreaseFans,
+              videoIncreaseFansFees,
+              videoClues,
+              videoShowcaseIncome,
+              videoShowcaseFee
              
             } = this.form;
             const data = {
@@ -763,6 +935,11 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
+              videoIncreaseFans,
+              videoIncreaseFansFees,
+              videoClues,
+              videoShowcaseIncome,
+              videoShowcaseFee
             };
             this.isflag=true
             // 添加

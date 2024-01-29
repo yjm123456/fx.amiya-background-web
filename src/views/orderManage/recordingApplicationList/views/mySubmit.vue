@@ -318,7 +318,7 @@ export default {
                               createBy
                             } = params.row;
                             this.recordingNormalParams.title = "录单";
-                            this.recordingNormalParams.isCustomer = "是";
+                            this.recordingNormalParams.isCustomer = belongCustomerServiceId == sessionStorage.getItem("employeeId")  ? "否" : "是";
                             this.recordingNormalParams.phone = phone;
                             this.recordingNormalParams.hospitalId = hospitalId;
                             this.recordingNormalParams.acceptBy = createBy;

@@ -9,12 +9,20 @@
           ></audit>
         </div>
       </TabPane>
-      <TabPane label="已审核" name="audited">
+      <TabPane label="已审核-助理薪资" name="audited">
         <div>
           <audited
             :activeName="activeName"
             :params="params"
           ></audited>
+        </div>
+      </TabPane>
+      <TabPane label="已审核-行政客服薪资" name="administrativeCustomerService">
+        <div>
+          <administrativeCustomerService
+            :activeName="activeName"
+            :params="params"
+          ></administrativeCustomerService>
         </div>
       </TabPane>
     </Tabs>
@@ -25,13 +33,16 @@ import * as api from "@/api/orderManage";
 import * as hospitalManage from "@/api/hospitalManage";
 import * as cusApi from "@/api/customerManage.js";
 import * as reconciliationDocumentsSettleApi from "@/api/reconciliationDocumentsSettle";
+import * as employeeManageApi from "@/api/employeeManage";
 import audit from "./views/audit.vue"
 import audited from "./views/audited.vue"
+import administrativeCustomerService from "./views/administrativeCustomerService.vue"
 
 export default {
   components:{
     audit,
     audited,
+    administrativeCustomerService
   },
   data(){
     return {
@@ -43,6 +54,8 @@ export default {
         employeeList:[],
         // 全部客服
         employeeAll:[{id:-1,name:'全部助理'}],
+        // 全部助理(客服管理员)
+        employeePositionAdmin:[{id:-1,name:'全部助理'}],
         // 医院
         hospitalInfo:[],
         // 全部医院
@@ -70,12 +83,51 @@ export default {
         },{
             type:'true',
             name:'老客业绩'
-        },]
+        },],
+        // 获取薪资审核类型
+        reconciliationtCheckType:[],
+        // 根据职位获取员工
+        employeePosition:[],
 
       }
     }
   },
   methods:{
+    // 根据职位id获取员工
+    getEmployeeByPositionIdAdmin(){
+      const data = {
+        // （客服管理员)线上id
+        positionId:4
+      }
+      employeeManageApi.getEmployeeByPositionId(data).then((res) => {
+        if (res.code === 0) {
+          const {employee} =res.data
+          this.params.employeePositionAdmin = [...this.params.employeePositionAdmin,...employee]
+        }
+      });
+    },
+    // 根据职位id获取员工
+    getEmployeeByPositionId(){
+      const data = {
+        // (行政客服) 测试线上都是30
+        positionId:30
+      }
+      employeeManageApi.getEmployeeByPositionId(data).then((res) => {
+        if (res.code === 0) {
+          const {employee} =res.data
+          this.params.employeePosition = employee
+        }
+      });
+    },
+    // 获取薪资审核类型
+    geReconciliationtCheckType(){
+      reconciliationDocumentsSettleApi.geReconciliationtCheckType().then((res) => {
+        if (res.code === 0) {
+          const {reconciliationtCheckType} =res.data
+          this.params.reconciliationtCheckType = reconciliationtCheckType
+        }
+      });
+    },
     // 获取上传人列表
     getcreateEmpNameList() {
       reconciliationDocumentsSettleApi.createEmpNameList().then((res) => {
@@ -122,6 +174,9 @@ export default {
     this.getHospitalInfonameList()
     this.getCheckStateList()
     this.getcreateEmpNameList()
+    this.geReconciliationtCheckType()
+    this.getEmployeeByPositionId()
+    this.getEmployeeByPositionIdAdmin()
   }
 }
 </script>

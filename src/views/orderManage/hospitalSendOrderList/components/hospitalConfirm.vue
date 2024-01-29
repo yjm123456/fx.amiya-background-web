@@ -152,7 +152,7 @@
           </Col>
         </Row>
         <div
-          style="color:red;font-size:3px;margin-top:-20px"
+          style="color:red;font-size:12px;margin-top:-20px"
           v-if="form.isFinish === true"
         >
           *注：请上传该手机号客户在贵公司系统的成交凭证截图

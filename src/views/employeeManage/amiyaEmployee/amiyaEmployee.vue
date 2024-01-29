@@ -76,31 +76,56 @@
       :title="title"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
+      width="60%"
     >
       <Form
         ref="form"
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="110"
+        :label-width="130"
       >
-            <FormItem label="姓名" prop="name">
+        <Row :gutter="30">
+          <Col span="8">
+            <FormItem label="姓名" prop="name" :rules="[
+                {
+                  required: true,
+                  message: '请输入姓名',
+                },
+              ]">
               <Input v-model="form.name" placeholder="请输入姓名"></Input>
             </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="用户名" prop="userName">
               <Input v-model="form.userName" placeholder="请输入用户名"></Input>
             </FormItem>
-            <FormItem label="用户密码" prop="password" v-if="isEdit === false">
+          </Col>
+          <Col span="8" v-if="isEdit == false">
+            <FormItem label="用户密码" prop="password" >
               <Input
                 v-model="form.password"
                 placeholder="请输入用户密码"
               ></Input>
             </FormItem>
-            <FormItem label="邮箱" prop="email">
+          </Col>
+          <Col span="8">
+            <FormItem label="邮箱" prop="email" :rules="[
+                {
+                  required: true,
+                  message: '请输入邮箱',
+                },
+              ]">
               <Input v-model="form.email" placeholder="请输入邮箱"></Input>
             </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="职位" prop="positionId">
-              <Select v-model="form.positionId" placeholder="请选择职位" filterable>
+              <Select
+                v-model="form.positionId"
+                placeholder="请选择职位"
+                filterable
+              >
                 <Option
                   v-for="item in positionInfo"
                   :value="item.id"
@@ -109,19 +134,27 @@
                 >
               </Select>
             </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="是否客服" prop="isCustomerService">
-              <i-switch v-model="form.isCustomerService" @on-change="isCustomerServiceChange"/>
+              <i-switch
+                v-model="form.isCustomerService"
+                @on-change="isCustomerServiceChange"
+              />
             </FormItem>
+          </Col>
+          <Col span="8" v-if="
+                (title == '修改' &&
+                  form.positionId == 2 &&
+                  form.isCustomerService === true) ||
+                  (title == '修改' && form.positionId == 19) ||
+                  (title == '修改' && form.positionId == 30)
+              ">
             <!-- 客服所属主播 (form.positionId === 2 && form.isCustomerService === true) || (form.positionId === 19 && form.isCustomerService === true)-->
             <FormItem
               label="主播"
               prop="liveAnchorIds"
-              v-if="
-                (title == '修改' &&
-                  form.positionId === 2 && form.isCustomerService === true) ||
-                  (title == '修改' && form.positionId === 19) ||
-                  (title == '修改' && form.positionId === 30)
-              "
+              
               key="主播"
             >
               <Select
@@ -138,10 +171,12 @@
                 >
               </Select>
             </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isCustomerService == true">
             <FormItem
               label="主播基础信息"
               prop="liveAnchorBaseId"
-              v-if="form.isCustomerService == true"
+              
               key="liveAnchorBaseId"
             >
               <Select
@@ -157,18 +192,131 @@
                 >
               </Select>
             </FormItem>
-            <FormItem label="新客提成(%)" prop="newCustomerCommission"  v-if="form.isCustomerService == true">
-              <Input v-model="form.newCustomerCommission" placeholder="请输入新客提成" type="number" number></Input>
+          </Col>
+          <Col span="8"  v-if="form.isCustomerService == true">
+            <FormItem
+              label="新客提成(%)"
+              prop="newCustomerCommission"
+             
+            >
+              <Input
+                v-model="form.newCustomerCommission"
+                placeholder="请输入新客提成"
+                type="number"
+                number
+              ></Input>
             </FormItem>
-            <FormItem label="老客提成(%)" prop="oldCustomerCommission"  v-if="form.isCustomerService == true">
-              <Input v-model="form.oldCustomerCommission" placeholder="请输入老客提成" type="number" number></Input>
+          </Col>
+          <Col span="8" v-if="form.isCustomerService == true">
+            <FormItem
+              label="老客提成(%)"
+              prop="oldCustomerCommission"
+              
+            >
+              <Input
+                v-model="form.oldCustomerCommission"
+                placeholder="请输入老客提成"
+                type="number"
+                number
+              ></Input>
             </FormItem>
-            <FormItem label="稽查提成(%)" prop="inspectionCommission"  v-if="form.isCustomerService == true">
-              <Input v-model="form.inspectionCommission" placeholder="请输入稽查提成" type="number" number></Input>
+          </Col>
+          <Col span="8" v-if="form.isCustomerService == true">
+            <FormItem
+              label="稽查提成(%)"
+              prop="inspectionCommission"
+              
+            >
+              <Input
+                v-model="form.inspectionCommission"
+                placeholder="请输入稽查提成"
+                type="number"
+                number
+              ></Input>
             </FormItem>
-            <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
+          </Col>
+          <Col span="8" v-if="form.isCustomerService == true">
+            <FormItem
+              label="参与稽查比例(%)"
+              prop="administrativeInspectionCommission"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入参与稽查比例',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.administrativeInspectionCommission"
+                placeholder="请输入参与稽查比例"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isCustomerService == true">
+            <FormItem
+              label="达人新客提成比例(%)"
+              prop="cooperateLiveanchorNewCustomerCommission"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入达人新客提成比例',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.cooperateLiveanchorNewCustomerCommission"
+                placeholder="请输入达人新客提成比例"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isCustomerService == true">
+            <FormItem
+              label="达人老客提成比例(%)"
+              prop="cooperateLiveanchorOldCustomerCommission"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入达人老客提成比例',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.cooperateLiveanchorOldCustomerCommission"
+                placeholder="请输入达人老客提成比例"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isCustomerService == true">
+            <FormItem
+              label="天猫升单比例(%)"
+              prop="tmallOrderCommission"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入天猫升单比例',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.tmallOrderCommission"
+                placeholder="请输入天猫升单比例"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-show="isEdit == true">
+            <FormItem label="是否有效" prop="valid" >
               <i-switch v-model="form.valid" />
             </FormItem>
+          </Col>
+        </Row>
       </Form>
       <div slot="footer">
         <Button @click="cancelSubmit('form')">取消</Button>
@@ -335,7 +483,11 @@ export default {
                               liveAnchorBaseId,
                               newCustomerCommission,
                               oldCustomerCommission,
-                              inspectionCommission
+                              inspectionCommission,
+                              administrativeInspectionCommission,
+                              cooperateLiveanchorNewCustomerCommission,
+                              cooperateLiveanchorOldCustomerCommission,
+                              tmallOrderCommission
                             } = res.data.employeeInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -349,6 +501,10 @@ export default {
                             this.form.newCustomerCommission = newCustomerCommission;
                             this.form.oldCustomerCommission = oldCustomerCommission;
                             this.form.inspectionCommission = inspectionCommission;
+                            this.form.administrativeInspectionCommission = administrativeInspectionCommission;
+                            this.form.cooperateLiveanchorNewCustomerCommission = cooperateLiveanchorNewCustomerCommission;
+                            this.form.cooperateLiveanchorOldCustomerCommission = cooperateLiveanchorOldCustomerCommission;
+                            this.form.tmallOrderCommission = tmallOrderCommission;
                             this.form.valid = valid;
                             this.controlModal = true;
                           }
@@ -427,16 +583,23 @@ export default {
         // 是否有效
         valid: false,
         // 主播id
-        liveAnchorIds:[],
+        liveAnchorIds: [],
         // 主播基础信息
         liveAnchorBaseId: "",
         // 新客提成
-        newCustomerCommission:null,
+        newCustomerCommission: null,
         // 老客提成
-        oldCustomerCommission:null,
+        oldCustomerCommission: null,
         // 稽查提成
-        inspectionCommission:null,
-
+        inspectionCommission: null,
+        // 行政客户稽查提成比例
+        administrativeInspectionCommission: null,
+        // 达人新客提成比例
+        cooperateLiveanchorNewCustomerCommission: null,
+        // 达人老客提成比例
+        cooperateLiveanchorOldCustomerCommission: null,
+        // 天猫升单比例
+        tmallOrderCommission: null,
       },
 
       ruleValidate: {
@@ -524,9 +687,9 @@ export default {
   },
   methods: {
     // 清空主播基础信息下拉框
-    isCustomerServiceChange(){
-      if(this.form.isCustomerService == false){
-        this.form.liveAnchorBaseId = ""
+    isCustomerServiceChange() {
+      if (this.form.isCustomerService == false) {
+        this.form.liveAnchorBaseId = "";
       }
     },
     // 获取主播基础信息列表
@@ -615,7 +778,11 @@ export default {
             liveAnchorBaseId,
             newCustomerCommission,
             oldCustomerCommission,
-            inspectionCommission
+            inspectionCommission,
+            administrativeInspectionCommission,
+            cooperateLiveanchorNewCustomerCommission,
+            cooperateLiveanchorOldCustomerCommission,
+            tmallOrderCommission
           } = this.form;
           if (this.isEdit) {
             // 修改
@@ -637,7 +804,11 @@ export default {
               liveAnchorBaseId,
               newCustomerCommission,
               oldCustomerCommission,
-            inspectionCommission
+              inspectionCommission,
+              administrativeInspectionCommission,
+              cooperateLiveanchorNewCustomerCommission,
+              cooperateLiveanchorOldCustomerCommission,
+              tmallOrderCommission,
             };
             api.updateAmiyaEmployee(data).then((res) => {
               if (res.code === 0) {
@@ -662,7 +833,11 @@ export default {
               liveAnchorBaseId,
               newCustomerCommission,
               oldCustomerCommission,
-            inspectionCommission
+              inspectionCommission,
+              administrativeInspectionCommission,
+              cooperateLiveanchorNewCustomerCommission,
+              cooperateLiveanchorOldCustomerCommission,
+              tmallOrderCommission,
             };
             if (email) {
               if (

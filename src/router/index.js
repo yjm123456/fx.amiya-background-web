@@ -1976,6 +1976,18 @@ const businessMange = [{
         },
         component: () =>
             import ("@/views/businessMange/performanceKanban/performanceKanban.vue"),
+    },
+    {
+        path: "/beforeLiveStreaming",
+        name: "beforeLiveStreaming",
+        meta: {
+            title: "直播前经营看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/beforeLiveStreaming/beforeLiveStreaming.vue"),
     }
 ];
 

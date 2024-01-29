@@ -152,6 +152,10 @@
             <span class="title_bold">追评内容：</span>
             <span>{{ shoppingCartRegistrationInfo.reContent }}</span>
           </div>
+          <div class="mr_top">
+            <span class="title_bold">备注：</span>
+            <span>{{ shoppingCartRegistrationInfo.remark }}</span>
+          </div>
         </div>
       </div>
   </div>

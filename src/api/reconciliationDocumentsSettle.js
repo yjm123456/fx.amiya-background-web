@@ -40,3 +40,18 @@ export const createEmpNameList = () => {
         method: "get",
     });
 };
+// 获取薪资审核类型列表
+export const geReconciliationtCheckType = () => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/geReconciliationtCheckType",
+        method: "get",
+    });
+};
+// 分页获取稽查业绩对账单审核记录（助理薪资审核相关数据）
+export const getListWithPageByCustomerInspectData = (params) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/getListWithPageByCustomerInspectData",
+        method: "get",
+        params
+    });
+};

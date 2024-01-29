@@ -184,6 +184,69 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="小红书涨粉" prop="xiaoHongShuIncreaseFans">
+              <Input
+                v-model="form.xiaoHongShuIncreaseFans"
+                placeholder="请输入小红书涨粉"
+                type="number"
+                number
+                @on-change="costChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="小红书涨粉付费" prop="xiaoHongShuIncreaseFansFees">
+              <Input
+                v-model="form.xiaoHongShuIncreaseFansFees"
+                placeholder="请输入小红书涨粉付费"
+                type="number"
+                number
+                @on-change="costChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="小红书涨粉成本" prop="xiaoHongShuIncreaseFansFeescost">
+              <Input
+                v-model="form.xiaoHongShuIncreaseFansFeescost"
+                placeholder="请输入小红书涨粉成本"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="小红书橱窗收入" prop="xiaoHongShuShowcaseIncome">
+              <Input
+                v-model="form.xiaoHongShuShowcaseIncome"
+                placeholder="请输入小红书橱窗收入"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="小红书橱窗付费" prop="xiaoHongShuShowcaseFee">
+              <Input
+                v-model="form.xiaoHongShuShowcaseFee"
+                placeholder="请输入小红书橱窗付费"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="小红书线索量" prop="xiaoHongShuClues">
+              <Input
+                v-model="form.xiaoHongShuClues"
+                placeholder="请输入小红书线索量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -266,6 +329,37 @@ export default {
             minWidth: 180,
             align: "center",
           },
+          
+          {
+            title: "今日涨粉",
+            key: "increaseFans",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "今日涨粉付费",
+            key: "increaseFansFees",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "今日橱窗收入",
+            key: "tikTokShowcaseIncome",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "今日橱窗付费",
+            key: "showCaseFee",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日线索量",
+            key: "clues",
+            minWidth: 170,
+            align: "center",
+          },
           {
             title: "今日加V人数",
             key: "addWechatNum",
@@ -290,6 +384,7 @@ export default {
             minWidth: 120,
             align: "center",
           },
+          
           {
             title: "操作",
             key: "",
@@ -336,7 +431,12 @@ export default {
                               zhihuFlowInvestmentNum,
                               sinaWeiBoFlowInvestmentNum,
                               videoFlowInvestmentNum,
-                              tikTokFlowInvestmentNum
+                              tikTokFlowInvestmentNum,
+                              xiaoHongShuIncreaseFans,
+                              xiaoHongShuIncreaseFansFees,
+                              xiaoHongShuClues,
+                              xiaoHongShuShowcaseIncome,
+                              xiaoHongShuShowcaseFee
 
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
@@ -344,6 +444,11 @@ export default {
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
+                            this.form.xiaoHongShuIncreaseFans = xiaoHongShuIncreaseFans;
+                            this.form.xiaoHongShuIncreaseFansFees = xiaoHongShuIncreaseFansFees;
+                            this.form.xiaoHongShuClues = xiaoHongShuClues;
+                            this.form.xiaoHongShuShowcaseIncome = xiaoHongShuShowcaseIncome;
+                            this.form.xiaoHongShuShowcaseFee = xiaoHongShuShowcaseFee;
                             this.form.xiaoHongShuOperationEmployeeId = xiaoHongShuOperationEmployeeId==0 ?  null : xiaoHongShuOperationEmployeeId ;
                             this.form.xiaoHongShuSendNum = xiaoHongShuSendNum;
                             this.form.xiaoHongShuFlowInvestmentNum = xiaoHongShuFlowInvestmentNum;
@@ -353,6 +458,8 @@ export default {
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
+                            const price = this.form.xiaoHongShuIncreaseFansFees / this.form.xiaoHongShuIncreaseFans
+                            this.form.xiaoHongShuIncreaseFansFeescost =  Math.round(price * 100) / 100 
                           }
                         });
                       },
@@ -488,10 +595,58 @@ export default {
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
         allflowInvestmentNum:null,
-        alltodaySendNum:null
+        alltodaySendNum:null,
+        // 小红书橱窗收入目标
+        xiaoHongShuShowcaseIncome:null,
+        // 小红书涨粉
+        xiaoHongShuIncreaseFans:null,
+         // 小红书涨粉付费
+        xiaoHongShuIncreaseFansFees:null,
+         // 小红书线索量
+        xiaoHongShuClues:null,
+        // 涨粉成本
+        xiaoHongShuIncreaseFansFeescost:null,
+        // 小红书橱窗付费
+        xiaoHongShuShowcaseFee:null
       },
 
       ruleValidate: {
+        xiaoHongShuShowcaseFee: [
+          {
+            required: true,
+            message: "请输入小红书橱窗付费",
+          },
+        ],
+        xiaoHongShuShowcaseIncome: [
+          {
+            required: true,
+            message: "请输入小红书橱窗收入目标",
+          },
+        ],
+        xiaoHongShuIncreaseFans: [
+          {
+            required: true,
+            message: "请输入小红书涨粉",
+          },
+        ],
+        xiaoHongShuIncreaseFansFees: [
+          {
+            required: true,
+            message: "请输入小红书涨粉付费",
+          },
+        ],
+        xiaoHongShuClues: [
+          {
+            required: true,
+            message: "请输入小红书线索量",
+          },
+        ],
+        xiaoHongShuIncreaseFansFeescost: [
+          {
+            required: true,
+            message: "请输入小红书涨粉成本",
+          },
+        ],
         liveanchorMonthlyTargetId: [
           {
             required: true,
@@ -550,6 +705,12 @@ export default {
     };
   },
   methods: {
+    // 计算涨粉成本
+    costChange(){
+      // 银行家算法保留两位小数
+      const price = this.form.xiaoHongShuIncreaseFansFees / this.form.xiaoHongShuIncreaseFans
+      this.form.xiaoHongShuIncreaseFansFeescost =  Math.round(price * 100) / 100 
+    },
     xiaoHongShuSendNumChange(){
       this.form.todaySendNum = Number(this.form.xiaoHongShuSendNum) 
     },
@@ -709,7 +870,12 @@ export default {
               flowInvestmentNum,
               recordDate,
               allflowInvestmentNum,
-              alltodaySendNum
+              alltodaySendNum,
+              xiaoHongShuIncreaseFans,
+              xiaoHongShuIncreaseFansFees,
+              xiaoHongShuClues,
+              xiaoHongShuShowcaseIncome,
+              xiaoHongShuShowcaseFee
             } = this.form;
             const data = {
               id,
@@ -724,6 +890,11 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
+              xiaoHongShuIncreaseFans,
+              xiaoHongShuIncreaseFansFees,
+              xiaoHongShuClues,
+              xiaoHongShuShowcaseIncome,
+              xiaoHongShuShowcaseFee
             };
             this.isflag=true
             api.BeforeLivingXiaoHongShuUpdate(data).then((res) => {
@@ -751,7 +922,11 @@ export default {
               todaySendNum,
               flowInvestmentNum	,
               recordDate,
-             
+              xiaoHongShuIncreaseFans,
+              xiaoHongShuIncreaseFansFees,
+              xiaoHongShuClues,
+              xiaoHongShuShowcaseIncome,
+              xiaoHongShuShowcaseFee
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -763,6 +938,11 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
+              xiaoHongShuIncreaseFans,
+              xiaoHongShuIncreaseFansFees,
+              xiaoHongShuClues,
+              xiaoHongShuShowcaseIncome,
+              xiaoHongShuShowcaseFee
             };
             this.isflag=true
             // 添加

@@ -78,9 +78,9 @@
       </div>
     </Card>
     <!-- 编辑 -->
-    <generateSalary :controlModal.sync="controlModal" :params="params" @getContractListClick="getContractListClick"/>
+    <generateSalary :controlModal.sync="controlModal" :params="params" @getContractListClick="getContractListClick" ref="generateSalaryRef"/>
     <!-- 详情 -->
-    <detail :detailModal.sync="detailModal" :id="id" ref="detail"/>
+    <detail :detailModal.sync="detailModal" :detailParams="detailParams" ref="detail"/>
 
   </div>
 </template>
@@ -229,6 +229,55 @@ export default {
             tooltip:true
           },
           {
+            title: "医美客资加V业绩",
+            key: "beautyAddWechatPrice",
+            align:'center',
+            minWidth:180,
+            tooltip:true
+          },
+          {
+            title: "带货客资加V业绩",
+            key: "takeGoodsAddWechatPrice",
+            align:'center',
+            minWidth:180,
+            tooltip:true
+          },
+          {
+            title: "引导面诊卡下单金额",
+            key: "consulationCardPrice",
+            align:'center',
+            minWidth:180,
+            tooltip:true
+          },
+          {
+            title: "引导面诊卡下单加v金额",
+            key: "consulationCardAddWechatPrice",
+            align:'center',
+            minWidth:200,
+            tooltip:true
+          },
+          {
+            title: "供应链达人派单提成金额",
+            key: "cooperationLiveAnchorSendOrderPrice",
+            align:'center',
+            minWidth:200,
+            tooltip:true
+          },
+          {
+            title: "供应链达人上门提成金额",
+            key: "cooperationLiveAnchorToHospitalPrice",
+            align:'center',
+            minWidth:200,
+            tooltip:true
+          },
+          {
+            title: "其他扣款",
+            key: "otherChargebacks",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
             title: "合计",
             key: "totalPrice",
             align:'center',
@@ -291,12 +340,10 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id } = params.row;
-                        this.id=id
+                        const { id,belongEmpId } = params.row;
+                        this.detailParams.id=id
+                        this.detailParams.belongEmpId=belongEmpId
                         this.detailModal = true
-                        this.$nextTick(()=>{
-                          this.$refs.detail.getDetail()
-                        })
                       },
                     },
                   },
@@ -318,12 +365,21 @@ export default {
                       click: () => {
                         const { id } = params.row;
                         this.title = "修改";
-                        api.byIdCustomerServiceCompensation(id).then((res) => {
-                          if (res.code === 0) {
-                            this.controlModal = true;
-                            this.params.detailObj = res.data.customerServiceCompensation
-                          }
-                        });
+                        this.params.id = id
+                        this.controlModal = true;
+                        // api.byIdCustomerServiceCompensation(id).then((res) => {
+                        //   if (res.code === 0) {
+                        //     this.controlModal = true;
+                        //     this.params.detailObj = res.data.customerServiceCompensation
+                        //     this.$nextTick(()=>{
+                        //       this.$refs.generateSalaryRef.checkBelongEmpIdChange()
+                        //     })
+                        //   }
+                        // });
+                         this.$nextTick(()=>{
+                            this.$refs.generateSalaryRef.getDetail()
+                        })
+                        
                       },
                     },
                   },
@@ -388,11 +444,17 @@ export default {
         // 归属客服
         employeeList:[],
         // 根据id获取详情
-        detailObj:{}
+        detailObj:{},
+        id:""
       },
+      id:"",
       // 详情
       detailModal:false,
-      id:''
+      
+      detailParams:{
+        id:'',
+        belongEmpId:null
+      }
     };
   },
   methods: {

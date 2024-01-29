@@ -194,6 +194,59 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="抖音涨粉" prop="tikTokIncreaseFans">
+              <Input
+                v-model="form.tikTokIncreaseFans"
+                placeholder="请输入抖音涨粉"
+                type="number"
+                number
+                @on-change="costChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="抖音涨粉付费" prop="tikTokIncreaseFansFees">
+              <Input
+                v-model="form.tikTokIncreaseFansFees"
+                placeholder="请输入抖音涨粉付费"
+                type="number"
+                number
+                @on-change="costChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="抖音涨粉成本" prop="tikTokIncreaseFansFeescost">
+              <Input
+                v-model="form.tikTokIncreaseFansFeescost"
+                placeholder="请输入抖音涨粉成本"
+                type="number"
+                number
+                disabled
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="抖音橱窗付费" prop="tikTokShowCaseFee">
+              <Input
+                v-model="form.tikTokShowCaseFee"
+                placeholder="请输入抖音橱窗付费"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="抖音线索量" prop="tikTokClues">
+              <Input
+                v-model="form.tikTokClues"
+                placeholder="请输入抖音线索量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -265,45 +318,69 @@ export default {
             },
           },
           {
-            title: "抖音今日发布量",
+            title: "今日发布量",
             key: "sendNum",
-            minWidth: 140,
+            minWidth: 130,
             align: "center",
           },
           {
-            title: "抖音今日投流费用",
+            title: "今日投流费用",
             key: "flowInvestmentNum",
-            minWidth: 170,
+            minWidth: 130,
             align: "center",
           },
           {
-            title: "抖音今日橱窗收入",
+            title: "今日涨粉",
+            key: "increaseFans",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日涨粉付费",
+            key: "increaseFansFees",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日橱窗收入",
             key: "tikTokShowcaseIncome",
-            minWidth: 170,
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日橱窗付费",
+            key: "showCaseFee",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "今日线索量",
+            key: "clues",
+            minWidth: 150,
             align: "center",
           },
           {
             title: "今日加V人数",
             key: "addWechatNum",
-            minWidth: 130,
+            minWidth: 150,
             align: "center",
           },
           {
             title: "今日派单人数",
             key: "sendOrderNum",
-            minWidth: 130,
+            minWidth: 150,
             align: "center",
           },
           {
             title: "今日成交人数",
             key: "dealNum",
-            minWidth: 130,
+            minWidth: 150,
             align: "center",
           },
           {
             title: "今日总业绩",
             key: "performanceNum",
-            minWidth: 120,
+            minWidth: 140,
             align: "center",
           },
           {
@@ -355,13 +432,21 @@ export default {
                               xiaoHongShuFlowInvestmentNum,
                               sinaWeiBoFlowInvestmentNum,
                               videoFlowInvestmentNum,
-                              tikTokShowcaseIncome
+                              tikTokShowcaseIncome,
+                              tikTokIncreaseFans,
+                              tikTokIncreaseFansFees,
+                              tikTokClues,
+                              tikTokShowcaseFee
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
+                            this.form.tikTokShowCaseFee = tikTokShowcaseFee;
+                            this.form.tikTokIncreaseFans = tikTokIncreaseFans;
+                            this.form.tikTokIncreaseFansFees = tikTokIncreaseFansFees;
+                            this.form.tikTokClues = tikTokClues;
                             this.form.tikTokOperationEmployeeId = tikTokOperationEmployeeId==0 ?  null : tikTokOperationEmployeeId ;
                             this.form.tikTokSendNum = tikTokSendNum;
                             this.form.tikTokFlowInvestmentNum = tikTokFlowInvestmentNum;
@@ -374,6 +459,9 @@ export default {
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
+                             // 银行家算法保留两位小数
+                            const price = this.form.tikTokIncreaseFansFees / this.form.tikTokIncreaseFans
+                            this.form.tikTokIncreaseFansFeescost =  Math.round(price * 100) / 100 
                           }
                         });
                       },
@@ -511,10 +599,50 @@ export default {
         allflowInvestmentNum:null,
         alltodaySendNum:null,
         // 抖音橱窗收入目标
-        tikTokShowcaseIncome:null
+        tikTokShowcaseIncome:null,
+        // 抖音涨粉
+        tikTokIncreaseFans:null,
+         // 抖音涨粉付费
+        tikTokIncreaseFansFees:null,
+         // 抖音线索量
+        tikTokClues:null,
+        // 涨粉成本
+        tikTokIncreaseFansFeescost:null,
+        // 抖音橱窗付费
+        tikTokShowCaseFee:null
       },
 
       ruleValidate: {
+        tikTokShowCaseFee: [
+          {
+            required: true,
+            message: "请输入抖音橱窗付费",
+          },
+        ],
+        tikTokIncreaseFansFeescost: [
+          {
+            required: true,
+            message: "请输入抖音涨粉成本",
+          },
+        ],
+        tikTokIncreaseFans: [
+          {
+            required: true,
+            message: "请输入抖音涨粉",
+          },
+        ],
+        tikTokIncreaseFansFees: [
+          {
+            required: true,
+            message: "请输入抖音涨粉付费",
+          },
+        ],
+        tikTokClues: [
+          {
+            required: true,
+            message: "请输入抖音线索量",
+          },
+        ],
         liveanchorMonthlyTargetId: [
           {
             required: true,
@@ -579,6 +707,12 @@ export default {
     };
   },
   methods: {
+    // 计算涨粉成本
+    costChange(){
+      // 银行家算法保留两位小数
+      const price = this.form.tikTokIncreaseFansFees / this.form.tikTokIncreaseFans
+      this.form.tikTokIncreaseFansFeescost =  Math.round(price * 100) / 100 
+    },
     tikTokSendNumChange(){
       this.form.todaySendNum = Number(this.form.tikTokSendNum) 
     },
@@ -739,7 +873,11 @@ export default {
               recordDate,
               allflowInvestmentNum,
               alltodaySendNum,
-              tikTokShowcaseIncome
+              tikTokShowcaseIncome,
+              tikTokIncreaseFans,
+              tikTokIncreaseFansFees,
+              tikTokClues,
+              tikTokShowCaseFee
             } = this.form;
             const data = {
               id,
@@ -754,7 +892,11 @@ export default {
                 "YYYY-MM-DD"
               ),
               flowInvestmentNum:Math.floor((allflowInvestmentNum + tikTokFlowInvestmentNum) * 100) /100,
-              tikTokShowcaseIncome
+              tikTokShowcaseIncome,
+              tikTokIncreaseFans,
+              tikTokIncreaseFansFees,
+              tikTokClues,
+              tikTokShowCaseFee
             };
             this.isflag = true;
             api.BeforeLivingTikTokUpdate(data).then((res) => {
@@ -782,7 +924,11 @@ export default {
               todaySendNum,
               flowInvestmentNum	,
               recordDate,
-              tikTokShowcaseIncome
+              tikTokShowcaseIncome,
+              tikTokIncreaseFans,
+              tikTokIncreaseFansFees,
+              tikTokClues,
+              tikTokShowCaseFee
              
             } = this.form;
             const data = {
@@ -795,7 +941,11 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
-              tikTokShowcaseIncome
+              tikTokShowcaseIncome,
+              tikTokIncreaseFans,
+              tikTokIncreaseFansFees,
+              tikTokClues,
+              tikTokShowCaseFee
             };
             this.isflag = true;
             // 添加

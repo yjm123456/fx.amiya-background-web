@@ -36,15 +36,21 @@ export default {
           {
             title: "订单号",
             key: "id",
-            minWidth:120,
+            minWidth:200,
             align:'center',
             tooltip:true
           },
           {
             title: "预约医院",
             key: "appointmentHospital",
-            minWidth:180,
+            minWidth:300,
             align:'center',
+            tooltip:true
+          },
+          {
+            title: "派单医院",
+            key: "sendHospital",
+            minWidth:300,
             tooltip:true
           },
           {
@@ -76,12 +82,7 @@ export default {
               );
             },
           },
-          {
-            title: "咨询内容",
-            key: "consultContent",
-            minWidth:500,
-            tooltip:true
-          },
+          
         ],
         data: [],
         totalCount: 0,

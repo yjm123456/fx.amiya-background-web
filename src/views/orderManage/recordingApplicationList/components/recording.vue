@@ -291,7 +291,7 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="8">
+          <Col span="8" >
             <FormItem label="是否为辅助客服" prop="isCustomer">
               <div>
                 <Radio-group v-model="form.isCustomer">
@@ -301,7 +301,7 @@
               </div>
             </FormItem>
           </Col>
-          <Col span="8">
+          <Col span="8" v-if="form.isCustomer == '是'">
             <FormItem
               label="辅助客服"
               prop="auxiliaryCustomerService"
@@ -888,13 +888,12 @@ export default {
               wechatNumber,
               city,
               isSupportOrder: isCustomer == "否" ? false : true,
-              supportEmpId: auxiliaryCustomerService
-                ? auxiliaryCustomerService
-                : 0,
+              supportEmpId: isCustomer == '否' ? 0 : ( auxiliaryCustomerService ? auxiliaryCustomerService : 0),
                 getCustomerType,
               customerSource,
               customerType
             };
+           
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
               //   this.$Message.error("请输入正确的手机号");

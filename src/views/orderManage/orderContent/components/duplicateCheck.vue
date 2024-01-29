@@ -23,54 +23,15 @@
             >查询</Button
           >
         </div>
-        <!-- <div class="content2">
-          <div v-if="recordingNormalParams.CustomerServiceNameByPhone">
-            <div v-if="recordingNormalParams.CustomerServiceNameByPhone == '未绑定' || employeeName == recordingNormalParams.CustomerServiceNameByPhone">
-              <div class="green">该顾客手机号是新顾客或已绑定在您的账号下，可按照正常流程进行操作</div>
-              <div class="ts">温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准</div>
-              <Button
-                type="primary"
-                style="margin-top: 20px"
-                @click="recordingNormalClick"
-                >录单</Button
-              >
-            </div>
-
-            <div v-else>
-              <div class="red">该顾客手机号已绑定了啊美雅客服，若仍需要录单，您可以向主管提交录单申请！</div>
-              <div class="ts">温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准</div>
-              <Button
-                type="primary"
-                style="margin-top: 20px"
-                @click="recordingApplicationClick"
-                >提交录单申请</Button
-              >
-            </div>
-          </div>
-          <div v-else class="content3">
-            <div class="ts" >温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准</div>
-          </div>
-        </div> -->
-
         <div class="content2">
           <div>
             <div v-if="checkStateTexts == '没数据'">
               <div v-if="recordingNormalParams.CustomerServiceNameByPhone">
-                <!-- <div v-if="recordingNormalParams.CustomerServiceNameByPhone == '未绑定' || employeeName == recordingNormalParams.CustomerServiceNameByPhone"> -->
                 <div
-                  v-if="
-                    recordingNormalParams.CustomerServiceNameByPhone ==
-                      '未绑定' ||
-                      employeeName ==
-                        recordingNormalParams.CustomerServiceNameByPhone
-                  "
+                  v-if="recordingNormalParams.CustomerServiceNameByPhone == '未绑定' || employeeName == recordingNormalParams.CustomerServiceNameByPhone"
                 >
-                  <div class="green">
-                    该顾客手机号是新顾客或已绑定在您的账号下，可按照正常流程进行操作
-                  </div>
-                  <div class="ts">
-                    温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准
-                  </div>
+                  <div class="green">该顾客手机号是新顾客或已绑定在您的账号下，可按照正常流程进行操作</div>
+                  <div class="ts">温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准</div>
                   <Button
                     type="primary"
                     style="margin-top: 20px"
@@ -79,13 +40,8 @@
                   >
                 </div>
                 <div v-else>
-                  <div class="red">
-                    <!-- 该顾客手机号已绑定了 {{recordingNormalParams.CustomerServiceNameByPhone}}，若仍需要录单，您可以向主管提交录单申请！ -->
-                    该顾客手机号已绑定了啊美雅客服，若仍需要录单，您可以向主管提交录单申请！
-                  </div>
-                  <div class="ts">
-                    温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准
-                  </div>
+                  <div class="red">该顾客手机号已绑定了啊美雅客服，若仍需要录单，您可以向主管提交录单申请！</div>
+                  <div class="ts">温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准</div>
                   <Button
                     type="primary"
                     style="margin-top: 20px"
@@ -100,25 +56,17 @@
                 该订单已在录单申请列表进行申请，请等待审核通过后录单！
               </div>
               <div class="red" v-else-if="checkStateTexts == '审核通过'">
-                该订单已在录单申请列表进行申请，请在录单申请中录单！
+                该订单已在录单申请列表进行申请(申请通过)，请在录单申请中录单！
               </div>
-              <!-- <div class="red">该顾客手机号已绑定了啊美雅客服，若仍需要录单，您可以向主管提交录单申请！</div> -->
+              <div class="red" v-else-if="checkStateTexts == '审核不通过'">
+                该订单已在录单申请列表进行申请，当前审核不通过，请与主管确认数据信息是否正常！
+              </div>
               <div class="ts">
                 温馨提示：查重规则根据该顾客手机号在系统中进行检索，最终反馈结果以系统为准
               </div>
-              <!-- <Button
-                type="primary"
-                style="margin-top: 20px"
-                @click="recordingApplicationClick"
-                >提交录单申请</Button
-              > -->
+              
             </div>
-            <!-- <Table
-              border
-              :columns="query.columns"
-              :data="query.data"
-            ></Table> -->
-
+           
             <!-- 重单的订单信息 -->
             <orderList ref="orderList" :isOrder="isOrder" :phone="phone"/>
             <!-- 小黄车登记详情 -->
@@ -224,6 +172,53 @@ export default {
     this.getContentPlatformOrderAddWorkTypeList()
   },
   methods: {
+    // 查询手机号是否绑定客服
+    getIsCustomer(){
+      this.recordingNormalParams.phone = this.phone;
+      const data = {
+        phone: this.phone,
+      };
+      api.getCustomerServiceNameByPhone(data).then((res) => {
+        if (res.code === 0) {
+          const { CustomerServiceNameByPhone } = res.data;
+          let employeeName = sessionStorage.getItem("employeeName");
+          let employeeId = sessionStorage.getItem("employeeId");
+          // 如果接口返回是未绑定或者是登录账号和接口返回账号一致可直接录单
+          if(CustomerServiceNameByPhone == "未绑定" || employeeName == CustomerServiceNameByPhone){
+            this.recordingNormalParams.CustomerServiceNameByPhone = CustomerServiceNameByPhone == "未绑定" ? employeeName : CustomerServiceNameByPhone;
+            // 如果是未绑定或者是登录账号和接口返回账号一致 获取登录时employeeId
+            this.recordingNormalParams.belongEmpId = employeeId;
+            // 该如果是未绑定过或者是绑定在自己账号里没有辅助客服（isCustomer = "否"）  如果是绑定在别人账号下就有辅助客服 （isCustomer = "是"）
+            this.recordingNormalParams.isCustomer = "否";
+            this.checkStateTexts = "没数据";
+          }else{
+            api.byPhoneContentPlatFormOrderAddWork(this.phone).then((res) => {
+              if (res.code === 0) {
+                const {id,phone,checkStateText,} = res.data.contentPlatFormOrderAddWork;
+                if(!id){
+                  this.checkStateTexts = "没数据";
+                  // 绑定客服与登录id不一致
+                  this.recordingNormalParams.CustomerServiceNameByPhone = '绑定在别人名下'
+                } else {
+                  if (checkStateText == "未审核") {
+                    this.checkStateTexts = checkStateText;
+                    return;
+                  } else if (checkStateText == "审核通过") {
+                    this.checkStateTexts = checkStateText;
+                    return;
+                  }
+                  else if (checkStateText == "审核不通过") {
+                    this.checkStateTexts = checkStateText;
+                    return;
+                  }
+                }
+              }
+            })
+          }
+          
+        }
+      })
+    },
      // 获取申请类型
     getContentPlatformOrderAddWorkTypeList(){
       contentPlatFormOrderAddWorkApi.getContentPlatformOrderAddWorkTypeList().then(res=>{
@@ -271,75 +266,10 @@ export default {
         this.$Message.warning("请输入客户手机号");
         return;
       }
-      // if (this.phone) {
-      //   if (!/^1[3456789]\d{9}$/.test(this.phone)) {
-      //     this.$Message.warning("请输入正确的手机号");
-      //     return false;
-      //   }
-      // }
-      this.getbyPhoneContentPlatFormOrderAddWork();
-      this.getbyEncryptPhone()
-      // this.isOrder = true
-      // setTimeout(()=>{
-      //   this.$refs.orderList.getContentPlateFormOrderSimpleInfos(this.phone)
-      // },30)
       this.isOrder = true
+      this.getIsCustomer()
+      this.getbyEncryptPhone()
       this.$refs.orderList.getContentPlateFormOrderSimpleInfos(this.phone)
-    },
-    // 根据录单申请手机号获取录单申请信息
-    getbyPhoneContentPlatFormOrderAddWork() {
-      api.byPhoneContentPlatFormOrderAddWork(this.phone).then((res) => {
-        if (res.code === 0) {
-          const {
-            id,
-            phone,
-            checkStateText,
-          } = res.data.contentPlatFormOrderAddWork;
-          if (!id) {
-            this.checkStateTexts = "没数据";
-            this.getCustomer();
-            return;
-          } else {
-            if (checkStateText == "未审核") {
-              this.checkStateTexts = checkStateText;
-              return;
-            } else if (checkStateText == "审核通过") {
-              this.checkStateTexts = checkStateText;
-              return;
-            }
-          }
-        }
-      });
-    },
-    // 根据手机号查询是否绑定客服
-    getCustomer() {
-      this.recordingNormalParams.phone = this.phone;
-      const data = {
-        phone: this.phone,
-      };
-      api.getCustomerServiceNameByPhone(data).then((res) => {
-        if (res.code === 0) {
-          const { CustomerServiceNameByPhone } = res.data;
-          // 如果是未绑定 获取登录时employeeId
-          let employeeName = sessionStorage.getItem("employeeName");
-          let employeeId = sessionStorage.getItem("employeeId");
-          this.recordingNormalParams.CustomerServiceNameByPhone = CustomerServiceNameByPhone == "未绑定" ? employeeName : CustomerServiceNameByPhone;
-          // 该如果是未绑定过或者是绑定在自己账号里没有辅助客服（isCustomer = "否"）  如果是绑定在别人账号下就有辅助客服 （isCustomer = "是"）
-          this.recordingNormalParams.isCustomer = "否";
-          // 如果是未绑定 获取登录时employeeId
-          if (CustomerServiceNameByPhone == "未绑定") {
-            this.recordingNormalParams.belongEmpId = employeeId;
-            return;
-          } else {
-            //   根据查重接口返回的名字获取该客服的id
-            this.recordingParams.employeeList.map((item) => {
-              if (item.name ==this.recordingNormalParams.CustomerServiceNameByPhone) {
-                this.recordingNormalParams.belongEmpId = item.id;
-              }
-            });
-          }
-        }
-      });
     },
 
     handleCancel() {

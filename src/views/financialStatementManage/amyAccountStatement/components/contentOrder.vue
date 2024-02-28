@@ -568,8 +568,17 @@ export default {
                           contentPlatFormOrderId,
                           price,
                           settlePrice,
-                          checkPrice
+                          checkPrice,
+                          lastDealHospitalId
                         } = params.row;
+                        // 判断当前对账医院与成交医院不同
+                        if(this.reconciliationParams.hospitalId != lastDealHospitalId){
+                          this.$Message.warning({
+                            content: "当前对账医院与成交医院不同，无法审核，请与助理核对业绩成交医院后重试！",
+                            duration: 3,
+                          });
+                          return
+                        }
                         this.controlModal = true;
                         this.form.id = contentPlatFormOrderId;
                         this.form.orderDealInfoId = id;
@@ -591,11 +600,8 @@ export default {
                         // 已对账系统使用费金额（已对账金额*系统使用费比例/100）
                         this.form.systemUsageFeePrice = ((Number(this.form.checkPriceNum) * Number(this.form.systemUsageFeeProportion)) / 100).toFixed(2)
                         // 已对账服务费合计(信息服务费金额+系统使用费金额)
-                        // this.form.totalServiceFeeReconciled = (Number(this.form.informationServiceFeePrice) +  Number(this.form.systemUsageFeePrice)).toFixed(2)
                         this.form.totalServiceFeeReconciled = settlePrice
                         // // 当前信息服务费
-                        // this.form.currentInformationServiceFee = (this.form.checkPrice * (this.form.proportionOfInformationServiceFee / 100)).toFixed(2)
-                        // this.form.currentInformationServiceFee = Math.round((Number(this.form.checkPrice) * (this.form.proportionOfInformationServiceFee / 100))*100)/100
                         let price1 = Math.round( (Math.round(Math.abs(Number(this.form.checkPrice))*100*this.form.proportionOfInformationServiceFee)/10000) *100 )/100
                         if(this.form.checkPrice<0){
                           this.form.currentInformationServiceFee = -price1
@@ -603,62 +609,26 @@ export default {
                           this.form.currentInformationServiceFee = price1
                         }
                         // 当前系统服务费
-                        // 正确的保留两位小数
-                        // let price2 = (Number(this.form.checkPrice) * this.form.systemUsageFeeProportion)*100/10000
-                        // this.form.currentSystemUsagefee = price2.toFixed(2)
-                        // 计算方式 Math.round( (Math.round(Math.abs(Number(this.form.checkPrice))*100*this.form.systemUsageFeeProportion)/10000) *100 )/100
                         let price2 = Math.round( (Math.round(Math.abs(Number(this.form.checkPrice))*100*this.form.systemUsageFeeProportion)/10000) *100 )/100
                         if(this.form.checkPrice<0){
                           this.form.currentSystemUsagefee = -price2
                         }else{
                           this.form.currentSystemUsagefee = price2
                         }
-                        // // 服务费合计
+                        // 服务费合计
                         this.form.settlePrice = (this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
-                        // // this.form.settlePrice = (this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
-                        // if(this.form.checkPrice<0){
-                        //   this.form.settlePrice = -(this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
-                        // }else{
-                        //   this.form.settlePrice = (this.form.currentInformationServiceFee + Number(this.form.currentSystemUsagefee)).toFixed(2)
-                        // }
 
-                        // // // 客服结算服务费
+                        // 客服结算服务费
                         this.form.customerServiceSettlePrice = proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
-                        // // this.form.customerServiceSettlePrice =  proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
-                        // if(this.form.checkPrice<0){
-                        //   this.form.customerServiceSettlePrice = -proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
-                        // }else{
-                        //   this.form.customerServiceSettlePrice = proportionOfInformationServiceFee+systemUsageFeeProportion <=30 ?  this.form.settlePrice :  (this.form.checkPrice*0.3).toFixed(2)
-                        // }
-
-
 
                         // 成交服务费合计
                          // 为负数情况
                         if(Number(checkPriceRight) <0){
-                          // let num = ((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000).toFixed(2)
-                          // this.form.totalServiceFee = (-num).toFixed(2)
                           let num = Math.round(((Math.abs(Number(checkPriceRight))*100 *(proportionOfInformationServiceFee+systemUsageFeeProportion))/10000)*100)/100
                           this.form.totalServiceFee = -num
-                          // console.log(this.form.totalServiceFee,'为负数情况')
                           return
                         }else{
-                          // .toFixed(2)银行家算法
-                          // > (3.61).toFixed(1)    //四舍
-                          // '3.6'
-                          // > (3.69).toFixed(1)    //六入
-                          // '3.7'
-                          // > (3.651).toFixed(1)    //五考虑，五后非零，进
-                          // '3.7'
-                          // > (3.65).toFixed(1)    //五考虑，五后为零，五前为偶数，舍去
-                          // '3.6'
-                          // > (3.75).toFixed(1)    //五考虑，五后为零，五前为奇数，进
-                          // '3.8'
-
-                          
-                          // this.form.totalServiceFee = Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000).toFixed(2))
                           this.form.totalServiceFee = Math.round(Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000))*100)/100
-                          // console.log(this.form.totalServiceFee,'为正数情况')
                           return
                         }
                       },

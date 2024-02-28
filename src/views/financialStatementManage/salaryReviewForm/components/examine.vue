@@ -244,6 +244,7 @@ export default {
         type: "",
         // 订单金额
         customerServiceSettlePrice: 0,
+        orderPrice:0,
         // 审核类型
         checkType: null,
         // 稽查人员 
@@ -372,11 +373,11 @@ export default {
     isCheckType(){
       if(this.form.checkType == 2){
         // 供应链达人 助理确认薪资 = 订单金额*对应比例 
-        let price2 = this.checkedParams.customerServiceSettlePrice * 0.1
+        let price2 = this.checkedParams.orderPrice * 0.1
         this.form.customerServiceOrderPerformance = Math.round(price2 * 100) / 100;
       }else if(this.form.checkType == 3){
         // 天猫升单 助理确认薪资 = 订单金额*对应比例
-        let price3 = this.checkedParams.customerServiceSettlePrice * 0.25
+        let price3 = this.checkedParams.orderPrice * 0.25
         this.form.customerServiceOrderPerformance = Math.round(price3 * 100) / 100;
       }
     },
@@ -402,7 +403,11 @@ export default {
     checkTypeChange() {
       const { checkType,checkBelongEmpId,customerServiceOrderPerformance } = this.form;
       // let price = this.checkedParams.customerServiceSettlePrice * (this.form.performancePercent / 100);
-      
+      if(checkType == 2 || checkType == 3){
+        this.form.orderPrice = this.checkedParams.orderPrice
+      }else{
+        this.form.orderPrice = this.checkedParams.customerServiceSettlePrice
+      }
       // 防止直接选择审核类型会报错 因为下面调用了根据归属客服查询详情接口
       if(this.control == true){
         if(!checkBelongEmpId){
@@ -417,6 +422,7 @@ export default {
           this.form.customerServiceOrderPerformance = 0;
           this.checkTitle = "审核客服业绩";
           this.form.valid = false;
+          this.form.customerServiceSettlePrice = this.checkedParams.customerServiceSettlePrice
           break;
         case '1':
           this.checkBelongEmpIdChange();
@@ -424,28 +430,31 @@ export default {
           this.form.customerServiceOrderPerformance = this.checkedParams.customerServiceSettlePrice;
           this.checkTitle = "审核客服业绩";
           this.form.valid = false;
+          this.form.customerServiceSettlePrice = this.checkedParams.customerServiceSettlePrice
           break;
         case '2':
           this.checkBelongEmpIdChange();
           // 供应链达人 助理确认薪资 = 订单金额*对应比例 
-          let price2 = this.checkedParams.customerServiceSettlePrice * 0.1
+          let price2 = this.checkedParams.orderPrice * 0.1
           this.form.customerServiceOrderPerformance = Math.round(price2 * 100) / 100;
           // 提成金额 = 助理确认业绩 * 提成比例
           let customerServicePerformance2 = customerServiceOrderPerformance * (this.form.performancePercent / 100)
           this.form.customerServicePerformance = Math.round(customerServicePerformance2 * 100) / 100;
           this.checkTitle = "订单金额";
           this.form.valid = false;
+          this.form.customerServiceSettlePrice = this.checkedParams.orderPrice
           break;
         case '3':
           this.checkBelongEmpIdChange();
           // 天猫升单 助理确认薪资 = 订单金额*对应比例
-          let price3 = this.checkedParams.customerServiceSettlePrice * 0.25
+          let price3 = this.checkedParams.orderPrice * 0.25
           this.form.customerServiceOrderPerformance = Math.round(price3 * 100) / 100;
           // 提成金额 = 助理确认业绩 * 提成比例
           let customerServicePerformance = customerServiceOrderPerformance * (this.form.performancePercent / 100)
           this.form.customerServicePerformance = Math.round(customerServicePerformance * 100) / 100;
           this.checkTitle = "订单金额";
           this.form.valid = false;
+          this.form.customerServiceSettlePrice = this.checkedParams.orderPrice
           break;
       }
     },

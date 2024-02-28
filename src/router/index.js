@@ -1988,6 +1988,42 @@ const businessMange = [{
         },
         component: () =>
             import ("@/views/businessMange/beforeLiveStreaming/beforeLiveStreaming.vue"),
+    },
+    {
+        path: "/liveStreaming",
+        name: "liveStreaming",
+        meta: {
+            title: "直播中(带货)看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/liveStreaming/liveStreaming.vue"),
+    },
+    {
+        path: "/liveStreamingMedicalAesthetics",
+        name: "liveStreamingMedicalAesthetics",
+        meta: {
+            title: "直播中(医美)看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/liveStreamingMedicalAesthetics/liveStreamingMedicalAesthetics.vue"),
+    },
+    {
+        path: "/afterLiveStreaming",
+        name: "afterLiveStreaming",
+        meta: {
+            title: "直播后经营看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/afterLiveStreaming/afterLiveStreaming.vue"),
     }
 ];
 

@@ -32,7 +32,7 @@
             <p class="content">
               <span>追踪人：{{ item.employeeName }}</span>
             </p>
-            <p class="content_footer">{{ item.trackContent }}</p>
+            <p class="content_footer"><span class="content_title">内容：</span>{{ item.trackContent }}</p>
           </TimelineItem>
         </Timeline>
         <Divider v-show="nextPage === false">暂无更多数据</Divider>
@@ -248,9 +248,14 @@ export default {
 }
 .content_footer {
   padding-left: 5px;
+  margin-top: 8px;
 }
 .scroll_wrap {
   height: 100%;
   overflow-y: auto;
+}
+.content_title{
+  font-size: 14px;
+  font-weight: bold;
 }
 </style>

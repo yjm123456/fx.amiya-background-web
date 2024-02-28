@@ -71,3 +71,11 @@ export const updateAvatar = (data) => {
         data
     });
 };
+// 根据时间、消息类型、获取消息通知列表
+export const bannerList = (params) => {
+    return http({
+        url: `/amiyabg/MessageNotice/bannerList`,
+        method: "get",
+        params
+    });
+};

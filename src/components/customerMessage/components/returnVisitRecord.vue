@@ -170,7 +170,9 @@ export default {
       common.byEncryptPhoneGetReturnVisitList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.trackRecord;
-          this.matcCallRecord(list, totalCount)
+          // this.matcCallRecord(list, totalCount)
+          this.returnVisitRecord.data = list;
+          this.returnVisitRecord.totalCount = totalCount;
         }
       });
     },
@@ -182,14 +184,16 @@ export default {
       common.byEncryptPhoneGetReturnVisitList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.trackRecord;
-          this.matcCallRecord(list,totalCount,()=>{
-            if(this.$refs.aplayer) {
-              const index = this.returnVisitRecord.data.findIndex(item=> item.callRecordId === this.playParams.row.callRecordId);
-              if(index !== -1) {
-                this.returnVisitRecord.data[index].play = this.currentPlayState;
-              }
-            }
-          })
+          this.returnVisitRecord.data = list;
+          this.returnVisitRecord.totalCount = totalCount;
+          // this.matcCallRecord(list,totalCount,()=>{
+          //   if(this.$refs.aplayer) {
+          //     const index = this.returnVisitRecord.data.findIndex(item=> item.callRecordId === this.playParams.row.callRecordId);
+          //     if(index !== -1) {
+          //       this.returnVisitRecord.data[index].play = this.currentPlayState;
+          //     }
+          //   }
+          // })
         }
       });
     },

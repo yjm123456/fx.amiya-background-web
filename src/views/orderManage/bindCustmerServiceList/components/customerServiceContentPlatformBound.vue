@@ -71,7 +71,7 @@
         >
           <Option
             v-for="(item, indexs) in weChatList"
-            :value="item.weChatNo"
+            :value="item.id"
             :key="indexs"
             >{{ item.weChatNo }}</Option
           >
@@ -175,7 +175,7 @@ export default {
         keyword: "",
         employee: [{ name: "全部", id: "all" }],
         customerServiceId: null,
-        liveAnchorWechatNoId:'全部微信号',
+        liveAnchorWechatNoId:'',
         appTypeList: [
           {
             name: "全部平台",
@@ -322,7 +322,7 @@ export default {
         customerServiceId: "",
       },
       // 微信号
-      weChatList:[{weChatNo:'全部微信号',name:'全部微信号'}]
+      weChatList:[{id:'',name:'全部微信号'}]
     };
   },
   methods: {
@@ -419,7 +419,7 @@ export default {
         liveAnchorId,
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        liveAnchorWechatNoId:liveAnchorWechatNoId == '全部微信号' ? '' : liveAnchorWechatNoId
+        liveAnchorWechatNoId:liveAnchorWechatNoId == '' ? '' : liveAnchorWechatNoId
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {
@@ -448,7 +448,7 @@ export default {
         liveAnchorId,
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        liveAnchorWechatNoId:liveAnchorWechatNoId == '全部微信号' ? '' : liveAnchorWechatNoId
+        liveAnchorWechatNoId:liveAnchorWechatNoId == '' ? '' : liveAnchorWechatNoId
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {

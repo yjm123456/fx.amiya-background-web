@@ -9,6 +9,13 @@
           @toggleCollapse="toggleCollapse"
         ></collapsedSider>
       </div>
+      <!-- 文字轮播 -->
+      <div style="width: 68%;margin-right:30px" v-if="employeeType == 'amiyaEmployee'">
+        <marquee scrollable wrapable>
+          <p style="color:red">{{contentTextList}}</p>
+        </marquee>
+      </div>
+
       <div class="right">
         <!-- 通知 -->
         <div class="notice" @click="noticeClick" v-if="isShow==true">
@@ -18,7 +25,6 @@
             <div class="circle2" v-else>99+</div>
           </div>
         </div>
-
         <news class="news"></news>
         <loginInfo class="loginInfo"></loginInfo>
         <user class="user"></user>
@@ -43,7 +49,9 @@ export default {
   },
   data(){
     return{
-      myUnReadNoticeMessage:this.$store.state.message.myUnReadNoticeMessage,
+      // 消息
+       myUnReadNoticeMessage:this.$store.state.message.myUnReadNoticeMessage,
+       contentTextList:this.$store.state.textBanner.contentText,
        isShow:false,
        employeeType:sessionStorage.getItem('employeeType'),
        token:sessionStorage.getItem("token")
@@ -57,16 +65,8 @@ export default {
     noticeClick(){
       this.$router.push("/trends");
     },
+    // 获取消息通知
     getMyUnReadCount(){
-      // // 医院端不调用接口
-      // if(this.employeeType == 'amiyaEmployee'){
-      //   api.getMyUnReadCount().then((res) => {
-      //       if(res.code === 0){
-      //         const {myUnReadNoticeMessage} = res.data
-      //         this.myUnReadNoticeMessage = myUnReadNoticeMessage
-      //       }
-      //   })
-      // }
       if(this.employeeType == 'amiyaEmployee'){
         this.$store.dispatch("message/getMessage")
       }
@@ -85,11 +85,18 @@ export default {
           })
         }
       })
+    },
+    // 文字轮播
+    getTextSwiper(){
+     if(this.employeeType == 'amiyaEmployee'){
+        this.$store.dispatch("textBanner/textSwiper")
+      }
     }
     
   },
   mounted(){
     this.getMyUnReadCount()
+    this.getTextSwiper()
   },
   created(){
     if(this.token){
@@ -98,6 +105,10 @@ export default {
       setInterval(()=>{
           this.getMyUnReadCount()
       },300000)
+      // 两小时刷新一次文字轮播接口 7200000
+      setInterval(()=>{
+          this.getTextSwiper()
+      },7200000)
     }
     
   },
@@ -105,6 +116,11 @@ export default {
     '$store.state.message.myUnReadNoticeMessage':{
       handler(value) {
         this.myUnReadNoticeMessage = value;
+      }
+    },
+    '$store.state.textBanner.contentText':{
+      handler(value) {
+        this.contentTextList= value
       }
     }
   }
@@ -120,6 +136,10 @@ export default {
   justify-content: space-between;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   line-height: normal;
+  .left{
+    display: flex;
+    align-items: center;
+  }
   .right {
     display: flex;
     align-items: center;

@@ -636,7 +636,7 @@ export default {
         },
         {
           id:1,
-          name:'吉娜（吉娜气质美学）'
+          name:'吉娜JINA'
         }
       ],
       liveAnchorBaseInfoValidList2All:[
@@ -654,7 +654,7 @@ export default {
         },
         {
           id:1,
-          name:'吉娜（吉娜气质美学）'
+          name:'吉娜JINA'
         }
       ],
       // 订单状态

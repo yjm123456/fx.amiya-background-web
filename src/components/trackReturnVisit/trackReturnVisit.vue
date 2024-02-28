@@ -54,7 +54,7 @@
                   />
                 </FormItem>
                 <FormItem label="是否有效" prop="valid">
-                  <i-switch v-model="form.valid" />
+                  <i-switch v-model="form.valid"  />
                 </FormItem>
               </Col>
               <Col span="12">
@@ -75,7 +75,7 @@
             <Row :gutter="30">
               <Col span="12">
                 <FormItem label="设置下次回访">
-                  <i-switch v-model="controlNextReturnVisit" />
+                  <i-switch v-model="controlNextReturnVisit" @on-change="switchClick"/>
                   <span class="text" >【注】：若不需要下次回访，可关闭此按钮</span>
                 </FormItem>
               </Col>
@@ -409,6 +409,12 @@ export default {
     };
   },
   methods: {
+    switchClick(){
+      if(this.controlNextReturnVisit == false){
+        this.form.addWaitTrackCustomer = []
+        return
+      }
+    },
     eyeClick(){
       const data = {
         encryptPhone:this.params.encryptPhone
@@ -573,6 +579,11 @@ export default {
             trackContent,
             callRecordId,
             valid,
+            waitTrackId:this.params.waitTrackId ? this.params.waitTrackId : null
+          }
+          if(this.controlNextReturnVisit == true && addWaitTrackCustomer.length==0){
+            this.$Message.warning('请添加下次回访数据！')
+            return
           }
           // 如果设置了下次回访则直接提交form 否则提交除addWaitTrackCustomer其他字段
           // const params = this.controlNextReturnVisit ? this.form : data;

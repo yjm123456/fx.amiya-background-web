@@ -333,11 +333,12 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id,isOldCustomerText, customerServiceSettlePrice} = params.row;
+                        const { id,isOldCustomerText, customerServiceSettlePrice,orderPrice} = params.row;
                         this.examineModel = true;
                         this.checkedParams.id = id;
                         this.checkedParams.isOldCustomerText = isOldCustomerText
                         this.checkedParams.customerServiceSettlePrice = customerServiceSettlePrice
+                        this.checkedParams.orderPrice = orderPrice
                       },
                     },
                   },
@@ -408,8 +409,10 @@ export default {
         // 新老客业绩
         isOldCustomerText:'',
         id:'',
+        // 审核客服业绩金额
+        customerServiceSettlePrice:0,
         // 订单金额
-        customerServiceSettlePrice:0
+        orderPrice:0
       },
 
       // 内容平台订单详情model

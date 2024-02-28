@@ -12,6 +12,8 @@ import chat from "./modules/chat";
 import callCenter from "./modules/callCenter"
 // 消息通知(小铃铛)
 import message from "./modules/message"
+// 问题轮播
+import textBanner from "./modules/text"
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -21,6 +23,7 @@ export default new Vuex.Store({
         addRoute,
         chat,
         callCenter,
-        message
+        message,
+        textBanner
     },
 });

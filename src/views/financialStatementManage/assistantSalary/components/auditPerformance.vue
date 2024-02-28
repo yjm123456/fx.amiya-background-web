@@ -219,7 +219,7 @@ export default {
         pageNum,
         pageSize,
         keyWord: this.detailParams.id,
-        isGenerateSalry: 2,
+        isGenerateInspectSalry: 2,
         inspectEmpId:this.detailParams.belongEmpId,
         checkState:2
         
@@ -243,7 +243,7 @@ export default {
         pageNum,
         pageSize,
         keyWord: this.detailParams.id,
-        isGenerateSalry: 2,
+        isGenerateInspectSalry: 2,
         inspectEmpId:this.detailParams.belongEmpId,
         checkState:2
       };

@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="title">趋势看板</div>
-    <div class="top">
+    <!-- <div class="top">
       <div class="date_con">
         <DatePicker
           type="month"
@@ -13,7 +13,7 @@
         ></DatePicker>
         <Button type="primary" @click="getData">查询</Button>
       </div>
-    </div>
+    </div> -->
     <Tabs ref="tabs" v-model="activeName" type="card" class="tabs">
       <TabPane label="公司" name="company">
         <lineChart
@@ -110,5 +110,8 @@ export default {
 
 .top {
   text-align: end;
+}
+.tabs{
+  margin-top: 30px;
 }
 </style>

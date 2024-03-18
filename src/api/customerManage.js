@@ -14,7 +14,14 @@ export const getBindCustomerServerList = (params) => {
         params
     });
 };
-
+// 获取绑定客服的客户列表（新）  get
+export const newBindCustomerServerList = (params) => {
+    return http({
+        url: "/amiyabg/Customer/newBindCustomerServerList",
+        method: "get",
+        params
+    });
+};
 // 获取客服姓名列表
 export const getCustomerServiceList = (params) => {
     return http({

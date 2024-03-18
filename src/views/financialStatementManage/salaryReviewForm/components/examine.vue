@@ -404,7 +404,7 @@ export default {
       const { checkType,checkBelongEmpId,customerServiceOrderPerformance } = this.form;
       // let price = this.checkedParams.customerServiceSettlePrice * (this.form.performancePercent / 100);
       if(checkType == 2 || checkType == 3){
-        this.form.orderPrice = this.checkedParams.orderPrice
+        this.form.orderPrice = this.checkedParams.recolicationPrice
       }else{
         this.form.orderPrice = this.checkedParams.customerServiceSettlePrice
       }
@@ -440,9 +440,9 @@ export default {
           // 提成金额 = 助理确认业绩 * 提成比例
           let customerServicePerformance2 = customerServiceOrderPerformance * (this.form.performancePercent / 100)
           this.form.customerServicePerformance = Math.round(customerServicePerformance2 * 100) / 100;
-          this.checkTitle = "订单金额";
+          this.checkTitle = "对账单面值";
           this.form.valid = false;
-          this.form.customerServiceSettlePrice = this.checkedParams.orderPrice
+          this.form.customerServiceSettlePrice = this.checkedParams.recolicationPrice
           break;
         case '3':
           this.checkBelongEmpIdChange();
@@ -452,9 +452,9 @@ export default {
           // 提成金额 = 助理确认业绩 * 提成比例
           let customerServicePerformance = customerServiceOrderPerformance * (this.form.performancePercent / 100)
           this.form.customerServicePerformance = Math.round(customerServicePerformance * 100) / 100;
-          this.checkTitle = "订单金额";
+          this.checkTitle = "对账单面值";
           this.form.valid = false;
-          this.form.customerServiceSettlePrice = this.checkedParams.orderPrice
+          this.form.customerServiceSettlePrice = this.checkedParams.recolicationPrice
           break;
       }
     },

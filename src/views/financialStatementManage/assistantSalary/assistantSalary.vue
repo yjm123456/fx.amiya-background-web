@@ -270,13 +270,7 @@ export default {
             minWidth:200,
             tooltip:true
           },
-          {
-            title: "其他扣款",
-            key: "otherChargebacks",
-            align:'center',
-            minWidth:150,
-            tooltip:true
-          },
+          
           {
             title: "合计",
             key: "totalPrice",

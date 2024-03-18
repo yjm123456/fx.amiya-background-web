@@ -91,10 +91,10 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['下单GMV', '退单GMV','实际回款','直播付费'],
+          data: ['下单GMV', '退款GMV','实际回款','直播付费'],
           selected:{
             '下单GMV':true,
-            '退单GMV':true,
+            '退款GMV':true,
             '实际回款':false,
             '直播付费':false,
 
@@ -112,7 +112,7 @@ export default {
                 },
             },
             {
-                name: '退单GMV',
+                name: '退款GMV',
                 type: 'line',
                 data: refundGMVDatas,
                 itemStyle: { 

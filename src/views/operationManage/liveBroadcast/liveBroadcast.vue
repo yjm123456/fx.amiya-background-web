@@ -162,7 +162,7 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem 
               label="抖+投流费用" 
               prop="tikTokPlusNum"
@@ -179,7 +179,7 @@
                 @on-change="livingRoomFlowInvestmentNum()"
               />
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="8">
             <FormItem 
               label="千川投流" 
@@ -254,25 +254,25 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="今日照片面诊卡下单数量"
+              label="今日设计卡下卡量"
               prop="consultation"
               :rules="[
                 {
                   required: title === '修改' ? true : false,
-                  message: '请输入今日照片面诊卡下单数量',
+                  message: '请输入今日设计卡下卡量',
                 },
               ]"
-              key="今日照片面诊卡下单数量"
+              key="今日设计卡下卡量"
             >
               <Input
                 v-model="form.consultation"
-                placeholder="请输入今日照片面诊卡下单数量"
+                placeholder="请输入今日设计卡下卡量"
                 type="number"
                 number
               />
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem
               label="今日视频面诊卡下单数量"
               prop="consultation2"
@@ -291,8 +291,8 @@
                 number
               />
             </FormItem>
-          </Col>
-          <Col span="8">
+          </Col> -->
+          <!-- <Col span="8">
             <FormItem
               label="今日带货结算佣金"
               prop="cargoSettlementCommission"
@@ -311,28 +311,28 @@
                 number
               />
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="8">
             <FormItem
-              label="今日退卡量"
+              label="今日设计卡退卡量"
               prop="refundCard"
-              key="今日退卡量"
+              key="今日设计卡退卡量"
               :rules="[
                 {
                   required: true,
-                  message: '请输入今日退卡量',
+                  message: '请输入今日设计卡退卡量',
                 },
               ]"
             >
               <Input
                 v-model="form.refundCard"
-                placeholder="请输入今日退卡量"
+                placeholder="请输入今日设计卡退卡量"
                 type="number"
                 number
               />
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem
               label="今日GMV"
               prop="gmv"
@@ -351,22 +351,22 @@
                 number
               />
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="8">
             <FormItem
-              label="今日去卡GMV"
+              label="今日带货GMV"
               prop="eliminateCardGMV"
-              key="今日去卡GMV"
+              key="今日带货GMV"
               :rules="[
                 {
                   required: true,
-                  message: '请输入今日去卡GMV',
+                  message: '请输入今日带货GMV',
                 },
               ]"
             >
               <Input
                 v-model="form.eliminateCardGMV"
-                placeholder="请输入今日去卡GMV"
+                placeholder="请输入今日带货GMV"
                 type="number"
                 number
               />
@@ -465,12 +465,12 @@ export default {
               );
             },
           },
-          {
-            title: "抖+投流费用",
-            key: "tikTokPlusNum",
-            minWidth: 130,
-            align: "center",
-          },
+          // {
+          //   title: "抖+投流费用",
+          //   key: "tikTokPlusNum",
+          //   minWidth: 130,
+          //   align: "center",
+          // },
           {
             title: "千川投流",
             key: "qianChuanNum",
@@ -497,45 +497,45 @@ export default {
           },
 
           {
-            title: "今日照片面诊卡下单数量",
+            title: "今日设计卡下卡量",
             key: "consultation",
             minWidth: 200,
             align: "center",
           },
+          // {
+          //   title: "今日视频面诊卡下单数量",
+          //   key: "consultation2",
+          //   minWidth: 200,
+          //   align: "center",
+          // },
+          // {
+          //   title: "今日带货结算佣金",
+          //   key: "cargoSettlementCommission",
+          //   minWidth: 160,
+          //   align: "center",
+          // },
           {
-            title: "今日视频面诊卡下单数量",
-            key: "consultation2",
-            minWidth: 200,
-            align: "center",
-          },
-          {
-            title: "今日带货结算佣金",
-            key: "cargoSettlementCommission",
-            minWidth: 160,
-            align: "center",
-          },
-          {
-            title: "今日退卡量",
+            title: "今日设计卡退卡量",
             key: "refundCard",
-            minWidth: 120,
+            minWidth: 150,
             align: "center",
           },
+          // {
+          //   title: "今日GMV",
+          //   key: "gmv",
+          //   minWidth: 100,
+          //   align: "center",
+          // },
           {
-            title: "今日GMV",
-            key: "gmv",
-            minWidth: 100,
-            align: "center",
-          },
-          {
-            title: "今日去卡GMV",
+            title: "今日带货GMV",
             key: "eliminateCardGMV",
-            minWidth: 130,
+            minWidth: 180,
             align: "center",
           },
           {
-            title: "今日去卡GMV",
+            title: "今日退款GMV",
             key: "refundGMV",
-            minWidth: 130,
+            minWidth: 180,
             align: "center",
           },
           {
@@ -572,15 +572,15 @@ export default {
                               liveanchorMonthlyTargetId,
                               livingRoomFlowInvestmentNum,
                               consultation,
-                              consultation2,
-                              cargoSettlementCommission,
+                              // consultation2,
+                              // cargoSettlementCommission,
                               livingTrackingEmployeeId,
                               recordDate,
-                              gmv,
+                              // gmv,
                               eliminateCardGMV,
                               refundCard,
                               refundGMV,
-                              tikTokPlusNum,
+                              // tikTokPlusNum,
                               qianChuanNum,
                               shuiXinTuiNum,
                               weiXinDou
@@ -592,13 +592,13 @@ export default {
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
                             this.form.livingRoomFlowInvestmentNum = livingRoomFlowInvestmentNum;
                             this.form.consultation = consultation;
-                            this.form.consultation2 = consultation2;
-                            this.form.cargoSettlementCommission = cargoSettlementCommission;
-                            this.form.gmv = gmv;
+                            // this.form.consultation2 = consultation2;
+                            // this.form.cargoSettlementCommission = cargoSettlementCommission;
+                            // this.form.gmv = gmv;
                             this.form.eliminateCardGMV = eliminateCardGMV;
                             this.form.refundGMV = refundGMV;
                             this.form.refundCard = refundCard;
-                            this.form.tikTokPlusNum = tikTokPlusNum;
+                            // this.form.tikTokPlusNum = tikTokPlusNum;
                             this.form.qianChuanNum = qianChuanNum;
                             this.form.shuiXinTuiNum = shuiXinTuiNum;
                             this.form.weiXinDou = weiXinDou;
@@ -733,7 +733,7 @@ export default {
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
         // 抖+投流费用
-        tikTokPlusNum: null,
+        tikTokPlusNum: 0,
         // 千川投流
         qianChuanNum: null,
         // 随心推
@@ -745,15 +745,15 @@ export default {
         // 今日照片面诊卡数量
         consultation: null,
         // 今日视频面诊卡数量
-        consultation2: null,
+        consultation2: 0,
         // 今日带货结算佣金
-        cargoSettlementCommission: null,
+        cargoSettlementCommission: 0,
         // 直播中人员
         livingTrackingEmployeeId: null,
-        // 今日退卡量
+        // 今日设计卡退卡量
         refundCard:null,
         // 今日GMV
-        gmv:null,
+        gmv:0,
         // 今日去卡GMV
         eliminateCardGMV:null,
         // 今日退款GMV

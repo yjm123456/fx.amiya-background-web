@@ -122,6 +122,7 @@
               <Button type="primary" @click="customerClick(detailObj)"
                 style="margin-right:10px">顾客信息</Button
               >
+              <Button type="primary" @click="visitClick(detailObj)" style="margin-right:10px">追踪回访</Button>
               <Button type="primary" @click="lookImg(detailObj.id)"
                 >查看顾客照片</Button
               >
@@ -544,6 +545,11 @@
     <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
     <!-- 派单情况 -->
     <dispatch :dispatchModel.sync="dispatchModel" ref="dispatch" :id="id"/>
+    <!-- 追踪回访 -->
+    <trackReturnVisit
+      @resetControlTrackReturnVisitDisplay="resetControlTrackReturnVisitDisplay"
+      :params="trackReturnVisitComParams"
+    />
   </div>
 </template>
 <script>
@@ -561,6 +567,7 @@ import goodsNews from "@/components/goodsNews/goodsNews.vue";
 import customerMessage from "@/components/customerMessage/customerMessage"
 import appointmentSchedule from "./appointmentSchedule.vue"
 import messageBoard from "@/components/contentMessageBoard/contentMessageBoard.vue";
+import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
 
 export default {
   props: {
@@ -575,10 +582,18 @@ export default {
     customerMessage,
     appointmentSchedule,
     messageBoard,
-    dispatch
+    dispatch,
+    trackReturnVisit
   },
   data() {
     return {
+      // 追踪回访组件参数
+      trackReturnVisitComParams: {
+        device: "",
+        encryptPhone: "",
+        controlTrackReturnVisitDisplay: false,
+        phone:''
+      },
       // 派单情况model
       dispatchModel:false,
       isShow:false,
@@ -699,6 +714,16 @@ export default {
   },
 
   methods: {
+    // 追踪回访
+    visitClick(value){
+      const {encryptPhone,phone} = value
+      this.trackReturnVisitComParams.encryptPhone = encryptPhone;
+      this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
+      this.trackReturnVisitComParams.phone = phone;
+    },
+    resetControlTrackReturnVisitDisplay() {
+      this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = false;
+    },
     // 派单情况
     dispatchClick(id){
       this.dispatchModel = true

@@ -26,31 +26,44 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Select v-model="query.type" style="width: 200px; margin-right: 10px">
+            <!-- <Select v-model="query.type" style="width: 200px; margin-right: 10px">
               <Option
                 v-for="item in query.typeList"
                 :value="item.value"
                 :key="item.value"
                 >{{ item.name }}</Option
               >
-            </Select>
+            </Select> -->
             <DatePicker
               type="date"
               placeholder="开始日期"
-              style="width: 200px;margin-right: 10px"
+              style="width: 160px;margin-right: 10px"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="结束日期"
-              style="width: 200px;;margin-right: 10px"
+              style="width: 160px;;margin-right: 10px"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
-            
+            <Input
+              v-model="query.minAmount"
+              placeholder="最小消费金额"
+              style="width: 160px; margin:0  5px;"
+              @keyup.enter.native="getWeChatCustomerList()"
+            />
+            —
+            <Input
+              v-model="query.maxAmount"
+              placeholder="最大消费金额"
+              style="width: 160px; margin:0  5px; "
+              @keyup.enter.native="getWeChatCustomerList()"
+            />
+            <Button type="primary" @click="getBindCustomerServerList()" style="margin-left:10px">查询</Button>
           </div>
-          <div class="price_content">
+          <!-- <div class="price_content">
             <div @change="amountTypeFlag(query.amountType)">
               <Radio-group v-model="query.amountType" vertical>
                   <Radio label="0">下单金额</Radio>
@@ -59,17 +72,18 @@
             </div>
             <Input
               v-model="query.minAmount"
-              placeholder="最小金额"
+              placeholder="最小消费金额"
               style="width: 200px; margin:0  5px;"
               @keyup.enter.native="getWeChatCustomerList()"
             />
             —
             <Input
               v-model="query.maxAmount"
-              placeholder="最大金额"
+              placeholder="最大消费金额"
               style="width: 200px; margin:0  5px; "
               @keyup.enter.native="getWeChatCustomerList()"
             />
+            <Button type="primary" @click="getBindCustomerServerList()" style="margin-left:20px">查询</Button>
             <div @change="isUnTrackCheckbox(query.isUnTrack)">
               <Checkbox v-model="query.isUnTrack" :disabled="query.disabled" style="margin-left:20px">
                   <span v-if="query.isUnTrack">未回访客户</span>
@@ -92,10 +106,10 @@
                 :disabled="query.isUnTrack==false"
               ></DatePicker>
             </div>
-          </div>
+          </div> -->
         </div>
         <div>
-          <Button type="primary" @click="getBindCustomerServerList()" style="margin-left:20px">查询</Button>
+          <!-- <Button type="primary" @click="getBindCustomerServerList()" style="margin-left:20px">查询</Button> -->
         </div>
       </div>
     </Card>
@@ -240,35 +254,6 @@ export default {
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         columns: [
           {
-            title: "头像",
-            key: "avatar",
-            width: 300,
-            render: (h, params) => {
-              return h(
-                "viewer",
-                {
-                  props: {
-                    zoomable: false,
-                  },
-                },
-                [
-                  h("img", {
-                    style: {
-                      width: "50px",
-                      height: "50px",
-                      margin: "5px 15px 5px 5px",
-                      verticalAlign: "middle",
-                    },
-                    attrs: {
-                      src: params.row.avatar,
-                    },
-                  }),
-                  params.row.nickName,
-                ]
-              );
-            },
-          },
-          {
             title: "创建时间",
             key: "createDate",
             render: (h, params) => {
@@ -285,24 +270,10 @@ export default {
             key: "phone",
           },
           {
-            title: "客户昵称",
-            key: "nickName",
-          },
-          {
             title: "绑定客服",
             key: "customerServiceName",
           },
-          {
-            title: "用户状态",
-            key: "userId",
-            align:'center',
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.userId ? '已注册小程序' : '未注册小程序'
-              );
-            },
-          },
+          
           {
             title: "操作",
             width: 220,
@@ -545,7 +516,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyword, employeeId, type , startDate , endDate , amountType ,isUnTrack , minAmount ,maxAmount ,unTrackStartDate ,unTrackEndDate} = this.query;
+      const { pageNum, pageSize, keyword, employeeId , startDate , endDate  , minAmount ,maxAmount } = this.query;
       const data = {
         pageNum,
         pageSize,
@@ -553,15 +524,10 @@ export default {
         employeeId: !this.isAuthority() ? null : employeeId,
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        type,
-        amountType,
-        isUnTrack,
         minAmount,
         maxAmount,
-        unTrackStartDate : unTrackStartDate ? this.$moment(unTrackStartDate).format("YYYY-MM-DD") : null,
-        unTrackEndDate : unTrackEndDate ? this.$moment(unTrackEndDate).format("YYYY-MM-DD") : null 
       };
-      api.getBindCustomerServerList(data).then((res) => {
+      api.newBindCustomerServerList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.customer;
           this.query.data = list;
@@ -572,7 +538,7 @@ export default {
 
     // 获取绑定客服的客户列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyword, employeeId, type , startDate , endDate , amountType ,isUnTrack , minAmount ,maxAmount ,unTrackStartDate ,unTrackEndDate} = this.query;
+      const { pageSize, keyword, employeeId , startDate , endDate  , minAmount ,maxAmount } = this.query;
       const data = {
         pageNum,
         pageSize,
@@ -580,15 +546,10 @@ export default {
         employeeId: !this.isAuthority() ? null : employeeId,
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        type,
-        amountType,
-        isUnTrack,
         minAmount,
         maxAmount,
-        unTrackStartDate : unTrackStartDate ? this.$moment(unTrackStartDate).format("YYYY-MM-DD") : null,
-        unTrackEndDate : unTrackEndDate ? this.$moment(unTrackEndDate).format("YYYY-MM-DD") : null 
       };
-      api.getBindCustomerServerList(data).then((res) => {
+      api.newBindCustomerServerList(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.customer;
           this.query.data = list;

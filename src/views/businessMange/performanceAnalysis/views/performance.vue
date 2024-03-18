@@ -255,7 +255,7 @@
             </Tabs>
           </div>
         </div>
-        <div class="scroll-item" style="height:1000px">
+        <div class="scroll-item" style="height:1050px">
           <!-- <div class="top_con">
             <div class="titles">业绩趋势</div>
             <div class="date_con">
@@ -309,7 +309,7 @@
           </div>
 
           <div class="date_content2">
-            <div class="titles">月业绩趋势</div>  
+            <div class="titles month_title">月业绩趋势</div>  
             <div class="date_con">
               <DatePicker
                 type="month"
@@ -766,5 +766,8 @@ export default {
 .green{
   color: red;
   margin-right: 4px;
+}
+.month_title{
+  margin-top: 60px;
 }
 </style>

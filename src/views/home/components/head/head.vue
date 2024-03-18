@@ -12,7 +12,7 @@
       <!-- 文字轮播 -->
       <div style="width: 68%;margin-right:30px" v-if="employeeType == 'amiyaEmployee'">
         <marquee scrollable wrapable>
-          <p style="color:red">{{contentTextList}}</p>
+          <p style="color:red;font-size:18px">{{contentTextList}}</p>
         </marquee>
       </div>
 

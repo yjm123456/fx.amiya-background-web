@@ -13,7 +13,7 @@
             :value="params.month"
             v-model="params.month"
           ></DatePicker>
-          <Button type="primary" @click="getData">查询</Button>
+          <Button type="primary" @click="getLiveAnchorBaseInfoValid">查询</Button>
         </div>
       </div>
         <Tabs ref="tabs" v-model="activeName" type="card" class="tabs">
@@ -71,7 +71,7 @@ export default {
           this.params.liveAnchorBaseInfos = liveAnchorBaseInfos;
           this.$nextTick(() => {
             this.getData()
-            // this.$refs.lineData.getData()
+            this.$refs.lineData.getData()
           });
         }
       });
@@ -96,7 +96,7 @@ export default {
         }
       });
     },
-   
+
     
   },
   created(){

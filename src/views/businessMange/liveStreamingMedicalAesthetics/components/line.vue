@@ -71,7 +71,7 @@ export default {
                         '<span style="display:inline-block;">' +
                         params[i].seriesName +
                         '</span><span style="display:inline-block;">&nbsp&nbsp' +
-                        params[i].data  + '元' +
+                        params[i].data  + '单' +
                         '</span>'
                     )
                 }

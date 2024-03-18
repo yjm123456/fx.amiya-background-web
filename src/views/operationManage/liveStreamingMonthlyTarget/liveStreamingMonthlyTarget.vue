@@ -201,28 +201,28 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="照片面诊卡下单数量目标"
+              label="设计卡下单目标"
               prop="consultationTarget"
               :rules="[
                 {
                   required: true,
-                  message: '照片面诊卡下单数量目标(最小是1)',
+                  message: '设计卡下单目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="照片面诊卡下单数量目标"
+              key="设计卡下单目标"
             >
               <Input
                 v-model="form.consultationTarget"
-                placeholder="照片面诊卡下单数量目标"
+                placeholder="设计卡下单目标"
                 type="number"
                 number
               />
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem
               label="视频面诊卡下单数量目标"
               prop="consultationTarget2"
@@ -244,8 +244,8 @@
                 number
               />
             </FormItem>
-          </Col>
-          <Col span="8">
+          </Col> -->
+          <!-- <Col span="8">
             <FormItem
               label="带货结算佣金目标"
               prop="cargoSettlementCommissionTarget"
@@ -267,32 +267,32 @@
                 number
               />
             </FormItem>
-          </Col>
+          </Col> -->
 
           <Col span="8">
             <FormItem
-              label="退卡量目标"
+              label="设计卡退卡目标"
               prop="livingRefundCardTarget"
               :rules="[
                 {
                   required: true,
-                  message: '退卡量目标(最小是1)',
+                  message: '设计卡退卡目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="退卡量目标"
+              key="设计卡退卡目标"
             >
               <Input
                 v-model="form.livingRefundCardTarget"
-                placeholder="请输入退卡量目标"
+                placeholder="请输入设计卡退卡目标"
                 type="number"
                 number
               />
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem
               label="GMV目标"
               prop="gmvTarget"
@@ -314,25 +314,25 @@
                 number
               />
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="8">
             <FormItem
-              label="去卡GMV目标"
+              label="带货GMV目标"
               prop="eliminateCardGMVTarget"
               :rules="[
                 {
                   required: true,
-                  message: '去卡GMV目标(最小是1)',
+                  message: '带货GMV目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="去卡GMV目标"
+              key="带货GMV目标"
             >
               <Input
                 v-model="form.eliminateCardGMVTarget"
-                placeholder="请输入去卡GMV目标"
+                placeholder="请输入带货GMV目标"
                 type="number"
                 number
               />
@@ -340,22 +340,22 @@
           </Col>
           <Col span="8">
             <FormItem
-              label="退款GMV"
+              label="带货退款GMV目标"
               prop="refundGMVTarget"
               :rules="[
                 {
                   required: true,
-                  message: '退款GMV(最小是1)',
+                  message: '带货退款GMV目标(最小是1)',
                   trigger: 'change',
                   type: 'number',
                   min: 1,
                 },
               ]"
-              key="退款GMV"
+              key="带货退款GMV目标"
             >
               <Input
                 v-model="form.refundGMVTarget"
-                placeholder="请输入退款GMV"
+                placeholder="请输入带货退款GMV目标"
                 type="number"
                 number
               />
@@ -450,19 +450,19 @@ export default {
             },
           },
           {
-            title: "照片面诊卡下单数量目标",
+            title: "设计卡下单目标",
             key: "consultationTarget",
             minWidth: 200,
             align: "center",
           },
           {
-            title: "累计照片面诊卡下单数量",
+            title: "累计设计卡退卡目标",
             key: "cumulativeConsultation",
             minWidth: 200,
             align: "center",
           },
           {
-            title: "照片面诊卡下单数量完成率",
+            title: "设计卡退卡目标完成率",
             key: "consultationCompleteRate",
             minWidth: 230,
             align: "center",
@@ -470,53 +470,53 @@ export default {
               return h("div", params.row.consultationCompleteRate + "%");
             },
           },
+          // {
+          //   title: "视频面诊卡下单数量目标",
+          //   key: "consultationTarget2",
+          //   minWidth: 200,
+          //   align: "center",
+          // },
+          // {
+          //   title: "累计视频面诊卡下单数量",
+          //   key: "cumulativeConsultation2",
+          //   minWidth: 200,
+          //   align: "center",
+          // },
+          // {
+          //   title: "视频面诊卡下单数量完成率",
+          //   key: "consultationCompleteRate2",
+          //   minWidth: 210,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     return h("div", params.row.consultationCompleteRate2 + "%");
+          //   },
+          // },
+          // {
+          //   title: "带货结算佣金目标",
+          //   key: "cargoSettlementCommissionTarget",
+          //   minWidth: 150,
+          //   align: "center",
+          // },
+          // {
+          //   title: "月累计带货结算佣金",
+          //   key: "cumulativeCargoSettlementCommission",
+          //   minWidth: 170,
+          //   align: "center",
+          // },
+          // {
+          //   title: "带货结算佣金完成率",
+          //   key: "cargoSettlementCommissionCompleteRate",
+          //   minWidth: 170,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     return h(
+          //       "div",
+          //       params.row.cargoSettlementCommissionCompleteRate + "%"
+          //     );
+          //   },
+          // },
           {
-            title: "视频面诊卡下单数量目标",
-            key: "consultationTarget2",
-            minWidth: 200,
-            align: "center",
-          },
-          {
-            title: "累计视频面诊卡下单数量",
-            key: "cumulativeConsultation2",
-            minWidth: 200,
-            align: "center",
-          },
-          {
-            title: "视频面诊卡下单数量完成率",
-            key: "consultationCompleteRate2",
-            minWidth: 210,
-            align: "center",
-            render: (h, params) => {
-              return h("div", params.row.consultationCompleteRate2 + "%");
-            },
-          },
-          {
-            title: "带货结算佣金目标",
-            key: "cargoSettlementCommissionTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "月累计带货结算佣金",
-            key: "cumulativeCargoSettlementCommission",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "带货结算佣金完成率",
-            key: "cargoSettlementCommissionCompleteRate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.cargoSettlementCommissionCompleteRate + "%"
-              );
-            },
-          },
-          {
-            title: "退卡量目标",
+            title: "设计卡退卡目标",
             key: "livingRefundCardTarget",
             minWidth: 150,
             align: "center",
@@ -528,9 +528,9 @@ export default {
             align: "center",
           },
           {
-            title: "退卡量目标完成率",
+            title: "设计卡退卡目标完成率",
             key: "livingRefundCardCompleteRate",
-            minWidth: 170,
+            minWidth: 180,
             align: "center",
             render: (h, params) => {
               return h(
@@ -539,46 +539,46 @@ export default {
               );
             },
           },
+          // {
+          //   title: "GMV目标",
+          //   key: "gmvTarget",
+          //   minWidth: 150,
+          //   align: "center",
+          // },
+          // {
+          //   title: "月累计GMV",
+          //   key: "cumulativeGMV",
+          //   minWidth: 170,
+          //   align: "center",
+          // },
+          // {
+          //   title: "GMV目标完成率",
+          //   key: "gmvTargetCompleteRate",
+          //   minWidth: 170,
+          //   align: "center",
+          //   render: (h, params) => {
+          //     return h(
+          //       "div",
+          //       params.row.gmvTargetCompleteRate + "%"
+          //     );
+          //   },
+          // },
           {
-            title: "GMV目标",
-            key: "gmvTarget",
-            minWidth: 150,
-            align: "center",
-          },
-          {
-            title: "月累计GMV",
-            key: "cumulativeGMV",
-            minWidth: 170,
-            align: "center",
-          },
-          {
-            title: "GMV目标完成率",
-            key: "gmvTargetCompleteRate",
-            minWidth: 170,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.gmvTargetCompleteRate + "%"
-              );
-            },
-          },
-          {
-            title: "去卡GMV目标",
+            title: "带货GMV目标",
             key: "eliminateCardGMVTarget",
-            minWidth: 150,
+            minWidth: 220,
             align: "center",
           },
           {
-            title: "月累计去卡GMV",
+            title: "月累计带货GMV目标",
             key: "cumulativeEliminateCardGMV",
-            minWidth: 170,
+            minWidth: 220,
             align: "center",
           },
           {
-            title: "去卡GMV目标完成率",
+            title: "带货GMV目标完成率",
             key: "eliminateCardGMVTargetCompleteRate",
-            minWidth: 170,
+            minWidth: 240,
             align: "center",
             render: (h, params) => {
               return h(
@@ -588,21 +588,21 @@ export default {
             },
           },
           {
-            title: "退款GMV目标",
+            title: "带货退款GMV目标目标",
             key: "refundGMVTarget",
-            minWidth: 150,
+            minWidth: 240,
             align: "center",
           },
           {
-            title: "月累计退款GMV",
+            title: "月累计带货退款GMV目标",
             key: "cumulativeRefundGMV",
-            minWidth: 170,
+            minWidth: 250,
             align: "center",
           },
           {
-            title: "退款GMV目标完成率",
+            title: "带货退款GMV目标目标完成率",
             key: "refundGMVTargetCompleteRate",
-            minWidth: 170,
+            minWidth: 290,
             align: "center",
             render: (h, params) => {
               return h(
@@ -665,16 +665,16 @@ export default {
                                 // 照片面诊卡目标
                               consultationTarget,
                                 // 视频面诊卡目标
-                              consultationTarget2,
+                              // consultationTarget2,
                                 // 带货结算佣金目标
-                              cargoSettlementCommissionTarget,
-                              // 退卡量目标
+                              // cargoSettlementCommissionTarget,
+                              // 设计卡退卡目标
                               livingRefundCardTarget,
                               // GMV目标
-                              gmvTarget,
-                              // 去卡GMV目标
+                              // gmvTarget,
+                              // 带货GMV目标
                               eliminateCardGMVTarget,
-                              // 退款GMV目标
+                              // 带货退款GMV目标目标
                               refundGMVTarget
                            
                             } = res.data.liveAnchorMonthlyTargetLivingInfo;
@@ -687,10 +687,10 @@ export default {
                             this.form.liveAnchorId = liveAnchorId;
                             this.form.livingRoomFlowInvestmentTarget = livingRoomFlowInvestmentTarget;
                             this.form.consultationTarget = consultationTarget;
-                            this.form.consultationTarget2 = consultationTarget2;
-                            this.form.cargoSettlementCommissionTarget = cargoSettlementCommissionTarget;
+                            // this.form.consultationTarget2 = consultationTarget2;
+                            // this.form.cargoSettlementCommissionTarget = cargoSettlementCommissionTarget;
                             this.form.livingRefundCardTarget = livingRefundCardTarget;
-                            this.form.gmvTarget = gmvTarget;
+                            // this.form.gmvTarget = gmvTarget;
                             this.form.eliminateCardGMVTarget = eliminateCardGMVTarget;
                             this.form.refundGMVTarget = refundGMVTarget;
                             this.form.id = id;
@@ -821,14 +821,14 @@ export default {
         // 照片面诊卡目标
         consultationTarget: null,
         // 视频面诊卡数量
-        consultationTarget2: null,
+        consultationTarget2: 0,
         // 带货结算佣金目标
-        cargoSettlementCommissionTarget: null,
-        // 退卡量目标
+        cargoSettlementCommissionTarget: 0,
+        // 设计卡退卡目标
         livingRefundCardTarget:null,
         // GMV目标
-        gmvTarget:null,
-        // 去卡GMV目标
+        gmvTarget:0,
+        // 带货GMV目标
         eliminateCardGMVTarget:null,
         // 退卡GMV
         refundGMVTarget:null

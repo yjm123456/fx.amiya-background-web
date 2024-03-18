@@ -38,7 +38,7 @@
               项目描述：{{ item.consultingContent ? item.consultingContent :'暂无描述'}}
             </div>
             <div class="item_content_appointment_hospital">
-              预约时间：{{ $moment(item.appointmentDate).format("YYYY-MM-DD") }}
+              预约时间：{{ $moment(item.appointmentDate).format("YYYY-MM-DD") == 'Invalid date' ?  '暂无预约' : $moment(item.appointmentDate).format("YYYY-MM-DD") }}
             </div>
             <div class="item_content_appointment_hospital">
               预约门店：{{ item.appointmentHospitalName }}

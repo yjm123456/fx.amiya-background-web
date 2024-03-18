@@ -224,6 +224,12 @@ export default {
             align: "center",
           },
           {
+            title: "对账单面值",
+            key: "recolicationPrice",
+            minWidth: 120,
+            align: "center",
+          },
+          {
             title: "对账金额",
             key: "returnBackPrice",
             minWidth: 160,
@@ -333,12 +339,13 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id,isOldCustomerText, customerServiceSettlePrice,orderPrice} = params.row;
+                        const { id,isOldCustomerText, customerServiceSettlePrice,orderPrice,recolicationPrice} = params.row;
                         this.examineModel = true;
                         this.checkedParams.id = id;
                         this.checkedParams.isOldCustomerText = isOldCustomerText
                         this.checkedParams.customerServiceSettlePrice = customerServiceSettlePrice
                         this.checkedParams.orderPrice = orderPrice
+                        this.checkedParams.recolicationPrice = recolicationPrice
                       },
                     },
                   },
@@ -412,7 +419,9 @@ export default {
         // 审核客服业绩金额
         customerServiceSettlePrice:0,
         // 订单金额
-        orderPrice:0
+        orderPrice:0,
+        // 对账单面值
+        recolicationPrice:0
       },
 
       // 内容平台订单详情model

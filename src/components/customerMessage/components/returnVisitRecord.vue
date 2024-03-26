@@ -20,6 +20,8 @@
           @on-change="handlePageChange"
         />
       </div>
+       <!-- 查看回访截图 -->
+    <visitImg :visitParams="visitParams" :viewPicModel.sync="viewPicModel"/>
     </div>
   </div>
 </template>
@@ -28,9 +30,12 @@
 import * as common from "@/api/common";
 import aplayer from "vue-aplayer";
 import { callRecordBaseUrl } from "./../../../http/baseUrl";
+import visitImg from "@/components/visitImg/visitImg"
+
 export default {
   components:{
-    aplayer
+    aplayer,
+    visitImg
   },
   data() {
     return {
@@ -39,7 +44,7 @@ export default {
           {
             title: "回访时间",
             key: "trackDate",
-            width: 200,
+            minWidth: 200,
             render: (h, params) => {
               return h("div",this.$moment(params.row.trackDate).format("YYYY-MM-DD HH:mm:ss"));
             },
@@ -47,38 +52,38 @@ export default {
           {
             title: "回访计划",
             key: "trackPlan",
-            width: 200,
+            minWidth: 200,
           },
           {
             title: "回访主题",
             key: "trackTheme",
-            width: 200,
+            minWidth: 200,
           },
           {
             title: "回访内容",
             key: "trackContent",
-            width: 200,
+            minWidth: 200,
             tooltip:true
           },
           {
             title: "回访类型",
             key: "trackTypeName",
-            width: 200,
+            minWidth: 200,
           },
           {
             title: "回访工具",
             key: "trackToolName",
-            width: 200,
+            minWidth: 200,
           },
           {
             title: "回访人",
             key: "employeeName",
-            width: 200,
+            minWidth: 200,
           },
           {
             title: "是否有效",
             key: "valid",
-            width: 200,
+            minWidth: 200,
             render: (h, params) => {
               if (params.row.valid === true) {
                 return h("Icon", {
@@ -104,9 +109,10 @@ export default {
             },
           },
           {
-            title: "操作",
+            title: "录音文件",
             key: "play",
             align: "center",
+            minWidth: 200,
             render: (h, params) => {
               if (params.row.isConnect) {
                 return h("div", [
@@ -133,6 +139,39 @@ export default {
               }
             },
           },
+          {
+            title: "操作",
+            align: "center",
+            minWidth: 140,
+            fixed: "right",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { trackPicture1,trackPicture2,trackPicture3 } = params.row;
+                        this.visitParams.trackPicture1 = trackPicture1;
+                        this.visitParams.trackPicture2 = trackPicture2;
+                        this.visitParams.trackPicture3 = trackPicture3;
+                        this.viewPicModel = true
+                        
+                      },
+                    },
+                  },
+                  "查看回访截图"
+                ),
+              ])
+            }
+          },
         ],
         data: [],
         encryptPhone: "",
@@ -152,6 +191,14 @@ export default {
       playParams:null,
 
       currentPlayState:null,
+      // 回访截图
+      visitParams:{
+        trackPicture1:'',
+        trackPicture2:'',
+        trackPicture3:'',
+      },
+      // 回访截图model
+      viewPicModel:false
     };
   },
   methods: {

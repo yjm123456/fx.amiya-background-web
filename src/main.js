@@ -40,7 +40,12 @@ Vue.prototype.$echarts = echarts;
  */
 import Viewer from "v-viewer";
 import "viewerjs/dist/viewer.css";
-Vue.use(Viewer);
+// Vue.use(Viewer);
+Vue.use(Viewer, {
+    defaultOptions: {
+        zIndex: 9999, // 这里设置层级高度
+    }
+})
 Viewer.setDefaults({
     Options: {
         inline: true,

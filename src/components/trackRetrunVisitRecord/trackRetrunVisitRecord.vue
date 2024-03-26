@@ -10,7 +10,7 @@
       <aplayer :music.sync="music" ref="aplayer" v-if="flag"></aplayer>
       <div @scroll="scrollEvent($event)" class="scroll_wrap" v-if="list.length">
         <Timeline>
-          <TimelineItem v-for="(item,index) in list" color="green" :key="item.id">
+          <TimelineItem v-for="(item,index) in list" color="green" :key="item.id" >
             <div class="time">
               <span>主题： <span v-if="item.trackPlan">({{item.trackPlan}})</span> {{ item.trackTheme }}</span>
             </div>
@@ -33,6 +33,18 @@
               <span>追踪人：{{ item.employeeName }}</span>
             </p>
             <p class="content_footer"><span class="content_title">内容：</span>{{ item.trackContent }}</p>
+            <div class="img_title" v-if="item.trackPicture1 || item.trackPicture2 || item.trackPicture3">回访截图</div>
+            <div class="img_content">
+              <viewer v-if="item.trackPicture1"  >
+                <img :src="item.trackPicture1" alt="" class="img" v-if="item.trackPicture1" >
+              </viewer>
+              <viewer v-if="item.trackPicture2" >
+                <img :src="item.trackPicture2" alt="" class="img" v-if="item.trackPicture2">
+              </viewer>
+              <viewer v-if="item.trackPicture3" >
+                <img :src="item.trackPicture3" alt="" class="img" v-if="item.trackPicture3">
+              </viewer>
+            </div>
           </TimelineItem>
         </Timeline>
         <Divider v-show="nextPage === false">暂无更多数据</Divider>
@@ -54,9 +66,11 @@ export default {
   props: {
     controlTrackRetrunVisitRecordModal: Boolean,
     encryptPhone: String,
+    params:Object
   },
   data() {
     return {
+      isModalVisible:false,
       controlModal: false,
 
       pageNum: 1,
@@ -83,11 +97,13 @@ export default {
     };
   },
   methods: {
+    
     getTrackRetrunVisitRecord(callback) {
       const data = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         encryptPhone: this.encryptPhone,
+        shoppingCartRegistionId:this.params.shoppingCartRegistionId
       };
       common.byEncryptPhoneGetReturnVisitList(data).then((res) => {
         if (res.code === 0) {
@@ -256,6 +272,20 @@ export default {
 }
 .content_title{
   font-size: 14px;
+  font-weight: bold;
+}
+.img_content{
+  display: flex;
+}
+.img{
+  width: 70px;
+  height: 70px;
+  margin-right: 20px;
+  padding-left: 6px;
+}
+.img_title{
+  padding-left: 6px;
+  margin-top: 10px;
   font-weight: bold;
 }
 </style>

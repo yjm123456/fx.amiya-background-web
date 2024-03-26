@@ -17,6 +17,8 @@
         />
       </div>
     </Card>
+    <!-- 查看回访截图 -->
+    <visitImg :visitParams="visitParams" :viewPicModel.sync="viewPicModel"/>
   </div>
 </template>
 
@@ -24,9 +26,11 @@
 import * as api from "@/api/customerManage";
 import aplayer from "vue-aplayer";
 import { callRecordBaseUrl } from "./../../../../http/baseUrl";
+import visitImg from "@/components/visitImg/visitImg"
 export default {
   components: {
     aplayer,
+    visitImg
   },
   props: {
     params: Object,
@@ -123,7 +127,7 @@ export default {
           },
         },
         {
-          title: "操作",
+          title: "录音文件",
           key: "play",
           align: "center",
           minWidth:180,
@@ -144,12 +148,47 @@ export default {
                     },
                   },
                 }),
+                
               ]);
             } else {
               return h("div", "没有录音文件");
             }
           },
         },
+        {
+            title: "操作",
+            align: "center",
+            minWidth: 140,
+            fixed: "right",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { trackPicture1,trackPicture2,trackPicture3 } = params.row;
+                        this.visitParams.trackPicture1 = trackPicture1;
+                        this.visitParams.trackPicture2 = trackPicture2;
+                        this.visitParams.trackPicture3 = trackPicture3;
+                        this.viewPicModel = true
+                        
+                      },
+                    },
+                  },
+                  "查看回访截图"
+                ),
+              ])
+            }
+                
+          },
       ],
       data: [],
 
@@ -164,6 +203,14 @@ export default {
       playParams:null,
 
       currentPlayState:null,
+      // 回访截图
+      visitParams:{
+        trackPicture1:'',
+        trackPicture2:'',
+        trackPicture3:'',
+      },
+      // 回访截图model
+      viewPicModel:false
     };
   },
   methods: {

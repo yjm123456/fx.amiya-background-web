@@ -380,11 +380,10 @@ export default {
               : null,
             toHospitalType: isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
-            consumptionType,
+            consumptionType:isFinish == false ? null : consumptionType,
             // addContentPlatFormOrderDealDetailsVoList: isFinish == false ? [] : addContentPlatFormOrderDealDetailsVoList,
             addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList
           };
-          
           if(isFinish == true){
             if(dealAmount == 0){
               this.isLoading = true

@@ -15,7 +15,13 @@
           label-position="left"
           :label-width="110"
         >
-          <div  class="phone" v-if="params.phone">{{params.phone}} <i class="iconfont  yanjing" :class="eyeFlag == false ? 'icon-yanjing-biyan' :''" @click="eyeClick" ></i></div>
+          <div  class="phone" v-if="hiddenPhone">{{hiddenPhone}} 
+            <!-- <i class="iconfont  yanjing" :class="eyeFlag == false ? 'icon-yanjing-biyan' :''" @click="eyeClick" ></i>  -->
+            <!-- 只有小黄车列表才有切换手机号功能 其他页面不需要切换手机号 -->
+            <span class="phone_bg" @click="switchPhone" v-if="isSwith == true && params.hiddenSubPhone">切换手机号</span>
+          </div>
+
+          
           <div class="tool">
             <Button type="primary" @click="controlTrackRetrunVisitRecordModal = true" ghost>追踪回访记录</Button>
             <Button style="margin-left:10px" type="primary" @click="controlOrderInfoModal = true" ghost>下单订单信息</Button>
@@ -38,7 +44,7 @@
                   </div>
                 </FormItem>
                 <FormItem label="回访类型" prop="trackTypeId">
-                  <Select v-model="form.trackTypeId" placeholder="请选择回访类型" @on-change="trackTypeChange()">
+                  <Select v-model="form.trackTypeId" placeholder="请选择回访类型" >
                     <Option :value="item.id" v-for="item in trackType" :key="item.id">{{item.name}}</Option>
                   </Select>
                 </FormItem>
@@ -66,6 +72,21 @@
                     placeholder="请输入回访内容"
                     class="trackContent"
                   />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem label="回访截图1" prop="trackPicture1">
+                  <upload :uploadObj="uploadObj1" @uploadChange="handleUploadChange1" />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem label="回访截图2" prop="trackPicture2">
+                  <upload :uploadObj="uploadObj2" @uploadChange="handleUploadChange2" />
+                </FormItem>
+              </Col>
+              <Col span="8">
+                <FormItem label="回访截图3" prop="trackPicture3">
+                  <upload :uploadObj="uploadObj3" @uploadChange="handleUploadChange3" />
                 </FormItem>
               </Col>
             </Row>
@@ -139,37 +160,39 @@
       </div>
     </Modal>
 
+      <!-- :encryptPhone="params.encryptPhone" -->
     <!-- 追踪回访记录 -->
     <trackRetrunVisitRecord 
-      :encryptPhone="params.encryptPhone"
+      :encryptPhone="encryptPhone"
       :controlTrackRetrunVisitRecordModal="controlTrackRetrunVisitRecordModal"
       @handleTrackRetrunVisitRecordModalChange="controlTrackRetrunVisitRecordModal = false;"
+      :params="params"
     />
 
     <!-- 下单订单信息 -->
     <orderInfo
-      :encryptPhone="params.encryptPhone"
+      :encryptPhone="encryptPhone"
       :controlOrderInfoModal="controlOrderInfoModal"
       @handleOrderInfoModalChange="controlOrderInfoModal = false;"
     />
 
     <!-- 内容平台订单信息 -->
     <contentOrderInfo
-      :encryptPhone="params.encryptPhone"
+      :encryptPhone="encryptPhone"
       :controlContentOrderInfoModal="controlContentOrderInfoModal"
       @handleContentOrderInfoModalChange="controlContentOrderInfoModal = false;"
     />
 
     <!-- 预约信息 -->
     <appointment
-      :encryptPhone="params.encryptPhone"
+      :encryptPhone="encryptPhone"
       :controlAppointmentModal="controlAppointmentModal"
       @handleAppointmentModalChange="controlAppointmentModal = false;"
     />
 
     <!-- 已领取礼品 -->
     <alreadyReceiveGift
-      :encryptPhone="params.encryptPhone"
+      :encryptPhone="encryptPhone"
       :controlAlreadyReceiveGiftModal="controlAlreadyReceiveGiftModal"
       @handleAlreadyReceiveGiftModalChange="controlAlreadyReceiveGiftModal = false;"
     />
@@ -187,13 +210,17 @@ import orderInfo from "@/components/orderInfo/orderInfo";
 import contentOrderInfo from "@/components/contentOrderInfo/contentOrderInfo";
 import appointment from "@/components/appointment/appointment";
 import alreadyReceiveGift from "@/components/alreadyReceiveGift/alreadyReceiveGift";
+
+import upload from "@/components/upload/upload";
+
 export default {
   components:{
     trackRetrunVisitRecord,
     orderInfo,
     contentOrderInfo,
     appointment,
-    alreadyReceiveGift
+    alreadyReceiveGift,
+    upload
   },
   props:{
     /**
@@ -224,6 +251,30 @@ export default {
   },
   data() {
     return {
+      uploadObj1: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
+      uploadObj2: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
+      uploadObj3: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
       indexs:0,
       index:0,
       ind:0,
@@ -262,6 +313,9 @@ export default {
           otherTrackEmployeeId:null,
           // 回访计划
           trackPlan:'',
+          trackPicture1:'',
+          trackPicture2:'',
+          trackPicture3:''
         },
         // 是否有效
         valid: true,
@@ -405,24 +459,59 @@ export default {
 
       controlAlreadyReceiveGiftModal:false,
       // 控制眼睛展示
-      eyeFlag:false
+      eyeFlag:false,
+      // 隐藏辅助号码
+      hiddenPhone:'',
+      // 加密辅助号码
+      encryptPhone:'',
+      // 控制切换账号只可切换一次 
+      isSwith:true
+
     };
   },
   methods: {
+    // 图片
+    handleUploadChange1(values) {
+      this.form.trackPicture1 = values[0];
+    },
+    // 图片
+    handleUploadChange2(values) {
+      this.form.trackPicture2 = values[0];
+    },
+    // 图片
+    handleUploadChange3(values) {
+      this.form.trackPicture3 = values[0];
+    },
+    // 切换手机号
+    switchPhone(){
+      if(this.params.phone == this.hiddenPhone){
+        // 辅助号码参数
+        // this.hiddenPhone = this.params.hiddenSubPhone
+        this.encryptPhone = this.params.encryptSubPhone
+        this.eyeClick()
+        this.isSwith = false
+        return
+      }else{
+        // this.hiddenPhone = this.params.hiddenPhone
+        this.encryptPhone = this.params.encryptPhone
+        this.eyeClick()
+      }
+    },
+    // 设置下次回访
     switchClick(){
       if(this.controlNextReturnVisit == false){
         this.form.addWaitTrackCustomer = []
         return
       }
     },
+    // 点击小眼睛 解密手机号
     eyeClick(){
       const data = {
-        encryptPhone:this.params.encryptPhone
+        encryptPhone:this.encryptPhone
       }
       orderApi.decryptoPhonesNew(data).then((res) => {
         if (res.code === 0) {
-          this.params.phone = res.data.phone;
-          this.eyeFlag = true
+          this.hiddenPhone = res.data.phone;
         }
       });
     },
@@ -563,15 +652,19 @@ export default {
       this.controlNextReturnVisit = true;
       this.$store.commit("callCenter/resetCallSuccessMsg")
       this.$emit("resetControlTrackReturnVisitDisplay")
+      this.uploadObj1.uploadList = [];
+      this.uploadObj2.uploadList = [];
+      this.uploadObj3.uploadList = [];
+      this.isSwith = true
     },
 
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const {addWaitTrackCustomer,encryptPhone,trackToolId,trackTypeId,trackThemeId,trackPlan,trackContent,callRecordId,valid,} = this.form;
+          const {addWaitTrackCustomer,encryptPhone,trackToolId,trackTypeId,trackThemeId,trackPlan,trackContent,callRecordId,valid,trackPicture1,trackPicture2,trackPicture3} = this.form;
           const datas = {
             addWaitTrackCustomer: addWaitTrackCustomer ? addWaitTrackCustomer : [],
-            encryptPhone,
+            encryptPhone:this.encryptPhone,
             trackToolId,
             trackTypeId,
             trackThemeId,
@@ -579,7 +672,12 @@ export default {
             trackContent,
             callRecordId,
             valid,
-            waitTrackId:this.params.waitTrackId ? this.params.waitTrackId : null
+            waitTrackId:this.params.waitTrackId ? this.params.waitTrackId : null,
+            trackPicture1,
+            trackPicture2,
+            trackPicture3,
+            shoppingCartRegistionId:this.params.shoppingCartRegistionId
+
           }
           if(this.controlNextReturnVisit == true && addWaitTrackCustomer.length==0){
             this.$Message.warning('请添加下次回访数据！')
@@ -641,9 +739,7 @@ export default {
         let d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(); //获取当前几号，不足10补0
         return `${y}-${m}-${d}`;
     },
-    trackTypeChange(){
-      
-    }
+    
 },
   computed: {
     callSuccessMsg() {
@@ -661,10 +757,18 @@ export default {
   watch:{
     params:{
       handler(params){
-        const {controlTrackReturnVisitDisplay, encryptPhone,hasModel,trackTypeThemeModel} = params;
+        const {controlTrackReturnVisitDisplay, encryptPhone,hasModel,trackTypeThemeModel,hiddenPhone,hiddenSubPhone} = params;
         if(controlTrackReturnVisitDisplay) {
           this.controlModal  = controlTrackReturnVisitDisplay;
           this.form.encryptPhone = encryptPhone;
+          // 赋值手机号
+          this.hiddenPhone = hiddenPhone
+          this.encryptPhone = this.params.encryptPhone
+          this.eyeClick()
+          // 判断手机号和辅助号码如果一样  切换手机号隐藏
+          if(hiddenPhone == hiddenSubPhone){
+            this.isSwith = false
+          }
           // 待回访编号
           if(params.waitTrackId) {
             this.form.waitTrackId = params.waitTrackId;
@@ -677,7 +781,6 @@ export default {
           if(params.trackThemeId) {
             this.form.trackThemeId = params.trackThemeId;
           }
-
         }
         // 判断基础数据模块添加的模板 如果 hasModel（是否开启模板）为true 
         if(hasModel == true){
@@ -731,7 +834,6 @@ export default {
             }
           }
       })
-        // this.$emit('getTtrak',trackTypeId)
       }
     }
   }
@@ -778,5 +880,15 @@ export default {
   font-size: 24px;
   margin-left: 5px;
 
+}
+.phone_bg{
+  font-size: 12px;
+  background: #2d8cf0;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-left: 12px;
+  color: #fff;
+  cursor: pointer;
 }
 </style>

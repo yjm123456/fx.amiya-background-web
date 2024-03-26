@@ -867,6 +867,11 @@
       :importControlModal.sync="importControlModal"
       @handleRefreshCustomerTrackList="getSmallCar()"
     ></importFile>
+    <!-- 追踪回访 -->
+    <trackReturnVisit
+      @resetControlTrackReturnVisitDisplay="resetControlTrackReturnVisitDisplay"
+      :params="trackReturnVisitComParams"
+    />
   </div>
 </template>
 <script>
@@ -879,11 +884,30 @@ import * as employeeManageApi from "@/api/employeeManage";
 import assign from "./components/assign.vue";
 import batchAssignment from "./components/batchAssignment.vue";
 import importFile from "./components/importModel.vue";
+import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+
 
 export default {
-  components: { assign, batchAssignment, importFile },
+  components: { assign, batchAssignment, importFile ,trackReturnVisit},
   data() {
     return {
+      // 追踪回访组件参数
+      trackReturnVisitComParams: {
+        device: "",
+        encryptPhone: "",
+        controlTrackReturnVisitDisplay: false,
+        hiddenPhone:'',
+        phone:'',
+        // 小黄车id 防止手机号是000000000时没法区分归属客服
+        shoppingCartRegistionId:'',
+
+        // 辅助电话带星号
+        hiddenSubPhone:'',
+        // 辅助电话加密手机号
+        encryptSubPhone:'',
+        // 辅助电话
+        subPhone:''
+      },
       // 客户类型
       shoppingCartRegistrationCustomerTypeList: [],
       shoppingCartRegistrationCustomerTypeListAll: [
@@ -978,7 +1002,7 @@ export default {
             align: "center",
           },
           {
-            title: "更新人",
+            title: "创建人",
             key: "createBy",
             minWidth: 120,
             align: "center",
@@ -1084,13 +1108,13 @@ export default {
           },
           {
             title: "联系方式",
-            key: "phone",
+            key: "hiddenPhone",
             minWidth: 130,
             align: "center",
           },
           {
             title: "辅助电话",
-            key: "subPhone",
+            key: "hiddenSubPhone",
             minWidth: 130,
             align: "center",
           },
@@ -1502,7 +1526,7 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 180,
+            width: 250,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -1526,6 +1550,34 @@ export default {
                     },
                   },
                   "指派"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled:!params.row.assignEmpName ? true : false 
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { encryptPhone,hiddenPhone ,hiddenSubPhone,encryptSubPhone,subPhone,phone,id} = params.row;
+                        this.trackReturnVisitComParams.hiddenPhone = hiddenPhone;
+                        this.trackReturnVisitComParams.encryptPhone = encryptPhone;
+                        this.trackReturnVisitComParams.hiddenSubPhone = hiddenSubPhone;
+                        this.trackReturnVisitComParams.encryptSubPhone = encryptSubPhone;
+                        this.trackReturnVisitComParams.subPhone = subPhone;
+                        this.trackReturnVisitComParams.phone = phone;
+                        this.trackReturnVisitComParams.shoppingCartRegistionId = id;
+                        this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
+                        
+                      },
+                    },
+                  },
+                  "回访"
                 ),
                 h(
                   "Button",
@@ -1657,7 +1709,7 @@ export default {
                   },
                   "修改"
                 ),
-
+                
                 h(
                   "Button",
                   {
@@ -2099,7 +2151,7 @@ export default {
         { name: "全部指派人员", id: 0 },
         { name: "未指派", id: -1 },
       ],
-      employeeCreat: [{ name: "全部更新人", id: -1 }],
+      employeeCreat: [{ name: "全部创建人", id: -1 }],
       // 微信号
       weChatList: [],
       // 紧急程度
@@ -2123,6 +2175,9 @@ export default {
     };
   },
   methods: {
+    resetControlTrackReturnVisitDisplay() {
+      this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = false;
+    },
     // 获取所有员工
     getEmployeeByPositionId() {
       const data = {

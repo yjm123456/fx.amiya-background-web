@@ -1145,6 +1145,12 @@ export default {
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
 
       };
+      if (checkState == 2  ) {
+        if(!checkStartDate || !checkEndDate){
+          this.$Message.error("请选择审核日期");
+          return;
+        }
+      }
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
         return;

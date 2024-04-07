@@ -12,12 +12,12 @@
         <Timeline>
           <TimelineItem v-for="(item,index) in list" color="green" :key="item.id" >
             <div class="time">
-              <span>主题： <span v-if="item.trackPlan">({{item.trackPlan}})</span> {{ item.trackTheme }}</span>
+              <span>主题： <span v-if="item.trackPlan">({{item.trackPlan}})</span> </span>
             </div>
             <div style="margin-left:5px">{{item.trackDate | formatDate}}</div>
             <div class="content" >
               <span>追踪工具：{{ item.trackToolName }}</span>
-              <span style="margin-left:10px">追踪类型：{{ item.trackTypeName }}</span>
+              <span style="margin-left:10px">追踪目的：{{ item.trackTypeName }}</span>
               <span 
                 v-show="item.isConnect"
                 style="margin-left:10px;color:#559DF9;font-size:18px"
@@ -27,10 +27,15 @@
             </div>
             <p class="content">
               <span>是否下次回访：{{ item.isPlanTrack ? '是' : '否' }}</span>
-              <span style="margin-left:10px" v-show="item.isPlanTrack">下次回访主题：{{ item.planTrackTheme }}</span>
+              <span style="margin-left:20px" v-show="item.isPlanTrack">下次回访目的：{{ item.planTrackTheme }}</span>
             </p>
             <p class="content">
               <span>追踪人：{{ item.employeeName }}</span>
+              <span style="margin-left:20px">新老客：{{item.isOldCustomerTrack  == true ? '老客'  : '新客'}}</span>
+            </p>
+            <p class="content">
+              <span>加v状态：{{ item.isAddWechat  == true ? '是'  : '否'}}</span>
+              <span style="margin-left:20px" v-if="item.isAddWechat  == false">未加v原因：{{item.unAddWechatReason}}</span>
             </p>
             <p class="content_footer"><span class="content_title">内容：</span>{{ item.trackContent }}</p>
             <div class="img_title" v-if="item.trackPicture1 || item.trackPicture2 || item.trackPicture3">回访截图</div>

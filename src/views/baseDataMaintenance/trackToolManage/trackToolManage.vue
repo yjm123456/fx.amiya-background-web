@@ -2,7 +2,28 @@
   <div>
     <Card :dis-hover="true">
       <div class="header_wrap">
-        <Button
+        <div class="left">
+          <Select
+            v-model="query.valid"
+            placeholder="请选择有效状态"
+            style="width: 200px;margin-left: 10px"
+          >
+            <Option
+              v-for="item in validList"
+              :value="item.type"
+              :key="item.type"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="getTrackToolList()"
+            >查询</Button
+          >
+        </div>
+        <div class="right">
+          <Button
           type="primary"
           @click="
             controlModal = true;
@@ -10,6 +31,8 @@
           "
           >添加</Button
         >
+        </div>
+        
       </div>
     </Card>
 
@@ -65,6 +88,7 @@ export default {
     return {
       // 查询
       query: {
+        valid:'true',
         pageNum: 1,
         pageSize: 10,
         columns: [
@@ -190,6 +214,13 @@ export default {
           },
         ],
       },
+      validList:[{
+        type:'true',
+        name:'有效'
+      },{
+        type:'false',
+        name:'无效'
+      }]
     };
   },
   methods: {
@@ -198,10 +229,11 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize } = this.query;
+      const { pageNum, pageSize,valid } = this.query;
       const data = {
         pageNum,
         pageSize,
+        valid
       };
       api.getTrackToolList(data).then((res) => {
         if (res.code === 0) {
@@ -214,10 +246,11 @@ export default {
 
     // 获取回访工具列表分页
     handlePageChange(pageNum) {
-      const { pageSize } = this.query;
+      const { pageSize ,valid} = this.query;
       const data = {
         pageNum,
         pageSize,
+        valid
       };
       api.getTrackToolList(data).then((res) => {
         if (res.code === 0) {
@@ -289,8 +322,14 @@ export default {
   margin-top: 16px;
 }
 
-.page_wrap {
-  margin-top: 16px;
+.header_wrap {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  
+}
+.page_wrap{
   text-align: right;
+  margin-top: 10px;
 }
 </style>

@@ -63,7 +63,7 @@
         :label-width="120"
       >
         <Row :gutter="16">
-          <Col span="12">
+          <Col span="8">
             <FormItem label="跟进情况" prop="isTrackedResult">
               <Select
                 v-model="form.isTrackedResult"
@@ -78,8 +78,42 @@
                 >
               </Select>
             </FormItem>
-            
-            <FormItem label="回访工具" prop="addTrackRecord.trackToolId" v-if="form.isTrackedResult=='true'" key="回访工具">
+          </Col>
+
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem label="加v状态" prop="isAddWechat">
+              <RadioGroup v-model="form.isAddWechat">
+                <Radio label="是"></Radio>
+                <Radio label="否"></Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem
+              label="未加V原因"
+              prop="unAddWechatReasonId"
+              ref="unAddWechatReasonId"
+            >
+              <Select
+                v-model="form.unAddWechatReasonId"
+                placeholder="请选择未加V原因"
+                :disabled="form.isAddWechat == '是' || !form.isAddWechat"
+              >
+                <Option
+                  :value="item.id"
+                  v-for="item in unAddList"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem
+              label="回访工具"
+              prop="addTrackRecord.trackToolId"
+              key="回访工具"
+            >
               <div class="template">
                 <Select
                   v-model="form.addTrackRecord.trackToolId"
@@ -97,8 +131,27 @@
                 </Button> -->
               </div>
             </FormItem>
-            <FormItem label="回访类型" prop="addTrackRecord.trackTypeId" v-if="form.isTrackedResult=='true'" key="回访类型">
-              <Select v-model="form.addTrackRecord.trackTypeId" placeholder="请选择回访类型">
+          </Col>
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem label="新老客" prop="isOldCustomerTrack">
+              <RadioGroup v-model="form.isOldCustomerTrack">
+                <Radio label="新客"></Radio>
+                <Radio label="老客"></Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem
+              label="回访目的"
+              prop="addTrackRecord.trackTypeId"
+              key="回访目的"
+            >
+              <Select
+                v-model="form.addTrackRecord.trackTypeId"
+                placeholder="请选择回访目的"
+                :disabled="!form.isOldCustomerTrack"
+              >
                 <Option
                   :value="item.id"
                   v-for="item in trackType"
@@ -107,13 +160,25 @@
                 >
               </Select>
             </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isTrackedResult == 'true'" key="客户类型">
             <FormItem
-              label="回访主题"
-              v-show="trackThemeList.length"
+              label="客户类型"
               prop="addTrackRecord.trackThemeId"
-              v-if="form.isTrackedResult=='true'" key="回访主题"
+              :rules="{
+                required:
+                  trackThemeList.length == 0 || trackThemeList == []
+                    ? false
+                    : true,
+                message: '请选择客户类型',
+              }"
+              ref="trackThemeId"
             >
-              <Select v-model="form.addTrackRecord.trackThemeId" placeholder="请选择回访主题">
+              <Select
+                v-model="form.addTrackRecord.trackThemeId"
+                placeholder="请选择客户类型"
+                :disabled="trackThemeList.length == 0 || trackThemeList == []"
+              >
                 <Option
                   :value="item.id"
                   v-for="item in trackThemeList"
@@ -122,16 +187,30 @@
                 >
               </Select>
             </FormItem>
-            <FormItem label="回访计划" prop="addTrackRecord.trackPlan" v-if="form.isTrackedResult=='true'" key="回访计划">
-              <Input v-model="form.addTrackRecord.trackPlan" placeholder="请输入回访计划" />
+          </Col>
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem
+              label="回访主题"
+              prop="addTrackRecord.trackPlan"
+              key="回访主题"
+            >
+              <Input
+                v-model="form.addTrackRecord.trackPlan"
+                placeholder="请输入回访主题"
+              />
             </FormItem>
-            <FormItem label="是否有效" prop="addTrackRecord.valid" v-if="form.isTrackedResult=='true'" key="是否有效">
+          </Col>
+          <!-- <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem
+              label="是否有效"
+              prop="addTrackRecord.valid"
+              key="是否有效"
+            >
               <i-switch v-model="form.addTrackRecord.valid" />
             </FormItem>
-            
-          </Col>
-          <Col span="12" v-if="form.isTrackedResult=='false'">
-            <FormItem label="跟进备注" prop="hospitalContent"  key="跟进备注">
+          </Col> -->
+          <Col span="8" v-if="form.isTrackedResult == 'false'">
+            <FormItem label="跟进备注" prop="hospitalContent" key="跟进备注">
               <Input
                 v-model="form.hospitalContent"
                 show-word-limit
@@ -142,15 +221,43 @@
               />
             </FormItem>
           </Col>
-          <Col span="12" v-if="form.isTrackedResult=='true'">
-            <FormItem label="回访内容" prop="addTrackRecord.trackContent"  key="回访内容">
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem
+              label="回访内容"
+              prop="addTrackRecord.trackContent"
+              key="回访内容"
+            >
               <Input
                 v-model="form.addTrackRecord.trackContent"
                 show-word-limit
                 type="textarea"
                 placeholder="请输入回访内容"
                 class="trackContent"
-                :rows="7"
+                :rows="3"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem label="回访截图1" prop="trackPicture1">
+              <upload
+                :uploadObj="uploadObj1"
+                @uploadChange="handleUploadChange1"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem label="回访截图2" prop="trackPicture2">
+              <upload
+                :uploadObj="uploadObj2"
+                @uploadChange="handleUploadChange2"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isTrackedResult == 'true'">
+            <FormItem label="回访截图3" prop="trackPicture3">
+              <upload
+                :uploadObj="uploadObj3"
+                @uploadChange="handleUploadChange3"
               />
             </FormItem>
           </Col>
@@ -166,7 +273,12 @@
 <script>
 import * as api from "@/api/trackReported";
 import * as apis from "@/api/common";
+import upload from "@/components/upload/upload";
+
 export default {
+  components: {
+    upload,
+  },
   props: ["activeName"],
   data() {
     return {
@@ -243,8 +355,8 @@ export default {
                       click: () => {
                         const { id, encryptPhone } = params.row;
                         this.controlModal = true;
-                        this.form.addTrackRecord.encryptPhone = encryptPhone
-                        this.form.id = id
+                        this.form.addTrackRecord.encryptPhone = encryptPhone;
+                        this.form.id = id;
                       },
                     },
                   },
@@ -268,38 +380,62 @@ export default {
       isEdit: false,
 
       form: {
-        addTrackRecord:{
-            // 加密手机号
-            encryptPhone: "",
-            // 回访工具编号
-            trackToolId: "",
-            // 回访类型编号
-            trackTypeId: "",
-            // 回访主题
-            trackThemeId: "",
-            // 回访计划
-            trackPlan: "",
-            // 回访内容
-            trackContent: "",
-            // 通话记录编号，如果回访工具是电话 该字段必传
-            callRecordId: null,
-            // 是否有效
-            valid: true,
+        addTrackRecord: {
+          // 加密手机号
+          encryptPhone: "",
+          // 回访工具编号
+          trackToolId: "",
+          // 回访目的编号
+          trackTypeId: "",
+          // 客户类型
+          trackThemeId: "",
+          // 回访主题
+          trackPlan: "",
+          // 回访内容
+          trackContent: "",
+          // 通话记录编号，如果回访工具是电话 该字段必传
+          callRecordId: null,
+          // 是否有效
+          valid: true,
         },
-        
+
         // 跟进情况
-        isTrackedResult:null,
+        isTrackedResult: null,
         // 医院跟进备注
-        hospitalContent:''
+        hospitalContent: "",
+        trackPicture1: "",
+        trackPicture2: "",
+        trackPicture3: "",
+        // 加v状态
+        isAddWechat: "",
+        // 未加v原因
+        unAddWechatReasonId: null,
+        // 新老客
+        isOldCustomerTrack: "",
       },
       ruleValidate: {
-        hospitalContent:[
+        isAddWechat: [
+          {
+            required: true,
+            message: "请选择加v状态",
+            trigger: "change",
+          },
+        ],
+
+        isOldCustomerTrack: [
+          {
+            required: true,
+            message: "请选择新老客",
+            trigger: "change",
+          },
+        ],
+        hospitalContent: [
           {
             required: true,
             message: "请输入跟进备注",
           },
         ],
-        isTrackedResult:[
+        isTrackedResult: [
           {
             required: true,
             message: "请选择跟进情况",
@@ -314,13 +450,13 @@ export default {
         "addTrackRecord.trackTypeId": [
           {
             required: true,
-            message: "请选择回访类型",
+            message: "请选择回访目的",
           },
         ],
         "addTrackRecord.trackThemeId": [
           {
             required: true,
-            message: "请选择回访主题",
+            message: "请选择客户类型",
           },
         ],
         "addTrackRecord.trackContent": [
@@ -332,7 +468,7 @@ export default {
         "addTrackRecord.trackPlan": [
           {
             required: true,
-            message: "请输入回访计划",
+            message: "请输入回访主题",
           },
         ],
         "addTrackRecord.valid": [
@@ -351,13 +487,13 @@ export default {
       // 回访工具列表
       trackTool: [],
 
-      // 回访类型列表
+      // 回访目的列表
       trackType: [],
 
-      // 回访主题列表
+      // 客户类型列表
       trackThemeList: [],
 
-      // 下次回访主题列表
+      // 下次客户类型列表
       nextTimeTrackThemeList: [],
       //跟进情况
       trackedResult: [
@@ -370,17 +506,67 @@ export default {
           name: "取消跟进",
         },
       ],
+      uploadObj1: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
+      uploadObj2: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
+      uploadObj3: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
+      // 未加v原因
+      unAddList: [],
     };
   },
- 
 
   methods: {
-    trackedResultChange(){
-        if(this.form.isTrackedResult == 'true'){
-            this.form.hospitalContent = ''
-        }else{
-            this.form.addTrackRecord = {}
-        }
+    // 获取未加v原因
+    getunAddWechatReasonNameList() {
+      apis.unAddWechatReasonNameList().then((res) => {
+        this.unAddList = res.data.nameList;
+      });
+    },
+    // 图片
+    handleUploadChange1(values) {
+      this.form.trackPicture1 = values[0];
+    },
+    // 图片
+    handleUploadChange2(values) {
+      this.form.trackPicture2 = values[0];
+    },
+    // 图片
+    handleUploadChange3(values) {
+      this.form.trackPicture3 = values[0];
+    },
+    trackedResultChange() {
+      if (this.form.isTrackedResult == "true") {
+        this.form.hospitalContent = "";
+      } else {
+        this.form.addTrackRecord = {};
+        this.form.trackPicture1 = "";
+        this.form.trackPicture2 = "";
+        this.form.trackPicture3 = "";
+        this.form.isAddWechat = "";
+        this.form.unAddWechatReasonId = null;
+        this.form.isOldCustomerTrack = "";
+        this.trackThemeList = [];
+      }
     },
     // 获取有效的回访工具列表
     getTrackReturnVisitToolList() {
@@ -391,14 +577,17 @@ export default {
       });
     },
 
-    // 获取有效的回访类型列表
+    // 获取有效的回访目的列表
     getTrackReturnVisitTypeList() {
-      apis.getTrackReturnVisitTypeList().then((res) => {
+      const data = {
+        isOldCustomer: this.form.isOldCustomerTrack == "新客" ? false : true,
+      };
+      apis.getTrackReturnVisitTypeList(data).then((res) => {
         this.trackType = res.data.trackType;
       });
     },
 
-    // 通过下次回访类型编号获取下次回访主题列表
+    // 通过下次回访目的编号获取下次客户类型列表
     handleNextTimeTrackTypeChange(trackTypeId) {
       if (!trackTypeId) return;
       apis.byTrackTypeIdGetTrackThemeList(trackTypeId).then((res) => {
@@ -416,21 +605,44 @@ export default {
             isTrackedResult,
             addTrackRecord,
             hospitalContent,
+            trackPicture1,
+            trackPicture2,
+            trackPicture3,
+            isAddWechat,
+            unAddWechatReasonId,
+            isOldCustomerTrack,
           } = this.form;
           const datas = {
             id,
-            isTrackedResult : isTrackedResult == 'true' ? true : false,
-            hospitalContent:isTrackedResult == 'true' ? '' : hospitalContent,
-            addTrackRecord : isTrackedResult == 'true' ?  {
-                encryptPhone:addTrackRecord.encryptPhone,
-                trackContent:addTrackRecord.trackContent,
-                trackToolId:addTrackRecord.trackToolId,
-                trackTypeId:addTrackRecord.trackTypeId,
-                trackThemeId:addTrackRecord.trackThemeId,
-                trackPlan:addTrackRecord.trackPlan,
-                valid:addTrackRecord.valid,
-            } : {}
+            isTrackedResult: isTrackedResult == "true" ? true : false,
+            hospitalContent: isTrackedResult == "true" ? "" : hospitalContent,
+            addTrackRecord:
+              isTrackedResult == "true"
+                ? {
+                    encryptPhone: addTrackRecord.encryptPhone,
+                    trackContent: addTrackRecord.trackContent,
+                    trackToolId: addTrackRecord.trackToolId,
+                    trackTypeId: addTrackRecord.trackTypeId,
+                    trackThemeId: addTrackRecord.trackThemeId,
+                    trackPlan: addTrackRecord.trackPlan,
+                    valid: addTrackRecord.valid,
+                    trackPicture1: trackPicture1 ? trackPicture1 : "",
+                    trackPicture2: trackPicture2 ? trackPicture2 : "",
+                    trackPicture3: trackPicture3 ? trackPicture3 : "",
+                  }
+                : {},
+            
+            isAddWechat: isAddWechat == "是" ? true : false,
+            unAddWechatReasonId: isAddWechat == "是" ? 0 : unAddWechatReasonId,
+            isOldCustomerTrack: isOldCustomerTrack == "老客" ? true : false,
           };
+          if (
+            (isAddWechat == "否" && datas.unAddWechatReasonId < 0) ||
+            datas.unAddWechatReasonId == null
+          ) {
+            this.$Message.warning("请选择未加v原因！");
+            return;
+          }
           api.hospitalConfirTrackRecord(datas).then((res) => {
             if (res.code === 0) {
               this.cancelSubmit("form");
@@ -498,6 +710,9 @@ export default {
       this.isEdit = false;
       this.controlModal = false;
       this.$refs[name].resetFields();
+      this.uploadObj1.uploadList = [];
+      this.uploadObj2.uploadList = [];
+      this.uploadObj3.uploadList = [];
     },
 
     // modal 显示状态发生变化时触发
@@ -505,12 +720,16 @@ export default {
       if (!value) {
         this.isEdit = false;
         this.$refs["form"].resetFields();
+        this.uploadObj1.uploadList = [];
+        this.uploadObj2.uploadList = [];
+        this.uploadObj3.uploadList = [];
       }
     },
   },
   created() {
     this.getTrackReturnVisitToolList();
-    this.getTrackReturnVisitTypeList();
+    // this.getTrackReturnVisitTypeList();
+    this.getunAddWechatReasonNameList();
   },
   watch: {
     activeName: {
@@ -521,17 +740,29 @@ export default {
       },
       immediate: true,
     },
-    // 通过回访类型编号获取回访主题列表
-    'form.addTrackRecord.trackTypeId':{
+    // 通过回访目的编号获取客户类型列表
+    "form.addTrackRecord.trackTypeId": {
       handler(trackTypeId) {
-        if(!trackTypeId) return;
-        apis.byTrackTypeIdGetTrackThemeList(trackTypeId).then(res=>{
-          if(res.code === 0) {
+        if (!trackTypeId) return;
+        apis.byTrackTypeIdGetTrackThemeList(trackTypeId).then((res) => {
+          if (res.code === 0) {
             this.trackThemeList = res.data.trackTheme;
           }
-        })
+        });
+      },
+    },
+    "form.isAddWechat"(value) {
+      if (value == "是") {
+        this.form.unAddWechatReasonId = null;
+        // this.$refs.unAddWechatReasonId.validateMessage = "";
+        // this.$refs.unAddWechatReasonId.validateState = "";
       }
-    }
+    },
+    "form.isOldCustomerTrack"(value) {
+      if (value) {
+        this.getTrackReturnVisitTypeList();
+      }
+    },
   },
 };
 </script>

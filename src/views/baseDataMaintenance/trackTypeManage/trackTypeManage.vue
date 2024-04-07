@@ -2,7 +2,28 @@
   <div>
     <Card :dis-hover="true">
       <div class="header_wrap">
-        <Button
+        <div class="left">
+          <Select
+            v-model="query.valid"
+            placeholder="请选择有效状态"
+            style="width: 200px;margin-left: 10px"
+          >
+            <Option
+              v-for="item in validList"
+              :value="item.type"
+              :key="item.type"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="getTrackTypeList()"
+            >查询</Button
+          >
+        </div>
+        <div class="right">
+          <Button
           type="primary"
           @click="
             controlModal = true;
@@ -10,6 +31,8 @@
           "
           >添加</Button
         >
+        </div>
+        
       </div>
     </Card>
 
@@ -47,6 +70,19 @@
       >
         <FormItem label="类型名称" prop="name">
           <Input v-model="form.name" placeholder="请输入类型名称"></Input>
+        </FormItem>
+        <FormItem label="新老客" prop="isOldCustomer">
+            <Select
+            v-model="form.isOldCustomer"
+            placeholder="请选择新老客"
+          >
+            <Option
+              v-for="item in isOldCustomerList"
+              :value="item.type"
+              :key="item.type"
+              >{{ item.name }}</Option
+            >
+          </Select>
         </FormItem>
         <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
           <i-switch v-model="form.valid" />
@@ -102,12 +138,23 @@ export default {
     return {
       // 查询
       query: {
+        valid:'true',
         pageNum: 1,
         pageSize: 10,
         columns: [
           {
             title: "类型名称",
             key: "name",
+          },
+          {
+            title: "新老客",
+            key: "isOldCustomer",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isOldCustomer == false ? '新客' : '老客'
+              );
+            },
           },
           {
             title: "是否有效",
@@ -154,12 +201,13 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id, name, valid } = params.row;
+                        const { id, name, valid ,isOldCustomer} = params.row;
                         this.title = "修改";
                         this.isEdit = true;
                         this.form.id = id;
                         this.form.name = name;
                         this.form.valid = valid;
+                        this.form.isOldCustomer = isOldCustomer == true ? 'true' : 'false';
                         this.controlModal = true;
                         api.byIdTrack(id).then((res) => {
                           if(res.code === 0 ){
@@ -311,7 +359,10 @@ export default {
           daysLater:null,
           // 回访计划
           trackPlan:'',
-        }
+        },
+        // 新老客
+        isOldCustomer:'',
+
       },
 
       ruleValidate: {
@@ -321,8 +372,28 @@ export default {
             message: "请输入类型名称",
           },
         ],
+        isOldCustomer: [
+          {
+            required: true,
+            message: "请选择新老客",
+          },
+        ],
       },
-      trackTheme:[]
+      trackTheme:[],
+      validList:[{
+        type:'true',
+        name:'有效'
+      },{
+        type:'false',
+        name:'无效'
+      }],
+      isOldCustomerList:[{
+        type:'false',
+        name:'新客'
+      },{
+        type:'true',
+        name:'老客'
+      },],
     };
   },
   methods: {
@@ -383,10 +454,11 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize } = this.query;
+      const { pageNum, pageSize ,valid} = this.query;
       const data = {
         pageNum,
         pageSize,
+        valid
       };
       api.getTrackTypeList(data).then((res) => {
         if (res.code === 0) {
@@ -399,10 +471,11 @@ export default {
 
     // 获取医院可预约人数列表分页
     handlePageChange(pageNum) {
-      const { pageSize } = this.query;
+      const { pageSize,valid } = this.query;
       const data = {
         pageNum,
         pageSize,
+        valid
       };
       api.getTrackTypeList(data).then((res) => {
         if (res.code === 0) {
@@ -418,13 +491,14 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const {id,valid,hasModel,trackTypeThemeModelVo,name} = this.form
+            const {id,valid,hasModel,trackTypeThemeModelVo,name,isOldCustomer} = this.form
             const data ={
               id,
               valid,
               hasModel,
               trackTypeThemeModelVo,
-              name
+              name,
+              isOldCustomer:isOldCustomer == 'true' ? true : false
             }
             // 修改
             api.updateTrackType(data).then((res) => {
@@ -439,9 +513,13 @@ export default {
               }
             });
           } else {
-            let { name } = this.form;
+            let { name,isOldCustomer } = this.form;
+            const data = {
+              name,
+              isOldCustomer:isOldCustomer == 'true' ? true : false
+            }
             // 添加
-            api.addTrackType({ name }).then((res) => {
+            api.addTrackType(data).then((res) => {
               if (res.code === 0) {
                 this.cancelSubmit("form");
                 this.getTrackTypeList();
@@ -484,10 +562,15 @@ export default {
   margin-top: 16px;
 }
 
-.page_wrap {
-  margin-top: 16px;
-  text-align: right;
+.header_wrap {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
   
+}
+.page_wrap{
+  text-align: right;
+  margin-top: 10px;
 }
 .title{
   margin-top: 2px;

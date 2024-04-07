@@ -54,12 +54,12 @@ export default {
           },
         },
         {
-          title: "回访计划",
+          title: "回访主题",
           key: "trackPlan",
           tooltip:true
         },
         {
-          title: "回访主题",
+          title: "客户类型",
           key: "trackTheme",
         },
         {
@@ -116,7 +116,7 @@ export default {
 
         },
         {
-          title: "回访类型",
+          title: "回访目的",
           key: "trackTypeName",
         },
         

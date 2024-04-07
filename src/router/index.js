@@ -1069,7 +1069,7 @@ const baseDataMaintenance = [{
         path: "/trackTypeManage",
         name: "trackTypeManage",
         meta: {
-            title: "回访类型管理",
+            title: "回访目的管理",
             keepAlive: false,
             isTag: true,
             openName: ['基础数据维护'],
@@ -1093,7 +1093,7 @@ const baseDataMaintenance = [{
         path: "/trackThemeManage",
         name: "trackThemeManage",
         meta: {
-            title: "回访主题管理",
+            title: "客户类型管理",
             keepAlive: false,
             isTag: true,
             openName: ['基础数据维护'],

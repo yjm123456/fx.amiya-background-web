@@ -5,27 +5,27 @@
         <DatePicker
           type="date"
           placeholder="下单开始日期"
-          style="width: 180px;"
+          style="width: 150px;"
           :value="query.startDate"
           v-model="query.startDate"
         ></DatePicker>
         <DatePicker
           type="date"
           placeholder="下单结束日期"
-          style="width: 180px; margin-left: .625rem"
+          style="width: 150px; margin-left: .625rem"
           :value="query.endDate"
           v-model="query.endDate"
         ></DatePicker>
         <Input
           v-model="query.keyword"
           placeholder="请输入姓名/订单号/手机号"
-          style="width: 220px; margin-left: 10px"
+          style="width: 200px; margin-left: 10px"
           @keyup.enter.native="getbindCustomerServieOrderList()"
         />
         <Select
           v-model="query.customerServiceId"
           placeholder="请选择客服"
-          style="width: 180px; margin-left: 10px"
+          style="width: 160px; margin-left: 10px"
           filterable
         >
           <Option
@@ -39,7 +39,7 @@
           v-model="query.contentPlatFormId"
           placeholder="请选择主播平台"
           @on-change="contentPlateChange(query.contentPlatFormId)"
-          style="width: 180px; margin-left: 10px"
+          style="width: 160px; margin-left: 10px"
           filterable
         >
           <Option
@@ -52,7 +52,7 @@
         <Select
           v-model="query.liveAnchorId"
           placeholder="请选择主播IP账号"
-          style="width: 180px; margin-left: 10px"
+          style="width: 160px; margin-left: 10px"
           :disabled="query.contentPlatFormId === null"
           filterable
         >
@@ -67,7 +67,7 @@
           v-model="query.liveAnchorWechatNoId"
           placeholder="请选择主播微信号"
           filterable
-          style="width: 180px; margin-left: 10px"
+          style="width: 160px; margin-left: 10px"
         >
           <Option
             v-for="(item, indexs) in weChatList"
@@ -76,6 +76,18 @@
             >{{ item.weChatNo }}</Option
           >
         </Select>
+        <Select
+              v-model="query.orderStatus"
+              placeholder="请选择订单状态"
+              style="width: 160px;margin-left: .625rem"
+            >
+              <Option
+                v-for="item in orderStatusList"
+                :value="item.orderStatus"
+                :key="item.orderStatus"
+                >{{ item.orderStatusText }}</Option
+              >
+            </Select>
         <Button
           type="primary"
           @click="getbindCustomerServieOrderList()"
@@ -168,6 +180,7 @@ export default {
   data() {
     return {
       query: {
+        orderStatus:-1,
         startDate:this.$moment().format("YYYY-MM-DD"),
         endDate:this.$moment().format("YYYY-MM-DD"),
         contentPlatFormId: null,
@@ -200,12 +213,12 @@ export default {
             type: "selection",
             key: "_checked",
             align: "center",
-            minWidth: 70,
+            minWidth: 60,
           },
           {
             title: "录单时间",
             key: "createDate",
-            minWidth: 180,
+            minWidth: 170,
             align:'center',
             render: (h, params) => {
               return h(
@@ -219,7 +232,7 @@ export default {
           {
             title: "订单号",
             key: "id",
-            minWidth: 180,
+            minWidth: 170,
             align: "center",
             tooltip: true,
           },
@@ -233,7 +246,7 @@ export default {
           {
             title: "项目",
             key: "thumbPictureUrl",
-            minWidth: 180,
+            minWidth: 170,
             align: "center",
             render: (h, params) => {
               return h(
@@ -271,6 +284,86 @@ export default {
              tooltip: true,
           },
           {
+            title: "订单状态",
+            key: "orderStatusText",
+            minWidth: 100,
+             align: "center",
+             tooltip: true,
+             render: (h, params) => {
+              if (params.row.orderStatusText == "已成交") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#04B05D",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "重单-不可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "重单-可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "已派单") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "blue",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "未成交") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "brown",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "已接单") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              }
+            },
+          },
+          {
             title: "IP账号",
             key: "liveAnchorName",
             minWidth: 120,
@@ -301,7 +394,7 @@ export default {
           {
             title: "主播微信号",
             key: "liveAnchorWeChatNo",
-            minWidth: 180,
+            minWidth: 120,
             tooltip: true,
             align: "center",
           },
@@ -322,10 +415,21 @@ export default {
         customerServiceId: "",
       },
       // 微信号
-      weChatList:[{id:'',name:'全部微信号'}]
+      weChatList:[{id:'',name:'全部微信号'}],
+      // 订单状态
+      orderStatusList:[{orderStatus:-1,orderStatusText:'全部订单状态'}]
     };
   },
   methods: {
+    // 订单状态
+    getContentPlateFormOrderStatusList() {
+      api.contentPlateFormOrderStatusList().then((res) => {
+        if (res.code === 0) {
+          const { orderStatus } = res.data;
+          this.orderStatusList = [...this.orderStatusList,...orderStatus];
+        }
+      });
+    },
     //  主播微信号
     getWeChatList() {
       const data = {
@@ -400,7 +504,8 @@ export default {
         liveAnchorId,
         startDate,
         endDate,
-        liveAnchorWechatNoId
+        liveAnchorWechatNoId,
+        orderStatus
       } = this.query;
       if(!startDate){
         this.$Message.error('请选择开始时间')
@@ -419,7 +524,8 @@ export default {
         liveAnchorId,
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        liveAnchorWechatNoId:liveAnchorWechatNoId == '' ? '' : liveAnchorWechatNoId
+        liveAnchorWechatNoId:liveAnchorWechatNoId == '' ? '' : liveAnchorWechatNoId,
+        orderStatus:orderStatus == -1 ? null : orderStatus
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {
@@ -438,7 +544,7 @@ export default {
     // 获取已绑定了客服的订单列表 分页
     handleProjectPageChange(pageNum) {
       const { keyword, customerServiceId, pageSize,liveAnchorId,startDate,
-        endDate ,liveAnchorWechatNoId} = this.query;
+        endDate ,liveAnchorWechatNoId,orderStatus} = this.query;
       const data = {
         keyword,
         customerServiceId:
@@ -448,7 +554,8 @@ export default {
         liveAnchorId,
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
-        liveAnchorWechatNoId:liveAnchorWechatNoId == '' ? '' : liveAnchorWechatNoId
+        liveAnchorWechatNoId:liveAnchorWechatNoId == '' ? '' : liveAnchorWechatNoId,
+        orderStatus:orderStatus == -1 ? null : orderStatus
       };
       api.getbindCustomerServieOrders(data).then((res) => {
         if (res.code === 0) {
@@ -553,6 +660,7 @@ export default {
     // this.getOrderPlatform()
     this.getContentValidList()
     this.getWeChatList()
+    this.getContentPlateFormOrderStatusList()
   },
 };
 </script>

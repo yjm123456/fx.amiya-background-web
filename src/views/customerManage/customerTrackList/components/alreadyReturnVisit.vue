@@ -54,14 +54,14 @@ export default {
           },
         },
         {
-          title: "回访计划",
+          title: "回访主题",
           key: "trackPlan",
           tooltip:true,
           minWidth:180,
           
         },
         {
-          title: "回访主题",
+          title: "客户类型",
           key: "trackTheme",
           minWidth:200,
           tooltip:true,
@@ -80,7 +80,7 @@ export default {
           minWidth:200,
         },
         {
-          title: "回访类型",
+          title: "回访目的",
           key: "trackTypeName",
           minWidth:180,
           align:'center',

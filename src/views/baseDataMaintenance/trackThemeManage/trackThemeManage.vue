@@ -12,6 +12,18 @@
               item.name
             }}</Option>
           </Select>
+          <Select
+            v-model="query.valid"
+            placeholder="请选择有效状态"
+            style="width: 200px;margin-left: 10px"
+          >
+            <Option
+              v-for="item in validList"
+              :value="item.type"
+              :key="item.type"
+              >{{ item.name }}</Option
+            >
+          </Select>
           <Button
             type="primary"
             style="margin-left:10px"
@@ -95,6 +107,7 @@ export default {
 
       // 查询
       query: {
+        valid:'true',
         trackTypeId: "",
         pageNum: 1,
         pageSize: 10,
@@ -243,7 +256,16 @@ export default {
           },
         ],
       },
+      validList:[{
+        type:'true',
+        name:'有效'
+      },{
+        type:'false',
+        name:'无效'
+      }]
+      
     };
+    
   },
   methods: {
     // 获取有效的回访类型列表
@@ -258,11 +280,12 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, trackTypeId } = this.query;
+      const { pageNum, pageSize, trackTypeId,valid } = this.query;
       const data = {
         pageNum,
         pageSize,
         trackTypeId,
+        valid
       };
       api.getTrackThemeList(data).then((res) => {
         if (res.code === 0) {
@@ -275,11 +298,12 @@ export default {
 
     // 获取回访主题列表（分页）
     handlePageChange(pageNum) {
-      const { pageSize, trackTypeId } = this.query;
+      const { pageSize, trackTypeId ,valid} = this.query;
       const data = {
         pageNum,
         pageSize,
         trackTypeId,
+        valid
       };
       api.getTrackThemeList(data).then((res) => {
         if (res.code === 0) {

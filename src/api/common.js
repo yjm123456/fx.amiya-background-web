@@ -65,10 +65,11 @@ export const getTrackReturnVisitToolList = () => {
 };
 
 // 获取有效的回访类型列表
-export const getTrackReturnVisitTypeList = () => {
+export const getTrackReturnVisitTypeList = (params) => {
     return http({
         url: `/amiyabg/Track/typeList`,
         method: "get",
+        params
     });
 };
 
@@ -112,5 +113,12 @@ export const byContentOrderList = (params) => {
         url: `/amiyabg/ContentPlateFormOrder/listByEncryptPhone`,
         method: "get",
         params
+    });
+};
+// 未加v原因
+export const unAddWechatReasonNameList = () => {
+    return http({
+        url: `/amiyabg/Track/unAddWechatReasonNameList`,
+        method: "get",
     });
 };

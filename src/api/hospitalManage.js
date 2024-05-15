@@ -479,3 +479,47 @@ export const deleteById = (params) => {
         params
     });
 };
+
+/**
+ *医院项目
+ */
+// 根据医院id获取项目列表
+export const getProjectList = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/getProjectList",
+        method: "get",
+        params
+    });
+};
+// 添加项目
+export const addProject = (data) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/addProject`,
+        method: "post",
+        data
+    });
+};
+// 修改项目
+export const UpdateProject = (data) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/UpdateProject`,
+        method: "put",
+        data
+    });
+};
+// 根据项目id获取项目详情
+export const getInfoByProjectId = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/getInfoByProjectId",
+        method: "get",
+        params
+    });
+};
+// 删除项目
+export const deleteProjectById = (params) => {
+    return http({
+        url: `/amiyabg/HospitalInfo/deleteProjectById`,
+        method: "delete",
+        params
+    });
+};

@@ -456,13 +456,13 @@ export default {
             align: "center",
           },
           {
-            title: "累计设计卡退卡目标",
+            title: "累计设计卡下单目标",
             key: "cumulativeConsultation",
             minWidth: 200,
             align: "center",
           },
           {
-            title: "设计卡退卡目标完成率",
+            title: "设计卡下单目标完成率",
             key: "consultationCompleteRate",
             minWidth: 230,
             align: "center",

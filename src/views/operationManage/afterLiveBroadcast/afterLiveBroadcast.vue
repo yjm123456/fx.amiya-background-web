@@ -599,6 +599,25 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="今日分诊"
+              prop="distributeConsulation"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日分诊',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.distributeConsulation"
+                placeholder="请输入今日分诊"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -805,6 +824,12 @@ export default {
             align: "center",
           },
           {
+            title: "今日分诊",
+            key: "distributeConsulation",
+            minWidth: 120,
+            align: "center",
+          },
+          {
             title: "操作",
             key: "",
             width: 120,
@@ -859,7 +884,8 @@ export default {
                               consultationCardConsumed2,
                               activateHistoricalConsultation,
                               effectivePerformance,
-                              potentialPerformance
+                              potentialPerformance,
+                              distributeConsulation
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
@@ -889,6 +915,7 @@ export default {
                             this.form.activateHistoricalConsultation = activateHistoricalConsultation;
                             this.form.effectivePerformance = effectivePerformance;
                             this.form.potentialPerformance = potentialPerformance;
+                            this.form.distributeConsulation = distributeConsulation;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -1066,6 +1093,8 @@ export default {
         effectivePerformance:null,
         // 今日潜在业绩
         potentialPerformance:null,
+        // 今日分诊
+        distributeConsulation:null
        
       },
 
@@ -1455,7 +1484,8 @@ export default {
               consultationCardConsumed2,
               activateHistoricalConsultation,
               effectivePerformance,
-              potentialPerformance
+              potentialPerformance,
+              distributeConsulation
             } = this.form;
             const data = {
               id,
@@ -1501,7 +1531,8 @@ export default {
                 ? activateHistoricalConsultation
                 : 0,
                 effectivePerformance,
-              potentialPerformance
+              potentialPerformance,
+              distributeConsulation
             };
             this.isflag = true
             api.afterLivingUpdate(data).then((res) => {
@@ -1546,7 +1577,8 @@ export default {
               consultationCardConsumed2,
               activateHistoricalConsultation,
               effectivePerformance,
-              potentialPerformance
+              potentialPerformance,
+              distributeConsulation
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -1589,7 +1621,8 @@ export default {
                 ? activateHistoricalConsultation
                 : 0,
               effectivePerformance,
-              potentialPerformance
+              potentialPerformance,
+              distributeConsulation
             };
             this.isflag = true
             // 添加

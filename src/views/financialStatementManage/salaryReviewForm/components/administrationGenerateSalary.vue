@@ -117,25 +117,34 @@
         <div class="bor" v-if="form.positionId == 30">
           <Row :gutter="30">
             <Col span="8">
-              <FormItem label="医美客资加V业绩" prop="beautyAddWechatPrice">
+              <FormItem label="医美客资加V业绩（单个15元）" prop="beautyAddWechatPrice">
                 <Input
                   v-model="form.beautyAddWechatPrice"
                   placeholder="请输入医美客资加V业绩"
                   type="number"
                   number
                   @on-change="administrativeCustomerService"
+                  style="width:85%;"
                 ></Input>
+               
+               <Tooltip :content="centent1" placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
+              </Tooltip>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="带货客资加V业绩" prop="takeGoodsAddWechatPrice">
+              <FormItem label="带货客资加V业绩（单个5元）" prop="takeGoodsAddWechatPrice">
                 <Input
                   v-model="form.takeGoodsAddWechatPrice"
                   placeholder="请输入带货客资加V业绩"
                   type="number"
                   number
                   @on-change="administrativeCustomerService"
+                  style="width:85%;"
                 ></Input>
+                <Tooltip :content="centent2" placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
+              </Tooltip>
               </FormItem>
             </Col>
             <Col span="8">
@@ -165,7 +174,7 @@
             </Col>
             <Col span="8">
               <FormItem
-                label="供应链达人派单提成金额"
+                label="供应链达人派单提成金额（单个7元）"
                 prop="cooperationLiveAnchorSendOrderPrice"
               >
                 <Input
@@ -174,12 +183,16 @@
                   type="number"
                   number
                   @on-change="administrativeCustomerService"
+                  style="width:85%;"
                 ></Input>
+                <Tooltip :content="centent3" placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
+              </Tooltip>
               </FormItem>
             </Col>
             <Col span="8">
               <FormItem
-                label="供应链达人上门提成金额"
+                label="供应链达人上门提成金额（单个20元）"
                 prop="cooperationLiveAnchorToHospitalPrice"
               >
                 <Input
@@ -188,7 +201,11 @@
                   type="number"
                   number
                   @on-change="administrativeCustomerService"
+                  style="width:85%;"
                 ></Input>
+                <Tooltip :content="centent4" placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
+              </Tooltip>
               </FormItem>
             </Col>
           </Row>
@@ -282,6 +299,9 @@
         </Spin>
       </Form>
       <div slot="footer">
+        <Button type="primary" @click="JiaVHandleSubmit" v-if="form.positionName=='行政客服'">自动填写（加v）</Button>
+        <Button type="primary" @click="visitHandleSubmit" style="margin-right:30px" v-if="form.positionName=='行政客服'">自动填写（派单上门）</Button>
+
         <Button @click="handleCancel('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确认</Button>
       </div>
@@ -475,9 +495,53 @@ export default {
           },
         ],
       },
+      // 医美客资加v业绩
+      centent1:'当前组医美客资加V：0个',
+      // 当前组带货客资加V
+      centent2:'当前组带货客资加V：0个',
+      // 供应链达人派单提成金额
+      centent3:'供应链达人派单人数：0人',
+      // 供应链达人上门提成功能金额
+      centent4:'供应链达人上门人数：0人',
     };
   },
   methods: {
+    // 加v自动获取
+    JiaVHandleSubmit(){
+      const data ={
+        employeeId:this.form.belongEmpId,
+        sartDate:this.$moment(this.filterCriteria.startDate).format("YYYY-MM-DD"),
+        endDate:this.$moment(this.filterCriteria.endDate).format("YYYY-MM-DD")
+      }
+      api.getAddWechatNumByCreateEmpInfoAndDate(data).then(res=>{
+        if(res.code == 0){
+          const {beautyCustomerAddWechatNum,takeGoodsCustomerAddWechatNum} = res.data.AddWechatNumByCreateEmpInfoAndDate
+          // this.form.beautyAddWechatPrice = Math.round( (beautyCustomerAddWechatNum * 5) *1000 / 10 ) / 100
+          // this.form.takeGoodsAddWechatPrice = Math.round( (takeGoodsCustomerAddWechatNum * 15) *1000 / 10 ) / 100
+          this.form.beautyAddWechatPrice = Math.round( (beautyCustomerAddWechatNum * 15) *1000 / 10 ) / 100
+          this.form.takeGoodsAddWechatPrice = Math.round( (takeGoodsCustomerAddWechatNum * 5) *1000 / 10 ) / 100
+          this.centent1='当前组医美客资加V：' + beautyCustomerAddWechatNum + '个'
+          this.centent2='当前组带货客资加V：' + takeGoodsCustomerAddWechatNum + '个'
+        }
+      })
+    },
+    // 自动获取
+    visitHandleSubmit(){
+      const data ={
+        sendStartDate:this.$moment(this.filterCriteria.startDate).format("YYYY-MM-DD"),
+        sendEndDate:this.$moment(this.filterCriteria.endDate).format("YYYY-MM-DD")
+      }
+      api.getCooperationLiveAnchorSendAndVisitNum(data).then(res=>{
+        if(res.code == 0){
+          const {sendOrderNum,visitNum} = res.data.CooperationLiveAnchorSendAndVisitNum
+          // 派单
+          this.form.cooperationLiveAnchorSendOrderPrice =  Math.round( (sendOrderNum * 7) *1000 / 10 ) / 100
+          this.form.cooperationLiveAnchorToHospitalPrice =  Math.round( (visitNum * 20) *1000 / 10 ) / 100
+          this.centent3='供应链达人派单人数' + sendOrderNum + '人'
+          this.centent4='供应链达人上门人数' + visitNum + '人'
+        }
+      })
+    },
     // 行政客服时计算方法
     administrativeCustomerService() {
       const {
@@ -610,6 +674,12 @@ export default {
       this.$emit("update:administrationGenerateSalaryModel", false);
       this.$emit("getListData");
       this.$refs["form"].resetFields();
+      this.form.positionId = null
+      this.centent1='当前组医美客资加V：0个'
+      this.centent2='当前组带货客资加V：0个'
+      this.centent3='供应链达人派单人数：0人'
+      this.centent4='供应链达人上门人数：0人'
+
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -617,6 +687,11 @@ export default {
         this.$emit("update:administrationGenerateSalaryModel", false);
         this.$emit("getListData");
         this.$refs["form"].resetFields();
+        this.form.positionId = null
+        this.centent1='当前组医美客资加V：0个'
+        this.centent2='当前组带货客资加V：0个'
+        this.centent3='供应链达人派单人数：0人'
+        this.centent4='供应链达人上门人数：0人'
       }
     },
   },

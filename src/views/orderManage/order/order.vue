@@ -7,13 +7,13 @@
             <div class="head_top">
               <Input
                 v-model="query.keyword"
-                style="width:11.25rem;"
-                placeholder="请输入订单号或商品名称"
+                style="width:180px;"
+                placeholder="请输入关键字"
                 @keyup.enter.native="getOrderInfo()"
               />
               <Select
                 v-model="query.statusCode"
-                style="width: 12.5rem;margin-left: .625rem"
+                style="width: 180px;margin-left: .625rem"
                 placeholder="请选择订单状态"
               >
                 <Option
@@ -69,7 +69,6 @@
                   :value="query.startDate"
                   v-model="query.startDate"
                 ></DatePicker>
-                <span style="margin-left:.625rem;color:#ccc">—</span>
                 <DatePicker
                   type="date"
                   placeholder="下单结束日期"
@@ -84,7 +83,6 @@
                   :value="query.writeOffStartDate"
                   v-model="query.writeOffStartDate"
                 ></DatePicker>
-                <span style="margin-left:.625rem;color:#ccc">—</span>
                 <DatePicker
                   type="date"
                   placeholder="核销结束时间"

@@ -74,6 +74,30 @@
             </span>
           </div>
         </div>
+        <div class="inp_wrap" v-if="query.type == '已追踪回访客户列表'">
+          <div style="margin-top:-25px">
+            <span style="width: 200px;margin-right: 19px">新老客</span>
+            <span>
+              <Select
+                v-model="query.isOldCustomerTrack"
+                style="width: 210px;"
+                placeholder="请选择新老客"
+                filterable
+              >
+                <Option
+                  v-for="item in isOldCustomerTrackList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </span>
+          </div>
+          <div>
+            
+            
+          </div>
+        </div>
         <div class="search">
           <div>
             <Button type="primary" ghost @click="search">
@@ -91,6 +115,22 @@ import * as api from "@/api/customerManage";
 export default {
   data() {
     return {
+      // 新老客状态
+      isOldCustomerTrackList:[
+        {
+          type:-1,
+          name:'全部状态'
+        },
+        {
+          type:'false',
+          name:'新客'
+        },
+        {
+          type:'true',
+          name:'老客'
+        },
+        
+      ],
       // 是否为客服
       isCustomerService:sessionStorage.getItem('isCustomerService'),
       // 是否为管理员
@@ -101,7 +141,9 @@ export default {
         keyword: "",
         startDate: new Date(),
         endDate: new Date(),
-        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1
+        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
+        isOldCustomerTrack:-1,
+
       },
     };
   },

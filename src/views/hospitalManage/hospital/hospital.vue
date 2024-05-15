@@ -80,10 +80,20 @@
       >
         <Row :gutter="30">
           <Col span="8">
+            <FormItem label="城市选择" prop="cityId">
+              <Select v-model="form.cityId" placeholder="请选择城市" filterable>
+                <Option v-for="item in citys" :value="item.id" :key="item.id">{{
+                  item.name
+                }}({{item.sort}})</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="序号" prop="sort">
               <Input v-model="form.sort" placeholder="请输入序号" type="number" number></Input>
             </FormItem>
           </Col>
+          
           <Col span="8">
             <FormItem label="医院名称" prop="name">
               <Input v-model="form.name" placeholder="请输入医院名称"></Input>
@@ -95,8 +105,7 @@
             </FormItem>
           </Col>
           
-        </Row>
-        <Row :gutter="30">
+       
           <Col span="8">
             <FormItem label="地址" prop="address">
               <Input v-model="form.address" placeholder="请输入地址"></Input>
@@ -126,9 +135,7 @@
               ></Input>
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
-          
+       
           <Col span="8">
             <FormItem label="医院级别" prop="scaleTagList">
               <Select
@@ -161,15 +168,7 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="城市选择" prop="cityId">
-              <Select v-model="form.cityId" placeholder="请选择城市" filterable>
-                <Option v-for="item in citys" :value="item.id" :key="item.id">{{
-                  item.name
-                }}</Option>
-              </Select>
-            </FormItem>
-          </Col>
+          
         </Row>
         <Row :gutter="30">
           <Col span="8">
@@ -237,31 +236,33 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="年服务费金额" prop="yearServiceMoney">
+              <Input v-model="form.yearServiceMoney" placeholder="请输入年服务费金额" type="number" number @on-change="yearServiceMoneyChange"></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="年服务费缴纳" prop="yearServiceFee">
-              <Select v-model="form.yearServiceFee" placeholder="请选择年服务费缴纳" filterable>
+              <Select v-model="form.yearServiceFee" placeholder="请选择年服务费缴纳" filterable disabled>
                 <Option v-for="item in payStatusNameList" :value="item.id" :key="item.id">{{
                   item.name
                 }}</Option>
               </Select>
+            </FormItem>
+          </Col>
+          
+          
+          <Col span="8">
+            <FormItem label="保证金金额" prop="securityDepositMoney">
+              <Input v-model="form.securityDepositMoney" placeholder="请输入保证金金额" type="number" number @on-change="securityDepositMoneyChange"></Input>
             </FormItem>
           </Col>
           <Col span="8">
             <FormItem label="保证金缴纳" prop="securityDeposit">
-              <Select v-model="form.securityDeposit" placeholder="请选择保证金缴纳" filterable>
+              <Select v-model="form.securityDeposit" placeholder="请选择保证金缴纳" filterable disabled>
                 <Option v-for="item in payStatusNameList" :value="item.id" :key="item.id">{{
                   item.name
                 }}</Option>
               </Select>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="年服务费金额" prop="yearServiceMoney">
-              <Input v-model="form.yearServiceMoney" placeholder="请输入年服务费金额" type="number" number></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="保证金金额" prop="securityDepositMoney">
-              <Input v-model="form.securityDepositMoney" placeholder="请输入保证金金额" type="number" number></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -313,6 +314,8 @@
     </Modal>
     <!-- 合同 -->
     <contract :contractModel.sync ="contractModel" :contractParams="contractParams"/>
+    <!-- 项目 -->
+    <project :projectContractModel.sync ="projectContractModel" :projectParams="projectParams"/>
   </div>
 </template>
 <script>
@@ -322,17 +325,28 @@ import upload from "@/components/upload/upload";
 import uploadFile from "@/components/upload/uploadFile";
 import { download } from "@/utils/util";
 import contract from "./components/contract.vue"
+import project from "./components/project.vue"
 export default {
   components: {
     upload,
     uploadFile,
-    contract
+    contract,
+    project
   },
   data() {
     return {
       // 合同model
       contractModel:false,
       contractParams:{
+        id:'',
+        // 新诊佣金比例
+        newCustomerCommissionRatio:'',
+        // 复诊佣金比例
+        oldCustomerCommissionRatio:''
+      },
+      // 项目
+      projectContractModel:false,
+      projectParams:{
         id:''
       },
       // 归属公司
@@ -420,37 +434,6 @@ export default {
             align:'center',
             tooltip:true
           },
-          
-          {
-            title: "地址",
-            key: "address",
-            minWidth: 240,
-            tooltip:true
-          },
-          {
-            title: "经度",
-            key: "longitude",
-            minWidth: 140,
-            align:'center'
-          },
-          {
-            title: "纬度",
-            key: "latitude",
-            minWidth: 140,
-            align:'center'
-          },
-          {
-            title: "医院电话",
-            key: "phone",
-            minWidth: 160,
-            align:'center'
-          },
-          {
-            title: "城市",
-            key: "city",
-            minWidth: 100,
-            align:'center'
-          },
           {
             title: "可用时间",
             key: "dueTime",
@@ -496,6 +479,37 @@ export default {
             minWidth: 150,
             align:'center'
           },
+          {
+            title: "地址",
+            key: "address",
+            minWidth: 240,
+            tooltip:true
+          },
+          {
+            title: "经度",
+            key: "longitude",
+            minWidth: 140,
+            align:'center'
+          },
+          {
+            title: "纬度",
+            key: "latitude",
+            minWidth: 140,
+            align:'center'
+          },
+          {
+            title: "医院电话",
+            key: "phone",
+            minWidth: 160,
+            align:'center'
+          },
+          {
+            title: "城市",
+            key: "city",
+            minWidth: 100,
+            align:'center'
+          },
+          
           {
             title: "重单规则",
             key: "repeatOrderRule",
@@ -634,7 +648,7 @@ export default {
           {
             title: "操作",
             key: "",
-            minWidth: 200,
+            minWidth: 240,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -651,7 +665,7 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id } = params.row;
+                        const { id ,newCustomerCommissionRatio,oldCustomerCommissionRatio} = params.row;
                         // api.byIdGetHospitalInfo(id).then((res) => {
                         //   if (res.code === 0) {
                         //     if (res.data.hospitalInfo.contractUrl) {
@@ -663,10 +677,32 @@ export default {
                         // });
                         this.contractModel = true
                         this.contractParams.id = id
+                        this.contractParams.newCustomerCommissionRatio = newCustomerCommissionRatio
+                        this.contractParams.oldCustomerCommissionRatio = oldCustomerCommissionRatio
                       },
                     },
                   },
                   "合同"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.projectContractModel = true
+                        this.projectParams.id = id
+                      },
+                    },
+                  },
+                  "项目"
                 ),
                 h(
                   "Button",
@@ -1013,11 +1049,14 @@ export default {
                         // });
                         this.contractModel = true
                         this.contractParams.id = id
+                        this.contractParams.newCustomerCommissionRatio = newCustomerCommissionRatio
+                        this.contractParams.oldCustomerCommissionRatio = oldCustomerCommissionRatio
                       },
                     },
                   },
                   "合同"
                 ),
+                
                 h(
                   "Button",
                   {
@@ -1149,7 +1188,7 @@ export default {
         // 序号
         sort:null,
         // 派单顺序
-        sendOrder:null,
+        sendOrder:0,
         // 新诊佣金比例
         newCustomerCommissionRatio:null,
         // 复诊佣金比例
@@ -1265,46 +1304,46 @@ export default {
             message: "请输入纬度",
           },
         ],
-        phone: [
-          {
-            required: true,
-            message: "请输入医院电话",
-          },
-        ],
+        // phone: [
+        //   {
+        //     required: true,
+        //     message: "请输入医院电话",
+        //   },
+        // ],
         scaleTagList: [
           {
             required: true,
             message: "请选择医院级别",
           },
         ],
-        facilityTagList: [
-          {
-            required: true,
-            message: "请选择医院设施",
-          },
-        ],
+        // facilityTagList: [
+        //   {
+        //     required: true,
+        //     message: "请选择医院设施",
+        //   },
+        // ],
         cityId: [
           {
             required: true,
             message: "请选择城市",
           },
         ],
-        businessHours: [
-          {
-            required: true,
-            message: "请选择营业时间",
-          },
-          {
-            validator: (rule, value, callback) => {
-              if (!value.length) {
-                callback(new Error("请选择营业时间"));
-              } else {
-                callback();
-              }
-            },
-            trigger: "change",
-          },
-        ],
+        // businessHours: [
+        //   {
+        //     required: true,
+        //     message: "请选择营业时间",
+        //   },
+        //   {
+        //     validator: (rule, value, callback) => {
+        //       if (!value.length) {
+        //         callback(new Error("请选择营业时间"));
+        //       } else {
+        //         callback();
+        //       }
+        //     },
+        //     trigger: "change",
+        //   },
+        // ],
         dueTime: [
           {
             required: true,
@@ -1321,6 +1360,22 @@ export default {
     };
   },
   methods: {
+    // 保证金金额
+    securityDepositMoneyChange(){
+      if( this.form.securityDepositMoney >0){
+        this.form.securityDeposit = 0
+      }else{
+        this.form.securityDeposit = 1
+      }
+    },
+    // 年服务费金额
+    yearServiceMoneyChange(){
+      if(this.form.yearServiceMoney >0){
+        this.form.yearServiceFee = 0
+      }else{
+        this.form.yearServiceFee = 1
+      }
+    },
     // 获取派单顺序名称列表
     getsendOrderList() {
       api.sendOrderList().then((res) => {
@@ -1436,11 +1491,9 @@ export default {
           if (this.isEdit) {
             let { scaleTagList, facilityTagList, ...data } = this.form;
             data.tagIds = [...scaleTagList, ...facilityTagList];
-            data.businessHours = this.form.businessHours.join("-");
-            // data.contractUrl = this.form.contractUrl ? this.form.contractUrl : ""
-            data.dueTime = this.$moment(new Date(this.form.dueTime)).format(
-              "YYYY-MM-DD"
-            );
+            data.businessHours = this.form.businessHours == '' ?  '00:00-00:00' :  this.form.businessHours.join("-");
+            data.dueTime = this.$moment(new Date(this.form.dueTime)).format("YYYY-MM-DD");
+            data.phone = data.phone ? data.phone : '00000000000'
             this.flag = true;
             // 修改
             api.updateHospitalInfo(data).then((res) => {
@@ -1469,10 +1522,9 @@ export default {
               ...data
             } = this.form;
             data.tagIds = [...scaleTagList, ...facilityTagList];
-            data.businessHours = this.form.businessHours.join("-");
-            data.dueTime = this.$moment(new Date(this.form.dueTime)).format(
-              "YYYY-MM-DD"
-            );
+            data.businessHours = this.form.businessHours == '' ?  '00:00-00:00' :  this.form.businessHours.join("-");
+            data.dueTime = this.$moment(new Date(this.form.dueTime)).format("YYYY-MM-DD");
+            data.phone = data.phone ? data.phone : '00000000000'
             // data.contractUrl = this.form.contractUrl ? this.form.contractUrl : ""
             this.flag = true;
             // 添加

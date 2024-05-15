@@ -72,7 +72,18 @@ export default {
           minWidth:150,
           align:'center',
         },
-        
+        {
+          title: "新老客",
+          key: "isOldCustomerTrack",
+          minWidth:180,
+          align:'center',
+          render: (h, params) => {
+            return h(
+              "div",
+              params.row.isOldCustomerTrack == true ? '老客' : '新客'
+            );
+          },
+        },
         {
           title: "回访内容",
           key: "trackContent",
@@ -219,7 +230,7 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { keyword, startDate, endDate, employeeId } = this.params;
+      const { keyword, startDate, endDate, employeeId ,isOldCustomerTrack} = this.params;
       const { pageNum, pageSize } = this;
       const data = { 
         keyword, 
@@ -227,7 +238,8 @@ export default {
         endDate:this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
         employeeId, 
         pageNum, 
-        pageSize 
+        pageSize ,
+        isOldCustomerTrack:isOldCustomerTrack == -1 ? null : isOldCustomerTrack 
       };
       api.getAlreadyReturnVisitList(data).then((res) => {
         if (res.code === 0) {
@@ -267,7 +279,7 @@ export default {
 
     // 获取已追踪回访记录（分页）
     handlePageChange(pageNum) {
-      const { keyword, startDate, endDate, employeeId } = this.params;
+      const { keyword, startDate, endDate, employeeId ,isOldCustomerTrack} = this.params;
       const { pageSize } = this;
       const data = { 
         keyword, 
@@ -275,7 +287,8 @@ export default {
         endDate:this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
         employeeId, 
         pageNum, 
-        pageSize 
+        pageSize ,
+        isOldCustomerTrack:isOldCustomerTrack == -1 ? null : isOldCustomerTrack 
       };
       api.getAlreadyReturnVisitList(data).then((res) => {
         if (res.code === 0) {

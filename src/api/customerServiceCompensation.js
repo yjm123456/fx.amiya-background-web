@@ -37,3 +37,20 @@ export const deleteCustomerServiceCompensation = (id) => {
         method: "delete",
     });
 };
+
+// 根据派单人和派单时间获取供应链达人派单和上门数据
+export const getCooperationLiveAnchorSendAndVisitNum = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormOrder/getCooperationLiveAnchorSendAndVisitNum`,
+        method: "get",
+        params,
+    });
+};
+// 根据创建人和登记时间获取医美/带货客资加v量
+export const getAddWechatNumByCreateEmpInfoAndDate = (params) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/getAddWechatNumByCreateEmpInfoAndDate`,
+        method: "get",
+        params,
+    });
+};

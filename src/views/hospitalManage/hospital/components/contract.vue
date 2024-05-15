@@ -105,36 +105,6 @@ export default {
       query: {
         columns: [
           {
-            title: "合同生效时间",
-            key: "startDate",
-            minWidth: 120,
-            align: "center",
-            tooltip: true,
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.startDate
-                  ? this.$moment(params.row.startDate).format("YYYY-MM-DD")
-                  : ""
-              );
-            },
-          },
-          {
-            title: "合同过期时间",
-            key: "expireDate",
-            minWidth: 120,
-            align: "center",
-            tooltip: true,
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.expireDate
-                  ? this.$moment(params.row.expireDate).format("YYYY-MM-DD")
-                  : ""
-              );
-            },
-          },
-          {
             title: "名称",
             key: "name",
             minWidth: 200,
@@ -169,6 +139,49 @@ export default {
               ]);
             },
           },
+          {
+            title: "新诊佣金比例(%)",
+            key: "newCustomerCommissionRatio",
+            minWidth: 150,
+            align:'center'
+          },
+          {
+            title: "复诊佣金比例(%)",
+            key: "oldCustomerCommissionRatio",
+            minWidth: 150,
+            align:'center'
+          },
+          {
+            title: "合同生效时间",
+            key: "startDate",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.startDate
+                  ? this.$moment(params.row.startDate).format("YYYY-MM-DD")
+                  : ""
+              );
+            },
+          },
+          {
+            title: "合同过期时间",
+            key: "expireDate",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.expireDate
+                  ? this.$moment(params.row.expireDate).format("YYYY-MM-DD")
+                  : ""
+              );
+            },
+          },
+          
           
           {
             title: "操作",
@@ -433,7 +446,14 @@ export default {
       };
       api.getContractList(data).then((res) => {
         if (res.code === 0) {
-          this.query.data = res.data.contractList;
+          this.query.data = res.data.contractList.map(item=>{
+            return {
+              newCustomerCommissionRatio:this.contractParams.newCustomerCommissionRatio,
+              oldCustomerCommissionRatio:this.contractParams.oldCustomerCommissionRatio,
+              ...item,
+
+            }
+          })
         }
       });
     },

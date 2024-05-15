@@ -254,7 +254,7 @@ export default {
             align: "center",
           },
           {
-            title: "提成比例",
+            title: "助理提成比例",
             key: "performancePercent",
             minWidth: 160,
             align: "center",
@@ -267,7 +267,7 @@ export default {
             },
           },
           {
-            title: "提成金额",
+            title: "助理提成金额",
             key: "customerServicePerformance",
             minWidth: 160,
             align: "center",
@@ -389,35 +389,6 @@ export default {
               );
             },
           },
-           {
-            title: "提成比例",
-            key: "performancePercent",
-            minWidth: 120,
-            align: "center",
-            tooltip:true,
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.performancePercent
-                  ? params.row.performancePercent + '%'
-                  : 0
-              );
-            },
-          },
-          {
-            title: "提成金额",
-            key: "customerServicePerformance",
-            minWidth: 120,
-            align: "center",
-            tooltip:true
-          },
-          {
-            title: "薪资审核类型",
-            key: "checkTypeText",
-            minWidth: 140,
-            align: "center",
-            tooltip:true
-          },
           {
             title: "是否为稽查订单",
             key: "isInspectPerformance",
@@ -447,6 +418,36 @@ export default {
               }
             },
           },
+           {
+            title: "稽查提成比例",
+            key: "inspectPercent",
+            minWidth: 160,
+            align: "center",
+            tooltip:true,
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.inspectPercent
+                  ? params.row.inspectPercent + '%'
+                  : 0
+              );
+            },
+          },
+          {
+            title: "稽查提成金额",
+            key: "inspectPrice",
+            minWidth: 160,
+            align: "center",
+            tooltip:true
+          },
+          {
+            title: "薪资审核类型",
+            key: "checkTypeText",
+            minWidth: 140,
+            align: "center",
+            tooltip:true
+          },
+          
           {
             title: "助理确认业绩",
             key: "customerServiceOrderPerformance",
@@ -498,15 +499,24 @@ export default {
         });
         return;
       }
-      for (var i = 0; i < this.generateSalaryParams.generateSalaryList.length; i++) {
-          if (this.generateSalaryParams.generateSalaryList[i].customerServiceCompensationId) {
-            this.$Message.warning("您选中的订单存在已经生成过的薪资单，请认真核对后重试！");
-            this.generateSalaryModel = false
-            break;
-          }else{
-              this.generateSalaryModel = true
-            }
+      let checkBelongEmpName = this.generateSalaryParams.generateSalaryList.map(item=>item.checkBelongEmpName)
+      let firstValue = checkBelongEmpName[0]
+      let isFlag = checkBelongEmpName.every(value => value === firstValue)
+      if(isFlag == true){
+        this.generateSalaryModel = true
+      }else{
+        this.$Message.warning('生成薪资存在多名助理数据，请核对后重新选择！')
       }
+      // for (var i = 0; i < this.generateSalaryParams.generateSalaryList.length; i++) {
+      //     if (this.generateSalaryParams.generateSalaryList[i].customerServiceCompensationId) {
+      //       this.$Message.warning("您选中的订单存在已经生成过的薪资单，请认真核对后重试！");
+      //       this.generateSalaryModel = false
+      //       break;
+      //     }else{
+      //         this.generateSalaryModel = true
+      //       }
+      // }
+      
         //  this.generateSalaryModel =  (this.isModel == 1 || !this.generateSalaryParams.generateSalaryList) ? false : true ;
         // this.generateSalaryParams.returnBackPrice =this.returnBackPrice == 0 ? 0 : this.returnBackPrice.toFixed(2);
     },

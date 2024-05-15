@@ -7,14 +7,14 @@
           <div class="left_top">
             <Input
               v-model="query.keyword"
-              style="width:180px;"
+              style="width:170px;"
               placeholder="请输入订单号或商品名称"
               @keyup.enter.native="getOrderInfo()"
             />
             <DatePicker
               type="date"
               placeholder="下单开始日期"
-              style="width: 160px;margin-left: .625rem"
+              style="width: 140px;margin-left: .625rem"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
@@ -22,7 +22,7 @@
             <DatePicker
               type="date"
               placeholder="下单结束日期"
-              style="width: 160px; margin-left: .625rem"
+              style="width: 140px; margin-left: .625rem"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
@@ -84,7 +84,7 @@
             
             <Select
               v-model="query.belongEmpId"
-              style="width: 180px;"
+              style="width: 170px;"
               placeholder="请选择归属客服"
               filterable
             >
@@ -100,7 +100,7 @@
               v-model="query.contentPlatFormId"
               placeholder="请选择主播平台"
               @on-change="contentPlateChange(query.contentPlatFormId)"
-              style="width: 160px; margin-left: 10px"
+              style="width: 140px; margin-left: 10px"
               filterable
             >
               <Option
@@ -113,7 +113,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 160px; margin-left: 10px"
+              style="width: 140px; margin-left: 10px"
               :disabled="query.contentPlatFormId === null"
               filterable
             >
@@ -169,7 +169,7 @@
             
             <Select
                 v-model="query.baseLiveAnchorId"
-                style="width: 180px;"
+                style="width: 170px;"
                 placeholder="请选择基础主播"
                 filterable
                 transfer
@@ -183,16 +183,16 @@
             </Select>
               <Input
                 v-model="query.minAddOrderPrice"
-                placeholder="请输入最小下单金额"
-                style="width: 150px;margin-left: 10px"
+                placeholder="最小下单金额"
+                style="width: 130px;margin-left: 10px"
                 type="number"
                 namber
               />
               <span> — </span>
               <Input
                 v-model="query.maxAddOrderPrice"
-                placeholder="请输入最大下单金额"
-                style="width: 160px;"
+                placeholder="最大下单金额"
+                style="width: 140px;"
                 type="number"
                 namber
               />
@@ -253,6 +253,12 @@
             style="margin-left: 10px"
             v-has="{ role: ['fx.amiya.permission.CHANGE_BIND_SERVICE'] }"
             >调整绑定客服</Button
+          >
+          <Button
+            type="primary"
+            @click="fanMeetingClick()"
+            style="margin-left: 10px"
+            >生成粉丝见面会名单</Button
           >
         </div>
       </div>
@@ -378,6 +384,9 @@
     <duplicateCheck :duplicateModel.sync="duplicateModel" :recordingParams="recordingParams" />
     <!-- 编辑录单 -->
     <editRecording :editRecordingModel.sync="editRecordingModel" :recordingParams="recordingParams" />
+    <!-- 生成粉丝见面会名单 -->
+    <fanMeeting :fanMeetingModel.sync="fanMeetingModel" :fanMeetingParams="fanMeetingParams" @getOrderInfo="getOrderInfo" ref="fanMeeting"/>
+    <!-- :orderId="[...adjustCustomerServiceForm.orderId]" -->
   </div>
 </template>
 
@@ -394,6 +403,7 @@ import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhot
 import { download } from "@/utils/util";
 import detail from "@/components/contentDetail/detail.vue";
 import duplicateCheck from "./components/duplicateCheck.vue"
+import fanMeeting from "@/components/fanMeeting/fanMeeting.vue"
 import editRecording from "@/components/recording/editRecording"
 
 export default {
@@ -402,11 +412,16 @@ export default {
     viewCustomerPhotos,
     detail,
     duplicateCheck,
-    editRecording
+    editRecording,
+    fanMeeting
   },
   data() {
     return {
-      
+      // 生成粉丝见面会名单
+      fanMeetingModel:false,
+      fanMeetingParams:{
+        orderId:new Set()
+      },
       // 录单(待查重)
       duplicateModel:false,
       //编辑录单参数
@@ -1022,6 +1037,17 @@ export default {
     };
   },
   methods: {
+    // 生成粉丝见面会名单
+    fanMeetingClick(){
+      if (![...this.fanMeetingParams.orderId].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.fanMeetingModel = true
+    },
     // 客户来源
     getcustomerSourceList() {
       shoppingCartRegistrationApi.customerSourceList().then((res) => {
@@ -1163,19 +1189,23 @@ export default {
     handleSelect(selection, row) {
       // 调整归属客服
       this.adjustCustomerServiceForm.orderId.add(row.id);
+      this.fanMeetingParams.orderId.add(row.id);
     },
 
     handleCancels(selection, row) {
       // 调整归属客服
       this.adjustCustomerServiceForm.orderId.delete(row.id);
+      this.fanMeetingParams.orderId.delete(row.id);
     },
 
     handleSelectAll(selection) {
       if (selection && selection.length === 0) {
         this.adjustCustomerServiceForm.orderId.clear();
+        this.fanMeetingParams.orderId.clear();
       } else {
         selection.forEach((item) => {
           this.adjustCustomerServiceForm.orderId.add(item.id);
+          this.fanMeetingParams.orderId.add(item.id);
         });
       }
     },

@@ -20,6 +20,9 @@
         <div class="name" v-if="goodsNewsObj.liveAnchorName">
           主播：{{ goodsNewsObj.liveAnchorName }}
         </div>
+        <div class="assistant" >
+          主播助理：{{ detailObj.isSupportOrder==true ? detailObj.supportEmpName : detailObj.belongEmpName}}
+        </div>
         <div class="price" v-if="goodsNewsObj.price">
           {{ goodsNewsObj.price }}
           <span style="font-size:58px;margin-left:5px">元</span>
@@ -37,7 +40,7 @@ export default {
   components: {},
   props: {
     goodsNewsModel: Boolean,
-    id: String,
+    detailObj:Object
   },
   data() {
     return {
@@ -48,7 +51,7 @@ export default {
   methods: {
     // 喜报
     getOrderProsperity() {
-      api.orderProsperity(this.id).then((res) => {
+      api.orderProsperity(this.detailObj.id).then((res) => {
         if (res.code === 0) {
           this.goodsNewsObj = res.data.orderInfo;
         }
@@ -97,7 +100,7 @@ export default {
 }
 .price {
   text-align: center;
-  font-size: 70px;
+  font-size: 60px;
   color: red;
   font-weight: bold;
   display: flex;
@@ -108,7 +111,17 @@ export default {
   -webkit-text-fill-color: transparent;
   // margin-top: 15%;
   position: absolute;
-  top: 60%;
+  top: 62%;
+  left: 50%;
+  transform: translate(-50%);
+}
+.assistant{
+  text-align: center;
+  font-size: 18px;
+  color: red;
+  font-weight: bold;
+  position: absolute;
+  top: 60.5%;
   left: 50%;
   transform: translate(-50%);
 }

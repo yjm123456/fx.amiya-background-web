@@ -404,6 +404,7 @@
                 v-model="confirmForm.lastDealHospitalId"
                 placeholder="请选择到院医院"
                 filterable
+                @on-change="confirmForm.fansMeetingId = ''"
               >
                 <Option
                   v-for="item in hospitalInfo"
@@ -593,6 +594,36 @@
               ></Input>
             </FormItem>
           </Col> -->
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="粉丝见面会"
+              prop="fansMeetingId"
+              key="粉丝见面会"
+              
+            >
+              <Select
+                v-model="confirmForm.fansMeetingId"
+                placeholder="请选择粉丝见面会"
+                filterable
+                @on-change="getFansMeetingDetailsisAttendClick(confirmForm.fansMeetingId)"
+              >
+                <Option
+                  v-for="item in fansMeetingList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否参加过见面会" prop="isFansMeeting" key="是否参加过见面会">
+              <i-switch
+                v-model="confirmForm.isFansMeeting"
+                disabled
+              />
+            </FormItem>
+          </Col>
           <Col span="8" v-if="confirmForm.isFinish === true">
             <FormItem
               label="后期项目铺垫"
@@ -684,6 +715,11 @@
 import * as api from "@/api/orderManage";
 import * as hospitalManage from "@/api/hospitalManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
+import * as fansMeetingApi from "@/api/fansMeeting";
+import * as fansMeetingDetailsApi from "@/api/fansMeetingDetails";
+
+
+
 import messageBoard from "@/components/contentMessageBoard/contentMessageBoard.vue";
 import transactionStatus from "@/components/transactionStatus/transactionStatus";
 import upload from "@/components/upload/upload";
@@ -796,7 +832,11 @@ export default {
         // 消费类型
         consumptionType: null,
         // 明细
-        addContentPlatFormOrderDealDetailsVoList:[]
+        addContentPlatFormOrderDealDetailsVoList:[],
+        // 粉丝见面会id
+        fansMeetingId:'',
+        // 是否参加粉丝会
+        isFansMeeting:false,
       },
       confirmRuleValidate: {
         consumptionType: [
@@ -1675,8 +1715,10 @@ export default {
                         api.decryptoPhonesNew(data).then(res=>{
                           if(res.code ===0){
                             this.confirmParams.phone = res.data.phone
+                            
                           }
                         })
+                        
                       },
                     },
                   },
@@ -1858,11 +1900,41 @@ export default {
         hospitalRefundTypeList:{name:'全部退款类型',id:'-1'},
         // 手机号
         phone:''
-      }
+      },
+      //   粉丝见面会数据
+      fansMeetingList:[],
     };
   },
   methods: {
-    
+    // 是否参加过粉丝见面会
+    getFansMeetingDetailsisAttendClick(value){
+      const {lastDealHospitalId} = this.confirmForm
+      console.log(lastDealHospitalId)
+      if(!lastDealHospitalId){
+        this.$Message.warning('请先选择到院医院！')
+        return
+      }
+      const data = {
+        id:value,
+        phone:this.confirmParams.phone,
+        hospitalId:lastDealHospitalId
+      }
+      fansMeetingDetailsApi.getFansMeetingDetailsisAttend(data).then(res=>{
+        if(res.code === 0){
+          this.confirmForm.isFansMeeting=res.data.isAttend
+
+        }
+      })
+    },
+     // 获取有效的粉丝见面会信息 下拉框
+    getValidKeyAndValues() {
+      fansMeetingApi.getValidKeyAndValue().then((res) => {
+        if (res.code === 0) {
+          const { fansMeeting } = res.data;
+          this.fansMeetingList = fansMeeting;
+        }
+      });
+    },
     // 获取医院成交类型
     getHospitalDealTypeList(){
       api.getHospitalDealTypeList().then(res=>{
@@ -2015,7 +2087,9 @@ export default {
             invitationDocuments,
             dealPerformanceType,
             consumptionType,
-            addContentPlatFormOrderDealDetailsVoList
+            addContentPlatFormOrderDealDetailsVoList,
+            fansMeetingId,
+            isFansMeeting
           } = this.confirmForm;
           const data = {
             id,
@@ -2041,7 +2115,8 @@ export default {
             invitationDocuments,
             dealPerformanceType:dealPerformanceType ? dealPerformanceType : 0,
             consumptionType:consumptionType<0 ? null : consumptionType,
-            addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList
+            addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList,
+            fansMeetingId:isFansMeeting == true ? fansMeetingId : ''
           };
           if(isFinish == true){
             if(dealAmount == 0){
@@ -2474,6 +2549,7 @@ export default {
     this.getHospitalDealTypeList()
     this.getHospitalConsumptionTypeList()
     this.getHospitalRefundTypeList()
+    this.getValidKeyAndValues()
   },
 };
 </script>

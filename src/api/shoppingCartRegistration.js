@@ -93,6 +93,14 @@ export const importShoppingCartRegistionData = (data) => {
         data,
     });
 };
+// 导入小黄车登记列表2
+export const importTikTokAndVideoToShoppingCartRegistionData = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/importTikTokAndVideoToShoppingCartRegistionData`,
+        method: "put",
+        data,
+    });
+};
 // 获取带货产品类型列表
 export const shoppingCartTakeGoodsProductTypeList = () => {
     return http({

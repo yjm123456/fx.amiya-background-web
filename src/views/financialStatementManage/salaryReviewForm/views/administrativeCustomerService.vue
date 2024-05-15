@@ -194,10 +194,19 @@ export default {
         });
         return;
       }
-
-      this.administrationGenerateSalaryModel = true;
+      let assistantPerformance = this.filterCriteria.assistantPerformanceList.map(item=>{return item.checkBelongEmpName})
+      let auditPerformance = this.filterCriteria.auditPerformanceList.map(item=>item.inspectEmpName)
+      let concatList = assistantPerformance.concat(auditPerformance)
+      let firstValue = concatList[0]
+      let isFlag = concatList.every(value => value === firstValue)
+      if(isFlag == true){
+        this.administrationGenerateSalaryModel = true;
+      }else{
+        this.$Message.warning('生成薪资存在多名助理数据，请核对后重新选择！')
+      }
     },
   },
+  
   mounted() {
     this.getListData();
   },

@@ -623,6 +623,29 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="分诊"
+              prop="distributeConsulationTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入分诊(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="分诊"
+            >
+              <Input
+                v-model="form.distributeConsulationTarget"
+                placeholder="请输入分诊"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -1099,6 +1122,27 @@ export default {
               return h("div", params.row.potentialPerformanceCompleteRate + "%");
             },
           },
+          {
+            title: "分诊目标",
+            key: "distributeConsulationTarget",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "累计分诊数量",
+            key: "cumulativeDistributeConsulation",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "分诊目标完成率",
+            key: "distributeConsulationCompleteRate",
+            minWidth: 170,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.distributeConsulationCompleteRate + "%");
+            },
+          },
 
           {
             title: "创建日期",
@@ -1186,7 +1230,9 @@ export default {
                               // 有效业绩目标
                               effectivePerformanceTarget,
                               // 潜在业绩
-                              potentialPerformanceTarget
+                              potentialPerformanceTarget,
+                              // 分诊
+                              distributeConsulationTarget
                             } = res.data.liveAnchorMonthlyTargetAfterLivingInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.isEdit = true;
@@ -1214,6 +1260,7 @@ export default {
                             this.form.miniVanBadReviewsTarget = miniVanBadReviewsTarget;
                             this.form.effectivePerformanceTarget = effectivePerformanceTarget;
                             this.form.potentialPerformanceTarget = potentialPerformanceTarget;
+                            this.form.distributeConsulationTarget = distributeConsulationTarget;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -1388,7 +1435,9 @@ export default {
         // 有效业绩目标
         effectivePerformanceTarget: null,
         // 潜在业绩
-        potentialPerformanceTarget: null
+        potentialPerformanceTarget: null,
+        // 分诊
+        distributeConsulationTarget:null
       },
 
       ruleValidate: {
@@ -1621,7 +1670,8 @@ export default {
               subsequentPerformanceTarget,
               oldCustomerPerformanceTarget,
               effectivePerformanceTarget,
-              potentialPerformanceTarget
+              potentialPerformanceTarget,
+              distributeConsulationTarget
             } = this.form;
             const data = {
               id,
@@ -1647,7 +1697,8 @@ export default {
               newCustomerDealTarget,
               oldCustomerDealTarget,
               effectivePerformanceTarget,
-              potentialPerformanceTarget
+              potentialPerformanceTarget,
+              distributeConsulationTarget
               
             };
             this.isflag = true
@@ -1692,7 +1743,8 @@ export default {
               subsequentPerformanceTarget,
               oldCustomerPerformanceTarget,
               effectivePerformanceTarget,
-              potentialPerformanceTarget
+              potentialPerformanceTarget,
+              distributeConsulationTarget
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -1717,7 +1769,8 @@ export default {
               newCustomerDealTarget,
               oldCustomerDealTarget,
               effectivePerformanceTarget,
-              potentialPerformanceTarget
+              potentialPerformanceTarget,
+              distributeConsulationTarget
               
             };
             this.isflag = true

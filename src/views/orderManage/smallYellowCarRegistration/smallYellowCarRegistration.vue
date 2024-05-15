@@ -1807,7 +1807,7 @@ export default {
 
       form: {
         // 登记时间
-        recordDate: "",
+        recordDate:  this.$moment().format("YYYY-MM-DD"),
         // 渠道id
         contentPlatFormId: "",
         // 主播id

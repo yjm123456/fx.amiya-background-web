@@ -122,7 +122,7 @@ export default {
             align: "center",
           },
           {
-            title: "提成比例",
+            title: "助理提成比例",
             key: "performancePercent",
             minWidth: 160,
             align: "center",
@@ -135,7 +135,7 @@ export default {
             },
           },
           {
-            title: "提成金额",
+            title: "助理提成金额",
             key: "customerServicePerformance",
             minWidth: 160,
             align: "center",
@@ -257,28 +257,7 @@ export default {
               );
             },
           },
-           {
-            title: "提成比例",
-            key: "performancePercent",
-            minWidth: 120,
-            align: "center",
-            tooltip:true,
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.performancePercent
-                  ? params.row.performancePercent + '%'
-                  : 0
-              );
-            },
-          },
-          {
-            title: "提成金额",
-            key: "customerServicePerformance",
-            minWidth: 120,
-            align: "center",
-            tooltip:true
-          },
+          
           {
             title: "薪资审核类型",
             key: "checkTypeText",

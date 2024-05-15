@@ -365,7 +365,7 @@ const appointment = [{
     },
     component: () =>
         import ("@/views/appointment/appointmentCall/appointmentCall.vue"),
-}, , {
+}, {
     path: "/customerAppointmentSchedule",
     name: "customerAppointmentSchedule",
     meta: {
@@ -376,6 +376,17 @@ const appointment = [{
     },
     component: () =>
         import ("@/views/appointment/customerAppointmentSchedule/customerAppointmentSchedule.vue"),
+}, {
+    path: "/fanMeeting",
+    name: "fanMeeting",
+    meta: {
+        title: "粉丝见面会",
+        keepAlive: false,
+        isTag: true,
+        openName: ['预约'],
+    },
+    component: () =>
+        import ("@/views/appointment/fanMeeting/fanMeeting.vue"),
 }, ];
 
 
@@ -1661,6 +1672,18 @@ const operationManage = [{
         component: () =>
             import ("@/views/operationManage/tiktokCommentsList/tiktokCommentsList.vue"),
     },
+    {
+        path: "/assistantPerformanceGoals",
+        name: "assistantPerformanceGoals",
+        meta: {
+            title: "助理业绩目标",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/assistantPerformanceGoals/assistantPerformanceGoals.vue"),
+    },
 ];
 /**
  * 财务对账单
@@ -2024,6 +2047,18 @@ const businessMange = [{
         },
         component: () =>
             import ("@/views/businessMange/afterLiveStreaming/afterLiveStreaming.vue"),
+    },
+    {
+        path: "/operationsDashboard",
+        name: "operationsDashboard",
+        meta: {
+            title: "运营看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/operationsDashboard/operationsDashboard.vue"),
     }
 ];
 

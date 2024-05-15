@@ -686,7 +686,8 @@ export default {
       this.form.settlePrice =  Math.round( (Number(this.form.currentInformationServiceFee) + Number(this.form.currentSystemUsagefee)) *1000 / 10 ) / 100
 
       // // 客服结算服务费
-      this.form.customerServiceSettlePrice = this.form.proportionOfInformationServiceFee+this.form.systemUsageFeeProportion <=30 ?  this.form.settlePrice :  this.form.checkPrice*0.3
+      let price3= this.form.proportionOfInformationServiceFee+this.form.systemUsageFeeProportion <=30 ?  this.form.settlePrice :  this.form.checkPrice*0.3
+      this.form.customerServiceSettlePrice = Math.round( price3 *1000 / 10 ) / 100
    },
     // 取消
     cancelSubmit(name) {

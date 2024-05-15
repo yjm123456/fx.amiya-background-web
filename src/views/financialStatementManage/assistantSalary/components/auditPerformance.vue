@@ -101,6 +101,20 @@ export default {
             tooltip: true,
           },
           {
+            title: "稽查比例",
+            key: "inspectPercent",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.inspectPercent
+                  ? params.row.inspectPercent + "%"
+                  : 0
+              );
+            },
+          },
+          {
             title: "稽查金额",
             key: "inspectPrice",
             minWidth: 140,

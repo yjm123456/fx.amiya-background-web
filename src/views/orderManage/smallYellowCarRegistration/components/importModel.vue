@@ -93,7 +93,7 @@ export default {
             //多个文件上传
             formData.append("file", file);
             this.flag=true
-            api.importShoppingCartRegistionData(formData).then((res) => {
+            api.importTikTokAndVideoToShoppingCartRegistionData(formData).then((res) => {
               if (res.code === 0) {
                 this.flag = false
                 this.handleCancel("importFileForm");

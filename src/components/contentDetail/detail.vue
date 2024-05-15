@@ -119,6 +119,9 @@
               <span>{{ detailObj.customerSourceText }} </span>
             </div>
             <div style="display:flex;align-items:flex-end">
+              <Button type="primary" @click="fanMeetingClick()"
+                style="margin-right:10px">生成粉丝见面会</Button
+              >
               <Button type="primary" @click="customerClick(detailObj)"
                 style="margin-right:10px">顾客信息</Button
               >
@@ -535,7 +538,7 @@
       :transactionStatusParams="transactionStatusParams"
     />
     <!-- 生成喜报 -->
-    <goodsNews :goodsNewsModel.sync="goodsNewsModel" :id="id"></goodsNews>
+    <goodsNews :goodsNewsModel.sync="goodsNewsModel"  :detailObj="detailObj"></goodsNews>
     <!--客户信息  -->
     <customerMessage :customerMessageModel.sync="customerMessageModel" 
     :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" ></customerMessage>
@@ -550,6 +553,8 @@
       @resetControlTrackReturnVisitDisplay="resetControlTrackReturnVisitDisplay"
       :params="trackReturnVisitComParams"
     />
+    <!-- 生成粉丝见面会名单 -->
+    <fanMeeting :fanMeetingModel.sync="fanMeetingModel" :fanMeetingParams="fanMeetingParams" />
   </div>
 </template>
 <script>
@@ -568,6 +573,7 @@ import customerMessage from "@/components/customerMessage/customerMessage"
 import appointmentSchedule from "./appointmentSchedule.vue"
 import messageBoard from "@/components/contentMessageBoard/contentMessageBoard.vue";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import fanMeeting from "@/components/fanMeeting/fanMeeting.vue"
 
 export default {
   props: {
@@ -583,10 +589,16 @@ export default {
     appointmentSchedule,
     messageBoard,
     dispatch,
-    trackReturnVisit
+    trackReturnVisit,
+    fanMeeting
   },
   data() {
     return {
+      // 生成粉丝见面会名单
+      fanMeetingModel:false,
+      fanMeetingParams:{
+        orderId:[]
+      },
       // 追踪回访组件参数
       trackReturnVisitComParams: {
         device: "",
@@ -714,6 +726,11 @@ export default {
   },
 
   methods: {
+    // 生成粉丝见面会名单
+    fanMeetingClick(){
+      this.fanMeetingModel = true
+      this.fanMeetingParams.orderId=[this.detailObj.id]
+    },
     // 追踪回访
     visitClick(value){
       const {encryptPhone,phone} = value

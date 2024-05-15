@@ -134,26 +134,6 @@ export default {
             align: "center",
           },
           {
-            title: "提成比例",
-            key: "performancePercent",
-            minWidth: 160,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.performancePercent
-                  ? params.row.performancePercent + "%"
-                  : 0
-              );
-            },
-          },
-          {
-            title: "提成金额",
-            key: "customerServicePerformance",
-            minWidth: 160,
-            align: "center",
-          },
-          {
             title: "审核客服业绩金额",
             key: "customerServiceSettlePrice",
             minWidth: 180,
@@ -273,42 +253,6 @@ export default {
             },
           },
           {
-            title: "提成比例",
-            key: "performancePercent",
-            minWidth: 120,
-            align: "center",
-            tooltip: true,
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.performancePercent
-                  ? params.row.performancePercent + "%"
-                  : 0
-              );
-            },
-          },
-          {
-            title: "提成金额",
-            key: "customerServicePerformance",
-            minWidth: 120,
-            align: "center",
-            tooltip: true,
-          },
-          {
-            title: "薪资审核类型",
-            key: "checkTypeText",
-            minWidth: 140,
-            align: "center",
-            tooltip: true,
-          },
-          {
-            title: "助理确认业绩",
-            key: "customerServiceOrderPerformance",
-            minWidth: 140,
-            align: "center",
-            tooltip: true,
-          },
-          {
             title: "是否为稽查订单",
             key: "isInspectPerformance",
             minWidth: 140,
@@ -337,17 +281,45 @@ export default {
               }
             },
           },
-
           {
-            title: "稽查人员",
-            key: "inspectEmpName",
+            title: "稽查提成比例",
+            key: "inspectPercent",
+            minWidth: 160,
+            align: "center",
+            tooltip: true,
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.inspectPercent
+                  ? params.row.inspectPercent + "%"
+                  : 0
+              );
+            },
+          },
+          {
+            title: "稽查提成金额",
+            key: "inspectPrice",
+            minWidth: 160,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "薪资审核类型",
+            key: "checkTypeText",
             minWidth: 140,
             align: "center",
             tooltip: true,
           },
           {
-            title: "稽查金额",
-            key: "inspectPrice",
+            title: "助理确认业绩",
+            key: "customerServiceOrderPerformance",
+            minWidth: 140,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "稽查人员",
+            key: "inspectEmpName",
             minWidth: 140,
             align: "center",
             tooltip: true,

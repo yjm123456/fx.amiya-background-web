@@ -40,3 +40,11 @@ export const deleteHealthValue = (params) => {
         params
     });
 };
+// 获取健康值列表（分页）  get
+export const getHealthValid = (params) => {
+    return http({
+        url: "/amiyabg/HealthValue/valid",
+        method: "get",
+        params,
+    });
+};

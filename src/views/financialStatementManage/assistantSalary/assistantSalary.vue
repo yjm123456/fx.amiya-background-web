@@ -29,7 +29,7 @@
             placeholder="请选择助理"
             filterable
             style="width: 180px;margin-left:10px"
-            :disabled="isDirector == 'false' && isCustomerService == 'true'"
+            :disabled="isButton == false"
           >
             <Option
               v-for="item in employeeAll"
@@ -448,10 +448,22 @@ export default {
       detailParams:{
         id:'',
         belongEmpId:null
-      }
+      },
+      isButton:false,
     };
   },
   methods: {
+    isAuthority() {
+      let currentRole = JSON.parse(sessionStorage.getItem("permissions")) ? JSON.parse(sessionStorage.getItem("permissions")) : [];
+      if (currentRole.includes("fx.amiya.permission.SELECT_ALL_PERFORMANCE") == false) {
+        this.query.belongEmpId = Number(sessionStorage.getItem('employeeId'))
+        this.isButton = false
+        return
+      }else{
+        this.isButton = true
+        this.query.belongEmpId = -1
+      }
+    },
     // 获取客服列表
     getCustomerServiceList() {
       orderApi.getCustomerServiceList().then((res) => {
@@ -480,7 +492,7 @@ export default {
         pageNum,
         pageSize,
         keyWord,
-        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId: this.isButton == false ? Number(sessionStorage.getItem('employeeId')) : belongEmpId == -1 ? null : belongEmpId,
         valid,
         startDate: startDate
           ? this.$moment(new Date(startDate)).format("YYYY-MM-DD")
@@ -512,7 +524,7 @@ export default {
         pageNum,
         pageSize,
         keyWord,
-        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId: this.isButton == false ? Number(sessionStorage.getItem('employeeId')) : belongEmpId == -1 ? null : belongEmpId,
         valid,
         startDate: startDate
           ? this.$moment(new Date(startDate)).format("YYYY-MM-DD")
@@ -533,6 +545,7 @@ export default {
   created() {
     this.getContractListClick();
     this.getCustomerServiceList();
+    this.isAuthority()
   },
 };
 </script>

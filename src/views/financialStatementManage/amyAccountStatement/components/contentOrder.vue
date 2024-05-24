@@ -635,6 +635,7 @@ export default {
                           this.form.totalServiceFee = -num
                           return
                         }else{
+                          // this.form.totalServiceFee = Math.round(Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000))*100)/100
                           this.form.totalServiceFee = Math.round(Number(((Number(checkPriceRight)*100)*(proportionOfInformationServiceFee+systemUsageFeeProportion)/10000))*100)/100
                           return
                         }
@@ -764,8 +765,18 @@ export default {
               });
           }
           // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
-          let num1 = Math.abs((Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100))
-          let num2 = Math.abs(Number(this.form.totalServiceFee)*100)
+          // let num1 = Math.abs((Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100))
+          // let num2 = Math.abs(Number(this.form.totalServiceFee)*100)
+          // console.log((Number(this.form.totalServiceFeeReconciled) *100),'已对账服务费合计*100')
+          // console.log((Number(this.form.totalServiceFeeReconciled) ),'已对账服务费合计')
+          // console.log((Number(this.form.settlePrice) *100),'服务费合计*100')
+          // console.log((Number(this.form.settlePrice) ),'服务费合计')
+          // console.log((Number(this.form.totalServiceFeeReconciled) *100 + Number(this.form.settlePrice)*100),'已对账服务费合计*100 + 服务费合计*100')
+          // console.log((Number(this.form.totalServiceFeeReconciled)  + Number(this.form.settlePrice)),'已对账服务费合计 + 服务费合计')
+          // console.log((Number(this.form.totalServiceFee) *100),'成交服务费合计*100')
+          // console.log((Number(this.form.totalServiceFee) ),'成交服务费合计')
+          let num1 = Math.abs((Number(this.form.totalServiceFeeReconciled) + Number(this.form.settlePrice)))
+          let num2 = Math.abs(Number(this.form.totalServiceFee))
           let content=""
           // 已对账服务费合计+当前对账单服务费合计不能大于成交服务费合计
           if(num1 > num2)

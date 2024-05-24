@@ -635,18 +635,24 @@ export default {
         targetFinishReword,
         otherPrice,
         otherChargebacks,
+        positionId,
+        beautyAddWechatPrice , 
+        takeGoodsAddWechatPrice ,
+        consulationCardPrice,
+        consulationCardAddWechatPrice,
+        cooperationLiveAnchorSendOrderPrice ,
+        cooperationLiveAnchorToHospitalPrice
       } = this.form;
-      let price =
-        salary +
-        customerServicePerformance +
-        toHospitalRateReword +
-        repeatPurchasesRateReword +
-        newCustomerToHospitalReword +
-        oldCustomerToHospitalReword +
-        targetFinishReword +
-        otherPrice -
-        otherChargebacks;
-      this.form.totalPrice = Math.round(price * 100) / 100;
+      if(positionId != 30){
+        let price =
+        salary + customerServicePerformance + toHospitalRateReword + repeatPurchasesRateReword + newCustomerToHospitalReword +  oldCustomerToHospitalReword + targetFinishReword +
+        otherPrice - otherChargebacks;
+        this.form.totalPrice = Math.round(price * 100) / 100;
+      }else{
+        let price =
+        salary + customerServicePerformance + beautyAddWechatPrice + takeGoodsAddWechatPrice +consulationCardPrice+consulationCardAddWechatPrice+cooperationLiveAnchorSendOrderPrice +cooperationLiveAnchorToHospitalPrice+otherPrice - otherChargebacks;
+        this.form.totalPrice = Math.round(price * 100) / 100;
+      }
     },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {

@@ -61,7 +61,7 @@
               :key="item.type"
               >{{ item.name }}</Option
             >
-          </Select> 
+          </Select>
           <Select
             v-model="query.createEmpId"
             placeholder="请选择上传人"
@@ -74,7 +74,7 @@
               :key="item.id"
               >{{ item.name }}</Option
             >
-          </Select> 
+          </Select>
           <!-- <Select
             v-model="query.checkState"
             placeholder="请选择审核状态"
@@ -94,13 +94,27 @@
             @click="getListWithPageByCustomerCompensation()"
             >查询</Button
           >
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="batchReviewClick()"
+            >批量审核</Button
+          >
         </div>
       </div>
     </Card>
 
     <Card class="container">
       <div>
-        <Table border :columns="query.columns" :data="query.data"></Table>
+        <Table
+          border
+          :columns="query.columns"
+          :data="query.data"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancels"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"
+        ></Table>
       </div>
       <div class="page_wrap">
         <Page
@@ -121,14 +135,31 @@
       :examineModel.sync="examineModel"
       :params="params"
       :checkedParams="checkedParams"
-      @getListWithPageByCustomerCompensation="getListWithPageByCustomerCompensation"
+      @getListWithPageByCustomerCompensation="
+        getListWithPageByCustomerCompensation
+      "
+    />
+    <!-- 批量审核 -->
+    <batchReview 
+      :batchReviewModel.sync="batchReviewModel"
+      :checkedParams="checkedParams"
+      :params="params"
+      @getListWithPageByCustomerCompensation="
+        getListWithPageByCustomerCompensation
+      "
     />
     <!-- 内容平台订单详情 -->
     <detail :detailModel.sync="detailModel" :detailList="detailList"></detail>
     <!-- 消费追踪订单详情 -->
-    <upgradeOrderDetail :upgradeOrderDetailModel.sync ="upgradeOrderDetailModel" :upgradeOrderObj="upgradeOrderObj"></upgradeOrderDetail>
+    <upgradeOrderDetail
+      :upgradeOrderDetailModel.sync="upgradeOrderDetailModel"
+      :upgradeOrderObj="upgradeOrderObj"
+    ></upgradeOrderDetail>
     <!-- 下单平台订单详情 -->
-    <orderDetail :detailModel.sync ="orderDetailModel" :detailList ="detailList"></orderDetail>
+    <orderDetail
+      :detailModel.sync="orderDetailModel"
+      :detailList="detailList"
+    ></orderDetail>
   </div>
 </template>
 <script>
@@ -137,16 +168,18 @@ import * as orderApi from "@/api/orderManage";
 import * as customerManageApi from "@/api/customerManage.js";
 
 import examine from "../components/examine.vue";
+import batchReview from "../components/batchReview.vue";
 import detail from "@/components/contentDetail/detail.vue";
-import upgradeOrderDetail from "@/components/upgradeOrderDetail/upgradeOrderDetail"
-import orderDetail from "@/components/orderDetail/detail.vue"
+import upgradeOrderDetail from "@/components/upgradeOrderDetail/upgradeOrderDetail";
+import orderDetail from "@/components/orderDetail/detail.vue";
 
 export default {
   components: {
     examine,
+    batchReview,
     detail,
     upgradeOrderDetail,
-    orderDetail
+    orderDetail,
   },
   props: {
     activeName: String,
@@ -154,7 +187,6 @@ export default {
   },
   data() {
     return {
-      
       // 查询
       query: {
         keyWord: "",
@@ -162,34 +194,41 @@ export default {
           .startOf("month")
           .format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
-        chooseHospitalId:-1,
-        isOldCustoemr:-1,
-        belongEmpId:-1,
-        checkState:0,
-        createEmpId:-1,
+        chooseHospitalId: -1,
+        isOldCustoemr: -1,
+        belongEmpId: -1,
+        checkState: 0,
+        createEmpId: -1,
         pageNum: 1,
         pageSize: 10,
         columns: [
+          {
+            type: "selection",
+            key: "_checked",
+            align: "center",
+            minWidth: 80,
+            fixed:'left'
+          },
           {
             title: "对账单编号",
             key: "recommandDocumentId",
             align: "center",
             minWidth: 180,
           },
-          
+
           {
             title: "医院",
             key: "hospitalName",
             align: "center",
             minWidth: 180,
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "来源",
             key: "orderFromText",
             minWidth: 120,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "订单号",
@@ -246,22 +285,22 @@ export default {
             key: "belongLiveAnchor",
             minWidth: 150,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
-          
+
           {
             title: "助理",
             key: "belongEmpName",
             minWidth: 150,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "上传人",
             key: "createEmpName",
             minWidth: 120,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "新/老客业绩",
@@ -295,7 +334,9 @@ export default {
                   },
                   params.row.compensationCheckStateText
                 );
-              } else if (params.row.compensationCheckStateText == "审核不通过") {
+              } else if (
+                params.row.compensationCheckStateText == "审核不通过"
+              ) {
                 return h(
                   "div",
                   {
@@ -323,7 +364,7 @@ export default {
             key: "",
             width: 180,
             align: "center",
-            fixed:'right',
+            fixed: "right",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -339,13 +380,19 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id,isOldCustomerText, customerServiceSettlePrice,orderPrice,recolicationPrice} = params.row;
+                        const {
+                          id,
+                          isOldCustomerText,
+                          customerServiceSettlePrice,
+                          orderPrice,
+                          recolicationPrice,
+                        } = params.row;
                         this.examineModel = true;
                         this.checkedParams.id = id;
-                        this.checkedParams.isOldCustomerText = isOldCustomerText
-                        this.checkedParams.customerServiceSettlePrice = customerServiceSettlePrice
-                        this.checkedParams.orderPrice = orderPrice
-                        this.checkedParams.recolicationPrice = recolicationPrice
+                        this.checkedParams.isOldCustomerText = isOldCustomerText;
+                        this.checkedParams.customerServiceSettlePrice = customerServiceSettlePrice;
+                        this.checkedParams.orderPrice = orderPrice;
+                        this.checkedParams.recolicationPrice = recolicationPrice;
                       },
                     },
                   },
@@ -364,44 +411,47 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { orderId,orderFromText } = params.row;
-                        switch(orderFromText){
-                          case '内容平台':
-                            orderApi.byIdContentPlateForm(orderId).then((res) => {
-                              if (res.code === 0) {
-                                this.detailModel = true;
-                                const { orderInfo } = res.data;
-                                this.detailList = [orderInfo];
-                              }
-                            });
+                        const { orderId, orderFromText } = params.row;
+                        switch (orderFromText) {
+                          case "内容平台":
+                            orderApi
+                              .byIdContentPlateForm(orderId)
+                              .then((res) => {
+                                if (res.code === 0) {
+                                  this.detailModel = true;
+                                  const { orderInfo } = res.data;
+                                  this.detailList = [orderInfo];
+                                }
+                              });
                             break;
-                          case '消费追踪':
-                            customerManageApi.byCustomerHospitalConsume(orderId).then((res) => {
-                              if (res.code === 0) {
-                                this.upgradeOrderDetailModel = true
-                                this.upgradeOrderObj= res.data.CustomerManageUpdateconsume
-                              }
-                            })
+                          case "消费追踪":
+                            customerManageApi
+                              .byCustomerHospitalConsume(orderId)
+                              .then((res) => {
+                                if (res.code === 0) {
+                                  this.upgradeOrderDetailModel = true;
+                                  this.upgradeOrderObj =
+                                    res.data.CustomerManageUpdateconsume;
+                                }
+                              });
                             break;
-                          case '下单平台':
+                          case "下单平台":
                             orderApi.byIdGetOrderInfo(orderId).then((res) => {
                               if (res.code === 0) {
-                                this.orderDetailModel = true
-                                const {order} = res.data;
-                                this.detailList= [order]
+                                this.orderDetailModel = true;
+                                const { order } = res.data;
+                                this.detailList = [order];
                               }
-                            })
+                            });
                             break;
                           default:
                             break;
                         }
-                      
                       },
                     },
                   },
                   "订单详情"
                 ),
-               
               ]);
             },
           },
@@ -409,34 +459,68 @@ export default {
         data: [],
         totalCount: 0,
       },
-      examineModel:false,
-      
+      // 审核
+      examineModel: false,
+      // 批量审核
+      batchReviewModel:false,
+
       // 审核参数
-      checkedParams:{
+      checkedParams: {
         // 新老客业绩
-        isOldCustomerText:'',
-        id:'',
+        isOldCustomerText: "",
+        id: "",
         // 审核客服业绩金额
-        customerServiceSettlePrice:0,
+        customerServiceSettlePrice: 0,
         // 订单金额
-        orderPrice:0,
+        orderPrice: 0,
         // 对账单面值
-        recolicationPrice:0
+        recolicationPrice: 0,
+        idList: new Set(),
       },
 
       // 内容平台订单详情model
-      detailModel:false,
+      detailModel: false,
       // 订单详情参数
-      detailList:[],
+      detailList: [],
       // 消费追踪订单详情model
-      upgradeOrderDetailModel:false,
-      upgradeOrderObj:{},
+      upgradeOrderDetailModel: false,
+      upgradeOrderObj: {},
       // 下单平台订单详情
-      orderDetailModel:false,
-      detailList:[]
+      orderDetailModel: false,
+      detailList: [],
     };
   },
   methods: {
+    // 批量审核
+    batchReviewClick(){
+      if (![...this.checkedParams.idList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.batchReviewModel = true;
+    },
+    handleSelect(selection, row) {
+      // 批量审核
+      this.checkedParams.idList.add(row.id);
+    },
+
+    handleCancels(selection, row) {
+      // 批量审核
+      this.checkedParams.idList.delete(row.id);
+    },
+
+    handleSelectAll(selection) {
+      if (selection && selection.length === 0) {
+        this.checkedParams.idList.clear();
+      } else {
+        selection.forEach((item) => {
+          this.checkedParams.idList.add(item.id);
+        });
+      }
+    },
     // 获取薪资审核表
     getListWithPageByCustomerCompensation() {
       this.$nextTick(() => {
@@ -453,7 +537,7 @@ export default {
         checkState,
         belongEmpId,
         isOldCustoemr,
-        createEmpId
+        createEmpId,
       } = this.query;
       const data = {
         pageNum,
@@ -473,7 +557,10 @@ export default {
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {
-          const { list, totalCount } = res.data.reconciliationDocumentsSettleInfo;
+          const {
+            list,
+            totalCount,
+          } = res.data.reconciliationDocumentsSettleInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
         }
@@ -491,7 +578,7 @@ export default {
         checkState,
         belongEmpId,
         isOldCustoemr,
-        createEmpId
+        createEmpId,
       } = this.query;
       const data = {
         pageNum,
@@ -511,7 +598,10 @@ export default {
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {
-          const { list, totalCount } = res.data.reconciliationDocumentsSettleInfo;
+          const {
+            list,
+            totalCount,
+          } = res.data.reconciliationDocumentsSettleInfo;
           this.query.data = list;
           this.query.totalCount = totalCount;
         }
@@ -572,9 +662,7 @@ export default {
       }
     },
   },
-  created() {
-    
-  },
+  created() {},
   watch: {
     activeName: {
       handler(value) {

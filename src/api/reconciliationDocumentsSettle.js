@@ -55,3 +55,11 @@ export const getListWithPageByCustomerInspectData = (params) => {
         params
     });
 };
+// 批量审核助理薪资
+export const batchCheckReconciliationDocumentsSettle = (data) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/batchCheckReconciliationDocumentsSettle",
+        method: "put",
+        data
+    });
+};

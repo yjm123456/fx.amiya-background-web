@@ -373,11 +373,11 @@ export default {
     isCheckType(){
       if(this.form.checkType == 2){
         // 供应链达人 助理确认薪资 = 订单金额*对应比例 
-        let price2 = this.checkedParams.orderPrice * 0.1
+        let price2 = this.checkedParams.recolicationPrice * 0.1
         this.form.customerServiceOrderPerformance = Math.round(price2 * 100) / 100;
       }else if(this.form.checkType == 3){
         // 天猫升单 助理确认薪资 = 订单金额*对应比例
-        let price3 = this.checkedParams.orderPrice * 0.25
+        let price3 = this.checkedParams.recolicationPrice * 0.25
         this.form.customerServiceOrderPerformance = Math.round(price3 * 100) / 100;
       }
     },
@@ -435,7 +435,8 @@ export default {
         case '2':
           this.checkBelongEmpIdChange();
           // 供应链达人 助理确认薪资 = 订单金额*对应比例 
-          let price2 = this.checkedParams.orderPrice * 0.1
+          // let price2 = this.checkedParams.orderPrice * 0.1
+          let price2 = this.checkedParams.recolicationPrice * 0.1
           this.form.customerServiceOrderPerformance = Math.round(price2 * 100) / 100;
           // 提成金额 = 助理确认业绩 * 提成比例
           let customerServicePerformance2 = customerServiceOrderPerformance * (this.form.performancePercent / 100)
@@ -447,7 +448,7 @@ export default {
         case '3':
           this.checkBelongEmpIdChange();
           // 天猫升单 助理确认薪资 = 订单金额*对应比例
-          let price3 = this.checkedParams.orderPrice * 0.25
+          let price3 = this.checkedParams.recolicationPrice * 0.25
           this.form.customerServiceOrderPerformance = Math.round(price3 * 100) / 100;
           // 提成金额 = 助理确认业绩 * 提成比例
           let customerServicePerformance = customerServiceOrderPerformance * (this.form.performancePercent / 100)
@@ -534,6 +535,7 @@ export default {
                         } else if (type == "老客业绩") {
                           // 提成比例
                           this.form.performancePercent = oldCustomerCommission;
+                          
                           // 计算提成金额
                           let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (oldCustomerCommission / 100);
                           this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
@@ -557,6 +559,7 @@ export default {
                         this.isCheckType()
                         return;
                       } else if (type == "老客业绩") {
+                        
                         // 提成比例
                         this.form.performancePercent = cooperateLiveanchorOldCustomerCommission;
                         // 计算提成金额

@@ -124,3 +124,10 @@ export const customerTypeList = () => {
         method: "get",
     });
 };
+// 获客归属客服渠道列表
+export const shoppingCartGetBelongChannelList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/shoppingCartGetBelongChannelList",
+        method: "get",
+    });
+};

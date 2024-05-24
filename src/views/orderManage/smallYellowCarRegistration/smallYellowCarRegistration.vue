@@ -66,13 +66,11 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-            </div>
-            <div style="margin:10px 0 ">
               <Select
                 v-model="query.isWriteOff"
                 placeholder="请选择核销状态"
                 filterable
-                style="width: 180px;"
+                style="width: 150px; margin-left: 10px"
               >
                 <Option
                   v-for="item in isWriteOffList"
@@ -81,11 +79,14 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+            </div>
+            <div style="margin:10px 0 ">
+              
               <Select
                 v-model="query.isConsultation"
                 placeholder="请选择面诊类型"
                 filterable
-                style="width: 150px; margin-left: 10px"
+                style="width: 180px;"
               >
                 <Option
                   v-for="item in isConsultationList"
@@ -147,6 +148,32 @@
                   >{{ item.emergencyLevelText }}</Option
                 >
               </Select>
+              <Select
+                v-model="query.baseLiveAnchorId"
+                placeholder="请选择主播"
+                filterable
+                style="width: 150px;margin-left: 10px"
+              >
+                <Option
+                  v-for="item in liveAnchorBaseInfos"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.shoppingCartRegistrationCustomerType"
+                placeholder="请选择客户类型"
+                filterable
+                style="width: 150px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in shoppingCartRegistrationCustomerTypeListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </div>
             <div>
               <Input
@@ -194,18 +221,32 @@
                 :disabled="query.isReturnBackPrice != 'true'"
               ></DatePicker>
               <Select
-                v-model="query.baseLiveAnchorId"
-                placeholder="请选择主播"
+                v-model="query.source"
+                placeholder="请选择客户来源"
                 filterable
                 style="width: 150px;margin-left: 10px"
               >
                 <Option
-                  v-for="item in liveAnchorBaseInfos"
+                  v-for="item in sourceListAll"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.name }}</Option
                 >
               </Select>
+              <Select
+                v-model="query.createBy"
+                placeholder="请选择创建人"
+                filterable
+                style="width: 150px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in employeeCreat"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              
             </div>
             <div style="margin-top:10px">
               <Select
@@ -238,45 +279,21 @@
                 :disabled="query.isBadReview != 'true'"
               ></DatePicker>
               <Select
-                v-model="query.source"
-                placeholder="请选择客户来源"
-                filterable
-                style="width: 150px;margin-left: 10px"
-              >
-                <Option
-                  v-for="item in sourceListAll"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.createBy"
-                placeholder="请选择创建人"
+                v-model="query.belongChannel"
+                placeholder="请选择归属部门"
                 filterable
                 style="width: 150px; margin-left: 10px"
               >
                 <Option
-                  v-for="item in employeeCreat"
+                  v-for="item in belongChannelListAll"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.name }}</Option
                 >
               </Select>
-              <Select
-                v-model="query.shoppingCartRegistrationCustomerType"
-                placeholder="请选择客户类型"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in shoppingCartRegistrationCustomerTypeListAll"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
+              
             </div>
+            
           </div>
           <div>
             <Button type="primary" style="margin:0 10px" @click="getSmallCar()"
@@ -395,6 +412,22 @@
                   :value="item.id"
                   :key="item.id"
                   >{{ item.contentPlatformName }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="归属部门" prop="belongChannel">
+              <Select
+                v-model="form.belongChannel"
+                placeholder="请选择归属部门"
+                filterable
+              >
+                <Option
+                  v-for="item in belongChannelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
                 >
               </Select>
             </FormItem>
@@ -930,6 +963,8 @@ export default {
       phoneCopy: "00000000000",
       // 查询
       query: {
+        // 归属部门
+        belongChannel:-1,
         shoppingCartRegistrationCustomerType: -1,
         // 创建人
         createBy: -1,
@@ -1085,6 +1120,12 @@ export default {
           {
             title: "渠道",
             key: "contentPlatFormName",
+            minWidth: 110,
+            align: "center",
+          },
+          {
+            title: "归属部门",
+            key: "belongChannelName",
             minWidth: 110,
             align: "center",
           },
@@ -1637,6 +1678,7 @@ export default {
                               getCustomerType,
                               createByEmpId,
                               shoppingCartRegistrationCustomerType,
+                              belongChannel
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1694,6 +1736,7 @@ export default {
                             this.form.getCustomerType = getCustomerType;
                             this.form.id = id;
                             this.form.shoppingCartRegistrationCustomerType = shoppingCartRegistrationCustomerType;
+                            this.form.belongChannel = belongChannel;
                             this.controlModal = true;
 
                             let index = recordDate.indexOf("T");
@@ -1876,9 +1919,17 @@ export default {
         createBy: Number(sessionStorage.getItem("employeeId")),
         // 客户类型
         shoppingCartRegistrationCustomerType: null,
+        // 归属部门
+        belongChannel:null
       },
 
       ruleValidate: {
+        belongChannel: [
+          {
+            required: true,
+            message: "请选择归属部门",
+          },
+        ],
         source: [
           {
             required: true,
@@ -2172,9 +2223,22 @@ export default {
       employeeLists: [],
       // 是否是管理员
       isDirector: sessionStorage.getItem("isDirector"),
+      // 归属部门
+      belongChannelList:[],
+      belongChannelListAll:[{id:-1,name:'全部部门'}],
     };
   },
   methods: {
+    // 获取归属部门
+    getshoppingCartGetBelongChannelList() {
+      api.shoppingCartGetBelongChannelList().then((res) => {
+        if (res.code === 0) {
+          const {belongChannelList} = res.data
+          this.belongChannelList =belongChannelList
+          this.belongChannelListAll =[...this.belongChannelListAll,...belongChannelList]
+        }
+      });
+    },
     resetControlTrackReturnVisitDisplay() {
       this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = false;
     },
@@ -2479,6 +2543,7 @@ export default {
         source,
         createBy,
         shoppingCartRegistrationCustomerType,
+        belongChannel
       } = this.query;
       const data = {
         pageNum,
@@ -2532,6 +2597,7 @@ export default {
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
         source: source == -1 ? null : source,
         createBy: createBy == -1 ? null : createBy,
+        belongChannel: belongChannel == -1 ? null : belongChannel,
       };
       if (!startDate || !endDate) {
         this.$Message.warning("请选择日期");
@@ -2595,6 +2661,7 @@ export default {
         source,
         createBy,
         shoppingCartRegistrationCustomerType,
+        belongChannel
       } = this.query;
       const data = {
         pageNum,
@@ -2648,6 +2715,7 @@ export default {
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
         source: source == -1 ? null : source,
         createBy: createBy == -1 ? null : createBy,
+        belongChannel: belongChannel == -1 ? null : belongChannel,
       };
       if (!startDate || !endDate) {
         this.$Message.warning("请选择日期");
@@ -2705,6 +2773,7 @@ export default {
         getCustomerType,
         createBy,
         shoppingCartRegistrationCustomerType,
+        belongChannel
       } = this.form;
       const data = {
         recordDate: time
@@ -2747,6 +2816,7 @@ export default {
         getCustomerType,
         createBy,
         shoppingCartRegistrationCustomerType,
+        belongChannel
       };
       // 归属地 国内是1 国外是2
       if (belongingPlace == 1) {
@@ -2870,6 +2940,7 @@ export default {
               productType,
               getCustomerType,
               shoppingCartRegistrationCustomerType,
+              belongChannel
             } = this.form;
             const data = {
               recordDate: time
@@ -2912,6 +2983,7 @@ export default {
               productType: source == 6 ? productType : 0,
               getCustomerType,
               shoppingCartRegistrationCustomerType,
+              belongChannel
             };
 
             // 归属地 国内是1 国外是2
@@ -3011,6 +3083,7 @@ export default {
     this.getShoppingCartGetCustomerTypeList();
     this.getEmployeeByPositionId();
     this.getcustomerTypeList();
+    this.getshoppingCartGetBelongChannelList()
   },
 };
 </script>

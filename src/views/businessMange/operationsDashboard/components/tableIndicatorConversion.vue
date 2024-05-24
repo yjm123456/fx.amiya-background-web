@@ -35,180 +35,6 @@ export default {
             align: "center",
           },
           {
-            title: "7日派单率",
-            key: "sevenDaySendOrderRate",
-            minWidth: 180,
-            align: "center",
-            renderHeader: (h, { column }) => {
-              return h('span', [
-              //   column.title,
-                h('span', {
-                  style: {
-                    // color: 'red',
-                  },
-                  domProps: {
-                    innerHTML: this.isTitle == '有效' ? '7日派单率' +'（' +this.sevenDaySendOrderHealthValue + '%）' : '7日派单率'
-                  //   + ' *',
-                  },
-                }),
-              ]);
-            },
-            render: (h, params) => {
-              if(this.isTitle == '有效'){
-                if (params.row.sevenDaySendOrderRate > this.sevenDaySendOrderHealthValue) {
-                  return h(
-                    "div",
-                    {
-                      style: {
-                        color: "#04B05D",
-                      },
-                    },
-                    params.row.sevenDaySendOrderRate + '%'
-                  );
-                } else if (params.row.sevenDaySendOrderRate< this.sevenDaySendOrderHealthValue) {
-                  return h(
-                    "div",
-                    {
-                      style: {
-                        color: "red",
-                      },
-                    },
-                    params.row.sevenDaySendOrderRate+ '%'
-                  );
-                }
-              }else{
-                 return h(
-                    "div",
-                    {
-                      style: {
-                        // color: "red",
-                      },
-                    },
-                    params.row.sevenDaySendOrderRate+ '%'
-                  );
-              }
-                
-            },
-          },
-          {
-            title: "15日上门率",
-            key: "fifteenDaySendOrderRate",
-            minWidth: 180,
-            align: "center",
-            renderHeader: (h, { column }) => {
-              return h('span', [
-              //   column.title,
-                h('span', {
-                  style: {
-                    // color: 'red',
-                  },
-                  domProps: {
-                    innerHTML: this.isTitle == '有效' ? '15日上门率' +'（' +this.fifteenVisitHealthValuue + '%）' : '15日上门率'
-                  //   + ' *',
-                  },
-                }),
-              ]);
-            },
-            render: (h, params) => {
-              if(this.isTitle == '有效'){
-                if (params.row.fifteenDaySendOrderRate > this.fifteenVisitHealthValuue) {
-                  return h(
-                    "div",
-                    {
-                      style: {
-                        color: "#04B05D",
-                      },
-                    },
-                    params.row.fifteenDaySendOrderRate + '%'
-                  );
-                } else if (params.row.fifteenDaySendOrderRate< this.fifteenVisitHealthValuue) {
-                  return h(
-                    "div",
-                    {
-                      style: {
-                        color: "red",
-                      },
-                    },
-                    params.row.fifteenDaySendOrderRate+ '%'
-                  );
-                }
-              }else{
-                 return h(
-                    "div",
-                    {
-                      style: {
-                        // color: "red",
-                      },
-                    },
-                    params.row.fifteenDaySendOrderRate+ '%'
-                  );
-              }
-                
-            },
-          },
-          {
-            title: "老客上门率",
-            key: "oldCustomerToHospitalRate",
-            minWidth: 170,
-            align: "center",
-            renderHeader: (h, { column }) => {
-              return h('span', [
-              //   column.title,
-                h('span', {
-                  style: {
-                    // color: 'red',
-                  },
-                  domProps: {
-                    innerHTML: this.isTitle == '有效' ? '老客上门率' +'（' +this.oldCustomerVisitHealthValue + '%）' : '老客上门率'
-                  //   + ' *',
-                  },
-                }),
-              ]);
-            },
-            render: (h, params) => {
-              if(this.isTitle == '有效'){
-                if (params.row.oldCustomerToHospitalRate > this.oldCustomerVisitHealthValue) {
-                  return h(
-                    "div",
-                    {
-                      style: {
-                        color: "#04B05D",
-                      },
-                    },
-                    params.row.oldCustomerToHospitalRate + '%'
-                  );
-                } else if (params.row.oldCustomerToHospitalRate< this.oldCustomerVisitHealthValue) {
-                  return h(
-                    "div",
-                    {
-                      style: {
-                        color: "red",
-                      },
-                    },
-                    params.row.oldCustomerToHospitalRate+ '%'
-                  );
-                }
-              }else{
-                 return h(
-                    "div",
-                    {
-                      style: {
-                        // color: "red",
-                      },
-                    },
-                    params.row.oldCustomerToHospitalRate+ '%'
-                  );
-              }
-                
-            },
-          },
-          {
-            title: "复购率",
-            key: "rePurchaseRate",
-            minWidth: 150,
-            align: "center",
-          },
-          {
             title: "加微率",
             key: "addWechatRate",
             minWidth: 160,
@@ -321,6 +147,62 @@ export default {
             },
           },
           {
+            title: "7日派单率",
+            key: "sevenDaySendOrderRate",
+            minWidth: 180,
+            align: "center",
+            renderHeader: (h, { column }) => {
+              return h('span', [
+              //   column.title,
+                h('span', {
+                  style: {
+                    // color: 'red',
+                  },
+                  domProps: {
+                    innerHTML: this.isTitle == '有效' ? '7日派单率' +'（' +this.sevenDaySendOrderHealthValue + '%）' : '7日派单率'
+                  //   + ' *',
+                  },
+                }),
+              ]);
+            },
+            render: (h, params) => {
+              if(this.isTitle == '有效'){
+                if (params.row.sevenDaySendOrderRate > this.sevenDaySendOrderHealthValue) {
+                  return h(
+                    "div",
+                    {
+                      style: {
+                        color: "#04B05D",
+                      },
+                    },
+                    params.row.sevenDaySendOrderRate + '%'
+                  );
+                } else if (params.row.sevenDaySendOrderRate< this.sevenDaySendOrderHealthValue) {
+                  return h(
+                    "div",
+                    {
+                      style: {
+                        color: "red",
+                      },
+                    },
+                    params.row.sevenDaySendOrderRate+ '%'
+                  );
+                }
+              }else{
+                 return h(
+                    "div",
+                    {
+                      style: {
+                        // color: "red",
+                      },
+                    },
+                    params.row.sevenDaySendOrderRate+ '%'
+                  );
+              }
+                
+            },
+          },
+          {
             title: "上门率",
             key: "toHospitalRate",
             minWidth: 160,
@@ -376,7 +258,62 @@ export default {
                 
             },
           },
-
+          {
+            title: "15日上门率",
+            key: "fifteenDaySendOrderRate",
+            minWidth: 180,
+            align: "center",
+            renderHeader: (h, { column }) => {
+              return h('span', [
+              //   column.title,
+                h('span', {
+                  style: {
+                    // color: 'red',
+                  },
+                  domProps: {
+                    innerHTML: this.isTitle == '有效' ? '15日上门率' +'（' +this.fifteenVisitHealthValuue + '%）' : '15日上门率'
+                  //   + ' *',
+                  },
+                }),
+              ]);
+            },
+            render: (h, params) => {
+              if(this.isTitle == '有效'){
+                if (params.row.fifteenDaySendOrderRate > this.fifteenVisitHealthValuue) {
+                  return h(
+                    "div",
+                    {
+                      style: {
+                        color: "#04B05D",
+                      },
+                    },
+                    params.row.fifteenDaySendOrderRate + '%'
+                  );
+                } else if (params.row.fifteenDaySendOrderRate< this.fifteenVisitHealthValuue) {
+                  return h(
+                    "div",
+                    {
+                      style: {
+                        color: "red",
+                      },
+                    },
+                    params.row.fifteenDaySendOrderRate+ '%'
+                  );
+                }
+              }else{
+                 return h(
+                    "div",
+                    {
+                      style: {
+                        // color: "red",
+                      },
+                    },
+                    params.row.fifteenDaySendOrderRate+ '%'
+                  );
+              }
+                
+            },
+          },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
@@ -433,6 +370,76 @@ export default {
                 
             },
           },
+          {
+            title: "老客上门率",
+            key: "oldCustomerToHospitalRate",
+            minWidth: 170,
+            align: "center",
+            renderHeader: (h, { column }) => {
+              return h('span', [
+              //   column.title,
+                h('span', {
+                  style: {
+                    // color: 'red',
+                  },
+                  domProps: {
+                    innerHTML: this.isTitle == '有效' ? '老客上门率' +'（' +this.oldCustomerVisitHealthValue + '%）' : '老客上门率'
+                  //   + ' *',
+                  },
+                }),
+              ]);
+            },
+            render: (h, params) => {
+              if(this.isTitle == '有效'){
+                if (params.row.oldCustomerToHospitalRate > this.oldCustomerVisitHealthValue) {
+                  return h(
+                    "div",
+                    {
+                      style: {
+                        color: "#04B05D",
+                      },
+                    },
+                    params.row.oldCustomerToHospitalRate + '%'
+                  );
+                } else if (params.row.oldCustomerToHospitalRate< this.oldCustomerVisitHealthValue) {
+                  return h(
+                    "div",
+                    {
+                      style: {
+                        color: "red",
+                      },
+                    },
+                    params.row.oldCustomerToHospitalRate+ '%'
+                  );
+                }
+              }else{
+                 return h(
+                    "div",
+                    {
+                      style: {
+                        // color: "red",
+                      },
+                    },
+                    params.row.oldCustomerToHospitalRate+ '%'
+                  );
+              }
+                
+            },
+          },
+          {
+            title: "复购率",
+            key: "rePurchaseRate",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.rePurchaseRate + '%'
+              );
+            },
+          },
+          
+          
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",

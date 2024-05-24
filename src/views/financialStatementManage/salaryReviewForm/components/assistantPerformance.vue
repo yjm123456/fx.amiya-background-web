@@ -434,7 +434,7 @@ export default {
         isOldCustoemr,
         createEmpId,
         isGenerateSalry
-      } = this.query;
+      } = this.filterCriteria;
       const data = {
         pageNum,
         pageSize:this.query.pageSize,

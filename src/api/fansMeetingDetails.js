@@ -7,6 +7,14 @@ export const getFansMeetingDetails = (params) => {
         params,
     });
 };
+// 医院端 获取粉丝见面会详情列表  分页
+export const getFansMeetingDetailsHospital = (params) => {
+    return http({
+        url: `/amiyabg/FansMeetingDetails/listWithPageByHospital`,
+        method: "get",
+        params,
+    });
+};
 // 添加粉丝见面会详情信息
 export const addFansMeetingDetails = (data) => {
     return http({

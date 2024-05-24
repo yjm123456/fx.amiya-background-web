@@ -104,7 +104,7 @@ export default {
                 data: totalPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
-                        color: '#6f7dfc'  // 折线的颜⾊
+                        color: '#2d8cf0'  // 折线的颜⾊
                     } 
                 },
             },
@@ -114,7 +114,7 @@ export default {
                 data: newCustomerPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
-                        color: '#3d92f3'  // 折线的颜⾊
+                        color: '#19be6b'  // 折线的颜⾊
                     } 
                 },
             },
@@ -124,7 +124,7 @@ export default {
                 data: oldCustomerPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
-                        color: '#ba5afa'  // 折线的颜⾊
+                        color: '#ff9900'  // 折线的颜⾊
                     } 
                 },
             },

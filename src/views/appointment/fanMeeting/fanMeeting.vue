@@ -219,6 +219,7 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
+                      disabled:params.row.valid == false
                     },
                     style: {
                       marginRight: "5px",
@@ -245,9 +246,11 @@ export default {
                     props: {
                       type: "error",
                       size: "small",
+                      disabled:params.row.valid == false
                     },
                     on: {
                       click: () => {
+                        
                         this.$Modal.confirm({
                           title: "过期提示",
                           content: "是否确认过期？",

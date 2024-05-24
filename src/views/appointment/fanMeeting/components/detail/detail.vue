@@ -168,7 +168,7 @@
                   v-model="form.fansMeetingId"
                   placeholder="请选择粉丝见面会"
                   filterable
-                  :disabled="title == '添加'"
+                  :disabled="title == '添加' ||  employeeType == 'hospitalEmployee'"
                 >
                   <Option
                     v-for="item in fansMeetingList"
@@ -206,17 +206,19 @@
                 ></Time-picker>
               </FormItem>
             </Col>
+            <!--  -->
             <Col span="8">
               <FormItem label="客户名称" prop="customerName">
                 <Input
                   v-model="form.customerName"
                   placeholder="请输入客户名称"
+                  :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"
                 ></Input>
               </FormItem>
             </Col>
             <Col span="8">
               <FormItem label="手机号" prop="phone">
-                <Input v-model="form.phone" placeholder="请输入手机号"></Input>
+                <Input v-model="form.phone" placeholder="请输入手机号" :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"></Input>
               </FormItem>
             </Col>
             <Col span="8">
@@ -241,6 +243,7 @@
                   v-model="form.isOldCustomer"
                   placeholder="请选择新老客"
                   filterable
+                  :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"
                 >
                   <Option
                     v-for="item in isOldCustomerList"
@@ -260,7 +263,7 @@
                   :disabled="isDirector == 'false' || employeeType == 'hospitalEmployee'"
                 >
                   <Option
-                    v-for="item in employeeType == 'amiyaEmployee' ? employeeList :employeeListHospital"
+                    v-for="item in employeeType == 'amiyaEmployee' ? employeeList : employeeListHospital"
                     :value="item.id"
                     :key="item.id"
                     >{{ item.name }}</Option
@@ -314,10 +317,10 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="预估消费" prop="planConsumption">
+              <FormItem label="预估消费(w)" prop="planConsumption">
                 <Input
                   v-model="form.planConsumption"
-                  placeholder="请输入预估消费"
+                  placeholder="请输入预估消费(w)"
                   type="number"
                   number
                 ></Input>
@@ -330,6 +333,7 @@
                   placeholder="请输入实际消费"
                   type="number"
                   number
+                  :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"
                 ></Input>
               </FormItem>
             </Col>
@@ -339,6 +343,7 @@
                   v-model="form.isToHospital"
                   placeholder="请选择是否到院"
                   filterable
+                  :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"
                 >
                   <Option
                     v-for="item in isHospitalList2"
@@ -355,6 +360,7 @@
                   v-model="form.isDeal"
                   placeholder="请选择是否成交"
                   filterable
+                  :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"
                 >
                   <Option
                     v-for="item in isDealList2"
@@ -610,7 +616,7 @@ export default {
         pageSize: 10,
         isToHospital: -1,
         isDeal: -1,
-        amiyaEmployeeId: -1,
+        amiyaEmployeeId:  -1,
         customerQuantity: -1,
         isOdCustomer: -1,
         startDealPrice: null,
@@ -655,6 +661,13 @@ export default {
             key: "planConsumption",
             minWidth: 200,
             align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                // params.row.appointmentDate ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") +" " + params.row.appointmentDetailsDate : ""
+                params.row.planConsumption + 'w'
+              );
+            },
           },
           {
             title: "顾客图片",
@@ -793,13 +806,21 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
+                      disabled:sessionStorage.getItem('employeeType') == 'amiyaEmployee' && params.row.amiyaConsulationId != Number(sessionStorage.getItem('employeeId'))
                     },
                     style: {
                       marginRight: "5px",
                     },
                     on: {
                       click: () => {
-                        const { id } = params.row;
+                        const { id,amiyaConsulationName } = params.row;
+                        if(amiyaConsulationName == '医院账户'){
+                          this.$Message.warning({
+                            content:"当前顾客是医院添加，如需修改请联系医院！",
+                            duration: 3,
+                          });
+                          return
+                        }
                         this.title = "编辑";
                         api.byIdFansMeetingDetails(id).then((res) => {
                           if (res.code === 0) {
@@ -905,6 +926,18 @@ export default {
             align: "center",
           },
           {
+            title: "客户昵称",
+            key: "customerName",
+            minWidth: 140,
+            align: "center",
+          },
+          {
+            title: "客户手机号",
+            key: "phone",
+            minWidth: 160,
+            align: "center",
+          },
+          {
             title: "预约时间",
             key: "appointmentDate",
             minWidth: 200,
@@ -923,15 +956,45 @@ export default {
             },
           },
           {
-            title: "客户昵称",
-            key: "customerName",
-            minWidth: 140,
+            title: "预估消费",
+            key: "planConsumption",
+            minWidth: 200,
             align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                // params.row.appointmentDate ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") +" " + params.row.appointmentDetailsDate : ""
+                params.row.planConsumption + 'w'
+              );
+            },
           },
           {
-            title: "客户手机号",
-            key: "phone",
-            minWidth: 160,
+            title: "顾客图片",
+            key: "customerPictureUrl",
+            align: "center",
+            minWidth: 120,
+            render: (h, params) => {
+              return h("viewer", {}, [
+                params.row.customerPictureUrl
+                  ? h("img", {
+                      style: {
+                        width: "50px",
+                        height: "50px",
+                        margin: "5px 0",
+                        verticalAlign: "middle",
+                      },
+                      attrs: {
+                        src: params.row.customerPictureUrl,
+                      },
+                    })
+                  : "",
+              ]);
+            },
+          },
+          {
+            title: "备注",
+            key: "remark",
+            minWidth: 200,
             align: "center",
           },
           {
@@ -995,40 +1058,101 @@ export default {
             minWidth: 160,
             align: "center",
           },
+          
+          
+          
           {
-            title: "预估消费",
-            key: "planConsumption",
-            minWidth: 200,
+            title: "操作",
+            key: "",
+            width: 100,
             align: "center",
-          },
-          {
-            title: "顾客图片",
-            key: "customerPictureUrl",
-            align: "center",
-            minWidth: 120,
+            fixed: "right",
             render: (h, params) => {
-              return h("viewer", {}, [
-                params.row.customerPictureUrl
-                  ? h("img", {
-                      style: {
-                        width: "50px",
-                        height: "50px",
-                        margin: "5px 0",
-                        verticalAlign: "middle",
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id ,amiyaConsulationName } = params.row;
+                        if(amiyaConsulationName != '医院账户'){
+                          this.$Message.warning({
+                            content:"当前顾客不是该医院添加，如需修改请联系啊美雅！",
+                            duration: 3,
+                          });
+                          return
+                        }
+                        this.title = "编辑";
+                        api.byIdFansMeetingDetails(id).then((res) => {
+                          if (res.code === 0) {
+                            this.fansMeetingDetailModel = true;
+                            const {
+                              id,
+                              fansMeetingId,
+                              appointmentDate,
+                              appointmentDetailsDate,
+                              customerName,
+                              phone,
+                              customerQuantity,
+                              isOldCustomer,
+                              amiyaConsulationId,
+                              hospitalConsulationName,
+                              city,
+                              travelInformation,
+                              isNeedDriver,
+                              hotelPlan,
+                              planConsumption,
+                              remark,
+                              customerPictureUrl,
+                              isToHospital,
+                              isDeal,
+                              cumulativeDealPrice
+                            } = res.data.fansMeetingDetails;
+                            this.form.id = id;
+                            this.form.fansMeetingId = fansMeetingId;
+                            this.form.appointmentDate = appointmentDate
+                              ? this.$moment(appointmentDate).format(
+                                  "YYYY-MM-DD"
+                                )
+                              : null;
+                            this.form.appointmentDetailsDate = appointmentDetailsDate.split(
+                              "-"
+                            );
+                            this.form.isToHospital = isToHospital == true ? 'true' : 'false';
+                            this.form.isDeal = isDeal == true ? 'true' : 'false';
+                            this.form.cumulativeDealPrice = cumulativeDealPrice;
+                            this.form.customerName = customerName;
+                            this.form.phone = phone;
+                            this.form.customerQuantity = customerQuantity;
+                            this.form.isOldCustomer = String(isOldCustomer);
+                            this.form.amiyaConsulationId = amiyaConsulationId;
+                            this.form.hospitalConsulationName = hospitalConsulationName;
+                            this.form.city = city;
+                            this.form.travelInformation = travelInformation;
+                            this.form.isNeedDriver = String(isNeedDriver);
+                            this.form.hotelPlan = hotelPlan;
+                            this.form.planConsumption = planConsumption;
+                            this.form.remark = remark;
+                            this.form.customerPictureUrl = customerPictureUrl;
+                            this.uploadObj.uploadList = customerPictureUrl
+                              ? [this.form.customerPictureUrl]
+                              : [];
+                          }
+                        });
                       },
-                      attrs: {
-                        src: params.row.customerPictureUrl,
-                      },
-                    })
-                  : "",
+                    },
+                  },
+                  "修改"
+                ),
               ]);
             },
-          },
-          {
-            title: "备注",
-            key: "remark",
-            minWidth: 200,
-            align: "center",
           },
         ],
         data: [],
@@ -1087,13 +1211,26 @@ export default {
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
       };
-      api.getFansMeetingDetails(data).then((res) => {
-        if (res.code === 0) {
-          const { list, totalCount } = res.data.fansMeetingDetails;
-          this.query.data = list;
-          this.query.totalCount = totalCount;
-        }
-      });
+      // 啊美雅系统展示
+      if(sessionStorage.getItem('employeeType') == 'amiyaEmployee'){
+        api.getFansMeetingDetails(data).then((res) => {
+          if (res.code === 0) {
+            const { list, totalCount } = res.data.fansMeetingDetails;
+            this.query.data = list;
+            this.query.totalCount = totalCount;
+          }
+        });
+      }else{
+        // 医院端展示列表
+        api.getFansMeetingDetailsHospital(data).then((res) => {
+          if (res.code === 0) {
+            const { list, totalCount } = res.data.fansMeetingDetails;
+            this.query.data = list;
+            this.query.totalCount= totalCount;
+          }
+        });
+      }
+      
     },
     handlePageSizeChange(pageSize) {
       this.query.pageSize = pageSize;
@@ -1117,13 +1254,26 @@ export default {
         startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
       };
-      api.getFansMeetingDetails(data).then((res) => {
-        if (res.code === 0) {
-          const { list, totalCount } = res.data.fansMeetingDetails;
-          this.query.data = list;
-          this.query.totalCount = totalCount;
-        }
-      });
+      // 啊美雅端展示列表数据
+      if(sessionStorage.getItem('employeeType') == 'amiyaEmployee'){
+        api.getFansMeetingDetails(data).then((res) => {
+          if (res.code === 0) {
+            const { list, totalCount } = res.data.fansMeetingDetails;
+            this.query.data = list;
+            this.query.totalCount = totalCount;
+          }
+        });
+      }else{
+        // 医院端展示列表
+        api.getFansMeetingDetailsHospital(data).then((res) => {
+          if (res.code === 0) {
+            const { list, totalCount } = res.data.fansMeetingDetails;
+            this.query.data = list;
+            this.query.totalCount = totalCount;
+          }
+        });
+      }
+      
     },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
@@ -1271,7 +1421,9 @@ export default {
         this.detailModels = detailModel;
         if (detailModel == true) {
           this.getFansMeetingDetailsInfo();
-          this.getCustomerServiceLists();
+          if(sessionStorage.getItem('employeeType') == 'amiyaEmployee'){
+            this.getCustomerServiceLists();
+          }
           this.getValidKeyAndValues();
           
         }

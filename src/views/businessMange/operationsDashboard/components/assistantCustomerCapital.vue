@@ -24,30 +24,6 @@ export default {
             align: "center",
           },
           {
-            title: "7日派单率",
-            key: "sevenDaySendOrderRate",
-            minWidth: 120,
-            align: "center",
-          },
-          {
-            title: "15日上门率",
-            key: "fifteenDaySendOrderRate",
-            minWidth: 140,
-            align: "center",
-          },
-          {
-            title: "老客上门率",
-            key: "oldCustomerToHospitalRate",
-            minWidth: 120,
-            align: "center",
-          },
-          {
-            title: "复购率",
-            key: "rePurchaseRate",
-            minWidth: 100,
-            align: "center",
-          },
-          {
             title: "加微率",
             key: "addWechatRate",
             minWidth: 100,
@@ -60,15 +36,39 @@ export default {
             align: "center",
           },
           {
+            title: "7日派单率",
+            key: "sevenDaySendOrderRate",
+            minWidth: 120,
+            align: "center",
+          },
+          {
             title: "上门率",
             key: "toHospitalRate",
             minWidth: 100,
             align: "center",
           },
           {
+            title: "15日上门率",
+            key: "fifteenDaySendOrderRate",
+            minWidth: 140,
+            align: "center",
+          },
+          {
             title: "新客成交率",
             key: "newCustomerDealRate",
             minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "老客上门率",
+            key: "oldCustomerToHospitalRate",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "复购率",
+            key: "rePurchaseRate",
+            minWidth: 100,
             align: "center",
           },
           {

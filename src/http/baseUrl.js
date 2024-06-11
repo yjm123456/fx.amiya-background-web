@@ -6,3 +6,5 @@ export const callRecordBaseUrl = process.env.VUE_APP_callRecordBaseUrl;
 export const wsUrl = process.env.VUE_APP_wsUrl;
 // 上传图片/视频/文件  都用线上地址
 export const uploadUrl = process.env.VUE_APP_uploadUrl;
+// 用于获取地址
+export const processEnv = process.env;

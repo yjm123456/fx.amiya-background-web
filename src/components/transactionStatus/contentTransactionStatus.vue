@@ -262,6 +262,37 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="粉丝见面会"
+              prop="fansMeetingId"
+              key="粉丝见面会"
+              
+            >
+              <Select
+                v-model="confirmForm.fansMeetingId"
+                placeholder="请选择粉丝见面会"
+                filterable
+                @on-change="getFansMeetingDetailsisAttendClick(confirmForm.fansMeetingId)"
+              >
+                <Option
+                  v-for="item in fansMeetingList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <div style="color:red;font-size:13px">非必要不用选</div>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem label="是否参加过见面会" prop="isFansMeeting" key="是否参加过见面会">
+              <i-switch
+                v-model="confirmForm.isFansMeeting"
+                disabled
+              />
+            </FormItem>
+          </Col>
           <!-- <FormItem
           label="佣金比例(%)"
           prop="commissionRatio"
@@ -361,6 +392,8 @@ import upload from "@/components/upload/upload";
 import viewImg from "./viewImg.vue";
 import detailTable from '@/components/dealDetailTable/dealDetailTable.vue';
 import { addCustomerAppointmentSchedule } from '../../api/customerAppointmentSchedule';
+import * as fansMeetingDetailsApi from "@/api/fansMeetingDetails";
+import * as fansMeetingApi from "@/api/fansMeeting";
 
 export default {
   components: {
@@ -375,6 +408,8 @@ export default {
   },
   data() {
     return {
+      //   粉丝见面会数据
+      fansMeetingList:[],
       isLoading:false,
       // 成交明细
       contentPlatFormOrderDealDetails:[],
@@ -462,7 +497,11 @@ export default {
         // 消费类型
         consumptionType: null,
         // 明细
-        addContentPlatFormOrderDealDetailsVoList:[]
+        addContentPlatFormOrderDealDetailsVoList:[],
+        // 粉丝见面会id
+        fansMeetingId:'',
+        // 是否参加粉丝会
+        isFansMeeting:false,
       },
       confirmRuleValidate: {
         consumptionType: [
@@ -896,7 +935,34 @@ export default {
     };
   },
   methods: {
-    
+     // 获取有效的粉丝见面会信息 下拉框
+    getValidKeyAndValues() {
+      fansMeetingApi.getValidKeyAndValue().then((res) => {
+        if (res.code === 0) {
+          const { fansMeeting } = res.data;
+          this.fansMeetingList = fansMeeting;
+        }
+      });
+    },
+    // 是否参加过粉丝见面会
+    getFansMeetingDetailsisAttendClick(value){
+      const {lastDealHospitalId} = this.confirmForm
+      if(!lastDealHospitalId){
+        this.$Message.warning('请先选择到院医院！')
+        return
+      }
+      const data = {
+        id:value,
+        phone:this.confirmParams.phone,
+        hospitalId:lastDealHospitalId
+      }
+      fansMeetingDetailsApi.getFansMeetingDetailsisAttend(data).then(res=>{
+        if(res.code === 0){
+          this.confirmForm.isFansMeeting=res.data.isAttend
+
+        }
+      })
+    },
     // 获取医院成交类型
     getHospitalDealTypeList(){
       api.getHospitalDealTypeList().then(res=>{
@@ -1048,7 +1114,9 @@ export default {
             invitationDocuments,
             dealPerformanceType,
             consumptionType,
-            addContentPlatFormOrderDealDetailsVoList
+            addContentPlatFormOrderDealDetailsVoList,
+            fansMeetingId,
+            isFansMeeting
           } = this.confirmForm;
           // 判断createBy与employeeId相等时 只提交该账号添加的数据
           let addContentPlatFormOrderDealDetailsVoLists = []
@@ -1089,7 +1157,8 @@ export default {
             dealPerformanceType:dealPerformanceType ? dealPerformanceType : 0,
             consumptionType:consumptionType <0 ? null : consumptionType,
             // addContentPlatFormOrderDealDetailsVoList:isFinish == false ? [] : addContentPlatFormOrderDealDetailsVoList
-            addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoLists
+            addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoLists,
+            fansMeetingId:isFansMeeting == true ? fansMeetingId : ''
           };
           if(isFinish == true){
             if(dealAmount == 0){
@@ -1274,6 +1343,7 @@ export default {
     transactionStatusParams: {
       handler(transactionStatusParams) {
         this.geTransactionStatus();
+        this.getValidKeyAndValues()
       },
       deep: true,
     },

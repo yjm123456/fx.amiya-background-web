@@ -15,6 +15,60 @@ export const getTotalAchievementAndDateSchedule = (params) => {
         params
     });
 };
+
+// 根据条件获取新老客业绩占比（分组）
+export const getNewOrOldCustomerCompare = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getNewOrOldCustomerCompare",
+        method: "get",
+        params
+    });
+};
+// 根据条件获取新老客业绩占比（助理与机构）
+export const getNewOrOldCustomerCompareByEmployeeAndHospital = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getNewOrOldCustomerCompareByEmployeeAndHospital",
+        method: "get",
+        params
+    });
+};
+//流量和客户转化情况
+export const companyTransformData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/companyTransformData",
+        method: "get",
+        params
+    });
+};
+// 助理流量和客户转化情况
+export const assistantTransformData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantTransformData",
+        method: "get",
+        params
+    });
+};
+// 机构转化情况
+export const hospitalTransformData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/hospitalTransformData",
+        method: "get",
+        params
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 获取客户运营情况数据
 export const getCustomerAnalizeData = (params) => {
     return http({

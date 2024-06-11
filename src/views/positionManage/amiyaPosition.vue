@@ -61,7 +61,7 @@
         <FormItem label="是否查看带货板块" prop="readTakeGoodsData" key="是否查看带货板块" v-if="form.readDataCenter == true">
           <i-switch v-model="form.readTakeGoodsData" />
         </FormItem>
-        <FormItem label="查看主播数据" prop="readLiveAnchorData" key="查看主播数据">
+        <FormItem label="个人中心权限" prop="readLiveAnchorData" key="个人中心权限">
           <i-switch v-model="form.readLiveAnchorData" />
         </FormItem>
       </Form>
@@ -329,7 +329,7 @@ export default {
             },
           },
           {
-            title: "查看主播数据",
+            title: "个人中心权限",
             key: "readLiveAnchorData",
             align:'center',
             minWidth:140,
@@ -543,7 +543,7 @@ export default {
         isDirector:false,
         // 是否查看数据中心
         readDataCenter:false,
-        // 是否可查看主播数据
+        // 是否可个人中心权限
         readLiveAnchorData:false,
         // 是否查看自播达人数据
         readSelfLiveAnchorData:false,

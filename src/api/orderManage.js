@@ -1319,6 +1319,15 @@ export const checkOrder = (data) => {
         data,
     });
 };
+// 对账单审核 下单平台审核订单
+export const checkOrderState = (data) => {
+    return http({
+        url: `/amiyabg/Order/checkOrderState`,
+        method: "put",
+        data,
+    });
+};
+
 // 下单平台 订单审核后回款
 export const orderReturnBackOrder = (data) => {
     return http({

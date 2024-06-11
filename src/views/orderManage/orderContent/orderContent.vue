@@ -456,8 +456,7 @@ export default {
         weChatList:[],
         // 获客方式
         customerTypeList:[],
-        customerTypeListAll:[{id:-1,name:'全部获客方式'}]
-
+        customerTypeListAll:[{id:-1,name:'全部获客方式'}],
       },
       // 编辑录单
       editRecordingModel:false,
@@ -1037,6 +1036,7 @@ export default {
     };
   },
   methods: {
+    
     // 生成粉丝见面会名单
     fanMeetingClick(){
       if (![...this.fanMeetingParams.orderId].length) {
@@ -1788,6 +1788,7 @@ export default {
     this.getshoppingCartGetCustomerTypeList();
     this.getcustomerTypeList();
     this.getcustomerSourceList()
+    
 
     const amiyaPositionId = JSON.parse(
       sessionStorage.getItem("amiyaPositionId")

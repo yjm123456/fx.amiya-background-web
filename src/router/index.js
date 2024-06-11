@@ -338,6 +338,18 @@ const hospitalManage = [{
                 "@/views/hospitalManage/supplyChainDispatchGuide/supplyChainDispatchGuide.vue"
             ),
     },
+    {
+        path: "/activeHospital",
+        name: "activeHospital",
+        meta: {
+            title: "活跃医院",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import ("@/views/hospitalManage/activeHospital/activeHospital.vue"),
+    },
 ];
 
 /**

@@ -574,7 +574,7 @@ export default {
         // 面诊人员
         consultationEmpId: null,
         // 面诊类型
-        consultationType: -1,
+        consultationType: 0,
         // 归属月份
         belongMonth: null,
         // 下单金额
@@ -637,12 +637,12 @@ export default {
             message: "请选择归属月份",
           },
         ],
-        consultationType: [
-          {
-            required: true,
-            message: "请选择面诊类型",
-          },
-        ],
+        // consultationType: [
+        //   {
+        //     required: true,
+        //     message: "请选择面诊类型",
+        //   },
+        // ],
         consultationEmpId: [
           {
             required: true,

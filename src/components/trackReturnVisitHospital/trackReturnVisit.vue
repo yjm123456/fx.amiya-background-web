@@ -2,7 +2,7 @@
   <div>
     <Modal
       v-model="controlModal"
-      title="追踪回访"
+      :title="'追踪回访' + '（' + params.phone + '）'"
       :closable="false"
       :mask-closable="false"
       width="1000"
@@ -15,52 +15,12 @@
           label-position="left"
           :label-width="110"
         >
-          <div class="phone" v-if="hiddenPhone">
-            {{ hiddenPhone }}
-            <!-- <i class="iconfont  yanjing" :class="eyeFlag == false ? 'icon-yanjing-biyan' :''" @click="eyeClick" ></i>  -->
-            <!-- 只有小黄车列表才有切换手机号功能 其他页面不需要切换手机号 -->
-            <span
-              class="phone_bg"
-              @click="switchPhone"
-              v-if="isSwith == true && params.hiddenSubPhone"
-              >切换手机号</span
-            >
-          </div>
-
           <div class="tool">
             <Button
               type="primary"
               @click="controlTrackRetrunVisitRecordModal = true"
               ghost
               >追踪回访记录</Button
-            >
-            <Button
-              style="margin-left:10px"
-              type="primary"
-              @click="controlOrderInfoModal = true"
-              ghost
-              >下单订单信息</Button
-            >
-            <Button
-              style="margin-left:10px"
-              type="primary"
-              @click="controlContentOrderInfoModal = true"
-              ghost
-              >内容平台订单信息</Button
-            >
-            <Button
-              style="margin-left:10px"
-              type="primary"
-              @click="controlAppointmentModal = true"
-              ghost
-              >预约信息</Button
-            >
-            <Button
-              style="margin-left:10px"
-              type="primary"
-              @click="controlAlreadyReceiveGiftModal = true"
-              ghost
-              >已领取礼品</Button
             >
           </div>
           <Divider />
@@ -208,122 +168,7 @@
               </FormItem>
             </Col>
           </Row>
-          <!-- </div> -->
-          <Divider />
-          <!-- <div class="bottom"> -->
-          <Row :gutter="30">
-            <Col span="12">
-              <FormItem label="设置下次回访">
-                <i-switch
-                  v-model="controlNextReturnVisit"
-                  @on-change="switchClick"
-                />
-                <span class="text">【注】：若不需要下次回访，可关闭此按钮</span>
-              </FormItem>
-            </Col>
-          </Row>
-          <Row :gutter="30">
-            <Col span="8">
-              <FormItem
-                label="下次回访日期"
-                prop="addWaitTrackCustomerObj.planTrackDate"
-                v-if="controlNextReturnVisit"
-              >
-                <DatePicker
-                  type="date"
-                  placeholder="请选择下次回访日期"
-                  style="width: 100%"
-                  :value="form.addWaitTrackCustomerObj.planTrackDate"
-                  @on-change="handlePlanTrackDateChange"
-                ></DatePicker>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem
-                label="回访目的"
-                prop="addWaitTrackCustomerObj.trackTypeId"
-                v-if="controlNextReturnVisit"
-              >
-                <Select
-                  v-model="form.addWaitTrackCustomerObj.trackTypeId"
-                  placeholder="请选择下次回访目的"
-                  @on-change="handleNextTimeTrackTypeChange"
-                >
-                  <Option
-                    :value="item.id"
-                    v-for="item in trackType"
-                    :key="item.id"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem
-                label="客户类型"
-                prop="addWaitTrackCustomerObj.trackThemeId"
-                v-if="controlNextReturnVisit"
-              >
-                <Select
-                  v-model="form.addWaitTrackCustomerObj.trackThemeId"
-                  placeholder="请选择下次客户类型"
-                >
-                  <Option
-                    :value="item.id"
-                    v-for="item in nextTimeTrackThemeList"
-                    :key="item.id"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-              </FormItem>
-            </Col>
-          </Row>
-          <Row :gutter="30">
-            <Col span="8">
-              <FormItem label="其他客服回访" v-if="controlNextReturnVisit">
-                <Select
-                  v-model="form.addWaitTrackCustomerObj.otherTrackEmployeeId"
-                  placeholder="请选择其他客服回访"
-                >
-                  <Option
-                    :value="item.id"
-                    v-for="item in employee"
-                    :key="item.id"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem
-                label="回访主题"
-                prop="addWaitTrackCustomerObj.trackPlan"
-                v-if="controlNextReturnVisit"
-              >
-                <Input
-                  v-model="form.addWaitTrackCustomerObj.trackPlan"
-                  placeholder="请输入回访主题"
-                />
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <Button
-                type="primary"
-                @click="addTemplateChange"
-                v-if="controlNextReturnVisit"
-                >添加</Button
-              >
-            </Col>
-          </Row>
-          <!-- </div> -->
-          <div class="list" v-if="controlNextReturnVisit">
-            <Table
-              border
-              :columns="query.columns"
-              :data="form.addWaitTrackCustomer"
-              height="300"
-            ></Table>
-          </div>
+         
         </Form>
       </div>
       <div slot="footer">
@@ -337,41 +182,11 @@
     <trackRetrunVisitRecord
       :encryptPhone="encryptPhone"
       :controlTrackRetrunVisitRecordModal="controlTrackRetrunVisitRecordModal"
-      @handleTrackRetrunVisitRecordModalChange="
-        controlTrackRetrunVisitRecordModal = false
-      "
+      @handleTrackRetrunVisitRecordModalChange="controlTrackRetrunVisitRecordModal = false"
       :params="params"
     />
 
-    <!-- 下单订单信息 -->
-    <orderInfo
-      :encryptPhone="encryptPhone"
-      :controlOrderInfoModal="controlOrderInfoModal"
-      @handleOrderInfoModalChange="controlOrderInfoModal = false"
-    />
-
-    <!-- 内容平台订单信息 -->
-    <contentOrderInfo
-      :encryptPhone="encryptPhone"
-      :controlContentOrderInfoModal="controlContentOrderInfoModal"
-      @handleContentOrderInfoModalChange="controlContentOrderInfoModal = false"
-    />
-
-    <!-- 预约信息 -->
-    <appointment
-      :encryptPhone="encryptPhone"
-      :controlAppointmentModal="controlAppointmentModal"
-      @handleAppointmentModalChange="controlAppointmentModal = false"
-    />
-
-    <!-- 已领取礼品 -->
-    <alreadyReceiveGift
-      :encryptPhone="encryptPhone"
-      :controlAlreadyReceiveGiftModal="controlAlreadyReceiveGiftModal"
-      @handleAlreadyReceiveGiftModalChange="
-        controlAlreadyReceiveGiftModal = false
-      "
-    />
+   
   </div>
 </template>
 
@@ -382,20 +197,12 @@ import * as baseApi from "@/api/baseDataMaintenance";
 import * as orderApi from "@/api/orderManage";
 
 import trackRetrunVisitRecord from "@/components/trackRetrunVisitRecord/trackRetrunVisitRecord";
-import orderInfo from "@/components/orderInfo/orderInfo";
-import contentOrderInfo from "@/components/contentOrderInfo/contentOrderInfo";
-import appointment from "@/components/appointment/appointment";
-import alreadyReceiveGift from "@/components/alreadyReceiveGift/alreadyReceiveGift";
 
 import upload from "@/components/upload/upload";
 
 export default {
   components: {
     trackRetrunVisitRecord,
-    orderInfo,
-    contentOrderInfo,
-    appointment,
-    alreadyReceiveGift,
     upload,
   },
   props: {
@@ -682,21 +489,7 @@ export default {
     handleUploadChange3(values) {
       this.form.trackPicture3 = values[0];
     },
-    // 切换手机号
-    switchPhone() {
-      if (this.params.phone == this.hiddenPhone) {
-        // 辅助号码参数
-        // this.hiddenPhone = this.params.hiddenSubPhone
-        this.encryptPhone = this.params.encryptSubPhone;
-        this.eyeClick();
-        this.isSwith = false;
-        return;
-      } else {
-        // this.hiddenPhone = this.params.hiddenPhone
-        this.encryptPhone = this.params.encryptPhone;
-        this.eyeClick();
-      }
-    },
+    
     // 设置下次回访
     switchClick() {
       if (this.controlNextReturnVisit == false) {
@@ -704,17 +497,7 @@ export default {
         return;
       }
     },
-    // 点击小眼睛 解密手机号
-    eyeClick() {
-      const data = {
-        encryptPhone: this.encryptPhone,
-      };
-      orderApi.decryptoPhonesNew(data).then((res) => {
-        if (res.code === 0) {
-          this.hiddenPhone = res.data.phone;
-        }
-      });
-    },
+    
     // 添加模板
     addTemplateChange() {
       const {
@@ -886,7 +669,6 @@ export default {
       this.uploadObj2.uploadList = [];
       this.uploadObj3.uploadList = [];
       this.isSwith = true;
-      this.trackType = []
     },
 
     handleSubmit(name) {
@@ -937,13 +719,7 @@ export default {
             return;
           }
          
-          if (
-            this.controlNextReturnVisit == true &&
-            addWaitTrackCustomer.length == 0
-          ) {
-            this.$Message.warning("请添加下次回访数据！");
-            return;
-          }
+         
           // 如果设置了下次回访则直接提交form 否则提交除addWaitTrackCustomer其他字段
           // const params = this.controlNextReturnVisit ? this.form : data;
           // 工具名称
@@ -962,19 +738,14 @@ export default {
           if (toolName === "电话") {
             datas.callRecordId = this.callSuccessMsg.CallRecordID;
           }
-          if (this.controlNextReturnVisit == true) {
-            if (addWaitTrackCustomer.length == 0) {
-              this.$Message.error("请先添加模板");
-            }
-          }
-          api.addTrackRecord(datas).then((res) => {
+          api.trackRecordByHospital(datas).then((res) => {
             if (res.code === 0) {
               this.$Message.success({
                 content: "添加成功",
                 duration: 3,
               });
               // 刷新父组件列表
-              this.$emit("refreshParentComList");
+              // this.$emit("refreshParentComList");
               this.close(name);
             }
           });
@@ -1017,8 +788,7 @@ export default {
   },
   created() {
     this.getTrackReturnVisitToolList();
-    // this.getTrackReturnVisitTypeList();
-    this.getCustomerServiceList();
+    // this.getCustomerServiceList();
     this.getunAddWechatReasonNameList();
   },
   watch: {
@@ -1038,7 +808,6 @@ export default {
           // 赋值手机号
           this.hiddenPhone = hiddenPhone;
           this.encryptPhone = this.params.encryptPhone;
-          this.eyeClick();
           // 判断手机号和辅助号码如果一样  切换手机号隐藏
           if (hiddenPhone == hiddenSubPhone) {
             this.isSwith = false;

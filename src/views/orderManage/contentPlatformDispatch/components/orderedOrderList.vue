@@ -595,6 +595,7 @@
             </FormItem>
           </Col> -->
           <Col span="8" v-if="confirmForm.isToHospital === true">
+            
             <FormItem
               label="粉丝见面会"
               prop="fansMeetingId"
@@ -614,9 +615,10 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+              <div style="color:red;font-size:13px">非必要不用选</div>
             </FormItem>
           </Col>
-          <Col span="8">
+          <Col span="8" v-if="confirmForm.isToHospital === true">
             <FormItem label="是否参加过见面会" prop="isFansMeeting" key="是否参加过见面会">
               <i-switch
                 v-model="confirmForm.isFansMeeting"
@@ -1909,7 +1911,6 @@ export default {
     // 是否参加过粉丝见面会
     getFansMeetingDetailsisAttendClick(value){
       const {lastDealHospitalId} = this.confirmForm
-      console.log(lastDealHospitalId)
       if(!lastDealHospitalId){
         this.$Message.warning('请先选择到院医院！')
         return

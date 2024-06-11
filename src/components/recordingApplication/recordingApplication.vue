@@ -21,7 +21,6 @@
             v-model="form.acceptBy"
             placeholder="接收人"
             filterable
-            disabled
           >
             <Option
               v-for="item in employee"
@@ -104,14 +103,14 @@ export default {
       control: false,
       // recipientList:[{id:1,name:'管理员'}],
       // recipientList:[{id:104,name:'虞郑韡'}],
-      recipientList:[{id:243,name:'陈飞'}],
+      // recipientList:[{id:243,name:'陈飞'}],
       // recipientList:[{id:62,name:'余建明'}],
       // recipientList:[{id:220,name:'张凌玥'}],
       form: {
         // // 接收人
         // acceptBy:104,
         // 记得改watch里面的字段
-        acceptBy:243,
+        acceptBy:null,
         // 手机号
         phone:'',
         // 医院
@@ -229,30 +228,34 @@ export default {
   watch: {
     recordingApplicationModel(value) {
       this.control = value;
+      // this.
       if(this.title == '录单申请'){
         // 测试 管理员
         //  this.form.acceptBy = 1
          //  线上虞老师id
         //  this.form.acceptBy = 104
         //  线上陈飞
-         this.form.acceptBy = 243
+        //  this.form.acceptBy = 243
         //  线上张凌玥id
         //  this.form.acceptBy = 220
-         this.employee = this.recordingNormalParams.employee
+         this.employee = this.recordingNormalParams.employeeList
          this.form.phone = this.recordingNormalParams.phone
          this.contentPlatformOrderAddWorkTypeList = this.editRecordingApplicationParams.contentPlatformOrderAddWorkTypeList
          this.form.addWorkType = '1'
+         this.form.acceptBy = this.recordingNormalParams.employeeList[0].id
          return
       }else{
         if(this.editRecordingApplicationParams.acceptBy){
           this.form.acceptBy = this.editRecordingApplicationParams.acceptBy
-          this.employee = this.editRecordingApplicationParams.employee
+          this.employee = this.editRecordingApplicationParams.employeeList
           this.form.phone = this.editRecordingApplicationParams.phone
+          this.form.acceptBy = this.editRecordingApplicationParams.employeeList[0].id
         }
       }
       
       
     },
+    
   },
 };
 </script>

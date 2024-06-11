@@ -1904,7 +1904,7 @@ export default {
         // 指派
         assignEmpId: null,
         // 重要程度
-        emergencyLevel: null,
+        emergencyLevel: 2,
         // 辅助电话
         subPhone: "",
         // 客户来源

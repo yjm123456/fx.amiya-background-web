@@ -1,406 +1,496 @@
 <template>
-  <div class="container">
-    <div class="content_top">
-      <!-- <jadeJueDiagram :brokenLine="brokenLine"/> -->
-      <Card class="left">
-          <div class="left_title">当日获客情况</div>
-          <jadeJueDiagram :customerData="dayCustomerData"/> 
-          <div style="margin-top:-120px">
-            <div class="left_title">当月获客情况</div>
-            <jadeJueDiagram :customerData="monthCustomerData"/> 
-          </div>
-      </Card>
-      <Card class="center">
-        <div class="c_title">
-          <div class="c_item"></div>
-          <div class="c_item">
-            <span class="left_title">啊美雅运营看板</span>
-            <span class="tab_name" @click="amyOperationsTableModel = true"><i class="iconfont icon-qiehuan-xue qiehuan"></i> 表格数据</span>
-          </div>
-          <div class="c_item2"><DatePicker type="date" placeholder="Select date" style="width: 140px;cursor: pointer;" v-model="selectedDate" :clearable="false" @on-change="getData"/></div>
-        </div>
-        <div class="center_content">
-          <div class="center_item">
-            <div class="item1">
-              <div class="item_title">时间指标</div>
-              <div class="time" >{{this.$moment(selectedDate).format("YYYY-MM-DD")}}</div>
-            </div>
-            <div class="item2">
-              <div class="item_title">时间进度</div>
-              <div class="time">{{totalAchievementAndDateSchedule.dateSchedule}}%</div>
-            </div>
-            <div class="item3">
-              <div class="item_title">总业绩</div>
-              <div class="time">{{totalAchievementAndDateSchedule.totalAchievement}}</div>
-            </div>
-          </div>
-          <div>
-            <div class="h4">业绩趋势</div>
-            <monthLine :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule"/>
+  <div>
+    <Card>
+      <div class="content_title">啊美雅医美业务运营情况</div>
+      <!-- tab切换 -->
+      <div class="tab_content">
+        <div class="tab">
+          <div
+            class="tab_item"
+            v-for="(item, index) in list"
+            :key="index"
+            @click="selectTab(index, item)"
+            :class="{ active: selected == item}"
+          >
+            <span>{{ item }}</span>
           </div>
         </div>
-      </Card>
-      <Card class="right">
-        <span class="left_title">当月客户运营情况</span>
-        <customerBar :customerBarData="customerBarData" style="margin-bottom:60px"/>
-        <span class="left_title h3">指标转化</span>
-        <funnelPlot :funnelPlotData="funnelPlotData"/>
-      </Card>
-    </div>
-    <div class="content_bottom">
-      <Card class="b_left">
-        <div class="assistant">
-            <assistantItem  :employeeDatas="employeeDatas"  />
+        <div class="date_con">
+          <DatePicker
+            type="date"
+            placeholder="请选择开始时间"
+            style="width: 160px;"
+            transfer
+            :value="params.startDate"
+            v-model="params.startDate"
+          ></DatePicker>
+          <DatePicker
+            type="date"
+            placeholder="请选择结束时间"
+            style="width: 160px;margin:0 10px"
+            transfer
+            :value="params.endDate"
+            v-model="params.endDate"
+          ></DatePicker>
+          <Button type="primary" @click="getData">查询</Button>
         </div>
-        <div class="assistant_echarts">
-          <div class="assistant_customer">
-            <span class="left_title">助理获客情况</span>
-            <assistantCustomerAcquisition :employeeDistributeConsulationNumAndAddWechats="assistantCustomerData"/> 
+      </div>
+      <!-- 业绩 -->
+      <div v-if="selected == '业绩'">
+        <Card class="m_b ">
+          <items :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule"/>
+        </Card>
+        <!-- 当月业绩趋势 -->
+        <Card  class="m_b">
+          <div class="h3">当月业绩趋势</div>
+          <monthLine :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule"/>
+        </Card>
+        <!-- 业绩情况分析 -->
+        <Card  class="m_b">
+          <div class="h3">业绩情况分析</div>
+          <div class="pie_list">
+            <Card class="pie_item">
+              <div class="pie_title">总业绩分析</div>
+              <pieItem :pieItemData="totalPerformancePie"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">刀刀组业绩分析</div>
+              <pieItem :pieItemData="daodaoTotalPerformancePie"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">吉娜组业绩分析</div>
+              <pieItem :pieItemData="jinaTotalPerformancePie"/>
+            </Card>
           </div>
-          <div class="assistant_customer">
-            <span class="left_title">助理客户运营情况</span>
-            <assistantOperations :getEmployeeCustomerAnalizes="assistantCustomerData"/>
+        </Card>
+        <!-- 助理业绩对比和机构业绩对比图 -->
+        <Card  class="m_b ">
+          <div class="customer_bar_content">
+            <Card class="customer_bar">
+              <div class="bar_title">助理业绩对比</div>
+              <barItem :barItemData="customerObj"/>
+            </Card>
+            <Card class="customer_bar">
+              <div class="bar_title">机构业绩对比</div>
+              <barItem :barItemData="hospitalObj"/>
+            </Card>
+          </div>
+          
+        </Card>
+      </div>
+      <!-- 流量 -->
+      <div v-else-if="selected == '流量'">
+        <!--  -->
+        <Card  class="m_b">
+          <item2 />
+        </Card>
+         <!-- 当月业绩趋势 -->
+        <Card  class="m_b">
+          <div class="h3">当月业绩趋势</div>
+          <monthLine :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule"/>
+        </Card>
+        <!-- 流量分析 -->
+        <Card  class="m_b">
+          <div class="h3">平台流量分析</div>
+          <div class="pie_list">
+            <Card class="pie_item">
+              <div class="pie_title">整体流量占比</div>
+              <pieItem :pieItemData="pieItemData"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">刀刀组流量占比</div>
+              <pieItem :pieItemData="pieItemData"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">吉娜组流量占比</div>
+              <pieItem :pieItemData="pieItemData"/>
+            </Card>
+          </div>
+        </Card>
+        <!-- 平台数据分析 -->
+        <Card  class="m_b ">
+          <div class="h3">部门平台流量分析</div>
+          <div class="flow_content m_t">
+            <Card class="flow_item margin_r">
+              <div class="pie_title">抖音流量分析</div>
+              <flowBarItem :flowBarItemData="flowBarItemData"/>
+            </Card>
+            <Card class="flow_item ">
+              <div class="pie_title">视频号流量分析</div>
+              <flowBarItem :flowBarItemData="flowBarItemData"/>
+            </Card>
+          </div>
+          <div class="flow_content m_t">
+            <Card class="flow_item margin_r">
+              <div class="pie_title">小红书流量分析</div>
+              <flowBarItem :flowBarItemData="flowBarItemData"/>
+            </Card>
+            <Card class="flow_item ">
+              <div class="pie_title">私域流量分析</div>
+              <flowBarItem :flowBarItemData="flowBarItemData"/>
+            </Card>
+          </div>
+        </Card>
+      </div>
+      <!-- 转化 -->
+      <div v-else-if="selected == '转化'">
+        <!-- 平台切换 -->
+        <div class="tab2" >
+          <div
+            class="tab_item"
+            v-for="(item, index) in platformList"
+            :key="index"
+            @click="checkTab(index, item)"
+            :class="{ active2: item.isSelected }"
+          >
+            <i class="iconfont  icons" :class="item.icon"></i>
+            <span>{{ item.name }}</span>
           </div>
         </div>
-      </Card>
-      <Card class="b_right">
-        <div>
-          <span class="left_title m_t">业绩贡献占比</span>
-          <performanceProportions :getEmployeePerformanceRankings="assistantCustomerData"/>
+        <!-- 流量转化 -->
+        <div >
+          <trafficConversionTable :params="params" :platformList="platformList" ref="trafficConversionTable" />
         </div>
-      </Card>
-    </div>
-    <!-- 表格 -->
-    <amyOperationsTable :amyOperationsTableModel.sync="amyOperationsTableModel" :selectedDate="this.$moment(selectedDate).format('YYYY-MM-DD')" :dateSchedule="totalAchievementAndDateSchedule.dateSchedule"/>
+      </div>
+      
+    </Card>
   </div>
 </template>
 <script>
-import jadeJueDiagram from "./components/jadeJueDiagram.vue";
-import monthLine from "./components/monthLine.vue";
-import customerBar from "./components/customerBar.vue";
-import funnelPlot from "./components/funnelPlot.vue";
-import assistantItem from "./components/assistantItem.vue";
-import assistantCustomerAcquisition from "./components/assistantCustomerAcquisition.vue";
-import assistantOperations from "./components/assistantOperations.vue";
-import performanceProportions from "./components/performanceProportion.vue";
-import amyOperationsTable from "./components/amyOperationsTable.vue";
 import * as api from "@/api/amiyaOperationsBoard";
+import * as contentPlatForm from "@/api/baseDataMaintenance";
 
+import items from "./components/item.vue"
+import item2 from "./components/item2.vue"
+import monthLine from "./components/monthLine.vue"
+import pieItem from "./components/pieItem.vue"
+import barItem from "./components/barItem.vue"
+import flowBarItem from "./components/3dBarItem.vue"
+import trafficConversionTable from "./components/trafficConversionTable.vue"
 export default {
-  components: {
-    jadeJueDiagram,
+  components:{
+    items,
+    item2,
     monthLine,
-    customerBar,
-    funnelPlot,
-    assistantItem,
-    assistantCustomerAcquisition,
-    assistantOperations,
-    performanceProportions,
-    amyOperationsTable
+    pieItem,
+    barItem,
+    flowBarItem,
+    trafficConversionTable,
   },
   data() {
     return {
+      params:{
+        // 当年
+        // startDate: this.$moment().startOf("month").format("YYYY-MM-DD"),
+        startDate: this.$moment()
+          .startOf("month")
+          .format("YYYY-MM-DD"),
+        endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
+        // 平台
+        // contentPalteForms:[]
+      },
+      list: ["业绩","流量","转化"],
+      selected:"转化",
+      // 业绩趋势
+      totalAchievementAndDateSchedule:{},
+      // 新客业绩
+      newCustomer:{},
+      // 老客业绩
+      oldCustomer:{},
+      // 总业绩
+      totalCustomer:{},
+      // 饼图数据
+      pieItemData:[],
+      // 3d流量分析数据
+      flowBarItemData:{},
+      // 总业绩饼图
+      totalPerformancePie:[],
+      // 刀刀组饼图
+      daodaoTotalPerformancePie:[],
+      // 吉娜组饼图
+      jinaTotalPerformancePie:[],
+      // 助理业绩对比图
+      customerObj:[],
+      // 机构业绩对比图
+      hospitalObj:[],
+      // 平台
+      platformList: [
+        {
+          icon: "icon-douyin-",
+          name: "抖音",
+          id: 1,
+          isSelected: true,
+        },
+        {
+          icon: "icon-shipinhao",
+          name: "视频号",
+          id: 2,
+          isSelected: false,
+        },
+        {
+          icon: "icon-xiaohongshu1",
+          name: "小红书",
+          id: 3,
+          isSelected: false,
+        },
+        {
+          icon: "icon-siyuzhibo",
+          name: "私域",
+          id: 4,
+          isSelected: false,
+        },
+      ],
       
-      // 日期
-      selectedDate: this.$moment().format("YYYY-MM-DD"),
-      // 当月获客情况数据
-      monthCustomerData: {},
-      // 当日获客情况数据
-      dayCustomerData: {},
-      // 时间进度、总业绩和折线图数据
-      totalAchievementAndDateSchedule: {},
-      // 客户运营情况数据
-      customerBarData:{},
-      // 指标转化
-      funnelPlotData:[],
-      // 助理业绩数据
-      assistantCustomerData:{},
-      // 
-      employeeDatas:[],
-      // 切换表格数据model
-      amyOperationsTableModel:false
     };
   },
   methods: {
-    getData(){
-      this.getMonthCustomerData();
-      this.getDayCustomerData();
-      this.getTotalAchievementAndDateSchedule();
-      this.getCustomerAnalizeDatas();
-      this.getCustomerIndexTransformationDatas();
-      this.getEmployeePerformanceAnalizeDatas()
+    //   获取平台（下拉框）
+    // getContentValidList() {
+    //   contentPlatForm.getContentPlatFormValidList().then((res) => {
+    //     if (res.code === 0) {
+    //       const { contentPalteForms } = res.data;
+    //       this.params.contentPalteForms = contentPalteForms;
+    //     }
+    //   });
+    // },
+    checkTab(index, value) {
+      this.platformList[index].isSelected = !this.platformList[index].isSelected;
+      this.getData()
     },
-    // 获取当月获客情况数据
-    getMonthCustomerData() {
-        if (!this.selectedDate) {
-          this.$Message.warning("请选择日期！");
-          return;
-        }
-      const data = {
-        startDate: this.$moment(this.selectedDate).format("YYYY-MM") + '-01',
-        endDate: this.$moment(this.selectedDate).format("YYYY-MM-DD"),
-      };
-      api.getCustomerData(data).then((res) => {
-        if (res.code == 0) {
-          this.monthCustomerData = res.data.data;
-        }
-      });
+    selectTab(index, value) {
+      this.selected = value
+      // this.list[index].isSelected = !this.list[index].isSelected;
+      this.getData()
     },
-    // 获取当日获客情况数据
-    getDayCustomerData() {
-        if (!this.selectedDate) {
-          this.$Message.warning("请选择日期！");
-          return;
-        }
-      const data = {
-        startDate: this.$moment(this.selectedDate).format("YYYY-MM-DD"),
-        endDate: this.$moment(this.selectedDate).format("YYYY-MM-DD"),
-      };
-      api.getCustomerData(data).then((res) => {
-        if (res.code == 0) {
-          this.dayCustomerData = res.data.data;
-        }
-      });
+    getData() {
+      if(this.selected == '业绩'){
+        this.getNewOrOldCustomerCompare()
+        this.getNewOrOldCustomerCompareByEmployeeAndHospital()
+      }else if(this.selected == '转化'){
+        this.$nextTick(()=>{
+          this.$refs.trafficConversionTable.getCompanyTransformData()
+        })
+      }
+        this.getTotalAchievementAndDateSchedule()
     },
-    // 获取时间进度和总业绩
+    // 获取业绩数据和折线图数据
     getTotalAchievementAndDateSchedule() {
-        if (!this.selectedDate) {
+      const {startDate,endDate} = this.params
+        if (!startDate || !endDate) {
           this.$Message.warning("请选择日期！");
           return;
         }
       const data = {
-        startDate: this.$moment(this.selectedDate).format("YYYY-MM") + '-01',
-        endDate: this.$moment(this.selectedDate).format("YYYY-MM-DD"),
+        startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+        endDate: this.$moment(endDate).format("YYYY-MM-DD"),
       };
       api.getTotalAchievementAndDateSchedule(data).then((res) => {
         if (res.code == 0) {
           this.totalAchievementAndDateSchedule = res.data.data;
-        }
-      });
-    },
-    // 获取客户运营情况
-    getCustomerAnalizeDatas() {
-        if (!this.selectedDate) {
-          this.$Message.warning("请选择日期！");
-          return;
-        }
-      const data = {
-        startDate: this.$moment(this.selectedDate).format("YYYY-MM") + '-01',
-        endDate: this.$moment(this.selectedDate).format("YYYY-MM-DD"),
-      };
-      api.getCustomerAnalizeData(data).then((res) => {
-        if (res.code == 0) {
-          this.customerBarData = res.data.data
-        }
-      });
-    },
-    // 获取指标转化
-    getCustomerIndexTransformationDatas() {
-        if (!this.selectedDate) {
-          this.$Message.warning("请选择日期！");
-          return;
-        }
-      const data = {
-        startDate: this.$moment(this.selectedDate).format("YYYY-MM") + '-01',
-        endDate: this.$moment(this.selectedDate).format("YYYY-MM-DD"),
-      };
-      api.getCustomerIndexTransformationData(data).then((res) => {
-        if (res.code == 0) {
-          this.funnelPlotData = res.data.data
-        }
-      });
-    },
-    // 获取助理业绩分析数据
-    getEmployeePerformanceAnalizeDatas() {
-        if (!this.selectedDate) {
-          this.$Message.warning("请选择日期！");
-          return;
-        }
-      const data = {
-        startDate: this.$moment(this.selectedDate).format("YYYY-MM") + '-01',
-        endDate: this.$moment(this.selectedDate).format("YYYY-MM-DD"),
-      };
-      api.getEmployeePerformanceAnalizeData(data).then((res) => {
-        if (res.code == 0) {
-         this.assistantCustomerData = res.data.data
-         let list  = res.data.data.employeeDatas ?  res.data.data.employeeDatas.slice(0, 4) : []
-        this.employeeDatas =  list.map((item,index)=>{
-          if(index == 0){
-            return{
-              completeRate:item.completeRate,
-              employeeName:item.employeeName,
-              performance:item.performance,
-              background:'linear-gradient(to right,#b1b8f3, #6f7dfc)'
-            }
-          }else if (index==1){
-            return{
-              completeRate:item.completeRate,
-              employeeName:item.employeeName,
-              performance:item.performance,
-              background:'linear-gradient(to right,#92c4fd, #3d92f3)'
-            }
-          }else if (index==2){
-            return{
-              completeRate:item.completeRate,
-              employeeName:item.employeeName,
-              performance:item.performance,
-              background:'linear-gradient(to right,#d9a7fa, #ba5afa)'
-            }
-          }else if (index==3){
-            return{
-              completeRate:item.completeRate,
-              employeeName:item.employeeName,
-              performance:item.performance,
-              background:'linear-gradient(to right,#f8a2f1, #fa5aed)'
-            }
+          this.pieItemData = [
+            { value: 40, name: '新客' },
+            { value: 60, name: '老客' },
+          ]
+          // this.barItemData={
+          //   data1:[320, 302, 301, 334, 390, 330, 350],
+          //   data2:[120, 132, 101, 134, 90, 230, 210],
+          //   name:['杭州连天美医疗美容医院有限公司杭州连天美医疗美容医院有限公司', '上海伊莱美医疗美容医院', '沈阳和平百嘉丽医疗美容医院有限公司', '杭州维多利亚医疗美容医院有限公司', '北京丽都医疗美容医院有限公司', '湖南雅美医疗美容医院有限公司长沙雅美医疗美容医院', '佛山曙光金子医学美容医院有限公司']
+          // }
+          this.flowBarItemData={
+           data1: [
+                        {value: 300, itemStyle: {color: '#5DC6D6'}},
+                        {value: 498, itemStyle: {color: '#A0A8F5'}},
+                        {value: 778, itemStyle: {color: '#D091FA'}},
+                        {value: 1382, itemStyle: {color: '#F69655'}},
+
+                    ],
+                    data2:[
+                        {value: 300, itemStyle: {color: '#2DB6C8'}},
+                        {value: 498, itemStyle: {color: '#8C97F8'}},
+                        {value: 778, itemStyle: {color: '#C77AF9'}},
+                        {value: 1382, itemStyle: {color: '#F48853'}},
+
+                    ],data3:[
+                        {value: 300, itemStyle: {color: '#5DC6D6'}},
+                        {value: 498, itemStyle: {color: '#A0A8F5'}},
+                        {value: 778, itemStyle: {color: '#D091FA'}},
+                        {value: 1382, itemStyle: {color: '#F69655'}},
+
+                    ]
+
           }
-         })
         }
       });
     },
+    // 根据条件获取新老客业绩占比（分组）
+    getNewOrOldCustomerCompare() {
+      const {startDate,endDate} = this.params
+        if (!startDate || !endDate) {
+          this.$Message.warning("请选择日期！");
+          return;
+        }
+      const data = {
+        startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+        endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+      };
+      api.getNewOrOldCustomerCompare(data).then((res) => {
+        if (res.code == 0) {
+          const {totalPerformanceNewCustomer,totalPerformanceOldCustomer,groupDaoDaoPerformanceNewCustomer,groupDaoDaoPerformanceOldCustomer,groupJiNaPerformanceNewCustomer,groupJiNaPerformanceOldCustomer} = res.data.data
+          // this.totalAchievementAndDateSchedule = res.data.data;
+          // 总业绩
+          this.totalPerformancePie = [{value:totalPerformanceNewCustomer,name:'新客'},{value:totalPerformanceOldCustomer,name:'老客'}]
+          this.daodaoTotalPerformancePie = [{value:groupDaoDaoPerformanceNewCustomer,name:'新客'},{value:groupDaoDaoPerformanceOldCustomer,name:'老客'}]
+          this.jinaTotalPerformancePie = [{value:groupJiNaPerformanceNewCustomer,name:'新客'},{value:groupJiNaPerformanceOldCustomer,name:'老客'}]
+        }
+      });
+    },
+    // 根据条件获取新老客业绩占比（助理与机构）
+    getNewOrOldCustomerCompareByEmployeeAndHospital() {
+      const {startDate,endDate} = this.params
+        if (!startDate || !endDate) {
+          this.$Message.warning("请选择日期！");
+          return;
+        }
+      const data = {
+        startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+        endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+      };
+      api.getNewOrOldCustomerCompareByEmployeeAndHospital(data).then((res) => {
+        if (res.code == 0) {
+          const {employeePerformance,hospitalPerformance} = res.data.data
+          this.customerObj = employeePerformance
+          this.hospitalObj = hospitalPerformance
+          // data.map(item=>{
+          //   if(item.code == 'employee'){
+          //     this.customerObj = item
+          //   }else if(item.code == 'hospital'){
+          //     this.hospitalObj = item
+          //   }
+          // })
+          // this.totalAchievementAndDateSchedule = res.data.data;
+          // this.totalAchievementAndDateSchedule = res.data.data;
+         
+        }
+      });
+    },
+    
   },
-  created() {
-    this.getData();
-  },
+  created(){
+    this.getData()
+    // this.getContentValidList()
+    // let list2 =  [300,498,778,1382 ]
+    // list2 = list2.map(item=>{return {value:item}})
+    // let list3=[
+    //   {color: '#5DC6D6'},
+    //   {color: '#A0A8F5'},
+    //   {color: '#D091FA'},
+    //   {color: '#F69655'}
+
+    // ]
+    // for(var i=0;i<list2.length;i++){
+    //   list2[i]['itemStyle'] =list3[i]
+    // }
+  }
 };
 </script>
-<style lang="less" scoped>
-/* 修改iView日期选择器下拉框的背景颜色 */
-/deep/
-.ivu-date-picker-dropdown {
-  background-color: red;
-}
-.content_top{
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-}
-.left{
-  width: 20%;
-  text-align: center;
-  border-radius: 5px;
-}
-.right{
-  width: 24%;
-}
-.left{
-  height: 525px;
-}
-.left_title{
-  font-size: 18px;
+
+<style scoped>
+.content_title{
+  font-size: 22px;
   font-weight: bold;
   text-align: center;
 }
-.center{
-  width: 54%;
-  border-radius: 5px;
-}
-.tab_name{
-  font-size: 12px;
-  color: dodgerblue;
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
-  
-  
-}
-.c_title{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.qiehuan{
-  font-size: 20px;
-  margin-right: 2px;
-}
-.center_content{
-
-}
-.center_item{
+.tab_content {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 15px 0;
+  width: 100%;
   padding: 0 10px;
   box-sizing: border-box;
-  text-align: center;
 }
-.item1,.item2,.item3{
-  flex:1;
-  margin:10px;
-  padding: 20px 0;
-  box-sizing: border-box;
-  border-radius: 10px;
-}
-.item1{
-  background-image:   linear-gradient(to right,#b1b8f3, #6f7dfc);
-  
-}
-.item2{
-  background: linear-gradient(to right,#92c4fd, #3d92f3);
-}
-.item3{
-  background:  linear-gradient(to right,#d9a7fa, #ba5afa);
-}
-.item_title{
-  font-size: 18px;
-  margin-bottom: 6px;
-  color: #fff;
-}
-.time{
-  color: #fff;
-}
-.date_content{
-  position: relative;
-}
-.c_item{
-  flex:1;
-  text-align: center;
+.tab,.tab2 {
   display: flex;
 }
-.c_item2{
-  text-align: end;
-  margin-right: 20px;
+.tab_item {
+  background: #f0f0f0;
+  padding: 1px 15px;
+  box-sizing: border-box;
+  margin-right: 30px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
 }
-.h4{
-  font-size: 16px;
+.icons {
+  font-size: 14px;
+  margin-right: 2px;
+}
+.active {
+  color: #fff;
+  border: 1px solid #2f8cf0;
+  background: #2f8cf0;
+}
+.active2 {
+  color: red;
+  border: 1px solid red;
+}
+.h3{
+  font-size: 18px;
   font-weight: bold;
-  padding-left: 20px;
-  margin-top: 20px;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
-.content_bottom{
+.m_b{
+  margin-bottom: 10px;
+}
+.m_t{
+  margin-top: 10px;
+}
+.margin_r{
+  margin-right: 10px;
+}
+.pie_list{
   display: flex;
   justify-content: space-between;
-  margin: 10px 0;
+
 }
-.b_left{
-  width: 75%;
-  border-radius: 5px;
+.pie_item{
+  width: 32%;
+  margin-top: 10px;
 }
-.b_right{
-  width: 24%;
-  border-radius: 5px;
-   text-align: center;
-   padding-top: 40px;
-   box-sizing: border-box;
+.pie_title,.bar_title{
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
 }
-.assistant{
+
+.customer_bar_content{
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
-// .assistant div{
-//   width: 100%;
-//   text-align: center;
-//   color: #fff;
-//   margin: 0 auto;
-// }
-.assistant_customer{
-  width: 48%;
+.customer_bar{
+  width: 49%;
 }
-.assistant_echarts{
+.flow_content{
+  width: 100%;
   display: flex;
-  height: 450px;
-  text-align: center;
-  margin-top: 40px;
+  justify-content: space-between;
 }
-
+.flow_item{
+  flex: 1;
+}
+.items{
+  display: flex;
+}
+.items div{
+  flex:1
+}
+.tab2{
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
 </style>

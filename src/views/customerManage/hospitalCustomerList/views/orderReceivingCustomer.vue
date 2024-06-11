@@ -90,6 +90,9 @@
     ></consumeTrack>
      <!--客户信息  -->
     <hopitalCustomerMessage :customerMessageModel.sync="customerMessageModel" :customerMessageObj="customerMessageObj" :customerInfoComParams2="customerInfoComParams2" @hospitalGetCustomerList="hospitalGetCustomerList"></hopitalCustomerMessage>
+    <!-- 回访 -->
+    <trackReturnVisitHospital @resetControlTrackReturnVisitDisplay="resetControlTrackReturnVisitDisplay"
+      :params="trackReturnVisitComParams"/>
   </div>
 </template>
 
@@ -98,13 +101,14 @@ import * as api from "@/api/customerManage";
 import detail from "../components/detail.vue";
 import consumeTrack from "../components/consumeTrack";
 import hopitalCustomerMessage from "@/components/customerMessage/hopitalCustomerMessage"
+import trackReturnVisitHospital from "@/components/trackReturnVisitHospital/trackReturnVisit"
 
 export default {
   props:{
     activeName:String,
     buyAgainType:Array
   },
-  components: { detail, consumeTrack ,hopitalCustomerMessage},
+  components: { detail, consumeTrack ,hopitalCustomerMessage,trackReturnVisitHospital},
   data() {
     return {
      customerMessageModel:false,
@@ -202,7 +206,7 @@ export default {
           },
           {
             title: "操作",
-            width: 200,
+            width: 240,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -288,7 +292,9 @@ export default {
                       type: "primary",
                       size: "small",
                     },
-                    style: {},
+                    style: {
+                      marginRight: "5px",
+                    },
                     on: {
                       click: () => {
                         const { encryptCustomerPhone } = params.row;
@@ -298,6 +304,27 @@ export default {
                     },
                   },
                   "消费追踪"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled:params.row.isMyFollow == false
+                    },
+                    style: {},
+                    on: {
+                      click: () => {
+                        const { encryptCustomerPhone,customerPhone } = params.row;
+                        this.trackReturnVisitComParams.encryptPhone = encryptCustomerPhone;
+                        this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = true;
+                        this.trackReturnVisitComParams.phone = customerPhone;
+                        
+                      },
+                    },
+                  },
+                  "回访"
                 ),
               ]);
             },
@@ -354,10 +381,21 @@ export default {
       // 消息追踪
       controlConsumeTrackModal: false,
       isTable:false,
-      buyAgainTypes:[]
+      buyAgainTypes:[],
+      // 回访组件参数
+      trackReturnVisitComParams: {
+        device: "",
+        encryptPhone: "",
+        controlTrackReturnVisitDisplay: false,
+        phone:''
+      },
     };
   },
   methods: {
+    resetControlTrackReturnVisitDisplay() {
+      this.trackReturnVisitComParams.controlTrackReturnVisitDisplay = false;
+    },
+    
     resetControlCustomerInfoDisplay() {
       this.customerInfoComParams.controlCustomerInfoDisplay = false;
     },

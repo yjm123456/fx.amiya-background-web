@@ -95,9 +95,6 @@ export default {
             '总业绩':true,
             '新客业绩':true,
             '老客业绩':true,
-          },
-          textStyle:{
-            color:'#000'
           }
         },
         series: [
@@ -107,7 +104,7 @@ export default {
                 data: totalPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
-                        color: '#0AABBD'  // 折线的颜⾊
+                        color: '#2d8cf0'  // 折线的颜⾊
                     } 
                 },
             },
@@ -117,7 +114,7 @@ export default {
                 data: newCustomerPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
-                        color: '#7381FB'  // 折线的颜⾊
+                        color: '#19be6b'  // 折线的颜⾊
                     } 
                 },
             },
@@ -127,7 +124,7 @@ export default {
                 data: oldCustomerPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
-                        color: '#BB5DF9'  // 折线的颜⾊
+                        color: '#ff9900'  // 折线的颜⾊
                     } 
                 },
             },
@@ -154,7 +151,7 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   width: 100%;
-  height: 280px;
+  height: 180px;
   // margin-left: 5%;
 }
 </style>

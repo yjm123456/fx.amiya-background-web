@@ -104,6 +104,7 @@
 import * as api from "@/api/orderManage";
 import * as emApi from "@/api/employeeManage";
 import * as contentPlatFormOrderAddWorkApi from "@/api/contentPlatFormOrderAddWork";
+import {processEnv} from "@/http/baseUrl";
 
 import upload from "@/components/upload/upload";
 import recording from "@/components/recording/recording";
@@ -121,10 +122,10 @@ export default {
   props: {
     duplicateModel: Boolean,
     recordingParams: Object,
-    
   },
   data() {
     return {
+      processEnv,
       // 判断是否显示
       isShoppingCar:false,
       isOrder:false,
@@ -148,6 +149,8 @@ export default {
         // 是否为辅助客服
         isCustomer: "",
         employee: [],
+        // 根据职位获取录单人员
+        employeeList:[]
       },
       // 通过审核状态判断展示文字
       checkStateTexts: "",
@@ -158,12 +161,13 @@ export default {
         acceptBy: null,
         employee: [],
         // 申请类型
-        contentPlatformOrderAddWorkTypeList:[]
+        contentPlatformOrderAddWorkTypeList:[],
       },
       // 小黄车详情
       shoppingCartRegistrationInfo:{},
       // 重单订单列表
-      orderParams:[]
+      orderParams:[],
+      
       
     };
   },
@@ -172,6 +176,19 @@ export default {
     this.getContentPlatformOrderAddWorkTypeList()
   },
   methods: {
+    // 根据职位为客服主管获取录单人信息
+    getPositionEm(){
+      // console.log(processEnv.VUE_APP_BASE_URL)
+      // 14是线上职位id 32是测试职位id
+      const data = {
+        positionId:processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 14 : 32
+      }
+      emApi.getEmployeeByPositionId(data).then((res) => {
+        if(res.code == 0){
+          this.recordingNormalParams.employeeList = [res.data.employee[0]]
+        }
+      })
+    },
     // 查询手机号是否绑定客服
     getIsCustomer(){
       this.recordingNormalParams.phone = this.phone;
@@ -291,6 +308,9 @@ export default {
   watch: {
     duplicateModel(value) {
       this.control = value;
+      if(value == true){
+        this.getPositionEm()
+      }
     },
   },
 };

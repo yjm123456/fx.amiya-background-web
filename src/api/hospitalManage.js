@@ -523,3 +523,12 @@ export const deleteProjectById = (params) => {
         params
     });
 };
+
+// 获取活跃医院数据
+export const activeHospitalList = (params) => {
+    return http({
+        url: "/amiyabg/HospitalInfo/activeHospitalList",
+        method: "get",
+        params
+    });
+};

@@ -646,7 +646,7 @@ export default {
             content: content,
             onOk: () => {
               this.isLoading = true
-              api.checkOrder(data).then((res) => {
+              api.checkOrderState(data).then((res) => {
                 if (res.code === 0) {
                   this.isLoading = false
                   this.controlModal = false;

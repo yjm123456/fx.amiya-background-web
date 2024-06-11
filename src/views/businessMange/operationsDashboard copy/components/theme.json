@@ -1,9 +1,9 @@
 {
     "color": [
-        "#0AABBD",
-        "#7381FB",
-        "#BB5DF9",
-        "#F37F51",
+        "#2d8cf0",
+        "#19be6b",
+        "#ff9900",
+        "#E46CBB",
         "#3d92f3",
         "#7330fc",
         "#ff7070",
@@ -173,10 +173,10 @@
         "symbol": "emptyCircle",
         "smooth": true,
         "color": [
-            "#0AABBD",
-            "#7381FB",
-            "#BB5DF9",
-            "#F37F51",
+            "#2d8cf0",
+            "#19be6b",
+            "#ff9900",
+            "#E46CBB",
             "#7330fc",
             "#ff7070",
             "#7fd3ce"

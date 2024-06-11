@@ -108,6 +108,7 @@ import * as orderApi from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as emApi from "@/api/employeeManage";
 import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
+import {processEnv} from "@/http/baseUrl";
 
 import editRecordingApplication from "@/components/recordingApplication/recordingApplication";
 import recording from "../components/recording.vue";
@@ -126,6 +127,7 @@ export default {
   },
   data() {
     return {
+      processEnv,
       // 查询
       query: {
         keyWord: "",
@@ -401,6 +403,8 @@ export default {
         employee:[],
         // 申请类型数组
         contentPlatformOrderAddWorkTypeList:[],
+        // 根据职位获取录单人员
+        employeeList:[]
       },
       // 添加录单申请
       addRecordingModel:false,
@@ -459,6 +463,19 @@ export default {
     };
   },
   methods: {
+    // 根据职位为客服主管获取录单人信息
+    getPositionEm(){
+      // console.log(processEnv.VUE_APP_BASE_URL)
+      // 14是线上职位id 32是测试职位id
+      const data = {
+        positionId:processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 14 : 32
+      }
+      emApi.getEmployeeByPositionId(data).then((res) => {
+        if(res.code == 0){
+          this.editRecordingApplicationParams.employeeList = [res.data.employee[0]]
+        }
+      })
+    },
     // 主获客方式列表
     getshoppingCartGetCustomerTypeList(){
       orderApi.shoppingCartGetCustomerTypeList().then((res) => {
@@ -736,6 +753,7 @@ export default {
       handler(value) {
         if (value === "mySubmit") {
           this.getContentPlatFormOrderAddWork();
+          this.getPositionEm()
         }
       },
       immediate: true,

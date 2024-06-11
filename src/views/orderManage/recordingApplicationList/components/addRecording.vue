@@ -20,10 +20,9 @@
             v-model="form.acceptBy"
             placeholder="接收人"
             filterable
-            disabled
           >
             <Option
-              v-for="item in editRecordingApplicationParams.employee"
+              v-for="item in editRecordingApplicationParams.employeeList"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
@@ -110,6 +109,8 @@
 
 <script>
 import * as api from "@/api/contentPlatFormOrderAddWork";
+import {processEnv} from "@/http/baseUrl";
+
 export default {
   components: {
   },
@@ -120,6 +121,7 @@ export default {
   },
   data() {
     return {
+      processEnv,
       // 归属地
       belongingPlaceList:[
         {
@@ -134,22 +136,10 @@ export default {
       isLoading:false,
       control: false,
       // recipientList:[{id:1,name:'管理员'}],
-      // recipientList:[{id:104,name:'虞郑韡'}],
-      recipientList:[{id:243,name:'陈飞'}],
       // recipientList:[{id:62,name:'余建明'}],
-      // recipientList:[{id:220,name:'张凌玥'}],
       form: {
         // 接收人
-        // 线上虞老师
-        // acceptBy:104,
-        // 陈飞
-        acceptBy:243,
-        // 线上张凌玥
-        // acceptBy:220,
-        // 测试管理员
-        // acceptBy:220,
-
-        // acceptBy:220,
+        acceptBy:null,
         // 手机号
         phone:'',
         // 医院
@@ -197,7 +187,7 @@ export default {
         // 测试医院
         // this.form.hospitalId = 39
         // 线上医院
-        this.form.hospitalId = 124
+        this.form.hospitalId =  processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 124 : 39
       }else{
         this.form.hospitalId = null
       }
@@ -291,6 +281,7 @@ export default {
   watch: {
     addRecordingModel(value) {
       this.control = value;
+      this.form.acceptBy = this.editRecordingApplicationParams.employeeList[0].id
     },
   },
 };

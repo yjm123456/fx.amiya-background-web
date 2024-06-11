@@ -402,6 +402,8 @@
       <div slot="footer" class="footer">
         <Button @click="cancel" style="margin-right: 10px">取消</Button>
       </div>
+      <!-- 查看图片 -->
+      <viewImg :viewPicModel.sync="viewPicModel" :customerPictureUrl="customerPictureUrl"/>
     </Modal>
   </div>
 </template>
@@ -411,15 +413,19 @@ import * as orderApi from "@/api/orderManage";
 import * as fansMeetingApi from "@/api/fansMeeting";
 
 import upload from "@/components/upload/upload";
-
+import viewImg from "../viewImg/viewImg.vue"
 export default {
-  components: { upload },
+  components: { upload ,viewImg},
   props: {
     detailModel: Boolean,
     detailParams: Object,
   },
   data() {
     return {
+      // 查看图片model
+      viewPicModel:false,
+      // 查看图片
+      customerPictureUrl:'',
       // 是否到院 筛选
       isHospitalList: [
         { type: -1, name: "全部到院状态" },
@@ -676,19 +682,17 @@ export default {
             minWidth: 120,
             render: (h, params) => {
               return h("viewer", {}, [
-                params.row.customerPictureUrl
-                  ? h("img", {
-                      style: {
-                        width: "50px",
-                        height: "50px",
-                        margin: "5px 0",
-                        verticalAlign: "middle",
-                      },
-                      attrs: {
-                        src: params.row.customerPictureUrl,
-                      },
-                    })
-                  : "",
+                h("img", {
+                  style: {
+                    width: "50px",
+                    height: "50px",
+                    margin: "5px 0",
+                    verticalAlign: "middle",
+                  },
+                  attrs: {
+                    src: params.row.customerPictureUrl,
+                  },
+                }),
               ]);
             },
           },
@@ -795,11 +799,35 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 190,
+            width: 230,
             align: "center",
             fixed: "right",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { customerPictureUrl } = params.row;
+                        if(!customerPictureUrl){
+                          this.$Message.warning('暂无图片！')
+                          return
+                        }
+                        this.customerPictureUrl = customerPictureUrl
+                        this.viewPicModel = true
+                      },
+                    },
+                  },
+                  "查看图片"
+                ),
                 h(
                   "Button",
                   {

@@ -122,3 +122,11 @@ export const unAddWechatReasonNameList = () => {
         method: "get",
     });
 };
+// 添加回访记录 医院端  post
+export const trackRecordByHospital = (data) => {
+    return http({
+        url: `/amiyabg/Track/trackRecordByHospital`,
+        method: "post",
+        data,
+    });
+};

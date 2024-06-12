@@ -147,9 +147,14 @@
             <span>{{ item.name }}</span>
           </div>
         </div>
-        <!-- 流量转化 -->
+        
         <div >
+          <!-- 流量转化和客户转化情况-->
           <trafficConversionTable :params="params" :platformList="platformList" ref="trafficConversionTable" />
+          <!-- 流量转化和客户转化情况-助理 -->
+          <assistantTable :params="params" :platformList="platformList" ref="assistantTable" />
+          <!-- 机构转化情况 -->
+          <hospitalTable :params="params" :platformList="platformList" ref="hospitalTable"/>
         </div>
       </div>
       
@@ -167,6 +172,8 @@ import pieItem from "./components/pieItem.vue"
 import barItem from "./components/barItem.vue"
 import flowBarItem from "./components/3dBarItem.vue"
 import trafficConversionTable from "./components/trafficConversionTable.vue"
+import assistantTable from "./components/assistantTable.vue"
+import hospitalTable from "./components/hospitalTable.vue"
 export default {
   components:{
     items,
@@ -176,6 +183,8 @@ export default {
     barItem,
     flowBarItem,
     trafficConversionTable,
+    assistantTable,
+    hospitalTable
   },
   data() {
     return {
@@ -262,6 +271,7 @@ export default {
       // this.list[index].isSelected = !this.list[index].isSelected;
       this.getData()
     },
+
     getData() {
       if(this.selected == '业绩'){
         this.getNewOrOldCustomerCompare()
@@ -269,6 +279,8 @@ export default {
       }else if(this.selected == '转化'){
         this.$nextTick(()=>{
           this.$refs.trafficConversionTable.getCompanyTransformData()
+          this.$refs.assistantTable.getAssistantTransformData()
+          this.$refs.hospitalTable.getData()
         })
       }
         this.getTotalAchievementAndDateSchedule()

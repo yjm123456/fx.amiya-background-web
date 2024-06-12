@@ -1,11 +1,11 @@
 <template>
     <div>
         <Card  class="m_b">
-            <div class="h3">流量转化情况</div>
+            <div class="h3">流量转化情况-助理</div>
             <Table border :columns="query.columns" :data="query.data" style="margin-top:10px"></Table>
         </Card>
         <Card class="m_b">
-            <div class="h3">客户转化情况</div>
+            <div class="h3">客户转化情况-助理</div>
             <Table border :columns="query2.columns" :data="query2.data" style="margin-top:10px"></Table>
         </Card>
     </div>
@@ -28,57 +28,6 @@ export default {
                     minWidth: 160,
                     align: "center",
                     
-                },
-                {
-                    title: "线索量",
-                    key: "clueCount",
-                    minWidth: 120,
-                    align: "center",
-                    render: (h, params) => {
-                        return h(
-                            "div",
-                            {
-                                style: {
-                                    color: params.row.clueCount <= 0 ? "red" : "#04B05D",
-                                },
-                            },
-                            params.row.clueCount + '%'
-                        );
-                    },
-                },
-                {
-                    title: "分诊量",
-                    key: "distributeConsulationNum",
-                    minWidth: 120,
-                    align: "center",
-                    render: (h, params) => {
-                        return h(
-                            "div",
-                            {
-                                style: {
-                                    color: params.row.distributeConsulationNum <= 0 ? "red" : "#04B05D",
-                                },
-                            },
-                            params.row.distributeConsulationNum 
-                        );
-                    },
-                },
-                {
-                    title: "线索有效率",
-                    key: "clueEffectiveRate",
-                    minWidth: 140,
-                    align: "center",
-                    render: (h, params) => {
-                        return h(
-                            "div",
-                            {
-                                style: {
-                                    color: params.row.clueEffectiveRate <= 0 ? "red" : "#04B05D",
-                                },
-                            },
-                            params.row.clueEffectiveRate + '%'
-                        );
-                    },
                 },
                 {
                     title: "加v",
@@ -359,7 +308,7 @@ export default {
     },
     methods:{
         // 根据条件获取新老客业绩占比（助理与机构）
-        getCompanyTransformData() {
+        getAssistantTransformData() {
             const {startDate,endDate} = this.params
             if (!startDate || !endDate) {
                 this.$Message.warning("请选择日期！");
@@ -373,7 +322,7 @@ export default {
                 showXiaoHongShu:this.platformList.find((item) => item.id == 3).isSelected,
                 showPrivateDomain:this.platformList.find((item) => item.id == 4).isSelected,
             };
-            api.companyTransformData(data).then((res) => {
+            api.assistantTransformData(data).then((res) => {
                 if (res.code == 0) {
                     this.query.data = res.data.data
                     this.query2.data = res.data.data

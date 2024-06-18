@@ -12,6 +12,7 @@ echarts.registerTheme("tdTheme", tdTheme);
 export default {
   props: {
     pieItemData: Array,
+    selected:String
   },
   data() {
     return {
@@ -24,12 +25,32 @@ export default {
       let option = {
         tooltip: {
           trigger: "item",
-          formatter: '{b} : {c}%'
+          // echarts计算的百分比
+          // formatter: '{b} : {d}%'
+          // 根据接口返回的百分比
+          formatter: (params) => {
+                let list = []
+                let listItem = ''
+                // let axisValueLabel = params[0].axisValueLabel + '号'
+                for (let i = 0; i < value.length; i++) {
+                  if(params.value == value[i].value){
+                    list.push(
+                        '<span style="display:inline-block;">' +
+                        value[i].name +
+                        '</span><span style="display:inline-block;">&nbsp&nbsp' +
+                        value[i].rate  +'%' +
+                        '</span>'
+                    )
+                  }
+                }
+                listItem = list.join('<br>')
+                return  listItem
+            }
         },
         legend: {
           orient: "vertical",
           left: "left",
-          formatter: function (name) {
+          formatter: this.selected == '业绩' ?  function (name) {
             var total = 0;
             var data = option.series[0].data;
             for (var i = 0, l = data.length; i < l; i++) {
@@ -37,11 +58,26 @@ export default {
             }
             for (var i = 0, l = data.length; i < l; i++) {
                 if (data[i].name == name) {
-                    var percentage = data[i].value == 0 ? '0%' : ((data[i].value / total) * 100).toFixed(2) + '%';
+                    // var percentage = data[i].value == 0 ? '0%' : ((data[i].value / total) * 100).toFixed(2) + '%';
+                    var percentage = data[i].value == 0 ? '0w' : data[i].value + 'w'
                     return  name + '(' + ' ' + percentage + ')';
                 }
             }
-            return name + ' 0%';
+            return name ;
+        }:function (name) {
+            var total = 0;
+            var data = option.series[0].data;
+            for (var i = 0, l = data.length; i < l; i++) {
+                total += data[i].value;
+            }
+            for (var i = 0, l = data.length; i < l; i++) {
+                if (data[i].name == name) {
+                    // var percentage = data[i].value == 0 ? '0%' : ((data[i].value / total) * 100).toFixed(2) + '%';
+                    var percentage = data[i].value == 0 ? '0' : data[i].value 
+                    return  name + '(' + ' ' + percentage + ')';
+                }
+            }
+            return name ;
         }
         },
         series: [

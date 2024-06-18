@@ -37,6 +37,7 @@ import * as employeeManageApi from "@/api/employeeManage";
 import audit from "./views/audit.vue"
 import audited from "./views/audited.vue"
 import administrativeCustomerService from "./views/administrativeCustomerService.vue"
+import {processEnv} from "@/http/baseUrl";
 
 export default {
   components:{
@@ -46,8 +47,12 @@ export default {
   },
   data(){
     return {
+      processEnv,
       activeName: "audit",
       params:{
+        // 平台
+        contentPalteForms:[{id:0,name:'全部平台'},{id:1,name:'下单平台'},{id:2,name:'内容平台'},{id:3,name:'消费追踪'}],
+        addOrderPriceList:[{id:-1,name:'全部下单金额'},{id:0,name:'潜在（等于0元）'},{id:1,name:'有效（大于0元）'}],
         // 全部上传人
         creteEmpNameList:[{id:-1,name:'全部上传人'}],
         // 客服
@@ -96,8 +101,9 @@ export default {
     // 根据职位id获取员工
     getEmployeeByPositionIdAdmin(){
       const data = {
-        // （客服管理员)线上id
-        positionId:4
+        // （客服管理员)线上id 4 测试5
+        positionId:processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 4 : 5
+        
       }
       employeeManageApi.getEmployeeByPositionId(data).then((res) => {
         if (res.code === 0) {

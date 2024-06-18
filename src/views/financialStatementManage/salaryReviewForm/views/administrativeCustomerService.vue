@@ -25,9 +25,9 @@
           ></DatePicker>
           <Select
             v-model="filterCriteria.belongEmpId"
-            placeholder="请选择行政客服"
+            placeholder="行政客服"
             filterable
-            style="width: 160px;margin-left:10px"
+            style="width: 130px;margin-left:10px"
           >
             <Option
               v-for="item in params.employeePosition"
@@ -40,7 +40,7 @@
             v-model="filterCriteria.chooseHospitalId"
             placeholder="请选择医院"
             filterable
-            style="width: 160px;margin-left:10px"
+            style="width: 150px;margin-left:10px"
           >
             <Option
               v-for="item in params.hospitallist"
@@ -53,7 +53,7 @@
             v-model="filterCriteria.isOldCustoemr"
             placeholder="请选择业绩"
             filterable
-            style="width: 140px;margin-left:10px"
+            style="width: 120px;margin-left:10px"
           >
             <Option
               v-for="item in params.isOldCustoemrList"
@@ -66,7 +66,7 @@
             v-model="filterCriteria.createEmpId"
             placeholder="请选择上传人"
             filterable
-            style="width: 140px;margin-left:10px"
+            style="width: 120px;margin-left:10px"
           >
             <Option
               v-for="item in params.creteEmpNameList"
@@ -83,6 +83,32 @@
           >
             <Option
               v-for="item in isGenerateSalryList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Select
+            v-model="filterCriteria.orderFrom"
+            placeholder="请选择平台"
+            filterable
+            style="width: 120px;margin-left:10px"
+          >
+            <Option
+              v-for="item in params.contentPalteForms"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Select
+            v-model="filterCriteria.addOrderPrice"
+            placeholder="请选择金额"
+            filterable
+            style="width: 140px;margin-left:10px"
+          >
+            <Option
+              v-for="item in params.addOrderPriceList"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
@@ -145,6 +171,8 @@ export default {
   data() {
     return {
       filterCriteria: {
+        orderFrom:0,
+        addOrderPrice:-1,
         isGenerateSalry: 1,
         keyWord: "",
         startDate: this.$moment().startOf("month").format("YYYY-MM-DD"),

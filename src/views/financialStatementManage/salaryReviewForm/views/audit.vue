@@ -6,20 +6,20 @@
           <Input
             v-model="query.keyWord"
             placeholder="请输入关键字"
-            style="width: 200px; "
+            style="width: 180px; "
             @keyup.enter.native="getListWithPageByCustomerCompensation()"
           />
           <DatePicker
             type="date"
             placeholder="开始日期"
-            style="width: 150px;margin-left: .625rem"
+            style="width: 120px;margin-left: .625rem"
             :value="query.startDate"
             v-model="query.startDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="结束日期"
-            style="width: 150px; margin-left: .625rem"
+            style="width: 120px; margin-left: .625rem"
             :value="query.endDate"
             v-model="query.endDate"
           ></DatePicker>
@@ -27,7 +27,7 @@
             v-model="query.belongEmpId"
             placeholder="请选择归属客服"
             filterable
-            style="width: 200px;margin-left:10px"
+            style="width: 150px;margin-left:10px"
           >
             <Option
               v-for="item in params.employeeAll"
@@ -40,7 +40,7 @@
             v-model="query.chooseHospitalId"
             placeholder="请选择医院"
             filterable
-            style="width: 200px;margin-left:10px"
+            style="width: 180px;margin-left:10px"
           >
             <Option
               v-for="item in params.hospitallist"
@@ -53,7 +53,7 @@
             v-model="query.isOldCustoemr"
             placeholder="请选择业绩"
             filterable
-            style="width: 150px;margin-left:10px"
+            style="width: 140px;margin-left:10px"
           >
             <Option
               v-for="item in params.isOldCustoemrList"
@@ -66,7 +66,7 @@
             v-model="query.createEmpId"
             placeholder="请选择上传人"
             filterable
-            style="width: 150px;margin-left:10px"
+            style="width: 140px;margin-left:10px"
           >
             <Option
               v-for="item in params.creteEmpNameList"
@@ -88,6 +88,32 @@
               >{{ item.name }}</Option
             >
           </Select> -->
+          <Select
+            v-model="query.orderFrom"
+            placeholder="请选择平台"
+            filterable
+            style="width: 120px;margin-left:10px"
+          >
+            <Option
+              v-for="item in params.contentPalteForms"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Select
+            v-model="query.addOrderPrice"
+            placeholder="请选择金额"
+            filterable
+            style="width: 140px;margin-left:10px"
+          >
+            <Option
+              v-for="item in params.addOrderPriceList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -189,6 +215,8 @@ export default {
     return {
       // 查询
       query: {
+        orderFrom:0,
+        addOrderPrice:-1,
         keyWord: "",
         startDate: this.$moment()
           .startOf("month")
@@ -231,10 +259,24 @@ export default {
             tooltip: true,
           },
           {
+            title: "下单金额",
+            key: "contentPlatFormOrderAddOrderPrice",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "新/老客业绩",
+            key: "isOldCustomerText",
+            minWidth: 140,
+            align: "center",
+          },
+          {
             title: "订单号",
             key: "orderId",
-            minWidth: 180,
+            minWidth: 200,
             align: "center",
+            tooltip: true,
           },
           {
             title: "成交编号",
@@ -302,12 +344,7 @@ export default {
             align: "center",
             tooltip: true,
           },
-          {
-            title: "新/老客业绩",
-            key: "isOldCustomerText",
-            minWidth: 140,
-            align: "center",
-          },
+          
           {
             title: "审核状态",
             key: "compensationCheckStateText",
@@ -538,6 +575,8 @@ export default {
         belongEmpId,
         isOldCustoemr,
         createEmpId,
+        orderFrom,
+        addOrderPrice
       } = this.query;
       const data = {
         pageNum,
@@ -554,6 +593,8 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
+        orderFrom,
+        addOrderPrice
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {
@@ -579,6 +620,8 @@ export default {
         belongEmpId,
         isOldCustoemr,
         createEmpId,
+        orderFrom,
+        addOrderPrice
       } = this.query;
       const data = {
         pageNum,
@@ -595,6 +638,8 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
+        orderFrom,
+        addOrderPrice
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {

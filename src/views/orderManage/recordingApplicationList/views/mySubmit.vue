@@ -100,6 +100,8 @@
     />
     <!-- 转移 -->
     <transfer :transferModel.sync="transferModel" :transferParams="transferParams" @getContentPlatFormOrderAddWork="getContentPlatFormOrderAddWork"/>
+    <!-- 查看图片 -->
+    <viewImg :viewPicModel.sync="viewPicModel" :customerPictureUrl="customerPictureUrl"/>
   </div>
 </template>
 <script>
@@ -114,12 +116,14 @@ import editRecordingApplication from "@/components/recordingApplication/recordin
 import recording from "../components/recording.vue";
 import transfer from "../components/transfer.vue"
 import addRecording from "../components/addRecording.vue"
+import viewImg from "../components/viewImg.vue"
 export default {
   components: {
     editRecordingApplication,
     recording,
     transfer,
-    addRecording
+    addRecording,
+    viewImg
   },
   props: {
     activeName: String,
@@ -127,6 +131,9 @@ export default {
   },
   data() {
     return {
+      // 查看截图
+      viewPicModel:false,
+      customerPictureUrl:"",
       processEnv,
       // 查询
       query: {
@@ -163,18 +170,40 @@ export default {
           {
             title: "客户手机号",
             key: "encryptPhone",
-            minWidth: 100,
+            minWidth: 140,
             align: "center",
           },
           {
             title: "医院",
             key: "hospitalName",
             minWidth: 200,
+            tooltip:true
           },
           {
             title: "申请理由",
             key: "sendRemark",
             minWidth: 150,
+          },
+          {
+            title: "截图",
+            key: "picture",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h("viewer", {}, [
+                h("img", {
+                  style: {
+                    width: "50px",
+                    height: "50px",
+                    margin: "5px 0",
+                    verticalAlign: "middle",
+                  },
+                  attrs: {
+                    src: params.row.picture,
+                  },
+                }),
+              ]);
+            },
           },
           {
             title: "归属客服",
@@ -260,10 +289,32 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 240,
+            width: 320,
             align: "center",
+            fixed:'right',
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled: !params.row.picture,
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { picture } = params.row;
+                        this.viewPicModel = true;
+                        this.customerPictureUrl = picture;
+                      },
+                    },
+                  },
+                  "查看截图"
+                ),
                 h(
                   "Button",
                   {
@@ -284,12 +335,14 @@ export default {
                             const {
                               phone,
                               acceptBy,
-                              addWorkType
+                              addWorkType,
+                              picture
                             } = res.data.contentPlatFormOrderAddWork;
                             this.title = "修改录单申请";
                             this.editRecordingApplicationParams.phone = phone;
                             this.editRecordingApplicationParams.acceptBy = acceptBy;
                             this.editRecordingApplicationParams.id = id;
+                            this.editRecordingApplicationParams.picture = picture;
                             this.recordingApplicationModel = true;
                           }
                         });
@@ -400,6 +453,7 @@ export default {
         id:'',
         phone: "",
         acceptBy:null,
+        picture:'',
         employee:[],
         // 申请类型数组
         contentPlatformOrderAddWorkTypeList:[],

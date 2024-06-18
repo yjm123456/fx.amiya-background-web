@@ -15,21 +15,43 @@ import loginForm from "./components/login-form";
 import { amiyaEmployeeLogin, permission } from "./../../api/user";
 import * as api from "@/api/customerAppointmentSchedule";
 import multipleTicketsVue from '../financialStatementManage/amyAccountStatement/components/multipleTickets/multipleTickets.vue';
+import axios from 'axios';
 
 export default {
   components: {
     loginForm,
   },
   data() {
-    return {};
+    return {
+      // ip地址
+      ip:'',
+      // 主机名称
+      hostName:''
+    };
+  },
+  mounted(){
+    this.getIp()
   },
   methods: {
+    getIp(){
+      // 获取主机名 
+      axios.get('http://localhost:5000/getMyComputerName').then(res=>{
+          const ip = res.data.split("\n",1);
+          sessionStorage.setItem('hostName',ip[0])
+      })
+      // 获取客户端IP 网络IP
+      axios.get('https://myip.ipip.net/').then(res=>{
+          sessionStorage.setItem('ip',res.data)
+      })
+    },
     async handleSubmit({ userName, password }) {
       sessionStorage.setItem("un",userName)
       sessionStorage.setItem("pd",password)
       const data = {
         password: password,
         userName: userName,
+        ip:sessionStorage.getItem("ip"),
+        hostName:sessionStorage.getItem("hostName")
       };
       try {
         const amiyaEmployeeLoginRes = await amiyaEmployeeLogin(data);

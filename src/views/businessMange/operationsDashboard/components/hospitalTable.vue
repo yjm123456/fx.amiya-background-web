@@ -10,7 +10,7 @@
           @click="checkTab(index, item)"
           :class="{ active2: item.isSelected }"
         >
-          <i class="iconfont  icons" :class="item.icon"></i>
+          <!-- <i class="iconfont  icons" :class="item.icon"></i> -->
           <span>{{ item.name }}</span>
         </div>
       </div>
@@ -38,12 +38,12 @@ export default {
         {
           name: "吉娜组",
           id: 2,
-          isSelected: false,
+          isSelected: true,
         },
         {
           name: "合作达人",
           id: 3,
-          isSelected: false,
+          isSelected: true,
         },
         
       ],
@@ -55,29 +55,34 @@ export default {
             key: "city",
             width:100,
             align:'center',
+            className: 'test-name',
           },
           {
             title: "医院",
             key: "hospitalName",
             width:180,
-            tooltip:true
+            tooltip:true,
+            className: 'test-name',
           },
           {
             title: "派单量",
             key: "sendNum",
             width:90,
             align:'center',
+            className: 'test-name',
           },
           {
             title: "上门数",
             key: "visitNum",
             width:90,
             align:'center',
+            className: 'test-name',
           },
           {
             title: "上门率",
             key: "visitRate",
             align:'center',
+            className: 'test-name',
             width:110,
             render: (h, params) => {
               return h(
@@ -91,6 +96,7 @@ export default {
             title: "新客成交",
             key: "newCustomerDealNum",
             width:140,
+            className: 'test-name',
             align:'center',
           },
           {
@@ -98,6 +104,7 @@ export default {
             key: "newCustomerDealRate",
             align:'center',
             width:110,
+            className: 'test-name',
             render: (h, params) => {
               return h(
                     "div",
@@ -111,6 +118,7 @@ export default {
             key: "newCustomerAchievement",
             width:120,
             align:'center',
+            className: 'test-name',
             render: (h, params) => {
               return h(
                     "div",
@@ -125,12 +133,14 @@ export default {
             key: "oldCustomerDealNum",
             width:110,
             align:'center',
+            className: 'test-name',
           },
           {
             title: "老客业绩",
             key: "oldCustomerAchievement",
             width:110,
             align:'center',
+            className: 'test-name',
             render: (h, params) => {
               return h(
                     "div",
@@ -144,6 +154,7 @@ export default {
             title: "总业绩",
             width:140,
             align:'center',
+            className: 'test-name',
             key: "totalAchievement",
             render: (h, params) => {
               return h(
@@ -155,6 +166,7 @@ export default {
           },
           {
             title: "新客客单价",
+            className: 'test-name',
             key: "newCustomerUnitPrice",
             width:110,
             align:'center',
@@ -168,6 +180,7 @@ export default {
           },
           {
             title: "老客客单价",
+            className: 'test-name',
             key: "oldCustomerUnitPrice",
             width:110,
             align:'center',
@@ -184,12 +197,14 @@ export default {
             key: "newOrOldCustomerRate",
             width:110,
             align:'center',
+            className: 'test-name',
           },
           {
             title: "贡献",
             key: "rate",
             width:110,
             align:'center',
+            className: 'test-name',
             render: (h, params) => {
               return h(
                     "div",
@@ -245,7 +260,13 @@ export default {
   
 };
 </script>
+<style scoped lang="less">
+/deep/.ivu-table th.test-name,.ivu-table-header thead tr th,.thead {
+    background: #f7e8b1;
+}
+</style>
 <style lang="less" >
+
 .header_wrap {
   display: flex;
   align-items: center;
@@ -299,4 +320,5 @@ export default {
   box-sizing: border-box;
   text-align: center;
 }
+
 </style>

@@ -1,6 +1,20 @@
 <template>
-  <div class="wrapper">
-    <div ref="dom" :style="{ width: '95%', height: '400px' }"></div>
+  <div>
+    <Modal
+      v-model="control"
+      :title="title"
+      :mask-closable="false"
+      @on-visible-change="handleModalVisibleChange"
+      width="53%"
+    >
+      <div class="wrapper">
+        <div ref="dom" :style="{ width: '100%', height: '400px' }"></div>
+      </div>
+      <div slot="footer">
+        <Button @click="cancel('form')">取消</Button>
+        <!-- <Button type="primary" @click="handleSubmit('form')">确定</Button> -->
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -11,14 +25,26 @@ import * as echarts from "echarts";
 echarts.registerTheme("tdTheme", tdTheme);
 export default {
   props: {
-    flowBarItemData: Array,
+    detailModel: Boolean,
+    detailFlowBarItemData: Array,
+    title: String,
   },
   data() {
     return {
       myChart: "",
+      control: false,
     };
   },
   methods: {
+    // modal 显示状态发生变化时触发
+    handleModalVisibleChange(value) {
+      if (!value) {
+        this.$emit("update:detailModel", false);
+      }
+    },
+    cancel() {
+      this.$emit("update:detailModel", false);
+    },
     // 业绩
     myEcharts(value) {
       let nameList = [];
@@ -42,14 +68,16 @@ export default {
         xAxis: {
           type: "category", // category(坐标轴类型)
           data: nameList,
-          // axisTick: { // 坐标轴刻度相关配置
-          //     show: true // 是否显示坐标轴刻度
+          // axisTick: {
+          //   // 坐标轴刻度相关配置
+          //   show: false, // 是否显示坐标轴刻度
           // },
-          // axisLine: { // 坐标轴轴线相关配置
-          //     lineStyle: { // 坐标轴轴线样式
-          //         // color: 'rgba(255,255,255,0.15)' // 坐标轴轴线颜色
-          //         color: '#ccc' // 坐标轴轴线颜色
-          //     }
+          // axisLine: {
+          //   // 坐标轴轴线相关配置
+          //   lineStyle: {
+          //     // 坐标轴轴线样式
+          //     color: "rgba(255,255,255,0.15)", // 坐标轴轴线颜色
+          //   },
           // },
           axisLabel: {
             // 坐标轴刻度标签相关配置
@@ -60,21 +88,26 @@ export default {
         },
         yAxis: {
           type: "value", // value(数值轴,适用于连续数据)
-          // axisTick: { // 坐标轴刻度相关配置
-          //     show: true  // 是否显示坐标轴刻度
+          // axisTick: {
+          //   // 坐标轴刻度相关配置
+          //   show: false, // 是否显示坐标轴刻度
           // },
-          // axisLine: { // 坐标轴轴线相关配置
-          //     show: true // 是否显示坐标轴轴线
+          // axisLine: {
+          //   // 坐标轴轴线相关配置
+          //   show: false, // 是否显示坐标轴轴线
           // },
-          // axisLabel: { // 坐标轴刻度标签相关配置
-          //     color: '#ffffff',
-          //     fontSize: 14
+          // axisLabel: {
+          //   // 坐标轴刻度标签相关配置
+          //   color: "#ffffff",
+          //   fontSize: 14,
           // },
-          // splitLine: { // 坐标轴在 grid 区域中的分隔线
-          //     lineStyle: { // 分割线配置
-          //         color: 'rgba(255,255,255,0.15)' // 分割线颜色
-          //     }
-          // }
+          // splitLine: {
+          //   // 坐标轴在 grid 区域中的分隔线
+          //   lineStyle: {
+          //     // 分割线配置
+          //     color: "rgba(255,255,255,0.15)", // 分割线颜色
+          //   },
+          // },
         },
         series: [
           // 底部的椭圆形(象形柱图):pictorialBar
@@ -172,10 +205,21 @@ export default {
     off(window, "resize", this.myChart.resize);
   },
   watch: {
-    flowBarItemData(value) {
-      // this.$nextTick(() => {
-      this.myEcharts(value);
-      // });
+    detailFlowBarItemData(value) {
+      if(this.detailModel == true){
+        this.$nextTick(() => {
+          this.myEcharts(value);
+        });
+      }
+      
+    },
+    detailModel(value) {
+      this.control = value;
+      if (value == true) {
+        // this.$nextTick(() => {
+        // this.myEcharts(this.detailFlowBarItemData);
+        // });
+      }
     },
   },
 };

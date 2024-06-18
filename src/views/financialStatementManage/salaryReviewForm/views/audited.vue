@@ -6,7 +6,7 @@
           <Input
             v-model="query.keyWord"
             placeholder="请输入关键字"
-            style="width: 170px; "
+            style="width: 160px; "
             @keyup.enter.native="getListWithPageByCustomerCompensation()"
           />
           <DatePicker
@@ -27,7 +27,7 @@
             v-model="query.belongEmpId"
             placeholder="请选择归属客服"
             filterable
-            style="width: 160px;margin-left:10px"
+            style="width: 140px;margin-left:10px"
           >
             <Option
               v-for="item in params.employeePositionAdmin"
@@ -40,7 +40,7 @@
             v-model="query.chooseHospitalId"
             placeholder="请选择医院"
             filterable
-            style="width: 160px;margin-left:10px"
+            style="width: 140px;margin-left:10px"
           >
             <Option
               v-for="item in params.hospitallist"
@@ -53,7 +53,7 @@
             v-model="query.isOldCustoemr"
             placeholder="请选择业绩"
             filterable
-            style="width: 140px;margin-left:10px"
+            style="width: 120px;margin-left:10px"
           >
             <Option
               v-for="item in params.isOldCustoemrList"
@@ -79,7 +79,7 @@
             v-model="query.isGenerateSalry"
             placeholder="请选择生成薪资状态"
             filterable
-            style="width: 150px;margin-left:10px"
+            style="width: 120px;margin-left:10px"
           >
             <Option
               v-for="item in isGenerateSalryList"
@@ -101,6 +101,32 @@
               >{{ item.name }}</Option
             >
           </Select> -->
+          <Select
+            v-model="query.orderFrom"
+            placeholder="请选择平台"
+            filterable
+            style="width: 120px;margin-left:10px"
+          >
+            <Option
+              v-for="item in params.contentPalteForms"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Select
+            v-model="query.addOrderPrice"
+            placeholder="请选择金额"
+            filterable
+            style="width: 140px;margin-left:10px"
+          >
+            <Option
+              v-for="item in params.addOrderPriceList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -173,6 +199,8 @@ export default {
     return {
       // 查询
       query: {
+        orderFrom:0,
+        addOrderPrice:-1,
         isGenerateSalry:1,
         keyWord: "",
         startDate: this.$moment()
@@ -214,6 +242,19 @@ export default {
             minWidth: 120,
             align: "center",
             tooltip:true
+          },
+          {
+            title: "下单金额",
+            key: "contentPlatFormOrderAddOrderPrice",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "新/老客业绩",
+            key: "isOldCustomerText",
+            minWidth: 140,
+            align: "center",
           },
           {
             title: "订单号",
@@ -293,12 +334,7 @@ export default {
             tooltip:true
           },
           
-          {
-            title: "新/老客业绩",
-            key: "isOldCustomerText",
-            minWidth: 140,
-            align: "center",
-          },
+          
           {
             title: "审核状态",
             key: "compensationCheckStateText",
@@ -583,7 +619,9 @@ export default {
         belongEmpId,
         isOldCustoemr,
         createEmpId,
-        isGenerateSalry
+        isGenerateSalry,
+        orderFrom,
+        addOrderPrice
       } = this.query;
       const data = {
         pageNum,
@@ -600,7 +638,9 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
-        isGenerateSalry
+        isGenerateSalry,
+        orderFrom,
+        addOrderPrice
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {
@@ -629,7 +669,9 @@ export default {
         belongEmpId,
         isOldCustoemr,
         createEmpId,
-        isGenerateSalry
+        isGenerateSalry,
+        orderFrom,
+        addOrderPrice
       } = this.query;
       const data = {
         pageNum,
@@ -646,7 +688,9 @@ export default {
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
-        isGenerateSalry
+        isGenerateSalry,
+        orderFrom,
+        addOrderPrice
       };
       api.getListWithPageByCustomerCompensation(data).then((res) => {
         if (res.code === 0) {

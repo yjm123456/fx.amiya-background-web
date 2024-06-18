@@ -96,6 +96,19 @@ export default {
             tooltip: true,
           },
           {
+            title: "下单金额",
+            key: "contentPlatFormOrderAddOrderPrice",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "新/老客业绩",
+            key: "isOldCustomerText",
+            minWidth: 140,
+            align: "center",
+          },
+          {
             title: "订单号",
             key: "orderId",
             minWidth: 180,
@@ -154,12 +167,7 @@ export default {
             tooltip: true,
           },
 
-          {
-            title: "新/老客业绩",
-            key: "isOldCustomerText",
-            minWidth: 140,
-            align: "center",
-          },
+          
           {
             title: "审核状态",
             key: "compensationCheckStateText",
@@ -417,6 +425,8 @@ export default {
         isOldCustoemr,
         createEmpId,
         isGenerateSalry,
+        orderFrom,
+        addOrderPrice
       } = this.filterCriteria;
       const data = {
         pageNum: this.query.pageNum,
@@ -434,6 +444,8 @@ export default {
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         isGenerateInspectSalry: isGenerateSalry,
+        orderFrom,
+        addOrderPrice
       };
       api.getListWithPageByCustomerInspectData(data).then((res) => {
         if (res.code === 0) {
@@ -468,6 +480,8 @@ export default {
         isOldCustoemr,
         createEmpId,
         isGenerateSalry,
+        orderFrom,
+        addOrderPrice
       } = this.filterCriteria;
       const data = {
         pageNum,
@@ -485,6 +499,8 @@ export default {
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         isGenerateInspectSalry: isGenerateSalry,
+        orderFrom,
+        addOrderPrice
       };
       api.getListWithPageByCustomerInspectData(data).then((res) => {
         if (res.code === 0) {

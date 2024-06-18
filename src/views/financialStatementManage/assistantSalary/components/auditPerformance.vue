@@ -55,6 +55,19 @@ export default {
             tooltip: true,
           },
           {
+            title: "下单金额",
+            key: "contentPlatFormOrderAddOrderPrice",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "新/老客业绩",
+            key: "isOldCustomerText",
+            minWidth: 140,
+            align: "center",
+          },
+          {
             title: "订单号",
             key: "orderId",
             minWidth: 180,
@@ -121,12 +134,7 @@ export default {
             align: "center",
             tooltip: true,
           },
-          {
-            title: "新/老客业绩",
-            key: "isOldCustomerText",
-            minWidth: 140,
-            align: "center",
-          },
+          
           {
             title: "审核状态",
             key: "compensationCheckStateText",

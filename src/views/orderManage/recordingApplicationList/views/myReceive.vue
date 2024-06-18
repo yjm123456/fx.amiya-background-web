@@ -84,6 +84,8 @@
       :id="id"
       @getContentPlatFormOrderAddWork="getContentPlatFormOrderAddWork"
     />
+    <!-- 查看图片 -->
+    <viewImg :viewPicModel.sync="viewPicModel" :customerPictureUrl="customerPictureUrl"/>
   </div>
 </template>
 
@@ -91,9 +93,12 @@
 import * as api from "@/api/contentPlatFormOrderAddWork";
 import * as orderApi from "@/api/orderManage";
 import examine from "../components/examine.vue";
+import viewImg from "../components/viewImg.vue"
+
 export default {
   components: {
     examine,
+    viewImg
   },
   props: {
     activeName: String,
@@ -101,6 +106,9 @@ export default {
   },
   data() {
     return {
+      // 查看截图
+      viewPicModel:false,
+      customerPictureUrl:"",
       // 查询
       query: {
         keyWord: "",
@@ -122,18 +130,40 @@ export default {
           {
             title: "手机号",
             key: "encryptPhone",
-            minWidth: 100,
+            minWidth: 120,
             align: "center",
           },
           {
             title: "医院",
             key: "hospitalName",
-            minWidth: 200,
+            minWidth: 180,
+            tooltip:true
           },
           {
             title: "申请理由",
             key: "sendRemark",
             minWidth: 150,
+          },
+          {
+            title: "截图",
+            key: "picture",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h("viewer", {}, [
+                h("img", {
+                  style: {
+                    width: "50px",
+                    height: "50px",
+                    margin: "5px 0",
+                    verticalAlign: "middle",
+                  },
+                  attrs: {
+                    src: params.row.picture,
+                  },
+                }),
+              ]);
+            },
           },
           {
             title: "归属客服",
@@ -216,13 +246,35 @@ export default {
               );
             },
           },
+          
           {
             title: "操作",
             key: "",
-            width: 220,
+            width: 320,
             align: "center",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled: !params.row.picture,
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { picture } = params.row;
+                        this.viewPicModel = true;
+                        this.customerPictureUrl = picture;
+                      },
+                    },
+                  },
+                  "查看截图"
+                ),
                 h(
                   "Button",
                   {

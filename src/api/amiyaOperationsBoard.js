@@ -56,6 +56,49 @@ export const hospitalTransformData = (params) => {
         params
     });
 };
+// 根据条件获取流量数据
+export const getTotalFlowRateAndDateSchedule = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getTotalFlowRateAndDateSchedule",
+        method: "get",
+        params
+    });
+};
+
+// 根据条件获取流量分析占比（分组）
+export const getGroupFlowRateCompare = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getGroupFlowRateCompare",
+        method: "get",
+        params
+    });
+};
+
+// 根据条件获取平台流量分析
+export const getFlowRateByContentPlatform = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getFlowRateByContentPlatform",
+        method: "get",
+        params
+    });
+};
+
+// 根据平台获取详细流量分析
+export const getFlowRateDetailsByContentPlatform = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getFlowRateDetailsByContentPlatform",
+        method: "get",
+        params
+    });
+};
+// 根据结束时间获取时间进度
+export const getTimeSpan = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getTimeSpan",
+        method: "get",
+        params
+    });
+};
 
 
 

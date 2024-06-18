@@ -64,7 +64,9 @@
             >
           </Select>
         </FormItem>
-        
+        <FormItem label="截图" prop="picture" key="picture">
+          <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
+        </FormItem>
         <FormItem label="申请理由" prop="sendRemark">
           <Input v-model="form.sendRemark" type="textarea" :rows="4"></Input>
         </FormItem>
@@ -87,8 +89,11 @@
 
 <script>
 import * as api from "@/api/contentPlatFormOrderAddWork";
+import upload from "@/components/upload/upload";
+
 export default {
   components: {
+    upload
   },
   props: {
     recordingApplicationModel: Boolean,
@@ -99,6 +104,14 @@ export default {
   },
   data() {
     return {
+      uploadObj: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
       isLoading:false,
       control: false,
       // recipientList:[{id:1,name:'管理员'}],
@@ -117,9 +130,17 @@ export default {
         hospitalId:null,
         // 申请理由
         sendRemark:'',
-        addWorkType: null
+        addWorkType: null,
+        // 截图
+        picture:''
       },
       ruleValidates: {
+        picture: [
+          {
+            required: true,
+            message: "请上传截图",
+          },
+        ],
         acceptBy: [
           {
             required: true,
@@ -150,6 +171,10 @@ export default {
     };
   },
   methods: {
+    // 图片
+    handleUploadChange(values) {
+      this.form.picture = values[0];
+    },
     // 申请类型为改绑申请时 默认医院为测试医院
     addWorkTypeChange(value){
       if(value == 2){
@@ -164,6 +189,8 @@ export default {
     handleCancel(name) {
       this.$emit("update:recordingApplicationModel", false);
       this.$refs[name].resetFields();
+      this.uploadObj.uploadList = [];
+
 
     },
     handleSubmit(name) {
@@ -187,15 +214,15 @@ export default {
                 }
             });
           }else{
-            const {acceptBy,phone,hospitalId,sendRemark,addWorkType} = this.form
+            const {acceptBy,phone,hospitalId,sendRemark,addWorkType,picture} = this.form
             const data ={
               id:this.editRecordingApplicationParams.id,
               acceptBy,
               phone,
               hospitalId,
               sendRemark,
-              addWorkType
-
+              addWorkType,
+              picture
             }
             this.isLoading = true;
             api.editContentPlatFormOrderAddWork(data).then((res) => {
@@ -249,6 +276,8 @@ export default {
           this.form.acceptBy = this.editRecordingApplicationParams.acceptBy
           this.employee = this.editRecordingApplicationParams.employeeList
           this.form.phone = this.editRecordingApplicationParams.phone
+          this.form.picture = this.editRecordingApplicationParams.picture;
+          this.uploadObj.uploadList = [this.form.picture];
           this.form.acceptBy = this.editRecordingApplicationParams.employeeList[0].id
         }
       }

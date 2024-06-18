@@ -102,15 +102,19 @@
         />
       </div>
     </Card>
-
+    <!-- 查看图片 -->
+    <viewImg :viewPicModel.sync="viewPicModel" :customerPictureUrl="customerPictureUrl"/>
    
   </div>
 </template>
 
 <script>
 import * as api from "@/api/contentPlatFormOrderAddWork";
+import viewImg from "../components/viewImg.vue"
+
 export default {
   components: {
+    viewImg
   },
   props: {
     activeName: String,
@@ -118,6 +122,9 @@ export default {
   },
   data() {
     return {
+      // 查看截图
+      viewPicModel:false,
+      customerPictureUrl:"",
       // 查询
       query: {
         keyWord: "",
@@ -170,6 +177,27 @@ export default {
             key: "sendRemark",
             minWidth: 150,
             tooltip:true
+          },
+          {
+            title: "截图",
+            key: "picture",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h("viewer", {}, [
+                h("img", {
+                  style: {
+                    width: "50px",
+                    height: "50px",
+                    margin: "5px 0",
+                    verticalAlign: "middle",
+                  },
+                  attrs: {
+                    src: params.row.picture,
+                  },
+                }),
+              ]);
+            },
           },
           {
             title: "归属客服",
@@ -255,6 +283,37 @@ export default {
                   ? this.$moment(params.row.checkDate).format("YYYY-MM-DD")
                   : ""
               );
+            },
+          },
+          {
+            title: "操作",
+            key: "",
+            width: 100,
+            align: "center",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      disabled: !params.row.picture,
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { picture } = params.row;
+                        this.viewPicModel = true;
+                        this.customerPictureUrl = picture;
+                      },
+                    },
+                  },
+                  "查看截图"
+                ),
+              ]);
             },
           },
          

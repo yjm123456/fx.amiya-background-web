@@ -27,13 +27,25 @@ export default {
                     key: "groupName",
                     minWidth: 160,
                     align: "center",
-                    
+                    className: 'test-name',
+                    render: (h, params) => {
+                        return h('div', { 
+                            style: { 
+                                // padding:'10px',backgroundColor: '#fff9e6',
+                                color:'orange',
+                                fontSize:'14px',
+                                fontWeight:'bold',
+                             } 
+                        },
+                             params.row.groupName );
+                    }
                 },
                 {
                     title: "线索量",
                     key: "clueCount",
                     minWidth: 120,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -42,7 +54,7 @@ export default {
                                     color: params.row.clueCount <= 0 ? "red" : "#04B05D",
                                 },
                             },
-                            params.row.clueCount + '%'
+                            params.row.clueCount 
                         );
                     },
                 },
@@ -51,6 +63,7 @@ export default {
                     key: "distributeConsulationNum",
                     minWidth: 120,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -68,12 +81,27 @@ export default {
                     key: "clueEffectiveRate",
                     minWidth: 140,
                     align: "center",
+                    className: 'test-name',
+                    renderHeader: (h, { column }) => {
+                        return h('span', [
+                        //   column.title,
+                            h('span', {
+                            style: {
+                                // color: 'red',
+                            },
+                            domProps: {
+                                innerHTML: '线索有效率' +'（' +this.params.ClueEffectiveRate + '%）'
+                            //   + ' *',
+                            },
+                            }),
+                        ]);
+                    },
                     render: (h, params) => {
                         return h(
                             "div",
                             {
                                 style: {
-                                    color: params.row.clueEffectiveRate <= 0 ? "red" : "#04B05D",
+                                    color: this.params.ClueEffectiveRate == params.row.clueEffectiveRate ? '#000' : params.row.clueEffectiveRate   < this.params.ClueEffectiveRate ? "red" : "#04B05D",
                                 },
                             },
                             params.row.clueEffectiveRate + '%'
@@ -85,6 +113,7 @@ export default {
                     key: "addWechatCount",
                     minWidth: 140,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -101,13 +130,28 @@ export default {
                     title: "加v率",
                     key: "addWechatRate",
                     minWidth: 180,
+                    className: 'test-name',
                     align: "center",
+                    renderHeader: (h, { column }) => {
+                        return h('span', [
+                        //   column.title,
+                            h('span', {
+                            style: {
+                                // color: 'red',
+                            },
+                            domProps: {
+                                innerHTML: '加v率' +'（' +this.params.FlowTransformAddWeChatRate + '%）'
+                            //   + ' *',
+                            },
+                            }),
+                        ]);
+                    },
                     render: (h, params) => {
                         return h(
                             "div",
                             {
                                 style: {
-                                    color: params.row.addWechatRate <= 0 ? "red" : "#04B05D",
+                                    color: this.params.FlowTransformAddWeChatRate == params.row.addWechatRate ? '#000' : params.row.addWechatRate   < this.params.FlowTransformAddWeChatRate ? "red" : "#04B05D",
                                 },
                             },
                             params.row.addWechatRate + '%'
@@ -119,6 +163,7 @@ export default {
                     key: "sendOrderCount",
                     minWidth: 160,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -136,12 +181,27 @@ export default {
                     key: "sendOrderRate",
                     minWidth: 120,
                     align: "center",
+                    className: 'test-name',
+                    renderHeader: (h, { column }) => {
+                        return h('span', [
+                        //   column.title,
+                            h('span', {
+                            style: {
+                                // color: 'red',
+                            },
+                            domProps: {
+                                innerHTML: '派单率' +'（' +this.params.FlowTransformSendOrderRate + '%）'
+                            //   + ' *',
+                            },
+                            }),
+                        ]);
+                    },
                     render: (h, params) => {
                         return h(
                             "div",
                             {
                                 style: {
-                                    color: params.row.sendOrderRate <= 0 ? "red" : "#04B05D",
+                                    color: this.params.FlowTransformSendOrderRate == params.row.sendOrderRate ? '#000' : params.row.sendOrderRate   < this.params.FlowTransformSendOrderRate ? "red" : "#04B05D",
                                 },
                             },
                             params.row.sendOrderRate + '%'
@@ -153,6 +213,7 @@ export default {
                     key: "toHospitalCount",
                     minWidth: 130,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -170,12 +231,27 @@ export default {
                     key: "toHospitalRate",
                     minWidth: 150,
                     align: "center",
+                    className: 'test-name',
+                    renderHeader: (h, { column }) => {
+                        return h('span', [
+                        //   column.title,
+                            h('span', {
+                            style: {
+                                // color: 'red',
+                            },
+                            domProps: {
+                                innerHTML: '上门率' +'（' +this.params.FlowTransformToHospitalRate + '%）'
+                            //   + ' *',
+                            },
+                            }),
+                        ]);
+                    },
                     render: (h, params) => {
                         return h(
                             "div",
                             {
                                 style: {
-                                    color: params.row.toHospitalRate <= 0 ? "red" : "#04B05D",
+                                    color: this.params.FlowTransformToHospitalRate == params.row.toHospitalRate ? '#000' : params.row.toHospitalRate   < this.params.FlowTransformToHospitalRate ? "red" : "#04B05D",
                                 },
                             },
                             params.row.toHospitalRate + '%'
@@ -192,11 +268,24 @@ export default {
                     key: "groupName",
                     minWidth: 160,
                     align: "center",
+                    className: 'test-name',
+                    render: (h, params) => {
+                        return h('div', { 
+                            style: { 
+                                // padding:'10px',backgroundColor: '#fff9e6',
+                                color:'orange',
+                                fontSize:'15px',
+                                fontWeight:'bold',
+                             } 
+                        },
+                             params.row.groupName );
+                    }
                 },
                 {
                     title: "上门人数",
                     key: "toHospitalCount",
                     minWidth: 130,
+                    className: 'test-name',
                     align: "center",
                     render: (h, params) => {
                         return h(
@@ -215,6 +304,7 @@ export default {
                     key: "dealCount",
                     minWidth: 120,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -232,12 +322,27 @@ export default {
                     key: "dealRate",
                     minWidth: 150,
                     align: "center",
+                    className: 'test-name',
+                    renderHeader: (h, { column }) => {
+                        return h('span', [
+                        //   column.title,
+                            h('span', {
+                            style: {
+                                // color: 'red',
+                            },
+                            domProps: {
+                                innerHTML: '成交率' +'（' +this.params.CustomerTransformDealRate + '%）'
+                            //   + ' *',
+                            },
+                            }),
+                        ]);
+                    },
                     render: (h, params) => {
                         return h(
                             "div",
                             {
                                 style: {
-                                    color: params.row.dealRate <= 0 ? "red" : "#04B05D",
+                                    color: this.params.CustomerTransformDealRate == params.row.dealRate ? '#000' : params.row.dealRate   < this.params.CustomerTransformDealRate ? "red" : "#04B05D",
                                 },
                             },
                             params.row.dealRate + '%'
@@ -249,6 +354,7 @@ export default {
                     key: "newCustomerPerformance",
                     minWidth: 150,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -266,6 +372,7 @@ export default {
                     key: "oldCustomerPerformance",
                     minWidth: 150,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -283,6 +390,7 @@ export default {
                     key: "newCustomerUnitPrice",
                     minWidth: 150,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -300,6 +408,7 @@ export default {
                     key: "oldCustomerUnitPrice",
                     minWidth: 150,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -317,6 +426,7 @@ export default {
                     key: "customerUnitPrice",
                     minWidth: 150,
                     align: "center",
+                    className: 'test-name',
                     render: (h, params) => {
                         return h(
                             "div",
@@ -334,11 +444,13 @@ export default {
                     key: "newAndOldCustomerRate",
                     minWidth: 150,
                     align: "center",
+                    className: 'test-name',
                 },
                 {
                     title: "贡献",
                     key: "rate",
                     minWidth: 150,
+                    className: 'test-name',
                     align: "center",
                     render: (h, params) => {
                         return h(
@@ -361,10 +473,6 @@ export default {
         // 根据条件获取新老客业绩占比（助理与机构）
         getCompanyTransformData() {
             const {startDate,endDate} = this.params
-            if (!startDate || !endDate) {
-                this.$Message.warning("请选择日期！");
-                return;
-            }
             const data = {
                 startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
                 endDate: this.$moment(endDate).format("YYYY-MM-DD"),
@@ -383,7 +491,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="less" scoped>
 .h3{
   font-size: 18px;
   font-weight: bold;
@@ -393,5 +501,11 @@ export default {
 }
 .m_b{
     margin-bottom: 10px;
+}
+/deep/.ivu-table th.test-name {
+    background: #f7e8b1;
+}
+/deep/.ivu-table-border td:nth-child(1){
+    background: #fff9e6;
 }
 </style>

@@ -147,6 +147,13 @@ export default {
             align: "center",
           },
           {
+            title: "助理确认业绩",
+            key: "customerServiceOrderPerformance",
+            minWidth: 140,
+            align: "center",
+            tooltip: true,
+          },
+          {
             title: "审核客服业绩金额",
             key: "customerServiceSettlePrice",
             minWidth: 180,
@@ -295,6 +302,20 @@ export default {
             minWidth: 160,
             align: "center",
             tooltip: true,
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '稽查提成比例'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
             render: (h, params) => {
               return h(
                 "div",
@@ -310,6 +331,20 @@ export default {
             minWidth: 160,
             align: "center",
             tooltip: true,
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '稽查提成金额'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
           },
           {
             title: "薪资审核类型",
@@ -318,13 +353,7 @@ export default {
             align: "center",
             tooltip: true,
           },
-          {
-            title: "助理确认业绩",
-            key: "customerServiceOrderPerformance",
-            minWidth: 140,
-            align: "center",
-            tooltip: true,
-          },
+          
           {
             title: "稽查人员",
             key: "inspectEmpName",
@@ -440,7 +469,7 @@ export default {
           : null,
         chooseHospitalId: chooseHospitalId == -1 ? null : chooseHospitalId,
         checkState,
-        inspectEmpId: belongEmpId == -1 ? null : belongEmpId,
+        inspectEmpId: belongEmpId == -1 ? '' : String(belongEmpId),
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         isGenerateInspectSalry: isGenerateSalry,
@@ -495,13 +524,14 @@ export default {
           : null,
         chooseHospitalId: chooseHospitalId == -1 ? null : chooseHospitalId,
         checkState,
-        inspectEmpId: belongEmpId == -1 ? null : belongEmpId,
+        inspectEmpId: belongEmpId == -1 ? '' : String(belongEmpId),
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         isGenerateInspectSalry: isGenerateSalry,
         orderFrom,
         addOrderPrice
       };
+      
       api.getListWithPageByCustomerInspectData(data).then((res) => {
         if (res.code === 0) {
           const {

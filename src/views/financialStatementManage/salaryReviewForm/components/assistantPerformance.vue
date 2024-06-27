@@ -135,10 +135,31 @@ export default {
             align: "center",
           },
           {
+            title: "助理确认业绩",
+            key: "customerServiceOrderPerformance",
+            minWidth: 140,
+            align: "center",
+            tooltip:true
+          },
+          {
             title: "助理提成比例",
             key: "performancePercent",
             minWidth: 160,
             align: "center",
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '助理提成比例'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
             render: (h, params) => {
               return h(
                 "div",
@@ -152,6 +173,20 @@ export default {
             key: "customerServicePerformance",
             minWidth: 160,
             align: "center",
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '助理提成金额'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
           },
           {
             title: "审核客服业绩金额",
@@ -302,13 +337,7 @@ export default {
               }
             },
           },
-          {
-            title: "助理确认业绩",
-            key: "customerServiceOrderPerformance",
-            minWidth: 140,
-            align: "center",
-            tooltip:true
-          },
+          
           
         ],
         data: [],
@@ -411,7 +440,7 @@ export default {
           : null,
         chooseHospitalId: chooseHospitalId == -1 ? null : chooseHospitalId,
         checkState,
-        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId: belongEmpId == -1 ? '' : String(belongEmpId),
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         isGenerateSalry,
@@ -461,7 +490,7 @@ export default {
           : null,
         chooseHospitalId: chooseHospitalId == -1 ? null : chooseHospitalId,
         checkState,
-        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId: belongEmpId == -1 ? '' : String(belongEmpId),
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         isGenerateSalry,

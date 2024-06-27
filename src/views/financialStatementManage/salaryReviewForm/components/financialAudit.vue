@@ -7,16 +7,16 @@
       @on-visible-change="handleModalVisibleChange"
       width="60%"
     >
-      <div class="model_title">  -（自行提交数据）</div>
+      <div class="model_title">  -（财务稽查数据）</div>
       <Form
         ref="form"
         :model="form"
         :rules="ruleValidates"
         label-position="left"
-        :label-width="90"
+        :label-width="110"
       >
           <Row :gutter="30">
-            <Col span="8">
+            <Col span="7">
               <FormItem label="审核状态" prop="checkState">
                 <Select v-model="form.checkState" placeholder="请选择审核状态">
                   <Option
@@ -28,15 +28,15 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="8">
-              <FormItem label="归属客服" prop="checkBelongEmpId">
+            <Col span="7">
+              <FormItem label="财务稽查人员" prop="checkBelongEmpId">
                 <Select
                   v-model="form.checkBelongEmpId"
-                  placeholder="请选择归属客服"
+                  placeholder="请选择财务稽查人员"
                   filterable
                 >
                   <Option
-                    v-for="item in params.employeeList"
+                    v-for="item in employeeList"
                     :value="item.id"
                     :key="item.id"
                     >{{ item.name }}</Option
@@ -44,23 +44,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="8">
-              <FormItem label="审核类型" prop="checkType">
-                <Select
-                  v-model="form.checkType"
-                  placeholder="请选择审核类型"
-                  disabled
-                >
-                  <Option
-                    v-for="item in params.reconciliationtCheckType"
-                    :value="item.id"
-                    :key="item.id"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="16">
+            <Col span="10">
               <FormItem label="审核备注" prop="checkRemark">
                 <Input
                   v-model="form.checkRemark"
@@ -85,16 +69,19 @@
 
 <script>
 import * as api from "@/api/reconciliationDocumentsSettle";
+import * as employeeManageApi from "@/api/employeeManage";
+import {processEnv} from "@/http/baseUrl";
 
 export default {
   components: {},
   props: {
-    batchReviewModel: Boolean,
+    financialAuditModel: Boolean,
     params: Object,
     checkedParams: Object,
   },
   data() {
     return {
+      processEnv,
       checkTitle: "审核客服业绩",
       isLoading: false,
       checkStateList: [
@@ -111,21 +98,14 @@ export default {
       form: {
         // 审核状态
         checkState: null,
-        // 归属客服
+        // 财务稽查人员
         checkBelongEmpId: null,
         // 审核备注
         checkRemark: "",
-        // 审核类型
-        checkType: '1',
        
       },
       ruleValidates: {
-        checkType: [
-          {
-            required: true,
-            message: "请选择审核类型",
-          },
-        ],
+        
         checkState: [
           {
             required: true,
@@ -135,7 +115,7 @@ export default {
         checkBelongEmpId: [
           {
             required: true,
-            message: "请选择归属客服",
+            message: "请选择财务稽查人员",
           },
         ],
       },
@@ -158,6 +138,8 @@ export default {
           name: "天猫升单",
         },
       ],
+      // 财务稽查人员
+      employeeList:[]
     };
   },
   methods: {
@@ -168,17 +150,15 @@ export default {
             checkState,
             checkBelongEmpId,
             checkRemark,
-            checkType,
           } = this.form;
           const data = {
             idList: [...this.checkedParams.idList],
             checkState,
-            checkBelongEmpId,
+            financeId:checkBelongEmpId,
             checkRemark,
-            checkType,
           };
           this.isLoading = true;
-          api.batchCheckReconciliationDocumentsSettle(data).then((res) => {
+          api.batchCheckFinanceReconciliationDocumentsSettle(data).then((res) => {
             if (res.code === 0) {
               this.isLoading = false;
               this.handleCancel("form");
@@ -197,7 +177,7 @@ export default {
     },
 
     handleCancel(name) {
-      this.$emit("update:batchReviewModel", false);
+      this.$emit("update:financialAuditModel", false);
       this.$refs[name].resetFields();
     },
     // modal 显示状态发生变化时触发
@@ -209,10 +189,27 @@ export default {
 
       }
     },
+    // 根据职位id获取员工
+    getEmployeeByPositionIdAdmin(){
+      const data = {
+        // （客服管理员)线上id 4 测试5
+        positionId:processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 13 : 26
+        
+      }
+      employeeManageApi.getEmployeeByPositionId(data).then((res) => {
+        if (res.code === 0) {
+          const {employee} =res.data
+          this.employeeList = employee 
+        }
+      });
+    },
   },
   watch: {
-    batchReviewModel(value) {
+    financialAuditModel(value) {
       this.control = value;
+      if(value == true){
+        this.getEmployeeByPositionIdAdmin()
+      }
     },
   },
 };

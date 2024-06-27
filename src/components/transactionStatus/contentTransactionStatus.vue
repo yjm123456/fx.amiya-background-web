@@ -709,6 +709,40 @@ export default {
             key: "price",
             minWidth: 140,
             align:'center',
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '成交金额'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
+          },
+          {
+            title: "业绩类型",
+            key: "dealPerformanceTypeText",
+            minWidth: 140,
+            align:'center',
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '业绩类型'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
           },
           {
             title: "消费类型",
@@ -729,13 +763,6 @@ export default {
               );
             },
           },
-          {
-            title: "业绩类型",
-            key: "dealPerformanceTypeText",
-            minWidth: 120,
-            align:'center',
-          },
-
           // {
           //   title: "佣金比例(%)",
           //   key: "commissionRatio",

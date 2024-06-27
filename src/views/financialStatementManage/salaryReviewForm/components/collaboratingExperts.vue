@@ -7,7 +7,7 @@
       @on-visible-change="handleModalVisibleChange"
       width="60%"
     >
-      <div class="model_title">  -（自行提交数据）</div>
+      <div class="model_title">  -（合作达人数据）</div>
       <Form
         ref="form"
         :model="form"
@@ -89,7 +89,7 @@ import * as api from "@/api/reconciliationDocumentsSettle";
 export default {
   components: {},
   props: {
-    batchReviewModel: Boolean,
+    collaboratingExpertsModel: Boolean,
     params: Object,
     checkedParams: Object,
   },
@@ -116,7 +116,7 @@ export default {
         // 审核备注
         checkRemark: "",
         // 审核类型
-        checkType: '1',
+        checkType: '2',
        
       },
       ruleValidates: {
@@ -178,7 +178,7 @@ export default {
             checkType,
           };
           this.isLoading = true;
-          api.batchCheckReconciliationDocumentsSettle(data).then((res) => {
+          api.batchCheckCooperationLiveAnchorsReconciliationDocumentsSettle(data).then((res) => {
             if (res.code === 0) {
               this.isLoading = false;
               this.handleCancel("form");
@@ -197,7 +197,7 @@ export default {
     },
 
     handleCancel(name) {
-      this.$emit("update:batchReviewModel", false);
+      this.$emit("update:collaboratingExpertsModel", false);
       this.$refs[name].resetFields();
     },
     // modal 显示状态发生变化时触发
@@ -211,7 +211,7 @@ export default {
     },
   },
   watch: {
-    batchReviewModel(value) {
+    collaboratingExpertsModel(value) {
       this.control = value;
     },
   },

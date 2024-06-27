@@ -998,7 +998,7 @@ export default {
           },
           
           {
-            title: "归属客服",
+            title: "上传人",
             key: "createByEmpName",
             minWidth: 120,
             align:'center'

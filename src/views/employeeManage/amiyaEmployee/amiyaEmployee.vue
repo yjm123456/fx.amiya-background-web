@@ -195,13 +195,27 @@
           </Col>
           <Col span="8"  v-if="form.isCustomerService == true">
             <FormItem
-              label="新客提成(%)"
+              label="有效新客提成(%)"
               prop="newCustomerCommission"
              
             >
               <Input
                 v-model="form.newCustomerCommission"
-                placeholder="请输入新客提成"
+                placeholder="请输入有效新客提成"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8"  v-if="form.isCustomerService == true">
+            <FormItem
+              label="潜在新客提成(%)"
+              prop="potentialNewCustomerCommission"
+             
+            >
+              <Input
+                v-model="form.potentialNewCustomerCommission"
+                placeholder="请输入潜在新客提成"
                 type="number"
                 number
               ></Input>
@@ -223,13 +237,27 @@
           </Col>
           <Col span="8" v-if="form.isCustomerService == true">
             <FormItem
-              label="稽查提成(%)"
+              label="财务参与稽查后提成(%)"
               prop="inspectionCommission"
               
             >
               <Input
                 v-model="form.inspectionCommission"
-                placeholder="请输入稽查提成"
+                placeholder="请输入财务参与稽查后提成"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isCustomerService == true">
+            <FormItem
+              label="行政客服参与稽查后提成(%)"
+              prop="administrativeInspection"
+              
+            >
+              <Input
+                v-model="form.administrativeInspection"
+                placeholder="请输入行政客服参与稽查后提成"
                 type="number"
                 number
               ></Input>
@@ -487,7 +515,9 @@ export default {
                               administrativeInspectionCommission,
                               cooperateLiveanchorNewCustomerCommission,
                               cooperateLiveanchorOldCustomerCommission,
-                              tmallOrderCommission
+                              tmallOrderCommission,
+                              potentialNewCustomerCommission,
+                              administrativeInspection
                             } = res.data.employeeInfo;
                             this.isEdit = true;
                             this.form.id = id;
@@ -499,12 +529,14 @@ export default {
                             this.form.liveAnchorIds = liveAnchorIds;
                             this.form.liveAnchorBaseId = liveAnchorBaseId;
                             this.form.newCustomerCommission = newCustomerCommission;
+                            this.form.potentialNewCustomerCommission = potentialNewCustomerCommission;
                             this.form.oldCustomerCommission = oldCustomerCommission;
                             this.form.inspectionCommission = inspectionCommission;
                             this.form.administrativeInspectionCommission = administrativeInspectionCommission;
                             this.form.cooperateLiveanchorNewCustomerCommission = cooperateLiveanchorNewCustomerCommission;
                             this.form.cooperateLiveanchorOldCustomerCommission = cooperateLiveanchorOldCustomerCommission;
                             this.form.tmallOrderCommission = tmallOrderCommission;
+                            this.form.administrativeInspection = administrativeInspection;
                             this.form.valid = valid;
                             this.controlModal = true;
                           }
@@ -586,8 +618,10 @@ export default {
         liveAnchorIds: [],
         // 主播基础信息
         liveAnchorBaseId: "",
-        // 新客提成
+        // 有效新客提成
         newCustomerCommission: null,
+        // 潜在新客提成
+        potentialNewCustomerCommission:null,
         // 老客提成
         oldCustomerCommission: null,
         // 稽查提成
@@ -600,13 +634,27 @@ export default {
         cooperateLiveanchorOldCustomerCommission: null,
         // 天猫升单比例
         tmallOrderCommission: null,
+        // 行政客服参与稽查后提成
+        administrativeInspection:null
       },
 
       ruleValidate: {
+        administrativeInspection: [
+          {
+            required: true,
+            message: "请输入行政客服参与稽查后提成",
+          },
+        ],
         newCustomerCommission: [
           {
             required: true,
-            message: "请输入新客提成",
+            message: "请输入有效新客提成",
+          },
+        ],
+        potentialNewCustomerCommission: [
+          {
+            required: true,
+            message: "请输入潜在新客提成",
           },
         ],
         oldCustomerCommission: [
@@ -618,7 +666,7 @@ export default {
         inspectionCommission: [
           {
             required: true,
-            message: "请输入稽查提成",
+            message: "请输入财务参与稽查后提成",
           },
         ],
         liveAnchorBaseId: [
@@ -782,7 +830,9 @@ export default {
             administrativeInspectionCommission,
             cooperateLiveanchorNewCustomerCommission,
             cooperateLiveanchorOldCustomerCommission,
-            tmallOrderCommission
+            tmallOrderCommission,
+            potentialNewCustomerCommission,
+            administrativeInspection
           } = this.form;
           if (this.isEdit) {
             // 修改
@@ -809,6 +859,8 @@ export default {
               cooperateLiveanchorNewCustomerCommission,
               cooperateLiveanchorOldCustomerCommission,
               tmallOrderCommission,
+              potentialNewCustomerCommission,
+              administrativeInspection
             };
             api.updateAmiyaEmployee(data).then((res) => {
               if (res.code === 0) {
@@ -838,6 +890,8 @@ export default {
               cooperateLiveanchorNewCustomerCommission,
               cooperateLiveanchorOldCustomerCommission,
               tmallOrderCommission,
+              potentialNewCustomerCommission,
+              administrativeInspection
             };
             if (email) {
               if (

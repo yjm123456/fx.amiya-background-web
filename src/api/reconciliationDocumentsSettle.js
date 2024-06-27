@@ -63,3 +63,19 @@ export const batchCheckReconciliationDocumentsSettle = (data) => {
         data
     });
 };
+// 批量审核财务稽查数据
+export const batchCheckFinanceReconciliationDocumentsSettle = (data) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/batchCheckFinanceReconciliationDocumentsSettle",
+        method: "put",
+        data
+    });
+};
+// 批量审核合作达人数据
+export const batchCheckCooperationLiveAnchorsReconciliationDocumentsSettle = (data) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/batchCheckCooperationLiveAnchorsReconciliationDocumentsSettle",
+        method: "put",
+        data
+    });
+};

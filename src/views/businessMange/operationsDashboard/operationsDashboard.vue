@@ -18,7 +18,7 @@
         <div class="date_con">
           <span>
             <span class="completeRateSize">时间进度：</span>
-            <Progress :percent="completeRate >100 ? 100 : completeRate" hide-info style="width:180px" stroke-color="dodgerblue" :stroke-width="13"> </Progress>
+            <Progress :percent="completeRate >100 ? 100 : completeRate" hide-info style="width:180px;" stroke-color="dodgerblue" :stroke-width="13" border> </Progress>
             <span class="completeRateSize"> {{completeRate}}%</span>
           </span>
           <DatePicker
@@ -647,7 +647,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .content_title{
   font-size: 22px;
   font-weight: bold;
@@ -773,5 +773,10 @@ export default {
   font-weight: bold;
   font-size: 14px;
   margin-left: 5px;
+}
+/* 添加边框样式 */
+/deep/ .ivu-progress-inner {
+  border: 3px solid dodgerblue;
+  border-radius: 10px;
 }
 </style>

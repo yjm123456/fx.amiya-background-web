@@ -23,11 +23,22 @@ export default {
            query: {
                 columns: [
                 {
-                    title: "分组",
+                    title: "助理",
                     key: "groupName",
                     minWidth: 160,
                     align: "center",
                     className: 'test-name',
+                    render: (h, params) => {
+                        return h('div', { 
+                            style: { 
+                                // padding:'10px',backgroundColor: '#fff9e6',
+                                color:'#000',
+                                fontSize:'15px',
+                                fontWeight:'bold',
+                             } 
+                        },
+                             params.row.groupName );
+                    }
                     
                 },
                 {
@@ -204,11 +215,22 @@ export default {
             query2: {
                 columns: [
                 {
-                    title: "分组",
+                    title: "助理",
                     key: "groupName",
                     minWidth: 160,
                     align: "center",
                     className: 'test-name',
+                    render: (h, params) => {
+                        return h('div', { 
+                            style: { 
+                                // padding:'10px',backgroundColor: '#fff9e6',
+                                color:'#000',
+                                fontSize:'15px',
+                                fontWeight:'bold',
+                             } 
+                        },
+                             params.row.groupName );
+                    }
                 },
                 {
                     title: "上门人数",
@@ -433,5 +455,9 @@ export default {
 }
 /deep/.ivu-table th.test-name {
     background: #f7e8b1;
+}
+
+/deep/.ivu-table-border td:nth-child(1){
+    background: #fff9e6;
 }
 </style>

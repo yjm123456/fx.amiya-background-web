@@ -61,7 +61,7 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="8" v-if="form.checkType == 1 || form.checkType == 2">
+            <Col span="8" v-if="form.checkType == 1">
               <FormItem label="是否为稽查订单" prop="valid">
                 <i-switch
                   v-model="form.valid"
@@ -70,24 +70,6 @@
                     !form.checkBelongEmpId || form.checkBelongEmpId == null
                   "
                 />
-              </FormItem>
-            </Col>
-            <Col span="8" v-if="form.valid==true">
-              <FormItem label="稽查类型" prop="inspectionType">
-                <Select
-                  v-model="form.inspectionType"
-                  placeholder="请选择稽查类型"
-                  @on-change="checkBelongEmpIdChange"
-                  :disabled="form.checkType == 2"
-                >
-                  <Option
-                    v-for="item in inspectionTypeList"
-                    :value="item.id"
-                    :key="item.id"
-                    >{{ item.name }}</Option
-                  >
-                </Select>
-                <div class="form_text">* 请确认稽查类型的准确性！</div>
               </FormItem>
             </Col>
             <Col span="16">
@@ -109,17 +91,6 @@
                 <Input
                   v-model="form.type"
                   placeholder="请输入业绩类型"
-                  disabled
-                ></Input>
-              </FormItem>
-            </Col>
-            <Col span="8">
-              <FormItem label="下单金额" prop="orderAmount">
-                <Input
-                  v-model="form.orderAmount"
-                  placeholder="请输入审核客服业绩"
-                  type="number"
-                  number
                   disabled
                 ></Input>
               </FormItem>
@@ -156,7 +127,7 @@
                   placeholder="请输入提成比例"
                   type="number"
                   number
-                  disabled
+                  :disabled="form.valid == false"
                   @on-change="performancePercentChange"
                 ></Input>
               </FormItem>
@@ -171,45 +142,10 @@
                 ></Input>
               </FormItem>
             </Col>
-            <Col span="8" v-if="form.checkBelongEmpId&&form.checkType == 1 || form.checkBelongEmpId&&form.checkType == 2">
-              <FormItem label="助理最初提成比例" prop="assistantCommission">
-                <Input
-                  v-model="form.assistantCommission"
-                  placeholder="请输入助理最初提成比例"
-                  type="number"
-                  number
-                  disabled
-                ></Input>
-              </FormItem>
-            </Col>
           </Row>
         </div>
-        <div class="bor" v-if="(form.valid == true && form.checkType == 1) || (form.valid == true && form.checkType == 2)">
+        <div class="bor" v-if="form.valid == true && form.checkType == 1">
           <div class="title">稽查人员业绩</div>
-          <Row :gutter="30">
-            <Col span="8" >
-              <FormItem label="稽查提成比例(%)" prop="inspectionCommissionRatio">
-                <Input
-                  v-model="form.inspectionCommissionRatio"
-                  placeholder="请输入提成稽查比例"
-                  type="number"
-                  number
-                  @on-change="inspectPercentChange"
-                  disabled
-                ></Input>
-              </FormItem>
-            </Col>
-            <Col span="8" >
-              <FormItem label="稽查提成金额" prop="inspectionCommissionPrice">
-                <Input
-                  v-model="form.inspectionCommissionPrice"
-                  placeholder="请输入稽查提成金额"
-                  type="number"
-                  number
-                ></Input>
-              </FormItem>
-            </Col>
-          </Row>
           <Row :gutter="30">
             <Col span="8" >
               <FormItem label="稽查人员" prop="inspectEmpId">
@@ -236,7 +172,6 @@
                   type="number"
                   number
                   @on-change="inspectPercentChange"
-                  disabled
                 ></Input>
               </FormItem>
             </Col>
@@ -250,7 +185,6 @@
                 ></Input>
               </FormItem>
             </Col>
-            
           </Row>
         </div>
        
@@ -280,7 +214,6 @@ export default {
   },
   data() {
     return {
-      inspectionTypeList:[{id:1,name:'财务稽查'},{id:2,name:'行政客服稽查'}],
       checkTitle: "审核客服业绩",
       isLoading: false,
       checkStateList: [
@@ -319,51 +252,11 @@ export default {
         // 稽查比例-稽查人员
         inspectPercent: null,
         // 稽查金额-稽查人员
-        inspectPrice: 0,
+        inspectPrice: null,
         // 助理确认薪资
         customerServiceOrderPerformance: null,
-        // 下单金额
-        orderAmount:null,
-        // 助理最初提成比例
-        assistantCommission:null,
-        // 稽查提成比例
-        inspectionCommissionRatio:null,
-        // 稽查提成金额
-        inspectionCommissionPrice:null,
-        // 稽查类型
-        inspectionType:1
       },
       ruleValidates: {
-        inspectionType: [
-          {
-            required: true,
-            message: "请选择稽查类型",
-          },
-        ],
-        inspectionCommissionRatio: [
-          {
-            required: true,
-            message: "请输入稽查提成比例",
-          },
-        ],
-        inspectionCommissionPrice: [
-          {
-            required: true,
-            message: "请输入稽查提成金额",
-          },
-        ],
-        assistantCommission: [
-          {
-            required: true,
-            message: "请输入助理最初提成比例",
-          },
-        ],
-        orderAmount: [
-          {
-            required: true,
-            message: "请输入下单金额",
-          },
-        ],
         customerServiceOrderPerformance: [
           {
             required: true,
@@ -463,7 +356,7 @@ export default {
                 // 稽查比例
                 this.form.inspectPercent = administrativeInspectionCommission
                 // 稽查金额
-                let inspectPrice = this.form.inspectionCommissionPrice == 0 ? 0 : this.form.inspectionCommissionPrice * (administrativeInspectionCommission / 100);
+                let inspectPrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (administrativeInspectionCommission / 100);
                 this.form.inspectPrice = Math.round(inspectPrice * 100) / 100;
                 return;
             }
@@ -494,18 +387,12 @@ export default {
         // 自播达人
         let price = this.form.customerServiceOrderPerformance * (this.form.performancePercent /100)
         this.form.customerServicePerformance = Math.round(price * 100) / 100 
-        // 当助理确认业绩改变时  助理确认业绩 * 稽查提成比例 = 稽查提成金额
-        let price2 = this.form.customerServiceOrderPerformance * (this.form.inspectionCommissionRatio / 100)
-        this.form.inspectionCommissionPrice = Math.round(price2 * 100) / 100; 
         // 稽查金额
         this.inspectPercentChange()
       }else if(this.form.checkType == 2){
         //供应链 提成金额 = 助理确认业绩 * 提成比例
           let customerServicePerformance2 = this.form.customerServiceOrderPerformance * (this.form.performancePercent / 100)
           this.form.customerServicePerformance = Math.round(customerServicePerformance2 * 100) / 100;
-          // // 当助理确认业绩改变时  助理确认业绩 * 稽查提成比例 = 稽查提成金额
-          let price2 = this.form.customerServiceOrderPerformance * (this.form.inspectionCommissionRatio / 100)
-          this.form.inspectionCommissionPrice = Math.round(price2 * 100) / 100; 
       }else if(this.form.checkType == 3){
         //天猫升单 提成金额 = 助理确认业绩 * 提成比例 
           let customerServicePerformance = this.form.customerServiceOrderPerformance * (this.form.performancePercent / 100)
@@ -515,12 +402,12 @@ export default {
     // 根据审核类型判断提成金额计算方式
     checkTypeChange() {
       const { checkType,checkBelongEmpId,customerServiceOrderPerformance } = this.form;
+      // let price = this.checkedParams.customerServiceSettlePrice * (this.form.performancePercent / 100);
       if(checkType == 2 || checkType == 3){
         this.form.orderPrice = this.checkedParams.recolicationPrice
       }else{
         this.form.orderPrice = this.checkedParams.customerServiceSettlePrice
       }
-     
       // 防止直接选择审核类型会报错 因为下面调用了根据归属客服查询详情接口
       if(this.control == true){
         if(!checkBelongEmpId){
@@ -533,7 +420,6 @@ export default {
           this.form.performancePercent = 0;
           this.form.customerServicePerformance = 0;
           this.form.customerServiceOrderPerformance = 0;
-          this.form.assistantCommission = 0;
           this.checkTitle = "审核客服业绩";
           this.form.valid = false;
           this.form.customerServiceSettlePrice = this.checkedParams.customerServiceSettlePrice
@@ -549,6 +435,7 @@ export default {
         case '2':
           this.checkBelongEmpIdChange();
           // 供应链达人 助理确认薪资 = 订单金额*对应比例 
+          // let price2 = this.checkedParams.orderPrice * 0.1
           let price2 = this.checkedParams.recolicationPrice * 0.1
           this.form.customerServiceOrderPerformance = Math.round(price2 * 100) / 100;
           // 提成金额 = 助理确认业绩 * 提成比例
@@ -557,8 +444,6 @@ export default {
           this.checkTitle = "对账单面值";
           this.form.valid = false;
           this.form.customerServiceSettlePrice = this.checkedParams.recolicationPrice
-          // 稽查类型
-          this.form.inspectionType = 1
           break;
         case '3':
           this.checkBelongEmpIdChange();
@@ -595,91 +480,56 @@ export default {
       if (this.examineModel == true) {
         employeeManageApi.byIdGetAmiyaEmployee(this.form.checkBelongEmpId).then((res) => {
             if (res.code === 0) {
-              const { newCustomerCommission,oldCustomerCommission,inspectionCommission,administrativeInspectionCommission,cooperateLiveanchorNewCustomerCommission, cooperateLiveanchorOldCustomerCommission,tmallOrderCommission,potentialNewCustomerCommission,administrativeInspection} = res.data.employeeInfo;
-              const { type, valid,checkType,inspectionType,orderAmount } = this.form;
-              this.form.orderAmount = this.checkedParams.orderAmount
+              const { newCustomerCommission,oldCustomerCommission,inspectionCommission,administrativeInspectionCommission,cooperateLiveanchorNewCustomerCommission, cooperateLiveanchorOldCustomerCommission,tmallOrderCommission} = res.data.employeeInfo;
+              const { type, valid,checkType } = this.form;
               if (valid == true) {
-                switch (checkType) {
-                  case '1':
-                    // inspectionType == 1是财务稽查 2是行政客服稽查
-                    // 当业绩类型满足新客业绩并且下单金额等于0 取新客潜在业绩比例和提成
-                    if(inspectionType == 2){
-                      // 提成比例
-                        this.form.performancePercent = administrativeInspection
-                        // 提成金额
-                        let price =  this.form.customerServiceSettlePrice *(administrativeInspection/100)
-                        this.form.customerServicePerformance =  Math.round(price * 100) / 100
-
-                      if(type == '新客业绩' && orderAmount == 0){
-                        // 助理最初提成比例
-                        this.form.assistantCommission = potentialNewCustomerCommission
-                        
-                      }else if(type == '新客业绩' && orderAmount > 0){
-                        // 助理最初提成比例
-                        this.form.assistantCommission = newCustomerCommission
-                      }else if(type == '老客业绩'){
-                        // 助理最初提成比例
-                        this.form.assistantCommission = oldCustomerCommission
-                      }
-                    }else if(inspectionType == 1){
-                        // 提成比例
-                        this.form.performancePercent = inspectionCommission
-                        // 提成金额
-                        let price =  this.form.customerServiceSettlePrice *(inspectionCommission/100)
-                        this.form.customerServicePerformance =  Math.round(price * 100) / 100
-                    }
-
-                    // 稽查提成比例 提成比例大于5展示5
-                    this.form.inspectionCommissionRatio = this.form.assistantCommission >= 5 ? 5 : this.form.assistantCommission
-                    // 稽查提成金额
-                    let price2 = this.form.customerServiceSettlePrice *(this.form.inspectionCommissionRatio/100)
-                    this.form.inspectionCommissionPrice = Math.round(price2 * 100) / 100
-                   break;
-                  case '2':
-                    // 稽查比例
-                    // 提成比例
-                    this.form.performancePercent = inspectionCommission
-                    // 提成金额
-                    let price6 =  this.form.customerServiceOrderPerformance *(this.form.performancePercent/100)
-                    this.form.customerServicePerformance =  Math.round(price6 * 100) / 100
-                    // 稽查提成金额
-                    this.form.inspectionCommissionPrice =  Math.round(this.form.customerServiceOrderPerformance * (this.form.inspectionCommissionRatio /100) * 100) / 100
-                  break;
-                }
+                // 提成比例
+                this.form.performancePercent = inspectionCommission;
+                // 计算提成金额
+                let customerServiceSettlePrice = this.checkedParams.customerServiceSettlePrice == 0 ? 0 : this.checkedParams.customerServiceSettlePrice * (inspectionCommission / 100);
+                this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
+                // // 稽查比例
+                // this.form.inspectPercent = administrativeInspectionCommission
+                // // 稽查金额
+                // let inspectPrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (administrativeInspectionCommission / 100);
+                // this.form.inspectPrice = Math.round(inspectPrice * 100) / 100;
                 return;
               } else {
+                // if (type == "新客业绩") {
+                //   // 提成比例
+                //   this.form.performancePercent = newCustomerCommission;
+                //   // 计算提成金额
+                //   let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (newCustomerCommission / 100);
+                //   this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
+                //   this.isCheckType()
+                //   return;
+                // } else if (type == "老客业绩") {
+                //   // 提成比例
+                //   this.form.performancePercent = oldCustomerCommission;
+                //   // 计算提成金额
+                //   let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (oldCustomerCommission / 100);
+                //   this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
+                //   this.isCheckType()
+                //   return;
+                // } else {
+                //   // 审核类型为其他 提成比例和提成金额为0
+                //   // 提成比例
+                //   this.form.performancePercent = 0;
+                //   // 计算提成金额
+                //   this.form.customerServicePerformance = 0;
+                // }
                 switch (checkType) {
-                    
                     case '0':
                       this.form.performancePercent = 0;
                       this.form.customerServicePerformance = 0;
-                      this.form.assistantCommission = 0
                       break;
                     case '1':
                         if (type == "新客业绩") {
-                          if(orderAmount > 0 ){
-                            // 提成比例
-                            this.form.performancePercent = newCustomerCommission;
-                            // 计算提成金额
-                            let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (newCustomerCommission / 100);
-                            this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
-                            // 助理最初提成比例
-                            this.form.assistantCommission = newCustomerCommission
-                          }else{
-                            // 提成比例
-                            this.form.performancePercent = potentialNewCustomerCommission;
-                            // 计算提成金额
-                            let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (potentialNewCustomerCommission / 100);
-                            this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
-                            // 助理最初提成比例
-                            this.form.assistantCommission = potentialNewCustomerCommission
-                          }
-                          
-                          // 稽查提成比例 提成比例大于5展示5
-                          this.form.inspectionCommissionRatio = this.form.assistantCommission >= 5 ? 5 : this.form.assistantCommission
-                          // 稽查提成金额
-                          let price2 = this.form.customerServiceSettlePrice *(this.form.inspectionCommissionRatio/100)
-                          this.form.inspectionCommissionPrice = Math.round(price2 * 100) / 100
+                          // 提成比例
+                          this.form.performancePercent = newCustomerCommission;
+                          // 计算提成金额
+                          let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (newCustomerCommission / 100);
+                          this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
                           this.isCheckType()
                           return;
                         } else if (type == "老客业绩") {
@@ -689,13 +539,6 @@ export default {
                           // 计算提成金额
                           let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (oldCustomerCommission / 100);
                           this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
-                          // 助理最初提成比例
-                          this.form.assistantCommission = oldCustomerCommission
-                          // 稽查提成比例 提成比例大于5展示5
-                          this.form.inspectionCommissionRatio = this.form.assistantCommission >= 5 ? 5 : this.form.assistantCommission
-                          // 稽查提成金额
-                          let price2 = this.form.customerServiceSettlePrice *(this.form.inspectionCommissionRatio/100)
-                          this.form.inspectionCommissionPrice = Math.round(price2 * 100) / 100
                           this.isCheckType()
                           return;
                         } else {
@@ -704,10 +547,7 @@ export default {
                           this.form.performancePercent = 0;
                           // 计算提成金额
                           this.form.customerServicePerformance = 0;
-                          // 助理确认提成
-                          this.form.assistantCommission = 0
                         }
-                        
                       break;
                     case '2':
                       if (type == "新客业绩") {
@@ -716,28 +556,15 @@ export default {
                         // 计算提成金额
                         let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (cooperateLiveanchorNewCustomerCommission / 100);
                         this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
-                        // 助理最初提成比例
-                        this.form.assistantCommission = cooperateLiveanchorNewCustomerCommission
-                        // 稽查提成比例 提成比例大于5展示5
-                        this.form.inspectionCommissionRatio = this.form.assistantCommission >= 5 ? 5 : this.form.assistantCommission
-                        // 稽查提成金额
-                        let price2 = this.form.customerServiceSettlePrice *(this.form.inspectionCommissionRatio/100)
-                        this.form.inspectionCommissionPrice = Math.round(price2 * 100) / 100
                         this.isCheckType()
                         return;
                       } else if (type == "老客业绩") {
+                        
                         // 提成比例
                         this.form.performancePercent = cooperateLiveanchorOldCustomerCommission;
                         // 计算提成金额
                         let customerServiceSettlePrice = this.form.customerServiceOrderPerformance == 0 ? 0 : this.form.customerServiceOrderPerformance * (cooperateLiveanchorOldCustomerCommission / 100);
                         this.form.customerServicePerformance = Math.round(customerServiceSettlePrice * 100) / 100;
-                        // 助理最初提成比例
-                        this.form.assistantCommission = cooperateLiveanchorOldCustomerCommission
-                        // 稽查提成比例 提成比例大于5展示5
-                        this.form.inspectionCommissionRatio = this.form.assistantCommission >= 5 ? 5 : this.form.assistantCommission
-                        // 稽查提成金额
-                        let price2 = this.form.customerServiceSettlePrice *(this.form.inspectionCommissionRatio/100)
-                        this.form.inspectionCommissionPrice = Math.round(price2 * 100) / 100
                         this.isCheckType()
                         return;
                       } else {
@@ -746,8 +573,6 @@ export default {
                         this.form.performancePercent = 0;
                         // 计算提成金额
                         this.form.customerServicePerformance = 0;
-                        // 助理确认提成
-                          this.form.assistantCommission = 0
                       }
                       break;
                     case '3':
@@ -860,10 +685,5 @@ export default {
   font-weight: bold;
   color: #000;
   margin-bottom: 15px;
-}
-.form_text{
-  font-size: 14px;
-  color: red;
-  font-weight: bold;
 }
 </style>

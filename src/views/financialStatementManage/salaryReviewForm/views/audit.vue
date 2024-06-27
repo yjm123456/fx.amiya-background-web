@@ -3,53 +3,41 @@
     <Card :dis-hover="true">
       <div class="header_wrap">
         <div class="left">
-          <Input
+          <div>
+            <Input
             v-model="query.keyWord"
             placeholder="请输入关键字"
-            style="width: 180px; "
+            style="width: 220px; "
             @keyup.enter.native="getListWithPageByCustomerCompensation()"
           />
           <DatePicker
             type="date"
             placeholder="开始日期"
-            style="width: 120px;margin-left: .625rem"
+            style="width: 140px;margin-left: .625rem"
             :value="query.startDate"
             v-model="query.startDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="结束日期"
-            style="width: 120px; margin-left: .625rem"
+            style="width: 140px; margin-left: .625rem"
             :value="query.endDate"
             v-model="query.endDate"
           ></DatePicker>
           <Select
-            v-model="query.belongEmpId"
-            placeholder="请选择归属客服"
+            v-model="query.orderFrom"
+            placeholder="请选择平台"
             filterable
-            style="width: 150px;margin-left:10px"
+            style="width: 140px;margin-left:10px"
           >
             <Option
-              v-for="item in params.employeeAll"
+              v-for="item in params.contentPalteForms"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
             >
           </Select>
-          <Select
-            v-model="query.chooseHospitalId"
-            placeholder="请选择医院"
-            filterable
-            style="width: 180px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.hospitallist"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
+           <Select
             v-model="query.isOldCustoemr"
             placeholder="请选择业绩"
             filterable
@@ -62,6 +50,22 @@
               >{{ item.name }}</Option
             >
           </Select>
+          </div>
+          <div style="margin-top:10px">
+            <Select
+            v-model="query.chooseHospitalId"
+            placeholder="请选择医院"
+            filterable
+            style="width: 220px;"
+          >
+            <Option
+              v-for="item in params.hospitallist"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+           
           <Select
             v-model="query.createEmpId"
             placeholder="请选择上传人"
@@ -88,19 +92,8 @@
               >{{ item.name }}</Option
             >
           </Select> -->
-          <Select
-            v-model="query.orderFrom"
-            placeholder="请选择平台"
-            filterable
-            style="width: 120px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.contentPalteForms"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
+
+          
           <Select
             v-model="query.addOrderPrice"
             placeholder="请选择金额"
@@ -114,18 +107,51 @@
               >{{ item.name }}</Option
             >
           </Select>
-          <Button
+          <Select
+            v-model="query.belongEmpId"
+            placeholder="请选择归属客服"
+            filterable
+            style="width: 290px;margin-left:10px"
+            multiple
+          >
+            <Option
+              v-for="item in params.employeeList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          </div>
+          
+          
+        </div>
+        <div class="right">
+          <div class="query" @click="getListWithPageByCustomerCompensation()">查询
+          </div>
+          <!-- <Button
             type="primary"
             style="margin-left: 10px"
             @click="getListWithPageByCustomerCompensation()"
             >查询</Button
-          >
-          <Button
+          > -->
+          <!-- <Button
             type="primary"
             style="margin-left: 10px"
             @click="batchReviewClick()"
-            >批量审核</Button
-          >
+            >批量审核-自行提交数据</Button
+          > -->
+          <div class="button" @click="batchReviewClick()">
+            <div>批量审核</div>
+            <div>自行提交数据</div>
+          </div>
+          <div class="button"  style="margin:0 10px"  @click="collaboratingExpertsClick()">
+            <div>批量审核</div>
+            <div>合作达人数据</div>
+          </div>
+          <div class="button"  @click="financialAuditClick()">
+            <div>批量审核</div>
+            <div>财务稽查数据</div>
+          </div>
         </div>
       </div>
     </Card>
@@ -165,7 +191,7 @@
         getListWithPageByCustomerCompensation
       "
     />
-    <!-- 批量审核 -->
+    <!-- 批量审核-自行审核 -->
     <batchReview 
       :batchReviewModel.sync="batchReviewModel"
       :checkedParams="checkedParams"
@@ -174,6 +200,25 @@
         getListWithPageByCustomerCompensation
       "
     />
+    <!-- 批量审核-合作达人 -->
+    <collaboratingExperts 
+      :collaboratingExpertsModel.sync="collaboratingExpertsModel"
+      :checkedParams="checkedParams"
+      :params="params"
+      @getListWithPageByCustomerCompensation="
+        getListWithPageByCustomerCompensation
+      "
+    />
+    <!-- 批量审核-财务稽查 -->
+    <financialAudit 
+      :financialAuditModel.sync="financialAuditModel"
+      :checkedParams="checkedParams"
+      :params="params"
+      @getListWithPageByCustomerCompensation="
+        getListWithPageByCustomerCompensation
+      "
+    />
+    
     <!-- 内容平台订单详情 -->
     <detail :detailModel.sync="detailModel" :detailList="detailList"></detail>
     <!-- 消费追踪订单详情 -->
@@ -195,6 +240,8 @@ import * as customerManageApi from "@/api/customerManage.js";
 
 import examine from "../components/examine.vue";
 import batchReview from "../components/batchReview.vue";
+import collaboratingExperts from "../components/collaboratingExperts.vue";
+import financialAudit from "../components/financialAudit.vue";
 import detail from "@/components/contentDetail/detail.vue";
 import upgradeOrderDetail from "@/components/upgradeOrderDetail/upgradeOrderDetail";
 import orderDetail from "@/components/orderDetail/detail.vue";
@@ -206,6 +253,9 @@ export default {
     detail,
     upgradeOrderDetail,
     orderDetail,
+    collaboratingExperts,
+    financialAudit
+
   },
   props: {
     activeName: String,
@@ -224,7 +274,7 @@ export default {
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         chooseHospitalId: -1,
         isOldCustoemr: -1,
-        belongEmpId: -1,
+        belongEmpId:[],
         checkState: 0,
         createEmpId: -1,
         pageNum: 1,
@@ -423,6 +473,7 @@ export default {
                           customerServiceSettlePrice,
                           orderPrice,
                           recolicationPrice,
+                          contentPlatFormOrderAddOrderPrice
                         } = params.row;
                         this.examineModel = true;
                         this.checkedParams.id = id;
@@ -430,6 +481,7 @@ export default {
                         this.checkedParams.customerServiceSettlePrice = customerServiceSettlePrice;
                         this.checkedParams.orderPrice = orderPrice;
                         this.checkedParams.recolicationPrice = recolicationPrice;
+                        this.checkedParams.orderAmount = contentPlatFormOrderAddOrderPrice;
                       },
                     },
                   },
@@ -500,6 +552,10 @@ export default {
       examineModel: false,
       // 批量审核
       batchReviewModel:false,
+      // 合作达人批量审核
+      collaboratingExpertsModel:false,
+      // 财务稽查批量审核
+      financialAuditModel:false,
 
       // 审核参数
       checkedParams: {
@@ -513,6 +569,8 @@ export default {
         // 对账单面值
         recolicationPrice: 0,
         idList: new Set(),
+        // 下单金额
+        orderAmount:null
       },
 
       // 内容平台订单详情model
@@ -538,6 +596,28 @@ export default {
         return;
       }
       this.batchReviewModel = true;
+    },
+    // 合作达人批量审核
+    collaboratingExpertsClick(){
+      if (![...this.checkedParams.idList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.collaboratingExpertsModel = true;
+    },
+    // 财务稽查批量审核
+    financialAuditClick(){
+      if (![...this.checkedParams.idList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.financialAuditModel = true;
     },
     handleSelect(selection, row) {
       // 批量审核
@@ -590,7 +670,7 @@ export default {
           : null,
         chooseHospitalId: chooseHospitalId == -1 ? null : chooseHospitalId,
         checkState,
-        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId:  belongEmpId.length == 0 ? '' : belongEmpId.join(','),
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         orderFrom,
@@ -635,7 +715,7 @@ export default {
           : null,
         chooseHospitalId: chooseHospitalId == -1 ? null : chooseHospitalId,
         checkState,
-        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId:  belongEmpId.length == 0 ? '' : belongEmpId.join(',') ,
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         orderFrom,
@@ -724,7 +804,6 @@ export default {
 .header_wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 .container {
   margin-top: 16px;
@@ -732,5 +811,40 @@ export default {
 .page_wrap {
   margin-top: 16px;
   text-align: right;
+}
+.button{
+  width: 120px;
+  height: 44px;
+  font-size: 12px;
+  background: #2D8CF0;
+  color: #fff;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4px;
+  box-sizing: border-box;
+}
+.query{
+  width: 100px;
+  height: 44px;
+  font-size: 12px;
+  background: #2D8CF0;
+  color: #fff;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 44px;
+  font-size: 16px;
+  margin: 0 10px;
+}
+.right{
+  display: flex;
+
 }
 </style>

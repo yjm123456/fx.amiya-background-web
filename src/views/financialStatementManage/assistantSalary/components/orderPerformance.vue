@@ -242,7 +242,7 @@ export default {
         pageNum,
         pageSize,
         keyWord: this.detailParams.id,
-        belongEmpId:this.detailParams.belongEmpId,
+        belongEmpId:String(this.detailParams.belongEmpId),
         checkState:2,
         orderFrom:0,
         addOrderPrice:-1
@@ -266,7 +266,7 @@ export default {
         pageNum,
         pageSize,
         keyWord: this.detailParams.id,
-        belongEmpId:this.detailParams.belongEmpId,
+        belongEmpId:String(this.detailParams.belongEmpId),
         checkState:2,
         orderFrom:0,
         addOrderPrice:-1

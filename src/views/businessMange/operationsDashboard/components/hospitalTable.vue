@@ -15,7 +15,7 @@
         </div>
       </div>
       <div>
-        <Table border :columns="query.columns" :data="query.data" :row-class-name="rowClassName" ></Table>
+        <Table border :columns="query.columns" :data="query.data"  :row-class-name="rowClassName"></Table>
       </div>
     </Card>
   </div>
@@ -56,6 +56,17 @@ export default {
             width:100,
             align:'center',
             className: 'test-name',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                        // padding:'10px',backgroundColor: '#fff9e6',
+                        color:'#000',
+                        fontSize:'15px',
+                        fontWeight:'bold',
+                      } 
+                },
+                      params.row.city );
+            }
           },
           {
             title: "医院",
@@ -63,6 +74,17 @@ export default {
             width:180,
             tooltip:true,
             className: 'test-name',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                        // padding:'10px',backgroundColor: '#fff9e6',
+                        color:'#000',
+                        fontSize:'15px',
+                        fontWeight:'bold',
+                      } 
+                },
+                      params.row.hospitalName );
+            }
           },
           {
             title: "派单量",
@@ -264,6 +286,16 @@ export default {
 /deep/.ivu-table th.test-name,.ivu-table-header thead tr th,.thead {
     background: #f7e8b1;
 }
+/deep/.ivu-table th.test-name {
+    background: #f7e8b1;
+}
+/deep/.ivu-table-border td:nth-child(1){
+    background: #fff9e6;
+}
+/deep/.ivu-table-border td:nth-child(2){
+    background: #fff9e6;
+}
+
 </style>
 <style lang="less" >
 
@@ -320,5 +352,10 @@ export default {
   box-sizing: border-box;
   text-align: center;
 }
-
+/deep/.ivu-table-border td:nth-child(1){
+    background: #fff9e6;
+}
+/deep/.ivu-table-border td:nth-child(2){
+    background: #fff9e6;
+}
 </style>

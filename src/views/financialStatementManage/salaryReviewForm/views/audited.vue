@@ -3,130 +3,137 @@
     <Card :dis-hover="true">
       <div class="header_wrap">
         <div class="left">
-          <Input
-            v-model="query.keyWord"
-            placeholder="请输入关键字"
-            style="width: 160px; "
-            @keyup.enter.native="getListWithPageByCustomerCompensation()"
-          />
-          <DatePicker
-            type="date"
-            placeholder="开始日期"
-            style="width: 120px;margin-left: .625rem"
-            :value="query.startDate"
-            v-model="query.startDate"
-          ></DatePicker>
-          <DatePicker
-            type="date"
-            placeholder="结束日期"
-            style="width: 120px; margin-left: .625rem"
-            :value="query.endDate"
-            v-model="query.endDate"
-          ></DatePicker>
-          <Select
-            v-model="query.belongEmpId"
-            placeholder="请选择归属客服"
-            filterable
-            style="width: 140px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.employeePositionAdmin"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+          <div>
+              <Input
+                v-model="query.keyWord"
+                placeholder="请输入关键字"
+                style="width: 180px; "
+                @keyup.enter.native="getListWithPageByCustomerCompensation()"
+              />
+              <DatePicker
+                type="date"
+                placeholder="开始日期"
+                style="width: 140px;margin-left: .625rem"
+                :value="query.startDate"
+                v-model="query.startDate"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="结束日期"
+                style="width: 140px; margin-left: .625rem"
+                :value="query.endDate"
+                v-model="query.endDate"
+              ></DatePicker>
+              <Select
+                v-model="query.belongEmpId"
+                placeholder="请选择归属客服"
+                filterable
+                style="width: 180px;margin-left:10px"
+                multiple
+              >
+                <Option
+                  v-for="item in params.employeeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.chooseHospitalId"
+                placeholder="请选择医院"
+                filterable
+                style="width: 180px;margin-left:10px"
+              >
+                <Option
+                  v-for="item in params.hospitallist"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </div>
+          <div style="margin-top:10px">
+            <Select
+              v-model="query.createEmpId"
+              placeholder="请选择上传人"
+              filterable
+              style="width: 180px;"
             >
-          </Select>
-          <Select
-            v-model="query.chooseHospitalId"
-            placeholder="请选择医院"
-            filterable
-            style="width: 140px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.hospitallist"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.creteEmpNameList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select> 
+            <Select
+              v-model="query.isOldCustoemr"
+              placeholder="请选择业绩"
+              filterable
+              style="width: 140px;margin-left:10px"
             >
-          </Select>
-          <Select
-            v-model="query.isOldCustoemr"
-            placeholder="请选择业绩"
-            filterable
-            style="width: 120px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.isOldCustoemrList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.isOldCustoemrList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select> 
+            <Select
+              v-model="query.isGenerateSalry"
+              placeholder="请选择生成薪资状态"
+              filterable
+              style="width: 140px;margin-left:10px"
             >
-          </Select> 
-          <Select
-            v-model="query.createEmpId"
-            placeholder="请选择上传人"
-            filterable
-            style="width: 140px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.creteEmpNameList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in isGenerateSalryList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select> 
+            <!-- <Select
+              v-model="query.checkState"
+              placeholder="请选择审核状态"
+              filterable
+              style="width: 150px;margin-left:10px"
             >
-          </Select> 
-          <Select
-            v-model="query.isGenerateSalry"
-            placeholder="请选择生成薪资状态"
-            filterable
-            style="width: 120px;margin-left:10px"
-          >
-            <Option
-              v-for="item in isGenerateSalryList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.checkStateListAll"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select> -->
+            <Select
+              v-model="query.orderFrom"
+              placeholder="请选择平台"
+              filterable
+              style="width: 180px;margin-left:10px"
             >
-          </Select> 
-          <!-- <Select
-            v-model="query.checkState"
-            placeholder="请选择审核状态"
-            filterable
-            style="width: 150px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.checkStateListAll"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.contentPalteForms"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.addOrderPrice"
+              placeholder="请选择金额"
+              filterable
+              style="width: 180px;margin-left:10px"
             >
-          </Select> -->
-          <Select
-            v-model="query.orderFrom"
-            placeholder="请选择平台"
-            filterable
-            style="width: 120px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.contentPalteForms"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
-          <Select
-            v-model="query.addOrderPrice"
-            placeholder="请选择金额"
-            filterable
-            style="width: 140px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.addOrderPriceList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
-            >
-          </Select>
+              <Option
+                v-for="item in params.addOrderPriceList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
+        </div>
+        <div class="right">
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -209,7 +216,7 @@ export default {
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         chooseHospitalId:-1,
         isOldCustoemr:-1,
-        belongEmpId:-1,
+        belongEmpId:[],
         checkState:2,
         createEmpId:-1,
         pageNum: 1,
@@ -295,10 +302,31 @@ export default {
             align: "center",
           },
           {
+            title: "助理确认业绩",
+            key: "customerServiceOrderPerformance",
+            minWidth: 140,
+            align: "center",
+            tooltip:true
+          },
+          {
             title: "助理提成比例",
             key: "performancePercent",
             minWidth: 160,
             align: "center",
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '助理提成比例'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
             render: (h, params) => {
               return h(
                 "div",
@@ -312,6 +340,20 @@ export default {
             key: "customerServicePerformance",
             minWidth: 160,
             align: "center",
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '助理提成金额'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
           },
           {
             title: "审核客服业绩金额",
@@ -484,13 +526,7 @@ export default {
             tooltip:true
           },
           
-          {
-            title: "助理确认业绩",
-            key: "customerServiceOrderPerformance",
-            minWidth: 140,
-            align: "center",
-            tooltip:true
-          },
+          
           
         ],
         data: [],
@@ -635,7 +671,7 @@ export default {
           : null,
         chooseHospitalId: chooseHospitalId == -1 ? null : chooseHospitalId,
         checkState,
-        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId: belongEmpId.length == 0 ? '' :  belongEmpId.join(','),
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         isGenerateSalry,
@@ -685,7 +721,7 @@ export default {
           : null,
         chooseHospitalId: chooseHospitalId == -1 ? null : chooseHospitalId,
         checkState,
-        belongEmpId: belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId: belongEmpId.length == 0 ? '' :  belongEmpId.join(','),
         isOldCustoemr: isOldCustoemr == -1 ? null : isOldCustoemr,
         createEmpId: createEmpId == -1 ? null : createEmpId,
         isGenerateSalry,
@@ -732,7 +768,6 @@ export default {
 .header_wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 .container {
   margin-top: 16px;

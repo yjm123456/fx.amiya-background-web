@@ -3,117 +3,123 @@
     <Card>
       <div class="header_wrap">
         <div class="left">
-          <Input
-            v-model="filterCriteria.keyWord"
-            placeholder="请输入关键字"
-            style="width: 170px; "
-            @keyup.enter.native="getListData()"
-          />
-          <DatePicker
-            type="date"
-            placeholder="开始日期"
-            style="width: 120px;margin-left: .625rem"
-            :value="filterCriteria.startDate"
-            v-model="filterCriteria.startDate"
-          ></DatePicker>
-          <DatePicker
-            type="date"
-            placeholder="结束日期"
-            style="width: 120px; margin-left: .625rem"
-            :value="filterCriteria.endDate"
-            v-model="filterCriteria.endDate"
-          ></DatePicker>
-          <Select
-            v-model="filterCriteria.belongEmpId"
-            placeholder="行政客服"
-            filterable
-            style="width: 130px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.employeePosition"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+          <div>
+            <Input
+              v-model="filterCriteria.keyWord"
+              placeholder="请输入关键字"
+              style="width: 180px; "
+              @keyup.enter.native="getListData()"
+            />
+            <DatePicker
+              type="date"
+              placeholder="开始日期"
+              style="width: 140px;margin-left: .625rem"
+              :value="filterCriteria.startDate"
+              v-model="filterCriteria.startDate"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="结束日期"
+              style="width: 140px; margin-left: .625rem"
+              :value="filterCriteria.endDate"
+              v-model="filterCriteria.endDate"
+            ></DatePicker>
+            <Select
+              v-model="filterCriteria.belongEmpId"
+              placeholder="行政客服"
+              filterable
+              style="width: 180px;margin-left:10px"
             >
-          </Select>
-          <Select
-            v-model="filterCriteria.chooseHospitalId"
-            placeholder="请选择医院"
-            filterable
-            style="width: 150px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.hospitallist"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.employeePosition"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="filterCriteria.chooseHospitalId"
+              placeholder="请选择医院"
+              filterable
+              style="width: 180px;margin-left:10px"
             >
-          </Select>
-          <Select
-            v-model="filterCriteria.isOldCustoemr"
-            placeholder="请选择业绩"
-            filterable
-            style="width: 120px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.isOldCustoemrList"
-              :value="item.type"
-              :key="item.type"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.hospitallist"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
+          <div style="margin-top:10px">
+            <Select
+              v-model="filterCriteria.createEmpId"
+              placeholder="请选择上传人"
+              filterable
+              style="width: 180px;"
             >
-          </Select>
-          <Select
-            v-model="filterCriteria.createEmpId"
-            placeholder="请选择上传人"
-            filterable
-            style="width: 120px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.creteEmpNameList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.creteEmpNameList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="filterCriteria.isOldCustoemr"
+              placeholder="请选择业绩"
+              filterable
+              style="width: 140px;margin-left:10px"
             >
-          </Select>
-          <Select
-            v-model="filterCriteria.isGenerateSalry"
-            placeholder="请选择生成薪资状态"
-            filterable
-            style="width: 150px;margin-left:10px"
-          >
-            <Option
-              v-for="item in isGenerateSalryList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.isOldCustoemrList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="filterCriteria.isGenerateSalry"
+              placeholder="请选择生成薪资状态"
+              filterable
+              style="width: 140px;margin-left:10px"
             >
-          </Select>
-          <Select
-            v-model="filterCriteria.orderFrom"
-            placeholder="请选择平台"
-            filterable
-            style="width: 120px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.contentPalteForms"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in isGenerateSalryList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="filterCriteria.orderFrom"
+              placeholder="请选择平台"
+              filterable
+              style="width: 180px;margin-left:10px"
             >
-          </Select>
-          <Select
-            v-model="filterCriteria.addOrderPrice"
-            placeholder="请选择金额"
-            filterable
-            style="width: 140px;margin-left:10px"
-          >
-            <Option
-              v-for="item in params.addOrderPriceList"
-              :value="item.id"
-              :key="item.id"
-              >{{ item.name }}</Option
+              <Option
+                v-for="item in params.contentPalteForms"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="filterCriteria.addOrderPrice"
+              placeholder="请选择金额"
+              filterable
+              style="width: 180px;margin-left:10px"
             >
-          </Select>
+              <Option
+                v-for="item in params.addOrderPriceList"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
+        </div>
+        <div class="right">
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -236,7 +242,7 @@ export default {
   },
   
   mounted() {
-    this.getListData();
+    // this.getListData();
   },
   watch: {
     activeName: {
@@ -258,8 +264,12 @@ export default {
 .card_content {
   width: 100%;
   display: flex;
-  justify-content: space-between;
   margin-top: 10px;
+  justify-content: space-between;
+}
+.header_wrap{
+  display: flex;
+  align-items: center;
 }
 .card {
   width: 49.5%;

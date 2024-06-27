@@ -32,7 +32,7 @@ export default {
                         return h('div', { 
                             style: { 
                                 // padding:'10px',backgroundColor: '#fff9e6',
-                                color:'orange',
+                                color:'#000',
                                 fontSize:'14px',
                                 fontWeight:'bold',
                              } 
@@ -273,7 +273,7 @@ export default {
                         return h('div', { 
                             style: { 
                                 // padding:'10px',backgroundColor: '#fff9e6',
-                                color:'orange',
+                                color:'#000',
                                 fontSize:'15px',
                                 fontWeight:'bold',
                              } 

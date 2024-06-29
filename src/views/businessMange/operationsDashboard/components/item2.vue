@@ -20,7 +20,7 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalFlowRateChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalFlowRateChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月目标达成率：{{totalFlowRateAndDateSchedule.totalFlowRateCompleteRate ? totalFlowRateAndDateSchedule.totalFlowRateCompleteRate + '%' : '0%'}}</div>
+                    <div class="f_w">当月目标达成率：{{totalFlowRateAndDateSchedule.totalFlowRateCompleteRate ? totalFlowRateAndDateSchedule.totalFlowRateCompleteRate + '%' : '0%'}}</div>
                 </div>
               </div>
             </div>
@@ -43,7 +43,7 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.refundCardChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.refundCardChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月目标达成率：{{totalFlowRateAndDateSchedule.refundCardCompleteRate ? totalFlowRateAndDateSchedule.refundCardCompleteRate + '%' : '0%'}}</div>
+                    <div class="f_w">当月目标达成率：{{totalFlowRateAndDateSchedule.refundCardCompleteRate ? totalFlowRateAndDateSchedule.refundCardCompleteRate + '%' : '0%'}}</div>
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.distributeConsulationChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.distributeConsulationChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月目标达成率：{{totalFlowRateAndDateSchedule.distributeConsulationCompleteRate ? totalFlowRateAndDateSchedule.distributeConsulationCompleteRate + '%' : '0%'}}</div>
+                    <div  class="f_w">当月目标达成率：{{totalFlowRateAndDateSchedule.distributeConsulationCompleteRate ? totalFlowRateAndDateSchedule.distributeConsulationCompleteRate + '%' : '0%'}}</div>
                 </div>
               </div>
             </div>
@@ -89,7 +89,7 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.addWechatChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.addWechatChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月目标达成率：{{totalFlowRateAndDateSchedule.addWechatCompleteRate ? totalFlowRateAndDateSchedule.addWechatCompleteRate + '%' : '0%'}}</div>
+                    <div class="f_w">当月目标达成率：{{totalFlowRateAndDateSchedule.addWechatCompleteRate ? totalFlowRateAndDateSchedule.addWechatCompleteRate + '%' : '0%'}}</div>
                 </div>
               </div>
             </div>
@@ -171,5 +171,8 @@ export default{
 .green{
   color: red;
   margin-right: 4px;
+}
+.f_w{
+  font-weight: bold;
 }
 </style>

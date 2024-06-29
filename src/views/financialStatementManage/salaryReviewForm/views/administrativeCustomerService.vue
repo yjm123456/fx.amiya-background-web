@@ -270,6 +270,7 @@ export default {
 .header_wrap{
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 .card {
   width: 49.5%;

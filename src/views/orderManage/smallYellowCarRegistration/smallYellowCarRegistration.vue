@@ -2898,7 +2898,7 @@ export default {
               this.$Modal.confirm({
                 title: "确认提示",
                 content:
-                  "因当前登录账号和创建人不一致,该部分数据只有加V与备注修改生效，是否确认修改？",
+                  "因当前登录账号和创建人不一致,该部分数据只有加V,主播微信号，客户昵称，手机号和备注修改生效，是否确认修改？",
                 onOk: () => {
                   this.editgetJoddle();
                 },

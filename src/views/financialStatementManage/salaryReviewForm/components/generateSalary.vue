@@ -108,7 +108,11 @@
                 type="number"
                 number
                 @on-change="amountChange"
+                style="width:86%"
               ></Input>
+              <Tooltip :content="newCustomerToHospitalRewordPeople" placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px;"></i>
+              </Tooltip>
             </FormItem>
           </Col>
           <Col span="8">
@@ -141,7 +145,11 @@
                 type="number"
                 number
                 @on-change="amountChange"
+                style="width:86%"
               ></Input>
+              <Tooltip :content="targetCompletionRate" placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px;"></i>
+              </Tooltip>
             </FormItem>
           </Col>
           <Col span="8">
@@ -152,7 +160,11 @@
                 type="number"
                 number
                 @on-change="amountChange"
+                style="width:86%"
               ></Input>
+              <Tooltip :content="targetCompletionRate" placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px;"></i>
+              </Tooltip>
             </FormItem>
           </Col>
           <Col span="8">
@@ -183,6 +195,12 @@
         </Spin>
       </Form>
       <div slot="footer">
+        <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="automaticFilling()"
+            >自动填写（助理目标奖励）</Button
+          >
         <Button @click="handleCancel('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确认</Button>
       </div>
@@ -196,9 +214,15 @@ export default {
     generateSalaryModel: Boolean,
     generateSalaryParams: Object,
     params: Object,
+    startDate:String,
+    endDate:String,
   },
   data() {
     return {
+      // 新客奖励人数
+      newCustomerToHospitalRewordPeople:'新客上门 0 人',
+      // 目标完成率
+      targetCompletionRate:'目标完成率 0%',
       isLoading: false,
       control: false,
       form: {
@@ -245,7 +269,8 @@ export default {
         // 供应链达人派单提成金额
         cooperationLiveAnchorSendOrderPrice:0,
         // 供应链达人上门提成金额
-        cooperationLiveAnchorToHospitalPrice:0
+        cooperationLiveAnchorToHospitalPrice:0,
+        
       },
 
       ruleValidate: {
@@ -337,6 +362,47 @@ export default {
     };
   },
   methods: {
+    // 自动填写
+    automaticFilling(){
+      if(!this.form.belongEmpId){
+        this.$Message.warning('请先选择助理！')
+        return
+      }
+      const data = {
+        startDate:this.startDate,
+        endDate:this.endDate,
+        empId:this.form.belongEmpId
+      }
+      
+      api.getNewCustomerToHospiatlAndTargetComplete(data).then(res=>{
+        if(res.code == 0){
+          const {newCustomerToHospitalCount,targetComplete} = res.data.data
+          this.newCustomerToHospitalRewordPeople = '新客上门 ' +  newCustomerToHospitalCount + ' 人'
+          this.targetCompletionRate = '目标完成率 ' +  targetComplete + '%' 
+          // 1、助理：个人总体目标完成情况下：总目标低于80% 扣款1000；完成100-110%奖励1000；完成110-120%：奖励1500；完成>=120%，奖励2000
+         
+          if(targetComplete<80){
+            this.form.otherChargebacks = 1000
+            this.form.otherPrice = 0
+          }else if(targetComplete >= 100 && targetComplete < 110){
+            this.form.otherPrice = 1000
+            this.form.otherChargebacks = 0
+            
+          }else if(targetComplete >= 110 && targetComplete < 120){
+            this.form.otherPrice = 1500
+            this.form.otherChargebacks = 0
+          }else if(targetComplete >= 120){
+            this.form.otherPrice = 2000
+            this.form.otherChargebacks = 0
+          }
+          // 2、新客目标：条件 ：总体目标完成>=100%奖励新客上门每个人100；
+          if(targetComplete >= 100){
+            this.form.newCustomerToHospitalReword =  Math.round((newCustomerToHospitalCount * 100) * 100) / 100 
+          }
+        }
+      })
+      
+    },
     // 合计
     amountChange(){
       const {salary,customerServicePerformance,toHospitalRateReword,repeatPurchasesRateReword,newCustomerToHospitalReword,oldCustomerToHospitalReword,targetFinishReword,otherPrice,otherChargebacks} = this.form
@@ -369,6 +435,9 @@ export default {
       this.$emit("update:generateSalaryModel", false);
       this.$emit("getListWithPageByCustomerCompensation");
       this.$refs["form"].resetFields();
+      this.newCustomerToHospitalRewordPeople = '新客上门 0 人'
+      // 目标完成率
+      this.targetCompletionRate = '目标完成率 0%'
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -379,7 +448,9 @@ export default {
       }
     },
   },
-  created() {},
+  mounted() {
+      
+  },
   watch: {
     generateSalaryModel(value) {
       let orderId = [];

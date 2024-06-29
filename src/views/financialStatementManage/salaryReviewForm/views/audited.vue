@@ -187,7 +187,7 @@
      
     </Card>
     <!-- 生成薪资 -->
-    <generateSalary :generateSalaryModel.sync="generateSalaryModel" :generateSalaryParams="generateSalaryParams" :params="params" @getListWithPageByCustomerCompensation="getListWithPageByCustomerCompensation"/>
+    <generateSalary :generateSalaryModel.sync="generateSalaryModel" :generateSalaryParams="generateSalaryParams" :params="params" @getListWithPageByCustomerCompensation="getListWithPageByCustomerCompensation" :startDate="this.$moment(new Date(query.startDate)).format('YYYY-MM-DD')" :endDate="this.$moment(new Date(query.endDate)).format('YYYY-MM-DD')"/>
   </div>
 </template>
 <script>
@@ -768,6 +768,7 @@ export default {
 .header_wrap {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 .container {
   margin-top: 16px;

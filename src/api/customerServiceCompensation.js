@@ -54,3 +54,11 @@ export const getAddWechatNumByCreateEmpInfoAndDate = (params) => {
         params,
     });
 };
+// 获取助理目标完成率和新客上门人数
+export const getNewCustomerToHospiatlAndTargetComplete = (params) => {
+    return http({
+        url: `/amiyabg/ReconciliationDocumentsSettle/getNewCustomerToHospiatlAndTargetComplete`,
+        method: "get",
+        params,
+    });
+};

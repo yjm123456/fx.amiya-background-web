@@ -107,16 +107,24 @@
               <span class="title_bold">获客方式：</span>
               <span>{{ detailObj.getCustomerTypeText }} </span>
           </div>
-          
           <div class="mr_top items">
             <span class="title_bold">客户类型：</span>
             <span>{{ detailObj.customerTypeText }} </span>
           </div>
           </div>
-          <div class="fl_end">
-            <div class="mr_top">
+          <div  class="item_list">
+          <div class="mr_top items">
               <span class="title_bold">客户来源：</span>
               <span>{{ detailObj.customerSourceText }} </span>
+            </div>
+          <div class="mr_top items">
+            <span class="title_bold">归属部门：</span>
+            <span>{{ detailObj.belongChannelText }} </span>
+          </div>
+          </div>
+          <div class="fl_end">
+            <div class="mr_top">
+             
             </div>
             <div style="display:flex;align-items:flex-end">
               <Button type="primary" @click="fanMeetingClick()"

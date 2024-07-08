@@ -56,15 +56,15 @@
           <div class="pie_list">
             <Card class="pie_item">
               <div class="pie_title">总业绩分析</div>
-              <pieItem :pieItemData="totalPerformancePie" :selected="selected"/>
+              <pieItem :pieItemData="totalPerformancePie" :pieItemData2="totalPerformancePie2" :selected="selected" />
             </Card>
             <Card class="pie_item">
               <div class="pie_title">刀刀组业绩分析</div>
-              <pieItem :pieItemData="daodaoTotalPerformancePie" :selected="selected"/>
+              <pieItem :pieItemData="daodaoTotalPerformancePie" :pieItemData2="daodaoTotalPerformancePie2" :selected="selected"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">吉娜组业绩分析</div>
-              <pieItem :pieItemData="jinaTotalPerformancePie" :selected="selected"/>
+              <pieItem :pieItemData="jinaTotalPerformancePie" :pieItemData2="jinaTotalPerformancePie2" :selected="selected"/>
             </Card>
           </div>
         </Card>
@@ -92,11 +92,61 @@
          <!-- 当月业绩趋势 -->
         <Card  class="m_b">
           <div class="h3">当月线索趋势</div>
+          <!-- tab切换 -->
+          <div class="tab_content">
+            <div class="tab">
+              <div
+                class="tab_item"
+                v-for="(item, index) in list2"
+                :key="index"
+                @click="selectTab2(index, item)"
+                :class="{ active: selected2 == item}"
+              >
+                <span>{{ item }}</span>
+              </div>
+            </div>
+          </div>
           <monthLine2 :totalAchievementAndDateSchedule="totalFlowRateAndDateSchedule" :selected="selected"/>
         </Card>
         <!-- 线索分析 -->
         <Card  class="m_b">
           <div class="h3">平台线索分析</div>
+          <div class="pie_list">
+            <Card class="pie_item">
+              <div class="pie_title">整体线索占比</div>
+              <pieItem :pieItemData="totalFlowRateByContentPlatForm" :selected="selected"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">刀刀组线索占比</div>
+              <pieItem :pieItemData="groupDaoDaoFlowRateByContentPlatForm" :selected="selected"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">吉娜组线索占比</div>
+              <pieItem :pieItemData="groupJiNaFlowRateByContentPlatForm" :selected="selected"/>
+            </Card>
+          </div>
+        </Card>
+        <!-- 部门线索分析 -->
+        <Card  class="m_b">
+          <div class="h3">部门线索分析</div>
+          <div class="pie_list">
+            <Card class="pie_item">
+              <div class="pie_title">整体线索占比</div>
+              <pieItem :pieItemData="totalFlowRateByDepartment" :selected="selected"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">刀刀组线索占比</div>
+              <pieItem :pieItemData="groupDaoDaoFlowRateByDepartment" :selected="selected"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">吉娜组线索占比</div>
+              <pieItem :pieItemData="groupJiNaFlowRateByDepartment" :selected="selected"/>
+            </Card>
+          </div>
+        </Card>
+        <!-- 分组线索分析 -->
+        <Card  class="m_b">
+          <div class="h3">分组线索分析</div>
           <div class="pie_list">
             <Card class="pie_item">
               <div class="pie_title">整体线索占比</div>
@@ -112,8 +162,35 @@
             </Card>
           </div>
         </Card>
+        <!-- 有效潜在分析 -->
+        <Card  class="m_b">
+          <div class="h3">有效潜在分析</div>
+          <div class="pie_list">
+            <Card class="pie_item">
+              <div class="pie_title">整体线索占比</div>
+              <pieItem :pieItemData="totalFlowRateByIsEffictive" :selected="selected"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">刀刀组线索占比</div>
+              <pieItem :pieItemData="groupDaoDaoFlowRateByIsEffictive" :selected="selected"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">吉娜组线索占比</div>
+              <pieItem :pieItemData="groupJiNaFlowRateByIsEffictive" :selected="selected"/>
+            </Card>
+          </div>
+        </Card>
+        <!-- 助理 -->
+        <Card  class="m_b">
+          <div class="h3">助理线索分析</div>
+          <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.employeeFlowRate" title="助理"/>
+        </Card>
+        <Card  class="m_b">
+          <div class="h3">机构线索分析</div>
+          <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.hospitalFlowRate" title="机构"/>
+        </Card>
         <!-- 平台数据分析 -->
-        <Card  class="m_b ">
+        <!-- <Card  class="m_b ">
           <div class="h3">部门平台线索分析</div>
           <div class="flow_content m_t">
             <Card class="flow_item margin_r">
@@ -147,7 +224,7 @@
               <flowBarItem :flowBarItemData="flowBarItemData.privateDataFolwRateAnalize" />
             </Card>
           </div>
-        </Card>
+        </Card> -->
       </div>
       <!-- 转化 -->
       <div v-else-if="selected == '转化'">
@@ -183,6 +260,7 @@
 import * as api from "@/api/amiyaOperationsBoard";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as healthValueApi from "@/api/healthValue";
+import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
 
 import items from "./components/item.vue"
 import item2 from "./components/item2.vue"
@@ -195,6 +273,7 @@ import trafficConversionTable from "./components/trafficConversionTable.vue"
 import assistantTable from "./components/assistantTable.vue"
 import hospitalTable from "./components/hospitalTable.vue"
 import detail from "./components/detail.vue"
+import customerAndHospital from "./components/customerAndHospital.vue"
 export default {
   components:{
     items,
@@ -207,7 +286,8 @@ export default {
     trafficConversionTable,
     assistantTable,
     hospitalTable,
-    detail
+    detail,
+    customerAndHospital
   },
   data() {
     return {
@@ -241,7 +321,9 @@ export default {
         AssistantFlowTransformSendOrderRate:''
       },
       list: ["业绩","线索","转化"],
+      list2: ["刀刀","吉娜"],
       selected:"业绩",
+      selected2:"",
       //详情 平台id
       platformId:'',
       // 业绩趋势
@@ -262,6 +344,12 @@ export default {
       daodaoTotalPerformancePie:[],
       // 吉娜组饼图
       jinaTotalPerformancePie:[],
+      // 总业绩饼图
+      totalPerformancePie2:{},
+      // 刀刀组饼图
+      daodaoTotalPerformancePie2:{},
+      // 吉娜组饼图
+      jinaTotalPerformancePie2:{},
       // 助理业绩对比图
       customerObj:[],
       // 机构业绩对比图
@@ -298,13 +386,31 @@ export default {
       titles:"",
       // 线索
       totalFlowRateAndDateSchedule:{},
+      // 平台线索分析
+      totalFlowRateByContentPlatForm:[],
+      groupDaoDaoFlowRateByContentPlatForm:[],
+      groupJiNaFlowRateByContentPlatForm:[],
+      // 直播前中后线索分析
+      totalFlowRateByDepartment:[],
+      groupDaoDaoFlowRateByDepartment:[],
+      groupJiNaFlowRateByDepartment:[],
+      // 分组线索分析
       totalFlowRate:[],
       groupDaoDaoFlowRate:[],
       groupJiNaFlowRate:[],
+      //有效潜在线索分析
+      totalFlowRateByIsEffictive:[],
+      groupDaoDaoFlowRateByIsEffictive:[],
+      groupJiNaFlowRateByIsEffictive:[],
+
       // 饼图分组
       groupFlowRateCompare:{},
       // 详情
-      detailFlowBarItemData:[]
+      detailFlowBarItemData:[],
+      // 主播基础
+      liveAnchorBaseInfos:[],
+      // 线索 助理和机构
+      CustomerFlowRateByEmployeeAndHospital:{}
     };
   },
   methods: {
@@ -319,6 +425,15 @@ export default {
         if (res.code === 0) {
           // const { contentPalteForms } = res.data;
           this.completeRate = res.data.data;
+        }
+      });
+    },
+    // 主播基础数据列表
+    getLiveAnchorBaseInfoValids(){
+      liveAnchorBaseInfoApi.getLiveAnchorBaseInfoValid().then((res) => {
+        if (res.code === 0) {
+          const {liveAnchorBaseInfos} = res.data
+          this.liveAnchorBaseInfos = liveAnchorBaseInfos
         }
       });
     },
@@ -340,6 +455,10 @@ export default {
       // this.list[index].isSelected = !this.list[index].isSelected;
       this.getData()
     },
+    selectTab2(index, value) {
+      this.selected2 = value
+      this.getTotalFlowRateAndDateSchedule()
+    },
 
     getData() {
       const {startDate,endDate} = this.params
@@ -356,6 +475,7 @@ export default {
           this.getTotalFlowRateAndDateSchedule();
           this.getGroupFlowRateCompare();
           this.getFlowRateByContentPlatform();
+          this.getCustomerFlowRateByEmployeeAndHospital()
       }else if(this.selected == '转化'){
         this.$nextTick(()=>{
           this.$refs.trafficConversionTable.getCompanyTransformData();
@@ -374,38 +494,6 @@ export default {
       api.getTotalAchievementAndDateSchedule(data).then((res) => {
         if (res.code == 0) {
           this.totalAchievementAndDateSchedule = res.data.data;
-          // this.pieItemData = [
-          //   { value: 40, name: '新客' },
-          //   { value: 60, name: '老客' },
-          // ]
-          // this.barItemData={
-          //   data1:[320, 302, 301, 334, 390, 330, 350],
-          //   data2:[120, 132, 101, 134, 90, 230, 210],
-          //   name:['杭州连天美医疗美容医院有限公司杭州连天美医疗美容医院有限公司', '上海伊莱美医疗美容医院', '沈阳和平百嘉丽医疗美容医院有限公司', '杭州维多利亚医疗美容医院有限公司', '北京丽都医疗美容医院有限公司', '湖南雅美医疗美容医院有限公司长沙雅美医疗美容医院', '佛山曙光金子医学美容医院有限公司']
-          // }
-          // this.flowBarItemData={
-          //  data1: [
-          //               {value: 300, itemStyle: {color: '#5DC6D6'}},
-          //               {value: 498, itemStyle: {color: '#A0A8F5'}},
-          //               {value: 778, itemStyle: {color: '#D091FA'}},
-          //               {value: 1382, itemStyle: {color: '#F69655'}},
-
-          //           ],
-          //           data2:[
-          //               {value: 300, itemStyle: {color: '#2DB6C8'}},
-          //               {value: 498, itemStyle: {color: '#8C97F8'}},
-          //               {value: 778, itemStyle: {color: '#C77AF9'}},
-          //               {value: 1382, itemStyle: {color: '#F48853'}},
-
-          //           ],data3:[
-          //               {value: 300, itemStyle: {color: '#5DC6D6'}},
-          //               {value: 498, itemStyle: {color: '#A0A8F5'}},
-          //               {value: 778, itemStyle: {color: '#D091FA'}},
-          //               {value: 1382, itemStyle: {color: '#F69655'}},
-
-          //           ]
-
-          // }
         }
       });
     },
@@ -418,22 +506,22 @@ export default {
       };
       api.getNewOrOldCustomerCompare(data).then((res) => {
         if (res.code == 0) {
-          // const {totalPerformanceNewCustomer,totalPerformanceOldCustomer,groupDaoDaoPerformanceNewCustomer,groupDaoDaoPerformanceOldCustomer,groupJiNaPerformanceNewCustomer,groupJiNaPerformanceOldCustomer} = res.data.data
-          // 总业绩
-          // this.totalPerformancePie = [{value:totalPerformanceNewCustomer,name:'新客'},{value:totalPerformanceOldCustomer,name:'老客'}]
-          // this.daodaoTotalPerformancePie = [{value:groupDaoDaoPerformanceNewCustomer,name:'新客'},{value:groupDaoDaoPerformanceOldCustomer,name:'老客'}]
-          // this.jinaTotalPerformancePie = [{value:groupJiNaPerformanceNewCustomer,name:'新客'},{value:groupJiNaPerformanceOldCustomer,name:'老客'}]
           const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer} = res.data.data
           this.totalPerformancePie = [
             {value:totalNewOrOldCustomer.totalPerformanceNewCustomerNumber,name:'新客',rate:totalNewOrOldCustomer.totalPerformanceNewCustomerRate},
-            {value:totalNewOrOldCustomer.totalPerformanceOldCustomerNumber,name:'老客',rate:totalNewOrOldCustomer.totalPerformanceOldCustomerRate}
+            {value:totalNewOrOldCustomer.totalPerformanceOldCustomerNumber,name:'老客',rate:totalNewOrOldCustomer.totalPerformanceOldCustomerRate},
           ]
           this.daodaoTotalPerformancePie = [
-            {value:groupDaoDaoNewOrOldCustomer.totalPerformanceNewCustomerNumber,name:'新客',rate:groupDaoDaoNewOrOldCustomer.totalPerformanceNewCustomerRate},{value:groupDaoDaoNewOrOldCustomer.totalPerformanceOldCustomerNumber,name:'老客',rate:groupDaoDaoNewOrOldCustomer.totalPerformanceOldCustomerRate}
+            {value:groupDaoDaoNewOrOldCustomer.totalPerformanceNewCustomerNumber,name:'新客',rate:groupDaoDaoNewOrOldCustomer.totalPerformanceNewCustomerRate},{value:groupDaoDaoNewOrOldCustomer.totalPerformanceOldCustomerNumber,name:'老客',rate:groupDaoDaoNewOrOldCustomer.totalPerformanceOldCustomerRate},
           ]
           this.jinaTotalPerformancePie = [
-            {value:groupJiNaNewOrOldCustomer.totalPerformanceNewCustomerNumber,name:'新客',rate:groupJiNaNewOrOldCustomer.totalPerformanceNewCustomerRate},{value:groupJiNaNewOrOldCustomer.totalPerformanceOldCustomerNumber,name:'老客',rate:groupJiNaNewOrOldCustomer.totalPerformanceOldCustomerRate}
+            {value:groupJiNaNewOrOldCustomer.totalPerformanceNewCustomerNumber,name:'新客',rate:groupJiNaNewOrOldCustomer.totalPerformanceNewCustomerRate},{value:groupJiNaNewOrOldCustomer.totalPerformanceOldCustomerNumber,name:'老客',rate:groupJiNaNewOrOldCustomer.totalPerformanceOldCustomerRate},
           ]
+          this.totalPerformancePie2 = totalNewOrOldCustomer
+          this.daodaoTotalPerformancePie2 = groupDaoDaoNewOrOldCustomer
+          this.jinaTotalPerformancePie2 = groupJiNaNewOrOldCustomer
+          
+        
         }
       });
     },
@@ -470,6 +558,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+        keyWord:this.selected2 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected2 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : '' 
       };
       api.getTotalFlowRateAndDateSchedule(data).then((res) => {
         if (res.code == 0) {
@@ -486,27 +575,72 @@ export default {
       };
       api.getGroupFlowRateCompare(data).then((res) => {
         if (res.code == 0) {
-          const {totalFlowRate,groupDaoDaoFlowRate,groupJiNaFlowRate} = res.data.data
+          const {totalFlowRateByContentPlatForm,groupDaoDaoFlowRateByContentPlatForm,groupJiNaFlowRateByContentPlatForm,totalFlowRateByDepartment,groupDaoDaoFlowRateByDepartment,groupJiNaFlowRateByDepartment,totalFlowRate,groupDaoDaoFlowRate,groupJiNaFlowRate,totalFlowRateByIsEffictive,groupDaoDaoFlowRateByIsEffictive,groupJiNaFlowRateByIsEffictive} = res.data.data
+          // 平台线索分析
+          this.totalFlowRateByContentPlatForm =  totalFlowRateByContentPlatForm ? [
+            {value:totalFlowRateByContentPlatForm.douYinNumber,name:'抖音',rate:totalFlowRateByContentPlatForm.douYinRate},
+            {value:totalFlowRateByContentPlatForm.videoNumberNumber,name:'视频号',rate:totalFlowRateByContentPlatForm.videoNumberRate},
+            {value:totalFlowRateByContentPlatForm.xiaoHongShuNumber,name:'小红书',rate:totalFlowRateByContentPlatForm.xiaoHongShuRate},
+            {value:totalFlowRateByContentPlatForm.privateDataNumber,name:'私域',rate:totalFlowRateByContentPlatForm.privateDataRate},
+          ] : []
 
+          this.groupDaoDaoFlowRateByContentPlatForm = groupDaoDaoFlowRateByContentPlatForm ? [
+            {value:groupDaoDaoFlowRateByContentPlatForm.douYinNumber,name:'抖音',rate:groupDaoDaoFlowRateByContentPlatForm.douYinRate},
+            {value:groupDaoDaoFlowRateByContentPlatForm.videoNumberNumber,name:'视频号',rate:groupDaoDaoFlowRateByContentPlatForm.videoNumberRate},
+            {value:groupDaoDaoFlowRateByContentPlatForm.xiaoHongShuNumber,name:'小红书',rate:groupDaoDaoFlowRateByContentPlatForm.xiaoHongShuRate},
+            {value:groupDaoDaoFlowRateByContentPlatForm.privateDataNumber,name:'私域',rate:groupDaoDaoFlowRateByContentPlatForm.privateDataRate},
+          ] : []
+          this.groupJiNaFlowRateByContentPlatForm = groupJiNaFlowRateByContentPlatForm ? [
+            {value:groupJiNaFlowRateByContentPlatForm.douYinNumber,name:'抖音',rate:groupJiNaFlowRateByContentPlatForm.douYinRate},
+            {value:groupJiNaFlowRateByContentPlatForm.videoNumberNumber,name:'视频号',rate:groupJiNaFlowRateByContentPlatForm.videoNumberRate},
+            {value:groupJiNaFlowRateByContentPlatForm.xiaoHongShuNumber,name:'小红书',rate:groupJiNaFlowRateByContentPlatForm.xiaoHongShuRate},
+            {value:groupJiNaFlowRateByContentPlatForm.privateDataNumber,name:'私域',rate:groupJiNaFlowRateByContentPlatForm.privateDataRate},
+          ]:[]
+
+          // // 部门线索分析
+          this.totalFlowRateByDepartment = totalFlowRateByDepartment ?  [
+            {value:totalFlowRateByDepartment.beforeLivingNumber,name:'直播前',rate:totalFlowRateByDepartment.beforeLivingRate},
+            {value:totalFlowRateByDepartment.livingNumber,name:'直播中',rate:totalFlowRateByDepartment.livingRate},
+            {value:totalFlowRateByDepartment.afterLivingNumber,name:'直播后',rate:totalFlowRateByDepartment.aftereLivingRate},
+            {value:totalFlowRateByDepartment.otherNumber,name:'其他',rate:totalFlowRateByDepartment.otherRate},
+          ] : []
+          this.groupDaoDaoFlowRateByDepartment = groupDaoDaoFlowRateByDepartment ? [
+            {value:groupDaoDaoFlowRateByDepartment.beforeLivingNumber,name:'直播前',rate:groupDaoDaoFlowRateByDepartment.beforeLivingRate},
+            {value:groupDaoDaoFlowRateByDepartment.livingNumber,name:'直播中',rate:groupDaoDaoFlowRateByDepartment.livingRate},
+            {value:groupDaoDaoFlowRateByDepartment.afterLivingNumber,name:'直播后',rate:groupDaoDaoFlowRateByDepartment.aftereLivingRate},
+            {value:groupDaoDaoFlowRateByDepartment.otherNumber,name:'其他',rate:groupDaoDaoFlowRateByDepartment.otherRate},
+          ] : []
+          this.groupJiNaFlowRateByDepartment = groupJiNaFlowRateByDepartment ? [
+            {value:groupJiNaFlowRateByDepartment.beforeLivingNumber,name:'直播前',rate:groupJiNaFlowRateByDepartment.beforeLivingRate},
+            {value:groupJiNaFlowRateByDepartment.livingNumber,name:'直播中',rate:groupJiNaFlowRateByDepartment.livingRate},
+            {value:groupJiNaFlowRateByDepartment.afterLivingNumber,name:'直播后',rate:groupJiNaFlowRateByDepartment.aftereLivingRate},
+            {value:groupJiNaFlowRateByDepartment.otherNumber,name:'其他',rate:groupJiNaFlowRateByDepartment.otherRate},
+          ] : []
+
+          // 分组线索分析
           this.totalFlowRate =  [
-            {value:totalFlowRate.douYinNumber,name:'抖音',rate:totalFlowRate.douYinRate},
-            {value:totalFlowRate.videoNumberNumber,name:'视频号',rate:totalFlowRate.videoNumberRate},
-            {value:totalFlowRate.xiaoHongShuNumber,name:'小红书',rate:totalFlowRate.xiaoHongShuRate},
-            {value:totalFlowRate.privateDataNumber,name:'私域',rate:totalFlowRate.privateDataRate},
+            {value:totalFlowRate,name:'总线索',rate:100},
+          ]
+          this.groupDaoDaoFlowRate =  [
+            {value:groupDaoDaoFlowRate,name:'刀刀组',rate:100},
+          ]
+          this.groupJiNaFlowRate =  [
+            {value:groupJiNaFlowRate,name:'吉娜组',rate:100},
           ]
 
-          this.groupDaoDaoFlowRate = [
-            {value:groupDaoDaoFlowRate.douYinNumber,name:'抖音',rate:groupDaoDaoFlowRate.douYinRate},
-            {value:groupDaoDaoFlowRate.videoNumberNumber,name:'视频号',rate:groupDaoDaoFlowRate.videoNumberRate},
-            {value:groupDaoDaoFlowRate.xiaoHongShuNumber,name:'小红书',rate:groupDaoDaoFlowRate.xiaoHongShuRate},
-            {value:groupDaoDaoFlowRate.privateDataNumber,name:'私域',rate:groupDaoDaoFlowRate.privateDataRate},
-          ]
-          this.groupJiNaFlowRate = [
-            {value:groupJiNaFlowRate.douYinNumber,name:'抖音',rate:groupJiNaFlowRate.douYinRate},
-            {value:groupJiNaFlowRate.videoNumberNumber,name:'视频号',rate:groupJiNaFlowRate.videoNumberRate},
-            {value:groupJiNaFlowRate.xiaoHongShuNumber,name:'小红书',rate:groupJiNaFlowRate.xiaoHongShuRate},
-            {value:groupJiNaFlowRate.privateDataNumber,name:'私域',rate:groupJiNaFlowRate.privateDataRate},
-          ]
+          // 有效潜在线索分析
+          this.totalFlowRateByIsEffictive =  totalFlowRateByIsEffictive ? [
+            {value:totalFlowRateByIsEffictive.effictiveNumber,name:'有效',rate:totalFlowRateByIsEffictive.effictiveRate},
+            {value:totalFlowRateByIsEffictive.notEffictiveNumber,name:'潜在',rate:totalFlowRateByIsEffictive.notEffictiveRate},
+          ] : []
+          this.groupDaoDaoFlowRateByIsEffictive = totalFlowRateByIsEffictive ? [
+            {value:groupDaoDaoFlowRateByIsEffictive.effictiveNumber,name:'有效',rate:groupDaoDaoFlowRateByIsEffictive.effictiveRate},
+            {value:groupDaoDaoFlowRateByIsEffictive.notEffictiveNumber,name:'潜在',rate:groupDaoDaoFlowRateByIsEffictive.notEffictiveRate},
+          ]:[]
+          this.groupJiNaFlowRateByIsEffictive = totalFlowRateByIsEffictive ? [
+            {value:groupJiNaFlowRateByIsEffictive.effictiveNumber,name:'有效',rate:groupJiNaFlowRateByIsEffictive.effictiveRate},
+            {value:groupJiNaFlowRateByIsEffictive.notEffictiveNumber,name:'潜在',rate:groupJiNaFlowRateByIsEffictive.notEffictiveRate},
+          ]:[]
         }
       });
     },
@@ -636,6 +770,19 @@ export default {
         }
       });
     },
+    // 获取线索柱形图
+    getCustomerFlowRateByEmployeeAndHospital() {
+      const {startDate,endDate} = this.params
+      const data = {
+        startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+        endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+      };
+      api.getCustomerFlowRateByEmployeeAndHospital(data).then((res) => {
+        if (res.code == 0) {
+          this.CustomerFlowRateByEmployeeAndHospital= res.data.data
+        }
+      });
+    },
     
   },
   created(){
@@ -643,6 +790,7 @@ export default {
     this.getContentValidList()
     this.getHealthValueLists()
     this.getTimeSpanClick()
+    this.getLiveAnchorBaseInfoValids()
   }
 };
 </script>

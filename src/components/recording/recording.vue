@@ -471,6 +471,22 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="归属部门" prop="belongChannel">
+              <Select
+                v-model="form.belongChannel"
+                placeholder="请选择归属部门"
+                filterable
+              >
+                <Option
+                  v-for="item in belongChannelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="20">
             <FormItem label="顾客照片" prop="imageUrl" key="customerPictures">
               <upload
@@ -545,6 +561,7 @@
 <script>
 import * as api from "@/api/orderManage";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
+import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
 
 import upload from "@/components/upload/upload";
 export default {
@@ -635,8 +652,16 @@ export default {
         customerSource:null,
         // 客户类型
         customerType:null,
+        // 归属部门
+        belongChannel:null
       },
       ruleValidates: {
+        belongChannel: [
+          {
+            required: true,
+            message: "请选择归属部门",
+          },
+        ],
         sex: [
           {
             required: true,
@@ -796,10 +821,20 @@ export default {
         uploadList: [],
       },
       flag:false,
-
+      // 归属部门
+      belongChannelList:[]
     };
   },
   methods: {
+     // 获取商品名称和id
+    getshoppingCartGetBelongChannelList() {
+      shoppingCartRegistrationApi.shoppingCartGetBelongChannelList().then((res) => {
+        if (res.code === 0) {
+          const { belongChannelList } = res.data;
+          this.belongChannelList = belongChannelList;
+        }
+      });
+    },
     // 顾客照片
     customerHandleUploadChange(values) {
       this.form.customerPictures = values;
@@ -902,7 +937,8 @@ export default {
               belongingPlace,
               getCustomerType,
               customerSource,
-              customerType
+              customerType,
+              belongChannel
             } = this.form;
             const data = {
               orderType,
@@ -939,7 +975,8 @@ export default {
               auxiliaryCustomerService,
               getCustomerType,
               customerSource,
-              customerType
+              customerType,
+              belongChannel
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1001,7 +1038,8 @@ export default {
               belongingPlace,
               getCustomerType,
               customerSource,
-              customerType
+              customerType,
+              belongChannel
             } = this.form;
             const data = {
               orderType,
@@ -1038,7 +1076,8 @@ export default {
               supportEmpId:auxiliaryCustomerService ? auxiliaryCustomerService : 0,
               getCustomerType,
               customerSource,
-              customerType
+              customerType,
+              belongChannel
             };
             if (phone) {
               // 归属地 1是国内 2是国外
@@ -1145,6 +1184,7 @@ export default {
      });
      this.buttonFlag = flag
      if(value == true){
+      this.getshoppingCartGetBelongChannelList()
       //  客资登记信息赋值
       if(this.recordingNormalParams.title == '录单'){
         this.form.contentPlateFormId = this.shoppingCartRegistrationInfo.contentPlatFormId
@@ -1157,6 +1197,7 @@ export default {
         this.form.getCustomerType = this.shoppingCartRegistrationInfo.getCustomerType
         this.form.customerSource = this.shoppingCartRegistrationInfo.source
         this.form.customerType = this.shoppingCartRegistrationInfo.shoppingCartRegistrationCustomerType
+        this.form.belongChannel = this.shoppingCartRegistrationInfo.belongChannel != 0 ? this.shoppingCartRegistrationInfo.belongChannel : null
       }
       return
      }else{

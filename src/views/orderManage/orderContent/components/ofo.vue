@@ -136,6 +136,10 @@
             </div>
           </div>
           <div class="mr_top">
+            <span class="title_bold">归属部门：</span>
+            <span>{{ shoppingCartRegistrationInfo.belongChannelName }}</span>
+          </div>
+          <div class="mr_top">
             <span class="title_bold">退款原因：</span>
             <span>{{ shoppingCartRegistrationInfo.refundReason }}</span>
           </div>

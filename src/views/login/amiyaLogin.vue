@@ -3,7 +3,7 @@
     <div class="login-con">
       <Card icon="log-in" title="欢迎登录" :bordered="false">
         <div class="form-con">
-          <login-form @on-success-valid="handleSubmit"></login-form>
+          <login-form @on-success-valid="getIp"></login-form>
           <p class="login-tip">啊美雅技术支持</p>
         </div>
       </Card>
@@ -30,26 +30,35 @@ export default {
     };
   },
   mounted(){
-    this.getIp()
+    // this.getIp()
   },
   methods: {
-    getIp(){
+    getIp(value){
+      sessionStorage.setItem("un",value.userName)
+      sessionStorage.setItem("pd",value.password)
       // 获取主机名 
       axios.get('http://localhost:5000/getMyComputerName').then(res=>{
-          const ip = res.data.split("\n",1);
-          sessionStorage.setItem('hostName',ip[0])
+          if(res.status == 200){
+            const ip = res.data.split("\n",1);
+            sessionStorage.setItem('hostName',ip[0])
+              this.handleSubmit()
+            return
+          }
+          
+      }).catch(error=>{
+        this.$Message.warning('插件包丢失，登陆失败！')
       })
       // 获取客户端IP 网络IP
       axios.get('https://myip.ipip.net/').then(res=>{
           sessionStorage.setItem('ip',res.data)
       })
     },
-    async handleSubmit({ userName, password }) {
-      sessionStorage.setItem("un",userName)
-      sessionStorage.setItem("pd",password)
+    async handleSubmit() {
+      // sessionStorage.setItem("un",userName)
+      // sessionStorage.setItem("pd",password)
       const data = {
-        password: password,
-        userName: userName,
+        password:  sessionStorage.getItem('pd'),
+        userName: sessionStorage.getItem('un'),
         ip:sessionStorage.getItem("ip"),
         hostName:sessionStorage.getItem("hostName")
       };

@@ -791,9 +791,9 @@ export default {
     },
   },
   created() {
+    this.isAuthority();
     this.getHospitalInfo();
     this.getCustomerServiceLists();
-    this.isAuthority();
   },
 };
 </script>

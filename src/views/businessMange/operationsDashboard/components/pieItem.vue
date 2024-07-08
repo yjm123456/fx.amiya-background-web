@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <div class="allNum" v-if="selected == '业绩'">总业绩：<span style="font-size:14px;">({{+ pieItemData2.totalPerformanceNumber ? pieItemData2.totalPerformanceNumber : '0'}}w) {{pieItemData2.totalPerformanceNumber == 0 ? '0%' : '100%'}} </span></div>
     <div ref="dom" :style="{ width: '100%', height: '180px' }"></div>
   </div>
 </template>
@@ -12,7 +13,8 @@ echarts.registerTheme("tdTheme", tdTheme);
 export default {
   props: {
     pieItemData: Array,
-    selected:String
+    selected:String,
+    pieItemData2:Object,
   },
   data() {
     return {
@@ -21,7 +23,7 @@ export default {
   },
   methods: {
     // 业绩
-    myEcharts(value) {
+    myEcharts(value,value2) {
       let option = {
         tooltip: {
           trigger: "item",
@@ -52,6 +54,7 @@ export default {
           left: "left",
           formatter: this.selected == '业绩' ?  function (name) {
             var total = 0;
+            // console.log(this.pieItemData2)
             var data = option.series[0].data;
             for (var i = 0, l = data.length; i < l; i++) {
                 total += data[i].value;
@@ -60,7 +63,8 @@ export default {
                 if (data[i].name == name) {
                     // var percentage = data[i].value == 0 ? '0%' : ((data[i].value / total) * 100).toFixed(2) + '%';
                     var percentage = data[i].value == 0 ? '0w' : data[i].value + 'w'
-                    return  name + '(' + ' ' + percentage + ')';
+                    var rate = data[i].rate == 0 ? '0' : data[i].rate 
+                    return  name + '(' + ' ' + percentage + ')'+ ' '  + rate +'%';
                 }
             }
             return name ;
@@ -74,7 +78,8 @@ export default {
                 if (data[i].name == name) {
                     // var percentage = data[i].value == 0 ? '0%' : ((data[i].value / total) * 100).toFixed(2) + '%';
                     var percentage = data[i].value == 0 ? '0' : data[i].value 
-                    return  name + '(' + ' ' + percentage + ')';
+                    var rate = data[i].rate == 0 ? '0' : data[i].rate 
+                    return percentage == 0 ?  name + '(' + ' ' + percentage + ')'+ ' ' +  '0%' :  name + '(' + ' ' + percentage + ')'+ ' ' +  rate +'%';
                 }
             }
             return name ;
@@ -85,7 +90,7 @@ export default {
             type: "pie",
             // radius: ["40%", "70%"],
             radius: '50%',
-            data: value ,
+            data: value,
           },
         ],
       };
@@ -104,6 +109,7 @@ export default {
       this.myEcharts(value);
       // });
     },
+    
   },
 };
 </script>
@@ -112,5 +118,14 @@ export default {
   width: 100%;
   height: 180px;
   // margin-left: 5%;
+  position: relative;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+.allNum{
+  position: absolute;
+  top: 48px;
+  left: 33px;
+  font-size: 11.5px;
+  color: #999;
 }
 </style>

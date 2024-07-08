@@ -90,21 +90,22 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['总业绩', '新客业绩','老客业绩'],
+          data: ['新客业绩','老客业绩','总业绩'],
           selected:{
-            '总业绩':true,
             '新客业绩':true,
             '老客业绩':true,
+            '总业绩':true,
           },
           textStyle:{
             color:'#000'
           }
         },
         series: [
-           {
-                name: '总业绩',
+           
+            {
+                name: '新客业绩',
                 type: 'line',
-                data: totalPerformanceBrokenLineLists,
+                data: newCustomerPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#0AABBD'  // 折线的颜⾊
@@ -112,9 +113,9 @@ export default {
                 },
             },
             {
-                name: '新客业绩',
+                name: '老客业绩',
                 type: 'line',
-                data: newCustomerPerformanceBrokenLineLists,
+                data: oldCustomerPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#7381FB'  // 折线的颜⾊
@@ -122,9 +123,9 @@ export default {
                 },
             },
             {
-                name: '老客业绩',
+                name: '总业绩',
                 type: 'line',
-                data: oldCustomerPerformanceBrokenLineLists,
+                data: totalPerformanceBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#BB5DF9'  // 折线的颜⾊
@@ -154,7 +155,7 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   width: 100%;
-  height: 280px;
+  height: 300px;
   // margin-left: 5%;
 }
 </style>

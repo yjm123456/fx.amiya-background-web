@@ -62,3 +62,11 @@ export const getNewCustomerToHospiatlAndTargetComplete = (params) => {
         params,
     });
 };
+// 复制助理薪资单
+export const copyCompensation = (data) => {
+    return http({
+        url: `/amiyabg/CustomerServiceCompensation/copyCompensation`,
+        method: "post",
+        data,
+    });
+};

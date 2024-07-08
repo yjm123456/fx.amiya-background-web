@@ -1,53 +1,8 @@
 <template>
     <div class="center_content">
           <div class="center_item">
+            
             <div class="item1" >
-              <div class="h2">线索量</div>
-              <div class="item">
-                <div class="item_left">
-                    <div>当日：{{totalFlowRateAndDateSchedule.todayTotalFlowRate}}</div>
-                    <div class="h3">累计</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalFlowRate}}</div>
-                </div>
-                <div class="item_right">
-                    <div>当月同比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.totalFlowRateYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalFlowRateYearOnYear) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalFlowRateYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalFlowRateYearOnYear) + '%'}}</span>
-                      <span class="h5"  v-else>-</span>
-                    </div>
-                    <div>当月环比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.totalFlowRateChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalFlowRateChainRatio) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalFlowRateChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalFlowRateChainRatio) + '%'}}</span>
-                      <span class="h5"  v-else>-</span>
-                    </div>
-                    <div class="f_w">当月目标达成率：{{totalFlowRateAndDateSchedule.totalFlowRateCompleteRate ? totalFlowRateAndDateSchedule.totalFlowRateCompleteRate + '%' : '0%'}}</div>
-                </div>
-              </div>
-            </div>
-            <div class="item2" >
-              <div class="h2">退卡量</div>
-              <div class="item">
-                <div class="item_left">
-                    <div>当日：{{totalFlowRateAndDateSchedule.todayRefundCard}}</div>
-                    <div class="h3">累计</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalRefundCard}}</div>
-                </div>
-                <div class="item_right">
-                    <div>当月同比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.refundCardYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.refundCardYearOnYear) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.refundCardYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.refundCardYearOnYear) + '%'}}</span>
-                      <span class="h5"  v-else>-</span>
-                    </div>
-                    <div>当月环比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.refundCardChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.refundCardChainRatio) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.refundCardChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.refundCardChainRatio) + '%'}}</span>
-                      <span class="h5"  v-else>-</span>
-                    </div>
-                    <div class="f_w">当月目标达成率：{{totalFlowRateAndDateSchedule.refundCardCompleteRate ? totalFlowRateAndDateSchedule.refundCardCompleteRate + '%' : '0%'}}</div>
-                </div>
-              </div>
-            </div>
-            <div class="item3" >
               <div class="h2">分诊量</div>
               <div class="item">
                 <div class="item_left">
@@ -66,11 +21,11 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.distributeConsulationChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.distributeConsulationChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div  class="f_w">当月目标达成率：{{totalFlowRateAndDateSchedule.distributeConsulationCompleteRate ? totalFlowRateAndDateSchedule.distributeConsulationCompleteRate + '%' : '0%'}}</div>
+                    <div  >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.distributeConsulationCompleteRate ? totalFlowRateAndDateSchedule.distributeConsulationCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>
-            <div class="item4" >
+            <div class="item2" >
               <div class="h2">加v量</div>
               <div class="item">
                 <div class="item_left">
@@ -89,7 +44,53 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.addWechatChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.addWechatChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div class="f_w">当月目标达成率：{{totalFlowRateAndDateSchedule.addWechatCompleteRate ? totalFlowRateAndDateSchedule.addWechatCompleteRate + '%' : '0%'}}</div>
+                    <div >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.addWechatCompleteRate ? totalFlowRateAndDateSchedule.addWechatCompleteRate + '%' : '0%'}}</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="item3" >
+              <div class="h2">派单量</div>
+              <div class="item">
+                <div class="item_left">
+                    <div>当日：{{totalFlowRateAndDateSchedule.todayTotalSendOrder}}</div>
+                    <div class="h3">累计</div>
+                    <div class="h3">{{totalFlowRateAndDateSchedule.totalSendOrder}}</div>
+                </div>
+                <div class="item_right">
+                    <div>当月同比：
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.totalSendOrderYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalSendOrderYearOnYear) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalSendOrderYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalSendOrderYearOnYear) + '%'}}</span>
+                      <span class="h5"  v-else>-</span>
+                    </div>
+                    <div>当月环比：
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.totalSendOrderChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalSendOrderChainRatio) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalSendOrderChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalSendOrderChainRatio) + '%'}}</span>
+                      <span class="h5"  v-else>-</span>
+                    </div>
+                    <div>当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.totalSendOrderCompleteRate ? totalFlowRateAndDateSchedule.totalSendOrderCompleteRate + '%' : '0%'}}</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="item4" >
+              <div class="h2">上门量</div>
+              <div class="item">
+                <div class="item_left">
+                    <div>当日：{{totalFlowRateAndDateSchedule.todayVisit}}</div>
+                    <div class="h3">累计</div>
+                    <div class="h3">{{totalFlowRateAndDateSchedule.totalVisit}}</div>
+                </div>
+                <div class="item_right">
+                    <div>当月同比：
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.visitYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.visitYearOnYear) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.visitYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.visitYearOnYear) + '%'}}</span>
+                      <span class="h5"  v-else>-</span>
+                    </div>
+                    <div>当月环比：
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.visitChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.visitChainRatio) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.visitChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.visitChainRatio) + '%'}}</span>
+                      <span class="h5"  v-else>-</span>
+                    </div>
+                    <div >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.visitCompleteRate ? totalFlowRateAndDateSchedule.visitCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>

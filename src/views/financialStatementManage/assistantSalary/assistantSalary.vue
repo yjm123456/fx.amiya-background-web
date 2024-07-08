@@ -316,11 +316,39 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 180,
+            width: 240,
             align:'center',
             fixed:"right",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      // disabled:params.row.valid == false
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id} = params.row;
+                        const data = {
+                          id:id
+                        }
+                        api.copyCompensation(data).then(res=>{
+                          if(res.code == 0){
+                            this.$Message.warning('复制成功！')
+                            this.getContractListClick()
+                          }
+                        })
+                      },
+                    },
+                  },
+                  "复制"
+                ),
                 h(
                   "Button",
                   {

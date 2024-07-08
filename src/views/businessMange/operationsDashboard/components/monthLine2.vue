@@ -24,17 +24,17 @@ export default {
   methods: {
     // 业绩
     myEcharts(value) {
-      const {flowRateBrokenLineList,distributeConsulationBrokenLineList,addWeChatBrokenLineList,
+      const {sendOrderBrokenLineList,distributeConsulationBrokenLineList,addWeChatBrokenLineList,
       
       } = value
       let date =[]
-      let flowRateBrokenLineLists =[]
+      let sendOrderBrokenLineLists =[]
       let distributeConsulationBrokenLineLists =[]
       let addWeChatBrokenLineLists =[]
      
-      flowRateBrokenLineList ? flowRateBrokenLineList.map(item=>{
+      sendOrderBrokenLineList ? sendOrderBrokenLineList.map(item=>{
         date.push(item.date)
-        flowRateBrokenLineLists.push(item.performance)
+        sendOrderBrokenLineLists.push(item.performance)
       }) : []
       distributeConsulationBrokenLineList ? distributeConsulationBrokenLineList.map(item=>{
         distributeConsulationBrokenLineLists.push(item.performance)
@@ -50,7 +50,7 @@ export default {
           name: '日期',
         },
         yAxis: {
-          name: this.selected == '线索' ? '人数' : '业绩/w',
+          name: '人数',
           type: 'value',
           axisLabel:{
             formatter:(value) => {
@@ -68,16 +68,6 @@ export default {
                 
                 for (let i = 0; i < params.length; i++) {
                     list.push(
-                       this.selected == '业绩' ? 
-                       '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
-                        params[i].color +
-                        ';margin-right: 5px;border-radius: 50%;}"></i>' +
-                        '<span style="display:inline-block;">' +
-                        params[i].seriesName +
-                        '</span><span style="display:inline-block;">&nbsp&nbsp' +
-                        params[i].data  +'w' +
-                        '</span>'
-                        : 
                         '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
                         params[i].color +
                         ';margin-right: 5px;border-radius: 50%;}"></i>' +
@@ -101,9 +91,9 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['线索', '分诊','加v'],
+          data: ['派单', '分诊','加v'],
           selected:{
-            '线索':true,
+            '派单':true,
             '分诊':true,
             '加v':true,
           },
@@ -113,9 +103,9 @@ export default {
         },
         series: [
            {
-                name: '线索',
+                name: '派单',
                 type: 'line',
-                data: flowRateBrokenLineLists,
+                data: sendOrderBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#0AABBD'  // 折线的颜⾊
@@ -165,7 +155,7 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   width: 100%;
-  height: 280px;
+  height: 300px;
   // margin-left: 5%;
 }
 </style>

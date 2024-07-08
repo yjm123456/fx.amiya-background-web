@@ -368,6 +368,10 @@ export default {
         this.$Message.warning('请先选择助理！')
         return
       }
+      if(this.$moment(new Date(this.startDate)).format("YYYY-MM") != this.$moment(new Date(this.endDate)).format("YYYY-MM")){
+        this.$Message.warning('列表开始时间和结束时间必须是同年月！')
+        return
+      }
       const data = {
         startDate:this.startDate,
         endDate:this.endDate,

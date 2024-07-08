@@ -210,3 +210,11 @@ export const companyNewCustomerConversionData = (params) => {
         params
     });
 };
+// 根据条件获取线索分析柱形图（助理和机构）
+export const getCustomerFlowRateByEmployeeAndHospital = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getCustomerFlowRateByEmployeeAndHospital",
+        method: "get",
+        params
+    });
+};

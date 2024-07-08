@@ -816,7 +816,12 @@ export default {
             minWidth: 100,
             align: "center",
           },
-
+          {
+            title: "归属部门",
+            key: "belongChannelText",
+            minWidth: 100,
+            align: "center",
+          },
           {
             title: "操作",
             align: "center",

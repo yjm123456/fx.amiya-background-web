@@ -28,7 +28,6 @@
                   placeholder="请选择助理"
                   filterable
                   @on-change="checkBelongEmpIdChange(1)"
-                  disabled
                 >
                   <Option
                     v-for="item in params.employeeList"

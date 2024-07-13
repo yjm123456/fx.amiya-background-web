@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card>
-      <div class="content_title">啊美雅医美业务运营情况</div>
+      <div class="content_title">{{selected == '业绩' ? '啊美雅医美业绩运营分析' : selected == '线索' ? '啊美雅医美线索运营分析' : '啊美雅医美转化运营分析'}}</div>
       <!-- tab切换 -->
       <div class="tab_content">
         <div class="tab">
@@ -48,11 +48,43 @@
         <!-- 当月业绩趋势 -->
         <Card  class="m_b">
           <div class="h3">当月业绩趋势</div>
+          <!-- tab切换 -->
+          <div class="tab_content">
+            <div class="tab">
+              <div
+                class="tab_item"
+                v-for="(item, index) in list2"
+                :key="index"
+                @click="selectTab3(index, item)"
+                :class="{ active: selected3 == item}"
+              >
+                <span>{{ item }}</span>
+              </div>
+            </div>
+          </div>
           <monthLine :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule"/>
         </Card>
-        <!-- 业绩情况分析 -->
+        <!-- 部门业绩分析 -->
         <Card  class="m_b">
-          <div class="h3">业绩情况分析</div>
+          <div class="h3">部门业绩分析</div>
+          <div class="pie_list">
+            <Card class="pie_item">
+              <div class="pie_title">总业绩分析</div>
+              <pieItem :pieItemData="totalBelongChannelPerformance" :pieItemData2="totalBelongChannelPerformance2" :selected="selected" title="部门业绩分析"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">刀刀组业绩分析</div>
+              <pieItem :pieItemData="groupDaoDaoBelongChannelPerformance" :pieItemData2="groupDaoDaoBelongChannelPerformance2" :selected="selected" title="部门业绩分析"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">吉娜组业绩分析</div>
+              <pieItem :pieItemData="groupJiNaBelongChannelPerformance" :pieItemData2="groupJiNaBelongChannelPerformance2" :selected="selected" title="部门业绩分析"/>
+            </Card>
+          </div>
+        </Card>
+        <!-- 新老客业绩分析 -->
+        <Card  class="m_b">
+          <div class="h3">新老客业绩分析</div>
           <div class="pie_list">
             <Card class="pie_item">
               <div class="pie_title">总业绩分析</div>
@@ -65,6 +97,42 @@
             <Card class="pie_item">
               <div class="pie_title">吉娜组业绩分析</div>
               <pieItem :pieItemData="jinaTotalPerformancePie" :pieItemData2="jinaTotalPerformancePie2" :selected="selected"/>
+            </Card>
+          </div>
+        </Card>
+        <!-- 有效潜在业绩分析 -->
+        <Card  class="m_b">
+          <div class="h3">有效/潜在业绩分析</div>
+          <div class="pie_list">
+            <Card class="pie_item">
+              <div class="pie_title">总业绩分析</div>
+              <pieItem :pieItemData="totalIsEffictivePerformance" :pieItemData2="totalIsEffictivePerformance2" :selected="selected" />
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">刀刀组业绩分析</div>
+              <pieItem :pieItemData="groupDaoDaoIsEffictivePerformance" :pieItemData2="groupDaoDaoIsEffictivePerformance2" :selected="selected"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">吉娜组业绩分析</div>
+              <pieItem :pieItemData="groupJiNaIsEffictivePerformance" :pieItemData2="groupJiNaIsEffictivePerformance2" :selected="selected"/>
+            </Card>
+          </div>
+        </Card>
+        <!-- 当月历史业绩分析 -->
+        <Card  class="m_b">
+          <div class="h3">当月/历史业绩分析</div>
+          <div class="pie_list">
+            <Card class="pie_item">
+              <div class="pie_title">总业绩分析</div>
+              <pieItem :pieItemData="totalIsHistoryPerformance" :pieItemData2="totalIsHistoryPerformance2" :selected="selected" />
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">刀刀组业绩分析</div>
+              <pieItem :pieItemData="groupDaoDaoIsHistoryPerformance" :pieItemData2="groupDaoDaoIsHistoryPerformance2" :selected="selected"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">吉娜组业绩分析</div>
+              <pieItem :pieItemData="groupJiNaIsHistoryPerformance" :pieItemData2="groupJiNaIsHistoryPerformance2" :selected="selected"/>
             </Card>
           </div>
         </Card>
@@ -92,6 +160,7 @@
          <!-- 当月业绩趋势 -->
         <Card  class="m_b">
           <div class="h3">当月线索趋势</div>
+          
           <!-- tab切换 -->
           <div class="tab_content">
             <div class="tab">
@@ -114,15 +183,15 @@
           <div class="pie_list">
             <Card class="pie_item">
               <div class="pie_title">整体线索占比</div>
-              <pieItem :pieItemData="totalFlowRateByContentPlatForm" :selected="selected"/>
+              <pieItem :pieItemData="totalFlowRateByContentPlatForm" :pieItemData3="pieItemData3.totalFlowRateByContentPlatForm.totalFlowRateNumber" :selected="selected"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">刀刀组线索占比</div>
-              <pieItem :pieItemData="groupDaoDaoFlowRateByContentPlatForm" :selected="selected"/>
+              <pieItem :pieItemData="groupDaoDaoFlowRateByContentPlatForm" :pieItemData3="pieItemData3.groupDaoDaoFlowRateByContentPlatForm.totalFlowRateNumber" :selected="selected"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">吉娜组线索占比</div>
-              <pieItem :pieItemData="groupJiNaFlowRateByContentPlatForm" :selected="selected"/>
+              <pieItem :pieItemData="groupJiNaFlowRateByContentPlatForm"  :pieItemData3="pieItemData3.groupJiNaFlowRateByContentPlatForm.totalFlowRateNumber" :selected="selected"/>
             </Card>
           </div>
         </Card>
@@ -132,15 +201,15 @@
           <div class="pie_list">
             <Card class="pie_item">
               <div class="pie_title">整体线索占比</div>
-              <pieItem :pieItemData="totalFlowRateByDepartment" :selected="selected"/>
+              <pieItem :pieItemData="totalFlowRateByDepartment" :pieItemData3="pieItemData3.totalFlowRateByDepartment.totalFlowRateNumber" :selected="selected"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">刀刀组线索占比</div>
-              <pieItem :pieItemData="groupDaoDaoFlowRateByDepartment" :selected="selected"/>
+              <pieItem :pieItemData="groupDaoDaoFlowRateByDepartment" :pieItemData3="pieItemData3.groupDaoDaoFlowRateByDepartment.totalFlowRateNumber" :selected="selected"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">吉娜组线索占比</div>
-              <pieItem :pieItemData="groupJiNaFlowRateByDepartment" :selected="selected"/>
+              <pieItem :pieItemData="groupJiNaFlowRateByDepartment" :pieItemData3="pieItemData3.groupJiNaFlowRateByDepartment.totalFlowRateNumber" :selected="selected"/>
             </Card>
           </div>
         </Card>
@@ -150,15 +219,15 @@
           <div class="pie_list">
             <Card class="pie_item">
               <div class="pie_title">整体线索占比</div>
-              <pieItem :pieItemData="totalFlowRate" :selected="selected"/>
+              <pieItem :pieItemData="totalFlowRate"  :selected="selected" title="分组"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">刀刀组线索占比</div>
-              <pieItem :pieItemData="groupDaoDaoFlowRate" :selected="selected"/>
+              <pieItem :pieItemData="groupDaoDaoFlowRate" :selected="selected" title="分组"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">吉娜组线索占比</div>
-              <pieItem :pieItemData="groupJiNaFlowRate" :selected="selected"/>
+              <pieItem :pieItemData="groupJiNaFlowRate" :selected="selected" title="分组"/>
             </Card>
           </div>
         </Card>
@@ -168,25 +237,35 @@
           <div class="pie_list">
             <Card class="pie_item">
               <div class="pie_title">整体线索占比</div>
-              <pieItem :pieItemData="totalFlowRateByIsEffictive" :selected="selected"/>
+              <pieItem :pieItemData="totalFlowRateByIsEffictive" :pieItemData3="pieItemData3.totalFlowRateByIsEffictive.totalFlowRateNumber" :selected="selected" title="有效潜在"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">刀刀组线索占比</div>
-              <pieItem :pieItemData="groupDaoDaoFlowRateByIsEffictive" :selected="selected"/>
+              <pieItem :pieItemData="groupDaoDaoFlowRateByIsEffictive" :pieItemData3="pieItemData3.groupDaoDaoFlowRateByIsEffictive.totalFlowRateNumber" :selected="selected" title="有效潜在"/>
             </Card>
             <Card class="pie_item">
               <div class="pie_title">吉娜组线索占比</div>
-              <pieItem :pieItemData="groupJiNaFlowRateByIsEffictive" :selected="selected"/>
+              <pieItem :pieItemData="groupJiNaFlowRateByIsEffictive" :pieItemData3="pieItemData3.groupJiNaFlowRateByIsEffictive.totalFlowRateNumber" :selected="selected" title="有效潜在"/>
             </Card>
           </div>
         </Card>
         <!-- 助理 -->
         <Card  class="m_b">
           <div class="h3">助理线索分析</div>
+          <div class="x_title">
+            <div>总分诊：{{CustomerFlowRateByEmployeeAndHospital.totalDistributeConsulationByEmployee}}</div>
+            <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByEmployee}}</div>
+            <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByEmployee}}</div>
+          </div>
           <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.employeeFlowRate" title="助理"/>
         </Card>
         <Card  class="m_b">
           <div class="h3">机构线索分析</div>
+          <div class="x_title">
+            <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByHospital}}</div>
+            <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByHospital}}</div>
+            <div>总成交：{{CustomerFlowRateByEmployeeAndHospital.totalDealByHospital}}</div>
+          </div>
           <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.hospitalFlowRate" title="机构"/>
         </Card>
         <!-- 平台数据分析 -->
@@ -321,9 +400,10 @@ export default {
         AssistantFlowTransformSendOrderRate:''
       },
       list: ["业绩","线索","转化"],
-      list2: ["刀刀","吉娜"],
+      list2: ["全部","刀刀","吉娜"],
       selected:"业绩",
-      selected2:"",
+      selected2:"全部",
+      selected3:"全部",
       //详情 平台id
       platformId:'',
       // 业绩趋势
@@ -350,6 +430,49 @@ export default {
       daodaoTotalPerformancePie2:{},
       // 吉娜组饼图
       jinaTotalPerformancePie2:{},
+
+      // 业绩部门
+      // 总业绩饼图
+      totalBelongChannelPerformance:[],
+      // 刀刀组饼图
+      groupDaoDaoBelongChannelPerformance:[],
+      // 吉娜组饼图
+      groupJiNaBelongChannelPerformance:[],
+      // 总业绩饼图
+      totalBelongChannelPerformance2:{},
+      // 刀刀组饼图
+      groupDaoDaoBelongChannelPerformance2:{},
+      // 吉娜组饼图
+      groupJiNaBelongChannelPerformance2:{},
+
+      // 业绩有效潜在
+      // 总业绩饼图
+      totalIsEffictivePerformance:[],
+      // 刀刀组饼图
+      groupDaoDaoIsEffictivePerformance:[],
+      // 吉娜组饼图
+      groupJiNaIsEffictivePerformance:[],
+      // 总业绩饼图
+      totalIsEffictivePerformance2:{},
+      // 刀刀组饼图
+      groupDaoDaoIsEffictivePerformance2:{},
+      // 吉娜组饼图
+      groupJiNaIsEffictivePerformance2:{},
+
+      // 业绩当月历史
+      // 总业绩饼图
+      totalIsHistoryPerformance:[],
+      // 刀刀组饼图
+      groupDaoDaoIsHistoryPerformance:[],
+      // 吉娜组饼图
+      groupJiNaIsHistoryPerformance:[],
+      // 总业绩饼图
+      totalIsHistoryPerformance2:{},
+      // 刀刀组饼图
+      groupDaoDaoIsHistoryPerformance2:{},
+      // 吉娜组饼图
+      groupJiNaIsHistoryPerformance2:{},
+
       // 助理业绩对比图
       customerObj:[],
       // 机构业绩对比图
@@ -410,7 +533,11 @@ export default {
       // 主播基础
       liveAnchorBaseInfos:[],
       // 线索 助理和机构
-      CustomerFlowRateByEmployeeAndHospital:{}
+      CustomerFlowRateByEmployeeAndHospital:{},
+      // 线索饼图
+      pieItemData3:{},
+      // 业绩饼图数据
+      NewOrOldCustomerCompare:{}
     };
   },
   methods: {
@@ -455,9 +582,15 @@ export default {
       // this.list[index].isSelected = !this.list[index].isSelected;
       this.getData()
     },
+    // 线索板块折线图切换
     selectTab2(index, value) {
       this.selected2 = value
       this.getTotalFlowRateAndDateSchedule()
+    },
+    // 业绩板块折线图切换
+    selectTab3(index, value) {
+      this.selected3 = value
+      this.getTotalAchievementAndDateSchedule()
     },
 
     getData() {
@@ -490,6 +623,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+        keyWord:this.selected3 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected3 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : '' 
       };
       api.getTotalAchievementAndDateSchedule(data).then((res) => {
         if (res.code == 0) {
@@ -506,7 +640,8 @@ export default {
       };
       api.getNewOrOldCustomerCompare(data).then((res) => {
         if (res.code == 0) {
-          const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer} = res.data.data
+          const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer,totalBelongChannelPerformance,groupDaoDaoBelongChannelPerformance,groupJiNaBelongChannelPerformance,totalIsEffictivePerformance,groupDaoDaoIsEffictivePerformance,groupJiNaIsEffictivePerformance,totalIsHistoryPerformance,groupDaoDaoIsHistoryPerformance,groupJiNaIsHistoryPerformance} = res.data.data
+          // 新老客业绩占比
           this.totalPerformancePie = [
             {value:totalNewOrOldCustomer.totalPerformanceNewCustomerNumber,name:'新客',rate:totalNewOrOldCustomer.totalPerformanceNewCustomerRate},
             {value:totalNewOrOldCustomer.totalPerformanceOldCustomerNumber,name:'老客',rate:totalNewOrOldCustomer.totalPerformanceOldCustomerRate},
@@ -520,6 +655,62 @@ export default {
           this.totalPerformancePie2 = totalNewOrOldCustomer
           this.daodaoTotalPerformancePie2 = groupDaoDaoNewOrOldCustomer
           this.jinaTotalPerformancePie2 = groupJiNaNewOrOldCustomer
+          // 部门业绩占比
+          this.totalBelongChannelPerformance = [
+            {value:totalBelongChannelPerformance.beforeLivingNumber,name:'直播前',rate:totalBelongChannelPerformance.beforeLivingRate},
+            {value:totalBelongChannelPerformance.livingNumber,name:'直播中',rate:totalBelongChannelPerformance.livingRate},
+            {value:totalBelongChannelPerformance.afterLivingNumber,name:'直播后',rate:totalBelongChannelPerformance.afterLivingRate},
+            {value:totalBelongChannelPerformance.otherNumber,name:'其他',rate:totalBelongChannelPerformance.otherRate},
+          ]
+          this.groupDaoDaoBelongChannelPerformance = [
+            {value:groupDaoDaoBelongChannelPerformance.beforeLivingNumber,name:'直播前',rate:groupDaoDaoBelongChannelPerformance.beforeLivingRate},
+            {value:groupDaoDaoBelongChannelPerformance.livingNumber,name:'直播中',rate:groupDaoDaoBelongChannelPerformance.livingRate},
+            {value:groupDaoDaoBelongChannelPerformance.afterLivingNumber,name:'直播后',rate:groupDaoDaoBelongChannelPerformance.afterLivingRate},
+            {value:groupDaoDaoBelongChannelPerformance.otherNumber,name:'其他',rate:groupDaoDaoBelongChannelPerformance.otherRate},
+          ]
+          this.groupJiNaBelongChannelPerformance = [
+            {value:groupJiNaBelongChannelPerformance.beforeLivingNumber,name:'直播前',rate:groupJiNaBelongChannelPerformance.beforeLivingRate},
+            {value:groupJiNaBelongChannelPerformance.livingNumber,name:'直播中',rate:groupJiNaBelongChannelPerformance.livingRate},
+            {value:groupJiNaBelongChannelPerformance.afterLivingNumber,name:'直播后',rate:groupJiNaBelongChannelPerformance.afterLivingRate},
+            {value:groupJiNaBelongChannelPerformance.otherNumber,name:'其他',rate:groupJiNaBelongChannelPerformance.otherRate},
+          ]
+          this.totalBelongChannelPerformance2 = totalBelongChannelPerformance
+          this.groupDaoDaoBelongChannelPerformance2 = groupDaoDaoBelongChannelPerformance
+          this.groupJiNaBelongChannelPerformance2 = groupJiNaBelongChannelPerformance
+
+          // 有效潜在
+          this.totalIsEffictivePerformance = [
+            {value:totalIsEffictivePerformance.effictivePerformanceNumber,name:'有效',rate:totalIsEffictivePerformance.effictivePerformanceRate},
+            {value:totalIsEffictivePerformance.notEffictivePerformanceNumber,name:'潜在',rate:totalIsEffictivePerformance.notEffictivePerformanceRate},
+          ]
+          this.groupDaoDaoIsEffictivePerformance = [
+            {value:groupDaoDaoIsEffictivePerformance.effictivePerformanceNumber,name:'有效',rate:groupDaoDaoIsEffictivePerformance.effictivePerformanceRate},
+            {value:groupDaoDaoIsEffictivePerformance.notEffictivePerformanceNumber,name:'潜在',rate:groupDaoDaoIsEffictivePerformance.notEffictivePerformanceRate},
+          ]
+          this.groupJiNaIsEffictivePerformance = [
+            {value:groupJiNaIsEffictivePerformance.effictivePerformanceNumber,name:'有效',rate:groupJiNaIsEffictivePerformance.effictivePerformanceRate},
+            {value:groupJiNaIsEffictivePerformance.notEffictivePerformanceNumber,name:'潜在',rate:groupJiNaIsEffictivePerformance.notEffictivePerformanceRate},
+          ]
+          this.totalIsEffictivePerformance2 = totalIsEffictivePerformance
+          this.groupDaoDaoIsEffictivePerformance2 = groupDaoDaoIsEffictivePerformance
+          this.groupJiNaIsEffictivePerformance2 = groupJiNaIsEffictivePerformance
+
+          // 当月/历史占比
+          this.totalIsHistoryPerformance = [
+            {value:totalIsHistoryPerformance.thisMonthPerformanceNumber,name:'当月',rate:totalIsHistoryPerformance.thisMonthPerformanceRate},
+            {value:totalIsHistoryPerformance.historyPerformanceNumber,name:'历史',rate:totalIsHistoryPerformance.historyPerformanceRate},
+          ]
+          this.groupDaoDaoIsHistoryPerformance = [
+            {value:groupDaoDaoIsHistoryPerformance.thisMonthPerformanceNumber,name:'当月',rate:groupDaoDaoIsHistoryPerformance.thisMonthPerformanceRate},
+            {value:groupDaoDaoIsHistoryPerformance.historyPerformanceNumber,name:'历史',rate:groupDaoDaoIsHistoryPerformance.historyPerformanceRate},
+          ]
+          this.groupJiNaIsHistoryPerformance = [
+            {value:groupJiNaIsHistoryPerformance.thisMonthPerformanceNumber,name:'当月',rate:groupJiNaIsHistoryPerformance.thisMonthPerformanceRate},
+            {value:groupJiNaIsHistoryPerformance.historyPerformanceNumber,name:'历史',rate:groupJiNaIsHistoryPerformance.historyPerformanceRate},
+          ]
+          this.totalIsHistoryPerformance2 = totalIsHistoryPerformance
+          this.groupDaoDaoIsHistoryPerformance2 = groupDaoDaoIsHistoryPerformance
+          this.groupJiNaIsHistoryPerformance2 = groupJiNaIsHistoryPerformance
           
         
         }
@@ -576,6 +767,7 @@ export default {
       api.getGroupFlowRateCompare(data).then((res) => {
         if (res.code == 0) {
           const {totalFlowRateByContentPlatForm,groupDaoDaoFlowRateByContentPlatForm,groupJiNaFlowRateByContentPlatForm,totalFlowRateByDepartment,groupDaoDaoFlowRateByDepartment,groupJiNaFlowRateByDepartment,totalFlowRate,groupDaoDaoFlowRate,groupJiNaFlowRate,totalFlowRateByIsEffictive,groupDaoDaoFlowRateByIsEffictive,groupJiNaFlowRateByIsEffictive} = res.data.data
+          this.pieItemData3 =  res.data.data
           // 平台线索分析
           this.totalFlowRateByContentPlatForm =  totalFlowRateByContentPlatForm ? [
             {value:totalFlowRateByContentPlatForm.douYinNumber,name:'抖音',rate:totalFlowRateByContentPlatForm.douYinRate},
@@ -843,6 +1035,7 @@ export default {
 }
 .m_b{
   margin-bottom: 10px;
+  position: relative;
 }
 .m_t{
   margin-top: 10px;
@@ -926,5 +1119,10 @@ export default {
 /deep/ .ivu-progress-inner {
   border: 3px solid dodgerblue;
   border-radius: 10px;
+}
+.x_title{
+  position: absolute;
+  right: 12%;
+  top:20px;
 }
 </style>

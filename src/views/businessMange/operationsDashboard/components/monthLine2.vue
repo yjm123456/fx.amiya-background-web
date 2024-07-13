@@ -91,31 +91,31 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['派单', '分诊','加v'],
+          data: ['分诊','加v' ,'派单'],
           selected:{
-            '派单':true,
             '分诊':true,
             '加v':true,
+            '派单':true,
           },
           textStyle:{
             color:'#000'
           }
         },
         series: [
-           {
-                name: '派单',
+          {
+                name: '分诊',
                 type: 'line',
-                data: sendOrderBrokenLineLists,
+                data: distributeConsulationBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#0AABBD'  // 折线的颜⾊
                     } 
                 },
             },
-            {
-                name: '分诊',
+          {
+                name: '加v',
                 type: 'line',
-                data: distributeConsulationBrokenLineLists,
+                data: addWeChatBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#7381FB'  // 折线的颜⾊
@@ -123,9 +123,9 @@ export default {
                 },
             },
             {
-                name: '加v',
+                name: '派单',
                 type: 'line',
-                data: addWeChatBrokenLineLists,
+                data: sendOrderBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#BB5DF9'  // 折线的颜⾊

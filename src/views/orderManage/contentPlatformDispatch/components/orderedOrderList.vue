@@ -300,6 +300,7 @@
             }}</Option>
           </Select>
         </FormItem>
+        
         <FormItem
           label="所有医院"
           :required="openAllHospital ? true : false"
@@ -307,11 +308,14 @@
           v-if="openAllHospital"
           key="所有医院"
         >
+        
           <Select
             v-model="form.allHospitalId"
             placeholder="请选择医院"
             filterable
+            :disabled="form.isMainHospital == true ? form.hasDealInfo  == true : form.hasDealInfo == false"
           >
+          <!-- hasDealInfo为true的话有成交信息主派医院不能修改 -->
             <Option
               v-for="item in hospitalInfo"
               :value="item.id"
@@ -323,6 +327,27 @@
         <FormItem label="是否为主派医院" key="是否为主派医院">
           <i-switch v-model="form.isMainHospital" disabled/>
         </FormItem>
+        <FormItem
+          label="次派医院"
+          prop="otherHospitalId"
+          v-if="form.isMainHospital == true "
+          key="次派医院"
+        >
+          <Select
+            v-model="form.otherHospitalId"
+            placeholder="请选择次派医院"
+            filterable
+            multiple
+          >
+            <Option
+              v-for="item in hospitalInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
+        
         <!-- <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
           <i-switch v-model="form.isUncertainDate" />
         </FormItem>
@@ -1635,7 +1660,7 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled: params.row.checkState == 2,
+                      // disabled: params.row.checkState == 2,
                     },
                     style: {
                       marginLeft: "5px",
@@ -1654,6 +1679,8 @@ export default {
                               timeType,
                               content,
                               isUncertainDate,
+                              otherHospitalId,
+                              hasDealInfo
                             } = res.data.sendOrderInfo;
                             // 已参与项目医院
                             const ycyxmyy = this.hospital.find(
@@ -1683,6 +1710,8 @@ export default {
                             this.form.content = content;
                             this.form.isUncertainDate = isUncertainDate;
                             this.form.isMainHospital = isMainHospital
+                            this.form.otherHospitalId = otherHospitalId
+                            this.form.hasDealInfo = hasDealInfo
                             this.controlModal = true;
                           }
                           // });
@@ -1808,12 +1837,16 @@ export default {
         tempHospitalId: "",
         // 所有医院中选择
         allHospitalId: "",
+        // 次派医院
+        otherHospitalId:[],
         appointmentDate: "",
         timeType: "",
         // 留言
         content: "",
         // 未确定时间
         isUncertainDate: false,
+        // 为true的话有成交信息主派医院不能修改
+        hasDealInfo:false
       },
 
       // 医院列表
@@ -2458,6 +2491,8 @@ export default {
             timeType,
             content,
             isUncertainDate,
+            otherHospitalId,
+            isMainHospital
           } = this.form;
           const data = {
             id,
@@ -2472,6 +2507,7 @@ export default {
             timeType: isUncertainDate ? null : timeType ? timeType : null,
             content,
             isUncertainDate,
+            otherHospitalId:isMainHospital == false ? [] : otherHospitalId
           };
           this.editLoading = true
           api.editContentPlateFormSendOrder(data).then((res) => {
@@ -2485,7 +2521,7 @@ export default {
               });
             }else {
               setTimeout(() => {
-                this.isLoading = false;
+                this.editLoading = false;
               }, 3000);
             }
           });

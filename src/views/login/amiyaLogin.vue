@@ -33,27 +33,65 @@ export default {
     // this.getIp()
   },
   methods: {
+    // 读取操作系统
+    getOperatingSystem() {
+      const { userAgent } = navigator;
+      // console.log(userAgent.indexOf("Win"))
+      // console.log(userAgent.indexOf("Mac"))
+      if (userAgent.indexOf("Win") !== -1) return "Windows";
+      if (userAgent.indexOf("Mac") !== -1) return "MacOS";
+      if (userAgent.indexOf("X11") !== -1) return "UNIX";
+      if (userAgent.indexOf("Linux") !== -1) return "Linux";
+      if (/Android/.test(userAgent)) return "Android";
+      if (/like Mac OS X/.test(userAgent)) {
+        const version = /CPU( iPhone)? OS ([0-9_]+) like Mac OS X/.exec(userAgent)
+          .pop()
+          .replace(/_/g, ".");
+        return "iOS " + version;
+      }
+      return "Unknown";
+    },
     getIp(value){
       sessionStorage.setItem("un",value.userName)
       sessionStorage.setItem("pd",value.password)
-      // 获取主机名 
-      axios.get('http://localhost:5000/getMyComputerName').then(res=>{
+       // 判断是windows系统还是mac mac直接跳过插件丢失包验证
+      if(this.getOperatingSystem() == 'Windows'){
+        // 获取主机名 
+        axios.get('http://localhost:5000/getMyComputerName').then(res=>{
+            if(res.status == 200){
+              const ip = res.data.split("\n",1);
+              sessionStorage.setItem('hostName',ip[0])
+              // 获取客户端IP 网络IP
+              axios.get('https://myip.ipip.net/').then(res=>{
+                  if(res.status == 200){
+                    sessionStorage.setItem('ip',res.data)
+                  }
+              })
+              setTimeout(()=>{
+                this.handleSubmit()
+              },2000)
+              return
+            }
+            
+        }).catch(error=>{
+          this.$Message.warning('插件包丢失，登陆失败！')
+        })
+      }else{
+        // mac只用获取IP地址
+        // 获取客户端IP 网络IP
+        axios.get('https://myip.ipip.net/').then(res=>{
           if(res.status == 200){
-            const ip = res.data.split("\n",1);
-            sessionStorage.setItem('hostName',ip[0])
-              this.handleSubmit()
-            return
+            sessionStorage.setItem('ip',res.data)
           }
-          
-      }).catch(error=>{
-        this.$Message.warning('插件包丢失，登陆失败！')
-      })
-      // 获取客户端IP 网络IP
-      axios.get('https://myip.ipip.net/').then(res=>{
-          sessionStorage.setItem('ip',res.data)
-      })
+        })
+        setTimeout(()=>{
+          this.handleSubmit()
+        },2000)
+      }
+      
     },
     async handleSubmit() {
+      
       // sessionStorage.setItem("un",userName)
       // sessionStorage.setItem("pd",password)
       const data = {

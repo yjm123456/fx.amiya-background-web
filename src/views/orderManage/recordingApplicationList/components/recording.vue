@@ -42,6 +42,23 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="归属部门" prop="belongChannel">
+              <Select
+                v-model="form.belongChannel"
+                placeholder="请选择归属部门"
+                filterable
+                @on-change="isTitleClick()"
+              >
+                <Option
+                  v-for="item in belongChannelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <!-- 客服和客服管理员不能更改（positionId==2 || positionId==4） :disabled="title=='录单编辑' && (positionId==2 || positionId==4)"-->
           <Col span="8">
             <FormItem label="主播平台" prop="contentPlateFormId">
@@ -375,12 +392,13 @@
                 filterable
               >
                 <Option
-                  v-for="item in recordingNormalParams.sourceList"
+                  v-for="item in sourceList"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.name }}</Option
                 >
               </Select>
+              <div style="font-size:12px;color:red" v-if="isTitle == true">请先选择归属部门和主播平台！</div>
             </FormItem>
           </Col>
         </Row>
@@ -513,6 +531,7 @@
 <script>
 import * as api from "@/api/orderManage";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
+import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
 
 import upload from "@/components/upload/upload";
 export default {
@@ -599,8 +618,16 @@ export default {
         customerSource:null,
         // 客户类型
         customerType:null,
+        // 归属部门
+        belongChannel:null
       },
       ruleValidates: {
+        belongChannel: [
+          {
+            required: true,
+            message: "请选择归属部门",
+          },
+        ],
         sex: [
           {
             required: true,
@@ -749,9 +776,55 @@ export default {
         uploadList: [],
       },
       flag: false,
+      // 客户来源
+      sourceList:[],
+      //客户来源文字提示
+      isTitle:true,
+      // 归属部门
+      belongChannelList:[]
     };
   },
   methods: {
+    // 客户来源文字提示
+    isTitleClick(){
+      if(this.form.belongChannel != null && this.form.contentPlateFormId){
+        this.isTitle = false
+        this.getcustomerSourceList()
+      }else{
+        this.isTitle = true
+      }
+    },
+    // 客户来源
+    getcustomerSourceList() {
+      const { contentPlateFormId, belongChannel} = this.form
+      const data = {
+        contentPlatFormId:contentPlateFormId,
+        channel:belongChannel
+      }
+      if(belongChannel == null ){
+        this.$Message.warning('请选择归属部门！')
+        return
+      }
+      if(!contentPlateFormId){
+        this.$Message.warning('请选择主播平台！')
+        return
+      }
+      shoppingCartRegistrationApi.customerSourceList(data).then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.sourceList = sourceList;
+        }
+      });
+    },
+     // 获取归属部门
+    getshoppingCartGetBelongChannelList() {
+      shoppingCartRegistrationApi.shoppingCartGetBelongChannelList().then((res) => {
+        if (res.code === 0) {
+          const { belongChannelList } = res.data;
+          this.belongChannelList = belongChannelList;
+        }
+      });
+    },
     // 顾客照片
     customerHandleUploadChange(values) {
       this.form.customerPictures = values;
@@ -794,6 +867,7 @@ export default {
       }
       this.form.liveAnchorWeChatNo = "";
       this.getLiveValidList(value);
+      this.isTitleClick()
     },
     //
     liveAnchorChange(value) {
@@ -946,6 +1020,8 @@ export default {
   watch: {
     recordingModel(value) {
       this.control = value;
+      this.isTitleClick()
+      this.getshoppingCartGetBelongChannelList()
       this.form.belongEmpId = Number(this.recordingNormalParams.belongEmpId);
       this.form.phone = this.recordingNormalParams.phone;
       this.form.isCustomer = this.recordingNormalParams.isCustomer;

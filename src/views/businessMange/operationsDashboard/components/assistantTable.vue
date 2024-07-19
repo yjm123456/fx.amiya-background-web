@@ -319,6 +319,24 @@ export default {
                     },
                 },
                 {
+                    title: "老客成交量",
+                    key: "oldCustomerDealCount",
+                    minWidth: 150,
+                    className: 'test-name',
+                    align: "center",
+                    render: (h, params) => {
+                        return h(
+                            "div",
+                            {
+                                style: {
+                                    color: params.row.oldCustomerDealCount <= 0 ? "red" : "#04B05D",
+                                },
+                            },
+                            params.row.oldCustomerDealCount
+                        );
+                    },
+                },
+                {
                     title: "老客业绩",
                     key: "oldCustomerPerformance",
                     minWidth: 150,

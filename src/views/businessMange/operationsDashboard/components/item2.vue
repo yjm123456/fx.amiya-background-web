@@ -3,94 +3,94 @@
           <div class="center_item">
             
             <div class="item1" >
-              <div class="h2">分诊量</div>
+              <div class="h2">直播前</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日：{{totalFlowRateAndDateSchedule.todayDistributeConsulation}}</div>
+                    <div>当日：{{totalFlowRateAndDateSchedule.todayBeforeLivingClue}}</div>
                     <div class="h3">累计</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalDistributeConsulation}}</div>
+                    <div class="h3">{{totalFlowRateAndDateSchedule.totalBeforeLivingClue}}</div>
                 </div>
                 <div class="item_right">
                     <div>当月同比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.distributeConsulationYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.distributeConsulationYearOnYear) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.distributeConsulationYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.distributeConsulationYearOnYear) + '%'}}</span>
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.beforeLivingClueYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.beforeLivingClueYearOnYear) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.beforeLivingClueYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.beforeLivingClueYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                       </div>
                     <div>当月环比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.distributeConsulationChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.distributeConsulationChainRatio) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.distributeConsulationChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.distributeConsulationChainRatio) + '%'}}</span>
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.beforeLivingClueChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.beforeLivingClueChainRatio) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.beforeLivingClueChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.beforeLivingClueChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div  >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.distributeConsulationCompleteRate ? totalFlowRateAndDateSchedule.distributeConsulationCompleteRate + '%' : '0%'}}</span></div>
+                    <div  >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.beforeLivingClueCompleteRate ? totalFlowRateAndDateSchedule.beforeLivingClueCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>
             <div class="item2" >
-              <div class="h2">加v量</div>
+              <div class="h2">直播中</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日：{{totalFlowRateAndDateSchedule.todayAddWechat}}</div>
+                    <div>当日：{{totalFlowRateAndDateSchedule.todayLivingClue}}</div>
                     <div class="h3">累计</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalAddWechat}}</div>
+                    <div class="h3">{{totalFlowRateAndDateSchedule.totalLivingClue}}</div>
                 </div>
                 <div class="item_right">
                     <div>当月同比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.addWechatYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.addWechatYearOnYear) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.addWechatYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.addWechatYearOnYear) + '%'}}</span>
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.livingClueYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.livingClueYearOnYear) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.livingClueYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.livingClueYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>当月环比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.addWechatChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.addWechatChainRatio) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.addWechatChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.addWechatChainRatio) + '%'}}</span>
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.livingClueChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.livingClueChainRatio) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.livingClueChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.livingClueChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.addWechatCompleteRate ? totalFlowRateAndDateSchedule.addWechatCompleteRate + '%' : '0%'}}</span></div>
+                    <div >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.livingClueCompleteRate ? totalFlowRateAndDateSchedule.livingClueCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>
             <div class="item3" >
-              <div class="h2">派单量</div>
+              <div class="h2">直播后</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日：{{totalFlowRateAndDateSchedule.todayTotalSendOrder}}</div>
+                    <div>当日：{{totalFlowRateAndDateSchedule.todayTotalAfterLivingClue}}</div>
                     <div class="h3">累计</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalSendOrder}}</div>
+                    <div class="h3">{{totalFlowRateAndDateSchedule.totalAfterLivingClue}}</div>
                 </div>
                 <div class="item_right">
                     <div>当月同比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.totalSendOrderYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalSendOrderYearOnYear) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalSendOrderYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalSendOrderYearOnYear) + '%'}}</span>
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.totalAfterLivingClueYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalAfterLivingClueYearOnYear) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalAfterLivingClueYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalAfterLivingClueYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>当月环比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.totalSendOrderChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalSendOrderChainRatio) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalSendOrderChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalSendOrderChainRatio) + '%'}}</span>
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.totalAfterLivingClueChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalAfterLivingClueChainRatio) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalAfterLivingClueChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalAfterLivingClueChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.totalSendOrderCompleteRate ? totalFlowRateAndDateSchedule.totalSendOrderCompleteRate + '%' : '0%'}}</span></div>
+                    <div>当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.totalAfterLivingClueCompleteRate ? totalFlowRateAndDateSchedule.totalAfterLivingClueCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>
             <div class="item4" >
-              <div class="h2">上门量</div>
+              <div class="h2">总线索</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日：{{totalFlowRateAndDateSchedule.todayVisit}}</div>
+                    <div>当日：{{totalFlowRateAndDateSchedule.todayClue}}</div>
                     <div class="h3">累计</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalVisit}}</div>
+                    <div class="h3">{{totalFlowRateAndDateSchedule.totalClue}}</div>
                 </div>
                 <div class="item_right">
                     <div>当月同比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.visitYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.visitYearOnYear) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.visitYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.visitYearOnYear) + '%'}}</span>
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.clueYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.clueYearOnYear) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.clueYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.clueYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>当月环比：
-                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.visitChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.visitChainRatio) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.visitChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.visitChainRatio) + '%'}}</span>
+                      <span  class="h5" v-if="Math.sign(totalFlowRateAndDateSchedule.clueChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalFlowRateAndDateSchedule.clueChainRatio) + '%'}}</span>
+                      <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.clueChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.clueChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.visitCompleteRate ? totalFlowRateAndDateSchedule.visitCompleteRate + '%' : '0%'}}</span></div>
+                    <div >当月目标达成率：<span class="f_w">{{totalFlowRateAndDateSchedule.clueCompleteRate ? totalFlowRateAndDateSchedule.clueCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>

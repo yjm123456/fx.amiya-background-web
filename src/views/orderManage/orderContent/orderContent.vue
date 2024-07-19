@@ -52,6 +52,20 @@
               >
             </Select>
             <Select
+                v-model="query.getCustomerType"
+                style="width: 170px;margin-left: 10px"
+                placeholder="请选择获客方式"
+                filterable
+                transfer
+              >
+                <Option
+                  v-for="item in recordingParams.customerTypeListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+            </Select>
+            <!-- <Select
               v-model="query.contentPlateFormId"
               placeholder="请选择(订单)下单平台"
               style="width: 170px;margin-left: .625rem"
@@ -63,7 +77,7 @@
                 :key="item.id"
                 >{{ item.contentPlatformName }}</Option
               >
-            </Select>
+            </Select> -->
             <!-- <Select
               v-model="query.consultationEmpId"
               placeholder="请选择面诊员"
@@ -196,20 +210,7 @@
                 type="number"
                 namber
               />
-              <Select
-                v-model="query.getCustomerType"
-                style="width: 160px;margin-left: 10px"
-                placeholder="请选择获客方式"
-                filterable
-                transfer
-              >
-                <Option
-                  v-for="item in recordingParams.customerTypeListAll"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-            </Select>
+              
               <Select
                 v-model="query.appointmentHospital"
                 style="width: 180px;margin-left: 10px"
@@ -1267,6 +1268,7 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         baseLiveAnchorId,
+        contentPlatFormId
       } = this.query;
       const data = {
         keyword,
@@ -1277,7 +1279,7 @@ export default {
           : "",
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         orderStatus,
-        contentPlateFormId,
+        contentPlateFormId:contentPlatFormId,
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         liveAnchorId,
         orderSource,
@@ -1312,7 +1314,8 @@ export default {
       if (!value) {
         return;
       }
-      this.form.liveAnchorWeChatNo = ''
+      // this.form.liveAnchorWeChatNo = ''
+      this.query.liveAnchorId = null
       this.getLiveValidList(value);
     },
     //
@@ -1676,7 +1679,8 @@ export default {
         maxAddOrderPrice,
         liveAnchorWechatId,
         baseLiveAnchorId,
-        getCustomerType
+        getCustomerType,
+        contentPlatFormId
       } = this.query;
       const data = {
         keyword,
@@ -1687,7 +1691,7 @@ export default {
           : "",
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         orderStatus,
-        contentPlateFormId,
+        contentPlateFormId:contentPlatFormId,
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         liveAnchorId,
         orderSource,
@@ -1732,7 +1736,8 @@ export default {
         maxAddOrderPrice,
         liveAnchorWechatId,
         baseLiveAnchorId,
-        getCustomerType
+        getCustomerType,
+        contentPlatFormId
       } = this.query;
       const data = {
         keyword,
@@ -1743,7 +1748,7 @@ export default {
           : "",
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : "",
         orderStatus,
-        contentPlateFormId,
+        contentPlateFormId:contentPlatFormId,
         belongEmpId: belongEmpId == -1 ? null : belongEmpId,
         liveAnchorId,
         orderSource,

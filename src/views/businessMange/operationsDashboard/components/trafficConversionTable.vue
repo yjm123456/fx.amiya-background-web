@@ -79,7 +79,7 @@ export default {
                 {
                     title: "线索有效率",
                     key: "clueEffectiveRate",
-                    minWidth: 140,
+                    minWidth: 160,
                     align: "center",
                     className: 'test-name',
                     renderHeader: (h, { column }) => {
@@ -111,7 +111,7 @@ export default {
                 {
                     title: "加v",
                     key: "addWechatCount",
-                    minWidth: 140,
+                    minWidth: 130,
                     align: "center",
                     className: 'test-name',
                     render: (h, params) => {
@@ -211,7 +211,7 @@ export default {
                 {
                     title: "上门数",
                     key: "toHospitalCount",
-                    minWidth: 130,
+                    minWidth: 120,
                     align: "center",
                     className: 'test-name',
                     render: (h, params) => {

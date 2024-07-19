@@ -42,6 +42,23 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="归属部门" prop="belongChannel">
+              <Select
+                v-model="form.belongChannel"
+                placeholder="请选择归属部门"
+                filterable
+                @on-change="isTitleClick()"
+              >
+                <Option
+                  v-for="item in belongChannelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <!-- 客服和客服管理员不能更改（positionId==2 || positionId==4） :disabled="title=='录单编辑' && (positionId==2 || positionId==4)"-->
           <Col span="8">
             <FormItem label="主播平台" prop="contentPlateFormId">
@@ -371,12 +388,13 @@
                 filterable
               >
                 <Option
-                  v-for="item in recordingParams.sourceList"
+                  v-for="item in sourceList"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.name }}</Option
                 >
               </Select>
+              <div style="font-size:12px;color:red" v-if="isTitle == true">请先选择归属部门和主播平台！</div>
             </FormItem>
           </Col>
           
@@ -471,22 +489,7 @@
               />
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="归属部门" prop="belongChannel">
-              <Select
-                v-model="form.belongChannel"
-                placeholder="请选择归属部门"
-                filterable
-              >
-                <Option
-                  v-for="item in belongChannelList"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
+          
           <Col span="20">
             <FormItem label="顾客照片" prop="imageUrl" key="customerPictures">
               <upload
@@ -822,11 +825,48 @@ export default {
       },
       flag:false,
       // 归属部门
-      belongChannelList:[]
+      belongChannelList:[],
+      // 客户来源
+      sourceList:[],
+      //客户来源文字提示
+      isTitle:true
     };
   },
   methods: {
-     // 获取商品名称和id
+    // 客户来源文字提示
+    isTitleClick(){
+      if(this.form.belongChannel != null && this.form.contentPlateFormId){
+        this.isTitle = false
+        this.getcustomerSourceList()
+      }else if(!this.form.source){
+        this.isTitle = false
+      }else{
+        this.isTitle = true
+      }
+    },
+    // 客户来源
+    getcustomerSourceList() {
+      const { contentPlateFormId, belongChannel} = this.form
+      const data = {
+        contentPlatFormId:contentPlateFormId,
+        channel:belongChannel
+      }
+      if(belongChannel == null ){
+        this.$Message.warning('请选择归属部门！')
+        return
+      }
+      if(!contentPlateFormId){
+        this.$Message.warning('请选择主播平台！')
+        return
+      }
+      shoppingCartRegistrationApi.customerSourceList(data).then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.sourceList = sourceList;
+        }
+      });
+    },
+     // 获取归属部门
     getshoppingCartGetBelongChannelList() {
       shoppingCartRegistrationApi.shoppingCartGetBelongChannelList().then((res) => {
         if (res.code === 0) {
@@ -877,6 +917,8 @@ export default {
       }
       this.form.liveAnchorWeChatNo = ''
       this.getLiveValidList(value);
+      this.isTitleClick()
+      
     },
     //
     liveAnchorChange(value) {
@@ -1184,6 +1226,7 @@ export default {
      });
      this.buttonFlag = flag
      if(value == true){
+      this.isTitleClick()
       this.getshoppingCartGetBelongChannelList()
       //  客资登记信息赋值
       if(this.recordingNormalParams.title == '录单'){
@@ -1198,6 +1241,9 @@ export default {
         this.form.customerSource = this.shoppingCartRegistrationInfo.source
         this.form.customerType = this.shoppingCartRegistrationInfo.shoppingCartRegistrationCustomerType
         this.form.belongChannel = this.shoppingCartRegistrationInfo.belongChannel != 0 ? this.shoppingCartRegistrationInfo.belongChannel : null
+        if(this.form.belongChannel !=null && this.form.contentPlateFormId){
+          this.getcustomerSourceList()
+        }
       }
       return
      }else{

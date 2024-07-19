@@ -178,6 +178,29 @@
           </Col>
           <Col span="8">
             <FormItem
+              label="线索量"
+              prop="cluesTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '线索量(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="线索量"
+            >
+              <Input
+                v-model="form.cluesTarget"
+                placeholder="请输入线索量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
               label="目标加V量"
               prop="addWechatTarget"
               :rules="[
@@ -709,7 +732,27 @@ export default {
             minWidth: 240,
             align: "center",
           },
-
+          {
+            title: "线索量目标",
+            key: "cluesTarget",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "累计线索量",
+            key: "cumulativeClues",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "线索量目标完成率",
+            key: "cluesCompleteRate",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h("div", params.row.cluesCompleteRate + "%");
+            },
+          },
           {
             title: "目标加V量",
             key: "addWechatTarget",
@@ -1232,7 +1275,9 @@ export default {
                               // 潜在业绩
                               potentialPerformanceTarget,
                               // 分诊
-                              distributeConsulationTarget
+                              distributeConsulationTarget,
+                              // 线索量
+                              cluesTarget
                             } = res.data.liveAnchorMonthlyTargetAfterLivingInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.isEdit = true;
@@ -1261,6 +1306,7 @@ export default {
                             this.form.effectivePerformanceTarget = effectivePerformanceTarget;
                             this.form.potentialPerformanceTarget = potentialPerformanceTarget;
                             this.form.distributeConsulationTarget = distributeConsulationTarget;
+                            this.form.cluesTarget = cluesTarget;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -1519,12 +1565,7 @@ export default {
             message: "请输入涨粉目标",
           },
         ],
-        cluesTarget: [
-          {
-            required: true,
-            message: "请输入线索目标",
-          },
-        ],
+        
         livingRoomFlowInvestmentTarget: [
           {
             required: true,
@@ -1671,7 +1712,8 @@ export default {
               oldCustomerPerformanceTarget,
               effectivePerformanceTarget,
               potentialPerformanceTarget,
-              distributeConsulationTarget
+              distributeConsulationTarget,
+              cluesTarget
             } = this.form;
             const data = {
               id,
@@ -1698,7 +1740,8 @@ export default {
               oldCustomerDealTarget,
               effectivePerformanceTarget,
               potentialPerformanceTarget,
-              distributeConsulationTarget
+              distributeConsulationTarget,
+              cluesTarget
               
             };
             this.isflag = true
@@ -1744,7 +1787,8 @@ export default {
               oldCustomerPerformanceTarget,
               effectivePerformanceTarget,
               potentialPerformanceTarget,
-              distributeConsulationTarget
+              distributeConsulationTarget,
+              cluesTarget
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -1770,7 +1814,8 @@ export default {
               oldCustomerDealTarget,
               effectivePerformanceTarget,
               potentialPerformanceTarget,
-              distributeConsulationTarget
+              distributeConsulationTarget,
+              cluesTarget
               
             };
             this.isflag = true

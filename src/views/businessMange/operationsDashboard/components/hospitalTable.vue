@@ -138,7 +138,7 @@ export default {
           {
             title: "新客业绩",
             key: "newCustomerAchievement",
-            width:120,
+            width:140,
             align:'center',
             className: 'test-name',
             render: (h, params) => {
@@ -153,14 +153,14 @@ export default {
           {
             title: "老客成交",
             key: "oldCustomerDealNum",
-            width:110,
+            width:140,
             align:'center',
             className: 'test-name',
           },
           {
             title: "老客业绩",
             key: "oldCustomerAchievement",
-            width:110,
+            width:140,
             align:'center',
             className: 'test-name',
             render: (h, params) => {
@@ -174,7 +174,7 @@ export default {
           
           {
             title: "总业绩",
-            width:140,
+            width:150,
             align:'center',
             className: 'test-name',
             key: "totalAchievement",

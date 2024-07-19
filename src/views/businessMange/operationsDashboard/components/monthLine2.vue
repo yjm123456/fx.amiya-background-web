@@ -24,23 +24,21 @@ export default {
   methods: {
     // 业绩
     myEcharts(value) {
-      const {sendOrderBrokenLineList,distributeConsulationBrokenLineList,addWeChatBrokenLineList,
-      
-      } = value
+      const {beforeLivingClueBrokenLineList,livingClueBrokenLineList,afterLivingClueBrokenLineList,} = value
       let date =[]
-      let sendOrderBrokenLineLists =[]
-      let distributeConsulationBrokenLineLists =[]
-      let addWeChatBrokenLineLists =[]
+      let beforeLivingClueBrokenLineLists =[]
+      let livingClueBrokenLineLists =[]
+      let afterLivingClueBrokenLineLists =[]
      
-      sendOrderBrokenLineList ? sendOrderBrokenLineList.map(item=>{
+      beforeLivingClueBrokenLineList ? beforeLivingClueBrokenLineList.map(item=>{
         date.push(item.date)
-        sendOrderBrokenLineLists.push(item.performance)
+        beforeLivingClueBrokenLineLists.push(item.performance)
       }) : []
-      distributeConsulationBrokenLineList ? distributeConsulationBrokenLineList.map(item=>{
-        distributeConsulationBrokenLineLists.push(item.performance)
+      livingClueBrokenLineList ? livingClueBrokenLineList.map(item=>{
+        livingClueBrokenLineLists.push(item.performance)
       }):[]
-      addWeChatBrokenLineList ? addWeChatBrokenLineList.map(item=>{
-        addWeChatBrokenLineLists.push(item.performance)
+      afterLivingClueBrokenLineList ? afterLivingClueBrokenLineList.map(item=>{
+        afterLivingClueBrokenLineLists.push(item.performance)
       }):[]
       
       let option = {
@@ -91,11 +89,11 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['分诊','加v' ,'派单'],
+          data: ['直播前','直播中' ,'直播后'],
           selected:{
-            '分诊':true,
-            '加v':true,
-            '派单':true,
+            '直播前':true,
+            '直播中':true,
+            '直播后':true,
           },
           textStyle:{
             color:'#000'
@@ -103,9 +101,9 @@ export default {
         },
         series: [
           {
-                name: '分诊',
+                name: '直播前',
                 type: 'line',
-                data: distributeConsulationBrokenLineLists,
+                data: beforeLivingClueBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#0AABBD'  // 折线的颜⾊
@@ -113,22 +111,22 @@ export default {
                 },
             },
           {
-                name: '加v',
+                name: '直播中',
                 type: 'line',
-                data: addWeChatBrokenLineLists,
+                data: livingClueBrokenLineLists,
                 itemStyle: { 
                     normal: { 
                         color: '#7381FB'  // 折线的颜⾊
                     } 
                 },
             },
-            {
-                name: '派单',
+          {
+                name: '直播后',
                 type: 'line',
-                data: sendOrderBrokenLineLists,
+                data: afterLivingClueBrokenLineLists,
                 itemStyle: { 
                     normal: { 
-                        color: '#BB5DF9'  // 折线的颜⾊
+                        color: ' #BB5DF9'  // 折线的颜⾊
                     } 
                 },
             },

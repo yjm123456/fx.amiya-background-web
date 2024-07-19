@@ -42,6 +42,23 @@
               </Select>
             </FormItem>
           </Col> -->
+          <Col span="8">
+            <FormItem label="归属部门" prop="belongChannel">
+              <Select
+                v-model="form.belongChannel"
+                placeholder="请选择归属部门"
+                filterable
+                @on-change="isTitleClick()"
+              >
+                <Option
+                  v-for="item in belongChannelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <!-- 客服和客服管理员不能更改（positionId==2 || positionId==4） :disabled="title=='录单编辑' && (positionId==2 || positionId==4)"-->
           <Col span="8">
             <FormItem label="主播平台" prop="contentPlateFormId">
@@ -335,7 +352,7 @@
                 filterable
               >
                 <Option
-                  v-for="item in recordingParams.sourceList"
+                  v-for="item in sourceList"
                   :value="item.id"
                   :key="item.id"
                   >{{ item.name }}</Option
@@ -435,22 +452,7 @@
               />
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="归属部门" prop="belongChannel">
-              <Select
-                v-model="form.belongChannel"
-                placeholder="请选择归属部门"
-                filterable
-              >
-                <Option
-                  v-for="item in belongChannelList"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
+          
           <Col span="20">
             <FormItem label="顾客照片" prop="imageUrl" key="customerPictures">
               <upload
@@ -784,10 +786,47 @@ export default {
       },
       flag:false,
       // 归属部门
-      belongChannelList:[]
+      belongChannelList:[],
+      // 客户来源
+      sourceList:[],
+      //客户来源文字提示
+      isTitle:true
     };
   },
   methods: {
+     // 客户来源文字提示
+    isTitleClick(){
+      if(this.form.belongChannel != null && this.form.contentPlateFormId){
+        this.isTitle = false
+        this.getcustomerSourceList()
+      }else if(!this.form.source){
+        this.isTitle = false
+      }else{
+        this.isTitle = true
+      }
+    },
+    // 客户来源
+    getcustomerSourceList() {
+      const { contentPlateFormId, belongChannel} = this.form
+      const data = {
+        contentPlatFormId:contentPlateFormId,
+        channel:belongChannel
+      }
+      if(belongChannel == null ){
+        this.$Message.warning('请选择归属部门！')
+        return
+      }
+      if(!contentPlateFormId){
+        this.$Message.warning('请选择主播平台！')
+        return
+      }
+      shoppingCartRegistrationApi.customerSourceList(data).then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.sourceList = sourceList;
+        }
+      });
+    },
     // 获取商品名称和id
     getshoppingCartGetBelongChannelList() {
       shoppingCartRegistrationApi.shoppingCartGetBelongChannelList().then((res) => {
@@ -839,6 +878,7 @@ export default {
       }
       this.form.liveAnchorWeChatNo = ''
       this.getLiveValidList(value);
+      this.isTitleClick()
     },
     //
     liveAnchorChange(value) {
@@ -1143,6 +1183,7 @@ export default {
     editRecordingModel(value) {
       this.control = value;
       if(value == true){
+        
         this.getshoppingCartGetBelongChannelList()
       const {info} = this.recordingParams
         this.contentPlateChange(info.contentPlateFormId);
@@ -1189,6 +1230,7 @@ export default {
         this.form.customerSource = info.customerSource
         this.form.customerType = info.customerType
         this.form.belongChannel = info.belongChannel
+        this.getcustomerSourceList()
 }
       const currentRole = JSON.parse(sessionStorage.getItem("permissions"));
       const flag = currentRole.some((ele) => {

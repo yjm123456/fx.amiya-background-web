@@ -63,10 +63,11 @@ export const ShoppingCartRegistrationassignList = (data) => {
     });
 };
 // 客户来源列表
-export const customerSourceList = () => {
+export const customerSourceList = (params) => {
     return http({
         url: "/amiyabg/ShoppingCartRegistration/customerSourceList",
         method: "get",
+        params
     });
 };
 // 获取客服姓名列表

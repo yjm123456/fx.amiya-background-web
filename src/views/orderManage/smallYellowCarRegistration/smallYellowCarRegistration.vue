@@ -400,6 +400,23 @@
             </FormItem>
           </Col> -->
           <Col span="8">
+            <FormItem label="归属部门" prop="belongChannel">
+              <Select
+                v-model="form.belongChannel"
+                placeholder="请选择归属部门"
+                filterable
+                @on-change="isTitleClick()"
+              >
+                <Option
+                  v-for="item in belongChannelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="渠道" prop="contentPlatFormId">
               <Select
                 v-model="form.contentPlatFormId"
@@ -416,22 +433,7 @@
               </Select>
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="归属部门" prop="belongChannel">
-              <Select
-                v-model="form.belongChannel"
-                placeholder="请选择归属部门"
-                filterable
-              >
-                <Option
-                  v-for="item in belongChannelList"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
+          
           <Col span="8">
             <FormItem label="主播IP账号" prop="liveAnchorId">
               <Select
@@ -575,6 +577,7 @@
                   >{{ item.name }}</Option
                 >
               </Select>
+              <div style="font-size:12px;color:red" v-if="isTitle == true ">请先选择归属部门和渠道！</div>
             </FormItem>
           </Col>
           <Col span="8" v-show="form.source == 6">
@@ -1745,6 +1748,9 @@ export default {
                               recordDate.length
                             );
                             this.form.time = result;
+                            if(this.form.belongChannel !=null && this.form.contentPlateFormId){
+                              this.getcustomerSourceList()
+                            }
                           }
                         });
                       },
@@ -2226,9 +2232,47 @@ export default {
       // 归属部门
       belongChannelList:[],
       belongChannelListAll:[{id:-1,name:'全部部门'}],
+       // 客户来源
+      sourceList:[],
+      //客户来源文字提示
+      isTitle:true
     };
   },
   methods: {
+    // 客户来源文字提示
+    isTitleClick(){
+      if(this.form.belongChannel != null && this.form.contentPlatFormId){
+        this.isTitle = false
+        this.getcustomerSourceList()
+      }else if(!this.form.source){
+        this.isTitle = false
+      }else{
+        this.isTitle = true
+      }
+    },
+    // 客户来源
+    getcustomerSourceList() {
+      const { contentPlatFormId, belongChannel} = this.form
+      const data = {
+        contentPlatFormId:contentPlatFormId,
+        channel:belongChannel
+      }
+      if(belongChannel == null ){
+        this.$Message.warning('请选择归属部门！')
+        return
+      }
+      if(!contentPlatFormId){
+        this.$Message.warning('请选择主播平台！')
+        return
+      }
+      api.customerSourceList(data).then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.sourceList = sourceList;
+          this.sourceListAll = [...this.sourceListAll, ...sourceList];
+        }
+      });
+    },
     // 获取归属部门
     getshoppingCartGetBelongChannelList() {
       api.shoppingCartGetBelongChannelList().then((res) => {
@@ -2305,16 +2349,7 @@ export default {
         }
       });
     },
-    // 客户来源
-    getcustomerSourceList() {
-      api.customerSourceList().then((res) => {
-        if (res.code === 0) {
-          const { sourceList } = res.data;
-          this.sourceList = sourceList;
-          this.sourceListAll = [...this.sourceListAll, ...sourceList];
-        }
-      });
-    },
+    
     // 根据主播id获取客服名称列表
     getcustomerServiceNameList(value) {
       const data = {
@@ -2489,6 +2524,7 @@ export default {
         return;
       }
       this.getLiveValidList(value);
+      this.isTitleClick()
     },
     // 根据平台id去获取IP账号
     getLiveValidList(value) {
@@ -3075,7 +3111,7 @@ export default {
     this.getProvince();
     this.getCustomerServiceLists();
     this.getEmergencyLevels();
-    this.getcustomerSourceList();
+    // this.getcustomerSourceList();
     this.getLiveAnchorBaseInfoValid();
     this.getconsultationTypeList();
     this.getWeChatList();
@@ -3084,7 +3120,12 @@ export default {
     this.getEmployeeByPositionId();
     this.getcustomerTypeList();
     this.getshoppingCartGetBelongChannelList()
+    
+    
   },
+  mounted(){
+    
+  }
 };
 </script>
 <style lang="less" scoped>

@@ -618,6 +618,25 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="今日线索量"
+              prop="clues"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日线索量',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.clues"
+                placeholder="请输入今日线索量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -830,6 +849,12 @@ export default {
             align: "center",
           },
           {
+            title: "今日线索量",
+            key: "clues",
+            minWidth: 110,
+            align: "center",
+          },
+          {
             title: "操作",
             key: "",
             width: 120,
@@ -885,7 +910,8 @@ export default {
                               activateHistoricalConsultation,
                               effectivePerformance,
                               potentialPerformance,
-                              distributeConsulation
+                              distributeConsulation,
+                              clues
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
@@ -916,6 +942,7 @@ export default {
                             this.form.effectivePerformance = effectivePerformance;
                             this.form.potentialPerformance = potentialPerformance;
                             this.form.distributeConsulation = distributeConsulation;
+                            this.form.clues = clues;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
                             ).format("YYYY-MM-DD");
@@ -1094,7 +1121,9 @@ export default {
         // 今日潜在业绩
         potentialPerformance:null,
         // 今日分诊
-        distributeConsulation:null
+        distributeConsulation:null,
+        // 今日线索量
+        clues:null
        
       },
 
@@ -1485,7 +1514,8 @@ export default {
               activateHistoricalConsultation,
               effectivePerformance,
               potentialPerformance,
-              distributeConsulation
+              distributeConsulation,
+              clues
             } = this.form;
             const data = {
               id,
@@ -1532,7 +1562,8 @@ export default {
                 : 0,
                 effectivePerformance,
               potentialPerformance,
-              distributeConsulation
+              distributeConsulation,
+              clues
             };
             this.isflag = true
             api.afterLivingUpdate(data).then((res) => {
@@ -1578,7 +1609,8 @@ export default {
               activateHistoricalConsultation,
               effectivePerformance,
               potentialPerformance,
-              distributeConsulation
+              distributeConsulation,
+              clues
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -1622,7 +1654,8 @@ export default {
                 : 0,
               effectivePerformance,
               potentialPerformance,
-              distributeConsulation
+              distributeConsulation,
+              clues
             };
             this.isflag = true
             // 添加

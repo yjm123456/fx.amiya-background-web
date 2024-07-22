@@ -51,7 +51,8 @@ export default {
   methods: {
     // 喜报
     getOrderProsperity() {
-      api.orderProsperity(this.detailObj.id).then((res) => {
+      let orderId =  sessionStorage.getItem('employeeType') == 'amiyaEmployee'  ? this.detailObj.id : this.detailObj.orderId
+      api.orderProsperity(orderId).then((res) => {
         if (res.code === 0) {
           this.goodsNewsObj = res.data.orderInfo;
         }

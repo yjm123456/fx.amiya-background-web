@@ -352,7 +352,7 @@
       @handleRefreshList="getHospitalContentList()"
     ></orderReceiving>
     <!-- 生成喜报 -->
-    <goodsNews :goodsNewsModel.sync="goodsNewsModel" :id="id"></goodsNews>
+    <goodsNews :goodsNewsModel.sync="goodsNewsModel" :detailObj="detailObj"></goodsNews>
     <!-- 留言板 -->
     <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
     <!-- 确认 -->
@@ -396,6 +396,7 @@ export default {
       // 生成喜报
       goodsNewsModel: false,
       id: "",
+      detailObj:{},
       // 传给接单子组件的值
       receivingObj: {},
       orderReceivingModel: false,
@@ -909,7 +910,7 @@ export default {
                         //生成喜报
                         const { orderId } = params.row;
                         this.goodsNewsModel = true;
-                        this.id = orderId;
+                        this.detailObj = params.row
                       }
                     },
                   },

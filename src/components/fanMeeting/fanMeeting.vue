@@ -156,7 +156,7 @@ export default {
       this.$emit("update:fanMeetingModel", false);
       this.$emit("getOrderInfo");
       this.$refs[name].resetFields();
-      this.$parent.fanMeetingParams.orderId.clear()
+      // this.$parent.fanMeetingParams.orderId.clear()
     },
 
     // modal 显示状态发生变化时触发
@@ -165,7 +165,7 @@ export default {
         this.cancel("form");
         this.$emit("update:fanMeetingModel", false);
         this.$refs["form"].resetFields();
-        this.$parent.fanMeetingParams.orderId.clear()
+        // this.$parent.fanMeetingParams.orderId.clear()
       }
     },
   },

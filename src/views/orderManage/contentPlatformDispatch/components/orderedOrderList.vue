@@ -266,7 +266,7 @@
           :total="query.totalCount"
           show-total
           show-elevator
-          @on-change="handleProjectPageChange"
+          @on-change="handlePageChange"
         />
       </div>
     </Card>
@@ -399,6 +399,7 @@
         label-position="left"
         :label-width="130"
       >
+       <div style="font-weight: bold;margin-top: 10px;margin-bottom: 15px;color: #000;"  >到院信息</div>
         <Row :gutter="30">
           <Col span="8">
             <FormItem label="面诊类型" prop="consultatioType" key="面诊类型">
@@ -488,38 +489,121 @@
               <i-switch v-model="confirmForm.isAcompanying" />
             </FormItem>
           </Col>
+          
+          
+          
+          <!-- <Col span="8">
+            <FormItem
+              label="三方单号"
+              prop="otherContentPlatFormOrderId"
+              key="三方单号"
+            >
+              <Input
+                v-model="confirmForm.otherContentPlatFormOrderId"
+                placeholder="请输入三方单号"
+              ></Input>
+            </FormItem>
+          </Col> -->
+          
+          
           <Col span="8">
-            <FormItem label="是否成交" prop="isFinish" key="是否成交">
-              <i-switch
-                v-model="confirmForm.isFinish"
-                @on-change="switchChange"
+            <FormItem label="邀约凭证" key="邀约凭证">
+              <upload
+                :uploadObj="invitationDocumentsUploadObj"
+                @uploadChange="invitationDocumentsHandleUploadChange"
               />
             </FormItem>
           </Col>
-          <Col span="8" v-if="confirmForm.isFinish !== true">
+        </Row>
+        <Divider style="margin-top:-6px" v-if="confirmForm.isToHospital === true"/>
+        <div style="font-weight: bold;margin-top: -10px;margin-bottom: 15px;color: #000;"  v-if="confirmForm.isToHospital === true">粉丝见面会信息</div>
+        <Row :gutter="30">
+          <Col span="8" v-if="confirmForm.isToHospital === true">
             <FormItem
-              label="未成交原因"
-              prop="unDealReason"
+              label="粉丝见面会"
+              prop="fansMeetingId"
+              key="粉丝见面会"
               
-              key="未成交原因"
+            >
+              <Select
+                v-model="confirmForm.fansMeetingId"
+                placeholder="请选择粉丝见面会"
+                filterable
+                @on-change="getFansMeetingDetailsisAttendClick(confirmForm.fansMeetingId)"
+              >
+                <Option
+                  v-for="item in fansMeetingList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <div style="color:red;font-size:13px">非必要不用选</div>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem label="是否参加过见面会" prop="isFansMeeting" key="是否参加过见面会">
+              <i-switch
+                v-model="confirmForm.isFansMeeting"
+                disabled
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFansMeeting === true">
+            <FormItem
+              label="见面会铺垫项目"
+              key="见面会铺垫项目"
             >
               <Input
-                v-model="confirmForm.unDealReason"
-                placeholder="请输入未成交原因"
+                v-model="confirmForm.fansMeetingProject"
+                placeholder="请输入见面会铺垫项目"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFansMeeting === true">
+            <FormItem
+              label="追踪内容"
+              key="追踪内容"
+            >
+              <Input
+                v-model="confirmForm.followUpContent"
+                placeholder="请输入追踪内容"
                 type="textarea"
                 :rows="3"
               ></Input>
             </FormItem>
           </Col>
-          <Col span="8" v-if="confirmForm.isFinish !== true">
+          <Col span="8" v-if="confirmForm.isFansMeeting === true">
             <FormItem
-              label="未成交截图"
-              key="未成交截图"
-              
+              label="下次邀约时间"
+              prop="nextAppointmentDate"
+              key="下次邀约时间"
             >
-              <upload
-                :uploadObj="noDealuploadObj"
-                @uploadChange="noDealhandleUploadChange"
+              <DatePicker
+                type="date"
+                placeholder="下次邀约时间"
+                style="width: 100%"
+                v-model="confirmForm.nextAppointmentDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFansMeeting === true">
+            <FormItem label="是否需要机构再次邀约" prop="isNeedHospitalHelp" key="是否需要机构再次邀约">
+              <i-switch
+                v-model="confirmForm.isNeedHospitalHelp"
+                
+              />
+            </FormItem>
+          </Col>
+        </Row>
+        <Divider style="margin-top:-6px"/>
+        <div style="font-weight: bold;margin-top: -10px;margin-bottom: 15px;color: #000;"  >成交信息</div>
+        <Row :gutter="30">
+          <Col span="8">
+            <FormItem label="是否成交" prop="isFinish" key="是否成交">
+              <i-switch
+                v-model="confirmForm.isFinish"
+                @on-change="switchChange"
               />
             </FormItem>
           </Col>
@@ -562,28 +646,6 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="业绩类型"
-              prop="dealPerformanceType"
-              key="业绩类型"
-              
-            >
-              <Select
-                v-model="confirmForm.dealPerformanceType"
-                placeholder="请选择业绩类型"
-                clearable
-                filterable
-              >
-                <Option
-                  v-for="item in contentPlateFormOrderDealPerformanceType"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
           <Col span="8" v-if="confirmForm.isFinish === true">
             <FormItem
               label="消费类型"
@@ -605,50 +667,6 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-            </FormItem>
-          </Col>
-          <!-- <Col span="8">
-            <FormItem
-              label="三方单号"
-              prop="otherContentPlatFormOrderId"
-              key="三方单号"
-            >
-              <Input
-                v-model="confirmForm.otherContentPlatFormOrderId"
-                placeholder="请输入三方单号"
-              ></Input>
-            </FormItem>
-          </Col> -->
-          <Col span="8" v-if="confirmForm.isToHospital === true">
-            
-            <FormItem
-              label="粉丝见面会"
-              prop="fansMeetingId"
-              key="粉丝见面会"
-              
-            >
-              <Select
-                v-model="confirmForm.fansMeetingId"
-                placeholder="请选择粉丝见面会"
-                filterable
-                @on-change="getFansMeetingDetailsisAttendClick(confirmForm.fansMeetingId)"
-              >
-                <Option
-                  v-for="item in fansMeetingList"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <div style="color:red;font-size:13px">非必要不用选</div>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem label="是否参加过见面会" prop="isFansMeeting" key="是否参加过见面会">
-              <i-switch
-                v-model="confirmForm.isFansMeeting"
-                disabled
-              />
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFinish === true">
@@ -677,16 +695,57 @@
               />
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="邀约凭证" key="邀约凭证">
+          <Col span="8" v-if="confirmForm.isFinish !== true">
+            <FormItem
+              label="未成交原因"
+              prop="unDealReason"
+              
+              key="未成交原因"
+            >
+              <Input
+                v-model="confirmForm.unDealReason"
+                placeholder="请输入未成交原因"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish !== true">
+            <FormItem
+              label="未成交截图"
+              key="未成交截图"
+              
+            >
               <upload
-                :uploadObj="invitationDocumentsUploadObj"
-                @uploadChange="invitationDocumentsHandleUploadChange"
+                :uploadObj="noDealuploadObj"
+                @uploadChange="noDealhandleUploadChange"
               />
             </FormItem>
           </Col>
+          
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="业绩类型"
+              prop="dealPerformanceType"
+              key="业绩类型"
+              
+            >
+              <Select
+                v-model="confirmForm.dealPerformanceType"
+                placeholder="请选择业绩类型"
+                clearable
+                filterable
+              >
+                <Option
+                  v-for="item in contentPlateFormOrderDealPerformanceType"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
         </Row>
-
         <Divider style="margin-top:-6px"/>
         <!-- 成交明细 -->
         <detailTable ref="detailTable" @handle="handle"  :id="confirmForm.id" v-if="confirmForm.isFinish === true" :confirmParams="confirmParams" :confirmForm="confirmForm"/>
@@ -735,6 +794,8 @@
       @messageBoardChange="messageBoardChange"
       :messageBoardParams="messageBoardParams"
     />
+    <!-- 编辑录单 -->
+    <editRecording :editRecordingModel.sync="editRecordingModel" :recordingParams="recordingParams" />
   </div>
 </template>
 
@@ -744,6 +805,8 @@ import * as hospitalManage from "@/api/hospitalManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import * as fansMeetingApi from "@/api/fansMeeting";
 import * as fansMeetingDetailsApi from "@/api/fansMeetingDetails";
+import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
+import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
 
 
 
@@ -754,6 +817,7 @@ import trackReturnVisitVue from "../../../../components/trackReturnVisit/trackRe
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import detail from "@/components/contentDetail/detail.vue";
 import detailTable from '@/components/dealDetailTable/dealDetailTable.vue';
+import editRecording from "@/components/recording/editRecording"
 
 export default {
   props: {
@@ -767,10 +831,47 @@ export default {
     upload,
     viewCustomerPhotos,
     detail,
-    detailTable
+    detailTable,
+    editRecording
   },
   data() {
     return {
+      // 修改订单信息
+      editRecordingModel:false,
+      //编辑录单参数
+      recordingParams:{
+        // 客服
+        employeeList:[],
+        // 平台
+        contentPalteForms:[],
+        // 科室
+        AmiyaHospitalDepartmentListDepartment:[],
+        // 内容平台订单类型
+        statusCodeArr2:[],
+        // 预约门店
+        hospitalNameList:[],
+        // 内容平台订单来源
+        orderSourcesList:[],
+        // 面诊类型列表
+        consultationTypeList:[],
+        // 
+        belongMonthList:[],
+        // 客户类型
+        shoppingCartRegistrationCustomerTypeList:[],
+        // 客户来源
+        sourceList:[],
+
+        // 录单编辑
+        // 获取订单信息
+        info:{},
+        // 弹窗标题
+        title:'录单编辑',
+        // 主播微信号
+        weChatList:[],
+        // 获客方式
+        customerTypeList:[],
+        customerTypeListAll:[{id:-1,name:'全部获客方式'}],
+      },
       // 是否为客服
       isCustomerService:sessionStorage.getItem('isCustomerService'),
       // 是否为管理员
@@ -864,6 +965,14 @@ export default {
         fansMeetingId:'',
         // 是否参加粉丝会
         isFansMeeting:false,
+        // 见面会铺垫项目
+        fansMeetingProject:'',
+        // 追踪内容
+        followUpContent:'',
+        // 下次邀约时间
+        nextAppointmentDate:'',
+        // 是否需要机构协助邀约
+        isNeedHospitalHelp:false
       },
       confirmRuleValidate: {
         consumptionType: [
@@ -1296,9 +1405,15 @@ export default {
           //   align:'center'
           // },
           {
-            title: "咨询内容",
+            title: "主派咨询内容",
             minWidth: 400,
             key: "consultingContent",
+            tooltip: true,
+          },
+          {
+            title: "次派咨询内容",
+            minWidth: 400,
+            key: "consultingContent2",
             tooltip: true,
           },
           {
@@ -1560,47 +1675,323 @@ export default {
             minWidth: 400,
             key: "hospitalRemark",
           },
+          // {
+          //   title: "操作",
+          //   width: 360,
+          //   align: "center",
+          //   fixed: "right",
+          //   render: (h, params) => {
+          //     return h("div", [
+          //       h(
+          //         "Button",
+          //         {
+          //           props: {
+          //             type: "primary",
+          //             size: "small",
+          //           },
+          //           style: {
+          //             marginRight: ".3125rem",
+          //           },
+          //           on: {
+          //             click: () => {
+          //               const { hospitalId, id, orderId } = params.row;
+          //               this.messageBoardParams.hospitalId = hospitalId;
+          //               this.messageBoardParams.id = orderId;
+          //               this.messageBoardParams.messageBoard = true;
+          //             },
+          //           },
+          //         },
+          //         "留言板"
+          //       ),
+          //       h(
+          //         "Button",
+          //         {
+          //           props: {
+          //             type: "primary",
+          //             size: "small",
+          //             // disabled:params.row.statusText != '交易成功'
+          //           },
+          //           style: {
+          //             marginRight: ".3125rem",
+          //           },
+          //           on: {
+          //             click: () => {
+          //               const { orderId } = params.row;
+          //               api.byIdContentPlateForm(orderId).then((res) => {
+          //                 if (res.code === 0) {
+          //                   this.detailModel = true;
+          //                   const { orderInfo } = res.data;
+          //                   this.detailList = [orderInfo];
+          //                 }
+          //               });
+          //             },
+          //           },
+          //         },
+          //         "订单详情"
+          //       ),
+          //       // h(
+          //       //   "Button",
+          //       //   {
+          //       //     props: {
+          //       //       type: "primary",
+          //       //       size: "small",
+          //       //     },
+          //       //     style: {
+          //       //       marginRight: ".3125rem",
+          //       //     },
+          //       //     on: {
+          //       //       click: () => {
+          //       //         const {orderId} = params.row
+          //       //         this.viewCustomerPhotosModel = true
+          //       //         this.contentPlatFormOrderId = orderId
+          //       //       },
+          //       //     },
+          //       //   },
+          //       //   "查看顾客照片"
+          //       // ),
+          //       // h(
+          //       //   "Button",
+          //       //   {
+          //       //     props: {
+          //       //       type: "primary",
+          //       //       size: "small",
+          //       //     },
+          //       //     style: {
+          //       //       marginLeft: "5px",
+          //       //     },
+          //       //     on: {
+          //       //       click: () => {
+          //       //         const { id, orderId } = params.row;
+          //       //         this.transactionStatusParams.contentPlatFormOrderId = orderId;
+          //       //         this.transactionStatusParams.transactionStatusModel = true;
+          //       //       },
+          //       //     },
+          //       //   },
+          //       //   "成交情况"
+          //       // ),
+          //       h(
+          //         "Button",
+          //         {
+          //           props: {
+          //             type: "primary",
+          //             size: "small",
+          //             // disabled: params.row.checkState == 2,
+          //           },
+          //           style: {
+          //             marginLeft: "5px",
+          //           },
+          //           on: {
+          //             click: () => {
+          //               const { id, orderId, goodsId ,isMainHospital} = params.row;
+          //               this.form.id = id;
+          //               this.form.orderId = orderId;
+          //               // this.byGoodsIdGetpartakeItemHospitalList(goodsId,() => {
+          //               api.simpleById(id).then((res) => {
+          //                 if (res.code === 0) {
+          //                   const {
+          //                     hospitalId,
+          //                     appointmentDate,
+          //                     timeType,
+          //                     content,
+          //                     isUncertainDate,
+          //                     otherHospitalId,
+          //                     hasDealInfo
+          //                   } = res.data.sendOrderInfo;
+          //                   // 已参与项目医院
+          //                   const ycyxmyy = this.hospital.find(
+          //                     (item) => item.id === hospitalId
+          //                   );
+          //                   // 所有医院
+          //                   const syyy = this.hospitalInfo.find(
+          //                     (item) => item.id === hospitalId
+          //                   );
+          //                   // 如果已参与项目医院中存在要修改的医院
+          //                   if (ycyxmyy) {
+          //                     this.form.hospitalId = hospitalId;
+          //                     this.form.tempHospitalId = hospitalId;
+          //                   }
+          //                   // 如果所有医院中存在要修改的医院
+          //                   if (syyy) {
+          //                     this.form.allHospitalId = hospitalId;
+          //                     this.form.tempHospitalId = hospitalId;
+          //                     this.openAllHospital = true;
+          //                   }
+          //                   // 如果已参与项目医院中存在 且 所有医院中存在 则 优先显示已参与项目医院
+          //                   if (ycyxmyy && syyy) {
+          //                     this.openAllHospital = false;
+          //                   }
+          //                   this.form.appointmentDate = appointmentDate;
+          //                   this.form.timeType = timeType;
+          //                   this.form.content = content;
+          //                   this.form.isUncertainDate = isUncertainDate;
+          //                   this.form.isMainHospital = isMainHospital
+          //                   this.form.otherHospitalId = otherHospitalId
+          //                   this.form.hasDealInfo = hasDealInfo
+          //                   this.controlModal = true;
+          //                 }
+          //                 // });
+          //               });
+          //             },
+          //           },
+          //         },
+          //         "改派"
+          //       ),
+          //       h(
+          //         "Button",
+          //         {
+          //           props: {
+          //             type: "primary",
+          //             size: "small",
+
+          //             // disabled: params.row.orderStatusText =='未成交' || params.row.orderStatusText =='已成交',
+          //           },
+          //           style: {
+          //             marginLeft: "5px",
+          //           },
+          //           on: {
+          //             click: () => {
+          //               const { id, orderId, consultatioType,encryptPhone } = params.row;
+          //               this.contentConfirmOrderModel = true;
+          //               this.confirmForm.id = orderId;
+          //               this.confirmForm.consultatioType = consultatioType;
+          //               const data = {
+          //                 encryptPhone:encryptPhone
+          //               }
+          //               // 解密手机号
+          //               api.decryptoPhonesNew(data).then(res=>{
+          //                 if(res.code ===0){
+          //                   this.confirmParams.phone = res.data.phone
+                            
+          //                 }
+          //               })
+                        
+          //             },
+          //           },
+          //         },
+          //         "确认"
+          //       ),
+          //       ,
+          //       h(
+          //         "Button",
+          //         {
+          //           props: {
+          //             type: "primary",
+          //             size: "small",
+          //           },
+          //           style: {
+          //             marginLeft: "5px",
+          //           },
+          //           on: {
+          //             click: () => {
+          //               const { userId, encryptPhone } = params.row;
+          //               this.customerInfoComParams.userId = userId;
+          //               this.customerInfoComParams.encryptPhone = encryptPhone;
+          //               this.customerInfoComParams.controlCustomerInfoDisplay = true;
+          //               this.$emit(
+          //                 "handleCustomerInfoComParams",
+          //                 this.customerInfoComParams
+          //               );
+          //             },
+          //           },
+          //         },
+          //         "客户详情"
+          //       ),
+          //       // params.row.orderStatusText === "医院重单"
+          //       //   ? h(
+          //       //       "Button",
+          //       //       {
+          //       //         props: {
+          //       //           type: "primary",
+          //       //           size: "small",
+          //       //           // disabled:params.row.orderStatusText !== '医院重单'
+          //       //         },
+          //       //         style: {
+          //       //           marginLeft: "5px",
+          //       //         },
+          //       //         on: {
+          //       //           click: () => {
+          //       //             const { orderId } = params.row;
+          //       //             const data = {
+          //       //               id: orderId,
+          //       //             };
+          //       //             api.byselectRepeateOrderPic(data).then((res) => {
+          //       //               if (res.code === 0) {
+          //       //                 const { repeateOrderPictureUrl } = res.data;
+          //       //                 if (repeateOrderPictureUrl) {
+          //       //                   this.query.repeateOrderPictureUrl = repeateOrderPictureUrl;
+          //       //                   this.query.doubleOrderModel = true;
+          //       //                 } else {
+          //       //                   this.$Message.error("暂无重单截图");
+          //       //                 }
+          //       //               }
+          //       //             });
+          //       //           },
+          //       //         },
+          //       //       },
+          //       //       "查看重单截图"
+          //       //     )
+          //       //   : "",
+          //     ]);
+          //   },
+          // },
           {
             title: "操作",
-            width: 360,
+            width: 200,
             align: "center",
             fixed: "right",
             render: (h, params) => {
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginRight: ".3125rem",
-                    },
-                    on: {
-                      click: () => {
-                        const { hospitalId, id, orderId } = params.row;
-                        this.messageBoardParams.hospitalId = hospitalId;
-                        this.messageBoardParams.id = orderId;
-                        this.messageBoardParams.messageBoard = true;
-                      },
+              let check = h(
+                "Button",
+                {
+                  props: {
+                    type: "text",
+                    // icon: "md-eye",
+                    size: "small",
+                  },
+                  style: {
+                    fontSize: "14px",
+                    color: "#fff",
+                    background: "#007fff",
+                    marginRight: "14px",
+                    cursor: "pointer",
+                    width: "60px",
+                    height: "27px",
+                  },
+                  on: {
+                    click: () => {
+                      
+                      // 确认
+                        const { id, orderId, consultatioType,encryptPhone } = params.row;
+                        this.contentConfirmOrderModel = true;
+                        this.confirmForm.id = orderId;
+                        this.confirmForm.consultatioType = consultatioType;
+                        const data = {
+                          encryptPhone:encryptPhone
+                        }
+                        // 解密手机号
+                        api.decryptoPhonesNew(data).then(res=>{
+                          if(res.code ===0){
+                            this.confirmParams.phone = res.data.phone
+                            
+                          }
+                        })
+
                     },
                   },
-                  "留言板"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      // disabled:params.row.statusText != '交易成功'
-                    },
-                    style: {
-                      marginRight: ".3125rem",
-                    },
-                    on: {
-                      click: () => {
+                },
+                "确认"
+              );
+              let send_order = h(
+                "Dropdown",
+                {
+                  props: {
+                    placement: "bottom",
+                    transfer: true,
+                  },
+                  on: {
+                    "on-click": (name) => {
+                      if (name == "orderDetail") {
+                        // 订单详情
                         const { orderId } = params.row;
                         api.byIdContentPlateForm(orderId).then((res) => {
                           if (res.code === 0) {
@@ -1609,64 +2000,13 @@ export default {
                             this.detailList = [orderInfo];
                           }
                         });
-                      },
-                    },
-                  },
-                  "订单详情"
-                ),
-                // h(
-                //   "Button",
-                //   {
-                //     props: {
-                //       type: "primary",
-                //       size: "small",
-                //     },
-                //     style: {
-                //       marginRight: ".3125rem",
-                //     },
-                //     on: {
-                //       click: () => {
-                //         const {orderId} = params.row
-                //         this.viewCustomerPhotosModel = true
-                //         this.contentPlatFormOrderId = orderId
-                //       },
-                //     },
-                //   },
-                //   "查看顾客照片"
-                // ),
-                // h(
-                //   "Button",
-                //   {
-                //     props: {
-                //       type: "primary",
-                //       size: "small",
-                //     },
-                //     style: {
-                //       marginLeft: "5px",
-                //     },
-                //     on: {
-                //       click: () => {
-                //         const { id, orderId } = params.row;
-                //         this.transactionStatusParams.contentPlatFormOrderId = orderId;
-                //         this.transactionStatusParams.transactionStatusModel = true;
-                //       },
-                //     },
-                //   },
-                //   "成交情况"
-                // ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      // disabled: params.row.checkState == 2,
-                    },
-                    style: {
-                      marginLeft: "5px",
-                    },
-                    on: {
-                      click: () => {
+                      } else if (name == "reassignment") {
+                        // 如果是次派 找到主派订单才可以改
+                        if(params.row.isMainHospital == false){
+                          this.$Message.warning('该数据为辅派订单，请通过订单号找到主派订单进行改派！')
+                          return
+                        }
+                        // 改派
                         const { id, orderId, goodsId ,isMainHospital} = params.row;
                         this.form.id = id;
                         this.form.orderId = orderId;
@@ -1716,58 +2056,13 @@ export default {
                           }
                           // });
                         });
-                      },
-                    },
-                  },
-                  "改派"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-
-                      // disabled: params.row.orderStatusText =='未成交' || params.row.orderStatusText =='已成交',
-                    },
-                    style: {
-                      marginLeft: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        const { id, orderId, consultatioType,encryptPhone } = params.row;
-                        this.contentConfirmOrderModel = true;
-                        this.confirmForm.id = orderId;
-                        this.confirmForm.consultatioType = consultatioType;
-                        const data = {
-                          encryptPhone:encryptPhone
-                        }
-                        // 解密手机号
-                        api.decryptoPhonesNew(data).then(res=>{
-                          if(res.code ===0){
-                            this.confirmParams.phone = res.data.phone
-                            
-                          }
-                        })
-                        
-                      },
-                    },
-                  },
-                  "确认"
-                ),
-                ,
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                    },
-                    style: {
-                      marginLeft: "5px",
-                    },
-                    on: {
-                      click: () => {
+                      } else if (name == "submit") {
+                        const { hospitalId, id, orderId } = params.row;
+                        this.messageBoardParams.hospitalId = hospitalId;
+                        this.messageBoardParams.id = orderId;
+                        this.messageBoardParams.messageBoard = true;
+                      } else if (name == "customerDetail") {
+                        //客户详情
                         const { userId, encryptPhone } = params.row;
                         this.customerInfoComParams.userId = userId;
                         this.customerInfoComParams.encryptPhone = encryptPhone;
@@ -1776,47 +2071,117 @@ export default {
                           "handleCustomerInfoComParams",
                           this.customerInfoComParams
                         );
-                      },
+                      } 
+                      else if (name == "editOrder") {
+                        //修改订单
+                        const { orderId } = params.row;
+                        api.byIdContentPlateForm(orderId).then((res) => {
+                          if(res.code === 0){
+                            this.editRecordingModel = true
+                            this.recordingParams.title = '录单编辑'
+                            this.recordingParams.info = res.data.orderInfo
+                            this.getcustomerSourceList()
+                            this.getWeChatList()
+                            this.getAmiyaHospitalDepartmentListChange()
+                            this.getcontentPlateFormOrderTypeList()
+                            this.getHospitalList()
+                            this.getOrderConsultationTypeList()
+                            this.getshoppingCartGetCustomerTypeList()
+                            this.getcustomerTypeList()
+                          }
+                        })
+                      }
                     },
                   },
-                  "客户详情"
-                ),
-                // params.row.orderStatusText === "医院重单"
-                //   ? h(
-                //       "Button",
-                //       {
-                //         props: {
-                //           type: "primary",
-                //           size: "small",
-                //           // disabled:params.row.orderStatusText !== '医院重单'
-                //         },
-                //         style: {
-                //           marginLeft: "5px",
-                //         },
-                //         on: {
-                //           click: () => {
-                //             const { orderId } = params.row;
-                //             const data = {
-                //               id: orderId,
-                //             };
-                //             api.byselectRepeateOrderPic(data).then((res) => {
-                //               if (res.code === 0) {
-                //                 const { repeateOrderPictureUrl } = res.data;
-                //                 if (repeateOrderPictureUrl) {
-                //                   this.query.repeateOrderPictureUrl = repeateOrderPictureUrl;
-                //                   this.query.doubleOrderModel = true;
-                //                 } else {
-                //                   this.$Message.error("暂无重单截图");
-                //                 }
-                //               }
-                //             });
-                //           },
-                //         },
-                //       },
-                //       "查看重单截图"
-                //     )
-                //   : "",
-              ]);
+                },
+                [
+                  h(
+                    "a",
+                    {
+                      style: {
+                        color: "#007fff",
+                      },
+                    },
+                    [
+                      "更多",
+                      h("Icon", {
+                        props: {
+                          type: "ios-arrow-down",
+                        },
+                        style: {
+                          marginLeft: "5px",
+                          color: "#3A64FF",
+                        },
+                      }),
+                    ]
+                  ),
+                  h(
+                    "DropdownMenu",
+                    {
+                      slot: "list",
+                      props: {
+                        trigger: "hover",
+                      },
+                    },
+                    [
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "orderDetail",
+                          },
+                        },
+                        "订单详情"
+                      ),
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "reassignment",
+                          },
+                        },
+                        "改派"
+                      ),
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "submit",
+                          },
+                        },
+                        "留言板"
+                      ),
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "customerDetail",
+                          },
+                        },
+                        "客户详情"
+                      ),
+
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "editOrder",
+                          },
+                        },
+                        "修改订单"
+                      ),
+                    ]
+                  ),
+                ]
+              );
+              let option = [];
+              // option.push(message);
+              option.push(check);
+              option.push(send_order);
+              return h("div", option);
             },
           },
         ],
@@ -1941,6 +2306,81 @@ export default {
     };
   },
   methods: {
+     // 客户类型列表
+    getcustomerTypeList() {
+      shoppingCartRegistrationApi.customerTypeList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.recordingParams.shoppingCartRegistrationCustomerTypeList = sourceList
+          
+        }
+      });
+    },
+    // 主获客方式列表
+    getshoppingCartGetCustomerTypeList(){
+      api.shoppingCartGetCustomerTypeList().then((res) => {
+        if (res.code === 0) {
+          const {typeList} = res.data
+          this.recordingParams.customerTypeList = typeList
+        }
+      });
+    },
+     //   获取 面诊类型列表（下拉框）
+    getOrderConsultationTypeList() {
+      api.getOrderConsultationTypeList().then((res) => {
+        if (res.code === 0) {
+          const { orderConsultationTypes } = res.data;
+          this.recordingParams.consultationTypeList = orderConsultationTypes;
+        }
+      });
+    },
+    // 获取合作过的医院列表
+    getHospitalList() {
+      api.getHospitalList().then((res) => {
+        if (res.code === 0) {
+          const { hospitalInfo } = res.data;
+          this.recordingParams.hospitalNameList = hospitalInfo;
+        }
+      });
+    },
+    //  获取内容平台订单类型
+    getcontentPlateFormOrderTypeList() {
+      api.getcontentPlateFormOrderTypeList().then((res) => {
+        if (res.code === 0) {
+          this.recordingParams.statusCodeArr2 = res.data.orderTypes;
+        }
+      });
+    },
+    //   获取科室
+    getAmiyaHospitalDepartmentListChange() {
+      api.getAmiyaHospitalDepartmentList().then((res) => {
+        if (res.code === 0) {
+          const { AmiyaHospitalDepartmentList } = res.data;
+          this.recordingParams.AmiyaHospitalDepartmentListDepartment = AmiyaHospitalDepartmentList;
+        }
+      });
+    },
+    //  根据主播获取主播微信号
+    getWeChatList(value) {
+      const data = {
+        liveanchorId: '',
+      };
+      liveAnchorApi.getvalidList(data).then((res) => {
+        if (res.code === 0) {
+          const { liveAnchorWechatInfos } = res.data;
+          this.recordingParams.weChatList = liveAnchorWechatInfos;
+        }
+      });
+    },
+    // 客户来源
+    getcustomerSourceList() {
+      shoppingCartRegistrationApi.customerSourceList().then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.recordingParams.sourceList = sourceList;
+        }
+      });
+    },
     // 是否参加过粉丝见面会
     getFansMeetingDetailsisAttendClick(value){
       const {lastDealHospitalId} = this.confirmForm
@@ -2048,6 +2488,7 @@ export default {
             ...this.orderSourcesListAll,
             ...orderSources,
           ];
+          this.recordingParams.orderSourcesList = orderSources;
         }
       });
     },
@@ -2123,7 +2564,11 @@ export default {
             consumptionType,
             addContentPlatFormOrderDealDetailsVoList,
             fansMeetingId,
-            isFansMeeting
+            isFansMeeting,
+            fansMeetingProject,
+            followUpContent,
+            nextAppointmentDate,
+            isNeedHospitalHelp
           } = this.confirmForm;
           const data = {
             id,
@@ -2150,7 +2595,11 @@ export default {
             dealPerformanceType:dealPerformanceType ? dealPerformanceType : 0,
             consumptionType:consumptionType<0 ? null : consumptionType,
             addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList,
-            fansMeetingId:isFansMeeting == true ? fansMeetingId : ''
+            fansMeetingId:isFansMeeting == true ? fansMeetingId : '',
+            fansMeetingProject:isFansMeeting == true ? fansMeetingProject : '',
+            followUpContent:isFansMeeting == true ? followUpContent : '',
+            nextAppointmentDate : isFansMeeting == true ?   (nextAppointmentDate ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD") : null) : null,
+            isNeedHospitalHelp:isFansMeeting == true ? isNeedHospitalHelp :false,
           };
           if(isFinish == true){
             if(dealAmount == 0){
@@ -2229,6 +2678,7 @@ export default {
         if (res.code === 0) {
           const { contentPalteForms } = res.data;
           this.query.contentPalteForms = contentPalteForms;
+          this.recordingParams.contentPalteForms = contentPalteForms;
         }
       });
     },
@@ -2384,7 +2834,7 @@ export default {
     },
 
     // 获取派单信息列表分页
-    handleProjectPageChange(pageNum) {
+    handlePageChange(pageNum) {
       const {
         startDate,
         endDate,
@@ -2587,6 +3037,7 @@ export default {
     this.getHospitalConsumptionTypeList()
     this.getHospitalRefundTypeList()
     this.getValidKeyAndValues()
+    
   },
 };
 </script>

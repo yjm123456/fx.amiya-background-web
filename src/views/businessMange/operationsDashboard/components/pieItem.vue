@@ -5,7 +5,7 @@
       ({{pieItemData2.totalPerformanceNumber ? pieItemData2.totalPerformanceNumber : '0'}}w){{pieItemData2.totalPerformanceNumber == 0  ? ' 0%' : ' 100%'}} 
       </span>
     </div>
-    <div class="allNum2" v-if="selected == '线索' && title !='分组'" :style="{top:title == '有效潜在' ? '48px' : '95px'}">总线索
+    <div class="allNum2" v-if="selected == '线索'" :style="{top:title == '有效潜在' ? '48px' : '95px'}">总线索
       <span style="font-size:14px;">({{pieItemData3 ? pieItemData3 : '0'}}){{pieItemData3 == 0 ? ' 0%' : ' 100%'}} </span>
     </div>
     <div ref="dom" :style="{ width: '100%', height: '180px' }"></div>

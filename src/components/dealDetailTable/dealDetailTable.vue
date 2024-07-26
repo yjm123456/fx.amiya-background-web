@@ -62,7 +62,7 @@
       ></Table>
     </div>
     <Divider style="margin-top:5px"/>
-    <div class="h3">客户在院消费列表</div>
+    <!-- <div class="h3">客户在院消费列表</div>
     <div class="search">
       <div style="width:60%">
         
@@ -182,7 +182,7 @@
         />
       </div>
       </div>
-    </div>
+    </div> -->
     
   </div>
 </template>
@@ -214,7 +214,7 @@ export default {
         date: new Set(),
         // date: [],
       },
-      
+    
       query:{
         data:[],
         columns:[

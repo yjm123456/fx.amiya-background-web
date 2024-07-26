@@ -648,8 +648,14 @@ export default {
           },
 
           {
-            title: "咨询内容",
+            title: "主派咨询内容",
             key: "consultingContent",
+            minWidth: 500,
+            tooltip:true
+          },
+          {
+            title: "次派咨询内容",
+            key: "consultingContent2",
             minWidth: 500,
             tooltip:true
           },

@@ -79,3 +79,11 @@ export const batchCheckCooperationLiveAnchorsReconciliationDocumentsSettle = (da
         data
     });
 };
+// 批量审核三方订单数据
+export const batchCheckConsumptionRracking = (data) => {
+    return http({
+        url: "/amiyabg/ReconciliationDocumentsSettle/batchCheckConsumptionRracking",
+        method: "put",
+        data
+    });
+};

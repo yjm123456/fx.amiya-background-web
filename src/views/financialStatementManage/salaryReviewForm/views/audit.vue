@@ -7,7 +7,7 @@
             <Input
             v-model="query.keyWord"
             placeholder="请输入关键字"
-            style="width: 220px; "
+            style="width: 200px; "
             @keyup.enter.native="getListWithPageByCustomerCompensation()"
           />
           <DatePicker
@@ -56,7 +56,7 @@
             v-model="query.chooseHospitalId"
             placeholder="请选择医院"
             filterable
-            style="width: 220px;"
+            style="width: 200px;"
           >
             <Option
               v-for="item in params.hospitallist"
@@ -148,9 +148,13 @@
             <div>批量审核</div>
             <div>合作达人数据</div>
           </div>
-          <div class="button"  @click="financialAuditClick()">
+          <div class="button" style="margin-right:10px"  @click="financialAuditClick()">
             <div>批量审核</div>
             <div>财务稽查数据</div>
+          </div>
+          <div class="button"  @click="threePartiesClick()">
+            <div>批量审核</div>
+            <div>三方订单数据</div>
           </div>
         </div>
       </div>
@@ -218,6 +222,15 @@
         getListWithPageByCustomerCompensation
       "
     />
+    <!-- 批量审核-三方订单 -->
+    <threeParties 
+      :threePartiesModel.sync="threePartiesModel"
+      :checkedParams="checkedParams"
+      :params="params"
+      @getListWithPageByCustomerCompensation="
+        getListWithPageByCustomerCompensation
+      "
+    />
     
     <!-- 内容平台订单详情 -->
     <detail :detailModel.sync="detailModel" :detailList="detailList"></detail>
@@ -241,6 +254,7 @@ import * as customerManageApi from "@/api/customerManage.js";
 import examine from "../components/examine.vue";
 import batchReview from "../components/batchReview.vue";
 import collaboratingExperts from "../components/collaboratingExperts.vue";
+import threeParties from "../components/threeParties.vue";
 import financialAudit from "../components/financialAudit.vue";
 import detail from "@/components/contentDetail/detail.vue";
 import upgradeOrderDetail from "@/components/upgradeOrderDetail/upgradeOrderDetail";
@@ -254,7 +268,8 @@ export default {
     upgradeOrderDetail,
     orderDetail,
     collaboratingExperts,
-    financialAudit
+    financialAudit,
+    threeParties
 
   },
   props: {
@@ -556,6 +571,8 @@ export default {
       collaboratingExpertsModel:false,
       // 财务稽查批量审核
       financialAuditModel:false,
+      // 三方订单批量审核
+      threePartiesModel:false,
 
       // 审核参数
       checkedParams: {
@@ -618,6 +635,17 @@ export default {
         return;
       }
       this.financialAuditModel = true;
+    },
+    // 三方订单批量审核
+    threePartiesClick(){
+      if (![...this.checkedParams.idList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.threePartiesModel = true;
     },
     handleSelect(selection, row) {
       // 批量审核

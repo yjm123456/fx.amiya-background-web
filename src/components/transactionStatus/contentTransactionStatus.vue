@@ -44,6 +44,7 @@
         label-position="left"
         :label-width="130"
       >
+       <div style="font-weight: bold;margin-top: 10px;margin-bottom: 15px;color: #000;"  >到院信息</div>
         <Row :gutter="30">
           <Col span="8">
             <FormItem label="面诊类型" prop="consultatioType" key="面诊类型">
@@ -61,6 +62,27 @@
                 :disabled="confirmForm.isFinish == true"
                 @on-change="isToHospitalChange"
               />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital == true">
+            <FormItem
+              label="到院医院"
+              prop="lastDealHospitalId"
+              key="到院医院"
+              
+            >
+              <Select
+                v-model="confirmForm.lastDealHospitalId"
+                placeholder="请选择到院医院"
+                filterable
+              >
+                <Option
+                  v-for="item in hospitalInfo"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </FormItem>
           </Col>
           <Col span="8"  v-if="confirmForm.isToHospital === true">
@@ -111,61 +133,9 @@
               <i-switch v-model="confirmForm.isAcompanying" />
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="是否成交" prop="isFinish" key="是否成交">
-              <i-switch
-                v-model="confirmForm.isFinish"
-                @on-change="switchChange"
-              />
-              <!--  @on-change="switchChange"  -->
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isFinish == true">
-            <FormItem
-              label="到院医院"
-              prop="lastDealHospitalId"
-              key="到院医院"
-              
-            >
-              <Select
-                v-model="confirmForm.lastDealHospitalId"
-                placeholder="请选择到院医院"
-                filterable
-              >
-                <Option
-                  v-for="item in hospitalInfo"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isFinish != true">
-            <FormItem
-              label="未成交原因"
-              prop="unDealReason"
-              key="未成交原因"
-            >
-              <Input
-                v-model="confirmForm.unDealReason"
-                placeholder="请输入未成交原因"
-                type="textarea"
-                :rows="3"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isFinish != true">
-            <FormItem
-              label="未成交截图"
-              key="未成交截图"
-            >
-              <upload
-                :uploadObj="noDealuploadObj"
-                @uploadChange="noDealhandleUploadChange"
-              />
-            </FormItem>
-          </Col>
+          
+          
+          
           <!-- <Col span="8" v-if="confirmForm.isFinish == true">
             <FormItem
               label="成交金额"
@@ -179,117 +149,14 @@
               ></Input>
             </FormItem>
           </Col> -->
-          <Col span="8" v-if="confirmForm.isFinish == true">
-            <FormItem
-              label="成交金额"
-              prop="dealAmount"
-              key="成交金额"
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入成交金额(最小是0)',
-                  trigger: 'change',
-                  type: 'number',
-                  min: 0,
-                },
-              ]"
-            >
-              <Input
-                v-model="confirmForm.dealAmount"
-                placeholder="请输入成交金额"
-                type="number"
-                number
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isFinish == true">
-            <FormItem
-              label="成交时间"
-              prop="DealDate"
-              
-              key="成交时间"
-            >
-              <DatePicker
-                type="date"
-                placeholder="成交时间"
-                style="width: 100%"
-                v-model="confirmForm.DealDate"
-              ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="业绩类型"
-              prop="dealPerformanceType"
-              key="业绩类型"
-              
-            >
-              <Select
-                v-model="confirmForm.dealPerformanceType"
-                placeholder="请选择业绩类型"
-                clearable
-                filterable
-              >
-                <Option
-                  v-for="item in contentPlateFormOrderDealPerformanceType"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isFinish === true">
-            <FormItem
-              label="消费类型"
-              prop="consumptionType"
-              key="消费类型"
-              
-            >
-              <Select
-                v-model="confirmForm.consumptionType"
-                placeholder="请选择消费类型"
-                clearable
-                filterable
-                :disabled="confirmForm.toHospitalType == 4"
-              >
-                <Option
-                  v-for="item in typeList"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="粉丝见面会"
-              prop="fansMeetingId"
-              key="粉丝见面会"
-              
-            >
-              <Select
-                v-model="confirmForm.fansMeetingId"
-                placeholder="请选择粉丝见面会"
-                filterable
-                @on-change="getFansMeetingDetailsisAttendClick(confirmForm.fansMeetingId)"
-              >
-                <Option
-                  v-for="item in fansMeetingList"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <div style="color:red;font-size:13px">非必要不用选</div>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem label="是否参加过见面会" prop="isFansMeeting" key="是否参加过见面会">
-              <i-switch
-                v-model="confirmForm.isFansMeeting"
-                disabled
+          
+          
+          
+          <Col span="8">
+            <FormItem label="邀约凭证" key="邀约凭证">
+              <upload
+                :uploadObj="invitationDocumentsUploadObj"
+                @uploadChange="invitationDocumentsHandleUploadChange"
               />
             </FormItem>
           </Col>
@@ -328,6 +195,162 @@
               ></Input>
             </FormItem>
           </Col> -->
+          
+        </Row>
+        <Divider style="margin-top:-6px" v-if="confirmForm.isToHospital === true"/>
+        <div style="font-weight: bold;margin-top: -10px;margin-bottom: 15px;color: #000;"  v-if="confirmForm.isToHospital === true">粉丝见面会信息</div>
+        <Row :gutter="30">
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="粉丝见面会"
+              prop="fansMeetingId"
+              key="粉丝见面会"
+              
+            >
+              <Select
+                v-model="confirmForm.fansMeetingId"
+                placeholder="请选择粉丝见面会"
+                filterable
+                @on-change="getFansMeetingDetailsisAttendClick(confirmForm.fansMeetingId)"
+              >
+                <Option
+                  v-for="item in fansMeetingList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <div style="color:red;font-size:13px">非必要不用选</div>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem label="是否参加过见面会" prop="isFansMeeting" key="是否参加过见面会">
+              <i-switch
+                v-model="confirmForm.isFansMeeting"
+                disabled
+              />
+            </FormItem>
+          </Col>
+           <Col span="8" v-if="confirmForm.isFansMeeting === true">
+            <FormItem
+              label="见面会铺垫项目"
+              key="见面会铺垫项目"
+            >
+              <Input
+                v-model="confirmForm.fansMeetingProject"
+                placeholder="请输入见面会铺垫项目"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFansMeeting === true">
+            <FormItem
+              label="追踪内容"
+              key="追踪内容"
+            >
+              <Input
+                v-model="confirmForm.followUpContent"
+                placeholder="请输入追踪内容"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFansMeeting === true">
+            <FormItem
+              label="下次邀约时间"
+              prop="nextAppointmentDate"
+              key="下次邀约时间"
+            >
+              <DatePicker
+                type="date"
+                placeholder="下次邀约时间"
+                style="width: 100%"
+                v-model="confirmForm.nextAppointmentDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFansMeeting === true">
+            <FormItem label="是否需要机构再次邀约" prop="isNeedHospitalHelp" key="是否需要机构再次邀约">
+              <i-switch
+                v-model="confirmForm.isNeedHospitalHelp"
+                
+              />
+            </FormItem>
+          </Col>
+        </Row>
+        <Divider style="margin-top:-6px"/>
+        <div style="font-weight: bold;margin-top: -10px;margin-bottom: 15px;color: #000;"  >成交信息</div>
+        <Row :gutter="30">
+          <Col span="8">
+            <FormItem label="是否成交" prop="isFinish" key="是否成交">
+              <i-switch
+                v-model="confirmForm.isFinish"
+                @on-change="switchChange"
+              />
+              <!--  @on-change="switchChange"  -->
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish == true">
+            <FormItem
+              label="成交金额"
+              prop="dealAmount"
+              key="成交金额"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入成交金额(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="confirmForm.dealAmount"
+                placeholder="请输入成交金额"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish == true">
+            <FormItem
+              label="成交时间"
+              prop="DealDate"
+              
+              key="成交时间"
+            >
+              <DatePicker
+                type="date"
+                placeholder="成交时间"
+                style="width: 100%"
+                v-model="confirmForm.DealDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish === true">
+            <FormItem
+              label="消费类型"
+              prop="consumptionType"
+              key="消费类型"
+              
+            >
+              <Select
+                v-model="confirmForm.consumptionType"
+                placeholder="请选择消费类型"
+                clearable
+                filterable
+                :disabled="confirmForm.toHospitalType == 4"
+              >
+                <Option
+                  v-for="item in typeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="8"  v-if="confirmForm.isFinish == true">
             <FormItem
               label="后期项目铺垫"
@@ -341,19 +364,12 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="邀约凭证" key="邀约凭证">
-              <upload
-                :uploadObj="invitationDocumentsUploadObj"
-                @uploadChange="invitationDocumentsHandleUploadChange"
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
+          
+          <Col span="8" v-if="confirmForm.isFinish == true">
             <FormItem
               label="成交凭证"
               key="成交凭证"
-              v-if="confirmForm.isFinish == true"
+              
             >
               <upload
                 :uploadObj="uploadObj"
@@ -361,8 +377,56 @@
               />
             </FormItem>
           </Col>
+          <Col span="8" v-if="confirmForm.isFinish != true">
+            <FormItem
+              label="未成交原因"
+              prop="unDealReason"
+              key="未成交原因"
+            >
+              <Input
+                v-model="confirmForm.unDealReason"
+                placeholder="请输入未成交原因"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isFinish != true">
+            <FormItem
+              label="未成交截图"
+              key="未成交截图"
+            >
+              <upload
+                :uploadObj="noDealuploadObj"
+                @uploadChange="noDealhandleUploadChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="业绩类型"
+              prop="dealPerformanceType"
+              key="业绩类型"
+              
+            >
+              <Select
+                v-model="confirmForm.dealPerformanceType"
+                placeholder="请选择业绩类型"
+                clearable
+                filterable
+              >
+                <Option
+                  v-for="item in contentPlateFormOrderDealPerformanceType"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
         </Row>
         <Divider style="margin-top:-6px"/>
+
         <!-- 成交明细 -->
         <detailTable @handle="handle"  :id="confirmForm.id" :contentPlatFormOrderDealDetails="contentPlatFormOrderDealDetails" v-if="confirmForm.isFinish === true" :confirmParams="confirmParams" :confirmForm="confirmForm" ref="detailTable"/>
         <!-- <div style="color:red;font-size:3px" v-if="confirmForm.isFinish === true">*注：请上传该手机号客户在贵公司系统的成交凭证截图</div> -->
@@ -502,6 +566,14 @@ export default {
         fansMeetingId:'',
         // 是否参加粉丝会
         isFansMeeting:false,
+        // 见面会铺垫项目
+        fansMeetingProject:'',
+        // 追踪内容
+        followUpContent:'',
+        // 下次邀约时间
+        nextAppointmentDate:'',
+        // 是否需要机构协助邀约
+        isNeedHospitalHelp:false
       },
       confirmRuleValidate: {
         consumptionType: [
@@ -868,7 +940,7 @@ export default {
                               invitationDocuments,
                               dealPerformanceType,
                               consumptionType,
-                              customerPhone
+                              customerPhone,
                             } = res.data.contentPlatFormOrderDealInfoInfo;
                             this.isEdit = true;
                             this.confirmForm.toHospitalDate = tohospitalDate
@@ -1143,7 +1215,11 @@ export default {
             consumptionType,
             addContentPlatFormOrderDealDetailsVoList,
             fansMeetingId,
-            isFansMeeting
+            isFansMeeting,
+            fansMeetingProject,
+            followUpContent,
+            nextAppointmentDate,
+            isNeedHospitalHelp
           } = this.confirmForm;
           // 判断createBy与employeeId相等时 只提交该账号添加的数据
           let addContentPlatFormOrderDealDetailsVoLists = []
@@ -1185,7 +1261,11 @@ export default {
             consumptionType:consumptionType <0 ? null : consumptionType,
             // addContentPlatFormOrderDealDetailsVoList:isFinish == false ? [] : addContentPlatFormOrderDealDetailsVoList
             addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoLists,
-            fansMeetingId:isFansMeeting == true ? fansMeetingId : ''
+            fansMeetingId:isFansMeeting == true ? fansMeetingId : '',
+            fansMeetingProject:isFansMeeting == true ? fansMeetingProject : '',
+            followUpContent:isFansMeeting == true ? followUpContent : '',
+            nextAppointmentDate : isFansMeeting == true ?   (nextAppointmentDate ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD") : null) : null,
+            isNeedHospitalHelp:isFansMeeting == true ? isNeedHospitalHelp :false,
           };
           if(isFinish == true){
             if(dealAmount == 0){
@@ -1345,6 +1425,11 @@ export default {
         this.editModel = false;
         this.uploadObj.uploadList = [];
         this.noDealuploadObj.uploadList = [];
+        this.confirmForm.fansMeetingId = ''
+        this.confirmForm.fansMeetingProject = ''
+        this.confirmForm.followUpContent = ''
+        this.confirmForm.nextAppointmentDate = null
+        this.confirmForm.isNeedHospitalHelp = false
       }
     },
     // 取消
@@ -1356,6 +1441,12 @@ export default {
       this.noDealuploadObj.uploadList = [];
       this.invitationDocumentsUploadObj.uploadList = [];
       this.$refs.detailTable.query2.data = []
+      this.confirmForm.fansMeetingId = ''
+      this.confirmForm.fansMeetingProject = ''
+      this.confirmForm.followUpContent = ''
+      this.confirmForm.nextAppointmentDate = null
+      this.confirmForm.isNeedHospitalHelp = false
+    
     },
   },
   created() {

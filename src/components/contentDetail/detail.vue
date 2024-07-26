@@ -358,8 +358,12 @@
           </div>
           
           <div class="mr_top">
-            <span class="title_bold">咨询内容：</span>
+            <span class="title_bold">主派咨询内容：</span>
             <span>{{ detailObj.consultingContent }} </span>
+          </div>
+          <div class="mr_top">
+            <span class="title_bold">次派咨询内容：</span>
+            <span>{{ detailObj.consultingContent2 }} </span>
           </div>
           <div class="mr_top">
             <span class="title_bold">备注：</span>

@@ -540,14 +540,14 @@ export default {
       });
     },
     // 客户来源
-    getcustomerSourceList() {
-      shoppingCartRegistrationApi.customerSourceList().then((res) => {
-        if (res.code === 0) {
-          const { sourceList } = res.data;
-          this.recordingNormalParams.sourceList = sourceList;
-        }
-      });
-    },
+    // getcustomerSourceList() {
+    //   shoppingCartRegistrationApi.customerSourceList().then((res) => {
+    //     if (res.code === 0) {
+    //       const { sourceList } = res.data;
+    //       this.recordingNormalParams.sourceList = sourceList;
+    //     }
+    //   });
+    // },
     // 客户类型列表
     getcustomerTypeList() {
       shoppingCartRegistrationApi.customerTypeList().then((res) => {
@@ -799,7 +799,7 @@ export default {
     this.getEmployeeByPositionId();
     this.getContentPlatformOrderAddWorkTypeList();
     this.getcustomerTypeList();
-    this.getcustomerSourceList();
+    // this.getcustomerSourceList();
     this.getshoppingCartGetCustomerTypeList();
   },
   watch: {

@@ -26,9 +26,23 @@
                 style="width: 150px; margin-left: 10px"
               ></DatePicker>
               <Select
+                v-model="query.belongChannel"
+                placeholder="请选择归属部门"
+                filterable
+                style="width: 150px; margin-left: 10px"
+                @on-change="isTitleClick2()"
+              >
+                <Option
+                  v-for="item in belongChannelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
                 v-model="query.contentPlatFormId"
                 placeholder="请选择渠道"
-                @on-change="contentPlateChange(query.contentPlatFormId)"
+                @on-change="contentPlateChange2(query.contentPlatFormId)"
                 filterable
                 style="width: 150px; margin-left: 10px"
               >
@@ -54,28 +68,16 @@
                 >
               </Select>
               <Select
-                v-model="query.isAddWechat"
-                placeholder="请选择加v状态"
+                v-model="query.source"
+                placeholder="请选择客户来源"
                 filterable
-                style="width: 150px; margin-left: 10px"
+                style="width: 150px;margin-left: 10px"
+                :disabled="!query.contentPlatFormId && query.belongChannel == null || query.belongChannel == -1"
               >
                 <Option
-                  v-for="item in isAddWeChatList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.isWriteOff"
-                placeholder="请选择核销状态"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in isWriteOffList"
-                  :value="item.type"
-                  :key="item.type"
+                  v-for="item in sourceListAll"
+                  :value="item.id"
+                  :key="item.id"
                   >{{ item.name }}</Option
                 >
               </Select>
@@ -220,19 +222,7 @@
                 style="width: 150px; margin-left: 10px"
                 :disabled="query.isReturnBackPrice != 'true'"
               ></DatePicker>
-              <Select
-                v-model="query.source"
-                placeholder="请选择客户来源"
-                filterable
-                style="width: 150px;margin-left: 10px"
-              >
-                <Option
-                  v-for="item in sourceListAll"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
+              
               <Select
                 v-model="query.createBy"
                 placeholder="请选择创建人"
@@ -246,7 +236,19 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-              
+              <Select
+                v-model="query.isWriteOff"
+                placeholder="请选择核销状态"
+                filterable
+                style="width: 150px; margin-left: 10px"
+              >
+                <Option
+                  v-for="item in isWriteOffList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </div>
             <div style="margin-top:10px">
               <Select
@@ -279,18 +281,19 @@
                 :disabled="query.isBadReview != 'true'"
               ></DatePicker>
               <Select
-                v-model="query.belongChannel"
-                placeholder="请选择归属部门"
+                v-model="query.isAddWechat"
+                placeholder="请选择加v状态"
                 filterable
                 style="width: 150px; margin-left: 10px"
               >
                 <Option
-                  v-for="item in belongChannelListAll"
-                  :value="item.id"
-                  :key="item.id"
+                  v-for="item in isAddWeChatList"
+                  :value="item.type"
+                  :key="item.type"
                   >{{ item.name }}</Option
                 >
               </Select>
+              
               
             </div>
             
@@ -967,7 +970,7 @@ export default {
       // 查询
       query: {
         // 归属部门
-        belongChannel:-1,
+        belongChannel:null,
         shoppingCartRegistrationCustomerType: -1,
         // 创建人
         createBy: -1,
@@ -2218,7 +2221,7 @@ export default {
       // 客户来源
       sourceList: [],
       // 客户来源
-      sourceListAll: [{ name: "全部客户来源", id: -1 }],
+      sourceListAll: [],
       // 主播
       liveAnchorBaseInfos: [{ name: "全部主播", id: -1 }],
       // 面诊方式
@@ -2231,14 +2234,20 @@ export default {
       isDirector: sessionStorage.getItem("isDirector"),
       // 归属部门
       belongChannelList:[],
-      belongChannelListAll:[{id:-1,name:'全部部门'}],
        // 客户来源
       sourceList:[],
       //客户来源文字提示
-      isTitle:true
+      isTitle:true,
+      isTitle2:true
     };
   },
   methods: {
+    // 客户来源文字提示
+    isTitleClick2(){
+      if(this.query.belongChannel != null  && this.query.contentPlatFormId){
+        this.getcustomerSourceList2()
+      }
+    },
     // 客户来源文字提示
     isTitleClick(){
       if(this.form.belongChannel != null && this.form.contentPlatFormId){
@@ -2250,12 +2259,13 @@ export default {
         this.isTitle = true
       }
     },
+    
     // 客户来源
     getcustomerSourceList() {
-      const { contentPlatFormId, belongChannel} = this.form
+      const {contentPlatFormId,belongChannel} = this.form
       const data = {
         contentPlatFormId:contentPlatFormId,
-        channel:belongChannel
+        channel:belongChannel ,
       }
       if(belongChannel == null ){
         this.$Message.warning('请选择归属部门！')
@@ -2269,7 +2279,29 @@ export default {
         if (res.code === 0) {
           const { sourceList } = res.data;
           this.sourceList = sourceList;
-          this.sourceListAll = [...this.sourceListAll, ...sourceList];
+          // this.sourceListAll = [...this.sourceListAll, ...sourceList];
+        }
+      });
+    },
+    // 客户来源
+    getcustomerSourceList2() {
+      const {contentPlatFormId,belongChannel} = this.query
+      const data = {
+        contentPlatFormId:contentPlatFormId,
+        channel:belongChannel ,
+      }
+      if(belongChannel == null ){
+        this.$Message.warning('请选择归属部门！')
+        return
+      }
+      if(!contentPlatFormId){
+        this.$Message.warning('请选择主播平台！')
+        return
+      }
+      api.customerSourceList(data).then((res) => {
+        if (res.code === 0) {
+          const { sourceList } = res.data;
+          this.sourceListAll = sourceList
         }
       });
     },
@@ -2279,7 +2311,6 @@ export default {
         if (res.code === 0) {
           const {belongChannelList} = res.data
           this.belongChannelList =belongChannelList
-          this.belongChannelListAll =[...this.belongChannelListAll,...belongChannelList]
         }
       });
     },
@@ -2519,6 +2550,15 @@ export default {
         }
       });
     },
+    // 查询
+    contentPlateChange2(value) {
+      if (!value) {
+        return;
+      }
+      this.getLiveValidList(value);
+      this.isTitleClick2()
+    },
+    // 添加
     contentPlateChange(value) {
       if (!value) {
         return;

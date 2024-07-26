@@ -124,6 +124,7 @@
                 v-model="form.liveanchorMonthlyTargetId"
                 placeholder="请选择月目标名称"
                 filterable
+                @on-change="liveanchorMonthlyTargetIdChange(form.liveanchorMonthlyTargetId)"
               >
                 <Option
                   v-for="item in liveAnchorMonthlyTarget"
@@ -1214,9 +1215,9 @@ export default {
     // 根据月名称获取主播id
     liveanchorMonthlyTargetIdChange(value){
       if(value){
-        api.byIdLiveAnchorMonthlyTargets(this.form.liveanchorMonthlyTargetId).then((res) => {
+        api.byIdLiveAnchorMonthlyTargetAfterLiving(this.form.liveanchorMonthlyTargetId).then((res) => {
           if (res.code === 0) {
-            this.form.liveAnchorId = res.data.liveAnchorMonthlyTargetInfo.liveAnchorId
+            this.form.liveAnchorId = res.data.liveAnchorMonthlyTargetAfterLivingInfo.liveAnchorId
           }
         })
       }
@@ -1241,7 +1242,6 @@ export default {
         recordDate:this.$moment(new Date(recordDate)).format("YYYY-MM-DD")
       }
       api.getLiveAnchorPerformance(data).then((res) => {
-       
         this.form.addWechatNum = res.addWechatNum
         this.form.sendOrderNum = res.sendOrderNum
         this.form.visitNum = res.visitNum
@@ -1264,6 +1264,8 @@ export default {
         this.form.activateHistoricalConsultation = res.activateHistoricalConsultation
         this.form.effectivePerformance = res.effectivePerformance
         this.form.potentialPerformance = res.potentialPerformance
+        this.form.distributeConsulation = res.distributeConsulation
+        this.form.clues = res.clues
       })
 
     },

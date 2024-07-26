@@ -464,12 +464,22 @@
         </Row>
         <Row :gutter="30">
           <Col span="12">
-            <FormItem label="咨询内容" prop="consultingContent">
+            <FormItem label="主派咨询内容" prop="consultingContent">
               <Input
                 v-model="form.consultingContent"
                 type="textarea"
                 :rows="5"
-                placeholder="请输入咨询内容"
+                placeholder="请输入主派咨询内容"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="次派咨询内容" prop="consultingContent2">
+              <Input
+                v-model="form.consultingContent2"
+                type="textarea"
+                :rows="5"
+                placeholder="请输入次派咨询内容"
               ></Input>
             </FormItem>
           </Col>
@@ -483,8 +493,6 @@
               ></Input>
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30">
           <Col span="12">
             <FormItem label="后期项目铺垫" prop="lateProjectStage">
               <Input
@@ -565,8 +573,9 @@ export default {
         depositAmount: "",
         // 项目id
         goodsId: "",
-        // 咨询内容
+        // 主派咨询内容
         consultingContent: "",
+        consultingContent2:"",
         // 备注
         remark: "",
         // 铺垫
@@ -916,6 +925,7 @@ export default {
               depositAmount,
               goodsId,
               consultingContent,
+              consultingContent2,
               remark,
               lateProjectStage,
               id,
@@ -955,6 +965,7 @@ export default {
               depositAmount: depositAmount ? depositAmount : 0,
               goodsId,
               consultingContent,
+              consultingContent2,
               remark,
               lateProjectStage,
               id,
@@ -1071,6 +1082,7 @@ export default {
               depositAmount,
               goodsId,
               consultingContent,
+              consultingContent2,
               remark,
               lateProjectStage,
               hospitalDepartmentId,
@@ -1109,6 +1121,7 @@ export default {
               depositAmount: depositAmount ? depositAmount : 0,
               goodsId,
               consultingContent,
+              consultingContent2,
               remark,
               lateProjectStage,
               hospitalDepartmentId,
@@ -1192,6 +1205,7 @@ export default {
         this.form.appointmentHospitalId = info.appointmentHospitalId;
         this.form.id = info.id;
         this.form.consultingContent = info.consultingContent;
+        this.form.consultingContent2 = info.consultingContent2;
         // this.form.consultingContent = info.consultingContent ? info.consultingContent : '咨询项目：\n既往史：\n方案及报价：\n推荐医生：\n预算及确定治疗项目：\n痛点、禁忌、喜好：\n是否车接车送：\n助理、vip管家：\n备注：'
         this.form.sex = info.sex;
         this.form.city = info.city;
@@ -1261,5 +1275,6 @@ export default {
   font-weight: bold;
   color: #000;
   margin-bottom: 20px;
+  text-align: start;
 }
 </style>

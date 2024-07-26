@@ -371,7 +371,53 @@
                 </Select>
               </FormItem>
             </Col>
-            
+            <Col span="8" v-if="title == '编辑'">
+            <FormItem
+              label="见面会铺垫项目"
+              key="见面会铺垫项目"
+              prop="fansMeetingProject"
+            >
+              <Input
+                v-model="form.fansMeetingProject"
+                placeholder="请输入见面会铺垫项目"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="title == '编辑'">
+            <FormItem
+              label="追踪内容"
+              key="追踪内容"
+            >
+              <Input
+                v-model="form.followUpContent"
+                placeholder="请输入追踪内容"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="title == '编辑'">
+            <FormItem
+              label="下次邀约时间"
+              prop="nextAppointmentDate"
+              key="下次邀约时间"
+            >
+              <DatePicker
+                type="date"
+                placeholder="下次邀约时间"
+                style="width: 100%"
+                v-model="form.nextAppointmentDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="title == '编辑'">
+            <FormItem label="是否需要机构再次邀约" prop="isNeedHospitalHelp" key="是否需要机构再次邀约">
+              <i-switch
+                v-model="form.isNeedHospitalHelp"
+                
+              />
+            </FormItem>
+          </Col>
             <Col span="8">
               <FormItem label="顾客照片" prop="imageUrl" key="imageUrl">
                 <upload
@@ -380,13 +426,26 @@
                 />
               </FormItem>
             </Col>
-            <Col span="16">
+            <Col span="8" v-if="title == '编辑'">
+            <FormItem
+              label="未成交原因"
+              key="未成交原因"
+            >
+              <Input
+                v-model="form.unDealReason"
+                placeholder="请输入未成交原因"
+                type="textarea"
+                :rows="3"
+              ></Input>
+            </FormItem>
+          </Col>
+            <Col span="8">
               <FormItem label="备注" prop="remark">
                 <Input
                   v-model="form.remark"
                   placeholder="请输入备注"
                   type="textarea"
-                  :rows="2"
+                  :rows="3"
                 ></Input>
               </FormItem>
             </Col>
@@ -540,6 +599,8 @@ export default {
         isToHospital:'',
         // 是否成交
         isDeal:'',
+        // 未成交原因
+        unDealReason:''
       },
       //添加model
       fansMeetingDetailModel: false,
@@ -794,7 +855,51 @@ export default {
               );
             },
           },
-          
+          {
+            title: "见面会铺垫项目",
+            key: "fansMeetingProject",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "追踪内容",
+            key: "followUpContent",
+            minWidth: 200,
+            align: "center",
+            tooltip:true
+          },
+
+          {
+            title: "下次邀约时间",
+            key: "nextAppointmentDate",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.nextAppointmentDate  ?  this.$moment(params.row.nextAppointmentDate).format("YYYY-MM-DD") : ''
+              );
+            },
+          },
+          {
+            title: "是否需要机构协助邀约",
+            key: "isNeedHospitalHelp",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isNeedHospitalHelp == true ? "需要" : "不需要"
+              );
+            },
+          },
+          {
+            title: "未成交原因",
+            key: "unDealReason",
+            minWidth: 150,
+            align: "center",
+            tooltip:true
+          },
 
           {
             title: "操作",
@@ -873,7 +978,12 @@ export default {
                               customerPictureUrl,
                               isToHospital,
                               isDeal,
-                              cumulativeDealPrice
+                              cumulativeDealPrice,
+                              fansMeetingProject,
+                              followUpContent,
+                              nextAppointmentDate,
+                              isNeedHospitalHelp,
+                              unDealReason
                             } = res.data.fansMeetingDetails;
                             this.form.id = id;
                             this.form.fansMeetingId = fansMeetingId;
@@ -891,6 +1001,10 @@ export default {
                             this.form.customerName = customerName;
                             this.form.phone = phone;
                             this.form.customerQuantity = customerQuantity;
+                            this.form.fansMeetingProject = fansMeetingProject;
+                            this.form.followUpContent = followUpContent;
+                            this.form.nextAppointmentDate = nextAppointmentDate;
+                            this.form.isNeedHospitalHelp = isNeedHospitalHelp;
                             this.form.isOldCustomer = String(isOldCustomer);
                             this.form.amiyaConsulationId = amiyaConsulationId;
                             this.form.hospitalConsulationName = hospitalConsulationName;
@@ -900,10 +1014,12 @@ export default {
                             this.form.hotelPlan = hotelPlan;
                             this.form.planConsumption = planConsumption;
                             this.form.remark = remark;
+                            this.form.unDealReason = unDealReason;
                             this.form.customerPictureUrl = customerPictureUrl;
                             this.uploadObj.uploadList = customerPictureUrl
                               ? [this.form.customerPictureUrl]
                               : [];
+                              
                           }
                         });
                       },
@@ -1086,7 +1202,44 @@ export default {
             minWidth: 160,
             align: "center",
           },
-          
+          {
+            title: "见面会铺垫项目",
+            key: "fansMeetingProject",
+            minWidth: 150,
+            align: "center",
+          },
+          {
+            title: "追踪内容",
+            key: "followUpContent",
+            minWidth: 200,
+            align: "center",
+            tooltip:true
+          },
+
+          {
+            title: "下次邀约时间",
+            key: "nextAppointmentDate",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.nextAppointmentDate  ?  this.$moment(params.row.nextAppointmentDate).format("YYYY-MM-DD") : ''
+              );
+            },
+          },
+          {
+            title: "是否需要机构协助邀约",
+            key: "isNeedHospitalHelp",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isNeedHospitalHelp == true ? "需要" : "不需要"
+              );
+            },
+          },
           
           
           {
@@ -1328,7 +1481,12 @@ export default {
               appointmentDetailsDate,
               isDeal,
               isToHospital,
-              cumulativeDealPrice
+              cumulativeDealPrice,
+              fansMeetingProject,
+              followUpContent,
+              nextAppointmentDate,
+              isNeedHospitalHelp,
+              unDealReason
             } = this.form;
             const data = {
               fansMeetingId,
@@ -1356,7 +1514,12 @@ export default {
               id,
               isDeal:isDeal == 'true' ? true : false,
               isToHospital:isToHospital == 'true' ? true : false,
-              cumulativeDealPrice
+              cumulativeDealPrice,
+              fansMeetingProject,
+              followUpContent,
+              nextAppointmentDate:nextAppointmentDate ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD") : null,
+              isNeedHospitalHelp,
+              unDealReason
             };
             api.editFansMeetingDetails(data).then((res) => {
               if (res.code == 0) {
@@ -1384,6 +1547,7 @@ export default {
               remark,
               customerPictureUrl,
               appointmentDetailsDate,
+              unDealReason
             } = this.form;
             const data = {
               fansMeetingId,
@@ -1408,6 +1572,7 @@ export default {
               planConsumption,
               remark,
               customerPictureUrl,
+              unDealReason
             };
             api.addFansMeetingDetails(data).then((res) => {
               if (res.code == 0) {

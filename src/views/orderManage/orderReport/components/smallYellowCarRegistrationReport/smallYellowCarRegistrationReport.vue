@@ -657,7 +657,7 @@ export default {
       shoppingCartApi.customerSourceList().then((res) => {
         if (res.code === 0) {
           const { sourceList } = res.data;
-          this.sourceListAll = [...this.sourceListAll, ...sourceList];
+          this.sourceListAll = sourceList
         }
       });
     },

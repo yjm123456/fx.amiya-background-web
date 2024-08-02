@@ -191,6 +191,7 @@ export default {
     controlModal: Boolean,
     typeList: Array,
     toHospitalTypeList: Array,
+    sendOrderId:Number
   },
   data() {
     return {
@@ -357,6 +358,7 @@ export default {
             isAcompanying,
             consumptionType,
             addContentPlatFormOrderDealDetailsVoList,
+            sendOrderId
           } = this.form;
           const data = {
             id:this.id,
@@ -371,10 +373,7 @@ export default {
             DealDate: DealDate
               ? this.$moment(DealDate).format("YYYY-MM-DD")
               : null,
-            lastDealHospitalId:
-              isToHospital == true
-                ? Number(sessionStorage.getItem("hospitalId"))
-                : null,
+            lastDealHospitalId: Number(sessionStorage.getItem("hospitalId")),
             toHospitalDate: toHospitalDate
               ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
               : null,
@@ -382,7 +381,8 @@ export default {
             isAcompanying,
             consumptionType:isFinish == false ? null : consumptionType,
             // addContentPlatFormOrderDealDetailsVoList: isFinish == false ? [] : addContentPlatFormOrderDealDetailsVoList,
-            addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList
+            addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList,
+            sendOrderId:this.sendOrderId
           };
           if(isFinish == true){
             if(dealAmount == 0){

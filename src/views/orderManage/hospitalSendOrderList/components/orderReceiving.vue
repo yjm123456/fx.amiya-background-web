@@ -102,7 +102,8 @@ export default {
     orderReceivingModel: Boolean,
     receivingObj:Object,
     phone:String,
-    isTabel:Boolean
+    isTabel:Boolean,
+    sendOrderId:Number,
   },
   data() {
     return {
@@ -183,7 +184,8 @@ export default {
       const receivingData ={
           orderId:this.receivingObj.orderId,
           netWorkConsulationName:this.netWorkConsulationName,
-          sceneConsulationName:this.sceneConsulationName
+          sceneConsulationName:this.sceneConsulationName,
+          sendOrderId:this.sendOrderId
       }
      
       api.contentPlateFormOrderConfirm(receivingData).then((res) => {

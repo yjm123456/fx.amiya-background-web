@@ -577,6 +577,8 @@ export default {
                           goodsId,
                           acceptConsulting,
                         } = params.row;
+                        // this.$Message.warning('系统正在维护中，请稍后！')
+                        // return
                         this.form.acceptConsulting = acceptConsulting;
                         this.form.orderId = orderId;
                         this.byGoodsIdGetpartakeItemHospitalList(

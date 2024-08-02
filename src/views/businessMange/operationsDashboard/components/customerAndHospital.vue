@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div ref="dom" :style="{ width: '100%', height: '410px' }"></div>
+    <div ref="dom" :style="{ width: '100%', height: '800px' }"></div>
   </div>
 </template>
 
@@ -27,15 +27,15 @@ export default {
       let list2 = [];
       let list3 = [];
       value.map((item) => {
-        name.push(item.name);
+        name.unshift(item.name);
         if (this.title == "助理") {
-          list1.push(item.distributeConsulationNum);
-          list2.push(item.sendOrderNum);
-          list3.push(item.visitNum);
+          list1.unshift(item.distributeConsulationNum);
+          list2.unshift(item.sendOrderNum);
+          list3.unshift(item.visitNum);
         } else {
-          list1.push(item.sendOrderNum);
-          list2.push(item.visitNum);
-          list3.push(item.newCustomerDealNum);
+          list1.unshift(item.sendOrderNum);
+          list2.unshift(item.visitNum);
+          list3.unshift(item.newCustomerDealNum);
         }
       });
       let option = {
@@ -45,19 +45,20 @@ export default {
         calculable: true,
         xAxis: [
           {
-            type: "category",
+            type: "value",
             // prettier-ignore
+            
+          },
+        ],
+        yAxis: [
+          {
+            type: "category",
             data: name,
             axisLabel: {
               formatter: function(value) {
                 return value.length > 5 ? value.slice(0, 5) + "..." : value;
               },
             },
-          },
-        ],
-        yAxis: [
-          {
-            type: "value",
           },
         ],
         series: [
@@ -105,7 +106,7 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   width: 100%;
-  height: 410px;
+  height: 800px;
   // margin-left: 5%;
 }
 </style>

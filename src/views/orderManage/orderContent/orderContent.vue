@@ -638,6 +638,7 @@ export default {
             key: "appointmentHospitalName",
             minWidth: 220,
             align: "center",
+            tooltip:true
           },
 
           {
@@ -706,8 +707,9 @@ export default {
           {
             title: "主播IP账号",
             key: "liveAnchorName",
-            minWidth: 130,
+            minWidth: 200,
             align: "center",
+            tooltip:true
           },
           {
             title: "主播微信号",

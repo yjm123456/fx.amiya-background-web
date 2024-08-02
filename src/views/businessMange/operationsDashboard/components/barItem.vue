@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div ref="dom" :style="{ width: '95%', height: '410px' }"></div>
+    <div ref="dom" :style="{ width: '100%', height: '800px' }"></div>
   </div>
 </template>
 
@@ -156,7 +156,7 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   width: 100%;
-  height: 410px;
+  height: 800px;
   // margin-left: 5%;
 }
 </style>

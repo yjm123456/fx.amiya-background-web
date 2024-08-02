@@ -310,7 +310,7 @@
     <!-- 留言板 -->
     <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
     <!-- 确认 -->
-    <hospitalConfirm :controlModal.sync="controlModal" :typeList="typeList" :toHospitalTypeList="toHospitalTypeList" :id="form.id" @getHospitalContentList="getHospitalContentList"/>
+    <hospitalConfirm :controlModal.sync="controlModal" :typeList="typeList" :toHospitalTypeList="toHospitalTypeList" :id="form.id" @getHospitalContentList="getHospitalContentList" :sendOrderId="form.sendOrderId"/>
   </div>
 </template>
 
@@ -859,6 +859,7 @@ export default {
                         const { id, orderId } = params.row;
                         this.controlModal = true;
                         this.form.id = orderId;
+                        this.form.sendOrderId = id
                         this.getHospitalList();
                       } else if (name == "goodNews") {
                         //生成喜报

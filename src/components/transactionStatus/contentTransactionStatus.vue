@@ -75,6 +75,7 @@
                 v-model="confirmForm.lastDealHospitalId"
                 placeholder="请选择到院医院"
                 filterable
+                disabled
               >
                 <Option
                   v-for="item in hospitalInfo"
@@ -910,13 +911,15 @@ export default {
                       type: "primary",
                       size: "small",
                       // 审核通过不可编辑
-                      disabled: params.row.checkState == 2,
+                      disabled: params.row.checkState == 2 || !params.row.dealHospital,
                     },
                     style: {
                       marginRight: "5px",
                     },
                     on: {
                       click: () => {
+                        // this.$Message.warning('系统正在维护中，请稍后！')
+                        // return
                         const { id ,contentPlatFormOrderId,encryptPhone } = params.row;
                         this.getcontentPlateFormOrderToHospitalTypeList();
                         this.getdealDetail(id,contentPlatFormOrderId)
@@ -1162,7 +1165,7 @@ export default {
         this.confirmForm.toHospitalDate = null;
         this.confirmForm.toHospitalType = null;
         this.confirmForm.isAcompanying = false;
-        this.confirmForm.lastDealHospitalId = null;
+        // this.confirmForm.lastDealHospitalId = null;
         this.confirmForm.dealPerformanceType = null
         this.confirmForm.unDealReason = ''
       }
@@ -1186,7 +1189,7 @@ export default {
         this.confirmForm.toHospitalType = null;
         this.confirmForm.commissionRatio = "";
         this.confirmForm.isAcompanying = false;
-        this.confirmForm.lastDealHospitalId = null;
+        // this.confirmForm.lastDealHospitalId = null;
         this.confirmForm.dealPerformanceType = null;
       }
     },

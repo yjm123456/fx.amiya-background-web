@@ -886,11 +886,13 @@ export default {
     width: 50%;
     color: #566ca6;
     border-right: 1px solid #ccc;
+    cursor: pointer;
   }
   .edit_type {
     width: 50%;
     color: #566ca6;
     text-align: center;
+     cursor: pointer;
   }
   .item_name{
     font-weight: bold;

@@ -608,8 +608,9 @@ export default {
           {
             title: "主播IP账号",
             key: "liveAnchorName",
-            minWidth: 130,
-            align:'center'
+            minWidth: 180,
+            align:'center',
+            tooltip:true
           },
           {
             title: "主播微信号",

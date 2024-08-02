@@ -302,13 +302,14 @@
       :phone="phone"
       :isTabel="isTabel"
       @handleRefreshList="getHospitalContentList()"
+      :sendOrderId="form.sendOrderId"
     ></orderReceiving>
     <!-- 生成喜报 -->
     <goodsNews :goodsNewsModel.sync="goodsNewsModel" :detailObj="detailObj"></goodsNews>
     <!-- 留言板 -->
     <messageBoard @messageBoardChange = "messageBoardChange"  :messageBoardParams = "messageBoardParams"/>
     <!-- 确认 -->
-    <hospitalConfirm :controlModal.sync="controlModal" :typeList="typeList" :toHospitalTypeList="toHospitalTypeList" :id="form.id" @getHospitalContentList="getHospitalContentList"/>
+    <hospitalConfirm :controlModal.sync="controlModal" :typeList="typeList" :toHospitalTypeList="toHospitalTypeList" :id="form.id" @getHospitalContentList="getHospitalContentList" :sendOrderId="form.sendOrderId"/>
   </div>
 </template>
 
@@ -831,6 +832,7 @@ export default {
                       this.orderReceivingModel = true;
                       this.receivingObj = params.row;
                       this.isTabel = true
+                      this.form.sendOrderId = id
                       const data = {
                         orderId:orderId
                       }
@@ -875,6 +877,7 @@ export default {
                         const { id, orderId } = params.row;
                         this.controlModal = true;
                         this.form.id = orderId;
+                        this.form.sendOrderId = id
                         this.getHospitalList();
                       } else if (name == "goodNews") {
                         //生成喜报

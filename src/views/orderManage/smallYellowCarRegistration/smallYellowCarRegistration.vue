@@ -1138,8 +1138,9 @@ export default {
           {
             title: "主播IP",
             key: "liveAnchorName",
-            minWidth: 150,
+            minWidth: 200,
             align: "center",
+            tooltip:true
           },
           {
             title: "主播微信号",

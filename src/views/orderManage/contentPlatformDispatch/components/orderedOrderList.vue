@@ -231,6 +231,20 @@
                 >{{ item.name }}</Option
               >
           </Select>
+          <Select
+              v-model="query.isMainHospital"
+              style="width: 160px;margin-left: 10px"
+              placeholder="请选择是否是主派医院"
+              filterable
+              transfer
+            >
+              <Option
+                v-for="item in isMainHospitalList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+          </Select>
             <Select
               v-model="query.hospitalIds"
               style="width: 240px;margin-left: 10px"
@@ -431,6 +445,7 @@
                 placeholder="请选择到院医院"
                 filterable
                 @on-change="confirmForm.fansMeetingId = ''"
+                disabled
               >
                 <Option
                   v-for="item in hospitalInfo"
@@ -972,7 +987,9 @@ export default {
         // 下次邀约时间
         nextAppointmentDate:'',
         // 是否需要机构协助邀约
-        isNeedHospitalHelp:false
+        isNeedHospitalHelp:false,
+        // 派单编号
+        sendId:null,
       },
       confirmRuleValidate: {
         consumptionType: [
@@ -1035,6 +1052,7 @@ export default {
       employee: [{ name: "全部归属客服", id: -1 }],
       dispatchEmployee: [{ name: "全部派单客服", id: -1 }],
       query: {
+        isMainHospital:null,
         baseLiveAnchorId:-1,
         // 陪诊
         isAcompanying: -1,
@@ -1352,13 +1370,6 @@ export default {
             },
           },
           {
-            title: "成交金额",
-            key: "dealAmount",
-            minWidth: 140,
-            align: "center",
-            tooltip:true,
-          },
-          {
             title: "派单人",
             key: "senderName",
             minWidth: 140,
@@ -1461,171 +1472,6 @@ export default {
                 h("span", { isRepeatProfundityOrder: "open" }, "开"),
                 h("span", { isRepeatProfundityOrder: "close" }, "关")
               );
-            },
-          },
-          
-          {
-            title: "到院类型",
-            minWidth: 120,
-            key: "toHospitalTypeText",
-            align: "center",
-          },
-          {
-            title: "到院时间",
-            key: "toHospitalDate",
-            minWidth: 120,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                this.$moment(params.row.toHospitalDate).format("YYYY-MM-DD") ==
-                  "0001-01-01"
-                  ? ""
-                  : params.row.toHospitalDate
-                  ? this.$moment(params.row.toHospitalDate).format("YYYY-MM-DD")
-                  : null
-              );
-            },
-          },
-          {
-            title: "是否陪诊",
-            minWidth: 100,
-            key: "isAcompanying",
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "i-switch",
-                {
-                  props: {
-                    value: params.row.isAcompanying,
-                    size: "default",
-                    disabled:
-                      params.row.isAcompanying === true ||
-                      params.row.isAcompanying === false,
-                  },
-                },
-                h("span", { isAcompanying: "open" }, "开"),
-                h("span", { isAcompanying: "close" }, "关")
-              );
-            },
-          },
-          {
-            title: "新老客业绩",
-            minWidth: 120,
-            key: "isOldCustomer",
-            align: "center",
-          },
-          // {
-          //   title: "佣金比例(%)",
-          //   minWidth: 120,
-          //   key: "commissionRatio",
-          //   align:'center',
-          //   render: (h, params) => {
-          //     return h(
-          //           "div",
-          //           params.row.commissionRatio!=0  ? params.row.commissionRatio + '%' : '0%'
-          //         )
-          //       ;
-          //   }
-          // },
-          // {
-          //   title: "成交凭证",
-          //   key: "dealPictureUrl",
-          //   minWidth: 120,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return params.row.dealPictureUrl
-          //       ? h(
-          //           "viewer",
-          //           {
-          //             props: {
-          //               zoomable: false,
-          //             },
-          //             style: {
-          //               display: "flex",
-          //             },
-          //           },
-          //           [
-          //             h("img", {
-          //               style: {
-          //                 width: "50px",
-          //                 height: "50px",
-          //                 margin: "5px 15px 5px 5px",
-          //                 verticalAlign: "middle",
-          //               },
-          //               attrs: {
-          //                 src: params.row.dealPictureUrl,
-          //               },
-          //             }),
-          //           ]
-          //         )
-          //       : "";
-          //   },
-          // },
-          {
-            title: "未成交原因",
-            key: "unDealReason",
-            minWidth: 200,
-          },
-          // {
-          //   title: "未成交截图",
-          //   key: "unDealPictureUrl",
-          //   minWidth: 120,
-          //   align: "center",
-          //   render: (h, params) => {
-          //     return params.row.unDealPictureUrl
-          //       ? h(
-          //           "viewer",
-          //           {
-          //             props: {
-          //               zoomable: false,
-          //             },
-          //             style: {
-          //               display: "flex",
-          //             },
-          //           },
-          //           [
-          //             h("img", {
-          //               style: {
-          //                 width: "50px",
-          //                 height: "50px",
-          //                 margin: "5px 15px 5px 5px",
-          //                 verticalAlign: "middle",
-          //               },
-          //               attrs: {
-          //                 src: params.row.unDealPictureUrl,
-          //               },
-          //             }),
-          //           ]
-          //         )
-          //       : "";
-          //   },
-          // },
-          // {
-          //   title: "订单类型",
-          //   key: "orderTypeText",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-
-          // {
-          //   title: "定金金额",
-          //   key: "depositAmount",
-          //   minWidth: 120,
-          //   align: "center",
-          // },
-          {
-            title: "成交时间",
-            key: "dealDate",
-            minWidth: 180,
-            align: "center",
-            render: (h, params) => {
-              return params.row.dealDate
-                ? h(
-                    "div",
-                    this.$moment(params.row.dealDate).format("YYYY-MM-DD")
-                  )
-                : "";
             },
           },
           
@@ -1959,12 +1805,15 @@ export default {
                   },
                   on: {
                     click: () => {
-                      
+                      // this.$Message.warning('系统正在维护中，请稍后！')
+                      // return
                       // 确认
-                        const { id, orderId, consultatioType,encryptPhone } = params.row;
+                        const { id, orderId, consultatioType,encryptPhone,sendHospitalId } = params.row;
                         this.contentConfirmOrderModel = true;
                         this.confirmForm.id = orderId;
                         this.confirmForm.consultatioType = consultatioType;
+                        this.confirmForm.sendId = id
+                        this.confirmForm.lastDealHospitalId = sendHospitalId
                         const data = {
                           encryptPhone:encryptPhone
                         }
@@ -2001,6 +1850,8 @@ export default {
                           }
                         });
                       } else if (name == "reassignment") {
+                        // this.$Message.warning('系统正在维护中，请稍后！')
+                        // return
                         // 如果是次派 找到主派订单才可以改
                         if(params.row.isMainHospital == false){
                           this.$Message.warning('该数据为辅派订单，请通过订单号找到主派订单进行改派！')
@@ -2303,6 +2154,7 @@ export default {
       },
       //   粉丝见面会数据
       fansMeetingList:[],
+      isMainHospitalList:[{type:'true',name:'主派'},{type:'false',name:'次派'}]
     };
   },
   methods: {
@@ -2502,7 +2354,7 @@ export default {
         this.confirmForm.toHospitalDate = null;
         this.confirmForm.toHospitalType = null;
         this.confirmForm.isAcompanying = false;
-        this.confirmForm.lastDealHospitalId = null;
+        // this.confirmForm.lastDealHospitalId = null;
         this.confirmForm.dealPerformanceType = null
         this.confirmForm.unDealReason = ''
       }
@@ -2527,7 +2379,7 @@ export default {
         this.confirmForm.toHospitalType = null;
         this.confirmForm.commissionRatio = "";
         this.confirmForm.isAcompanying = false;
-        this.confirmForm.lastDealHospitalId = null;
+        // this.confirmForm.lastDealHospitalId = null;
         this.confirmForm.dealPerformanceType = null;
       }
     },
@@ -2568,7 +2420,8 @@ export default {
             fansMeetingProject,
             followUpContent,
             nextAppointmentDate,
-            isNeedHospitalHelp
+            isNeedHospitalHelp,
+            sendId
           } = this.confirmForm;
           const data = {
             id,
@@ -2600,6 +2453,7 @@ export default {
             followUpContent:isFansMeeting == true ? followUpContent : '',
             nextAppointmentDate : isFansMeeting == true ?   (nextAppointmentDate ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD") : null) : null,
             isNeedHospitalHelp:isFansMeeting == true ? isNeedHospitalHelp :false,
+            sendOrderId:sendId
           };
           if(isFinish == true){
             if(dealAmount == 0){
@@ -2779,7 +2633,8 @@ export default {
         isAcompanying,
         isOldCustomer,
         commissionRatio,
-        baseLiveAnchorId
+        baseLiveAnchorId,
+        isMainHospital
       } = this.query;
       const data = {
         startDate: startDate
@@ -2823,6 +2678,7 @@ export default {
         isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? '' : baseLiveAnchorId,
         commissionRatio,
+        isMainHospital
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -2855,7 +2711,8 @@ export default {
         isAcompanying,
         isOldCustomer,
         commissionRatio,
-        baseLiveAnchorId
+        baseLiveAnchorId,
+        isMainHospital
       } = this.query;
       const data = {
         startDate: startDate
@@ -2897,6 +2754,7 @@ export default {
         isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? '' : baseLiveAnchorId,
         commissionRatio,
+        isMainHospital
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {

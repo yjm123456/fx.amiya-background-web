@@ -392,6 +392,26 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="今日线索量"
+              prop="clues"
+              key="今日线索量"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入今日线索量',
+                },
+              ]"
+            >
+              <Input
+                v-model="form.clues"
+                placeholder="请输入今日线索量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -539,6 +559,12 @@ export default {
             align: "center",
           },
           {
+            title: "今日线索量",
+            key: "clues",
+            minWidth: 180,
+            align: "center",
+          },
+          {
             title: "操作",
             key: "",
             width: 100,
@@ -583,7 +609,8 @@ export default {
                               // tikTokPlusNum,
                               qianChuanNum,
                               shuiXinTuiNum,
-                              weiXinDou
+                              weiXinDou,
+                              livingClues
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
@@ -602,6 +629,7 @@ export default {
                             this.form.qianChuanNum = qianChuanNum;
                             this.form.shuiXinTuiNum = shuiXinTuiNum;
                             this.form.weiXinDou = weiXinDou;
+                            this.form.clues = livingClues;
                             this.form.livingTrackingEmployeeId = livingTrackingEmployeeId ? livingTrackingEmployeeId : null;
                             this.form.recordDate = this.$moment(
                               new Date(recordDate)
@@ -757,7 +785,9 @@ export default {
         // 今日去卡GMV
         eliminateCardGMV:null,
         // 今日退款GMV
-        refundGMV:null
+        refundGMV:null,
+        // 今日线索量
+        clues:null
       },
 
       ruleValidate: {
@@ -1005,7 +1035,8 @@ export default {
               tikTokPlusNum,
               qianChuanNum,
               shuiXinTuiNum,
-              weiXinDou
+              weiXinDou,
+              clues
             } = this.form;
             const data = {
               id,
@@ -1031,7 +1062,8 @@ export default {
               tikTokPlusNum,
               qianChuanNum,
               shuiXinTuiNum,
-              weiXinDou
+              weiXinDou,
+              clues
             };
             this.isflag = true
             api.livingUpdate(data).then((res) => {
@@ -1066,7 +1098,8 @@ export default {
               tikTokPlusNum,
               qianChuanNum,
               shuiXinTuiNum,
-              weiXinDou
+              weiXinDou,
+              clues
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -1089,7 +1122,8 @@ export default {
               tikTokPlusNum,
               qianChuanNum,
               shuiXinTuiNum,
-              weiXinDou
+              weiXinDou,
+              clues
             };
             this.isflag = true
             // 添加

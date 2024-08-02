@@ -43,8 +43,12 @@
       <!-- 业绩 -->
       <div v-if="selected == '图表'">
         <Card class="m_b ">
-          <items :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule"/>
+          <div class="name">线索</div>
           <item2 ref="item2" :params="params" :totalFlowRateAndDateSchedule="totalFlowRateAndDateSchedule" />
+        </Card>
+        <Card class="m_b ">
+          <div class="name">业绩</div>
+          <items :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule"/>
         </Card>
         <!-- 当月业绩趋势 -->
         <Card  class="m_b">
@@ -66,6 +70,51 @@
           <monthLine :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule" v-if="selected3 == '业绩'"/>
           <monthLine2 :totalAchievementAndDateSchedule="totalFlowRateAndDateSchedule"  v-if="selected3 == '线索'"/>
         </Card>
+
+
+
+        <!-- 漏斗图 -->
+        <Card  class="m_b">
+          <div class="h3">业绩转化漏斗</div>
+          <!-- <Tabs type="card" v-model="active"  style="width:100%" >
+              <TabPane label="整体" name="whole">
+                <div>
+                  <funnel
+                    :active="active"
+                    ref="whole"
+                    :params="params"
+                  ></funnel>
+                </div>
+              </TabPane>
+              <TabPane label="抖音" name="tiktok">
+                <div>
+                  <tiktok
+                    :active="active"
+                    ref="tiktok"
+                    :params="params"
+                  ></tiktok>
+                </div>
+              </TabPane>
+              <TabPane label="视频号" name="vedio">
+                <div>
+                  <vedio
+                    :active="active"
+                    ref="vedio"
+                    :params="params"
+                  ></vedio>
+                </div>
+              </TabPane>
+          </Tabs> -->
+          <funnel
+            :active="active"
+            ref="whole"
+            :params="params"
+          ></funnel>
+        </Card>
+
+
+
+
         <!-- 平台线索分析 -->
         <Card  class="m_b">
           <div class="h3">平台线索分析</div>
@@ -80,13 +129,14 @@
         <Card  class="m_b">
           <div class="h3">部门分析</div>
           <div class="pie_list">
-            <Card class="pie_item">
-              <div class="pie_title">总业绩分析</div>
-              <pieItem :pieItemData="totalBelongChannelPerformance" :pieItemData2="totalBelongChannelPerformance2" selected="业绩" title="部门业绩分析"/>
-            </Card>
+            
             <Card class="pie_item">
               <div class="pie_title">总线索占比</div>
               <pieItem :pieItemData="totalFlowRateByDepartment" :pieItemData3="totalFlowRateByDepartmentTotalFlowRateNumber" selected="线索" />
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">总业绩分析</div>
+              <pieItem :pieItemData="totalBelongChannelPerformance" :pieItemData2="totalBelongChannelPerformance2" selected="业绩" title="部门业绩分析"/>
             </Card>
           </div>
         </Card>
@@ -105,12 +155,12 @@
           <div class="h3">有效/潜在业绩分析</div>
           <div class="pie_list">
             <Card class="pie_item">
-              <div class="pie_title">总业绩分析</div>
-              <pieItem :pieItemData="totalIsEffictivePerformance" :pieItemData2="totalIsEffictivePerformance2" selected="业绩" />
-            </Card>
-            <Card class="pie_item">
               <div class="pie_title">总线索占比</div>
               <pieItem :pieItemData="totalFlowRateByIsEffictive" :pieItemData3="totalFlowRateByIsEffictiveTotalFlowRateNumber" selected="线索" title="有效潜在"/>
+            </Card>
+            <Card class="pie_item">
+              <div class="pie_title">总业绩分析</div>
+              <pieItem :pieItemData="totalIsEffictivePerformance" :pieItemData2="totalIsEffictivePerformance2" selected="业绩" />
             </Card>
           </div>
         </Card>
@@ -124,37 +174,43 @@
             </Card>
           </div>
         </Card>
-        <!-- 助理业绩对比和机构业绩对比图 -->
+        <!-- 助理 -->
         <Card  class="m_b ">
           <div class="customer_bar_content">
             <Card class="customer_bar">
-              <div class="bar_title">助理业绩对比</div>
-              <barItem :barItemData="customerObj"/>
+              <div class="h3">助理线索分析</div>
+              <div class="x_title">
+                <div>总分诊：{{CustomerFlowRateByEmployeeAndHospital.totalDistributeConsulationByEmployee}}</div>
+                <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByEmployee}}</div>
+                <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByEmployee}}</div>
+              </div>
+              <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.employeeFlowRate" title="助理"/>
             </Card>
             <Card class="customer_bar">
-              <div class="bar_title">机构业绩对比</div>
+              <div class="h3">助理业绩分析</div>
+              <barItem :barItemData="customerObj"/>
+            </Card>
+            
+          </div>
+        </Card>
+        <!-- 机构 -->
+        <Card  class="m_b ">
+          <div class="customer_bar_content">
+            
+            <Card class="customer_bar">
+              <div class="h3">机构线索分析</div>
+              <div class="x_title">
+                <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByHospital}}</div>
+                <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByHospital}}</div>
+                <div>总成交：{{CustomerFlowRateByEmployeeAndHospital.totalDealByHospital}}</div>
+              </div>
+              <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.hospitalFlowRate" title="机构"/>
+            </Card>
+            <Card class="customer_bar">
+              <div class="h3">机构业绩分析</div>
               <barItem :barItemData="hospitalObj"/>
             </Card>
           </div>
-        </Card>
-        <!-- 助理 -->
-        <Card  class="m_b">
-          <div class="h3">助理线索分析</div>
-          <div class="x_title">
-            <div>总分诊：{{CustomerFlowRateByEmployeeAndHospital.totalDistributeConsulationByEmployee}}</div>
-            <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByEmployee}}</div>
-            <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByEmployee}}</div>
-          </div>
-          <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.employeeFlowRate" title="助理"/>
-        </Card>
-        <Card  class="m_b">
-          <div class="h3">机构线索分析</div>
-          <div class="x_title">
-            <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByHospital}}</div>
-            <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByHospital}}</div>
-            <div>总成交：{{CustomerFlowRateByEmployeeAndHospital.totalDealByHospital}}</div>
-          </div>
-          <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.hospitalFlowRate" title="机构"/>
         </Card>
       </div>
      
@@ -207,6 +263,10 @@ import assistantTable from "./components/assistantTable.vue"
 import hospitalTable from "./components/hospitalTable.vue"
 import detail from "./components/detail.vue"
 import customerAndHospital from "./components/customerAndHospital.vue"
+import funnel from "./components/funnel.vue"
+import tiktok from "./components/tiktok.vue"
+import vedio from "./components/vedio.vue"
+
 export default {
   components:{
     items,
@@ -221,10 +281,14 @@ export default {
     assistantTable,
     hospitalTable,
     detail,
-    customerAndHospital
+    customerAndHospital,
+    funnel,
+    tiktok,
+    vedio
   },
   data() {
     return {
+      active:'whole',
       completeRate:0,
       params:{
         // 当年
@@ -255,10 +319,10 @@ export default {
         AssistantFlowTransformSendOrderRate:''
       },
       list: ["图表","转化"],
-      list2: ["业绩","线索"],
+      list2: ["线索","业绩"],
       selected:"图表",
       selected2:"业绩",
-      selected3:"业绩",
+      selected3:"线索",
       //详情 平台id
       platformId:'',
       // 业绩趋势
@@ -469,6 +533,17 @@ export default {
         this.getGroupFlowRateCompare();
         this.getFlowRateByContentPlatform();
         this.getCustomerFlowRateByEmployeeAndHospital()
+        this.$nextTick(()=>{
+          
+          if(this.active == 'whole'){
+            this.$refs.whole.getPerformanceOperationData()
+          }else if(this.active == 'tiktok'){
+            this.$refs.tiktok.getPerformanceOperationData()
+          }else if(this.active == 'vedio'){
+            this.$refs.vedio.getPerformanceOperationData()
+          }
+        })
+        
       }else if(this.selected == '转化'){
         this.$nextTick(()=>{
           this.$refs.trafficConversionTable.getCompanyTransformData();
@@ -987,5 +1062,11 @@ export default {
   position: absolute;
   right: 12%;
   top:20px;
+}
+.name{
+  font-size: 14px;
+  padding-left: 20px;
+  font-weight: bold;
+  color: #000;
 }
 </style>

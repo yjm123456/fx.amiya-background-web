@@ -361,6 +361,29 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem
+              label="线索量"
+              prop="cluesTarget"
+              :rules="[
+                {
+                  required: true,
+                  message: '线索量(最小是1)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 1,
+                },
+              ]"
+              key="线索量"
+            >
+              <Input
+                v-model="form.cluesTarget"
+                placeholder="请输入线索量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -612,6 +635,30 @@ export default {
             },
           },
           {
+            title: "线索量目标目标",
+            key: "cluesTarget",
+            minWidth: 240,
+            align: "center",
+          },
+          {
+            title: "月累计线索量",
+            key: "cumulativeClues",
+            minWidth: 250,
+            align: "center",
+          },
+          {
+            title: "线索量目标完成率",
+            key: "cluesTargetCompleteRate",
+            minWidth: 290,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.cluesTargetCompleteRate + "%"
+              );
+            },
+          },
+          {
             title: "创建日期",
             key: "createDate",
             minWidth: 170,
@@ -675,8 +722,9 @@ export default {
                               // 带货GMV目标
                               eliminateCardGMVTarget,
                               // 带货退款GMV目标目标
-                              refundGMVTarget
-                           
+                              refundGMVTarget,
+                              // 线索量
+                              cluesTarget
                             } = res.data.liveAnchorMonthlyTargetLivingInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.isEdit = true;
@@ -693,6 +741,7 @@ export default {
                             // this.form.gmvTarget = gmvTarget;
                             this.form.eliminateCardGMVTarget = eliminateCardGMVTarget;
                             this.form.refundGMVTarget = refundGMVTarget;
+                            this.form.cluesTarget = cluesTarget;
                             this.form.id = id;
                             this.controlModal = true;
                           }
@@ -831,7 +880,9 @@ export default {
         // 带货GMV目标
         eliminateCardGMVTarget:null,
         // 退卡GMV
-        refundGMVTarget:null
+        refundGMVTarget:null,
+        // 线索量
+        cluesTarget:null
       },
 
       ruleValidate: {
@@ -995,7 +1046,8 @@ export default {
               livingRefundCardTarget,
               gmvTarget,
               eliminateCardGMVTarget,
-              refundGMVTarget
+              refundGMVTarget,
+              cluesTarget
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -1009,7 +1061,8 @@ export default {
               livingRefundCardTarget,
               gmvTarget,
               eliminateCardGMVTarget,
-              refundGMVTarget
+              refundGMVTarget,
+              cluesTarget
             };
             this.isflag = true
             // 添加

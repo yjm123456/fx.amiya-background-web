@@ -1,16 +1,32 @@
 <template>
   <div>
     <Card>
-      <div class="content_title">{{selected == '图表' ? '啊美雅业绩运营分析'  : '啊美雅医美转化运营分析'}}</div>
+      <div class="content_title">
+        <div class="h2">{{selected == '图表' ? '啊美雅业绩运营分析'  : '啊美雅医美转化运营分析'}}</div>
+        <!-- tab切换 -->
+        <div class="tab_content2">
+            <div class="tab">
+              <div
+                class="tab_item"
+                v-for="(item, index) in list"
+                :key="index"
+                @click="selectTab(index, item)"
+                :class="{ active: selected == item}"
+              >
+                <span>{{ item }}</span>
+              </div>
+            </div>
+        </div>
+      </div>
       <!-- tab切换 -->
       <div class="tab_content">
         <div class="tab">
           <div
             class="tab_item"
-            v-for="(item, index) in list"
+            v-for="(item, index) in list4"
             :key="index"
-            @click="selectTab(index, item)"
-            :class="{ active: selected == item}"
+            @click="selectTab4(index, item)"
+            :class="{ active: selected4 == item}"
           >
             <span>{{ item }}</span>
           </div>
@@ -117,11 +133,15 @@
 
         <!-- 平台线索分析 -->
         <Card  class="m_b">
-          <div class="h3">平台线索分析</div>
+          <div class="h3">平台分析</div>
           <div class="pie_list">
-            <Card  style="width:100%;margin-top:10px">
+            <Card  class="pie_item">
               <div class="pie_title">总线索占比</div>
               <pieItem2 :pieItemData="totalFlowRateByContentPlatForm" :pieItemData3="totalFlowRateByContentPlatFormTotalFlowRateNumber" selected="线索"/>
+            </Card>
+            <Card  class="pie_item">
+              <div class="pie_title">总业绩占比</div>
+              <pieItem :pieItemData="totalFlowRateByContentPlatFormAchievement" :pieItemData2="totalFlowRateByContentPlatFormAchievement2" selected="平台总业绩" />
             </Card>
           </div>
         </Card>
@@ -144,7 +164,11 @@
         <Card  class="m_b">
           <div class="h3">新老客业绩分析</div>
           <div class="pie_list">
-            <Card style="width:100%;margin-top:10px">
+            <Card class="pie_item">
+              <div class="pie_title">总线索占比</div>
+              <pieItem :pieItemData="totalNewOrOldCustomerNumAchievement" :pieItemData3="totalNewOrOldCustomerNumAchievement2" selected="线索" title="有效潜在"/>
+            </Card>
+            <Card class="pie_item">
               <div class="pie_title">总业绩分析</div>
               <pieItem :pieItemData="totalPerformancePie" :pieItemData2="totalPerformancePie2" selected="业绩" />
             </Card>
@@ -168,9 +192,13 @@
         <Card  class="m_b">
           <div class="h3">当月/历史业绩分析</div>
           <div class="pie_list">
-            <Card style="width:100%;margin-top:10px">
+            <Card class="pie_item">
+              <div class="pie_title">总线索占比</div>
+              <pieItem :pieItemData="totalIsHistoryPerformanceNumAchievement" :pieItemData3="totalIsHistoryPerformanceNumAchievement2" selected="线索"  title="有效潜在"/>
+            </Card>
+            <Card class="pie_item">
               <div class="pie_title">总业绩分析</div>
-              <pieItem :pieItemData="totalIsHistoryPerformance" :pieItemData2="totalIsHistoryPerformance2" :selected="selected3" />
+              <pieItem :pieItemData="totalIsHistoryPerformance" :pieItemData2="totalIsHistoryPerformance2" selected="业绩" />
             </Card>
           </div>
         </Card>
@@ -320,9 +348,11 @@ export default {
       },
       list: ["图表","转化"],
       list2: ["线索","业绩"],
+      list4: ["全部","刀刀","吉娜"],
       selected:"图表",
       selected2:"业绩",
       selected3:"线索",
+      selected4:"全部",
       //详情 平台id
       platformId:'',
       // 业绩趋势
@@ -457,7 +487,16 @@ export default {
       NewOrOldCustomerCompare:{},
       totalFlowRateByContentPlatFormTotalFlowRateNumber : 0,
       totalFlowRateByDepartmentTotalFlowRateNumber : 0,
-      totalFlowRateByIsEffictiveTotalFlowRateNumber : 0
+      totalFlowRateByIsEffictiveTotalFlowRateNumber : 0,
+      // 平台业绩
+      totalFlowRateByContentPlatFormAchievement:[],
+      totalFlowRateByContentPlatFormAchievement2:{},
+      // 新老客 总业绩
+      totalNewOrOldCustomerNumAchievement:[],
+      totalNewOrOldCustomerNumAchievement2:0,
+      // 当月历史 总业绩
+      totalIsHistoryPerformanceNumAchievement:[],
+      totalIsHistoryPerformanceNumAchievement2:0
     };
   },
   methods: {
@@ -517,7 +556,15 @@ export default {
       }
       
     },
-
+    // 刀刀和吉娜切换
+    selectTab4(index, value){
+      this.selected4 = value
+      // this.list[index].isSelected = !this.list[index].isSelected;
+      this.getTotalFlowRateAndDateSchedule()
+      this.getTotalAchievementAndDateSchedule()
+      this.getGroupFlowRateCompare()
+      this.getNewOrOldCustomerCompare()
+    },
     getData() {
       const {startDate,endDate} = this.params
       if (!startDate || !endDate) {
@@ -558,7 +605,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
-        keyWord:this.selected3 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected3 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : '' 
+        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : '' 
       };
       api.getTotalAchievementAndDateSchedule(data).then((res) => {
         if (res.code == 0) {
@@ -572,10 +619,32 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : ''
       };
       api.getNewOrOldCustomerCompare(data).then((res) => {
         if (res.code == 0) {
-          const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer,totalBelongChannelPerformance,groupDaoDaoBelongChannelPerformance,groupJiNaBelongChannelPerformance,totalIsEffictivePerformance,groupDaoDaoIsEffictivePerformance,groupJiNaIsEffictivePerformance,totalIsHistoryPerformance,groupDaoDaoIsHistoryPerformance,groupJiNaIsHistoryPerformance} = res.data.data
+          const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer,totalBelongChannelPerformance,groupDaoDaoBelongChannelPerformance,groupJiNaBelongChannelPerformance,totalIsEffictivePerformance,groupDaoDaoIsEffictivePerformance,groupJiNaIsEffictivePerformance,totalIsHistoryPerformance,groupDaoDaoIsHistoryPerformance,groupJiNaIsHistoryPerformance,totalFlowRateByContentPlatForm,totalNewOrOldCustomerNum,totalIsHistoryPerformanceNum} = res.data.data
+          // 平台业绩
+          this.totalFlowRateByContentPlatFormAchievement =  totalFlowRateByContentPlatForm ? [
+            {value:totalFlowRateByContentPlatForm.douYinNumber,name:'抖音',rate:totalFlowRateByContentPlatForm.douYinRate},
+            {value:totalFlowRateByContentPlatForm.videoNumberNumber,name:'视频号',rate:totalFlowRateByContentPlatForm.videoNumberRate},
+            {value:totalFlowRateByContentPlatForm.xiaoHongShuNumber,name:'小红书',rate:totalFlowRateByContentPlatForm.xiaoHongShuRate},
+            {value:totalFlowRateByContentPlatForm.privateDataNumber,name:'私域',rate:totalFlowRateByContentPlatForm.privateDataRate},
+          ] : []
+          this.totalFlowRateByContentPlatFormAchievement2 = totalFlowRateByContentPlatForm
+          // 新老客业绩 总业绩
+          this.totalNewOrOldCustomerNumAchievement = [
+            {value:totalNewOrOldCustomerNum.totalPerformanceNewCustomerNumber,name:'新客',rate:totalNewOrOldCustomerNum.totalPerformanceNewCustomerRate},
+            {value:totalNewOrOldCustomerNum.totalPerformanceOldCustomerNumber,name:'老客',rate:totalNewOrOldCustomerNum.totalPerformanceOldCustomerRate},
+          ]
+          this.totalNewOrOldCustomerNumAchievement2 = totalNewOrOldCustomerNum.totalPerformanceNumber
+          // 当月/历史 总业绩
+          this.totalIsHistoryPerformanceNumAchievement = [
+            {value:totalIsHistoryPerformanceNum.thisMonthPerformanceNumber,name:'当月',rate:totalIsHistoryPerformanceNum.thisMonthPerformanceRate},
+            {value:totalIsHistoryPerformanceNum.historyPerformanceNumber,name:'历史',rate:totalIsHistoryPerformanceNum.historyPerformanceRate},
+          ]
+          this.totalIsHistoryPerformanceNumAchievement2=totalIsHistoryPerformanceNum.totalPerformanceNumber
+
           // 新老客业绩占比
           this.totalPerformancePie = [
             {value:totalNewOrOldCustomer.totalPerformanceNewCustomerNumber,name:'新客',rate:totalNewOrOldCustomer.totalPerformanceNewCustomerRate},
@@ -685,7 +754,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
-        keyWord:'' 
+        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : '' 
       };
       api.getTotalFlowRateAndDateSchedule(data).then((res) => {
         if (res.code == 0) {
@@ -699,6 +768,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : ''
       };
       api.getGroupFlowRateCompare(data).then((res) => {
         if (res.code == 0) {
@@ -915,21 +985,35 @@ export default {
     },
     
   },
+
   created(){
     this.getContentValidList()
     this.getHealthValueLists()
     this.getTimeSpanClick()
     this.getLiveAnchorBaseInfoValids()
-    this.getData()
+    // setTimeout(()=>{
+      this.getData()
+    // },1000)
   }
 };
 </script>
 
 <style scoped lang="less">
+
 .content_title{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+.h2{
   font-size: 22px;
   font-weight: bold;
   text-align: center;
+  width: 250px;
+}
+.tab_content2{
+  padding-top: 6px;
 }
 .tab_content {
   display: flex;

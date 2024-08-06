@@ -5,8 +5,14 @@
       ({{pieItemData2.totalPerformanceNumber ? pieItemData2.totalPerformanceNumber : '0'}}w){{pieItemData2.totalPerformanceNumber == 0  ? ' 0%' : ' 100%'}} 
       </span>
     </div>
+    <!-- 因字段不一样 -->
+    <div class="allNum" v-if="selected == '平台总业绩' " :style="{top:'95px' }">总业绩
+      <span style="font-size:14px;">
+      ({{pieItemData2.totalFlowRateNumber ? pieItemData2.totalFlowRateNumber : '0'}}w){{pieItemData2.totalFlowRateNumber == 0  ? ' 0%' : ' 100%'}} 
+      </span>
+    </div>
     <div class="allNum2" v-if="selected == '线索'" :style="{top:title == '有效潜在' ? '48px' : '95px'}">总线索
-      <span style="font-size:14px;">({{pieItemData3 ? pieItemData3 : '0'}}){{pieItemData3 == 0 ? ' 0%' : ' 100%'}} </span>
+      <span style="font-size:14px;">({{pieItemData3 ? pieItemData3 : '0'}}人){{pieItemData3 == 0 ? ' 0%' : ' 100%'}} </span>
     </div>
     <div ref="dom" :style="{ width: '100%', height: '180px' }"></div>
   </div>
@@ -61,7 +67,7 @@ export default {
         legend: {
           orient: "vertical",
           left: "left",
-          formatter: this.selected == '业绩' ?  function (name) {
+          formatter: this.selected == '业绩' ||  this.selected == '平台总业绩' ?  function (name) {
             var total = 0;
             // console.log(this.pieItemData2)
             var data = option.series[0].data;
@@ -86,7 +92,7 @@ export default {
             for (var i = 0, l = data.length; i < l; i++) {
                 if (data[i].name == name) {
                     // var percentage = data[i].value == 0 ? '0%' : ((data[i].value / total) * 100).toFixed(2) + '%';
-                    var percentage = data[i].value == 0 ? '0' : data[i].value 
+                    var percentage = data[i].value == 0 ? '0' : data[i].value  + '人'
                     var rate = data[i].rate == 0 ? '0' : data[i].rate 
                     return percentage == 0 ?  name + '(' + ' ' + percentage + ')'+ ' ' +  '0%' :  name + '(' + ' ' + percentage + ')'+ ' ' +  rate +'%';
                 }

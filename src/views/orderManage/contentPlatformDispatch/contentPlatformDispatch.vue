@@ -21,6 +21,13 @@
           ></orderedOrderList>
         </div>
       </TabPane>
+      <TabPane label="未辅派订单列表" name="listOfUnassignedOrders">
+        <div>
+          <listOfUnassignedOrders
+            :activeName="activeName"
+          ></listOfUnassignedOrders>
+        </div>
+      </TabPane>
     </Tabs>
 
     <!-- 客户详情 -->
@@ -37,9 +44,10 @@ import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
 
 import undeliveredOrderList from "./components/undeliveredOrderList";
 import orderedOrderList from "./components/orderedOrderList";
+import listOfUnassignedOrders from "./components/listOfUnassignedOrders";
 import customerInfo from "@/components/customerInfo/customerInfo";
 export default {
-  components: { undeliveredOrderList, orderedOrderList, customerInfo },
+  components: { undeliveredOrderList, orderedOrderList, customerInfo ,listOfUnassignedOrders},
   data() {
     return {
       activeName: "undeliveredOrderList",

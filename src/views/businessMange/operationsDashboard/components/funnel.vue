@@ -30,17 +30,35 @@
                             </div>
                         </div>
                     </div> -->
+                    <div class="left_customer">
+                        <div class="r_content6">
+                            <span class="r_t2">成交能效</span>
+                        </div>
+                        <div  class="r_content2" style="margin-top:-18px">
+                            <span class="r_t2" ><span class="num">{{performance.newCustomerData.flowClueToDealPrice}}</span>元</span>
+                        </div>
+                        <div  class="r_content3">
+                            <span class="r_t2" style="margin-top:14%"><span class="num">{{performance.newCustomerData.allocationConsulationToDealPrice}}</span>元</span>
+                        </div>
+                        <div  class="r_content4">
+                            <span class="r_t2" style="margin-top:12%"><span class="num">{{performance.newCustomerData.addWeChatToDealPrice}}</span>元</span>
+                        </div>
+                        <div  class="r_content5">
+                            <span class="r_t2" style="margin-top:12%"><span class="num">{{performance.newCustomerData.sendOrderToDealPrice}}</span>元</span>
+                        </div>
+                            <div  class="r_content5">
+                            <span class="r_t2" style="margin-top:12%"><span class="num">{{performance.newCustomerData.visitToDealPrice}}</span>元</span>
+                        </div>
+                    </div>
                     <div class="new_customer">
-                        
                         <div class="center_data">
-                            <div><span>{{performance.newCustomerData.newCustomerOperationDataDetails[0].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[0].value}}</span> 张</div>
-                            <div class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[1].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[1].value}}</span> 张</div>
-                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[2].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[2].value}}</span> 张</div>
-                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[3].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[3].value}}</span> 人</div>
-                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[4].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[4].value}}</span> 单</div>
+                            <div><span>{{performance.newCustomerData.newCustomerOperationDataDetails[0].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[0].value}}</span> 个</div>
+                            <!-- <div class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[1].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[1].value}}</span> 个</div> -->
+                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[1].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[1].value}}</span> 个</div>
+                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[2].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[2].value}}</span> 人</div>
+                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[3].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[3].value}}</span> 单</div>
+                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[4].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[4].value}}</span> 人</div>
                             <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[5].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[5].value}}</span> 人</div>
-                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[6].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[6].value}}</span> 人</div>
-
                         </div>
                         <div class="right_data">
                             <div class="r_content6">
@@ -48,30 +66,29 @@
                                 <!-- <span  class="r_t">累计健康值</span> -->
                                 <span class="r_t3">当月健康值</span>
                             </div>
-                            <div  class="r_content">
+                            <!-- <div  class="r_content">
                                 <span class="r_t2">退卡率：<span class="num">{{performance.newCustomerData.refundCardRate}}</span>%</span>
-                                <!-- <span  class="r_t">{{performance.newCustomerData.refundCardRateHealthValueSum}}%</span> -->
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.refundCardRateHealthValueThisMonth}}</span>%</span>
-                            </div>
+                            </div> -->
                             <div  class="r_content2">
-                                <span class="r_t2">加v率：<span class="num">{{performance.newCustomerData.addWeChatRate}}</span>%</span>
+                                <span class="r_t2" >加v率：<span class="num">{{performance.newCustomerData.addWeChatRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.addWeChatRateHealthValueSum}}%</span> -->
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.addWeChatRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content3">
-                                <span class="r_t2" style="margin-top:10%">派单率：<span class="num">{{performance.newCustomerData.sendOrderRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num">{{performance.newCustomerData.sendOrderRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.sendOrderRateHealthValueSum}}%</span> -->
-                                <span  class="r_t3" style="margin-top:10%"><span class="num">{{performance.newCustomerData.sendOrderRateHealthValueThisMonth}}</span>%</span>
+                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.newCustomerData.sendOrderRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:10%">上门率：<span class="num">{{performance.newCustomerData.toHospitalRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num">{{performance.newCustomerData.toHospitalRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.toHospitalRateHealthValueSum}}%</span> -->
-                                <span  class="r_t3" style="margin-top:10%"><span class="num">{{performance.newCustomerData.toHospitalRateHealthValueThisMonth}}</span>%</span>
+                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.newCustomerData.toHospitalRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content5">
-                                <span class="r_t2" style="margin-top:10%">成交率：<span class="num">{{performance.newCustomerData.dealRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">成交率：<span class="num">{{performance.newCustomerData.dealRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.dealRateHealthValueSum}}%</span> -->
-                                <span  class="r_t3" style="margin-top:10%"><span class="num">{{performance.newCustomerData.dealRateHealthValueThisMonth}}</span>%</span>
+                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.newCustomerData.dealRateHealthValueThisMonth}}</span>%</span>
                             </div>
                         </div>
                     </div>
@@ -225,7 +242,7 @@ export default {
     background-size: 100% 100%;
     position: relative;
     margin-top: 30px;
-    margin: 50px 0 0 -100px;
+    margin: 50px 0 0 -50px;
 }
 .old_customer{
      width:100%;
@@ -245,7 +262,12 @@ export default {
 .right_data{
     position: absolute;
     right: -6%;
-    top:-3%;
+    top:7%;
+}
+.left_customer{
+    position: absolute;
+    left: -3%;
+    top:12%;
 }
 .r_content,.r_content2,.r_content3,.r_content4,.r_content5,.r_content6{
     width: 200px;
@@ -297,7 +319,7 @@ position: absolute
     left: 44%;
 }
 .c_text{
-    margin-top: 23%;
+    margin-top: 33%;
     width: 120px;
 }
 .num{

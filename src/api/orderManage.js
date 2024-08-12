@@ -1597,3 +1597,11 @@ export const byOrderIdEncryptPhone = (params) => {
         params
     });
 };
+//根据订单号解密手机号
+export const getOnlyMainHospitalOrder = (params) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormOrder/getOnlyMainHospitalOrder`,
+        method: "get",
+        params
+    });
+};

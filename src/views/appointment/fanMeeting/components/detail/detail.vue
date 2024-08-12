@@ -7,8 +7,11 @@
       fullscreen
       @on-visible-change="handleModalVisibleChange"
     >
-      <div class="top" >
-        <div style="display:flex;align-items:center" v-if="employeeType == 'amiyaEmployee'">
+      <div class="top">
+        <div
+          style="display:flex;align-items:center"
+          v-if="employeeType == 'amiyaEmployee'"
+        >
           <div>
             <div style="margin-bottom:10px">
               <Input
@@ -68,7 +71,7 @@
                 style="width:180px;"
               >
                 <Option
-                  v-for="(item,index) in employeeListAll"
+                  v-for="(item, index) in employeeListAll"
                   :value="item.id"
                   :key="index"
                   >{{ item.name }}</Option
@@ -81,7 +84,7 @@
                 style="width:180px;margin-left:10px"
               >
                 <Option
-                  v-for="(item,index) in customerQuantityListAll"
+                  v-for="(item, index) in customerQuantityListAll"
                   :value="item.type"
                   :key="index"
                   >{{ item.name }}</Option
@@ -94,7 +97,7 @@
                 style="width:180px;margin-left:10px"
               >
                 <Option
-                  v-for="(item,index) in isCustomerLisAll"
+                  v-for="(item, index) in isCustomerLisAll"
                   :value="item.type"
                   :key="index"
                   >{{ item.name }}</Option
@@ -125,14 +128,42 @@
             >
           </div>
         </div>
-        <div v-else></div>
+        <div v-else>
+          <Input
+            v-model="query.keyWord"
+            style="width:180px;"
+            placeholder="请输入关键词"
+            @keyup.enter.native="getFansMeetingDetailsInfo()"
+          />
+          <Button
+            type="primary"
+            style="margin-left: .625rem"
+            @click="getFansMeetingDetailsInfo()"
+            >查询</Button
+          >
+          <Button
+            type="primary"
+            style="margin-left: .625rem"
+            @click="handleExportClick()"
+            v-if="employeeType == 'hospitalEmployee'"
+            >导出</Button
+          >
+        </div>
         <div>
-          <Button type="primary" @click="fansMeetingDetailModel = true" style="text-align:end">添加</Button
+          <Button
+            type="primary"
+            @click="fansMeetingDetailModel = true"
+            style="text-align:end"
+            >添加</Button
           >
         </div>
       </div>
       <div>
-        <Table border :columns="employeeType == 'amiyaEmployee' ? query.columns : query.columns2" :data="query.data" ></Table>
+        <Table
+          border
+          :columns="employeeType == 'amiyaEmployee' ? query.columns : query.columns2"
+          :data="query.data"
+        ></Table>
       </div>
       <div class="page_wrap">
         <Page
@@ -168,7 +199,9 @@
                   v-model="form.fansMeetingId"
                   placeholder="请选择粉丝见面会"
                   filterable
-                  :disabled="title == '添加' ||  employeeType == 'hospitalEmployee'"
+                  :disabled="
+                    title == '添加' || employeeType == 'hospitalEmployee'
+                  "
                 >
                   <Option
                     v-for="item in fansMeetingList"
@@ -212,13 +245,21 @@
                 <Input
                   v-model="form.customerName"
                   placeholder="请输入客户名称"
-                  :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"
+                  :disabled="
+                    title == '编辑' && employeeType == 'hospitalEmployee'
+                  "
                 ></Input>
               </FormItem>
             </Col>
             <Col span="8">
               <FormItem label="手机号" prop="phone">
-                <Input v-model="form.phone" placeholder="请输入手机号" :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"></Input>
+                <Input
+                  v-model="form.phone"
+                  placeholder="请输入手机号"
+                  :disabled="
+                    title == '编辑' && employeeType == 'hospitalEmployee'
+                  "
+                ></Input>
               </FormItem>
             </Col>
             <Col span="8">
@@ -243,7 +284,9 @@
                   v-model="form.isOldCustomer"
                   placeholder="请选择新老客"
                   filterable
-                  :disabled="title == '编辑' && employeeType == 'hospitalEmployee'"
+                  :disabled="
+                    title == '编辑' && employeeType == 'hospitalEmployee'
+                  "
                 >
                   <Option
                     v-for="item in isOldCustomerList"
@@ -254,13 +297,15 @@
                 </Select>
               </FormItem>
             </Col>
-            <Col span="8">
+            <Col span="8" v-if="employeeType == 'amiyaEmployee'">
               <FormItem label="啊美雅助理" prop="amiyaConsulationId">
                 <Select
                   v-model="form.amiyaConsulationId"
                   placeholder="请选择啊美雅助理"
                   filterable
-                  :disabled="isDirector == 'false' || employeeType == 'hospitalEmployee'"
+                  :disabled="
+                    isDirector == 'false' || employeeType == 'hospitalEmployee'
+                  "
                 >
                   <Option
                     v-for="item in employeeType == 'amiyaEmployee' ? employeeList : employeeListHospital"
@@ -372,52 +417,61 @@
               </FormItem>
             </Col>
             <Col span="8" v-if="title == '编辑'">
-            <FormItem
-              label="见面会铺垫项目"
-              key="见面会铺垫项目"
-              prop="fansMeetingProject"
+              <FormItem
+                label="见面会铺垫项目"
+                key="见面会铺垫项目"
+                prop="fansMeetingProject"
+              >
+                <Input
+                  v-model="form.fansMeetingProject"
+                  placeholder="请输入见面会铺垫项目"
+                ></Input>
+              </FormItem>
+            </Col>
+            <Col span="8" v-if="title == '编辑'">
+              <FormItem label="追踪内容" key="追踪内容">
+                <Input
+                  v-model="form.followUpContent"
+                  placeholder="请输入追踪内容"
+                  type="textarea"
+                  :rows="3"
+                ></Input>
+              </FormItem>
+            </Col>
+            <Col span="8" v-if="title == '编辑'">
+              <FormItem
+                label="下次邀约时间"
+                prop="nextAppointmentDate"
+                key="下次邀约时间"
+              >
+                <DatePicker
+                  type="date"
+                  placeholder="下次邀约时间"
+                  style="width: 100%"
+                  v-model="form.nextAppointmentDate"
+                ></DatePicker>
+              </FormItem>
+            </Col>
+            <Col span="8" v-if="title == '编辑'">
+              <FormItem
+                label="是否需要机构再次邀约"
+                prop="isNeedHospitalHelp"
+                key="是否需要机构再次邀约"
+              >
+                <i-switch v-model="form.isNeedHospitalHelp" />
+              </FormItem>
+            </Col>
+            <Col
+              span="8"
+              v-if="employeeType == 'hospitalEmployee' && title == '编辑'"
             >
-              <Input
-                v-model="form.fansMeetingProject"
-                placeholder="请输入见面会铺垫项目"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="title == '编辑'">
-            <FormItem
-              label="追踪内容"
-              key="追踪内容"
-            >
-              <Input
-                v-model="form.followUpContent"
-                placeholder="请输入追踪内容"
-                type="textarea"
-                :rows="3"
-              ></Input>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="title == '编辑'">
-            <FormItem
-              label="下次邀约时间"
-              prop="nextAppointmentDate"
-              key="下次邀约时间"
-            >
-              <DatePicker
-                type="date"
-                placeholder="下次邀约时间"
-                style="width: 100%"
-                v-model="form.nextAppointmentDate"
-              ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col span="8" v-if="title == '编辑'">
-            <FormItem label="是否需要机构再次邀约" prop="isNeedHospitalHelp" key="是否需要机构再次邀约">
-              <i-switch
-                v-model="form.isNeedHospitalHelp"
-                
-              />
-            </FormItem>
-          </Col>
+              <FormItem label="会员卡号" prop="hospitalMemberCardId">
+                <Input
+                  v-model="form.hospitalMemberCardId"
+                  placeholder="请输入会员卡号"
+                ></Input>
+              </FormItem>
+            </Col>
             <Col span="8">
               <FormItem label="顾客照片" prop="imageUrl" key="imageUrl">
                 <upload
@@ -427,18 +481,15 @@
               </FormItem>
             </Col>
             <Col span="8" v-if="title == '编辑'">
-            <FormItem
-              label="未成交原因"
-              key="未成交原因"
-            >
-              <Input
-                v-model="form.unDealReason"
-                placeholder="请输入未成交原因"
-                type="textarea"
-                :rows="3"
-              ></Input>
-            </FormItem>
-          </Col>
+              <FormItem label="未成交原因" key="未成交原因">
+                <Input
+                  v-model="form.unDealReason"
+                  placeholder="请输入未成交原因"
+                  type="textarea"
+                  :rows="3"
+                ></Input>
+              </FormItem>
+            </Col>
             <Col span="8">
               <FormItem label="备注" prop="remark">
                 <Input
@@ -462,7 +513,10 @@
         <Button @click="cancel" style="margin-right: 10px">取消</Button>
       </div>
       <!-- 查看图片 -->
-      <viewImg :viewPicModel.sync="viewPicModel" :customerPictureUrl="customerPictureUrl"/>
+      <viewImg
+        :viewPicModel.sync="viewPicModel"
+        :customerPictureUrl="customerPictureUrl"
+      />
     </Modal>
   </div>
 </template>
@@ -470,21 +524,24 @@
 import * as api from "@/api/fansMeetingDetails";
 import * as orderApi from "@/api/orderManage";
 import * as fansMeetingApi from "@/api/fansMeeting";
+import { download } from "@/utils/util";
+import { processEnv } from "@/http/baseUrl";
 
 import upload from "@/components/upload/upload";
-import viewImg from "../viewImg/viewImg.vue"
+import viewImg from "../viewImg/viewImg.vue";
 export default {
-  components: { upload ,viewImg},
+  components: { upload, viewImg },
   props: {
     detailModel: Boolean,
     detailParams: Object,
   },
   data() {
     return {
+      processEnv,
       // 查看图片model
-      viewPicModel:false,
+      viewPicModel: false,
       // 查看图片
-      customerPictureUrl:'',
+      customerPictureUrl: "",
       // 是否到院 筛选
       isHospitalList: [
         { type: -1, name: "全部到院状态" },
@@ -545,7 +602,7 @@ export default {
       employeeListAll: [{ id: -1, name: "全部助理" }],
       //   粉丝见面会数据
       fansMeetingList: [],
-      
+
       uploadObj: {
         // 是否开启多图
         multiple: false,
@@ -572,10 +629,7 @@ export default {
         // 新老客
         isOldCustomer: "",
         // 啊美雅助理
-        amiyaConsulationId:
-          sessionStorage.getItem("isDirector") == "false"
-            ? Number(sessionStorage.getItem("employeeId"))
-            : null,
+        amiyaConsulationId:sessionStorage.getItem("isDirector") == "false" ? Number(sessionStorage.getItem("employeeId")) : null,
         // 医院现场咨询
         hospitalConsulationName: "",
         // 客户所在城市
@@ -594,19 +648,29 @@ export default {
         customerPictureUrl: "",
         id: "",
         // 实际消费
-        cumulativeDealPrice:null,
+        cumulativeDealPrice: null,
         // 是否到院
-        isToHospital:'',
+        isToHospital: "",
         // 是否成交
-        isDeal:'',
+        isDeal: "",
         // 未成交原因
-        unDealReason:''
+        unDealReason: "",
+        // 判断是否是医院添加
+        amiyaConsulationName: "",
+        // 会员卡号
+        hospitalMemberCardId: "",
       },
       //添加model
       fansMeetingDetailModel: false,
       //   title
       title: "添加",
       ruleValidate: {
+        hospitalMemberCardId: [
+          {
+            required: true,
+            message: "请输入会员卡号",
+          },
+        ],
         cumulativeDealPrice: [
           {
             required: true,
@@ -683,7 +747,7 @@ export default {
         pageSize: 10,
         isToHospital: -1,
         isDeal: -1,
-        amiyaEmployeeId:  -1,
+        amiyaEmployeeId: -1,
         customerQuantity: -1,
         isOdCustomer: -1,
         startDealPrice: null,
@@ -697,7 +761,7 @@ export default {
             minWidth: 160,
             align: "center",
           },
-          
+
           {
             title: "客户昵称",
             key: "customerName",
@@ -719,7 +783,13 @@ export default {
               return h(
                 "div",
                 // params.row.appointmentDate ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") +" " + params.row.appointmentDetailsDate : ""
-                !params.row.appointmentDate ? params.row.appointmentDetailsDate : this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") + " " + params.row.appointmentDetailsDate
+                !params.row.appointmentDate
+                  ? params.row.appointmentDetailsDate
+                  : this.$moment(params.row.appointmentDate).format(
+                      "YYYY-MM-DD"
+                    ) +
+                      " " +
+                      params.row.appointmentDetailsDate
               );
             },
           },
@@ -732,7 +802,7 @@ export default {
               return h(
                 "div",
                 // params.row.appointmentDate ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") +" " + params.row.appointmentDetailsDate : ""
-                params.row.planConsumption + 'w'
+                params.row.planConsumption + "w"
               );
             },
           },
@@ -849,10 +919,7 @@ export default {
             minWidth: 160,
             align: "center",
             render: (h, params) => {
-              return h(
-                "div",
-                params.row.isDeal == true ? "已成交" : "未成交"
-              );
+              return h("div", params.row.isDeal == true ? "已成交" : "未成交");
             },
           },
           {
@@ -866,7 +933,7 @@ export default {
             key: "followUpContent",
             minWidth: 200,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
 
           {
@@ -877,7 +944,11 @@ export default {
             render: (h, params) => {
               return h(
                 "div",
-                params.row.nextAppointmentDate  ?  this.$moment(params.row.nextAppointmentDate).format("YYYY-MM-DD") : ''
+                params.row.nextAppointmentDate
+                  ? this.$moment(params.row.nextAppointmentDate).format(
+                      "YYYY-MM-DD"
+                    )
+                  : ""
               );
             },
           },
@@ -898,7 +969,7 @@ export default {
             key: "unDealReason",
             minWidth: 150,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
 
           {
@@ -922,12 +993,12 @@ export default {
                     on: {
                       click: () => {
                         const { customerPictureUrl } = params.row;
-                        if(!customerPictureUrl){
-                          this.$Message.warning('暂无图片！')
-                          return
+                        if (!customerPictureUrl) {
+                          this.$Message.warning("暂无图片！");
+                          return;
                         }
-                        this.customerPictureUrl = customerPictureUrl
-                        this.viewPicModel = true
+                        this.customerPictureUrl = customerPictureUrl;
+                        this.viewPicModel = true;
                       },
                     },
                   },
@@ -939,20 +1010,24 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled:sessionStorage.getItem('employeeType') == 'amiyaEmployee' && params.row.amiyaConsulationId != Number(sessionStorage.getItem('employeeId'))
+                      disabled:
+                        sessionStorage.getItem("employeeType") ==
+                          "amiyaEmployee" &&
+                        params.row.amiyaConsulationId !=
+                          Number(sessionStorage.getItem("employeeId")),
                     },
                     style: {
                       marginRight: "5px",
                     },
                     on: {
                       click: () => {
-                        const { id,amiyaConsulationName } = params.row;
-                        if(amiyaConsulationName == '医院账户'){
+                        const { id, amiyaConsulationName } = params.row;
+                        if (amiyaConsulationName == "医院账户") {
                           this.$Message.warning({
-                            content:"当前顾客是医院添加，如需修改请联系医院！",
+                            content: "当前顾客是医院添加，如需修改请联系医院！",
                             duration: 3,
                           });
-                          return
+                          return;
                         }
                         this.title = "编辑";
                         api.byIdFansMeetingDetails(id).then((res) => {
@@ -983,7 +1058,7 @@ export default {
                               followUpContent,
                               nextAppointmentDate,
                               isNeedHospitalHelp,
-                              unDealReason
+                              unDealReason,
                             } = res.data.fansMeetingDetails;
                             this.form.id = id;
                             this.form.fansMeetingId = fansMeetingId;
@@ -995,8 +1070,10 @@ export default {
                             this.form.appointmentDetailsDate = appointmentDetailsDate.split(
                               "-"
                             );
-                            this.form.isToHospital = isToHospital == true ? 'true' : 'false';
-                            this.form.isDeal = isDeal == true ? 'true' : 'false';
+                            this.form.isToHospital =
+                              isToHospital == true ? "true" : "false";
+                            this.form.isDeal =
+                              isDeal == true ? "true" : "false";
                             this.form.cumulativeDealPrice = cumulativeDealPrice;
                             this.form.customerName = customerName;
                             this.form.phone = phone;
@@ -1019,7 +1096,6 @@ export default {
                             this.uploadObj.uploadList = customerPictureUrl
                               ? [this.form.customerPictureUrl]
                               : [];
-                              
                           }
                         });
                       },
@@ -1064,9 +1140,9 @@ export default {
         ],
         columns2: [
           {
-            title: "粉丝见面会名称",
-            key: "fansMeetingName",
-            minWidth: 160,
+            title: "会员卡号",
+            key: "hospitalMemberCardId",
+            minWidth: 200,
             align: "center",
           },
           {
@@ -1100,6 +1176,55 @@ export default {
             },
           },
           {
+            title: "备注",
+            key: "remark",
+            minWidth: 450,
+            align: "center",
+          },
+          {
+            title: "新/老客",
+            key: "isOldCustomer	",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isOldCustomer == true ? "老客" : "新客"
+              );
+            },
+          },
+          {
+            title: "啊美雅助理",
+            key: "amiyaConsulationName",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "客户所在城市",
+            key: "city",
+            minWidth: 160,
+            align: "center",
+          },
+          {
+            title: "是否接车",
+            key: "isNeedDriver",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isOldCustomer == true ? "需要接车" : "不需要接车"
+              );
+            },
+          },
+          {
+            title: "粉丝见面会名称",
+            key: "fansMeetingName",
+            minWidth: 160,
+            align: "center",
+          },
+
+          {
             title: "预估消费",
             key: "planConsumption",
             minWidth: 200,
@@ -1108,7 +1233,7 @@ export default {
               return h(
                 "div",
                 // params.row.appointmentDate ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD") +" " + params.row.appointmentDetailsDate : ""
-                params.row.planConsumption + 'w'
+                params.row.planConsumption + "w"
               );
             },
           },
@@ -1135,12 +1260,7 @@ export default {
               ]);
             },
           },
-          {
-            title: "备注",
-            key: "remark",
-            minWidth: 200,
-            align: "center",
-          },
+
           {
             title: "客户质量",
             key: "customerQuantityText",
@@ -1149,53 +1269,19 @@ export default {
           },
 
           {
-            title: "新/老客",
-            key: "isOldCustomer	",
-            minWidth: 160,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.isOldCustomer == true ? "老客" : "新客"
-              );
-            },
-          },
-          {
-            title: "啊美雅助理",
-            key: "amiyaConsulationName",
-            minWidth: 160,
-            align: "center",
-          },
-          {
             title: "医院现场咨询",
             key: "hospitalConsulationName",
             minWidth: 160,
             align: "center",
           },
-          {
-            title: "客户所在城市",
-            key: "city",
-            minWidth: 160,
-            align: "center",
-          },
+
           {
             title: "行程信息",
             key: "travelInformation",
             minWidth: 160,
             align: "center",
           },
-          {
-            title: "是否接车",
-            key: "isNeedDriver",
-            minWidth: 160,
-            align: "center",
-            render: (h, params) => {
-              return h(
-                "div",
-                params.row.isOldCustomer == true ? "需要接车" : "不需要接车"
-              );
-            },
-          },
+
           {
             title: "酒店安排",
             key: "hotelPlan",
@@ -1213,7 +1299,7 @@ export default {
             key: "followUpContent",
             minWidth: 200,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
 
           {
@@ -1224,7 +1310,11 @@ export default {
             render: (h, params) => {
               return h(
                 "div",
-                params.row.nextAppointmentDate  ?  this.$moment(params.row.nextAppointmentDate).format("YYYY-MM-DD") : ''
+                params.row.nextAppointmentDate
+                  ? this.$moment(params.row.nextAppointmentDate).format(
+                      "YYYY-MM-DD"
+                    )
+                  : ""
               );
             },
           },
@@ -1240,8 +1330,7 @@ export default {
               );
             },
           },
-          
-          
+
           {
             title: "操作",
             key: "",
@@ -1262,14 +1351,15 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id ,amiyaConsulationName } = params.row;
-                        if(amiyaConsulationName != '医院账户'){
-                          this.$Message.warning({
-                            content:"当前顾客不是该医院添加，如需修改请联系啊美雅！",
-                            duration: 3,
-                          });
-                          return
-                        }
+                        const { id, amiyaConsulationName } = params.row;
+                        // if(amiyaConsulationName != '医院账户'){
+                        //   this.$Message.warning({
+                        //     content:"当前顾客不是该医院添加，如需修改请联系啊美雅！",
+                        //     duration: 3,
+                        //   });
+                        //   return
+                        // }
+                        this.form.amiyaConsulationName = amiyaConsulationName;
                         this.title = "编辑";
                         api.byIdFansMeetingDetails(id).then((res) => {
                           if (res.code === 0) {
@@ -1294,7 +1384,8 @@ export default {
                               customerPictureUrl,
                               isToHospital,
                               isDeal,
-                              cumulativeDealPrice
+                              cumulativeDealPrice,
+                              hospitalMemberCardId,
                             } = res.data.fansMeetingDetails;
                             this.form.id = id;
                             this.form.fansMeetingId = fansMeetingId;
@@ -1306,8 +1397,10 @@ export default {
                             this.form.appointmentDetailsDate = appointmentDetailsDate.split(
                               "-"
                             );
-                            this.form.isToHospital = isToHospital == true ? 'true' : 'false';
-                            this.form.isDeal = isDeal == true ? 'true' : 'false';
+                            this.form.isToHospital =
+                              isToHospital == true ? "true" : "false";
+                            this.form.isDeal =
+                              isDeal == true ? "true" : "false";
                             this.form.cumulativeDealPrice = cumulativeDealPrice;
                             this.form.customerName = customerName;
                             this.form.phone = phone;
@@ -1316,6 +1409,7 @@ export default {
                             this.form.amiyaConsulationId = amiyaConsulationId;
                             this.form.hospitalConsulationName = hospitalConsulationName;
                             this.form.city = city;
+                            this.form.hospitalMemberCardId = hospitalMemberCardId;
                             this.form.travelInformation = travelInformation;
                             this.form.isNeedDriver = String(isNeedDriver);
                             this.form.hotelPlan = hotelPlan;
@@ -1339,7 +1433,7 @@ export default {
         data: [],
         totalCount: 0,
       },
-      employeeListHospital:[{id:266,name:'医院'}]
+      employeeListHospital: [{ id: 266, name: "医院" }],
     };
   },
   methods: {
@@ -1376,24 +1470,39 @@ export default {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { pageNum, pageSize, keyWord ,isToHospital,isDeal,amiyaEmployeeId,customerQuantity,isOdCustomer,startDealPrice,endDealPrice,startDate,endDate} = this.query;
+      const {
+        pageNum,
+        pageSize,
+        keyWord,
+        isToHospital,
+        isDeal,
+        amiyaEmployeeId,
+        customerQuantity,
+        isOdCustomer,
+        startDealPrice,
+        endDealPrice,
+        startDate,
+        endDate,
+      } = this.query;
       const data = {
         pageNum,
         pageSize,
         fansMeetingId: this.detailParams.id,
         keyWord,
-        isToHospital:isToHospital == -1 ? null : isToHospital,
-        isDeal:isDeal == -1 ? null : isDeal,
-        amiyaEmployeeId:amiyaEmployeeId == -1 ? null : amiyaEmployeeId,
-        customerQuantity:customerQuantity == -1 ? null : customerQuantity,
-        isOdCustomer:isOdCustomer == -1 ? null : isOdCustomer,
+        isToHospital: isToHospital == -1 ? null : isToHospital,
+        isDeal: isDeal == -1 ? null : isDeal,
+        amiyaEmployeeId: amiyaEmployeeId == -1 ? null : amiyaEmployeeId,
+        customerQuantity: customerQuantity == -1 ? null : customerQuantity,
+        isOdCustomer: isOdCustomer == -1 ? null : isOdCustomer,
         startDealPrice,
         endDealPrice,
-        startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
-        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
       };
       // 啊美雅系统展示
-      if(sessionStorage.getItem('employeeType') == 'amiyaEmployee'){
+      if (sessionStorage.getItem("employeeType") == "amiyaEmployee") {
         api.getFansMeetingDetails(data).then((res) => {
           if (res.code === 0) {
             const { list, totalCount } = res.data.fansMeetingDetails;
@@ -1401,17 +1510,16 @@ export default {
             this.query.totalCount = totalCount;
           }
         });
-      }else{
+      } else {
         // 医院端展示列表
         api.getFansMeetingDetailsHospital(data).then((res) => {
           if (res.code === 0) {
             const { list, totalCount } = res.data.fansMeetingDetails;
             this.query.data = list;
-            this.query.totalCount= totalCount;
+            this.query.totalCount = totalCount;
           }
         });
       }
-      
     },
     handlePageSizeChange(pageSize) {
       this.query.pageSize = pageSize;
@@ -1419,24 +1527,38 @@ export default {
     },
     // 获取粉丝见面会详情列表分页
     handlePageChange(pageNum) {
-      const { pageSize, keyWord  ,isToHospital,isDeal,amiyaEmployeeId,customerQuantity,isOdCustomer,startDealPrice,endDealPrice,startDate,endDate} = this.query;
+      const {
+        pageSize,
+        keyWord,
+        isToHospital,
+        isDeal,
+        amiyaEmployeeId,
+        customerQuantity,
+        isOdCustomer,
+        startDealPrice,
+        endDealPrice,
+        startDate,
+        endDate,
+      } = this.query;
       const data = {
         pageNum,
         pageSize,
         fansMeetingId: this.detailParams.id,
         keyWord,
-        isToHospital:isToHospital == -1 ? null : isToHospital,
-        isDeal:isDeal == -1 ? null : isDeal,
-        amiyaEmployeeId:amiyaEmployeeId == -1 ? null : amiyaEmployeeId,
-        customerQuantity:customerQuantity == -1 ? null : customerQuantity,
-        isOdCustomer:isOdCustomer == -1 ? null : isOdCustomer,
+        isToHospital: isToHospital == -1 ? null : isToHospital,
+        isDeal: isDeal == -1 ? null : isDeal,
+        amiyaEmployeeId: amiyaEmployeeId == -1 ? null : amiyaEmployeeId,
+        customerQuantity: customerQuantity == -1 ? null : customerQuantity,
+        isOdCustomer: isOdCustomer == -1 ? null : isOdCustomer,
         startDealPrice,
         endDealPrice,
-        startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
-        endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        startDate: startDate
+          ? this.$moment(startDate).format("YYYY-MM-DD")
+          : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
       };
       // 啊美雅端展示列表数据
-      if(sessionStorage.getItem('employeeType') == 'amiyaEmployee'){
+      if (sessionStorage.getItem("employeeType") == "amiyaEmployee") {
         api.getFansMeetingDetails(data).then((res) => {
           if (res.code === 0) {
             const { list, totalCount } = res.data.fansMeetingDetails;
@@ -1444,7 +1566,7 @@ export default {
             this.query.totalCount = totalCount;
           }
         });
-      }else{
+      } else {
         // 医院端展示列表
         api.getFansMeetingDetailsHospital(data).then((res) => {
           if (res.code === 0) {
@@ -1454,7 +1576,6 @@ export default {
           }
         });
       }
-      
     },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
@@ -1486,7 +1607,8 @@ export default {
               followUpContent,
               nextAppointmentDate,
               isNeedHospitalHelp,
-              unDealReason
+              unDealReason,
+              hospitalMemberCardId,
             } = this.form;
             const data = {
               fansMeetingId,
@@ -1512,14 +1634,17 @@ export default {
               remark,
               customerPictureUrl,
               id,
-              isDeal:isDeal == 'true' ? true : false,
-              isToHospital:isToHospital == 'true' ? true : false,
+              isDeal: isDeal == "true" ? true : false,
+              isToHospital: isToHospital == "true" ? true : false,
               cumulativeDealPrice,
               fansMeetingProject,
               followUpContent,
-              nextAppointmentDate:nextAppointmentDate ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD") : null,
+              nextAppointmentDate: nextAppointmentDate
+                ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD")
+                : null,
               isNeedHospitalHelp,
-              unDealReason
+              unDealReason,
+              hospitalMemberCardId,
             };
             api.editFansMeetingDetails(data).then((res) => {
               if (res.code == 0) {
@@ -1547,7 +1672,7 @@ export default {
               remark,
               customerPictureUrl,
               appointmentDetailsDate,
-              unDealReason
+              unDealReason,
             } = this.form;
             const data = {
               fansMeetingId,
@@ -1572,7 +1697,7 @@ export default {
               planConsumption,
               remark,
               customerPictureUrl,
-              unDealReason
+              unDealReason,
             };
             api.addFansMeetingDetails(data).then((res) => {
               if (res.code == 0) {
@@ -1583,6 +1708,24 @@ export default {
             });
           }
         }
+      });
+    },
+    // 导出
+    handleExportClick() {
+      const { keyWord, pageNum, pageSize } = this.query;
+      const data = {
+        keyWord,
+        pageNum,
+        pageSize,
+        fansMeetingId: this.detailParams.id,
+      };
+      if (this.query.data.length == 0) {
+        this.$Message.error("没有数据时不支持导出");
+        return;
+      }
+      api.ExportByHospital(data).then((res) => {
+        let name = "粉丝见面会";
+        download(res, name);
       });
     },
     // 取消
@@ -1614,19 +1757,21 @@ export default {
         this.detailModels = detailModel;
         if (detailModel == true) {
           this.getFansMeetingDetailsInfo();
-          if(sessionStorage.getItem('employeeType') == 'amiyaEmployee'){
+          if (sessionStorage.getItem("employeeType") == "amiyaEmployee") {
             this.getCustomerServiceLists();
           }
           this.getValidKeyAndValues();
-          
         }
         if (this.title == "添加") {
           this.form.fansMeetingId = this.detailParams.id;
         }
-        if(sessionStorage.getItem("employeeType") == 'hospitalEmployee'){
-          this.form.amiyaConsulationId = 266
+        if (sessionStorage.getItem("employeeType") == "hospitalEmployee") {
+          // 线上266 测试193
+          this.form.amiyaConsulationId =
+            processEnv.VUE_APP_BASE_URL == "https://app.ameiyes.com"
+              ? 266
+              : 193;
         }
-        
       },
       immediate: true,
     },

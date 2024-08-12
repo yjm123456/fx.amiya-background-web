@@ -173,7 +173,7 @@
               >
             </Select>
 
-              <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
+            <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
             <Select
               v-model="query.employeeId"
               style="width: 160px;margin-left: 10px"
@@ -230,8 +230,8 @@
                 :key="item.id"
                 >{{ item.name }}</Option
               >
-          </Select>
-          <Select
+            </Select>
+            <Select
               v-model="query.isMainHospital"
               style="width: 160px;margin-left: 10px"
               placeholder="请选择是否是主派医院"
@@ -244,7 +244,7 @@
                 :key="item.type"
                 >{{ item.name }}</Option
               >
-          </Select>
+            </Select>
             <Select
               v-model="query.hospitalIds"
               style="width: 240px;margin-left: 10px"
@@ -314,7 +314,7 @@
             }}</Option>
           </Select>
         </FormItem>
-        
+
         <FormItem
           label="所有医院"
           :required="openAllHospital ? true : false"
@@ -322,14 +322,13 @@
           v-if="openAllHospital"
           key="所有医院"
         >
-        
           <Select
             v-model="form.allHospitalId"
             placeholder="请选择医院"
             filterable
-            :disabled="form.isMainHospital == true ? form.hasDealInfo  == true : form.hasDealInfo == false"
+            :disabled=" form.isMainHospital == true ? form.hasDealInfo == true : form.hasDealInfo == false"
           >
-          <!-- hasDealInfo为true的话有成交信息主派医院不能修改 -->
+            <!-- hasDealInfo为true的话有成交信息主派医院不能修改 -->
             <Option
               v-for="item in hospitalInfo"
               :value="item.id"
@@ -339,12 +338,12 @@
           </Select>
         </FormItem>
         <FormItem label="是否为主派医院" key="是否为主派医院">
-          <i-switch v-model="form.isMainHospital" disabled/>
+          <i-switch v-model="form.isMainHospital" disabled />
         </FormItem>
         <FormItem
           label="次派医院"
           prop="otherHospitalId"
-          v-if="form.isMainHospital == true "
+          v-if="form.isMainHospital == true"
           key="次派医院"
         >
           <Select
@@ -361,7 +360,7 @@
             >
           </Select>
         </FormItem>
-        
+
         <!-- <FormItem label="未确定时间" prop="isUncertainDate" key="未确定时间">
           <i-switch v-model="form.isUncertainDate" />
         </FormItem>
@@ -413,7 +412,7 @@
         label-position="left"
         :label-width="130"
       >
-       <div style="font-weight: bold;margin-top: 10px;margin-bottom: 15px;color: #000;"  >到院信息</div>
+        <div style="font-weight: bold;margin-top: 10px;margin-bottom: 15px;color: #000;">到院信息</div>
         <Row :gutter="30">
           <Col span="8">
             <FormItem label="面诊类型" prop="consultatioType" key="面诊类型">
@@ -434,12 +433,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="到院医院"
-              prop="lastDealHospitalId"
-              key="到院医院"
-              
-            >
+            <FormItem label="到院医院" prop="lastDealHospitalId" key="到院医院">
               <Select
                 v-model="confirmForm.lastDealHospitalId"
                 placeholder="请选择到院医院"
@@ -457,11 +451,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="到院类型"
-              prop="toHospitalType"
-              key="到院类型"
-            >
+            <FormItem label="到院类型" prop="toHospitalType" key="到院类型">
               <Select
                 v-model="confirmForm.toHospitalType"
                 placeholder="请选择到院类型"
@@ -479,11 +469,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="到院时间"
-              prop="toHospitalDate"
-              key="到院时间"
-            >
+            <FormItem label="到院时间" prop="toHospitalDate" key="到院时间">
               <DatePicker
                 type="date"
                 placeholder="到院时间"
@@ -495,18 +481,11 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="是否陪诊"
-              prop="isAcompanying"
-              key="是否陪诊"
-              
-            >
+            <FormItem label="是否陪诊" prop="isAcompanying" key="是否陪诊">
               <i-switch v-model="confirmForm.isAcompanying" />
             </FormItem>
           </Col>
-          
-          
-          
+
           <!-- <Col span="8">
             <FormItem
               label="三方单号"
@@ -519,8 +498,7 @@
               ></Input>
             </FormItem>
           </Col> -->
-          
-          
+
           <Col span="8">
             <FormItem label="邀约凭证" key="邀约凭证">
               <upload
@@ -530,16 +508,19 @@
             </FormItem>
           </Col>
         </Row>
-        <Divider style="margin-top:-6px" v-if="confirmForm.isToHospital === true"/>
-        <div style="font-weight: bold;margin-top: -10px;margin-bottom: 15px;color: #000;"  v-if="confirmForm.isToHospital === true">粉丝见面会信息</div>
+        <Divider
+          style="margin-top:-6px"
+          v-if="confirmForm.isToHospital === true"
+        />
+        <div
+          style="font-weight: bold;margin-top: -10px;margin-bottom: 15px;color: #000;"
+          v-if="confirmForm.isToHospital === true"
+        >
+          粉丝见面会信息
+        </div>
         <Row :gutter="30">
           <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="粉丝见面会"
-              prop="fansMeetingId"
-              key="粉丝见面会"
-              
-            >
+            <FormItem label="粉丝见面会" prop="fansMeetingId" key="粉丝见面会">
               <Select
                 v-model="confirmForm.fansMeetingId"
                 placeholder="请选择粉丝见面会"
@@ -557,18 +538,16 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem label="是否参加过见面会" prop="isFansMeeting" key="是否参加过见面会">
-              <i-switch
-                v-model="confirmForm.isFansMeeting"
-                disabled
-              />
+            <FormItem
+              label="是否参加过见面会"
+              prop="isFansMeeting"
+              key="是否参加过见面会"
+            >
+              <i-switch v-model="confirmForm.isFansMeeting" disabled />
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFansMeeting === true">
-            <FormItem
-              label="见面会铺垫项目"
-              key="见面会铺垫项目"
-            >
+            <FormItem label="见面会铺垫项目" key="见面会铺垫项目">
               <Input
                 v-model="confirmForm.fansMeetingProject"
                 placeholder="请输入见面会铺垫项目"
@@ -576,10 +555,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFansMeeting === true">
-            <FormItem
-              label="追踪内容"
-              key="追踪内容"
-            >
+            <FormItem label="追踪内容" key="追踪内容">
               <Input
                 v-model="confirmForm.followUpContent"
                 placeholder="请输入追踪内容"
@@ -603,16 +579,21 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFansMeeting === true">
-            <FormItem label="是否需要机构再次邀约" prop="isNeedHospitalHelp" key="是否需要机构再次邀约">
-              <i-switch
-                v-model="confirmForm.isNeedHospitalHelp"
-                
-              />
+            <FormItem
+              label="是否需要机构再次邀约"
+              prop="isNeedHospitalHelp"
+              key="是否需要机构再次邀约"
+            >
+              <i-switch v-model="confirmForm.isNeedHospitalHelp" />
             </FormItem>
           </Col>
         </Row>
-        <Divider style="margin-top:-6px"/>
-        <div style="font-weight: bold;margin-top: -10px;margin-bottom: 15px;color: #000;"  >成交信息</div>
+        <Divider style="margin-top:-6px" />
+        <div
+          style="font-weight: bold;margin-top: -10px;margin-bottom: 15px;color: #000;"
+        >
+          成交信息
+        </div>
         <Row :gutter="30">
           <Col span="8">
             <FormItem label="是否成交" prop="isFinish" key="是否成交">
@@ -625,7 +606,6 @@
           <Col span="8" v-if="confirmForm.isFinish === true">
             <FormItem
               label="成交金额"
-              
               prop="dealAmount"
               key="成交金额"
               :rules="[
@@ -647,12 +627,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFinish === true">
-            <FormItem
-              label="成交时间"
-              prop="DealDate"
-              
-              key="成交时间"
-            >
+            <FormItem label="成交时间" prop="DealDate" key="成交时间">
               <DatePicker
                 type="date"
                 placeholder="成交时间"
@@ -662,12 +637,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFinish === true">
-            <FormItem
-              label="消费类型"
-              prop="consumptionType"
-              key="消费类型"
-              
-            >
+            <FormItem label="消费类型" prop="consumptionType" key="消费类型">
               <Select
                 v-model="confirmForm.consumptionType"
                 placeholder="请选择消费类型"
@@ -685,11 +655,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFinish === true">
-            <FormItem
-              label="后期项目铺垫"
-              
-              key="后期项目铺垫"
-            >
+            <FormItem label="后期项目铺垫" key="后期项目铺垫">
               <Input
                 v-model="confirmForm.lastProjectStage"
                 placeholder="请输入后期项目铺垫"
@@ -699,11 +665,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFinish === true">
-            <FormItem
-              label="成交凭证"
-              key="成交凭证"
-              
-            >
+            <FormItem label="成交凭证" key="成交凭证">
               <upload
                 :uploadObj="uploadObj"
                 @uploadChange="handleUploadChange"
@@ -711,12 +673,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFinish !== true">
-            <FormItem
-              label="未成交原因"
-              prop="unDealReason"
-              
-              key="未成交原因"
-            >
+            <FormItem label="未成交原因" prop="unDealReason" key="未成交原因">
               <Input
                 v-model="confirmForm.unDealReason"
                 placeholder="请输入未成交原因"
@@ -726,24 +683,19 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFinish !== true">
-            <FormItem
-              label="未成交截图"
-              key="未成交截图"
-              
-            >
+            <FormItem label="未成交截图" key="未成交截图">
               <upload
                 :uploadObj="noDealuploadObj"
                 @uploadChange="noDealhandleUploadChange"
               />
             </FormItem>
           </Col>
-          
+
           <Col span="8" v-if="confirmForm.isToHospital === true">
             <FormItem
               label="业绩类型"
               prop="dealPerformanceType"
               key="业绩类型"
-              
             >
               <Select
                 v-model="confirmForm.dealPerformanceType"
@@ -761,9 +713,16 @@
             </FormItem>
           </Col>
         </Row>
-        <Divider style="margin-top:-6px"/>
+        <Divider style="margin-top:-6px" />
         <!-- 成交明细 -->
-        <detailTable ref="detailTable" @handle="handle"  :id="confirmForm.id" v-if="confirmForm.isFinish === true" :confirmParams="confirmParams" :confirmForm="confirmForm"/>
+        <detailTable
+          ref="detailTable"
+          @handle="handle"
+          :id="confirmForm.id"
+          v-if="confirmForm.isFinish === true"
+          :confirmParams="confirmParams"
+          :confirmForm="confirmForm"
+        />
         <Spin fix v-if="isLoading == true">
           <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
           <div>加载中...</div>
@@ -810,7 +769,10 @@
       :messageBoardParams="messageBoardParams"
     />
     <!-- 编辑录单 -->
-    <editRecording :editRecordingModel.sync="editRecordingModel" :recordingParams="recordingParams" />
+    <editRecording
+      :editRecordingModel.sync="editRecordingModel"
+      :recordingParams="recordingParams"
+    />
   </div>
 </template>
 
@@ -823,22 +785,20 @@ import * as fansMeetingDetailsApi from "@/api/fansMeetingDetails";
 import * as shoppingCartRegistrationApi from "@/api/shoppingCartRegistration";
 import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
 
-
-
 import messageBoard from "@/components/contentMessageBoard/contentMessageBoard.vue";
 import transactionStatus from "@/components/transactionStatus/transactionStatus";
 import upload from "@/components/upload/upload";
 import trackReturnVisitVue from "../../../../components/trackReturnVisit/trackReturnVisit.vue";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue";
 import detail from "@/components/contentDetail/detail.vue";
-import detailTable from '@/components/dealDetailTable/dealDetailTable.vue';
-import editRecording from "@/components/recording/editRecording"
+import detailTable from "@/components/dealDetailTable/dealDetailTable.vue";
+import editRecording from "@/components/recording/editRecording";
 
 export default {
   props: {
     activeName: String,
     consultationNameList: Array,
-    liveAnchorBaseInfos:Array,
+    liveAnchorBaseInfos: Array,
   },
   components: {
     messageBoard,
@@ -847,52 +807,52 @@ export default {
     viewCustomerPhotos,
     detail,
     detailTable,
-    editRecording
+    editRecording,
   },
   data() {
     return {
       // 修改订单信息
-      editRecordingModel:false,
+      editRecordingModel: false,
       //编辑录单参数
-      recordingParams:{
+      recordingParams: {
         // 客服
-        employeeList:[],
+        employeeList: [],
         // 平台
-        contentPalteForms:[],
+        contentPalteForms: [],
         // 科室
-        AmiyaHospitalDepartmentListDepartment:[],
+        AmiyaHospitalDepartmentListDepartment: [],
         // 内容平台订单类型
-        statusCodeArr2:[],
+        statusCodeArr2: [],
         // 预约门店
-        hospitalNameList:[],
+        hospitalNameList: [],
         // 内容平台订单来源
-        orderSourcesList:[],
+        orderSourcesList: [],
         // 面诊类型列表
-        consultationTypeList:[],
-        // 
-        belongMonthList:[],
+        consultationTypeList: [],
+        //
+        belongMonthList: [],
         // 客户类型
-        shoppingCartRegistrationCustomerTypeList:[],
+        shoppingCartRegistrationCustomerTypeList: [],
         // 客户来源
-        sourceList:[],
+        sourceList: [],
 
         // 录单编辑
         // 获取订单信息
-        info:{},
+        info: {},
         // 弹窗标题
-        title:'录单编辑',
+        title: "录单编辑",
         // 主播微信号
-        weChatList:[],
+        weChatList: [],
         // 获客方式
-        customerTypeList:[],
-        customerTypeListAll:[{id:-1,name:'全部获客方式'}],
+        customerTypeList: [],
+        customerTypeListAll: [{ id: -1, name: "全部获客方式" }],
       },
       // 是否为客服
-      isCustomerService:sessionStorage.getItem('isCustomerService'),
+      isCustomerService: sessionStorage.getItem("isCustomerService"),
       // 是否为管理员
-      isDirector:sessionStorage.getItem('isDirector'),
-      editLoading:false,
-      isLoading:false,
+      isDirector: sessionStorage.getItem("isDirector"),
+      editLoading: false,
+      isLoading: false,
       detailList: [],
       detailModel: false,
       consultationEmpId: -1,
@@ -975,21 +935,21 @@ export default {
         // 消费类型
         consumptionType: null,
         // 明细
-        addContentPlatFormOrderDealDetailsVoList:[],
+        addContentPlatFormOrderDealDetailsVoList: [],
         // 粉丝见面会id
-        fansMeetingId:'',
+        fansMeetingId: "",
         // 是否参加粉丝会
-        isFansMeeting:false,
+        isFansMeeting: false,
         // 见面会铺垫项目
-        fansMeetingProject:'',
+        fansMeetingProject: "",
         // 追踪内容
-        followUpContent:'',
+        followUpContent: "",
         // 下次邀约时间
-        nextAppointmentDate:'',
+        nextAppointmentDate: "",
         // 是否需要机构协助邀约
-        isNeedHospitalHelp:false,
+        isNeedHospitalHelp: false,
         // 派单编号
-        sendId:null,
+        sendId: null,
       },
       confirmRuleValidate: {
         consumptionType: [
@@ -1052,8 +1012,8 @@ export default {
       employee: [{ name: "全部归属客服", id: -1 }],
       dispatchEmployee: [{ name: "全部派单客服", id: -1 }],
       query: {
-        isMainHospital:null,
-        baseLiveAnchorId:-1,
+        isMainHospital: null,
+        baseLiveAnchorId: -1,
         // 陪诊
         isAcompanying: -1,
         // 新老客业绩
@@ -1144,7 +1104,7 @@ export default {
         ],
         orderAppTypes: [{ orderType: -1, appTypeText: "全部平台" }],
         appType: -1,
-        employeeId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
+        employeeId: sessionStorage.getItem("isDirector") == "false" && sessionStorage.getItem("isCustomerService") == "true"  ? Number(sessionStorage.getItem("employeeId")) : -1,
         pageNum: 1,
         pageSize: 10,
         totalCount: 0,
@@ -1154,14 +1114,14 @@ export default {
             key: "id",
             minWidth: 100,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "订单编号",
             key: "orderId",
             minWidth: 170,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
 
           // {
@@ -1185,7 +1145,7 @@ export default {
             key: "customerName",
             minWidth: 150,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "电话",
@@ -1235,7 +1195,7 @@ export default {
             title: "是否为主派医院",
             key: "isMainHospital",
             minWidth: 140,
-            align:'center',
+            align: "center",
             render: (h, params) => {
               if (params.row.isMainHospital == true) {
                 return h("Icon", {
@@ -1265,7 +1225,7 @@ export default {
             key: "sendHospital",
             minWidth: 200,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "是否到院",
@@ -1294,7 +1254,7 @@ export default {
             key: "orderStatusText",
             minWidth: 140,
             align: "center",
-            tooltip:true,
+            tooltip: true,
             render: (h, params) => {
               if (params.row.orderStatusText == "已成交") {
                 return h(
@@ -1374,7 +1334,7 @@ export default {
             key: "senderName",
             minWidth: 140,
             align: "center",
-            tooltip:true
+            tooltip: true,
           },
           {
             title: "项目",
@@ -1442,10 +1402,11 @@ export default {
           {
             title: "主播IP账号",
             key: "liveAnchorName",
-            minWidth: 160,
+            minWidth: 190,
             align: "center",
+            tooltip: true,
           },
-          
+
           // {
           //   title: "三方单号",
           //   key: "otherContentPlatFormOrderId",
@@ -1464,9 +1425,7 @@ export default {
                   props: {
                     value: params.row.isRepeatProfundityOrder,
                     size: "default",
-                    disabled:
-                      params.row.isRepeatProfundityOrder === true ||
-                      params.row.isRepeatProfundityOrder === false,
+                    disabled:params.row.isRepeatProfundityOrder === true || params.row.isRepeatProfundityOrder === false,
                   },
                 },
                 h("span", { isRepeatProfundityOrder: "open" }, "开"),
@@ -1474,7 +1433,7 @@ export default {
               );
             },
           },
-          
+
           {
             title: "派单时间",
             key: "sendDate",
@@ -1487,7 +1446,6 @@ export default {
               );
             },
           },
-          
 
           // {
           //   title: "派单留言",
@@ -1707,10 +1665,10 @@ export default {
           //               api.decryptoPhonesNew(data).then(res=>{
           //                 if(res.code ===0){
           //                   this.confirmParams.phone = res.data.phone
-                            
+
           //                 }
           //               })
-                        
+
           //             },
           //           },
           //         },
@@ -1808,23 +1766,27 @@ export default {
                       // this.$Message.warning('系统正在维护中，请稍后！')
                       // return
                       // 确认
-                        const { id, orderId, consultatioType,encryptPhone,sendHospitalId } = params.row;
-                        this.contentConfirmOrderModel = true;
-                        this.confirmForm.id = orderId;
-                        this.confirmForm.consultatioType = consultatioType;
-                        this.confirmForm.sendId = id
-                        this.confirmForm.lastDealHospitalId = sendHospitalId
-                        const data = {
-                          encryptPhone:encryptPhone
+                      const {
+                        id,
+                        orderId,
+                        consultatioType,
+                        encryptPhone,
+                        sendHospitalId,
+                      } = params.row;
+                      this.contentConfirmOrderModel = true;
+                      this.confirmForm.id = orderId;
+                      this.confirmForm.consultatioType = consultatioType;
+                      this.confirmForm.sendId = id;
+                      this.confirmForm.lastDealHospitalId = sendHospitalId;
+                      const data = {
+                        encryptPhone: encryptPhone,
+                      };
+                      // 解密手机号
+                      api.decryptoPhonesNew(data).then((res) => {
+                        if (res.code === 0) {
+                          this.confirmParams.phone = res.data.phone;
                         }
-                        // 解密手机号
-                        api.decryptoPhonesNew(data).then(res=>{
-                          if(res.code ===0){
-                            this.confirmParams.phone = res.data.phone
-                            
-                          }
-                        })
-
+                      });
                     },
                   },
                 },
@@ -1853,12 +1815,19 @@ export default {
                         // this.$Message.warning('系统正在维护中，请稍后！')
                         // return
                         // 如果是次派 找到主派订单才可以改
-                        if(params.row.isMainHospital == false){
-                          this.$Message.warning('该数据为辅派订单，请通过订单号找到主派订单进行改派！')
-                          return
+                        if (params.row.isMainHospital == false) {
+                          this.$Message.warning(
+                            "该数据为辅派订单，请通过订单号找到主派订单进行改派！"
+                          );
+                          return;
                         }
                         // 改派
-                        const { id, orderId, goodsId ,isMainHospital} = params.row;
+                        const {
+                          id,
+                          orderId,
+                          goodsId,
+                          isMainHospital,
+                        } = params.row;
                         this.form.id = id;
                         this.form.orderId = orderId;
                         // this.byGoodsIdGetpartakeItemHospitalList(goodsId,() => {
@@ -1871,7 +1840,7 @@ export default {
                               content,
                               isUncertainDate,
                               otherHospitalId,
-                              hasDealInfo
+                              hasDealInfo,
                             } = res.data.sendOrderInfo;
                             // 已参与项目医院
                             const ycyxmyy = this.hospital.find(
@@ -1900,9 +1869,9 @@ export default {
                             this.form.timeType = timeType;
                             this.form.content = content;
                             this.form.isUncertainDate = isUncertainDate;
-                            this.form.isMainHospital = isMainHospital
-                            this.form.otherHospitalId = otherHospitalId
-                            this.form.hasDealInfo = hasDealInfo
+                            this.form.isMainHospital = isMainHospital;
+                            this.form.otherHospitalId = otherHospitalId;
+                            this.form.hasDealInfo = hasDealInfo;
                             this.controlModal = true;
                           }
                           // });
@@ -1922,25 +1891,24 @@ export default {
                           "handleCustomerInfoComParams",
                           this.customerInfoComParams
                         );
-                      } 
-                      else if (name == "editOrder") {
+                      } else if (name == "editOrder") {
                         //修改订单
                         const { orderId } = params.row;
                         api.byIdContentPlateForm(orderId).then((res) => {
-                          if(res.code === 0){
-                            this.editRecordingModel = true
-                            this.recordingParams.title = '录单编辑'
-                            this.recordingParams.info = res.data.orderInfo
-                            this.getcustomerSourceList()
-                            this.getWeChatList()
-                            this.getAmiyaHospitalDepartmentListChange()
-                            this.getcontentPlateFormOrderTypeList()
-                            this.getHospitalList()
-                            this.getOrderConsultationTypeList()
-                            this.getshoppingCartGetCustomerTypeList()
-                            this.getcustomerTypeList()
+                          if (res.code === 0) {
+                            this.editRecordingModel = true;
+                            this.recordingParams.title = "录单编辑";
+                            this.recordingParams.info = res.data.orderInfo;
+                            this.getcustomerSourceList();
+                            this.getWeChatList();
+                            this.getAmiyaHospitalDepartmentListChange();
+                            this.getcontentPlateFormOrderTypeList();
+                            this.getHospitalList();
+                            this.getOrderConsultationTypeList();
+                            this.getshoppingCartGetCustomerTypeList();
+                            this.getcustomerTypeList();
                           }
-                        })
+                        });
                       }
                     },
                   },
@@ -2054,7 +2022,7 @@ export default {
         // 所有医院中选择
         allHospitalId: "",
         // 次派医院
-        otherHospitalId:[],
+        otherHospitalId: [],
         appointmentDate: "",
         timeType: "",
         // 留言
@@ -2062,7 +2030,7 @@ export default {
         // 未确定时间
         isUncertainDate: false,
         // 为true的话有成交信息主派医院不能修改
-        hasDealInfo:false
+        hasDealInfo: false,
       },
 
       // 医院列表
@@ -2142,42 +2110,44 @@ export default {
       // 消费类型
       typeList: [],
       // 确认成交参数
-      confirmParams:{
+      confirmParams: {
         // 医院成交类型
-        hospitalDealTypeList:{name:'全部成交类型',id:'-1'},
+        hospitalDealTypeList: { name: "全部成交类型", id: "-1" },
         // 医院消费类型
-        hospitalConsumptionTypeList:{name:'全部消费类型',id:'-1'},
+        hospitalConsumptionTypeList: { name: "全部消费类型", id: "-1" },
         // 医院退款类型
-        hospitalRefundTypeList:{name:'全部退款类型',id:'-1'},
+        hospitalRefundTypeList: { name: "全部退款类型", id: "-1" },
         // 手机号
-        phone:''
+        phone: "",
       },
       //   粉丝见面会数据
-      fansMeetingList:[],
-      isMainHospitalList:[{type:'true',name:'主派'},{type:'false',name:'次派'}]
+      fansMeetingList: [],
+      isMainHospitalList: [
+        { type: "true", name: "主派" },
+        { type: "false", name: "次派" },
+      ],
     };
   },
   methods: {
-     // 客户类型列表
+    // 客户类型列表
     getcustomerTypeList() {
       shoppingCartRegistrationApi.customerTypeList().then((res) => {
         if (res.code === 0) {
           const { sourceList } = res.data;
-          this.recordingParams.shoppingCartRegistrationCustomerTypeList = sourceList
-          
+          this.recordingParams.shoppingCartRegistrationCustomerTypeList = sourceList;
         }
       });
     },
     // 主获客方式列表
-    getshoppingCartGetCustomerTypeList(){
+    getshoppingCartGetCustomerTypeList() {
       api.shoppingCartGetCustomerTypeList().then((res) => {
         if (res.code === 0) {
-          const {typeList} = res.data
-          this.recordingParams.customerTypeList = typeList
+          const { typeList } = res.data;
+          this.recordingParams.customerTypeList = typeList;
         }
       });
     },
-     //   获取 面诊类型列表（下拉框）
+    //   获取 面诊类型列表（下拉框）
     getOrderConsultationTypeList() {
       api.getOrderConsultationTypeList().then((res) => {
         if (res.code === 0) {
@@ -2215,7 +2185,7 @@ export default {
     //  根据主播获取主播微信号
     getWeChatList(value) {
       const data = {
-        liveanchorId: '',
+        liveanchorId: "",
       };
       liveAnchorApi.getvalidList(data).then((res) => {
         if (res.code === 0) {
@@ -2234,25 +2204,24 @@ export default {
       });
     },
     // 是否参加过粉丝见面会
-    getFansMeetingDetailsisAttendClick(value){
-      const {lastDealHospitalId} = this.confirmForm
-      if(!lastDealHospitalId){
-        this.$Message.warning('请先选择到院医院！')
-        return
+    getFansMeetingDetailsisAttendClick(value) {
+      const { lastDealHospitalId } = this.confirmForm;
+      if (!lastDealHospitalId) {
+        this.$Message.warning("请先选择到院医院！");
+        return;
       }
       const data = {
-        id:value,
-        phone:this.confirmParams.phone,
-        hospitalId:lastDealHospitalId
-      }
-      fansMeetingDetailsApi.getFansMeetingDetailsisAttend(data).then(res=>{
-        if(res.code === 0){
-          this.confirmForm.isFansMeeting=res.data.isAttend
-
+        id: value,
+        phone: this.confirmParams.phone,
+        hospitalId: lastDealHospitalId,
+      };
+      fansMeetingDetailsApi.getFansMeetingDetailsisAttend(data).then((res) => {
+        if (res.code === 0) {
+          this.confirmForm.isFansMeeting = res.data.isAttend;
         }
-      })
+      });
     },
-     // 获取有效的粉丝见面会信息 下拉框
+    // 获取有效的粉丝见面会信息 下拉框
     getValidKeyAndValues() {
       fansMeetingApi.getValidKeyAndValue().then((res) => {
         if (res.code === 0) {
@@ -2262,47 +2231,46 @@ export default {
       });
     },
     // 获取医院成交类型
-    getHospitalDealTypeList(){
-      api.getHospitalDealTypeList().then(res=>{
-        if(res.code == 0){
-          this.confirmParams.hospitalDealTypeList = [this.confirmParams.hospitalDealTypeList,...res.data.hospitalDealTypeList]
+    getHospitalDealTypeList() {
+      api.getHospitalDealTypeList().then((res) => {
+        if (res.code == 0) {
+          this.confirmParams.hospitalDealTypeList = [this.confirmParams.hospitalDealTypeList,...res.data.hospitalDealTypeList];
         }
-      })
+      });
     },
     // 获取医院消费类型
-    getHospitalConsumptionTypeList(){
-      api.getHospitalConsumptionTypeList().then(res=>{
-        if(res.code == 0){
-          this.confirmParams.hospitalConsumptionTypeList = [this.confirmParams.hospitalConsumptionTypeList,...res.data.hospitalConsumptionTypeList]
-          
+    getHospitalConsumptionTypeList() {
+      api.getHospitalConsumptionTypeList().then((res) => {
+        if (res.code == 0) {
+          this.confirmParams.hospitalConsumptionTypeList = [this.confirmParams.hospitalConsumptionTypeList,...res.data.hospitalConsumptionTypeList];
         }
-      })
+      });
     },
     //  获取医院退款类型
-    getHospitalRefundTypeList(){
-      api.getHospitalRefundTypeList().then(res=>{
-        if(res.code == 0){
-          this.confirmParams.hospitalRefundTypeList = [this.confirmParams.hospitalRefundTypeList,...res.data.hospitalRefundTypeList]
+    getHospitalRefundTypeList() {
+      api.getHospitalRefundTypeList().then((res) => {
+        if (res.code == 0) {
+          this.confirmParams.hospitalRefundTypeList = [this.confirmParams.hospitalRefundTypeList,...res.data.hospitalRefundTypeList];
         }
-      })
+      });
     },
     // 判断到院类型为退款(4)的情况 消费类型只能选择退款消费
-    toHospitalTypeListChange(value){
-      const {isToHospital,isFinish,toHospitalType} = this.confirmForm
+    toHospitalTypeListChange(value) {
+      const { isToHospital, isFinish, toHospitalType } = this.confirmForm;
       // if(isToHospital == true && isFinish == true){
-        if(toHospitalType == 4){
-          this.confirmForm.toHospitalType = value
-          this.confirmForm.consumptionType = 2
-          return
-        }else{
-          this.confirmForm.consumptionType = null
-        }
+      if (toHospitalType == 4) {
+        this.confirmForm.toHospitalType = value;
+        this.confirmForm.consumptionType = 2;
+        return;
+      } else {
+        this.confirmForm.consumptionType = null;
+      }
       // }else{
       //   this.confirmForm.consumptionType = 3
       // }
     },
-    handle(value){
-      this.confirmForm.addContentPlatFormOrderDealDetailsVoList = value
+    handle(value) {
+      this.confirmForm.addContentPlatFormOrderDealDetailsVoList = value;
     },
     // 消费类型列表
     getContentPlatFormOrderDealInfotypeList() {
@@ -2336,10 +2304,7 @@ export default {
       api.contentPlateFormOrderSourceList().then((res) => {
         if (res.code === 0) {
           const { orderSources } = res.data;
-          this.orderSourcesListAll = [
-            ...this.orderSourcesListAll,
-            ...orderSources,
-          ];
+          this.orderSourcesListAll = [...this.orderSourcesListAll,...orderSources];
           this.recordingParams.orderSourcesList = orderSources;
         }
       });
@@ -2355,8 +2320,8 @@ export default {
         this.confirmForm.toHospitalType = null;
         this.confirmForm.isAcompanying = false;
         // this.confirmForm.lastDealHospitalId = null;
-        this.confirmForm.dealPerformanceType = null
-        this.confirmForm.unDealReason = ''
+        this.confirmForm.dealPerformanceType = null;
+        this.confirmForm.unDealReason = "";
       }
     },
     switchChange() {
@@ -2367,7 +2332,7 @@ export default {
         this.confirmForm.lastProjectStage = "";
         this.uploadObj.uploadList = [];
         this.confirmForm.DealDate = null;
-        
+
         // this.confirmForm.consumptionType = null;
       } else {
         this.confirmForm.dealAmount = null;
@@ -2421,7 +2386,7 @@ export default {
             followUpContent,
             nextAppointmentDate,
             isNeedHospitalHelp,
-            sendId
+            sendId,
           } = this.confirmForm;
           const data = {
             id,
@@ -2431,64 +2396,28 @@ export default {
             dealPictureUrl: isFinish == true ? dealPictureUrl : "",
             unDealReason: isFinish == true ? "" : unDealReason,
             isToHospital: isFinish === true ? true : isToHospital,
-            unDealPictureUrl:
-              isFinish === true ? "" : unDealPictureUrl ? unDealPictureUrl : "",
-            DealDate: DealDate
-              ? this.$moment(DealDate).format("YYYY-MM-DD")
-              : null,
+            unDealPictureUrl: isFinish === true ? "" : unDealPictureUrl ? unDealPictureUrl : "",
+            DealDate: DealDate ? this.$moment(DealDate).format("YYYY-MM-DD") : null,
             lastDealHospitalId,
-            toHospitalDate: toHospitalDate
-              ? this.$moment(toHospitalDate).format("YYYY-MM-DD")
-              : null,
+            toHospitalDate: toHospitalDate ? this.$moment(toHospitalDate).format("YYYY-MM-DD") : null,
             otherContentPlatFormOrderId,
             toHospitalType: isToHospital == false ? 0 : toHospitalType,
             isAcompanying,
             commissionRatio: 0,
             invitationDocuments,
-            dealPerformanceType:dealPerformanceType ? dealPerformanceType : 0,
-            consumptionType:consumptionType<0 ? null : consumptionType,
-            addContentPlatFormOrderDealDetailsVoList:isFinish == false  || dealAmount == 0 ? [] : addContentPlatFormOrderDealDetailsVoList,
-            fansMeetingId:isFansMeeting == true ? fansMeetingId : '',
-            fansMeetingProject:isFansMeeting == true ? fansMeetingProject : '',
-            followUpContent:isFansMeeting == true ? followUpContent : '',
-            nextAppointmentDate : isFansMeeting == true ?   (nextAppointmentDate ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD") : null) : null,
-            isNeedHospitalHelp:isFansMeeting == true ? isNeedHospitalHelp :false,
-            sendOrderId:sendId
+            dealPerformanceType: dealPerformanceType ? dealPerformanceType : 0,
+            consumptionType: consumptionType < 0 ? null : consumptionType,
+            addContentPlatFormOrderDealDetailsVoList: isFinish == false || dealAmount == 0  ? [] : addContentPlatFormOrderDealDetailsVoList,
+            fansMeetingId: isFansMeeting == true ? fansMeetingId : "",
+            fansMeetingProject: isFansMeeting == true ? fansMeetingProject : "",
+            followUpContent: isFansMeeting == true ? followUpContent : "",
+            nextAppointmentDate:isFansMeeting == true ? nextAppointmentDate ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD") : null : null,
+            isNeedHospitalHelp: isFansMeeting == true ? isNeedHospitalHelp : false,
+            sendOrderId: sendId,
           };
-          if(isFinish == true){
-            if(dealAmount == 0){
-              this.isLoading = true
-              api.finishContentPlateFormOrderByEmployee(data).then((res) => {
-                if (res.code === 0) {
-                  this.isLoading = false
-                  this.cancel("confirmForm");
-                  this.getSendOrderInfo();
-                  this.$Message.success({
-                    content: "确认成功",
-                    duration: 3,
-                  });
-                }else {
-                  setTimeout(() => {
-                    this.isLoading = false;
-                  }, 3000);
-                }
-              });
-              return
-            }else{
-                let price = 0
-                if(addContentPlatFormOrderDealDetailsVoList.length == 0 || addContentPlatFormOrderDealDetailsVoList == []){
-                  this.$Message.warning('请填写成交明细！')
-                  return
-                }
-                addContentPlatFormOrderDealDetailsVoList.map(item=>{
-                  price += Number(item.price)
-                  return
-                })
-                if(price*100 != dealAmount*100){
-                  this.$Message.warning('成交明细合计与成金金额不一致，请认真核对！')
-                  return
-                }
-                this.isLoading = true
+          if (isFinish == true) {
+            if (dealAmount == 0) {
+              this.isLoading = true;
               api.finishContentPlateFormOrderByEmployee(data).then((res) => {
                 if (res.code === 0) {
                   this.isLoading = false;
@@ -2498,16 +2427,52 @@ export default {
                     content: "确认成功",
                     duration: 3,
                   });
-                }else {
+                } else {
                   setTimeout(() => {
                     this.isLoading = false;
                   }, 3000);
                 }
               });
-              return
+              return;
+            } else {
+              let price = 0;
+              if (
+                addContentPlatFormOrderDealDetailsVoList.length == 0 ||
+                addContentPlatFormOrderDealDetailsVoList == []
+              ) {
+                this.$Message.warning("请填写成交明细！");
+                return;
+              }
+              addContentPlatFormOrderDealDetailsVoList.map((item) => {
+                price += Number(item.price);
+                return;
+              });
+              if (price * 100 != dealAmount * 100) {
+                this.$Message.warning(
+                  "成交明细合计与成金金额不一致，请认真核对！"
+                );
+                return;
+              }
+              this.isLoading = true;
+              api.finishContentPlateFormOrderByEmployee(data).then((res) => {
+                if (res.code === 0) {
+                  this.isLoading = false;
+                  this.cancel("confirmForm");
+                  this.getSendOrderInfo();
+                  this.$Message.success({
+                    content: "确认成功",
+                    duration: 3,
+                  });
+                } else {
+                  setTimeout(() => {
+                    this.isLoading = false;
+                  }, 3000);
+                }
+              });
+              return;
             }
           }
-          this.isLoading = true
+          this.isLoading = true;
           api.finishContentPlateFormOrderByEmployee(data).then((res) => {
             if (res.code === 0) {
               this.isLoading = false;
@@ -2517,7 +2482,7 @@ export default {
                 content: "确认成功",
                 duration: 3,
               });
-            }else {
+            } else {
               setTimeout(() => {
                 this.isLoading = false;
               }, 3000);
@@ -2634,28 +2599,16 @@ export default {
         isOldCustomer,
         commissionRatio,
         baseLiveAnchorId,
-        isMainHospital
+        isMainHospital,
       } = this.query;
       const data = {
-        startDate: startDate
-          ? this.$moment(startDate).format("YYYY-MM-DD")
-          : null,
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         // toHospitalStartDate: toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD"): null,
         // toHospitalEndDate: toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null,
         // IsToHospital != 1的时候是未到院和全部到院状态  传null  等于1的时候是已到院穿时间和状态
-        toHospitalStartDate:
-          IsToHospital != "true"
-            ? null
-            : toHospitalStartDate
-            ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
-            : null,
-        toHospitalEndDate:
-          IsToHospital != "true"
-            ? null
-            : toHospitalEndDate
-            ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
-            : null,
+        toHospitalStartDate: IsToHospital != "true" ? null : toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD") : null,
+        toHospitalEndDate: IsToHospital != "true" ? null : toHospitalEndDate  ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")  : null,
         keyword,
         pageNum,
         pageSize,
@@ -2668,17 +2621,12 @@ export default {
         orderSource,
         consultationEmpId: consultationEmpId == -1 ? null : consultationEmpId,
         sendBy: sendBy == -1 ? null : sendBy,
-        toHospitalType:
-          IsToHospital != "true"
-            ? null
-            : toHospitalType == -1
-            ? null
-            : toHospitalType,
+        toHospitalType: IsToHospital != "true" ? null : toHospitalType == -1 ? null : toHospitalType,
         isAcompanying: isAcompanying == -1 ? null : isAcompanying,
         isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
-        baseLiveAnchorId: baseLiveAnchorId == -1 ? '' : baseLiveAnchorId,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? "" : baseLiveAnchorId,
         commissionRatio,
-        isMainHospital
+        isMainHospital,
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -2712,26 +2660,14 @@ export default {
         isOldCustomer,
         commissionRatio,
         baseLiveAnchorId,
-        isMainHospital
+        isMainHospital,
       } = this.query;
       const data = {
-        startDate: startDate
-          ? this.$moment(startDate).format("YYYY-MM-DD")
-          : null,
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         // IsToHospital != TRUE的时候是未到院和全部到院状态  传null  等于TRUE的时候是已到院穿时间和状态
-        toHospitalStartDate:
-          IsToHospital != "true"
-            ? null
-            : toHospitalStartDate
-            ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD")
-            : null,
-        toHospitalEndDate:
-          IsToHospital != "true"
-            ? null
-            : toHospitalEndDate
-            ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD")
-            : null,
+        toHospitalStartDate: IsToHospital != "true" ? null : toHospitalStartDate ? this.$moment(toHospitalStartDate).format("YYYY-MM-DD") : null,
+        toHospitalEndDate: IsToHospital != "true" ? null  : toHospitalEndDate ? this.$moment(toHospitalEndDate).format("YYYY-MM-DD") : null,
         keyword,
         pageNum,
         pageSize,
@@ -2744,17 +2680,12 @@ export default {
         orderSource,
         consultationEmpId: consultationEmpId == -1 ? null : consultationEmpId,
         sendBy: sendBy == -1 ? null : sendBy,
-        toHospitalType:
-          IsToHospital != "true"
-            ? null
-            : toHospitalType == -1
-            ? null
-            : toHospitalType,
+        toHospitalType: IsToHospital != "true" ? null : toHospitalType == -1 ? null : toHospitalType,
         isAcompanying: isAcompanying == -1 ? null : isAcompanying,
         isOldCustomer: isOldCustomer == -1 ? null : isOldCustomer,
-        baseLiveAnchorId: baseLiveAnchorId == -1 ? '' : baseLiveAnchorId,
+        baseLiveAnchorId: baseLiveAnchorId == -1 ? "" : baseLiveAnchorId,
         commissionRatio,
-        isMainHospital
+        isMainHospital,
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -2800,34 +2731,30 @@ export default {
             content,
             isUncertainDate,
             otherHospitalId,
-            isMainHospital
+            isMainHospital,
           } = this.form;
           const data = {
             id,
             orderId,
             // 提交时，如果所有医院未开启则提交已参与医院中的医院，反则提交所有医院中的医院
             hospitalId: !this.openAllHospital ? hospitalId : allHospitalId,
-            appointmentDate: isUncertainDate
-              ? null
-              : appointmentDate
-              ? this.$moment(appointmentDate).format("YYYY-MM-DD")
-              : appointmentDate,
+            appointmentDate: isUncertainDate ? null : appointmentDate ? this.$moment(appointmentDate).format("YYYY-MM-DD") : appointmentDate,
             timeType: isUncertainDate ? null : timeType ? timeType : null,
             content,
             isUncertainDate,
-            otherHospitalId:isMainHospital == false ? [] : otherHospitalId
+            otherHospitalId: isMainHospital == false ? [] : otherHospitalId,
           };
-          this.editLoading = true
+          this.editLoading = true;
           api.editContentPlateFormSendOrder(data).then((res) => {
             if (res.code === 0) {
-              this.editLoading = false
+              this.editLoading = false;
               this.cancel("form");
               this.getSendOrderInfo();
               this.$Message.success({
                 content: "修改成功",
                 duration: 3,
               });
-            }else {
+            } else {
               setTimeout(() => {
                 this.editLoading = false;
               }, 3000);
@@ -2855,7 +2782,7 @@ export default {
       this.confirmForm.dealAmount = null;
       this.confirmForm.DealDate = null;
       this.query.doubleOrderModel = false;
-      this.confirmForm.isFinish = false
+      this.confirmForm.isFinish = false;
       // this.$refs.detailTable.query2.data = []
     },
 
@@ -2891,11 +2818,10 @@ export default {
     this.getcontentPlateFormOrderToHospitalTypeList();
     this.getcontentPlateFormOrderDealPerformanceType();
     this.getContentPlatFormOrderDealInfotypeList();
-    this.getHospitalDealTypeList()
-    this.getHospitalConsumptionTypeList()
-    this.getHospitalRefundTypeList()
-    this.getValidKeyAndValues()
-    
+    this.getHospitalDealTypeList();
+    this.getHospitalConsumptionTypeList();
+    this.getHospitalRefundTypeList();
+    this.getValidKeyAndValues();
   },
 };
 </script>
@@ -2915,7 +2841,7 @@ export default {
 .top {
   margin-bottom: 10px;
 }
-.detailed{
+.detailed {
   font-size: 16px;
   font-weight: bold;
   color: #000;

@@ -68,6 +68,12 @@
             @click="getItemInfo()"
             >查询</Button
           >
+          <Button
+              type="primary"
+              style="margin-left: 10px"
+              @click="importControlModal = true"
+              >导入</Button
+            >
         </div>
         <div class="right">
           <Button
@@ -306,6 +312,30 @@
           </Col>
           <Col span="8">
             <FormItem
+              label="讲解次数"
+              prop="explainTimes"
+              key="explainTimes"
+            >
+              <Input
+                v-model="form.explainTimes"
+                placeholder="请输入讲解次数"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="首次上架时间" prop="firstTimeOnSell" key="首次上架时间">
+              <DatePicker
+                type="date"
+                placeholder="首次上架时间"
+                :value="form.firstTimeOnSell"
+                v-model="form.firstTimeOnSell"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem
               label="是否有效"
               prop="valid"
               v-show="isEdit === true"
@@ -321,6 +351,11 @@
         <Button type="primary" @click="handleSubmit('form')">确定</Button>
       </div>
     </Modal>
+     <!-- 导入 -->
+    <importFile
+      :importControlModal.sync="importControlModal"
+      @handleRefreshCustomerTrackList="getItemInfo()"
+    ></importFile>
   </div>
 </template>
 <script>
@@ -329,14 +364,17 @@ import * as orderApi from "@/api/orderManage";
 import * as supplierCategoryApi from "@/api/supplierCategory";
 import * as supplierBrandApi from "@/api/supplierBrand";
 import * as supplierItemDetailsApi from "@/api/supplierItemDetails";
+import importFile from "./components/importModel.vue";
 
 import upload from "@/components/upload/upload";
 export default {
   components: {
     upload,
+    importFile
   },
   data() {
     return {
+      importControlModal:false,
       // 渠道
       orderAppTypes:[],
       // 获取科室列表（下拉框）
@@ -379,7 +417,7 @@ export default {
           {
             title: "商品编号",
             key: "otherAppItemId",
-            minWidth: 150,
+            minWidth: 200,
           },
           {
             title: "品牌",
@@ -548,6 +586,53 @@ export default {
             minWidth: 200,
           },
           {
+            title: "讲解次数",
+            key: "explainTimes",
+            minWidth: 120,
+            align:'center'
+          },
+          {
+            title: "首次上架时间",
+            key: "firstTimeOnSell",
+            minWidth: 140,
+            align:'center',
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.firstTimeOnSell ? this.$moment(params.row.firstTimeOnSell).format("YYYY-MM-DD"): ""
+              );
+            },
+          },
+          {
+            title: "是否是新品",
+            key: "isNewGoods",
+            minWidth: 140,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isNewGoods == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
             title: "创建时间",
             key: "createDate",
             minWidth: 110,
@@ -643,7 +728,7 @@ export default {
                               return Number(item)
                             })
                             this.getLiveValidList(this.form.brandId);
-                            this.uploadObj.uploadList = [this.form.thumbPicUrl];
+                            this.uploadObj.uploadList = this.form.thumbPicUrl ? [this.form.thumbPicUrl] : [];
                             this.controlModal = true;
                           }
                         });
@@ -739,32 +824,24 @@ export default {
         // 品项
         itemDetailsId:'',
         // 品类
-        categoryId:''
+        categoryId:'',
+        // 讲解次数
+        explainTimes:null,
+        // 首次上架时间
+        firstTimeOnSell:''
       },
 
       ruleValidate: {
-        appType: [
+        otherAppItemId: [
+          {
+            required: true,
+            message: "请输入商品编号",
+          },
+        ],
+       appType: [
           {
             required: true,
             message: "请选择渠道",
-          },
-        ],
-        brandId: [
-          {
-            required: true,
-            message: "请选择品牌",
-          },
-        ],
-        itemDetailsId: [
-          {
-            required: true,
-            message: "请选择品项",
-          },
-        ],
-        categoryId: [
-          {
-            required: true,
-            message: "请选择品类",
           },
         ],
         name: [
@@ -773,12 +850,7 @@ export default {
             message: "请输入商品名称",
           },
         ],
-        thumbPicUrl: [
-          {
-            required: true,
-            message: "请上传缩略图",
-          },
-        ],
+      
         salePrice: [
           {
             required: true,
@@ -789,30 +861,6 @@ export default {
           {
             required: true,
             message: "请输入限购数量",
-          },
-        ],
-        // description: [
-        //   {
-        //     required: true,
-        //     message: "请输入项目简介",
-        //   },
-        // ],
-        standard: [
-          {
-            required: true,
-            message: "请输入规格",
-          },
-        ],
-        // parts: [
-        //   {
-        //     required: true,
-        //     message: "请输入治疗部位",
-        //   },
-        // ],
-        hospitalDepartmentId: [
-          {
-            required: true,
-            message: "请选择科室",
           },
         ],
       },
@@ -932,10 +980,30 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId,itemDetailsId} = this.form
+            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId,itemDetailsId,explainTimes,firstTimeOnSell} = this.form
             const data = {
               appType:appType.toString(),
-              otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,brandId,categoryId,itemDetailsId
+              otherAppItemId,
+              name,
+              hospitalDepartmentId,
+              thumbPicUrl,
+              salePrice,
+              livePrice,
+              isLimitBuy,
+              limitBuyQuantity,
+              description,
+              standard,
+              parts,
+              commitment,
+              guarantee,
+              appointmentNotice,
+              id,
+              valid,
+              brandId,
+              categoryId,
+              itemDetailsId,
+              explainTimes:explainTimes? explainTimes : 0,
+              firstTimeOnSell: firstTimeOnSell ? this.$moment(firstTimeOnSell).format("YYYY-MM-DD") : null
             }
             // 修改
             api.updateItemInfo(data).then((res) => {
@@ -953,10 +1021,30 @@ export default {
    
             // 添加
             // const { id, valid, ...data } = this.form;
-            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId,itemDetailsId} = this.form
+            const {otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,appType,brandId,categoryId,itemDetailsId,explainTimes,firstTimeOnSell} = this.form
             const data = {
               appType:appType.toString(),
-              otherAppItemId,name,hospitalDepartmentId,thumbPicUrl,salePrice,livePrice,isLimitBuy,limitBuyQuantity,description,standard,parts,commitment,guarantee,appointmentNotice,id,valid,brandId,categoryId,itemDetailsId
+              otherAppItemId,
+              name,
+              hospitalDepartmentId,
+              thumbPicUrl,
+              salePrice,
+              livePrice,
+              isLimitBuy,
+              limitBuyQuantity,
+              description,
+              standard,
+              parts,
+              commitment,
+              guarantee,
+              appointmentNotice,
+              id,
+              valid,
+              brandId,
+              categoryId,
+              itemDetailsId, 
+              explainTimes:explainTimes? explainTimes : 0,
+              firstTimeOnSell: firstTimeOnSell ? this.$moment(firstTimeOnSell).format("YYYY-MM-DD") : null
             }
             api.addItemInfo(data).then((res) => {
               if (res.code === 0) {

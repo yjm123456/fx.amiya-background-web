@@ -776,6 +776,20 @@ const orderManage = [{
                 "@/views/orderManage/vedioOrderList/vedioOrderList.vue"
             ),
     },
+    {
+        path: "/liveStreamingSalesOrders",
+        name: "liveStreamingSalesOrders",
+        meta: {
+            title: "直播中带货订单",
+            keepAlive: false,
+            isTag: true,
+            openName: ['订单管理'],
+        },
+        component: () =>
+            import (
+                "@/views/orderManage/liveStreamingSalesOrders/liveStreamingSalesOrders.vue"
+            ),
+    },
 
 ];
 

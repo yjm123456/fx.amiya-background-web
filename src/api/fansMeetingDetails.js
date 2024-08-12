@@ -53,3 +53,12 @@ export const getFansMeetingDetailsisAttend = (params) => {
         params,
     });
 };
+// 导出粉丝见面会详情
+export const ExportByHospital = (params) => {
+    return http({
+        url: "/amiyabg/FansMeetingDetails/ExportByHospital",
+        method: "get",
+        params,
+        responseType: 'blob'
+    });
+};

@@ -49,3 +49,11 @@ export const getDepartment = () => {
         method: "get",
     });
 };
+// 导入带货商品列表
+export const importItemInfo = (data) => {
+    return http({
+        url: `/amiyabg/ItemInfo/import`,
+        method: "put",
+        data,
+    });
+};

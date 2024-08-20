@@ -628,6 +628,91 @@ export default {
             align: "center",
           },
           {
+            title: "订单状态",
+            key: "orderStatusText",
+            minWidth: 130,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.orderStatusText == "已成交") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#04B05D",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "重单-不可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "重单-可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "已派单") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "blue",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "未成交") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "brown",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else if (params.row.orderStatusText == "已接单") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              } else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.orderStatusText
+                );
+              }
+            },
+          },
+          {
+            title: "消费金额",
+            key: "dealAmount",
+            minWidth: 120,
+            align: "center",
+          },
+          {
             title: "城市",
             key: "city",
             minWidth: 120,
@@ -739,85 +824,7 @@ export default {
               );
             },
           },
-          {
-            title: "订单状态",
-            key: "orderStatusText",
-            minWidth: 130,
-            align: "center",
-            render: (h, params) => {
-              if (params.row.orderStatusText == "已成交") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "#04B05D",
-                    },
-                  },
-                  params.row.orderStatusText
-                );
-              } else if (params.row.orderStatusText == "重单-不可深度") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "red",
-                    },
-                  },
-                  params.row.orderStatusText
-                );
-              } else if (params.row.orderStatusText == "重单-可深度") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "orange",
-                    },
-                  },
-                  params.row.orderStatusText
-                );
-              } else if (params.row.orderStatusText == "已派单") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "blue",
-                    },
-                  },
-                  params.row.orderStatusText
-                );
-              } else if (params.row.orderStatusText == "未成交") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "brown",
-                    },
-                  },
-                  params.row.orderStatusText
-                );
-              } else if (params.row.orderStatusText == "已接单") {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "orange",
-                    },
-                  },
-                  params.row.orderStatusText
-                );
-              } else {
-                return h(
-                  "div",
-                  {
-                    style: {
-                      color: "#515a6e",
-                    },
-                  },
-                  params.row.orderStatusText
-                );
-              }
-            },
-          },
+          
 
           {
             title: "订单来源",

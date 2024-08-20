@@ -235,7 +235,7 @@ export default {
                 {
                     title: "上门人数",
                     key: "toHospitalCount",
-                    minWidth: 130,
+                    minWidth: 100,
                     align: "center",
                     className: 'test-name',
                     render: (h, params) => {
@@ -253,7 +253,7 @@ export default {
                 {
                     title: "成交人数",
                     key: "dealCount",
-                    minWidth: 120,
+                    minWidth: 100,
                     align: "center",
                     className: 'test-name',
                     render: (h, params) => {
@@ -321,7 +321,7 @@ export default {
                 {
                     title: "老客成交量",
                     key: "oldCustomerDealCount",
-                    minWidth: 150,
+                    minWidth: 120,
                     className: 'test-name',
                     align: "center",
                     render: (h, params) => {
@@ -473,6 +473,7 @@ export default {
 }
 /deep/.ivu-table th.test-name {
     background: #f7e8b1;
+    border: 1px solid rgb(221, 220, 220);
 }
 
 /deep/.ivu-table-border td:nth-child(1){

@@ -2,25 +2,11 @@
   <div>
     <Card>
       <div class="content_title">
-        <div class="h2">{{selected == '图表' ? '啊美雅业绩运营分析'  : '啊美雅医美转化运营分析'}}</div>
-        <!-- tab切换 -->
-        <div class="tab_content2">
-            <div class="tab">
-              <div
-                class="tab_item"
-                v-for="(item, index) in list"
-                :key="index"
-                @click="selectTab(index, item)"
-                :class="{ active: selected == item}"
-              >
-                <span>{{ item }}</span>
-              </div>
-            </div>
-        </div>
+        <div class="h2">{{selected == '图表' ? '啊美雅线索&业绩运营看板'  : '啊美雅医美转化运营分析'}}</div>
       </div>
       <!-- tab切换 -->
-      <div class="tab_content">
-        <div class="tab">
+      <div class="tab_content" >
+        <div class="tab" v-if="selected == '图表'">
           <div
             class="tab_item"
             v-for="(item, index) in list4"
@@ -31,12 +17,29 @@
             <span>{{ item }}</span>
           </div>
         </div>
+        <div class="tab" v-else></div>
         <div class="date_con">
+          <!-- tab切换 -->
+          <div class="tab_content2">
+              <div class="tab">
+                <div
+                  class="tab_item"
+                  v-for="(item, index) in list"
+                  :key="index"
+                  @click="selectTab(index, item)"
+                  :class="{ active: selected == item}"
+                >
+                  <span>{{ item }}</span>
+                </div>
+              </div>
+          </div>
+
           <span>
             <span class="completeRateSize">时间进度：</span>
             <Progress :percent="completeRate >100 ? 100 : completeRate" hide-info style="width:180px;" stroke-color="dodgerblue" :stroke-width="13" border> </Progress>
             <span class="completeRateSize"> {{completeRate}}%</span>
           </span>
+
           <DatePicker
             type="date"
             placeholder="请选择开始时间"
@@ -68,7 +71,7 @@
         </Card>
         <!-- 当月业绩趋势 -->
         <Card  class="m_b">
-          <div class="h3">当月业绩趋势</div>
+          <div class="h3">当月线索&业绩趋势</div>
           <!-- tab切换 -->
           <div class="tab_content">
             <div class="tab">
@@ -91,7 +94,7 @@
 
         <!-- 漏斗图 -->
         <Card  class="m_b">
-          <div class="h3">业绩转化漏斗</div>
+          <div class="h3">新老客业绩转化漏斗</div>
           <!-- <Tabs type="card" v-model="active"  style="width:100%" >
               <TabPane label="整体" name="whole">
                 <div>
@@ -125,33 +128,32 @@
             :active="active"
             ref="whole"
             :params="params"
+            :selected4="selected4"
+            :liveAnchorBaseInfos="liveAnchorBaseInfos"
           ></funnel>
         </Card>
 
-
-
-
         <!-- 平台线索分析 -->
         <Card  class="m_b">
-          <div class="h3">平台分析</div>
+          <div class="h3">平台线索&业绩分析</div>
           <div class="pie_list">
             <Card  class="pie_item">
-              <div class="pie_title">总线索占比</div>
+              <div class="pie_title">总线索分析</div>
               <pieItem2 :pieItemData="totalFlowRateByContentPlatForm" :pieItemData3="totalFlowRateByContentPlatFormTotalFlowRateNumber" selected="线索"/>
             </Card>
             <Card  class="pie_item">
-              <div class="pie_title">总业绩占比</div>
+              <div class="pie_title">总业绩分析</div>
               <pieItem :pieItemData="totalFlowRateByContentPlatFormAchievement" :pieItemData2="totalFlowRateByContentPlatFormAchievement2" selected="平台总业绩" />
             </Card>
           </div>
         </Card>
         <!-- 部门业绩分析 -->
         <Card  class="m_b">
-          <div class="h3">部门分析</div>
+          <div class="h3">部门线索&业绩分析</div>
           <div class="pie_list">
             
             <Card class="pie_item">
-              <div class="pie_title">总线索占比</div>
+              <div class="pie_title">总线索分析</div>
               <pieItem :pieItemData="totalFlowRateByDepartment" :pieItemData3="totalFlowRateByDepartmentTotalFlowRateNumber" selected="线索" />
             </Card>
             <Card class="pie_item">
@@ -162,10 +164,10 @@
         </Card>
         <!-- 新老客业绩分析 -->
         <Card  class="m_b">
-          <div class="h3">新老客业绩分析</div>
+          <div class="h3">新老客成交量&业绩分析</div>
           <div class="pie_list">
             <Card class="pie_item">
-              <div class="pie_title">总线索占比</div>
+              <div class="pie_title">成交量占比</div>
               <pieItem :pieItemData="totalNewOrOldCustomerNumAchievement" :pieItemData3="totalNewOrOldCustomerNumAchievement2" selected="线索" title="有效潜在"/>
             </Card>
             <Card class="pie_item">
@@ -176,10 +178,10 @@
         </Card>
         <!-- 有效潜在业绩分析 -->
         <Card  class="m_b">
-          <div class="h3">有效/潜在业绩分析</div>
+          <div class="h3">有效/潜在线索&业绩分析</div>
           <div class="pie_list">
             <Card class="pie_item">
-              <div class="pie_title">总线索占比</div>
+              <div class="pie_title">总线索分析</div>
               <pieItem :pieItemData="totalFlowRateByIsEffictive" :pieItemData3="totalFlowRateByIsEffictiveTotalFlowRateNumber" selected="线索" title="有效潜在"/>
             </Card>
             <Card class="pie_item">
@@ -190,10 +192,10 @@
         </Card>
         <!-- 当月历史业绩分析 -->
         <Card  class="m_b">
-          <div class="h3">当月/历史业绩分析</div>
+          <div class="h3">当月/历史派单量&业绩分析</div>
           <div class="pie_list">
             <Card class="pie_item">
-              <div class="pie_title">总线索占比</div>
+              <div class="pie_title">派单量占比</div>
               <pieItem :pieItemData="totalIsHistoryPerformanceNumAchievement" :pieItemData3="totalIsHistoryPerformanceNumAchievement2" selected="线索"  title="有效潜在"/>
             </Card>
             <Card class="pie_item">
@@ -218,9 +220,9 @@
               <div class="h3">助理业绩分析</div>
               <barItem :barItemData="customerObj"/>
             </Card>
-            
           </div>
         </Card>
+        
         <!-- 机构 -->
         <Card  class="m_b ">
           <div class="customer_bar_content">
@@ -263,6 +265,8 @@
           <trafficConversionTable :params="params" :platformList="platformList" ref="trafficConversionTable" />
           <!-- 线索转化和客户转化情况-助理 -->
           <assistantTable :params="params" :platformList="platformList" ref="assistantTable" />
+          <!-- 助理业绩目标达成情况 -->
+          <assistantTargetCompleteDataTable :params="params" :platformList="platformList" ref="assistantTargetCompleteDataTable"/>
           <!-- 机构转化情况 -->
           <hospitalTable :params="params" :platformList="platformList" ref="hospitalTable"/>
         </div>
@@ -288,6 +292,7 @@ import barItem from "./components/barItem.vue"
 import flowBarItem from "./components/3dBarItem.vue"
 import trafficConversionTable from "./components/trafficConversionTable.vue"
 import assistantTable from "./components/assistantTable.vue"
+import assistantTargetCompleteDataTable from "./components/assistantTargetCompleteDataTable.vue"
 import hospitalTable from "./components/hospitalTable.vue"
 import detail from "./components/detail.vue"
 import customerAndHospital from "./components/customerAndHospital.vue"
@@ -312,7 +317,8 @@ export default {
     customerAndHospital,
     funnel,
     tiktok,
-    vedio
+    vedio,
+    assistantTargetCompleteDataTable
   },
   data() {
     return {
@@ -564,6 +570,10 @@ export default {
       this.getTotalAchievementAndDateSchedule()
       this.getGroupFlowRateCompare()
       this.getNewOrOldCustomerCompare()
+      this.$nextTick(()=>{
+
+        this.$refs.whole.getPerformanceOperationData()
+      })
     },
     getData() {
       const {startDate,endDate} = this.params
@@ -595,6 +605,7 @@ export default {
         this.$nextTick(()=>{
           this.$refs.trafficConversionTable.getCompanyTransformData();
           this.$refs.assistantTable.getAssistantTransformData();
+          this.$refs.assistantTargetCompleteDataTable.getassistantTargetCompleteData();
           this.$refs.hospitalTable.getData();
         })
       }
@@ -1010,7 +1021,7 @@ export default {
   font-size: 22px;
   font-weight: bold;
   text-align: center;
-  width: 250px;
+  width: 280px;
 }
 .tab_content2{
   padding-top: 6px;

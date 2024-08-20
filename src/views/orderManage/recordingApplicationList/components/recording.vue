@@ -305,6 +305,7 @@
                 type="number"
                 number
                 placeholder="请输入下单金额"
+                :disabled="isPrice == true"
               ></Input>
             </FormItem>
           </Col>
@@ -790,7 +791,9 @@ export default {
       //客户来源文字提示
       isTitle:true,
       // 归属部门
-      belongChannelList:[]
+      belongChannelList:[],
+      // 录单时根据主播IP账号和手机获取小黄车下单金额（下单金额大于0时禁用，为空或者小于0可更改）
+      isPrice:false
     };
   },
   methods: {
@@ -884,6 +887,7 @@ export default {
         return;
       }
       // this.getWeChatList(value);
+      this.getbyPhoneAndLiveAnchorId()
     },
     //  根据主播获取主播微信号
     getWeChatList(value) {
@@ -896,6 +900,20 @@ export default {
           this.weChatList = liveAnchorWechatInfos;
         }
       });
+    },
+    // 根据小黄车登记手机号获取小黄车登记信息
+    getbyPhoneAndLiveAnchorId(){
+      const data = {
+        phone:this.form.phone,
+        liveAnchorId:this.form.liveAnchorId,
+      }
+      api.byPhoneAndLiveAnchorId(data).then((res)=>{
+        if(res.code === 0){
+          const { price} = res.data.shoppingCartRegistrationInfo
+          this.isPrice= price > 0 ? true : false
+          this.form.addOrderPrice = price
+        }
+      })
     },
     // 提交
     handleSubmit(name) {

@@ -265,6 +265,7 @@
                 type="number"
                 number
                 placeholder="请输入下单金额"
+                :disabled="!isOrderPrice"
               ></Input>
             </FormItem>
           </Col>
@@ -799,7 +800,9 @@ export default {
       // 客户来源
       sourceList:[],
       //客户来源文字提示
-      isTitle:true
+      isTitle:true,
+      // 根据按钮权限判断是否可以修改下单金额
+      isOrderPrice:false
     };
   },
   methods: {
@@ -1251,6 +1254,13 @@ export default {
         return 'fx.amiya.permission.UPDATE_CONTENT_PLAT_FORM_ORDER'.includes(ele);
      });
      this.buttonFlag = flag
+
+    //  根据按钮权限判断是否可以修改下单金额
+    const currentRole2 = JSON.parse(sessionStorage.getItem("permissions"));
+      const flag2 = currentRole2.some((ele) => {
+        return 'fx.amiya.permission.UPDATE_ORDER_PRICE'.includes(ele);
+    });
+    this.isOrderPrice = flag2
     },
   },
 };

@@ -301,6 +301,7 @@
                 type="number"
                 number
                 placeholder="请输入下单金额"
+                :disabled="isPrice == true"
               ></Input>
             </FormItem>
           </Col>
@@ -838,7 +839,9 @@ export default {
       // 客户来源
       sourceList:[],
       //客户来源文字提示
-      isTitle:true
+      isTitle:true,
+      // 根据手机号和主播IP获取小黄车金额
+      isPrice:false
     };
   },
   methods: {
@@ -934,7 +937,8 @@ export default {
       if (!value) {
         return;
       }
-      this.getWeChatList(value);
+      // this.getWeChatList(value);
+      this.getbyPhoneAndLiveAnchorId()
     },
     //  根据主播获取主播微信号
     getWeChatList(value) {
@@ -947,6 +951,20 @@ export default {
           this.weChatList = liveAnchorWechatInfos;
         }
       });
+    },
+    // 根据小黄车登记手机号获取小黄车登记信息
+    getbyPhoneAndLiveAnchorId(){
+      const data = {
+        phone:this.form.phone,
+        liveAnchorId:this.form.liveAnchorId,
+      }
+      api.byPhoneAndLiveAnchorId(data).then((res)=>{
+        if(res.code === 0){
+          const { price} = res.data.shoppingCartRegistrationInfo
+          this.isPrice= price > 0 ? true : false
+          this.form.addOrderPrice = price
+        }
+      })
     },
     // 提交
     handleSubmit(name) {
@@ -1226,6 +1244,9 @@ export default {
       }
     },
   },
+  created(){
+    this.getWeChatList();
+  },
   watch: {
     recordingNormalModel(value) {
       this.control = value;
@@ -1244,10 +1265,9 @@ export default {
       //  客资登记信息赋值
       if(this.recordingNormalParams.title == '录单'){
         this.form.contentPlateFormId = this.shoppingCartRegistrationInfo.contentPlatFormId
-        this.contentPlateChange(this.shoppingCartRegistrationInfo.contentPlatFormId)
-        this.liveAnchorChange(this.shoppingCartRegistrationInfo.liveAnchorId)
+        
         this.form.liveAnchorId = this.shoppingCartRegistrationInfo.liveAnchorId
-        this.form.liveAnchorWeChatNo =  this.shoppingCartRegistrationInfo.liveAnchorWechatNo ? this.recordingParams.weChatList.find(item=>this.shoppingCartRegistrationInfo.liveAnchorWechatNo == item.weChatNo).id : ''
+        // this.form.liveAnchorWeChatNo =  this.shoppingCartRegistrationInfo.liveAnchorWechatNo ? this.recordingParams.weChatList.find(item=>this.shoppingCartRegistrationInfo.liveAnchorWechatNo == item.weChatNo).id : ''
         this.form.addOrderPrice = this.shoppingCartRegistrationInfo.price
         this.form.customerName = this.shoppingCartRegistrationInfo.customerNickName
         this.form.getCustomerType = this.shoppingCartRegistrationInfo.getCustomerType
@@ -1257,6 +1277,9 @@ export default {
         if(this.form.belongChannel !=null && this.form.contentPlateFormId){
           this.getcustomerSourceList()
         }
+        this.contentPlateChange(this.shoppingCartRegistrationInfo.contentPlatFormId)
+        this.liveAnchorChange(this.shoppingCartRegistrationInfo.liveAnchorId)
+        this.form.liveAnchorWeChatNo =   this.shoppingCartRegistrationInfo.liveAnchorWechatNo ? this.weChatList.find(item=>this.shoppingCartRegistrationInfo.liveAnchorWechatNo == item.weChatNo).id : ''
       }
       return
      }else{

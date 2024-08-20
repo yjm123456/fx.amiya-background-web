@@ -572,6 +572,7 @@
                 v-model="form.source"
                 placeholder="请选择客户来源"
                 filterable
+                @on-change="emergencyLevelClick()"
               >
                 <Option
                   v-for="item in sourceList"
@@ -736,7 +737,7 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          <Col span="8">
+          <!-- <Col span="8">
             <FormItem label="是否退款" prop="isReturnBackPrice">
               <i-switch
                 v-model="form.isReturnBackPrice"
@@ -788,8 +789,8 @@
                 :disabled="form.refundType != '其他'"
               ></Input>
             </FormItem>
-          </Col>
-          <Col span="8">
+          </Col> -->
+          <!-- <Col span="8">
             <FormItem label="是否差评" prop="isBadReview">
               <i-switch
                 v-model="form.isBadReview"
@@ -826,7 +827,7 @@
                 :rows="3"
               ></Input>
             </FormItem>
-          </Col>
+          </Col> 
           <Col span="8">
             <FormItem label="是否追评" prop="isReContent">
               <i-switch
@@ -844,7 +845,7 @@
                 :rows="3"
               ></Input>
             </FormItem>
-          </Col>
+          </Col>-->
           <Col span="16">
             <FormItem label="备注" prop="remark">
               <Input
@@ -1755,6 +1756,7 @@ export default {
                             if(this.form.belongChannel !=null && this.form.contentPlateFormId){
                               this.getcustomerSourceList()
                             }
+                            this.emergencyLevelClick()
                           }
                         });
                       },
@@ -1914,7 +1916,7 @@ export default {
         // 指派
         assignEmpId: null,
         // 重要程度
-        emergencyLevel: 2,
+        emergencyLevel: 0,
         // 辅助电话
         subPhone: "",
         // 客户来源
@@ -2259,8 +2261,22 @@ export default {
       }else{
         this.isTitle = true
       }
+      this.emergencyLevelClick()
     },
-    
+    // 根据归属部门和客户来源 定义 重要程度
+    emergencyLevelClick(){
+      const {belongChannel,source} = this.form
+      if( belongChannel == 2  && source == 1 ){
+        // 部门是直播中并且客户来源是直播间的话 是一级客资
+        this.form.emergencyLevel = 3
+      }else if( (belongChannel == 1 && source == 3) || (belongChannel == 2 && source == 3) || (belongChannel == 3 && source == 3) || (belongChannel == 3 && source == 2) ){
+        // 直播前/中/后  客户来源是私信 是二级客资
+        // 直播后 粉丝群也是二级客资
+        this.form.emergencyLevel = 2
+      }else{
+        this.form.emergencyLevel = 0
+      }
+    },
     // 客户来源
     getcustomerSourceList() {
       const {contentPlatFormId,belongChannel} = this.form

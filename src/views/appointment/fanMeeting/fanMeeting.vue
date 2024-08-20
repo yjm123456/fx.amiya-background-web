@@ -130,7 +130,8 @@ export default {
       detailModel:false,
       // 详情参数
       detailParams:{
-        id:''
+        id:'',
+        name:''
       },
       // dateTime: '',
       // 查询
@@ -203,11 +204,12 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id } = params.row;
+                        const { id ,name} = params.row;
                         this.detailModel = true;
                         this.detailParams.id = id
                         this.detailParams.startDate = this.$moment(params.row.startDate).format("YYYY-MM-DD")
                         this.detailParams.endDate = this.$moment(params.row.endDate).format("YYYY-MM-DD")
+                        this.detailParams.name = name
                       },
                     },
                   },
@@ -337,9 +339,10 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id } = params.row;
+                        const { id,name } = params.row;
                         this.detailModel = true;
                         this.detailParams.id = id
+                        this.detailParams.name = name
                       },
                     },
                   },

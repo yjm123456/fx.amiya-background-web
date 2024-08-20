@@ -504,6 +504,7 @@ export default {
 }
 /deep/.ivu-table th.test-name {
     background: #f7e8b1;
+    border: 1px solid rgb(221, 220, 220);
 }
 /deep/.ivu-table-border td:nth-child(1){
     background: #fff9e6;

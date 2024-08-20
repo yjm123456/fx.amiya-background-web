@@ -55,6 +55,7 @@ export default {
             key: "city",
             width:100,
             align:'center',
+            fixed:'left',
             className: 'test-name',
             render: (h, params) => {
                 return h('div', { 
@@ -72,6 +73,7 @@ export default {
             title: "医院",
             key: "hospitalName",
             width:180,
+            fixed:'left',
             tooltip:true,
             className: 'test-name',
             render: (h, params) => {
@@ -288,6 +290,7 @@ export default {
 }
 /deep/.ivu-table th.test-name {
     background: #f7e8b1;
+    border: 1px solid rgb(221, 220, 220);
 }
 /deep/.ivu-table-border td:nth-child(1){
     background: #fff9e6;

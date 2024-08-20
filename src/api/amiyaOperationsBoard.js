@@ -218,3 +218,11 @@ export const getCustomerFlowRateByEmployeeAndHospital = (params) => {
         params
     });
 };
+// 获取助理业绩目标达成情况
+export const assistantTargetCompleteData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantTargetCompleteData",
+        method: "get",
+        params
+    });
+};

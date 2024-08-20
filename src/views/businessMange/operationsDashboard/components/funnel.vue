@@ -46,8 +46,11 @@
                         <div  class="r_content5">
                             <span class="r_t2" style="margin-top:12%"><span class="num">{{performance.newCustomerData.sendOrderToDealPrice}}</span>元</span>
                         </div>
-                            <div  class="r_content5">
+                        <div  class="r_content5">
                             <span class="r_t2" style="margin-top:12%"><span class="num">{{performance.newCustomerData.visitToDealPrice}}</span>元</span>
+                        </div>
+                        <div  class="r_content5">
+                            <span class="r_t2" style="margin-top:12%"><span class="num">{{performance.newCustomerData.dealToPrice}}</span>元</span>
                         </div>
                     </div>
                     <div class="new_customer">
@@ -70,6 +73,11 @@
                                 <span class="r_t2">退卡率：<span class="num">{{performance.newCustomerData.refundCardRate}}</span>%</span>
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.refundCardRateHealthValueThisMonth}}</span>%</span>
                             </div> -->
+                            <div  class="r_content">
+                                <span class="r_t2" >线索有效率：<span class="num">{{performance.newCustomerData.clueEffictiveRate}}</span>%</span>
+                                <!-- <span  class="r_t">{{performance.newCustomerData.addWeChatRateHealthValueSum}}%</span> -->
+                                <span  class="r_t3"><span class="num">{{performance.newCustomerData.clueEffictiveRateHealthValueThisMonth}}</span>%</span>
+                            </div>
                             <div  class="r_content2">
                                 <span class="r_t2" >加v率：<span class="num">{{performance.newCustomerData.addWeChatRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.addWeChatRateHealthValueSum}}%</span> -->
@@ -97,21 +105,24 @@
                     <div class="h3">老客业绩</div>
                     <div class="old_customer">
                         <div class="left_old">
-                            <div class="proportion">2次复购占比：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">2次复购占比：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRateProportion}}</span>%</div>
                             <div class="proportion2">3次复购占比：<span  class="num">{{performance.oldCustomerData.thirdTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion3">4次及以上复购占比：<span  class="num">{{performance.oldCustomerData.fourthTimeOrMoreBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">4次复购占比：<span  class="num">{{performance.oldCustomerData.fourthTimeBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">5次及以上复购占比：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
                         </div>
                         <div class="center_old">
                             <div class="people">总成交<div><span  class="num">{{performance.oldCustomerData.totalDealPeople}}</span>人</div></div>
                             <div  class="people2">2次复购<div><span  class="num">{{performance.oldCustomerData.secondDealPeople}}</span>人</div></div>
                             <div  class="people3">3次复购<div><span  class="num">{{performance.oldCustomerData.thirdDealPeople}}</span>人</div></div>
-                            <div  class="people4">4次及以上复购<div><span  class="num">{{performance.oldCustomerData.fourthOrMoreDealPeople}}</span>人</div></div>
+                            <div  class="people4">4次复购<div><span  class="num">{{performance.oldCustomerData.fourthDealCustomer}}</span>人</div></div>
+                            <div  class="people4">5次及以上复购<div><span  class="num">{{performance.oldCustomerData.fifThOrMoreOrMoreDealCustomer}}</span>人</div></div>
                         </div>
                         <div class="right_old">
                             <div class="r_text1">2次转化率：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRate}}</span>%</div>
                             <div class="r_text2">3次转化率：<span  class="num">{{performance.oldCustomerData.thirdTimeBuyRate}}</span>%</div>
-                            <div  class="r_text3">4次及以上转化率：<span  class="num">{{performance.oldCustomerData.fourthTimeOrMoreBuyRate}}</span>%</div>
-                            <div  class="r_text4">复购率：<span  class="num">{{performance.oldCustomerData.buyRate}}</span>%</div>
+                            <div  class="r_text3">4次转化率：<span  class="num">{{performance.oldCustomerData.fourthTimeBuyRate}}</span>%</div>
+                            <div  class="r_text4">5次及以上转化率：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRate}}</span>%</div>
+                            <div  class="r_text5">复购率：<span  class="num">{{performance.oldCustomerData.buyRate}}</span>%</div>
                         </div>
                     </div>
             </Card>
@@ -126,12 +137,15 @@ import * as api from "@/api/amiyaAchievement";
 export default {
     props:{
         active:String,
-        params:Object
+        selected4:String,
+        params:Object,
+        liveAnchorBaseInfos:Array
+
     },
   data() {
     return {
-      selected: "有效业绩",
-      list: ["有效业绩", "潜在业绩"],
+      selected: "全部业绩",
+      list: ["全部业绩","有效业绩", "潜在业绩"],
       isFlag:false,
       performance:{}
     };
@@ -147,8 +161,11 @@ export default {
         const data ={
             year:this.$moment(this.params.endDate).format("YYYY")? this.$moment(this.params.endDate).format("YYYY") : null,
             month:Number(this.$moment(this.params.endDate).format("MM")) >= 10 ? this.$moment(this.params.endDate).format("MM") : this.$moment(this.params.endDate).format("MM"),
-            contentPlatFormId:this.active == 'tiktok' ? this.params.contentPalteForms.find(item=>item.contentPlatformName == '抖音').id : this.active == 'vedio' ?  this.params.contentPalteForms.find(item=>item.contentPlatformName == '视频号').id : '',
-            isEffectiveCustomerData:this.selected == '有效业绩' ? true : false
+            // contentPlatFormId:this.active == 'tiktok' ? this.params.contentPalteForms.find(item=>item.contentPlatformName == '抖音').id : this.active == 'vedio' ?  this.params.contentPalteForms.find(item=>item.contentPlatformName == '视频号').id : '',
+            isEffectiveCustomerData:this.selected == '全部业绩' ? null : this.selected == '有效业绩' ? true : false,
+            contentPlatFormId:'',
+            liveAnchorBaseId:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : '' 
+
         }
         api.performanceOperationData(data).then(res=>{
             if(res.code == 0){
@@ -215,7 +232,7 @@ export default {
     justify-content: space-between;
 }
 .content{
-   width:80%;
+   width:100%;
    margin-right: 10px;
 //     height:500px;
 //     background-image: url(../../../../assets/images/new.png)  ;
@@ -238,7 +255,7 @@ export default {
      width:100%;
     height:400px;
     background-image: url(../../../../assets/images/new.png)  ;
-    min-width:400px;
+    min-width:600px;
     background-size: 100% 100%;
     position: relative;
     margin-top: 30px;
@@ -250,7 +267,7 @@ export default {
     background-image: url(../../../../assets/images/old.png) ;
     background-size: 100% 100%;
     position: relative;
-    min-width:700px; 
+    min-width:600px; 
     margin-left: 10px;
 }
 .h3{
@@ -262,7 +279,7 @@ export default {
 .right_data{
     position: absolute;
     right: -6%;
-    top:7%;
+    top:-6%;
 }
 .left_customer{
     position: absolute;
@@ -279,7 +296,7 @@ export default {
     margin-top: 8%;
 }
 .r_content2{
-    margin-top: 30%;
+    margin-top: 6%;
 }
 .r_content3{
     margin-top: 8%;
@@ -339,61 +356,61 @@ position: absolute
 
 .left_old{
     position: absolute;
-    top: 26%;
-    left: 20%;
+    top: 7%;
+    left: 16%;
 }
-.proportion{
-    margin-left: 0px;
-}
+
 .proportion2{
-    margin-left: -30%;
-    margin-top: 35px;
+    margin-left: -33%;
+    margin-top: 69px;
 }
-.proportion3{
-    margin-left: -90%;
-    margin-top: 45px;
-}
+
 .center_old{
     position: absolute;
-    top: 10%;
-    left: 46%;
+    top: 8%;
+    left: 48%;
     text-align: center;
 }
 .people{
     /* width:140px; */
 }
 .people2{
-    margin-top: 85%;
+    margin-top: 54%;
     /* width:100px; */
 }
 .people3{
-    margin-top: 85%;
+    margin-top: 57%;
     /* width:80px; */
 }
 .people4{
-    margin-top: 85%;
-    /* width:80px; */
+    margin-top: 50%;
 }
+
 .right_old{
     position: absolute;
     right: 0%;
     top: 24%;
 }
 .r_text1{
-    margin-top: 0px;
-    margin-left: -100px;
+    margin-top: -33px;
+    margin-left: -35px;
 }
 .r_text2{
     margin-top: 80px;
-    margin-left: -100px;
+    margin-left: -35px;
 }
 .r_text3{
-    margin-top: 100px;
-    margin-left: -140px;
+    margin-top: 70px;
+    margin-left: -35px;
 }
 .r_text4{
-    margin-left: 25%;
-    margin-top: -62%;
+    margin-left: -15%;
+    margin-top: 45%;
+    width: 180px;
+}
+.r_text5{
+    margin-left: 39%;
+    margin-top: -109%;
     width: 160px;
 }
 </style>

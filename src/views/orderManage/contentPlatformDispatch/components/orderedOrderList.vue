@@ -1330,6 +1330,12 @@ export default {
             },
           },
           {
+            title: "消费金额",
+            key: "dealAmount",
+            minWidth: 120,
+            align: "center",
+          },
+          {
             title: "派单人",
             key: "senderName",
             minWidth: 140,

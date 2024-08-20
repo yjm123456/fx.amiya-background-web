@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <Modal
-      title="详情"
+      :title=" '（' +detailParams.name + '）详情'"
       v-model="detailModels"
       width="100%"
       fullscreen
@@ -1154,7 +1154,7 @@ export default {
           {
             title: "客户手机号",
             key: "phone",
-            minWidth: 160,
+            minWidth: 130,
             align: "center",
           },
           {
@@ -1178,13 +1178,14 @@ export default {
           {
             title: "备注",
             key: "remark",
-            minWidth: 450,
+            minWidth: 300,
             align: "center",
+            tooltip:true
           },
           {
             title: "新/老客",
             key: "isOldCustomer	",
-            minWidth: 160,
+            minWidth: 100,
             align: "center",
             render: (h, params) => {
               return h(
@@ -1208,7 +1209,7 @@ export default {
           {
             title: "是否接车",
             key: "isNeedDriver",
-            minWidth: 160,
+            minWidth: 130,
             align: "center",
             render: (h, params) => {
               return h(
@@ -1218,12 +1219,83 @@ export default {
             },
           },
           {
-            title: "粉丝见面会名称",
-            key: "fansMeetingName",
-            minWidth: 160,
+            title: "是否到院",
+            key: "isToHospital",
+            minWidth: 120,
             align: "center",
+            render: (h, params) => {
+              if (params.row.isToHospital == true) {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#04B05D",
+                    },
+                  },
+                  params.row.isToHospital== true ? '已到院' : '未到院'
+                );
+              } else if (params.row.isToHospital == false) {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.isToHospital == true ? '已到院' : '未到院'
+                );
+              }  else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.isToHospital== true ? '已到院' : '未到院'
+                );
+              }
+            },
           },
-
+          {
+            title: "是否成交",
+            key: "isDeal",
+            minWidth: 120,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isToHospital == true) {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#04B05D",
+                    },
+                  },
+                  params.row.isToHospital == true ? '已成交' : '未成交'
+                );
+              } else if (params.row.isToHospital == false) {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.isToHospital == true ? '已成交' : '未成交'
+                );
+              }  else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.isToHospital== true ? '已成交' : '未成交'
+                );
+              }
+            },
+          },
           {
             title: "预估消费",
             key: "planConsumption",

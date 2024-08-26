@@ -17,6 +17,10 @@
         @on-page-size-change="handlePageSizeChange"
       />
     </div>
+    <Spin fix v-if="isLoading == true">
+      <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
+      <div>加载中...</div>
+    </Spin>
   </div>
 </template>
 <script>
@@ -29,6 +33,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       query: {
         pageNum: 1,
         pageSize: 10,
@@ -246,14 +251,20 @@ export default {
         checkState:2
         
       };
+      this.isLoading = true;
       api.getListWithPageByCustomerInspectData(data).then((res) => {
         if (res.code === 0) {
           const {
             list,
             totalCount,
           } = res.data.reconciliationDocumentsSettleInfo;
+          this.isLoading = false;
           this.query.data = list;
           this.query.totalCount = totalCount;
+        } else {
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 3000);
         }
       });
     },

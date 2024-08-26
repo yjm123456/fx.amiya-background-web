@@ -8,7 +8,7 @@
           v-for="(item, index) in platformList"
           :key="index"
           @click="checkTab(index, item)"
-          :class="{ active2: item.isSelected }"
+          :class="{ active: selected == item.name }"
         >
           <!-- <i class="iconfont  icons" :class="item.icon"></i> -->
           <span>{{ item.name }}</span>
@@ -28,8 +28,14 @@ export default {
     },
   data() {
     return {
+      selected:'全部',
       // 平台
       platformList: [
+        {
+          name: "全部",
+          id: 1,
+          isSelected: true,
+        },
         {
           name: "刀刀组",
           id: 1,
@@ -255,7 +261,8 @@ export default {
         return '';
     },
     checkTab(index, value) {
-      this.platformList[index].isSelected = !this.platformList[index].isSelected;
+      this.selected = value.name
+      // this.platformList[index].isSelected = !this.platformList[index].isSelected;
       this.getData()
     },
     getData(){
@@ -267,9 +274,9 @@ export default {
         const data = {
             startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
             endDate: this.$moment(endDate).format("YYYY-MM-DD"),
-            showDaoDao:this.platformList.find((item) => item.id == 1).isSelected,
-            showJiNa:this.platformList.find((item) => item.id == 2).isSelected,
-            showCooperate:this.platformList.find((item) => item.id == 3).isSelected,
+            showDaoDao:this.selected == '刀刀组' ? true : false,
+            showJiNa:this.selected == '吉娜组' ? true : false,
+            showCooperate:this.selected == '合作达人' ? true : false,
         }
         api.hospitalTransformData(data).then((res) => {
             if (res.code === 0) {
@@ -343,6 +350,11 @@ export default {
   border: 1px solid #ccc;
   border-radius: 8px;
   cursor: pointer;
+}
+.active{
+  color: #fff;
+  background:#2f8cf0;
+  border: 1px solid #2f8cf0;
 }
 .active2{
   color: red;

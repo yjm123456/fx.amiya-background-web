@@ -13,6 +13,8 @@ export default {
     props:{
         params:Object,
         platformList:Array,
+        liveAnchorBaseInfos:Array,
+        selected:String
     },
     data(){
         return{
@@ -394,6 +396,7 @@ export default {
                 showWechatVideo:this.platformList.find((item) => item.id == 2).isSelected,
                 showXiaoHongShu:this.platformList.find((item) => item.id == 3).isSelected,
                 showPrivateDomain:this.platformList.find((item) => item.id == 4).isSelected,
+                baseLiveAnchorId:this.selected == '全部' ? '' : this.liveAnchorBaseInfos.find(item=>this.selected == item.name).id 
             };
             api.assistantTargetCompleteData(data).then((res) => {
                 if (res.code == 0) {

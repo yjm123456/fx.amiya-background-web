@@ -155,6 +155,7 @@
                 placeholder="请选择主播"
                 filterable
                 style="width: 150px;margin-left: 10px"
+                :disabled="query.baseLiveAnchorId != -1 && isliveAnchorBaseId == true"
               >
                 <Option
                   v-for="item in liveAnchorBaseInfos"
@@ -685,12 +686,13 @@
               </Select>
             </FormItem>
           </Col>
+          <!-- @on-change="emergencyLevelChange" -->
           <Col span="8">
             <FormItem label="重要程度" prop="emergencyLevel">
               <Select
                 v-model="form.emergencyLevel"
                 placeholder="请选择重要程度"
-                @on-change="emergencyLevelChange"
+                
               >
                 <Option
                   v-for="item in emergencyLevelsList"
@@ -737,7 +739,7 @@
               ></DatePicker>
             </FormItem>
           </Col>
-          <!-- <Col span="8">
+          <Col span="8">
             <FormItem label="是否退款" prop="isReturnBackPrice">
               <i-switch
                 v-model="form.isReturnBackPrice"
@@ -789,8 +791,8 @@
                 :disabled="form.refundType != '其他'"
               ></Input>
             </FormItem>
-          </Col> -->
-          <!-- <Col span="8">
+          </Col>
+          <Col span="8">
             <FormItem label="是否差评" prop="isBadReview">
               <i-switch
                 v-model="form.isBadReview"
@@ -845,7 +847,7 @@
                 :rows="3"
               ></Input>
             </FormItem>
-          </Col>-->
+          </Col>
           <Col span="16">
             <FormItem label="备注" prop="remark">
               <Input
@@ -895,6 +897,7 @@
       :assignModel.sync="assignModel"
       :assignParams="assignParams"
       @getSmallCar="getSmallCar"
+      
     />
     <!-- 批量指派 -->
     <batchAssignment
@@ -1756,7 +1759,7 @@ export default {
                             if(this.form.belongChannel !=null && this.form.contentPlateFormId){
                               this.getcustomerSourceList()
                             }
-                            this.emergencyLevelClick()
+                            // this.emergencyLevelClick()
                           }
                         });
                       },
@@ -2241,7 +2244,9 @@ export default {
       sourceList:[],
       //客户来源文字提示
       isTitle:true,
-      isTitle2:true
+      isTitle2:true,
+      // 验证主播下拉框是否可以查看其他的主播权限
+      isliveAnchorBaseId:false
     };
   },
   methods: {
@@ -2266,7 +2271,7 @@ export default {
     // 根据归属部门和客户来源 定义 重要程度
     emergencyLevelClick(){
       const {belongChannel,source} = this.form
-      if( belongChannel == 2  && source == 1 ){
+      if( belongChannel == 2  && source == 1  || belongChannel== 3 && source==9){
         // 部门是直播中并且客户来源是直播间的话 是一级客资
         this.form.emergencyLevel = 3
       }else if( (belongChannel == 1 && source == 3) || (belongChannel == 2 && source == 3) || (belongChannel == 3 && source == 3) || (belongChannel == 3 && source == 2) ){
@@ -2384,6 +2389,17 @@ export default {
           this.typeList = typeList;
         }
       });
+    },
+    // 根据员工编号获取员工信息
+    getbyIdGetAmiyaEmployee(){
+      let employeeId = sessionStorage.getItem('employeeId')
+      employeeManageApi.byIdGetAmiyaEmployee(employeeId).then(res=>{
+        if(res.code == 0){
+          // this.liveAnchorBaseId = res.data.employeeInfo.liveAnchorBaseId
+          this.query.baseLiveAnchorId =  this.isliveAnchorBaseId == true ? res.data.employeeInfo.liveAnchorBaseId : -1
+          // this.getLiveAnchorBaseInfoValid()
+        }
+      })
     },
     // 获取有效的主播基础信息列表
     getLiveAnchorBaseInfoValid() {
@@ -3053,24 +3069,17 @@ export default {
               isReturnBackPrice,
               remark,
               IsAddWeChat,
-              refundDate: refundDate
-                ? this.$moment(refundDate).format("YYYY-MM-DD")
-                : null,
-              refundReason:
-                refundType != "其他" ? refundType : "其他：" + refundReason,
+              refundDate: refundDate ? this.$moment(refundDate).format("YYYY-MM-DD") : null,
+              refundReason: refundType != "其他" ? refundType : "其他：" + refundReason,
               isBadReview,
-              badReviewDate: badReviewDate
-                ? this.$moment(badReviewDate).format("YYYY-MM-DD")
-                : null,
+              badReviewDate: badReviewDate ? this.$moment(badReviewDate).format("YYYY-MM-DD") : null,
               badReviewReason,
               badReviewContent,
               isReContent,
               reContent,
               assignEmpId,
               emergencyLevel,
-              consultationDate: consultationDate
-                ? this.$moment(consultationDate).format("YYYY-MM-DD")
-                : null,
+              consultationDate: consultationDate ? this.$moment(consultationDate).format("YYYY-MM-DD") : null,
               subPhone,
               source,
               productType: source == 6 ? productType : 0,
@@ -3169,7 +3178,6 @@ export default {
     this.getCustomerServiceLists();
     this.getEmergencyLevels();
     // this.getcustomerSourceList();
-    this.getLiveAnchorBaseInfoValid();
     this.getconsultationTypeList();
     this.getWeChatList();
     this.getshoppingCartTakeGoodsProductTypeList();
@@ -3177,11 +3185,15 @@ export default {
     this.getEmployeeByPositionId();
     this.getcustomerTypeList();
     this.getshoppingCartGetBelongChannelList()
+    this.getLiveAnchorBaseInfoValid();
+    this.getbyIdGetAmiyaEmployee()
     
     
   },
   mounted(){
-    
+    const currentRole = JSON.parse(sessionStorage.getItem("permissions"));
+    const flag = currentRole.some((ele) => {return 'fx.amiya.permission.SELECT_SPEC_LIVEANCHOR'.includes(ele);});
+    this.isliveAnchorBaseId = flag ? true :false
   }
 };
 </script>

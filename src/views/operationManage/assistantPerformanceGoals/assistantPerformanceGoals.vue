@@ -131,6 +131,11 @@
               </FormItem>
             </Col>
             <Col span="8">
+                <FormItem label="线索登记目标" prop="cluesRegisterTarget">
+                    <Input v-model="form.cluesRegisterTarget" placeholder="请输入线索登记目标" type="number" number ></Input>
+                </FormItem>
+            </Col>
+            <Col span="8">
                 <FormItem label="有效分诊" prop="effectiveConsulationCardTarget">
                     <Input v-model="form.effectiveConsulationCardTarget" placeholder="请输入有效分诊" type="number" number></Input>
                 </FormItem>
@@ -190,6 +195,7 @@
                     <Input v-model="form.performanceTarget" placeholder="请输入总业绩目标" type="number" number disabled></Input>
                 </FormItem>
             </Col>
+            
            
             <Spin fix v-if="isflag == true">
                 <Icon
@@ -326,6 +332,12 @@ export default {
             align: "center",
           },
           {
+            title: "线索登记目标",
+            key: "cluesRegisterTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
             title: "操作",
             key: "",
             minWidth: 150,
@@ -365,7 +377,8 @@ export default {
                               effectiveAddWechatTarget,
                               potentialAddWechatTarget,
                               newCustomerVisitTarget,
-                              oldCustomerVisitTarget
+                              oldCustomerVisitTarget,
+                              cluesRegisterTarget
                             } = res.data.employeePerformanceTarget;
                             this.isEdit = true;
                             this.form.belongYear = String(belongYear);
@@ -384,6 +397,7 @@ export default {
                             this.form.oldCustomerPerformanceTarget = oldCustomerPerformanceTarget;
                             this.form.performanceTarget = performanceTarget;
                             this.form.id = id;
+                            this.form.cluesRegisterTarget = cluesRegisterTarget
                             this.controlModal = true;
                           }
                         });
@@ -449,29 +463,31 @@ export default {
         // 助理
         employeeId: null,
         // 有效分诊
-        effectiveConsulationCardTarget: null,
+        effectiveConsulationCardTarget: 0,
         // 潜在分诊
-        potentialConsulationCardTarget: null,
+        potentialConsulationCardTarget: 0,
         // 派单目标
-        sendOrderTarget: null,
+        sendOrderTarget: 0,
         // 新客到院目标
-        newCustomerVisitTarget: null,
+        newCustomerVisitTarget: 0,
         // 老客到院目标
-        oldCustomerVisitTarget: null,
+        oldCustomerVisitTarget: 0,
         // 新客成交目标
-        newCustomerDealTarget: null,
+        newCustomerDealTarget: 0,
         // 老客成交目标
-        oldCustomerDealTarget: null,
+        oldCustomerDealTarget: 0,
         // 新客业绩目标
-        newCustomerPerformanceTarget: null,
+        newCustomerPerformanceTarget: 0,
         // 老客业绩目标
-        oldCustomerPerformanceTarget: null,
+        oldCustomerPerformanceTarget: 0,
         // 总业绩目标
-        performanceTarget: null,
+        performanceTarget: 0,
         // 有效加v
-        effectiveAddWechatTarget: null,
+        effectiveAddWechatTarget: 0,
         // 潜在加V
-        potentialAddWechatTarget: null,
+        potentialAddWechatTarget: 0,
+        // 线索登记目标
+        cluesRegisterTarget:0
       },
 
       ruleValidate: {
@@ -563,6 +579,12 @@ export default {
           {
             required: true,
             message: "请输入总业绩目标",
+          },
+        ],
+        cluesRegisterTarget: [
+          {
+            required: true,
+            message: "请输入线索登记目标",
           },
         ],
       },
@@ -698,7 +720,7 @@ export default {
         if (valid) {
           if (this.isEdit) {
             this.isflag = true
-            const {belongYear,belongMonth,employeeId,effectiveConsulationCardTarget,potentialConsulationCardTarget,sendOrderTarget,newCustomerDealTarget,oldCustomerDealTarget,newCustomerPerformanceTarget,oldCustomerPerformanceTarget,performanceTarget,id,effectiveAddWechatTarget,potentialAddWechatTarget,newCustomerVisitTarget,oldCustomerVisitTarget} = this.form
+            const {belongYear,belongMonth,employeeId,effectiveConsulationCardTarget,potentialConsulationCardTarget,sendOrderTarget,newCustomerDealTarget,oldCustomerDealTarget,newCustomerPerformanceTarget,oldCustomerPerformanceTarget,performanceTarget,id,effectiveAddWechatTarget,potentialAddWechatTarget,newCustomerVisitTarget,oldCustomerVisitTarget,cluesRegisterTarget} = this.form
             const data ={
                 belongYear:this.$moment(new Date(belongYear)).format("YYYY"),
                 belongMonth,
@@ -715,7 +737,8 @@ export default {
                 effectiveAddWechatTarget,
                 potentialAddWechatTarget,
                 newCustomerVisitTarget,
-                oldCustomerVisitTarget
+                oldCustomerVisitTarget,
+                cluesRegisterTarget
             }
             // 修改
             api.editEmployeePerformanceTarget(data).then((res) => {
@@ -736,7 +759,7 @@ export default {
             });
           } else {
             this.isflag = true
-            const {belongYear,belongMonth,employeeId,effectiveConsulationCardTarget,potentialConsulationCardTarget,sendOrderTarget,newCustomerDealTarget,oldCustomerDealTarget,newCustomerPerformanceTarget,oldCustomerPerformanceTarget,performanceTarget,effectiveAddWechatTarget,potentialAddWechatTarget,newCustomerVisitTarget,oldCustomerVisitTarget} = this.form
+            const {belongYear,belongMonth,employeeId,effectiveConsulationCardTarget,potentialConsulationCardTarget,sendOrderTarget,newCustomerDealTarget,oldCustomerDealTarget,newCustomerPerformanceTarget,oldCustomerPerformanceTarget,performanceTarget,effectiveAddWechatTarget,potentialAddWechatTarget,newCustomerVisitTarget,oldCustomerVisitTarget,cluesRegisterTarget} = this.form
             const data ={
                 belongYear:this.$moment(new Date(belongYear)).format("YYYY"),
                 belongMonth,
@@ -752,7 +775,8 @@ export default {
                 effectiveAddWechatTarget,
                 potentialAddWechatTarget,
                 newCustomerVisitTarget,
-                oldCustomerVisitTarget
+                oldCustomerVisitTarget,
+                cluesRegisterTarget
             }
             // 添加
             api.addEmployeePerformanceTarget(data).then((res) => {

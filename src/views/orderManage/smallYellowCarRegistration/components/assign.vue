@@ -79,7 +79,8 @@ export default {
                   this.form.assignBy = null 
                   this.$Message.success('指派成功')
                   this.cancel()
-                  this.$emit("getSmallCar")
+                  // this.$emit("getSmallCar")
+                  this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
               }
           })
       },

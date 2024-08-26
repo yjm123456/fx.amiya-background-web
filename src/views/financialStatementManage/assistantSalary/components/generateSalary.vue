@@ -117,6 +117,28 @@
         <div class="bor" v-if="form.positionId == 30">
           <Row :gutter="30">
             <Col span="8">
+              <FormItem label="加v率达成情况" prop="addWechatCompletePrice">
+                <Input
+                  v-model="form.addWechatCompletePrice"
+                  placeholder="请输入加v率达成情况"
+                  type="number"
+                  number
+                  @on-change="amountChange"
+                ></Input>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="线索登记完成率" prop="addClueCompletePrice">
+                <Input
+                  v-model="form.addClueCompletePrice"
+                  placeholder="请输入线索登记完成率"
+                  type="number"
+                  number
+                  @on-change="amountChange"
+                ></Input>
+              </FormItem>
+            </Col>
+            <Col span="8">
               <FormItem label="医美客资加V业绩" prop="beautyAddWechatPrice">
                 <Input
                   v-model="form.beautyAddWechatPrice"
@@ -346,9 +368,25 @@ export default {
         cooperationLiveAnchorSendOrderPrice: 0,
         // 供应链达人上门提成金额
         cooperationLiveAnchorToHospitalPrice: 0,
+        // 加v率达成情况
+        addWechatCompletePrice:0,
+        // 线索登记完成率
+        addClueCompletePrice:0
       },
 
       ruleValidate: {
+        addWechatCompletePrice: [
+          {
+            required: true,
+            message: "请输入加v率达成情况",
+          },
+        ],
+        addClueCompletePrice: [
+          {
+            required: true,
+            message: "请输入线索登记完成率",
+          },
+        ],
         beautyAddWechatPrice: [
           {
             required: true,
@@ -502,6 +540,8 @@ export default {
           consulationCardAddWechatPrice,
           cooperationLiveAnchorSendOrderPrice,
           cooperationLiveAnchorToHospitalPrice,
+          addWechatCompletePrice,
+          addClueCompletePrice
         } =  res.data.customerServiceCompensation;
         this.form.name = name;
         this.form.belongEmpId = belongEmpId;
@@ -526,6 +566,8 @@ export default {
         this.form.consulationCardAddWechatPrice = consulationCardAddWechatPrice;
         this.form.cooperationLiveAnchorSendOrderPrice = cooperationLiveAnchorSendOrderPrice;
         this.form.cooperationLiveAnchorToHospitalPrice = cooperationLiveAnchorToHospitalPrice;
+        this.form.addWechatCompletePrice = addWechatCompletePrice;
+        this.form.addClueCompletePrice = addClueCompletePrice;
           this.checkBelongEmpIdChange()
       }
       });
@@ -588,6 +630,10 @@ export default {
       this.form.cooperationLiveAnchorSendOrderPrice = 0;
       // 供应链达人上门提成金额
       this.form.cooperationLiveAnchorToHospitalPrice = 0;
+      // 加v率达成情况
+      this.form.addWechatCompletePrice = 0;
+      // 线索登记完成率
+      this.form.addClueCompletePrice = 0;
     },
     //根据员工id查询提成比例
     checkBelongEmpIdChange(value) {
@@ -635,7 +681,9 @@ export default {
         consulationCardPrice,
         consulationCardAddWechatPrice,
         cooperationLiveAnchorSendOrderPrice ,
-        cooperationLiveAnchorToHospitalPrice
+        cooperationLiveAnchorToHospitalPrice,
+        addWechatCompletePrice ,
+        addClueCompletePrice
 
       } = this.form;
       if(positionId != 30){
@@ -645,7 +693,7 @@ export default {
         this.form.totalPrice = Math.round(price * 100) / 100;
       }else{
         let price =
-        salary + customerServicePerformance + beautyAddWechatPrice + takeGoodsAddWechatPrice +consulationCardPrice+consulationCardAddWechatPrice+cooperationLiveAnchorSendOrderPrice +cooperationLiveAnchorToHospitalPrice+otherPrice - otherChargebacks;
+        salary + customerServicePerformance + beautyAddWechatPrice + takeGoodsAddWechatPrice +consulationCardPrice+consulationCardAddWechatPrice+cooperationLiveAnchorSendOrderPrice +cooperationLiveAnchorToHospitalPrice+otherPrice - otherChargebacks+ addWechatCompletePrice + addClueCompletePrice;
         this.form.totalPrice = Math.round(price * 100) / 100;
       }
       

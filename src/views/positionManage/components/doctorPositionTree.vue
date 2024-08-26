@@ -39,7 +39,10 @@
                         }
                         else{
                             moduleItem._checked = false
-                            this.menuModuleData[index]["_highlight"] = false;
+                            this.menuModuleData.map((item2,index2)=>{
+                                this.menuModuleData[index2]["_highlight"] = false;
+                            })
+                            
                         }
                     })
                 })

@@ -29,8 +29,9 @@
                   filterable
                   @on-change="checkBelongEmpIdChange"
                 >
+                <!-- params.employeeList -->
                   <Option
-                    v-for="item in params.employeeList"
+                    v-for="item in params.employeePosition"
                     :value="item.id"
                     :key="item.id"
                     >{{ item.name }}</Option
@@ -116,6 +117,46 @@
         </div>
         <div class="bor" v-if="form.positionId == 30">
           <Row :gutter="30">
+            <Col span="8">
+              <FormItem label="加v率达成情况" prop="addWechatCompletePrice">
+                <Input
+                  v-model="form.addWechatCompletePrice"
+                  placeholder="请输入加v率达成情况"
+                  type="number"
+                  number
+                  @on-change="amountChange"
+                  style="width:85%;"
+                ></Input>
+               
+               <Tooltip placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
+                  <template #content>
+                    <p>{{centent5}}</p>
+                </template>
+              </Tooltip>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="线索登记完成率" prop="addClueCompletePrice">
+                <Input
+                  v-model="form.addClueCompletePrice"
+                  placeholder="请输入线索登记完成率"
+                  type="number"
+                  number
+                  @on-change="amountChange"
+                  style="width:85%;"
+                ></Input>
+               
+               <Tooltip  placement="top-start">
+                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
+                  <template #content>
+                    <p>{{centent6}}</p>
+                    <p>{{centent7}}</p>
+                    <p>{{centent8}}</p>
+                </template>
+              </Tooltip>
+              </FormItem>
+            </Col>
             <Col span="8">
               <FormItem label="医美客资加V业绩（单个15元）" prop="beautyAddWechatPrice">
                 <Input
@@ -299,7 +340,7 @@
         </Spin>
       </Form>
       <div slot="footer">
-        <Button type="primary" @click="JiaVHandleSubmit" v-if="form.positionName=='行政客服'">自动填写（加v）</Button>
+        <Button type="primary" @click="JiaVHandleSubmit" v-if="form.positionName=='行政客服'">自动填写（线索、加v）</Button>
         <Button type="primary" @click="visitHandleSubmit" style="margin-right:30px" v-if="form.positionName=='行政客服'">自动填写（派单上门）</Button>
 
         <Button @click="handleCancel('form')">取消</Button>
@@ -311,6 +352,7 @@
 <script>
 import * as api from "@/api/customerServiceCompensation";
 import * as employeeManageApi from "@/api/employeeManage";
+import * as healthValueApi from "@/api/healthValue";
 
 export default {
   props: {
@@ -336,7 +378,7 @@ export default {
         // 对账单id集合
         recommandDocumentSettleIdList: [],
         // 底薪
-        salary: null,
+        salary: 0,
         // 提成金额
         customerServicePerformance: null,
         // 上门率
@@ -370,9 +412,25 @@ export default {
         cooperationLiveAnchorSendOrderPrice: 0,
         // 供应链达人上门提成金额
         cooperationLiveAnchorToHospitalPrice: 0,
+        // 加v率达成情况
+        addWechatCompletePrice:0,
+        // 线索登记完成率
+        addClueCompletePrice:0
       },
 
       ruleValidate: {
+        addWechatCompletePrice: [
+          {
+            required: true,
+            message: "请输入加v率达成情况",
+          },
+        ],
+        addClueCompletePrice: [
+          {
+            required: true,
+            message: "请输入线索登记完成率",
+          },
+        ],
         beautyAddWechatPrice: [
           {
             required: true,
@@ -503,9 +561,27 @@ export default {
       centent3:'供应链达人派单人数：0人',
       // 供应链达人上门提成功能金额
       centent4:'供应链达人上门人数：0人',
+      // 加v率达成情况
+      centent5:'当前组加v率：0%',
+      // 供线索登记完成率
+      centent6:'当前助理线索登记量：0',
+      centent7:'当前助理线索登记目标：0',
+      centent8:'当前助理线索登记完成率：0%',
+      // 当月加v率健康值
+      AddWeChatHealthValueThisMonth:0
     };
   },
   methods: {
+    // 获取当月获客情况数据
+    getHealthValueLists() {
+      healthValueApi.getHealthValid().then((res) => {
+        if (res.code == 0) {
+          const {list} = res.data
+          // 当月加v健康值
+          this.AddWeChatHealthValueThisMonth = list.find(item=>item.id == 'AddWeChatHealthValueThisMonth').rate
+        }
+      });
+    },
     // 加v自动获取
     JiaVHandleSubmit(){
       const data ={
@@ -515,13 +591,24 @@ export default {
       }
       api.getAddWechatNumByCreateEmpInfoAndDate(data).then(res=>{
         if(res.code == 0){
-          const {beautyCustomerAddWechatNum,takeGoodsCustomerAddWechatNum} = res.data.AddWechatNumByCreateEmpInfoAndDate
+          const {beautyCustomerAddWechatNum,takeGoodsCustomerAddWechatNum,addWeChatRate,shoppingCartRegistionAddNumAndCompleteRateVo} = res.data.AddWechatNumByCreateEmpInfoAndDate
           // this.form.beautyAddWechatPrice = Math.round( (beautyCustomerAddWechatNum * 5) *1000 / 10 ) / 100
           // this.form.takeGoodsAddWechatPrice = Math.round( (takeGoodsCustomerAddWechatNum * 15) *1000 / 10 ) / 100
           this.form.beautyAddWechatPrice = Math.round( (beautyCustomerAddWechatNum * 15) *1000 / 10 ) / 100
           this.form.takeGoodsAddWechatPrice = Math.round( (takeGoodsCustomerAddWechatNum * 5) *1000 / 10 ) / 100
           this.centent1='当前组医美客资加V：' + beautyCustomerAddWechatNum + '个'
           this.centent2='当前组带货客资加V：' + takeGoodsCustomerAddWechatNum + '个'
+          // 加v率达成情况
+          this.centent5='当前组加v率：' + addWeChatRate + '%'
+          // 当前组加v率 大于 当月加v健康值的话是0 小于扣除300
+          this.form.addWechatCompletePrice =  addWeChatRate >= this.AddWeChatHealthValueThisMonth ? 0 : -300
+          // 供线索登记完成率
+          this.centent6='当前助理线索登记量：'  + shoppingCartRegistionAddNumAndCompleteRateVo.createNum 
+          this.centent7='当前助理线索登记目标：'  + shoppingCartRegistionAddNumAndCompleteRateVo.createNumTarget
+          this.centent8='当前助理线索登记完成率：'  + shoppingCartRegistionAddNumAndCompleteRateVo.createNumCompleteRate + '%'
+          // 供线索登记完成率 大于等于100 奖励500 小于扣除300
+          this.form.addClueCompletePrice =  shoppingCartRegistionAddNumAndCompleteRateVo.createNumCompleteRate >= 100 ? 500 : -300
+          this.amountChange()
         }
       })
     },
@@ -600,6 +687,10 @@ export default {
       this.form.cooperationLiveAnchorSendOrderPrice = 0;
       // 供应链达人上门提成金额
       this.form.cooperationLiveAnchorToHospitalPrice = 0;
+      // 加v率达成情况
+      this.form.addWechatCompletePrice = 0;
+      // 线索登记完成率
+      this.form.addClueCompletePrice = 0;
     },
     //根据员工id查询提成比例
     checkBelongEmpIdChange() {
@@ -641,7 +732,9 @@ export default {
         consulationCardPrice,
         consulationCardAddWechatPrice,
         cooperationLiveAnchorSendOrderPrice ,
-        cooperationLiveAnchorToHospitalPrice
+        cooperationLiveAnchorToHospitalPrice,
+        addWechatCompletePrice,
+        addClueCompletePrice
       } = this.form;
       if(positionId != 30){
         let price =
@@ -650,7 +743,7 @@ export default {
         this.form.totalPrice = Math.round(price * 100) / 100;
       }else{
         let price =
-        salary + customerServicePerformance + beautyAddWechatPrice + takeGoodsAddWechatPrice +consulationCardPrice+consulationCardAddWechatPrice+cooperationLiveAnchorSendOrderPrice +cooperationLiveAnchorToHospitalPrice+otherPrice - otherChargebacks;
+        salary + customerServicePerformance + beautyAddWechatPrice + takeGoodsAddWechatPrice +consulationCardPrice+consulationCardAddWechatPrice+cooperationLiveAnchorSendOrderPrice +cooperationLiveAnchorToHospitalPrice+otherPrice - otherChargebacks + addWechatCompletePrice + addClueCompletePrice;
         this.form.totalPrice = Math.round(price * 100) / 100;
       }
     },
@@ -685,6 +778,10 @@ export default {
       this.centent2='当前组带货客资加V：0个'
       this.centent3='供应链达人派单人数：0人'
       this.centent4='供应链达人上门人数：0人'
+      this.centent5='当前组加v率：0%'
+      this.centent6='当前助理线索登记量：0'
+      this.centent7='当前助理线索登记目标：0'
+      this.centent8='当前助理线索登记完成率：0%'
 
     },
     // modal 显示状态发生变化时触发
@@ -698,6 +795,10 @@ export default {
         this.centent2='当前组带货客资加V：0个'
         this.centent3='供应链达人派单人数：0人'
         this.centent4='供应链达人上门人数：0人'
+        this.centent5='当前组加v率：0%'
+        this.centent6='当前助理线索登记量：0'
+        this.centent7='当前助理线索登记目标：0'
+        this.centent8='当前助理线索登记完成率：0%'
       }
     },
   },
@@ -705,6 +806,7 @@ export default {
   watch: {
     administrationGenerateSalaryModel(value) {
       this.control = value;
+
       if (value == true) {
         const {
           assistantPerformanceList,
@@ -723,6 +825,7 @@ export default {
         this.form.recommandDocumentSettleIdList = orderId;
         // 提成金额
         this.form.customerServicePerformance = Math.round(price * 100) / 100;
+        this.getHealthValueLists()
       }
     },
   },

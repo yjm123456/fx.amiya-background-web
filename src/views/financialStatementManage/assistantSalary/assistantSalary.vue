@@ -80,7 +80,7 @@
     <!-- 编辑 -->
     <generateSalary :controlModal.sync="controlModal" :params="params" @getContractListClick="getContractListClick" ref="generateSalaryRef"/>
     <!-- 详情 -->
-    <detail :detailModal.sync="detailModal" :detailParams="detailParams" ref="detail"/>
+    <detail :detailModal.sync="detailModal" :detailParams="detailParams" ref="detail" />
 
   </div>
 </template>
@@ -229,6 +229,20 @@ export default {
             tooltip:true
           },
           {
+            title: "加v率达成情况",
+            key: "addWechatCompletePrice",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "线索登记完成情况",
+            key: "addClueCompletePrice",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
             title: "医美客资加V业绩",
             key: "beautyAddWechatPrice",
             align:'center',
@@ -328,6 +342,7 @@ export default {
                       type: "primary",
                       size: "small",
                       // disabled:params.row.valid == false
+                      disabled:this.isButton == false
                     },
                     style: {
                       marginRight: "5px",
@@ -377,8 +392,8 @@ export default {
                     props: {
                       type: "primary",
                       size: "small",
-                      disabled:this.isDirector == 'false' && this.isCustomerService == 'true'
-
+                      // disabled:this.isDirector == 'false' && this.isCustomerService == 'true'
+                      disabled:this.isButton == false
                     },
                     style: {
                       marginRight: "5px",
@@ -413,7 +428,8 @@ export default {
                     props: {
                       type: "error",
                       size: "small",
-                      disabled:params.row.valid == false || this.isDirector == 'false' && this.isCustomerService == 'true'
+                      // disabled:params.row.valid == false || this.isDirector == 'false' && this.isCustomerService == 'true'
+                      disabled:this.isButton == false
                     },
                     on: {
                       click: () => {

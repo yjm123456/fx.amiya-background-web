@@ -259,14 +259,28 @@
             <span>{{ item.name }}</span>
           </div>
         </div>
+        <!-- 主播筛选 -->
+          <div class="tab_content2">
+              <div class="tab">
+                <div
+                  class="tab_item"
+                  v-for="(item, index) in list4"
+                  :key="index"
+                  @click="selectTab5(index, item)"
+                  :class="{ active: selected5 == item}"
+                >
+                  <span>{{ item }}</span>
+                </div>
+              </div>
+          </div>
         
         <div >
           <!-- 线索转化和客户转化情况-->
-          <trafficConversionTable :params="params" :platformList="platformList" ref="trafficConversionTable" />
+          <trafficConversionTable :params="params" :platformList="platformList" :liveAnchorBaseInfos="liveAnchorBaseInfos" ref="trafficConversionTable" :selected="selected5"/>
           <!-- 线索转化和客户转化情况-助理 -->
-          <assistantTable :params="params" :platformList="platformList" ref="assistantTable" />
+          <assistantTable :params="params" :platformList="platformList" :liveAnchorBaseInfos="liveAnchorBaseInfos" ref="assistantTable" :selected="selected5"/>
           <!-- 助理业绩目标达成情况 -->
-          <assistantTargetCompleteDataTable :params="params" :platformList="platformList" ref="assistantTargetCompleteDataTable"/>
+          <assistantTargetCompleteDataTable :params="params" :platformList="platformList" :liveAnchorBaseInfos="liveAnchorBaseInfos" ref="assistantTargetCompleteDataTable" :selected="selected5"/>
           <!-- 机构转化情况 -->
           <hospitalTable :params="params" :platformList="platformList" ref="hospitalTable"/>
         </div>
@@ -359,6 +373,7 @@ export default {
       selected2:"业绩",
       selected3:"线索",
       selected4:"全部",
+      selected5:"全部",
       //详情 平台id
       platformId:'',
       // 业绩趋势
@@ -574,6 +589,15 @@ export default {
 
         this.$refs.whole.getPerformanceOperationData()
       })
+    },
+    // 转化板块 主播筛选
+    selectTab5(index,value){
+      this.selected5 = value
+      this.$nextTick(()=>{
+          this.$refs.trafficConversionTable.getCompanyTransformData();
+          this.$refs.assistantTable.getAssistantTransformData();
+          this.$refs.assistantTargetCompleteDataTable.getassistantTargetCompleteData();
+        })
     },
     getData() {
       const {startDate,endDate} = this.params
@@ -1060,6 +1084,7 @@ export default {
   color: red;
   border: 1px solid red;
 }
+
 .h3{
   font-size: 18px;
   font-weight: bold;

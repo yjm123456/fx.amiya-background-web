@@ -931,32 +931,32 @@ export default {
       } = this.form;
       if (positionId != 30) {
         let price =
-          salary +
-          customerServicePerformance +
-          toHospitalRateReword +
-          repeatPurchasesRateReword +
-          newCustomerToHospitalReword +
-          oldCustomerToHospitalReword +
-          targetFinishReword +
-          otherPrice -
-          otherChargebacks +
-          oldTakeNewCustomerPrice;
+          Number(salary) +
+          Number(customerServicePerformance) +
+          Number(toHospitalRateReword) +
+          Number(repeatPurchasesRateReword) +
+          Number(newCustomerToHospitalReword) +
+          Number(oldCustomerToHospitalReword) +
+          Number(targetFinishReword) +
+          Number(otherPrice) -
+          Number(otherChargebacks) +
+          Number(oldTakeNewCustomerPrice);
         this.form.totalPrice = Math.round(price * 100) / 100;
       } else {
         let price =
-          salary +
-          customerServicePerformance +
-          beautyAddWechatPrice +
-          takeGoodsAddWechatPrice +
-          consulationCardPrice +
-          consulationCardAddWechatPrice +
-          cooperationLiveAnchorSendOrderPrice +
-          cooperationLiveAnchorToHospitalPrice +
-          otherPrice -
-          otherChargebacks +
-          addWechatCompletePrice +
-          addClueCompletePrice +
-          oldTakeNewCustomerPrice;
+          Number(salary) +
+          Number(customerServicePerformance) +
+          Number(beautyAddWechatPrice) +
+          Number(takeGoodsAddWechatPrice) +
+          Number(consulationCardPrice) +
+          Number(consulationCardAddWechatPrice) +
+          Number(cooperationLiveAnchorSendOrderPrice) +
+          Number(cooperationLiveAnchorToHospitalPrice) +
+          Number(otherPrice) -
+          Number(otherChargebacks) +
+          Number(addWechatCompletePrice) +
+          Number(addClueCompletePrice) +
+          Number(oldTakeNewCustomerPrice);
         this.form.totalPrice = Math.round(price * 100) / 100;
       }
     },

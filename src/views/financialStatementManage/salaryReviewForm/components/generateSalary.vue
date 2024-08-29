@@ -447,7 +447,7 @@ export default {
         // 供应链达人上门提成金额
         cooperationLiveAnchorToHospitalPrice: 0,
         // 老带新提成
-        oldTakeNewCustomerPrice: 0,
+        oldTakeNewCustomerPrice: null,
       },
 
       ruleValidate: {
@@ -620,16 +620,16 @@ export default {
         oldTakeNewCustomerPrice,
       } = this.form;
       let price =
-        salary + 
-        customerServicePerformance +
-        toHospitalRateReword +
-        repeatPurchasesRateReword +
-        newCustomerToHospitalReword +
-        oldCustomerToHospitalReword +
-        targetFinishReword +
-        otherPrice +
-        oldTakeNewCustomerPrice -
-        otherChargebacks;
+        Number(salary) + 
+        Number(customerServicePerformance) +
+        Number(toHospitalRateReword) +
+        Number(repeatPurchasesRateReword) +
+        Number(newCustomerToHospitalReword) +
+        Number(oldCustomerToHospitalReword) +
+        Number(targetFinishReword) +
+        Number(otherPrice) +
+        Number(oldTakeNewCustomerPrice) -
+        Number(otherChargebacks);
       this.form.totalPrice = Math.round(price * 100) / 100;
     },
 

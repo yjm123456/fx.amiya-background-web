@@ -960,16 +960,16 @@ export default {
         cooperationLiveAnchorToHospitalPrice,
       } = this.form;
       let price =
-        salary +
-        customerServicePerformance +
-        otherPrice -
-        otherChargebacks +
-        beautyAddWechatPrice +
-        takeGoodsAddWechatPrice +
-        consulationCardPrice +
-        consulationCardAddWechatPrice +
-        cooperationLiveAnchorSendOrderPrice +
-        cooperationLiveAnchorToHospitalPrice;
+        Number(salary) +
+        Number(customerServicePerformance) +
+        Number(otherPrice) -
+        Number(otherChargebacks) +
+        Number(beautyAddWechatPrice) +
+        Number(takeGoodsAddWechatPrice) +
+        Number(consulationCardPrice) +
+        Number(consulationCardAddWechatPrice) +
+        Number(cooperationLiveAnchorSendOrderPrice) +
+        Number(cooperationLiveAnchorToHospitalPrice);
       this.form.totalPrice = Math.round(price * 100) / 100;
     },
     // 职位为行政客服时 清空数据
@@ -1056,32 +1056,32 @@ export default {
       } = this.form;
       if (positionId != 30) {
         let price =
-          salary +
-          customerServicePerformance +
-          toHospitalRateReword +
-          repeatPurchasesRateReword +
-          newCustomerToHospitalReword +
-          oldCustomerToHospitalReword +
-          targetFinishReword +
-          otherPrice +
-          oldTakeNewCustomerPrice -
-          otherChargebacks;
+          Number(salary) +
+          Number(customerServicePerformance) +
+          Number(toHospitalRateReword) +
+          Number(repeatPurchasesRateReword) +
+          Number(newCustomerToHospitalReword) +
+          Number(oldCustomerToHospitalReword) +
+          Number(targetFinishReword) +
+          Number(otherPrice) +
+          Number(oldTakeNewCustomerPrice) -
+          Number(otherChargebacks);
         this.form.totalPrice = Math.round(price * 100) / 100;
       } else {
         let price =
-          salary +
-          customerServicePerformance +
-          beautyAddWechatPrice +
-          takeGoodsAddWechatPrice +
-          consulationCardPrice +
-          consulationCardAddWechatPrice +
-          cooperationLiveAnchorSendOrderPrice +
-          cooperationLiveAnchorToHospitalPrice +
-          otherPrice -
-          otherChargebacks +
-          addWechatCompletePrice +
-          oldTakeNewCustomerPrice +
-          addClueCompletePrice;
+          Number(salary) +
+          Number(customerServicePerformance) +
+          Number(beautyAddWechatPrice) +
+          Number(takeGoodsAddWechatPrice) +
+          Number(consulationCardPrice) +
+          Number(consulationCardAddWechatPrice) +
+          Number(cooperationLiveAnchorSendOrderPrice) +
+          Number(cooperationLiveAnchorToHospitalPrice) +
+          Number(otherPrice) -
+          Number(otherChargebacks) +
+          Number(addWechatCompletePrice) +
+          Number(oldTakeNewCustomerPrice) +
+          Number(addClueCompletePrice);
         this.form.totalPrice = Math.round(price * 100) / 100;
       }
     },

@@ -215,6 +215,13 @@ export default {
             tooltip:true
           },
           {
+            title: "老带新提成",
+            key: "oldTakeNewCustomerPrice",
+            align:'center',
+            minWidth:150,
+            tooltip:true
+          },
+          {
             title: "其他奖励",
             key: "otherPrice",
             align:'center',
@@ -229,14 +236,14 @@ export default {
             tooltip:true
           },
           {
-            title: "加v率达成情况",
+            title: "加v达成业绩",
             key: "addWechatCompletePrice",
             align:'center',
             minWidth:150,
             tooltip:true
           },
           {
-            title: "线索登记完成情况",
+            title: "线索登记业绩",
             key: "addClueCompletePrice",
             align:'center',
             minWidth:150,
@@ -400,7 +407,7 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id } = params.row;
+                        const { id,toHospitalRateReword } = params.row;
                         this.title = "修改";
                         this.params.id = id
                         this.controlModal = true;
@@ -414,6 +421,7 @@ export default {
                         //   }
                         // });
                          this.$nextTick(()=>{
+                          // let toHospitalRateReword2 = toHospitalRateReword > 0 ? '普通客服' : '行政客服'
                             this.$refs.generateSalaryRef.getDetail()
                         })
                         

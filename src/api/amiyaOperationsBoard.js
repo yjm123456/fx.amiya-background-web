@@ -226,3 +226,63 @@ export const assistantTargetCompleteData = (params) => {
         params
     });
 };
+
+
+
+// 助理业绩看板
+// 助理业绩 卡片数据
+export const assistantPerformance = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantPerformance",
+        method: "get",
+        params
+    });
+};
+// 业绩趋势折线图
+export const brokenLineData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/brokenLineData",
+        method: "get",
+        params
+    });
+};
+// 新老客业绩转化漏斗图
+export const assistantPerformanceFilterData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantPerformanceFilterData",
+        method: "get",
+        params
+    });
+};
+// 饼状图
+export const analysisData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/analysisData",
+        method: "get",
+        params
+    });
+};
+//  助理目标完成率和业绩占比  
+export const assiatantTargetCompleteAndPerformanceRateData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assiatantTargetCompleteAndPerformanceRateData",
+        method: "get",
+        params
+    });
+};
+//  助理机构线索分析数据
+export const assistantHospitalCluesData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantHospitalCluesData",
+        method: "get",
+        params
+    });
+};
+//  助理机构业绩分析数据 
+export const assistantHospitalPerformanceData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantHospitalPerformanceData",
+        method: "get",
+        params
+    });
+};

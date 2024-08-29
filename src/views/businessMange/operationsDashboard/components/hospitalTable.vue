@@ -47,8 +47,13 @@ export default {
           isSelected: true,
         },
         {
-          name: "合作达人",
+          name: "璐璐组",
           id: 3,
+          isSelected: true,
+        },
+        {
+          name: "合作达人",
+          id: 4,
           isSelected: true,
         },
         
@@ -276,6 +281,7 @@ export default {
             endDate: this.$moment(endDate).format("YYYY-MM-DD"),
             showDaoDao:this.selected == '刀刀组' ? true : false,
             showJiNa:this.selected == '吉娜组' ? true : false,
+            showLuLu:this.selected == '璐璐组' ? true : false,
             showCooperate:this.selected == '合作达人' ? true : false,
         }
         api.hospitalTransformData(data).then((res) => {

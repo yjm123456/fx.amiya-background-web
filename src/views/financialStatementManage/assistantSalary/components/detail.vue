@@ -40,12 +40,12 @@
       <div v-if="form.positionId == 30" class="m_r">
         <div>
           <span class="title"
-            >加v率达成情况：<span class="num">{{
+            >加v率达成业绩：<span class="num">{{
               form.addWechatCompletePrice
             }}</span>
           </span>
           <span class="title"
-            >线索登记完成率：<span class="num">{{
+            >线索登记业绩：<span class="num">{{
               form.addClueCompletePrice
             }}</span>
           </span>

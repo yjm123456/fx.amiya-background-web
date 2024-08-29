@@ -29,7 +29,7 @@
                   filterable
                   @on-change="checkBelongEmpIdChange"
                 >
-                <!-- params.employeeList -->
+                  <!-- params.employeeList -->
                   <Option
                     v-for="item in params.employeePosition"
                     :value="item.id"
@@ -49,10 +49,22 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="底薪" prop="salary">
+              <FormItem
+                label="底薪"
+                prop="salary"
+                :rules="[
+                  {
+                    required: true,
+                    message: '底薪(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.salary"
-                  placeholder="请输入底薪"
+                  placeholder="请输入底薪(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -60,10 +72,22 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="提成金额" prop="customerServicePerformance">
+              <FormItem
+                label="提成金额"
+                prop="customerServicePerformance"
+                :rules="[
+                  {
+                    required: true,
+                    message: '提成金额(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.customerServicePerformance"
-                  placeholder="请输入提成金额"
+                  placeholder="提成金额(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -71,10 +95,52 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="其他奖励" prop="otherPrice">
+              <FormItem
+                label="老带新提成"
+                prop="oldTakeNewCustomerPrice"
+                :rules="[
+                  {
+                    required: true,
+                    message: '老带新提成(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
+                <Input
+                  v-model="form.oldTakeNewCustomerPrice"
+                  placeholder="老带新提成(最小是0)"
+                  type="number"
+                  number
+                  @on-change="amountChange"
+                  style="width:84%"
+                ></Input>
+                <Tooltip :content="oldTakeNewCustomerNum" placement="top-start">
+                  <i
+                    class="iconfont icon-info"
+                    style="color:rgb(58 143 233);margin-left:10px;font-size:22px;"
+                  ></i>
+                </Tooltip>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem
+                label="其他奖励"
+                prop="otherPrice"
+                :rules="[
+                  {
+                    required: true,
+                    message: '其他奖励(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.otherPrice"
-                  placeholder="请输入其他奖励"
+                  placeholder="其他奖励(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -82,10 +148,22 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="其他扣款" prop="otherChargebacks">
+              <FormItem
+                label="其他扣款"
+                prop="otherChargebacks"
+                :rules="[
+                  {
+                    required: true,
+                    message: '其他扣款(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.otherChargebacks"
-                  placeholder="请输入其他扣款"
+                  placeholder="其他扣款(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -118,159 +196,273 @@
         <div class="bor" v-if="form.positionId == 30">
           <Row :gutter="30">
             <Col span="8">
-              <FormItem label="加v率达成情况" prop="addWechatCompletePrice">
+              <FormItem
+                label="加v达成业绩"
+                prop="addWechatCompletePrice"
+              >
                 <Input
                   v-model="form.addWechatCompletePrice"
-                  placeholder="请输入加v率达成情况"
+                  placeholder="加v达成业绩(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
                   style="width:85%;"
                 ></Input>
-               
-               <Tooltip placement="top-start">
-                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
+
+                <Tooltip placement="top-start">
+                  <i
+                    class="iconfont icon-info"
+                    style="color:rgb(58 143 233);margin-left:10px;font-size:22px"
+                  ></i>
                   <template #content>
-                    <p>{{centent5}}</p>
-                </template>
-              </Tooltip>
+                    <p>{{ centent5 }}</p>
+                  </template>
+                </Tooltip>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="线索登记完成率" prop="addClueCompletePrice">
+              <FormItem
+                label="线索登记业绩"
+                prop="addClueCompletePrice"
+              >
                 <Input
                   v-model="form.addClueCompletePrice"
-                  placeholder="请输入线索登记完成率"
+                  placeholder="线索登记业绩(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
                   style="width:85%;"
                 ></Input>
-               
-               <Tooltip  placement="top-start">
-                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
+
+                <Tooltip placement="top-start">
+                  <i
+                    class="iconfont icon-info"
+                    style="color:rgb(58 143 233);margin-left:10px;font-size:22px"
+                  ></i>
                   <template #content>
-                    <p>{{centent6}}</p>
-                    <p>{{centent7}}</p>
-                    <p>{{centent8}}</p>
-                </template>
-              </Tooltip>
+                    <p>{{ centent6 }}</p>
+                    <p>{{ centent7 }}</p>
+                    <p>{{ centent8 }}</p>
+                  </template>
+                </Tooltip>
               </FormItem>
             </Col>
+            <!-- @on-change="administrativeCustomerService" -->
             <Col span="8">
-              <FormItem label="医美客资加V业绩（单个15元）" prop="beautyAddWechatPrice">
+              <FormItem
+                label="医美客资加V业绩（单个15元）"
+                prop="beautyAddWechatPrice"
+                :rules="[
+                  {
+                    required: true,
+                    message: '医美客资加V业绩(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.beautyAddWechatPrice"
-                  placeholder="请输入医美客资加V业绩"
+                  placeholder="医美客资加V业绩(最小是0)"
                   type="number"
                   number
-                  @on-change="administrativeCustomerService"
+                  @on-change="amountChange"
                   style="width:85%;"
                 ></Input>
-               
-               <Tooltip :content="centent1" placement="top-start">
-                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
-              </Tooltip>
+
+                <Tooltip :content="centent1" placement="top-start">
+                  <i
+                    class="iconfont icon-info"
+                    style="color:rgb(58 143 233);margin-left:10px;font-size:22px"
+                  ></i>
+                </Tooltip>
               </FormItem>
             </Col>
+            <!-- @on-change="administrativeCustomerService" -->
             <Col span="8">
-              <FormItem label="带货客资加V业绩（单个5元）" prop="takeGoodsAddWechatPrice">
+              <FormItem
+                label="带货客资加V业绩（单个5元）"
+                prop="takeGoodsAddWechatPrice"
+                :rules="[
+                  {
+                    required: true,
+                    message: '带货客资加V业绩(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.takeGoodsAddWechatPrice"
-                  placeholder="请输入带货客资加V业绩"
+                  placeholder="带货客资加V业绩(最小是0)"
                   type="number"
                   number
-                  @on-change="administrativeCustomerService"
+                  @on-change="amountChange"
                   style="width:85%;"
                 ></Input>
                 <Tooltip :content="centent2" placement="top-start">
-                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
-              </Tooltip>
+                  <i
+                    class="iconfont icon-info"
+                    style="color:rgb(58 143 233);margin-left:10px;font-size:22px"
+                  ></i>
+                </Tooltip>
               </FormItem>
             </Col>
+            <!-- @on-change="administrativeCustomerService" -->
             <Col span="8">
-              <FormItem label="引导面诊卡下单金额" prop="consulationCardPrice">
+              <FormItem
+                label="引导面诊卡下单金额"
+                prop="consulationCardPrice"
+                :rules="[
+                  {
+                    required: true,
+                    message: '引导面诊卡下单金额(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.consulationCardPrice"
-                  placeholder="请输入引导面诊卡下单金额"
+                  placeholder="引导面诊卡下单金额(最小是0)"
                   type="number"
                   number
-                  @on-change="administrativeCustomerService"
+                  @on-change="amountChange"
                 ></Input>
               </FormItem>
             </Col>
+            <!--  @on-change="administrativeCustomerService" -->
             <Col span="8">
               <FormItem
                 label="引导面诊卡下单加v金额"
                 prop="consulationCardAddWechatPrice"
+                :rules="[
+                  {
+                    required: true,
+                    message: '引导面诊卡下单加v金额(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
               >
                 <Input
                   v-model="form.consulationCardAddWechatPrice"
-                  placeholder="请输入引导面诊卡下单加v金额"
+                  placeholder="引导面诊卡下单加v金额(最小是0)"
                   type="number"
                   number
-                  @on-change="administrativeCustomerService"
+                  @on-change="amountChange"
                 ></Input>
               </FormItem>
             </Col>
+            <!-- @on-change="administrativeCustomerService" -->
             <Col span="8">
               <FormItem
                 label="供应链达人派单提成金额（单个7元）"
                 prop="cooperationLiveAnchorSendOrderPrice"
+                :rules="[
+                  {
+                    required: true,
+                    message: '供应链达人派单提成金额(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
               >
                 <Input
                   v-model="form.cooperationLiveAnchorSendOrderPrice"
-                  placeholder="请输入供应链达人派单提成金额"
+                  placeholder="供应链达人派单提成金额(最小是0)"
                   type="number"
                   number
-                  @on-change="administrativeCustomerService"
+                  @on-change="amountChange"
                   style="width:85%;"
                 ></Input>
                 <Tooltip :content="centent3" placement="top-start">
-                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
-              </Tooltip>
+                  <i
+                    class="iconfont icon-info"
+                    style="color:rgb(58 143 233);margin-left:10px;font-size:22px"
+                  ></i>
+                </Tooltip>
               </FormItem>
             </Col>
+            <!-- @on-change="administrativeCustomerService" -->
             <Col span="8">
               <FormItem
                 label="供应链达人上门提成金额（单个20元）"
                 prop="cooperationLiveAnchorToHospitalPrice"
+                :rules="[
+                  {
+                    required: true,
+                    message: '供应链达人上门提成金额(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
               >
                 <Input
                   v-model="form.cooperationLiveAnchorToHospitalPrice"
-                  placeholder="请输入供应链达人上门提成金额"
+                  placeholder="供应链达人上门提成金额(最小是0)"
                   type="number"
                   number
-                  @on-change="administrativeCustomerService"
+                  @on-change="amountChange"
                   style="width:85%;"
                 ></Input>
                 <Tooltip :content="centent4" placement="top-start">
-                  <i class="iconfont icon-info" style="color:rgb(58 143 233);margin-left:10px;font-size:22px"></i>
-              </Tooltip>
+                  <i
+                    class="iconfont icon-info"
+                    style="color:rgb(58 143 233);margin-left:10px;font-size:22px"
+                  ></i>
+                </Tooltip>
               </FormItem>
             </Col>
           </Row>
         </div>
-        <div
-          class="bor"
-          v-if="form.positionId && form.positionId != 30"
-        >
+        <div class="bor" v-if="form.positionId && form.positionId != 30">
           <Row :gutter="30">
             <Col span="8">
-              <FormItem label="上门率(%)" prop="toHospitalRate">
+              <FormItem
+                label="上门率(%)"
+                prop="toHospitalRate"
+                :rules="[
+                  {
+                    required: true,
+                    message: '上门率(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.toHospitalRate"
-                  placeholder="请输入上门率"
+                  placeholder="上门率(最小是0)"
                   type="number"
                   number
                 ></Input>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="上门率奖励" prop="toHospitalRateReword">
+              <FormItem
+                label="上门率奖励"
+                prop="toHospitalRateReword"
+                :rules="[
+                  {
+                    required: true,
+                    message: '上门率奖励(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.toHospitalRateReword"
-                  placeholder="请输入上门率奖励"
+                  placeholder="上门率奖励(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -278,20 +470,44 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="复购率(%)" prop="repeatPurchasesRate">
+              <FormItem
+                label="复购率(%)"
+                prop="repeatPurchasesRate"
+                :rules="[
+                  {
+                    required: true,
+                    message: '复购率(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.repeatPurchasesRate"
-                  placeholder="请输入复购率"
+                  placeholder="复购率(最小是0)"
                   type="number"
                   number
                 ></Input>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="复购率奖励" prop="repeatPurchasesRateReword">
+              <FormItem
+                label="复购率奖励"
+                prop="repeatPurchasesRateReword"
+                :rules="[
+                  {
+                    required: true,
+                    message: '复购率奖励(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.repeatPurchasesRateReword"
-                  placeholder="请输入复购率奖励"
+                  placeholder="复购率奖励(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -299,10 +515,22 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="新客上门奖励" prop="newCustomerToHospitalReword">
+              <FormItem
+                label="新客上门奖励"
+                prop="newCustomerToHospitalReword"
+                :rules="[
+                  {
+                    required: true,
+                    message: '新客上门奖励(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.newCustomerToHospitalReword"
-                  placeholder="请输入新客上门奖励"
+                  placeholder="新客上门奖励(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -310,10 +538,22 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="老客上门奖励" prop="oldCustomerToHospitalReword">
+              <FormItem
+                label="老客上门奖励"
+                prop="oldCustomerToHospitalReword"
+                :rules="[
+                  {
+                    required: true,
+                    message: '老客上门奖励(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.oldCustomerToHospitalReword"
-                  placeholder="请输入老客上门奖励"
+                  placeholder="老客上门奖励(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -321,10 +561,22 @@
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="目标达成奖励" prop="targetFinishReword">
+              <FormItem
+                label="目标达成奖励"
+                prop="targetFinishReword"
+                :rules="[
+                  {
+                    required: true,
+                    message: '目标达成奖励(最小是0)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 0,
+                  },
+                ]"
+              >
                 <Input
                   v-model="form.targetFinishReword"
-                  placeholder="请输入目标达成奖励"
+                  placeholder="目标达成奖励(最小是0)"
                   type="number"
                   number
                   @on-change="amountChange"
@@ -340,8 +592,19 @@
         </Spin>
       </Form>
       <div slot="footer">
-        <Button type="primary" @click="JiaVHandleSubmit" v-if="form.positionName=='行政客服'">自动填写（线索、加v）</Button>
-        <Button type="primary" @click="visitHandleSubmit" style="margin-right:30px" v-if="form.positionName=='行政客服'">自动填写（派单上门）</Button>
+        <Button
+          type="primary"
+          @click="JiaVHandleSubmit"
+          v-if="form.positionName == '行政客服'"
+          >自动填写（线索、加v）</Button
+        >
+        <Button
+          type="primary"
+          @click="visitHandleSubmit"
+          style="margin-right:30px"
+          v-if="form.positionName == '行政客服'"
+          >自动填写（派单上门）</Button
+        >
 
         <Button @click="handleCancel('form')">取消</Button>
         <Button type="primary" @click="handleSubmit('form')">确认</Button>
@@ -399,7 +662,7 @@ export default {
         otherChargebacks: null,
         // 职位
         positionName: "",
-        positionId:null,
+        positionId: null,
         // 医美客资加V业绩
         beautyAddWechatPrice: 0,
         // 带货客资加V业绩
@@ -412,23 +675,31 @@ export default {
         cooperationLiveAnchorSendOrderPrice: 0,
         // 供应链达人上门提成金额
         cooperationLiveAnchorToHospitalPrice: 0,
-        // 加v率达成情况
-        addWechatCompletePrice:0,
-        // 线索登记完成率
-        addClueCompletePrice:0
+        // 加v达成业绩
+        addWechatCompletePrice: 0,
+        // 线索登记业绩
+        addClueCompletePrice: 0,
+        // 老带新提成
+        oldTakeNewCustomerPrice: 0,
       },
 
       ruleValidate: {
+        oldTakeNewCustomerPrice: [
+          {
+            required: true,
+            message: "请输入老带新提成",
+          },
+        ],
         addWechatCompletePrice: [
           {
             required: true,
-            message: "请输入加v率达成情况",
+            message: "请输入加v达成业绩",
           },
         ],
         addClueCompletePrice: [
           {
             required: true,
-            message: "请输入线索登记完成率",
+            message: "请输入线索登记业绩",
           },
         ],
         beautyAddWechatPrice: [
@@ -554,21 +825,23 @@ export default {
         ],
       },
       // 医美客资加v业绩
-      centent1:'当前组医美客资加V：0个',
+      centent1: "当前组医美客资加V：0个",
       // 当前组带货客资加V
-      centent2:'当前组带货客资加V：0个',
+      centent2: "当前组带货客资加V：0个",
       // 供应链达人派单提成金额
-      centent3:'供应链达人派单人数：0人',
+      centent3: "供应链达人派单人数：0人",
       // 供应链达人上门提成功能金额
-      centent4:'供应链达人上门人数：0人',
-      // 加v率达成情况
-      centent5:'当前组加v率：0%',
+      centent4: "供应链达人上门人数：0人",
+      // 加v达成业绩
+      centent5: "当前组加v率：0%",
       // 供线索登记完成率
-      centent6:'当前助理线索登记量：0',
-      centent7:'当前助理线索登记目标：0',
-      centent8:'当前助理线索登记完成率：0%',
+      centent6: "当前助理线索登记量：0",
+      centent7: "当前助理线索登记目标：0",
+      centent8: "当前助理线索登记完成率：0%",
       // 当月加v率健康值
-      AddWeChatHealthValueThisMonth:0
+      AddWeChatHealthValueThisMonth: 0,
+      // 老带新人数
+      oldTakeNewCustomerNum: "老带新0人",
     };
   },
   methods: {
@@ -576,58 +849,101 @@ export default {
     getHealthValueLists() {
       healthValueApi.getHealthValid().then((res) => {
         if (res.code == 0) {
-          const {list} = res.data
+          const { list } = res.data;
           // 当月加v健康值
-          this.AddWeChatHealthValueThisMonth = list.find(item=>item.id == 'AddWeChatHealthValueThisMonth').rate
+          this.AddWeChatHealthValueThisMonth = list.find(
+            (item) => item.id == "AddWeChatHealthValueThisMonth"
+          ).rate;
         }
       });
     },
     // 加v自动获取
-    JiaVHandleSubmit(){
-      const data ={
-        employeeId:this.form.belongEmpId,
-        sartDate:this.$moment(this.filterCriteria.startDate).format("YYYY-MM-DD"),
-        endDate:this.$moment(this.filterCriteria.endDate).format("YYYY-MM-DD")
-      }
-      api.getAddWechatNumByCreateEmpInfoAndDate(data).then(res=>{
-        if(res.code == 0){
-          const {beautyCustomerAddWechatNum,takeGoodsCustomerAddWechatNum,addWeChatRate,shoppingCartRegistionAddNumAndCompleteRateVo} = res.data.AddWechatNumByCreateEmpInfoAndDate
+    JiaVHandleSubmit() {
+      const data = {
+        employeeId: this.form.belongEmpId,
+        sartDate: this.$moment(this.filterCriteria.startDate).format(
+          "YYYY-MM-DD"
+        ),
+        endDate: this.$moment(this.filterCriteria.endDate).format("YYYY-MM-DD"),
+      };
+      api.getAddWechatNumByCreateEmpInfoAndDate(data).then((res) => {
+        if (res.code == 0) {
+          const {
+            beautyCustomerAddWechatNum,
+            takeGoodsCustomerAddWechatNum,
+            addWeChatRate,
+            shoppingCartRegistionAddNumAndCompleteRateVo,
+          } = res.data.AddWechatNumByCreateEmpInfoAndDate;
           // this.form.beautyAddWechatPrice = Math.round( (beautyCustomerAddWechatNum * 5) *1000 / 10 ) / 100
           // this.form.takeGoodsAddWechatPrice = Math.round( (takeGoodsCustomerAddWechatNum * 15) *1000 / 10 ) / 100
-          this.form.beautyAddWechatPrice = Math.round( (beautyCustomerAddWechatNum * 15) *1000 / 10 ) / 100
-          this.form.takeGoodsAddWechatPrice = Math.round( (takeGoodsCustomerAddWechatNum * 5) *1000 / 10 ) / 100
-          this.centent1='当前组医美客资加V：' + beautyCustomerAddWechatNum + '个'
-          this.centent2='当前组带货客资加V：' + takeGoodsCustomerAddWechatNum + '个'
-          // 加v率达成情况
-          this.centent5='当前组加v率：' + addWeChatRate + '%'
+          this.form.beautyAddWechatPrice =
+            Math.round((beautyCustomerAddWechatNum * 15 * 1000) / 10) / 100;
+          this.form.takeGoodsAddWechatPrice =
+            Math.round((takeGoodsCustomerAddWechatNum * 5 * 1000) / 10) / 100;
+          this.centent1 =
+            "当前组医美客资加V：" + beautyCustomerAddWechatNum + "个";
+          this.centent2 =
+            "当前组带货客资加V：" + takeGoodsCustomerAddWechatNum + "个";
+          // 加v达成业绩
+          this.centent5 = "当前组加v率：" + addWeChatRate + "%";
           // 当前组加v率 大于 当月加v健康值的话是0 小于扣除300
-          this.form.addWechatCompletePrice =  addWeChatRate >= this.AddWeChatHealthValueThisMonth ? 0 : -300
+          this.form.addWechatCompletePrice =
+            addWeChatRate >= this.AddWeChatHealthValueThisMonth ? 0 : -300;
           // 供线索登记完成率
-          this.centent6='当前助理线索登记量：'  + shoppingCartRegistionAddNumAndCompleteRateVo.createNum 
-          this.centent7='当前助理线索登记目标：'  + shoppingCartRegistionAddNumAndCompleteRateVo.createNumTarget
-          this.centent8='当前助理线索登记完成率：'  + shoppingCartRegistionAddNumAndCompleteRateVo.createNumCompleteRate + '%'
+          this.centent6 =
+            "当前助理线索登记量：" +
+            shoppingCartRegistionAddNumAndCompleteRateVo.createNum;
+          this.centent7 =
+            "当前助理线索登记目标：" +
+            shoppingCartRegistionAddNumAndCompleteRateVo.createNumTarget;
+          this.centent8 =
+            "当前助理线索登记完成率：" +
+            shoppingCartRegistionAddNumAndCompleteRateVo.createNumCompleteRate +
+            "%";
           // 供线索登记完成率 大于等于100 奖励500 小于扣除300
-          this.form.addClueCompletePrice =  shoppingCartRegistionAddNumAndCompleteRateVo.createNumCompleteRate >= 100 ? 500 : -300
-          this.amountChange()
+          this.form.addClueCompletePrice =
+            shoppingCartRegistionAddNumAndCompleteRateVo.createNumCompleteRate >=
+            100
+              ? 500
+              : -300;
+          this.amountChange();
         }
-      })
+      });
     },
     // 自动获取
-    visitHandleSubmit(){
-      const data ={
-        sendStartDate:this.$moment(this.filterCriteria.startDate).format("YYYY-MM-DD"),
-        sendEndDate:this.$moment(this.filterCriteria.endDate).format("YYYY-MM-DD")
-      }
-      api.getCooperationLiveAnchorSendAndVisitNum(data).then(res=>{
-        if(res.code == 0){
-          const {sendOrderNum,visitNum} = res.data.CooperationLiveAnchorSendAndVisitNum
+    visitHandleSubmit() {
+      const data = {
+        sendStartDate: this.$moment(this.filterCriteria.startDate).format(
+          "YYYY-MM-DD"
+        ),
+        sendEndDate: this.$moment(this.filterCriteria.endDate).format(
+          "YYYY-MM-DD"
+        ),
+        employeeId: this.form.belongEmpId,
+      };
+      api.getCooperationLiveAnchorSendAndVisitNum(data).then((res) => {
+        if (res.code == 0) {
+          const {
+            sendOrderNum,
+            visitNum,
+            oldTakeNewDealNum,
+          } = res.data.CooperationLiveAnchorSendAndVisitNum;
           // 派单
-          this.form.cooperationLiveAnchorSendOrderPrice =  Math.round( (sendOrderNum * 7) *1000 / 10 ) / 100
-          this.form.cooperationLiveAnchorToHospitalPrice =  Math.round( (visitNum * 20) *1000 / 10 ) / 100
-          this.centent3='供应链达人派单人数' + sendOrderNum + '人'
-          this.centent4='供应链达人上门人数' + visitNum + '人'
+          this.form.cooperationLiveAnchorSendOrderPrice =
+            Math.round((sendOrderNum * 7 * 1000) / 10) / 100;
+          this.form.cooperationLiveAnchorToHospitalPrice =
+            Math.round((visitNum * 20 * 1000) / 10) / 100;
+          this.centent3 = "供应链达人派单人数" + sendOrderNum + "人";
+          this.centent4 = "供应链达人上门人数" + visitNum + "人";
+          // 老带新人数
+          this.oldTakeNewCustomerNum = "老带新" + oldTakeNewDealNum + "人";
+          // 老带新提成
+          this.form.oldTakeNewCustomerPrice = Number(
+            Math.round(oldTakeNewDealNum * 200 * 100) / 100
+          );
+          this.amountChange();
         }
-      })
+      });
     },
     // 行政客服时计算方法
     administrativeCustomerService() {
@@ -687,7 +1003,7 @@ export default {
       this.form.cooperationLiveAnchorSendOrderPrice = 0;
       // 供应链达人上门提成金额
       this.form.cooperationLiveAnchorToHospitalPrice = 0;
-      // 加v率达成情况
+      // 加v达成业绩
       this.form.addWechatCompletePrice = 0;
       // 线索登记完成率
       this.form.addClueCompletePrice = 0;
@@ -700,12 +1016,13 @@ export default {
           .byIdGetAmiyaEmployee(this.form.belongEmpId)
           .then((res) => {
             if (res.code === 0) {
-              const { positionName,positionId } = res.data.employeeInfo;
+              const { positionName, positionId } = res.data.employeeInfo;
               this.form.positionName = positionName;
-              this.form.positionId = positionId
+              this.form.positionId = positionId;
               if (positionName == "行政客服") {
                 this.clearCustomer();
-                this.administrativeCustomerService();
+                // this.administrativeCustomerService();
+                this.amountChange();
               } else {
                 this.clearCustomer2();
                 this.amountChange();
@@ -727,23 +1044,44 @@ export default {
         otherPrice,
         otherChargebacks,
         positionId,
-        beautyAddWechatPrice , 
-        takeGoodsAddWechatPrice ,
+        beautyAddWechatPrice,
+        takeGoodsAddWechatPrice,
         consulationCardPrice,
         consulationCardAddWechatPrice,
-        cooperationLiveAnchorSendOrderPrice ,
+        cooperationLiveAnchorSendOrderPrice,
         cooperationLiveAnchorToHospitalPrice,
         addWechatCompletePrice,
-        addClueCompletePrice
+        addClueCompletePrice,
+        oldTakeNewCustomerPrice,
       } = this.form;
-      if(positionId != 30){
+      if (positionId != 30) {
         let price =
-        salary + customerServicePerformance + toHospitalRateReword + repeatPurchasesRateReword + newCustomerToHospitalReword +  oldCustomerToHospitalReword + targetFinishReword +
-        otherPrice - otherChargebacks;
+          salary +
+          customerServicePerformance +
+          toHospitalRateReword +
+          repeatPurchasesRateReword +
+          newCustomerToHospitalReword +
+          oldCustomerToHospitalReword +
+          targetFinishReword +
+          otherPrice +
+          oldTakeNewCustomerPrice -
+          otherChargebacks;
         this.form.totalPrice = Math.round(price * 100) / 100;
-      }else{
+      } else {
         let price =
-        salary + customerServicePerformance + beautyAddWechatPrice + takeGoodsAddWechatPrice +consulationCardPrice+consulationCardAddWechatPrice+cooperationLiveAnchorSendOrderPrice +cooperationLiveAnchorToHospitalPrice+otherPrice - otherChargebacks + addWechatCompletePrice + addClueCompletePrice;
+          salary +
+          customerServicePerformance +
+          beautyAddWechatPrice +
+          takeGoodsAddWechatPrice +
+          consulationCardPrice +
+          consulationCardAddWechatPrice +
+          cooperationLiveAnchorSendOrderPrice +
+          cooperationLiveAnchorToHospitalPrice +
+          otherPrice -
+          otherChargebacks +
+          addWechatCompletePrice +
+          oldTakeNewCustomerPrice +
+          addClueCompletePrice;
         this.form.totalPrice = Math.round(price * 100) / 100;
       }
     },
@@ -773,16 +1111,16 @@ export default {
       this.$emit("update:administrationGenerateSalaryModel", false);
       this.$emit("getListData");
       this.$refs["form"].resetFields();
-      this.form.positionId = null
-      this.centent1='当前组医美客资加V：0个'
-      this.centent2='当前组带货客资加V：0个'
-      this.centent3='供应链达人派单人数：0人'
-      this.centent4='供应链达人上门人数：0人'
-      this.centent5='当前组加v率：0%'
-      this.centent6='当前助理线索登记量：0'
-      this.centent7='当前助理线索登记目标：0'
-      this.centent8='当前助理线索登记完成率：0%'
-
+      this.form.positionId = null;
+      this.centent1 = "当前组医美客资加V：0个";
+      this.centent2 = "当前组带货客资加V：0个";
+      this.centent3 = "供应链达人派单人数：0人";
+      this.centent4 = "供应链达人上门人数：0人";
+      this.centent5 = "当前组加v率：0%";
+      this.centent6 = "当前助理线索登记量：0";
+      this.centent7 = "当前助理线索登记目标：0";
+      this.centent8 = "当前助理线索登记完成率：0%";
+      this.oldTakeNewCustomerNum = "老带新0人";
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -790,15 +1128,16 @@ export default {
         this.$emit("update:administrationGenerateSalaryModel", false);
         this.$emit("getListData");
         this.$refs["form"].resetFields();
-        this.form.positionId = null
-        this.centent1='当前组医美客资加V：0个'
-        this.centent2='当前组带货客资加V：0个'
-        this.centent3='供应链达人派单人数：0人'
-        this.centent4='供应链达人上门人数：0人'
-        this.centent5='当前组加v率：0%'
-        this.centent6='当前助理线索登记量：0'
-        this.centent7='当前助理线索登记目标：0'
-        this.centent8='当前助理线索登记完成率：0%'
+        this.form.positionId = null;
+        this.centent1 = "当前组医美客资加V：0个";
+        this.centent2 = "当前组带货客资加V：0个";
+        this.centent3 = "供应链达人派单人数：0人";
+        this.centent4 = "供应链达人上门人数：0人";
+        this.centent5 = "当前组加v率：0%";
+        this.centent6 = "当前助理线索登记量：0";
+        this.centent7 = "当前助理线索登记目标：0";
+        this.centent8 = "当前助理线索登记完成率：0%";
+        this.oldTakeNewCustomerNum = "老带新0人";
       }
     },
   },
@@ -825,7 +1164,7 @@ export default {
         this.form.recommandDocumentSettleIdList = orderId;
         // 提成金额
         this.form.customerServicePerformance = Math.round(price * 100) / 100;
-        this.getHealthValueLists()
+        this.getHealthValueLists();
       }
     },
   },

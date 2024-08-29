@@ -2085,6 +2085,18 @@ const businessMange = [{
         },
         component: () =>
             import ("@/views/businessMange/operationsDashboard/operationsDashboard.vue"),
+    },
+    {
+        path: "/assistantOperationsDashboard",
+        name: "assistantOperationsDashboard",
+        meta: {
+            title: "助理运营看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/assistantOperationsDashboard/assistantOperationsDashboard.vue"),
     }
 ];
 

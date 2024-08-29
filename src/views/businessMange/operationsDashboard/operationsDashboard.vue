@@ -9,7 +9,7 @@
         <div class="tab" v-if="selected == '图表'">
           <div
             class="tab_item"
-            v-for="(item, index) in list4"
+            v-for="(item, index) in list5"
             :key="index"
             @click="selectTab4(index, item)"
             :class="{ active: selected4 == item}"
@@ -264,7 +264,7 @@
               <div class="tab">
                 <div
                   class="tab_item"
-                  v-for="(item, index) in list4"
+                  v-for="(item, index) in list5"
                   :key="index"
                   @click="selectTab5(index, item)"
                   :class="{ active: selected5 == item}"
@@ -369,6 +369,7 @@ export default {
       list: ["图表","转化"],
       list2: ["线索","业绩"],
       list4: ["全部","刀刀","吉娜"],
+      list5: ["全部","刀刀","吉娜",'璐璐'],
       selected:"图表",
       selected2:"业绩",
       selected3:"线索",
@@ -640,7 +641,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
-        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : '' 
+        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : this.selected4 == '璐璐' ? this.liveAnchorBaseInfos.find(item=>item.name == '璐璐').id :  ''
       };
       api.getTotalAchievementAndDateSchedule(data).then((res) => {
         if (res.code == 0) {
@@ -654,7 +655,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
-        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : ''
+        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : this.selected4 == '璐璐' ? this.liveAnchorBaseInfos.find(item=>item.name == '璐璐').id :  ''
       };
       api.getNewOrOldCustomerCompare(data).then((res) => {
         if (res.code == 0) {
@@ -789,7 +790,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
-        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : '' 
+        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : this.selected4 == '璐璐' ? this.liveAnchorBaseInfos.find(item=>item.name == '璐璐').id :  ''
       };
       api.getTotalFlowRateAndDateSchedule(data).then((res) => {
         if (res.code == 0) {
@@ -803,7 +804,7 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
-        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : ''
+        keyWord:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : this.selected4 == '璐璐' ? this.liveAnchorBaseInfos.find(item=>item.name == '璐璐').id :  ''
       };
       api.getGroupFlowRateCompare(data).then((res) => {
         if (res.code == 0) {

@@ -51,8 +51,123 @@ export default {
             title: "派单医院",
             key: "hospitalName",
             minWidth: 200,
+            tooltip: true,
           },
-         
+          {
+            title: "是否指定医生账号",
+            key: "isSpecifyHospitalEmployee",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isSpecifyHospitalEmployee == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "医生账号",
+            key: "hospitalEmployeeName",
+            minWidth: 200,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "订单状态",
+            key: "orderStatus",
+            minWidth: 130,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.orderStatus == "已成交") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#04B05D",
+                    },
+                  },
+                  params.row.orderStatus
+                );
+              } else if (params.row.orderStatus == "重单-不可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.orderStatus
+                );
+              } else if (params.row.orderStatus == "重单-可深度") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
+                    },
+                  },
+                  params.row.orderStatus
+                );
+              } else if (params.row.orderStatus == "已派单") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "blue",
+                    },
+                  },
+                  params.row.orderStatus
+                );
+              } else if (params.row.orderStatus == "未成交") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "brown",
+                    },
+                  },
+                  params.row.orderStatus
+                );
+              } else if (params.row.orderStatus == "已接单") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "orange",
+                    },
+                  },
+                  params.row.orderStatus
+                );
+              } else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.orderStatus
+                );
+              }
+            },
+          },
           {
             title: "是否主派",
             key: "isMainHospital",
@@ -78,12 +193,14 @@ export default {
           {
             title: "派单人",
             key: "senderName",
-            minWidth: 120,
+            minWidth: 180,
+            align:'center',
           },
           {
             title: "派单时间",
             key: "sendDate",
-            minWidth: 150,
+            minWidth: 180,
+            align:'center',
             render: (h, params) => {
               return h("div",params.row.sendDate  ? this.$moment(params.row.sendDate).format("YYYY-MM-DD  HH:mm:ss") : '');
             },
@@ -91,7 +208,8 @@ export default {
           {
             title: "预约到院日期",
             key: "appointmentDate",
-            minWidth: 150,
+            minWidth: 180,
+            align:'center',
             render: (h, params) => {
               return h("div",params.row.appointmentDate  ? this.$moment(params.row.appointmentDate).format("YYYY-MM-DD  HH:mm:ss") : '');
             },
@@ -99,7 +217,14 @@ export default {
           {
             title: "备注",
             key: "remark",
-            minWidth: 200,
+            minWidth: 300,
+            tooltip:true
+          },
+          {
+            title: "医院备注",
+            key: "hospitalRemark",
+            minWidth: 300,
+            tooltip:true
           },
         ],
         data:[]

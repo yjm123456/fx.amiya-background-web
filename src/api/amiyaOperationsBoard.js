@@ -286,3 +286,19 @@ export const assistantHospitalPerformanceData = (params) => {
         params
     });
 };
+//  助理客资分诊数据
+export const distributeConsulationData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/distributeConsulationData",
+        method: "get",
+        params
+    });
+};
+//  助理客资分诊折线图
+export const assistantDistributeConsulationBrokenLineData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantDistributeConsulationBrokenLineData",
+        method: "get",
+        params
+    });
+};

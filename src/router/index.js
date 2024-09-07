@@ -350,6 +350,18 @@ const hospitalManage = [{
         component: () =>
             import ("@/views/hospitalManage/activeHospital/activeHospital.vue"),
     },
+    {
+        path: "/threePlatformCode",
+        name: "threePlatformCode",
+        meta: {
+            title: "机构平台编码",
+            keepAlive: false,
+            isTag: true,
+            openName: ['医院管理'],
+        },
+        component: () =>
+            import ("@/views/hospitalManage/threePlatformCode/threePlatformCode.vue"),
+    },
 ];
 
 /**
@@ -1341,6 +1353,18 @@ const baseDataMaintenance = [{
         },
         component: () =>
             import ("@/views/baseDataMaintenance/Item/Item.vue"),
+    },
+    {
+        path: "/threePlatformMessage",
+        name: "threePlatformMessage",
+        meta: {
+            title: "三方平台信息",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/threePlatformMessage/threePlatformMessage.vue"),
     },
 ];
 

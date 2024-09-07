@@ -260,6 +260,12 @@ export default {
             align: "center",
           },
           {
+            title: "线索登记目标",
+            key: "cluesRegisterTarget",
+            minWidth: 140,
+            align: "center",
+          },
+          {
             title: "有效分诊",
             key: "effectiveConsulationCardTarget",
             minWidth: 120,
@@ -331,12 +337,7 @@ export default {
             minWidth: 140,
             align: "center",
           },
-          {
-            title: "线索登记目标",
-            key: "cluesRegisterTarget",
-            minWidth: 140,
-            align: "center",
-          },
+          
           {
             title: "操作",
             key: "",

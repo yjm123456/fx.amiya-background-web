@@ -191,9 +191,28 @@
           key="主派医院"
           
         >
-          <Select v-model="form.hospitalId" placeholder="请选择医院" filterable>
+          <Select v-model="form.hospitalId" placeholder="请选择医院" filterable @on-change="isSpecifyHospitalEmployeeChange(form.isSpecifyHospitalEmployee)">
             <Option
               v-for="item in hospitalInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+        </FormItem>
+        <FormItem label="是否指定医生账号" key="是否指定医生账号">
+          <i-switch v-model="form.isSpecifyHospitalEmployee" @on-change="isSpecifyHospitalEmployeeChange(form.isSpecifyHospitalEmployee)" :disabled="!form.hospitalId"/>
+        </FormItem>
+        <FormItem
+          label="医生账号"
+          prop="hospitalEmployeeId"
+          key="医生账号"
+          v-if="form.isSpecifyHospitalEmployee == true"
+          
+        >
+          <Select v-model="form.hospitalEmployeeId" placeholder="请选择医生账号" filterable  >
+            <Option
+              v-for="item in hospitalIdList"
               :value="item.id"
               :key="item.id"
               >{{ item.name }}</Option
@@ -712,7 +731,11 @@ export default {
         isUncertainDate: false,
         acceptConsulting: "",
         // 派单人员
-        sendBy:Number(sessionStorage.getItem("employeeId"))? Number(sessionStorage.getItem("employeeId")) : null
+        sendBy:Number(sessionStorage.getItem("employeeId"))? Number(sessionStorage.getItem("employeeId")) : null,
+        // 是否指定医生账号
+        isSpecifyHospitalEmployee:false,
+        // 医生账号
+        hospitalEmployeeId:null
       },
 
       // 医院列表
@@ -734,6 +757,12 @@ export default {
       ],
 
       ruleValidate: {
+        hospitalEmployeeId: [
+          {
+            required: true,
+            message: "请选择医生账号",
+          },
+        ],
         sendBy: [
           {
             required: true,
@@ -772,9 +801,33 @@ export default {
         encryptPhone: "",
         controlCustomerInfoDisplay: false,
       },
+      // 指定医院账户
+      hospitalIdList:[]
     };
   },
   methods: {
+    // 特定账户Switch isSpecifyHospitalEmployee
+    isSpecifyHospitalEmployeeChange(value){
+      if(value == true){
+        this.getByHospitalIdList()
+      }else{
+        this.form.hospitalEmployeeId = null
+        this.form.isSpecifyHospitalEmployee == false
+      }
+    },
+    // 根据医院查询医院账户
+    getByHospitalIdList(){
+      const data = {
+        hospitalId:this.form.hospitalId
+      }
+      hospitalManage.getByHospitalIdList(data).then(res=>{
+        if(res.code == 0){
+          const {employee} = res.data
+          this.hospitalIdList= !employee  || employee == [] ?  [] : employee
+          
+        }
+      })
+    },
     //   获取内容平台订单来源
     getcontentPlateFormOrderSourceList() {
       api.contentPlateFormOrderSourceList().then((res) => {
@@ -966,8 +1019,11 @@ export default {
     cancel(name) {
       this.controlModal = false;
       this.openAllHospital = false;
+      this.form.isSpecifyHospitalEmployee = false
+      this.hospitalIdList = []
       this.$refs[name].resetFields();
       this.form.remark = "";
+      
     },
 
     submit(name) {
@@ -981,7 +1037,9 @@ export default {
             remark,
             isUncertainDate,
             sendBy,
-            otherHospitalId
+            otherHospitalId,
+            isSpecifyHospitalEmployee,
+            hospitalEmployeeId
           } = this.form;
           const data = {
             orderId,
@@ -995,9 +1053,10 @@ export default {
             remark,
             isUncertainDate,
             sendBy,
-            otherHospitalId
+            otherHospitalId,
+            isSpecifyHospitalEmployee,
+            hospitalEmployeeId:isSpecifyHospitalEmployee == true  ? hospitalEmployeeId : 0
           };
-          
           if(otherHospitalId == [] || otherHospitalId.length == 0){
               this.flag = true;
               api.AddContentPlateFormSendOrder(data).then((res) => {
@@ -1018,7 +1077,7 @@ export default {
               return
             }else{
                 for(var i = 0;i<otherHospitalId.length;i++){
-                  console.log(otherHospitalId[i])
+                  // console.log(otherHospitalId[i])
                   if(otherHospitalId[i] == hospitalId){
                     let hostpital = this.hospitalInfo.find(item=>item.id == hospitalId).name
                     this.$Message.warning( hostpital+ '已存在于主派医院中，请勿重复选择')
@@ -1051,6 +1110,8 @@ export default {
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
       if (!value) {
+        this.form.isSpecifyHospitalEmployee = false
+        this.hospitalIdList = []
         this.cancel("form");
         this.query.doubleOrderModel = false;
       }

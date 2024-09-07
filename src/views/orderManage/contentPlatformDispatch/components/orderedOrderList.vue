@@ -251,9 +251,25 @@
               placeholder="请选择医院"
               filterable
               transfer
+              @on-change="getQueryByHospitalIdList()"
             >
               <Option
                 v-for="item in hospitallist"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.hospitalEmpId"
+              style="width: 240px;margin-left: 10px"
+              placeholder="请选择指定账号"
+              filterable
+              transfer
+              :disabled="query.hospitalIds == '全部医院' || !query.hospitalIds"
+            >
+              <Option
+                v-for="item in hospitalIdList2"
                 :value="item.id"
                 :key="item.id"
                 >{{ item.name }}</Option
@@ -327,6 +343,8 @@
             placeholder="请选择医院"
             filterable
             :disabled=" form.isMainHospital == true ? form.hasDealInfo == true : form.hasDealInfo == false"
+            @on-change="isSpecifyHospitalEmployeeChange(form.isSpecifyHospitalEmployee,form.allHospitalId)"
+
           >
             <!-- hasDealInfo为true的话有成交信息主派医院不能修改 -->
             <Option
@@ -339,6 +357,25 @@
         </FormItem>
         <FormItem label="是否为主派医院" key="是否为主派医院">
           <i-switch v-model="form.isMainHospital" disabled />
+        </FormItem>
+        <FormItem label="是否指定医生账号" key="是否指定医生账号">
+          <i-switch v-model="form.isSpecifyHospitalEmployee" @on-change="isSpecifyHospitalEmployeeChange(form.isSpecifyHospitalEmployee,form.allHospitalId)" />
+        </FormItem>
+        <FormItem
+          label="医生账号"
+          prop="hospitalEmployeeId"
+          key="医生账号"
+          v-if="form.isSpecifyHospitalEmployee == true"
+          
+        >
+          <Select v-model="form.hospitalEmployeeId" placeholder="请选择医生账号" filterable  >
+            <Option
+              v-for="item in hospitalIdList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
         </FormItem>
         <FormItem
           label="次派医院"
@@ -773,6 +810,8 @@
       :editRecordingModel.sync="editRecordingModel"
       :recordingParams="recordingParams"
     />
+    <!-- 验单 -->
+    <verificationForm :verificationFormModel.sync="verificationFormModel" :verificationFormParams="verificationFormParams"/>
   </div>
 </template>
 
@@ -793,6 +832,7 @@ import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhot
 import detail from "@/components/contentDetail/detail.vue";
 import detailTable from "@/components/dealDetailTable/dealDetailTable.vue";
 import editRecording from "@/components/recording/editRecording";
+import verificationForm from "./verificationForm";
 
 export default {
   props: {
@@ -808,6 +848,7 @@ export default {
     detail,
     detailTable,
     editRecording,
+    verificationForm
   },
   data() {
     return {
@@ -1012,6 +1053,7 @@ export default {
       employee: [{ name: "全部归属客服", id: -1 }],
       dispatchEmployee: [{ name: "全部派单客服", id: -1 }],
       query: {
+        hospitalEmpId:null,
         isMainHospital: null,
         baseLiveAnchorId: -1,
         // 陪诊
@@ -1118,7 +1160,7 @@ export default {
           },
           {
             title: "订单编号",
-            key: "orderId",
+            key: "orderId", 
             minWidth: 170,
             align: "center",
             tooltip: true,
@@ -1223,6 +1265,42 @@ export default {
           {
             title: "派单医院",
             key: "sendHospital",
+            minWidth: 200,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "是否指定医生账号",
+            key: "isSpecifyHospitalEmployee",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isSpecifyHospitalEmployee == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "医生账号",
+            key: "hospitalEmployeeName",
             minWidth: 200,
             align: "center",
             tooltip: true,
@@ -1817,6 +1895,13 @@ export default {
                             this.detailList = [orderInfo];
                           }
                         });
+                      }else if (name == "verificationForm") {
+                        // 验单
+                        const { id,orderId,sendHospitalId } = params.row;
+                        this.verificationFormParams.id=id
+                        this.verificationFormParams.orderId=orderId
+                        this.verificationFormParams.sendHospitalId=sendHospitalId
+                        this.verificationFormModel = true
                       } else if (name == "reassignment") {
                         // this.$Message.warning('系统正在维护中，请稍后！')
                         // return
@@ -1847,7 +1932,10 @@ export default {
                               isUncertainDate,
                               otherHospitalId,
                               hasDealInfo,
+                              isSpecifyHospitalEmployee,
+                              hospitalEmployeeId
                             } = res.data.sendOrderInfo;
+                           
                             // 已参与项目医院
                             const ycyxmyy = this.hospital.find(
                               (item) => item.id === hospitalId
@@ -1878,6 +1966,9 @@ export default {
                             this.form.isMainHospital = isMainHospital;
                             this.form.otherHospitalId = otherHospitalId;
                             this.form.hasDealInfo = hasDealInfo;
+                             this.getByHospitalIdList(hospitalId)
+                            this.form.isSpecifyHospitalEmployee = isSpecifyHospitalEmployee;
+                            this.form.hospitalEmployeeId = hospitalEmployeeId;
                             this.controlModal = true;
                           }
                           // });
@@ -1958,7 +2049,15 @@ export default {
                         },
                         "订单详情"
                       ),
-
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "verificationForm",
+                          },
+                        },
+                        "验单"
+                      ),
                       h(
                         "DropdownItem",
                         {
@@ -2037,6 +2136,10 @@ export default {
         isUncertainDate: false,
         // 为true的话有成交信息主派医院不能修改
         hasDealInfo: false,
+        // 是否指定医生账号
+        isSpecifyHospitalEmployee:false,
+        // 医生账号
+        hospitalEmployeeId:null
       },
 
       // 医院列表
@@ -2059,6 +2162,12 @@ export default {
       ],
 
       ruleValidate: {
+        hospitalEmployeeId: [
+          {
+            required: true,
+            message: "请选择医生账号",
+          },
+        ],
         hospitalId: [
           {
             type: "number",
@@ -2132,9 +2241,58 @@ export default {
         { type: "true", name: "主派" },
         { type: "false", name: "次派" },
       ],
+      // 指定医院账户
+      hospitalIdList:[],
+      // 指定医院账户 查询用
+      hospitalIdList2:[],
+      // 验单参数
+      verificationFormParams:{
+        id:'',
+        orderId:'',
+        sendHospitalId:null,
+        
+      },
+      // 验单model
+      verificationFormModel:false
     };
   },
   methods: {
+    // 特定账户Switch isSpecifyHospitalEmployee
+    isSpecifyHospitalEmployeeChange(value,value2){
+      if(value == true){
+        this.getByHospitalIdList(value2)
+      }else{
+        this.form.hospitalEmployeeId = null
+        this.form.isSpecifyHospitalEmployee == false
+      }
+    },
+    // 根据医院查询医院账户
+    getByHospitalIdList(value){
+      const data = {
+        hospitalId:value
+      }
+      hospitalManage.getByHospitalIdList(data).then(res=>{
+        if(res.code == 0){
+          const {employee} = res.data
+          this.hospitalIdList= !employee  || employee == [] ?  [] : employee
+        }
+      })
+    },
+    // 根据医院查询医院账户
+    getQueryByHospitalIdList(){
+      const data = {
+        hospitalId:this.query.hospitalIds
+      }
+      hospitalManage.getByHospitalIdList(data).then(res=>{
+        if(res.code == 0){
+          const {employee} = res.data
+          this.hospitalIdList2= !employee  || employee == [] ?  [] : employee
+          if(this.query.hospitalIds == '全部医院'){
+            this.query.hospitalEmpId = null
+          }
+        }
+      })
+    },
     // 客户类型列表
     getcustomerTypeList() {
       shoppingCartRegistrationApi.customerTypeList().then((res) => {
@@ -2606,6 +2764,7 @@ export default {
         commissionRatio,
         baseLiveAnchorId,
         isMainHospital,
+        hospitalEmpId
       } = this.query;
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
@@ -2633,6 +2792,7 @@ export default {
         baseLiveAnchorId: baseLiveAnchorId == -1 ? "" : baseLiveAnchorId,
         commissionRatio,
         isMainHospital,
+        hospitalEmpId:hospitalIds ==  0  ? null : hospitalEmpId
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -2667,7 +2827,9 @@ export default {
         commissionRatio,
         baseLiveAnchorId,
         isMainHospital,
+        hospitalEmpId
       } = this.query;
+      
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
@@ -2692,6 +2854,7 @@ export default {
         baseLiveAnchorId: baseLiveAnchorId == -1 ? "" : baseLiveAnchorId,
         commissionRatio,
         isMainHospital,
+        hospitalEmpId:hospitalIds ==  0  ? null : hospitalEmpId
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -2738,6 +2901,8 @@ export default {
             isUncertainDate,
             otherHospitalId,
             isMainHospital,
+            isSpecifyHospitalEmployee,
+            hospitalEmployeeId
           } = this.form;
           const data = {
             id,
@@ -2749,7 +2914,10 @@ export default {
             content,
             isUncertainDate,
             otherHospitalId: isMainHospital == false ? [] : otherHospitalId,
+            isSpecifyHospitalEmployee,
+            hospitalEmployeeId:isSpecifyHospitalEmployee == true ? hospitalEmployeeId : 0
           };
+         
           this.editLoading = true;
           api.editContentPlateFormSendOrder(data).then((res) => {
             if (res.code === 0) {
@@ -2789,6 +2957,8 @@ export default {
       this.confirmForm.DealDate = null;
       this.query.doubleOrderModel = false;
       this.confirmForm.isFinish = false;
+      this.form.isSpecifyHospitalEmployee = false
+      this.hospitalIdList = []
       // this.$refs.detailTable.query2.data = []
     },
 

@@ -1,6 +1,6 @@
 <template>
   <Card>
-    <div class="title">啊美雅（医美）数据运营看板</div>
+    <div class="title">啊美雅（医美）助理数据运营看板</div>
     <!-- 时间进度及筛选 -->
     <div class="time">
       <span>
@@ -50,10 +50,26 @@
     </div>
     <!-- 卡片 -->
     <item ref="items" :params="params"/>
+    <items2 ref="items2" :params="params"/>
     <!-- 折线图 -->
     <Card >
-      <div class="h2">业绩趋势</div>
-      <monthLine  :brokenLineDataObj="brokenLineDataObj"/>
+      <div class="h2">当月业绩&客资趋势</div>
+      <!-- tab切换 -->
+      <div class="tab_content">
+        <div class="tab">
+          <div
+            class="tab_item"
+            v-for="(item, index) in list2"
+            :key="index"
+            @click="selectTab2(index, item)"
+            :class="{ active: selected2 == item }"
+          >
+            <span>{{ item }}</span>
+          </div>
+        </div>
+      </div>
+      <monthLine  :brokenLineDataObj="brokenLineDataObj" v-if="selected2 == '业绩'"/>
+      <monthLine2  :brokenLineDataObj="assistantDistributeConsulationBrokenLineDataObj" v-if="selected2 == '客资'"/>
     </Card>
     <!-- 漏斗图 -->
     <Card class="mr">
@@ -74,19 +90,32 @@
       </div>
       
       <div  class="list">
-        <Card class="item">
+        <!-- <Card class="item">
           <div class="h2">新客业绩</div>
           <funnel :funnelData="funnelObj.newCustomerData"/>
         </Card>
         <Card  class="item">
           <div class="h2">老客业绩</div>
           <funnel :funnelData="funnelObj.oldCustomerData"/>
-        </Card>
+        </Card> -->
+        <funnel :funnelObj="funnelObj" :isFlag="isFlag"/>
       </div>
     </Card>
     <!-- 饼图 -->
     <Card class="mr">
-      <div class="h2 h3">有效/潜在线索&业绩</div>
+      <div class="h2 h3">客资分类--线索&业绩</div>
+      <div  class="list h3">
+        <Card class="item">
+          <div class="h2">客资线索</div>
+          <pieItem2 :pieData="typeCount.data" :total="typeCount.total" title="总线索"/>
+        </Card>
+        <Card  class="item">
+          <div class="h2">客资业绩</div>
+          <pieItem2 :pieData="typePerformance.data" :total="typePerformance.total" title="总业绩"/>
+        </Card>
+      </div>
+
+      <div class="h2 h3">有效/潜在--线索&业绩</div>
       <div  class="list h3">
         <Card class="item">
           <div class="h2">有效/潜在分诊量</div>
@@ -97,7 +126,7 @@
           <pieItem :pieData="performanceEffictiveOrNoData" :totalNumber="totalPerformanceNumber" title="总业绩"/>
         </Card>
       </div>
-      <div class="h2 h3">当月/历史派单量&业绩</div>
+      <div class="h2 h3">当月/历史--派单量&业绩</div>
       <div  class="list h3">
         <Card class="item">
           <div class="h2">当月/历史派单量</div>
@@ -108,7 +137,7 @@
           <pieItem :pieData="performanceHistoryOrNoData" :totalNumber="totalPerformanceNumber3" title="总业绩"/>
         </Card>
       </div>
-      <div class="h2 h3">新老客成交量&业绩占比</div>
+      <div class="h2 h3">新老客--成交量&业绩占比</div>
       <div  class="list ">
         <Card class="item">
           <div class="h2">新老客成交占比</div>
@@ -122,21 +151,21 @@
     </Card>
     <!-- 助理目标完成率和业绩占比 -->
     <Card class="mr">
-      <div class="h2 h3">助理目标完成率&助理业绩占比</div>
+      <div class="h2 h3">助理--目标完成率&业绩贡献</div>
       <div  class="list ">
         <Card class="item">
           <div class="h2">助理目标完成率</div>
           <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData"  />
         </Card>
         <Card  class="item">
-          <div class="h2">助理业绩占比</div>
+          <div class="h2">助理业绩贡献</div>
           <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData"  />
         </Card>
       </div>
     </Card>
     <!-- 机构线索分析和机构业绩分析 -->
     <Card class="mr">
-      <div class="h2 h3">机构线索分析&机构业绩分析</div>
+      <div class="h2 h3">机构--线索&业绩</div>
       <div class="list">
         <Card class="item">
           <div class="h2">助理线索分析</div>
@@ -158,12 +187,18 @@
   </Card>
 </template>
 <script>
+import {processEnv} from "@/http/baseUrl";
+
 import * as api from "@/api/amiyaOperationsBoard";
 import * as orderApi from "@/api/orderManage";
+import * as employeeManageApi from "@/api/employeeManage";
 import item from "./components/item.vue";
+import items2 from "./components/item2.vue";
 import monthLine from "./components/monthLine.vue"
+import monthLine2 from "./components/monthLine2.vue"
 import funnel from "./components/funnel.vue"
 import pieItem from "./components/pieItem.vue"
+import pieItem2 from "./components/pieItem2.vue"
 import customerBar from "./components/customerBar.vue"
 import barItem from "./components/barItem.vue"
 import hospitalBar from "./components/hospitalBar.vue"
@@ -171,16 +206,21 @@ export default {
   components: {
     item,
     monthLine,
+    monthLine2,
     funnel,
     pieItem,
     customerBar,
     barItem,
-    hospitalBar
+    hospitalBar,
+    items2,
+    pieItem2
   },
   data() {
     return {
       list: ["全部业绩","有效业绩", "潜在业绩"],
+      list2: ["业绩","客资"],
       selected:'全部业绩',
+      selected2:'业绩',
       // 时间进度
       completeRate: 0,
       params: {
@@ -200,6 +240,8 @@ export default {
       isDirector:sessionStorage.getItem('isDirector'),
       // 折线图数据
       brokenLineDataObj:{},
+      // 分诊折线图
+      assistantDistributeConsulationBrokenLineDataObj:{},
       // 漏斗图数据
       funnelObj:{},
       // 有效/潜在分诊量
@@ -225,7 +267,13 @@ export default {
       // 机构线索分析
       assistantHospitalCluesDataObj:{},
       // 机构业绩分析
-      assistantHospitalPerformanceData:[]
+      assistantHospitalPerformanceData:[],
+      // 用于加载数据
+      isFlag:false,
+      // 客资线索
+      typeCount:[],
+      // 客资业绩
+      typePerformance:[]
     };
   },
   methods: {
@@ -248,19 +296,26 @@ export default {
       this.getTimeSpanClick();
       this.$nextTick(()=>{
           this.$refs.items.getAssistantPerformance()
+          this.$refs.items2.getdistributeConsulationData()
       })
       this.getbrokenLineData()
+      this.getassistantDistributeConsulationBrokenLineData()
       this.getassistantPerformanceFilterData()
       this.getanalysisData()
       this.getassiatantTargetCompleteAndPerformanceRateData()
       this.getassistantHospitalCluesData()
       this.getassistantHospitalPerformanceData()
     },
-    // 获取客服列表
-    getCustomerServiceLists() {
-      orderApi.getCustomerServiceList().then((res) => {
+    // 根据职位id获取员工
+    getEmployeeByPositionIdAdmin(){
+      const data = {
+        // （客服管理员)线上id 4 测试5
+        positionId:processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 4 : 5
+        
+      }
+      employeeManageApi.getEmployeeByPositionId(data).then((res) => {
         if (res.code === 0) {
-          const { employee } = res.data;
+          const {employee} =res.data
           this.params.employee = employee
           // 是客服但不是管理员获取登录id 
           this.params.assistantId =  sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')) : employee[0].id
@@ -281,6 +336,20 @@ export default {
             }
         })
     },
+    // 获取分诊折线图数据
+    getassistantDistributeConsulationBrokenLineData(){
+      const {startDate,endDate,assistantId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            assistantId:assistantId 
+        }
+        api.assistantDistributeConsulationBrokenLineData(data).then(res=>{
+            if(res.code === 0){
+                this.assistantDistributeConsulationBrokenLineDataObj =  res.data.data
+            }
+        })
+    },
     // 获取漏斗图数据
     getassistantPerformanceFilterData(){
         const {startDate,endDate,assistantId} = this.params
@@ -293,6 +362,7 @@ export default {
         api.assistantPerformanceFilterData(data).then(res=>{
             if(res.code === 0){
                 this.funnelObj =  res.data.data
+                this.isFlag = true
             }
         })
     },
@@ -306,7 +376,7 @@ export default {
         }
         api.analysisData(data).then(res=>{
             if(res.code === 0){
-                const {distributeConsulationData ,performanceEffictiveOrNoData,sendOrderData,performanceHistoryOrNoData,customerDealData,performanceNewCustonerOrNoData} = res.data.data
+                const {distributeConsulationData ,performanceEffictiveOrNoData,sendOrderData,performanceHistoryOrNoData,customerDealData,performanceNewCustonerOrNoData,typeCount,typePerformance} = res.data.data
                 // 有效/潜在分诊量
                 this.distributeConsulationData = [
                   {name:'有效',value:distributeConsulationData.effictiveNumber,rate:distributeConsulationData.effictiveRate},
@@ -343,6 +413,10 @@ export default {
                   {name:'老客',value:performanceNewCustonerOrNoData.totalPerformanceOldCustomerNumber,rate:performanceNewCustonerOrNoData.totalPerformanceOldCustomerRate},
                 ]
                 this.totalPerformanceNumber5 = performanceNewCustonerOrNoData.totalPerformanceNumber
+                // 客资线索
+                this.typeCount = typeCount 
+                // 客资业绩
+                this.typePerformance = typePerformance
                 
                 
 
@@ -396,9 +470,19 @@ export default {
       this.selected = value;
       this.getassistantPerformanceFilterData()
     },
+    // 折线图切换
+    selectTab2(index, value) {
+      this.selected2 = value;
+      if(value == '业绩'){
+        this.getbrokenLineData()
+      }else if(value == '客资'){
+        this.getassistantDistributeConsulationBrokenLineData()
+
+      }
+    },
   },
   created() {
-    this.getCustomerServiceLists();
+    this.getEmployeeByPositionIdAdmin();
     setTimeout(()=>{
 
         this.getData();

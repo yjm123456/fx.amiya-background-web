@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-    <div class="allNum" :style="{top: '48px'}" v-if="title">{{title}}
+    <div class="allNum" :style="{top: '71px'}" v-if="title">{{title}}
       <span style="font-size:14px;">
-      ({{totalNumber}} {{title == '总线索' ? '人' : 'w'}})
+      ({{total}} {{title == '总线索' ? '人' : 'w'}})
       </span>
     </div>
     <div ref="dom" :style="{ width: '100%', height: '180px' }"></div>
@@ -17,7 +17,7 @@ echarts.registerTheme("tdTheme", tdTheme);
 export default {
   props: {
     pieData: Array,
-    totalNumber:Number,
+    total:Number,
     title:String
   },
   data() {

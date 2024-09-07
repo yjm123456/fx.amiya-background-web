@@ -705,7 +705,12 @@
           </Col>
           <Col span="8">
             <FormItem label="是否加V" prop="IsAddWeChat">
-              <i-switch v-model="form.IsAddWeChat" />
+              <i-switch v-model="form.IsAddWeChat" @on-change="IsAddWeChatChange()"/>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="加v截图" prop="addWechatPicture" key="addWechatPicture" v-if="form.IsAddWeChat == true">
+              <upload :uploadObj="uploadObj2" @uploadChange="handleUploadChange2" />
             </FormItem>
           </Col>
           <!-- <Col span="8">
@@ -881,6 +886,12 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="线索截图" prop="cluePicture" key="cluePicture">
+              <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
+            </FormItem>
+          </Col>
+          
         </Row>
         <Spin fix v-if="flag == true">
           <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
@@ -928,12 +939,29 @@ import assign from "./components/assign.vue";
 import batchAssignment from "./components/batchAssignment.vue";
 import importFile from "./components/importModel.vue";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
+import upload from "@/components/upload/upload";
 
 
 export default {
-  components: { assign, batchAssignment, importFile ,trackReturnVisit},
+  components: { assign, batchAssignment, importFile ,trackReturnVisit,upload},
   data() {
     return {
+      uploadObj: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
+      uploadObj2: {
+        // 是否开启多图
+        multiple: false,
+        // 图片个数
+        length: 1,
+        // 文件列表
+        uploadList: [],
+      },
       // 追踪回访组件参数
       trackReturnVisitComParams: {
         device: "",
@@ -1027,6 +1055,12 @@ export default {
             minWidth: 80,
           },
           {
+            title: "编号",
+            key: "id",
+            minWidth: 180,
+            align: "center",
+          },
+          {
             title: "登记日期",
             key: "recordDate",
             minWidth: 110,
@@ -1037,6 +1071,39 @@ export default {
                 params.row.recordDate
                   ? this.$moment(params.row.recordDate).format("YYYY-MM-DD")
                   : ""
+              );
+            },
+          },
+          {
+            title: "线索截图",
+            key: "cluePicture",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h(
+                "viewer",
+                {
+                  props: {
+                    options: {
+                      toolbar: false,
+                      title: false,
+                      navbar: false,
+                    },
+                  },
+                },
+                [
+                  h("img", {
+                    style: {
+                      width: "50px",
+                      height: "50px",
+                      margin: "5px 0",
+                      verticalAlign: "middle",
+                    },
+                    attrs: {
+                      src: params.row.cluePicture,
+                    },
+                  }),
+                ]
               );
             },
           },
@@ -1157,6 +1224,39 @@ export default {
             key: "customerNickName",
             minWidth: 150,
             align: "center",
+          },
+          {
+            title: "加v截图",
+            key: "addWechatPicture",
+            align: "center",
+            minWidth: 100,
+            render: (h, params) => {
+              return h(
+                "viewer",
+                {
+                  props: {
+                    options: {
+                      toolbar: false,
+                      title: false,
+                      navbar: false,
+                    },
+                  },
+                },
+                [
+                  h("img", {
+                    style: {
+                      width: "50px",
+                      height: "50px",
+                      margin: "5px 0",
+                      verticalAlign: "middle",
+                    },
+                    attrs: {
+                      src: params.row.addWechatPicture,
+                    },
+                  }),
+                ]
+              );
+            },
           },
           {
             title: "联系方式",
@@ -1334,6 +1434,12 @@ export default {
                 });
               }
             },
+          },
+          {
+            title: "加v人员",
+            key: "addWechatEmpName",
+            minWidth: 130,
+            align: "center",
           },
           // {
           //   title: "是否核销",
@@ -1689,7 +1795,9 @@ export default {
                               getCustomerType,
                               createByEmpId,
                               shoppingCartRegistrationCustomerType,
-                              belongChannel
+                              belongChannel,
+                              cluePicture,
+                              addWechatPicture
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1749,6 +1857,10 @@ export default {
                             this.form.shoppingCartRegistrationCustomerType = shoppingCartRegistrationCustomerType;
                             this.form.belongChannel = belongChannel;
                             this.controlModal = true;
+                            this.form.cluePicture = cluePicture;
+                            this.uploadObj.uploadList = this.form.cluePicture ? [this.form.cluePicture] : [];
+                            this.form.addWechatPicture = addWechatPicture;
+                            this.uploadObj2.uploadList = this.form.addWechatPicture ? [this.form.addWechatPicture] : [];
 
                             let index = recordDate.indexOf("T");
                             let result = recordDate.substr(
@@ -1935,10 +2047,20 @@ export default {
         // 客户类型
         shoppingCartRegistrationCustomerType: null,
         // 归属部门
-        belongChannel:null
+        belongChannel:null,
+        // 线索截图
+        cluePicture:'',
+        // 加v截图
+        addWechatPicture:''
       },
 
       ruleValidate: {
+        cluePicture: [
+          {
+            required: true,
+            message: "请上传线索截图",
+          },
+        ],
         belongChannel: [
           {
             required: true,
@@ -2250,6 +2372,21 @@ export default {
     };
   },
   methods: {
+    //是否加v为false 清空加v截图
+    IsAddWeChatChange(){
+      if(this.form.IsAddWeChat == false){
+        this.form.addWechatPicture = ''
+        this.uploadObj2.uploadList = [];
+      }
+    },
+    // 线索截图
+    handleUploadChange(values) {
+      this.form.cluePicture = values[0];
+    },
+    // 加v截图
+    handleUploadChange2(values) {
+      this.form.addWechatPicture = values[0];
+    },
     // 客户来源文字提示
     isTitleClick2(){
       if(this.query.belongChannel != null  && this.query.contentPlatFormId){
@@ -2882,7 +3019,9 @@ export default {
         getCustomerType,
         createBy,
         shoppingCartRegistrationCustomerType,
-        belongChannel
+        belongChannel,
+        cluePicture,
+        addWechatPicture
       } = this.form;
       const data = {
         recordDate: time
@@ -2925,7 +3064,9 @@ export default {
         getCustomerType,
         createBy,
         shoppingCartRegistrationCustomerType,
-        belongChannel
+        belongChannel,
+        cluePicture,
+        addWechatPicture:IsAddWeChat == true ? addWechatPicture : ''
       };
       // 归属地 国内是1 国外是2
       if (belongingPlace == 1) {
@@ -3049,7 +3190,9 @@ export default {
               productType,
               getCustomerType,
               shoppingCartRegistrationCustomerType,
-              belongChannel
+              belongChannel,
+              cluePicture,
+              addWechatPicture
             } = this.form;
             const data = {
               recordDate: time
@@ -3085,7 +3228,9 @@ export default {
               productType: source == 6 ? productType : 0,
               getCustomerType,
               shoppingCartRegistrationCustomerType,
-              belongChannel
+              belongChannel,
+              cluePicture,
+              addWechatPicture:IsAddWeChat == true ? addWechatPicture : ''
             };
 
             // 归属地 国内是1 国外是2
@@ -3161,6 +3306,8 @@ export default {
       this.isEdit = false;
       this.controlModal = false;
       this.assignParams.idList.clear();
+      this.uploadObj.uploadList = [];
+      this.uploadObj2.uploadList = [];
       this.$refs[name].resetFields();
     },
 
@@ -3168,6 +3315,8 @@ export default {
     handleModalVisibleChange(value) {
       if (!value) {
         this.isEdit = false;
+        this.uploadObj.uploadList = [];
+        this.uploadObj2.uploadList = [];
         this.$refs["form"].resetFields();
       }
     },

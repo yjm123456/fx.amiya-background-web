@@ -239,12 +239,14 @@
           </div>
           <div  class="item_list">
             <div class="mr_top items">
+            <span class="title_bold">院方接诊人员：</span>
+            <span>{{ detailObj.acceptConsulting }}</span>
+          </div>
+            <div class="mr_top items">
               <span class="title_bold">预约日期：</span>
               <span>{{ customerAppointmentScheduleInfo.appointmentDate }} </span>
             </div>
-            <div class="mr_top items">
-              
-            </div>
+           
           </div>
           <div class="appoint"  style="display:flex;justify-content:flex-end;margin-top:10px;margin-right:-5px">
             <Button type="primary" @click="dispatchClick(detailObj.id)" style="margin-right:10px">派单情况</Button>

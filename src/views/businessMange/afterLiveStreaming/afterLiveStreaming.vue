@@ -135,7 +135,10 @@ export default {
   left: 0;
   border-top-left-radius: 6px;
 }
-.top {
+.top,.date_con {
   text-align: end;
+  display: flex;
+  justify-content: flex-end;
 }
+
 </style>

@@ -532,3 +532,11 @@ export const activeHospitalList = (params) => {
         params
     });
 };
+// 根据医院获取医院账户
+export const getByHospitalIdList = (params) => {
+    return http({
+        url: "/amiyabg/HospitalEmployee/getByHospitalIdList",
+        method: "get",
+        params
+    });
+};

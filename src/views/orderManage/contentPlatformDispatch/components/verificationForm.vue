@@ -2,7 +2,7 @@
   <div>
     <Modal
       v-model="verificationFormModels"
-      title="验单"
+      :title="verificationFormParams.title"
       :mask-closable="false"
       @on-visible-change="handleModalVisibleChange"
     >
@@ -25,7 +25,9 @@
               >{{ item.name }}</Option
             >
           </Select>
+          <div class="title">查重接口由三方平台提供</div>
         </FormItem>
+        
         <Spin fix v-if="flag == true">
           <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
           <div>加载中...</div>
@@ -77,11 +79,11 @@ export default {
     },
     handleSubmit() {
       const data = {
-        thirdPartContentplatformInfoId: this.form
-          .thirdPartContentplatformInfoId,
+        thirdPartContentplatformInfoId: this.form.thirdPartContentplatformInfoId,
         hospitalId: this.verificationFormParams.sendHospitalId,
         orderId: this.verificationFormParams.orderId,
         sendOrderId: this.verificationFormParams.id,
+        YWLX: this.verificationFormParams.YWLX,
       };
       if (!this.form.thirdPartContentplatformInfoId) {
         this.$Message.warning("请选择三方平台");
@@ -152,5 +154,9 @@ export default {
 .img_cons {
   display: flex;
   flex-wrap: wrap;
+}
+.title{
+  font-size: 14px;
+  color: red;
 }
 </style>

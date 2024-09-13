@@ -302,3 +302,51 @@ export const assistantDistributeConsulationBrokenLineData = (params) => {
         params
     });
 };
+//  行政客服客资数据
+export const adminCustomerServiceCustomerTypeData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/adminCustomerServiceCustomerTypeData",
+        method: "get",
+        params
+    });
+};
+//  行政客服个人加v后客资数据
+export const adminCustomerServiceCustomerTypeAddWechatData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/adminCustomerServiceCustomerTypeAddWechatData",
+        method: "get",
+        params
+    });
+};
+//  行政客服客资折线图
+export const adminCustomerServiceCustomerTypeBrokenLineData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/adminCustomerServiceCustomerTypeBrokenLineData",
+        method: "get",
+        params
+    });
+};
+//  行政客服漏斗图数据
+export const adminCustomerFilterData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/adminCustomerFilterData",
+        method: "get",
+        params
+    });
+};
+//  行政客服饼状图数据
+export const adminCustomerAnalysisData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/adminCustomerAnalysisData",
+        method: "get",
+        params
+    });
+};
+//  行政客服分诊加v率柱状图数据
+export const adminCustomerAssistantDisAndAddVData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/adminCustomerAssistantDisAndAddVData",
+        method: "get",
+        params
+    });
+};

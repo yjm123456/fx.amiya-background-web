@@ -122,6 +122,12 @@
             <span>{{ detailObj.belongChannelText }} </span>
           </div>
           </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">是否为日不落直播：</span>
+              <i-switch v-model="detailObj.isRiBuLuoLiving" disabled />
+            </div>
+          </div>
           <div class="fl_end">
             <div class="mr_top">
              

@@ -824,7 +824,28 @@ export default {
               );
             },
           },
-          
+          {
+            title: "是否为日不落直播",
+            key: "isRiBuLuoLiving",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "i-switch",
+                {
+                  props: {
+                    value: params.row.isRiBuLuoLiving,
+                    size: "default",
+                    disabled:
+                      params.row.isRiBuLuoLiving === true ||
+                      params.row.isRiBuLuoLiving === false,
+                  },
+                },
+                h("span", { isRiBuLuoLiving: "open" }, "开"),
+                h("span", { isRiBuLuoLiving: "close" }, "关")
+              );
+            },
+          },
 
           {
             title: "订单来源",

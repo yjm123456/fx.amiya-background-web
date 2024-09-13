@@ -135,9 +135,18 @@
               <span>{{ shoppingCartRegistrationInfo.getCustomerTypeText }} </span>
             </div>
           </div>
-          <div class="mr_top">
-            <span class="title_bold">归属部门：</span>
-            <span>{{ shoppingCartRegistrationInfo.belongChannelName }}</span>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">归属部门：</span>
+              <span>{{ shoppingCartRegistrationInfo.belongChannelName }}</span>
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">是否为日不落直播：</span>
+              <i-switch v-model="shoppingCartRegistrationInfo.isRiBuLuoLiving" disabled />
+            </div>
+            <div class="mr_top items">
+             
+            </div>
           </div>
           <div class="mr_top">
             <span class="title_bold">退款原因：</span>

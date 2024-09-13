@@ -309,6 +309,8 @@
     <viewCustomerPhotos :viewCustomerPhotosModel.sync ="viewCustomerPhotosModel" :contentPlatFormOrderId.sync ="contentPlatFormOrderId"></viewCustomerPhotos>
     <!-- 订单详情 -->
     <detail :detailModel.sync ="detailModel" :detailList ="detailList"></detail>
+    <!-- 验单 -->
+    <verificationForm :verificationFormModel.sync="verificationFormModel" :verificationFormParams="verificationFormParams"/>
   </div>
 </template>
 <script>
@@ -317,6 +319,7 @@ import * as hospitalManage from "@/api/hospitalManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue"
 import detail from "@/components/contentDetail/detail.vue"
+import verificationForm from "./verificationForm";
 
 export default {
   // props: ["activeName"],
@@ -327,10 +330,21 @@ export default {
   },
   components: {
     viewCustomerPhotos,
-    detail
+    detail,
+    verificationForm
   },
   data() {
     return {
+      // 查重参数
+      verificationFormParams:{
+        id:'',
+        orderId:'',
+        sendHospitalId:null,
+        title:'',
+        YWLX:''
+      },
+      // 查重model
+      verificationFormModel:false,
       employeeId:sessionStorage.getItem('employeeId'),
       // 是否为客服
       isCustomerService:sessionStorage.getItem('isCustomerService'),
@@ -532,7 +546,7 @@ export default {
           },
           {
             title: "操作",
-            width: 250,
+            width: 290,
             align: "center",
             fixed: "right",
             render: (h, params) => {
@@ -635,6 +649,31 @@ export default {
                     },
                   },
                   "客户详情"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginLeft: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        // 查重
+                        const { orderId,appointmentHospitalId } = params.row;
+                        this.verificationFormParams.id=0
+                        this.verificationFormParams.orderId=orderId
+                        this.verificationFormParams.sendHospitalId=appointmentHospitalId
+                        this.verificationFormParams.title = '查重'
+                        this.verificationFormParams.YWLX='C'
+                        this.verificationFormModel = true
+                      },
+                    },
+                  },
+                  "查重"
                 ),
                 // params.row.orderStatusText == "医院重单"
                 //   ? h(

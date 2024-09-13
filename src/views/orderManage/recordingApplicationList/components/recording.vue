@@ -402,6 +402,7 @@
               <div style="font-size:12px;color:red" v-if="isTitle == true">请先选择归属部门和主播平台！</div>
             </FormItem>
           </Col>
+          
         </Row>
         <div class="h3">客户信息</div>
         <Row :gutter="30">
@@ -456,6 +457,11 @@
           <Col span="8">
             <FormItem label="城市" prop="city">
               <Input v-model="form.city" placeholder="请输入城市" />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否为日不落直播" prop="isRiBuLuoLiving">
+              <i-switch v-model="form.isRiBuLuoLiving" />
             </FormItem>
           </Col>
           <Col span="20">
@@ -629,7 +635,9 @@ export default {
         // 客户类型
         customerType:null,
         // 归属部门
-        belongChannel:null
+        belongChannel:null,
+        // 是否为日不落直播
+        isRiBuLuoLiving:false
       },
       ruleValidates: {
         belongChannel: [
@@ -954,7 +962,9 @@ export default {
               auxiliaryCustomerService,
               getCustomerType,
               customerSource,
-              customerType
+              customerType,
+              isRiBuLuoLiving
+
             } = this.form;
             const data = {
               orderType,
@@ -994,7 +1004,8 @@ export default {
               supportEmpId: isCustomer == '否' ? 0 : ( auxiliaryCustomerService ? auxiliaryCustomerService : 0),
                 getCustomerType,
               customerSource,
-              customerType
+              customerType,
+              isRiBuLuoLiving
             };
            
             if (phone) {

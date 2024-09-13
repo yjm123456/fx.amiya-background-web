@@ -399,6 +399,7 @@
             </FormItem>
           </Col>
           
+          
         </Row>
         <div class="h3">客户信息</div>
         <Row :gutter="30">
@@ -490,7 +491,11 @@
               />
             </FormItem>
           </Col>
-          
+          <Col span="8">
+            <FormItem label="是否为日不落直播" prop="isRiBuLuoLiving">
+              <i-switch v-model="form.isRiBuLuoLiving" />
+            </FormItem>
+          </Col>
           <Col span="20">
             <FormItem label="顾客照片" prop="imageUrl" key="customerPictures">
               <upload
@@ -666,7 +671,9 @@ export default {
         // 客户类型
         customerType:null,
         // 归属部门
-        belongChannel:null
+        belongChannel:null,
+        // 是否为日不落直播
+        isRiBuLuoLiving:false
       },
       ruleValidates: {
         belongChannel: [
@@ -1008,7 +1015,8 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              belongChannel
+              belongChannel,
+              isRiBuLuoLiving
             } = this.form;
             const data = {
               orderType,
@@ -1047,7 +1055,8 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              belongChannel
+              belongChannel,
+              isRiBuLuoLiving
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1111,7 +1120,8 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              belongChannel
+              belongChannel,
+              isRiBuLuoLiving
             } = this.form;
             const data = {
               orderType,
@@ -1150,7 +1160,8 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              belongChannel
+              belongChannel,
+              isRiBuLuoLiving
             };
             if (phone) {
               // 归属地 1是国内 2是国外
@@ -1273,6 +1284,7 @@ export default {
         this.form.getCustomerType = this.shoppingCartRegistrationInfo.getCustomerType
         this.form.customerSource = this.shoppingCartRegistrationInfo.source
         this.form.customerType = this.shoppingCartRegistrationInfo.shoppingCartRegistrationCustomerType
+        this.form.isRiBuLuoLiving = this.shoppingCartRegistrationInfo.isRiBuLuoLiving
         this.form.belongChannel = this.shoppingCartRegistrationInfo.belongChannel != 0 ? this.shoppingCartRegistrationInfo.belongChannel : null
         if(this.form.belongChannel !=null && this.form.contentPlateFormId){
           this.getcustomerSourceList()

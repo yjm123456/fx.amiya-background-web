@@ -143,6 +143,7 @@
               />
             </FormItem>
           </Col>
+          <!-- 客服所属主播 (form.positionId === 2 && form.isCustomerService === true) || (form.positionId === 19 && form.isCustomerService === true)-->
           <Col span="8" v-if="
                 (title == '修改' &&
                   form.positionId == 2 &&
@@ -150,7 +151,7 @@
                   (title == '修改' && form.positionId == 19) ||
                   (title == '修改' && form.positionId == 30)
               ">
-            <!-- 客服所属主播 (form.positionId === 2 && form.isCustomerService === true) || (form.positionId === 19 && form.isCustomerService === true)-->
+            
             <FormItem
               label="主播"
               prop="liveAnchorIds"
@@ -866,7 +867,8 @@ export default {
               if (res.code === 0) {
                 this.isEdit = false;
                 this.cancelSubmit("form");
-                this.getAmiyaEmployeeList();
+                // this.getAmiyaEmployeeList();
+                this.handlePageChange(this.$refs.pages.currentPage)
                 this.$Message.success({
                   content: "修改成功",
                   duration: 3,

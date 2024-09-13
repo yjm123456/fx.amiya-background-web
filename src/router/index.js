@@ -2121,6 +2121,18 @@ const businessMange = [{
         },
         component: () =>
             import ("@/views/businessMange/assistantOperationsDashboard/assistantOperationsDashboard.vue"),
+    },
+    {
+        path: "/administrationKanBan",
+        name: "administrationKanBan",
+        meta: {
+            title: "行政客服看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/administrationKanBan/administrationKanBan.vue"),
     }
 ];
 

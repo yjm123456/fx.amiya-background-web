@@ -362,6 +362,7 @@
             </FormItem>
           </Col>
           
+          
         </Row>
         <div class="h3">客户信息</div>
         <Row :gutter="30">
@@ -453,7 +454,11 @@
               />
             </FormItem>
           </Col>
-          
+          <Col span="8">
+            <FormItem label="是否为日不落直播" prop="isRiBuLuoLiving">
+              <i-switch v-model="form.isRiBuLuoLiving" />
+            </FormItem>
+          </Col>
           <Col span="20">
             <FormItem label="顾客照片" prop="imageUrl" key="customerPictures">
               <upload
@@ -627,7 +632,9 @@ export default {
         // 客户类型
         customerType:null,
         // 归属部门
-        belongChannel:null
+        belongChannel:null,
+        // 是否为日不落直播
+        isRiBuLuoLiving:false
       },
       ruleValidates: {
         belongChannel: [
@@ -953,7 +960,8 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              belongChannel
+              belongChannel,
+              isRiBuLuoLiving
             } = this.form;
             const data = {
               orderType,
@@ -992,7 +1000,8 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              belongChannel
+              belongChannel,
+              isRiBuLuoLiving
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1109,7 +1118,8 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              belongChannel
+              belongChannel,
+              isRiBuLuoLiving
             } = this.form;
             const data = {
               orderType,
@@ -1148,7 +1158,8 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              belongChannel
+              belongChannel,
+              isRiBuLuoLiving
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1247,6 +1258,7 @@ export default {
         this.form.customerSource = info.customerSource
         this.form.customerType = info.customerType
         this.form.belongChannel = info.belongChannel
+        this.form.isRiBuLuoLiving = info.isRiBuLuoLiving
         this.getcustomerSourceList()
 }
       const currentRole = JSON.parse(sessionStorage.getItem("permissions"));

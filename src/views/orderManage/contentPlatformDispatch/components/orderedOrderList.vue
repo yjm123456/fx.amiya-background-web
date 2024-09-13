@@ -1901,6 +1901,8 @@ export default {
                         this.verificationFormParams.id=id
                         this.verificationFormParams.orderId=orderId
                         this.verificationFormParams.sendHospitalId=sendHospitalId
+                        this.verificationFormParams.title = '验单'
+                        this.verificationFormParams.YWLX='P'
                         this.verificationFormModel = true
                       } else if (name == "reassignment") {
                         // this.$Message.warning('系统正在维护中，请稍后！')
@@ -2250,7 +2252,8 @@ export default {
         id:'',
         orderId:'',
         sendHospitalId:null,
-        
+        title:'',
+        YWLX:''
       },
       // 验单model
       verificationFormModel:false

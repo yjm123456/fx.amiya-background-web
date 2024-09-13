@@ -853,6 +853,13 @@
               ></Input>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="是否为日不落直播" prop="isRiBuLuoLiving">
+              <i-switch
+                v-model="form.isRiBuLuoLiving"
+              />
+            </FormItem>
+          </Col>
           <Col span="16">
             <FormItem label="备注" prop="remark">
               <Input
@@ -1091,7 +1098,7 @@ export default {
                     },
                   },
                 },
-                [
+                params.row.cluePicture ? [
                   h("img", {
                     style: {
                       width: "50px",
@@ -1100,10 +1107,10 @@ export default {
                       verticalAlign: "middle",
                     },
                     attrs: {
-                      src: params.row.cluePicture,
+                      src: params.row.cluePicture ,
                     },
                   }),
-                ]
+                ] : []
               );
             },
           },
@@ -1242,7 +1249,7 @@ export default {
                     },
                   },
                 },
-                [
+                params.row.addWechatPicture ? [
                   h("img", {
                     style: {
                       width: "50px",
@@ -1254,7 +1261,7 @@ export default {
                       src: params.row.addWechatPicture,
                     },
                   }),
-                ]
+                ] : []
               );
             },
           },
@@ -1658,6 +1665,35 @@ export default {
             tooltip: true,
           },
           {
+            title: "是否为日不落直播",
+            key: "isRiBuLuoLiving",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isRiBuLuoLiving == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
             title: "备注",
             key: "remark",
             minWidth: 200,
@@ -1797,7 +1833,8 @@ export default {
                               shoppingCartRegistrationCustomerType,
                               belongChannel,
                               cluePicture,
-                              addWechatPicture
+                              addWechatPicture,
+                              isRiBuLuoLiving
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1847,6 +1884,7 @@ export default {
                             this.form.consultationDate = consultationDate;
                             this.form.badReviewReason = badReviewReason;
                             this.form.isReContent = isReContent;
+                            this.form.isRiBuLuoLiving = isRiBuLuoLiving;
                             this.form.reContent = reContent;
                             this.form.isBadReview = isBadReview;
                             this.form.badReviewContent = badReviewContent;
@@ -2051,16 +2089,12 @@ export default {
         // 线索截图
         cluePicture:'',
         // 加v截图
-        addWechatPicture:''
+        addWechatPicture:'',
+        // 是否为日不落直播
+        isRiBuLuoLiving:false
       },
 
       ruleValidate: {
-        cluePicture: [
-          {
-            required: true,
-            message: "请上传线索截图",
-          },
-        ],
         belongChannel: [
           {
             required: true,
@@ -3021,7 +3055,8 @@ export default {
         shoppingCartRegistrationCustomerType,
         belongChannel,
         cluePicture,
-        addWechatPicture
+        addWechatPicture,
+        isRiBuLuoLiving
       } = this.form;
       const data = {
         recordDate: time
@@ -3066,7 +3101,8 @@ export default {
         shoppingCartRegistrationCustomerType,
         belongChannel,
         cluePicture,
-        addWechatPicture:IsAddWeChat == true ? addWechatPicture : ''
+        addWechatPicture:IsAddWeChat == true ? addWechatPicture : '',
+        isRiBuLuoLiving
       };
       // 归属地 国内是1 国外是2
       if (belongingPlace == 1) {
@@ -3192,7 +3228,8 @@ export default {
               shoppingCartRegistrationCustomerType,
               belongChannel,
               cluePicture,
-              addWechatPicture
+              addWechatPicture,
+              isRiBuLuoLiving
             } = this.form;
             const data = {
               recordDate: time
@@ -3230,7 +3267,8 @@ export default {
               shoppingCartRegistrationCustomerType,
               belongChannel,
               cluePicture,
-              addWechatPicture:IsAddWeChat == true ? addWechatPicture : ''
+              addWechatPicture:IsAddWeChat == true ? addWechatPicture : '',
+              isRiBuLuoLiving
             };
 
             // 归属地 国内是1 国外是2

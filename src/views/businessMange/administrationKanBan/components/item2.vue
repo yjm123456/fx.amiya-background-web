@@ -3,12 +3,25 @@
     <div class="title">{{title}}</div>
     <div class="center_item">
       <div class="item1">
-        <div class="h2">一类客资</div>
+        <div class="h2">
+          一级线索
+          <Tooltip placement="top-start" v-if="title=='部门'">
+            <i
+              class="iconfont icon-info info"
+              style="color:#fff;font-size:18px;"
+            ></i>
+            <template #content>
+              <p>1、直播间下单199（199面诊卡，199</p>
+              <p>面膜），视频号下单未付款的顾客</p>
+              <p>2、直播间公屏捞客顾客</p>
+            </template>
+          </Tooltip>
+        </div>
         <div class="h1">{{assistantPerformanceObj.firstTypeTotal ? assistantPerformanceObj.firstTypeTotal : 0}}</div>
         <div class="item">
           <div class="item_left">
             <div>
-              当月同比：
+              去年同比：
               <span class="h5"
                 v-if=" Math.sign(assistantPerformanceObj.firstTypeYearOnYear) == 1"
               >
@@ -32,7 +45,7 @@
           </div>
           <div class="item_right">
             <div>
-              当月环比：
+              上月环比：
               <span
                 class="h5"
                 v-if="
@@ -60,12 +73,25 @@
         </div>
       </div>
       <div class="item2">
-        <div class="h2">二类客资</div>
+        <div class="h2">
+          二级线索
+          <Tooltip placement="top-start" v-if="title=='部门'">
+            <i
+              class="iconfont icon-info info"
+              style="color:#fff;font-size:18px;"
+            ></i>
+            <template #content >
+              <p>1、来源渠道直播前/中/后，主动私信</p>
+              <p>的顾客</p>
+              <p>2、直播后各平台的粉丝群顾客</p>
+            </template>
+          </Tooltip>
+        </div>
         <div class="h1">{{assistantPerformanceObj.secondTypeTotal ? assistantPerformanceObj.secondTypeTotal : 0}}</div>
         <div class="item">
           <div class="item_left">
             <div>
-              当月同比：
+              去年同比：
               <span
                 class="h5"
                 v-if="
@@ -92,7 +118,7 @@
           </div>
           <div class="item_right">
             <div>
-              当月环比：
+              上月环比：
               <span
                 class="h5"
                 v-if="
@@ -120,12 +146,24 @@
         </div>
       </div>
       <div class="item3">
-        <div class="h2">三类客资</div>
+        <div class="h2">
+          三级线索
+          <Tooltip placement="top-start" v-if="title=='部门'">
+            <i
+              class="iconfont icon-info info"
+              style="color:#fff;font-size:18px;"
+            ></i>
+            <template #content>
+              <p>小风车/短视频/福袋/产品转化/其他，</p>
+              <p>获取的顾客资源</p>
+            </template>
+          </Tooltip>
+        </div>
         <div class="h1">{{assistantPerformanceObj.thirdTypeTotal ? assistantPerformanceObj.thirdTypeTotal : 0}}</div>
         <div class="item">
           <div class="item_left">
             <div>
-              当月同比：
+              去年同比：
               <span
                 class="h5"
                 v-if="
@@ -152,7 +190,7 @@
           </div>
           <div class="item_right">
             <div>
-              当月环比：
+              上月环比：
               <span
                 class="h5"
                 v-if="
@@ -180,12 +218,12 @@
         </div>
       </div>
       <div class="item4">
-        <div class="h2">总客资</div>
+        <div class="h2">总线索</div>
         <div class="h1">{{assistantPerformanceObj.totalTypeTotal ? assistantPerformanceObj.totalTypeTotal : 0}}</div>
         <div class="item">
           <div class="item_left">
             <div>
-              当月同比：
+              去年同比：
               <span
                 class="h5"
                 v-if="
@@ -212,7 +250,7 @@
           </div>
           <div class="item_right">
             <div>
-              当月环比：
+              上月环比：
               <span
                 class="h5"
                 v-if="
@@ -369,5 +407,9 @@ export default {
   font-weight: bold;
   padding-left: 15px;
   color: #000;
+}
+.info{
+  position: relative;
+  top: 2px;
 }
 </style>

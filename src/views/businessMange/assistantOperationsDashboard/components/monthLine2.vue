@@ -91,12 +91,12 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['一类客资','二类客资','三类客资','总客资'],
+          data: ['一级线索','二级线索','三级线索','总线索'],
           selected:{
-            '一类客资':true,
-            '二类客资':true,
-            '三类客资':true,
-            '总客资':true,
+            '一级线索':true,
+            '二级线索':true,
+            '三级线索':true,
+            '总线索':true,
           },
           textStyle:{
             color:'#000'
@@ -104,7 +104,7 @@ export default {
         },
         series: [
             {
-                name: '一类客资',
+                name: '一级线索',
                 type: 'line',
                 data: firstTypes,
                 itemStyle: { 
@@ -115,7 +115,7 @@ export default {
                 },
             },
             {
-                name: '二类客资',
+                name: '二级线索',
                 type: 'line',
                 data: sencondTypes,
                 itemStyle: { 
@@ -126,7 +126,7 @@ export default {
             },
             
             {
-                name: '三类客资',
+                name: '三级线索',
                 type: 'line',
                 data: thirdTypes,
                 itemStyle: { 
@@ -136,7 +136,7 @@ export default {
                 },
             },
             {
-                name: '总客资',
+                name: '总线索',
                 type: 'line',
                 data: totalTypes,
                 itemStyle: { 

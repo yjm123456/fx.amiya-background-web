@@ -2,7 +2,7 @@
    
     <div class="center" v-if="isFlag == true">
             <Card class="content">
-                    <div class="h3">当前组</div>
+                    <div class="h3">部门</div>
                     <div class="new_customer">
                         <div class="center_data">
                             <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[0].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[0].value}}</span> 个</div>
@@ -17,22 +17,22 @@
                             </div>
                           
                             <div  class="r_content2">
-                                <span class="r_t2" >加v率：<span class="num">{{adminCustomerFilterDataObj.groupData.addWeChatRate}}</span>%</span>
+                                <span class="r_t2" >加v率：<span class="num"  :style="{color:adminCustomerFilterDataObj.groupData.addWeChatRate < adminCustomerFilterDataObj.groupData.addWeChatRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.addWeChatRate}}</span>%</span>
                                 <span  class="r_t3"><span class="num">{{adminCustomerFilterDataObj.groupData.addWeChatRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content3">
-                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num">{{adminCustomerFilterDataObj.groupData.sendOrderRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.sendOrderRate < adminCustomerFilterDataObj.groupData.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.sendOrderRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.groupData.sendOrderRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num">{{adminCustomerFilterDataObj.groupData.toHospitalRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.toHospitalRate < adminCustomerFilterDataObj.groupData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.toHospitalRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.groupData.toHospitalRateHealthValueThisMonth}}</span>%</span>
                             </div>
                         </div>
                     </div>
             </Card>
             <Card class="content2">
-                    <div class="h3">个人加v</div>
+                    <div class="h3">个人</div>
                     <div class="new_customer">
                         <div class="center_data">
                             <div  class="c_text"><span>{{adminCustomerFilterDataObj.addwechatData.dataList[0].name}}</span> <span class="num">{{adminCustomerFilterDataObj.addwechatData.dataList[0].value}}</span> 个</div>
@@ -47,15 +47,15 @@
                             </div>
                           
                             <div  class="r_content2">
-                                <span class="r_t2" >加v率：<span class="num">{{adminCustomerFilterDataObj.addwechatData.addWeChatRate}}</span>%</span>
+                                <span class="r_t2" >加v率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.addWeChatRate < adminCustomerFilterDataObj.groupData.addWeChatRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.addwechatData.addWeChatRate}}</span>%</span>
                                 <span  class="r_t3"><span class="num">{{adminCustomerFilterDataObj.addwechatData.addWeChatRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content3">
-                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num">{{adminCustomerFilterDataObj.addwechatData.sendOrderRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.sendOrderRate < adminCustomerFilterDataObj.groupData.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.addwechatData.sendOrderRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.addwechatData.sendOrderRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num">{{adminCustomerFilterDataObj.addwechatData.toHospitalRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.toHospitalRate < adminCustomerFilterDataObj.groupData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.addwechatData.toHospitalRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.addwechatData.toHospitalRateHealthValueThisMonth}}</span>%</span>
                             </div>
                         </div>

@@ -53,7 +53,7 @@
     <items2 ref="items2" :params="params"/>
     <!-- 折线图 -->
     <Card >
-      <div class="h2">当月业绩&客资趋势</div>
+      <div class="h2">当月业绩&线索趋势</div>
       <!-- tab切换 -->
       <div class="tab_content">
         <div class="tab">
@@ -69,7 +69,7 @@
         </div>
       </div>
       <monthLine  :brokenLineDataObj="brokenLineDataObj" v-if="selected2 == '业绩'"/>
-      <monthLine2  :brokenLineDataObj="assistantDistributeConsulationBrokenLineDataObj" v-if="selected2 == '客资'"/>
+      <monthLine2  :brokenLineDataObj="assistantDistributeConsulationBrokenLineDataObj" v-if="selected2 == '线索'"/>
     </Card>
     <!-- 漏斗图 -->
     <Card class="mr">
@@ -103,14 +103,14 @@
     </Card>
     <!-- 饼图 -->
     <Card class="mr">
-      <div class="h2 h3">客资分类--线索&业绩</div>
+      <div class="h2 h3">线索分类--线索&业绩</div>
       <div  class="list h3">
         <Card class="item">
-          <div class="h2">客资线索</div>
+          <div class="h2">线索人数</div>
           <pieItem2 :pieData="typeCount.data" :total="typeCount.total" title="总线索"/>
         </Card>
         <Card  class="item">
-          <div class="h2">客资业绩</div>
+          <div class="h2">线索业绩</div>
           <pieItem2 :pieData="typePerformance.data" :total="typePerformance.total" title="总业绩"/>
         </Card>
       </div>
@@ -152,6 +152,7 @@
     <!-- 助理目标完成率和业绩占比 -->
     <Card class="mr">
       <div class="h2 h3">助理--目标完成率&业绩贡献</div>
+      
       <div  class="list ">
         <Card class="item">
           <div class="h2">助理目标完成率</div>
@@ -166,6 +167,18 @@
     <!-- 机构线索分析和机构业绩分析 -->
     <Card class="mr">
       <div class="h2 h3">机构--线索&业绩</div>
+      <!-- 平台切换 -->
+      <div class="tab2" >
+        <div
+          class="tab_item2"
+          v-for="(item, index) in platformList2"
+          :key="index"
+          @click="checkTab2(index, item)"
+          :class="{ active2: item.isSelected }"
+        >
+          <span>{{ item.name }}</span>
+        </div>
+      </div>
       <div class="list">
         <Card class="item">
           <div class="h2">助理线索分析</div>
@@ -218,7 +231,7 @@ export default {
   data() {
     return {
       list: ["全部业绩","有效业绩", "潜在业绩"],
-      list2: ["业绩","客资"],
+      list2: ["业绩","线索"],
       selected:'全部业绩',
       selected2:'业绩',
       // 时间进度
@@ -273,10 +286,27 @@ export default {
       // 客资线索
       typeCount:[],
       // 客资业绩
-      typePerformance:[]
+      typePerformance:[],
+      platformList2:[
+        {
+          name: "当月",
+          id: 1,
+          isSelected: true,
+        },
+        {
+          name: "历史",
+          id: 2,
+          isSelected: false,
+        },
+       
+      ],
     };
   },
   methods: {
+    checkTab2(index, value) {
+      this.platformList2[index].isSelected = !this.platformList2[index].isSelected;
+      this.getassistantHospitalCluesData()
+    },
     //   获取时间进度
     getTimeSpanClick() {
       const data = {
@@ -444,6 +474,8 @@ export default {
             startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
             endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
             assistantId:assistantId,
+            currentMonth:this.platformList2.find((item) => item.id == 1).isSelected,
+            history:this.platformList2.find((item) => item.id == 2).isSelected,
         }
         api.assistantHospitalCluesData(data).then(res=>{
             if(res.code === 0){
@@ -475,7 +507,7 @@ export default {
       this.selected2 = value;
       if(value == '业绩'){
         this.getbrokenLineData()
-      }else if(value == '客资'){
+      }else if(value == '线索'){
         this.getassistantDistributeConsulationBrokenLineData()
 
       }
@@ -490,7 +522,37 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="less">
+
+.tab2{
+  text-align: start;
+  padding-left: 10px;
+  display: flex;
+  margin-bottom: 10px;
+}
+.tab_item2 {
+  background: #f0f0f0;
+  padding: 1px 15px;
+  box-sizing: border-box;
+  margin-right: 30px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.active2 {
+  color: red;
+  border: 1px solid red;
+}
+.completeRateSize{
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 5px;
+}
+/* 添加边框样式 */
+/deep/ .ivu-progress-inner {
+  border: 3px solid dodgerblue;
+  border-radius: 10px;
+}
 .title {
   font-size: 22px;
   font-weight: bold;

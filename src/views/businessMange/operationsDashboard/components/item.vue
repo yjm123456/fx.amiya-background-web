@@ -6,23 +6,23 @@
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：<span class="b_w">{{totalAchievementAndDateSchedule.todayNewCustomerPerformance}}</span></div>
-                    <div class="h3">累计业绩</div>
+                    <div class="item_left">累计业绩</div>
                     <div class="h3 b_w">{{totalAchievementAndDateSchedule.newCustomerPerformance}}</div>
                 </div>
                 <div class="item_right">
                     <div>
-                      当月同比：
+                      去年同比：
                       <span  class="h5" v-if="Math.sign(totalAchievementAndDateSchedule.newCustomerPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalAchievementAndDateSchedule.newCustomerPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(totalAchievementAndDateSchedule.newCustomerPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalAchievementAndDateSchedule.newCustomerPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>
-                      当月环比：
+                      上月环比：
                       <span  class="h5" v-if="Math.sign(totalAchievementAndDateSchedule.newCustomerPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalAchievementAndDateSchedule.newCustomerPerformanceChainRatio) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(totalAchievementAndDateSchedule.newCustomerPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalAchievementAndDateSchedule.newCustomerPerformanceChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月目标达成率：<span class="h5">{{totalAchievementAndDateSchedule.newCustomerPerformanceCompleteRate}}</span>%</div>
+                    <div>目标达成：<span class="h5">{{totalAchievementAndDateSchedule.newCustomerPerformanceCompleteRate}}</span>%</div>
                 </div>
               </div>
             </div>
@@ -31,24 +31,24 @@
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：<span class="b_w">{{totalAchievementAndDateSchedule.todayOldCustomerPerformance}}</span></div>
-                    <div class="h3">累计业绩</div>
+                    <div class="item_left">累计业绩</div>
                     <div class="h3 b_w">{{totalAchievementAndDateSchedule.oldCustomerPerformance}}</div>
                 </div>
                 <div class="item_right">
                     <div>
-                      当月同比：
+                      去年同比：
                       <span  class="h5" v-if="Math.sign(totalAchievementAndDateSchedule.oldCustomerPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalAchievementAndDateSchedule.oldCustomerPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(totalAchievementAndDateSchedule.oldCustomerPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalAchievementAndDateSchedule.oldCustomerPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>
-                      当月环比：
+                      上月环比：
                       <span  class="h5" v-if="Math.sign(totalAchievementAndDateSchedule.oldCustomerPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalAchievementAndDateSchedule.oldCustomerPerformanceChainRatio) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(totalAchievementAndDateSchedule.oldCustomerPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalAchievementAndDateSchedule.oldCustomerPerformanceChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
 
                     </div>
-                    <div>当月目标达成率：<span class="h5">{{totalAchievementAndDateSchedule.oldCustomerPerformanceCompleteRate}}</span>%</div>
+                    <div>目标达成：<span class="h5">{{totalAchievementAndDateSchedule.oldCustomerPerformanceCompleteRate}}</span>%</div>
                 </div>
               </div>
             </div>
@@ -57,24 +57,24 @@
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：<span class="b_w">{{totalAchievementAndDateSchedule.todayTotalPerformance}}</span></div>
-                    <div class="h3">累计业绩</div>
+                    <div class="item_left">累计业绩</div>
                     <div class="h3 b_w">{{totalAchievementAndDateSchedule.totalPerformance}}</div>
                 </div>
                 <div class="item_right">
                     <div>
-                      当月同比：
+                      去年同比：
                       <span  class="h5" v-if="Math.sign(totalAchievementAndDateSchedule.totalPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalAchievementAndDateSchedule.totalPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(totalAchievementAndDateSchedule.totalPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(totalAchievementAndDateSchedule.totalPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>
-                      当月环比：
+                      上月环比：
                       <span  class="h5" v-if="Math.sign(totalAchievementAndDateSchedule.totalPerformanceChainRatio)== 1"> <span  class="red ">增长</span>{{ Math.abs(totalAchievementAndDateSchedule.totalPerformanceChainRatio) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(totalAchievementAndDateSchedule.totalPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalAchievementAndDateSchedule.totalPerformanceChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
 
                     </div>
-                    <div>当月目标达成率：<span class="h5">{{totalAchievementAndDateSchedule.totalPerformanceCompleteRate}}</span>%</div>
+                    <div>目标达成：<span class="h5">{{totalAchievementAndDateSchedule.totalPerformanceCompleteRate}}</span>%</div>
                 </div>
               </div>
             </div>

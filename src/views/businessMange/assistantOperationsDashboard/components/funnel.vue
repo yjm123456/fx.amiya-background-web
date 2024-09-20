@@ -27,7 +27,7 @@
                         <div class="center_data">
                             <div  class="c_text"><span>{{funnelObj.newCustomerData.newCustomerOperationDataDetails[0].name}}</span> <span class="num">{{funnelObj.newCustomerData.newCustomerOperationDataDetails[0].value}}</span> 个</div>
                             <div  class="c_text"><span>{{funnelObj.newCustomerData.newCustomerOperationDataDetails[1].name}}</span> <span class="num">{{funnelObj.newCustomerData.newCustomerOperationDataDetails[1].value}}</span> 人</div>
-                            <div  class="c_text"><span>{{funnelObj.newCustomerData.newCustomerOperationDataDetails[2].name}}</span> <span class="num">{{funnelObj.newCustomerData.newCustomerOperationDataDetails[2].value}}</span> 单</div>
+                            <div  class="c_text"><span>{{funnelObj.newCustomerData.newCustomerOperationDataDetails[2].name}}</span> <span class="num">{{funnelObj.newCustomerData.newCustomerOperationDataDetails[2].value}}</span>人</div>
                             <div  class="c_text"><span>{{funnelObj.newCustomerData.newCustomerOperationDataDetails[3].name}}</span> <span class="num">{{funnelObj.newCustomerData.newCustomerOperationDataDetails[3].value}}</span> 人</div>
                             <div  class="c_text"><span>{{funnelObj.newCustomerData.newCustomerOperationDataDetails[4].name}}</span> <span class="num">{{funnelObj.newCustomerData.newCustomerOperationDataDetails[4].value}}</span> 人</div>
                         </div>
@@ -38,19 +38,19 @@
                             </div>
                           
                             <div  class="r_content2">
-                                <span class="r_t2" >加v率：<span class="num">{{funnelObj.newCustomerData.addWeChatRate}}</span>%</span>
+                                <span class="r_t2" >加v率：<span class="num" :style="{color:funnelObj.newCustomerData.addWeChatRate < funnelObj.newCustomerData.addWeChatRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{funnelObj.newCustomerData.addWeChatRate}}</span>%</span>
                                 <span  class="r_t3"><span class="num">{{funnelObj.newCustomerData.addWeChatRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content3">
-                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num">{{funnelObj.newCustomerData.sendOrderRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:funnelObj.newCustomerData.sendOrderRate < funnelObj.newCustomerData.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{funnelObj.newCustomerData.sendOrderRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{funnelObj.newCustomerData.sendOrderRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num">{{funnelObj.newCustomerData.toHospitalRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:funnelObj.newCustomerData.toHospitalRate < funnelObj.newCustomerData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{funnelObj.newCustomerData.toHospitalRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{funnelObj.newCustomerData.toHospitalRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content5">
-                                <span class="r_t2" style="margin-top:14%">成交率：<span class="num">{{funnelObj.newCustomerData.dealRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">成交率：<span class="num"  :style="{color:funnelObj.newCustomerData.dealRate < funnelObj.newCustomerData.dealRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{funnelObj.newCustomerData.dealRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{funnelObj.newCustomerData.dealRateHealthValueThisMonth}}</span>%</span>
                             </div>
                         </div>
@@ -60,10 +60,10 @@
                     <div class="h3">老客业绩</div>
                     <div class="old_customer">
                         <div class="left_old">
-                            <div class="proportion2">2次复购占比：<span  class="num">{{funnelObj.oldCustomerData.secondTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion2">3次复购占比：<span  class="num">{{funnelObj.oldCustomerData.thirdTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion2">4次复购占比：<span  class="num">{{funnelObj.oldCustomerData.fourthTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion2">5次及以上复购占比：<span  class="num">{{funnelObj.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">2次复购率：<span  class="num">{{funnelObj.oldCustomerData.secondTimeBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">3次复购率：<span  class="num">{{funnelObj.oldCustomerData.thirdTimeBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">4次复购率：<span  class="num">{{funnelObj.oldCustomerData.fourthTimeBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">5次及以上复购率：<span  class="num">{{funnelObj.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
                         </div>
                         <div class="center_old">
                             <div class="people">总成交<div><span  class="num">{{funnelObj.oldCustomerData.totalDealPeople}}</span>人</div></div>
@@ -73,10 +73,10 @@
                             <div  class="people4">5次及以上复购<div><span  class="num">{{funnelObj.oldCustomerData.fifThOrMoreOrMoreDealCustomer}}</span>人</div></div>
                         </div>
                         <div class="right_old">
-                            <div class="r_text1">2次转化率：<span  class="num">{{funnelObj.oldCustomerData.secondTimeBuyRate}}</span>%</div>
+                            <!-- <div class="r_text1">2次转化率：<span  class="num">{{funnelObj.oldCustomerData.secondTimeBuyRate}}</span>%</div>
                             <div class="r_text2">3次转化率：<span  class="num">{{funnelObj.oldCustomerData.thirdTimeBuyRate}}</span>%</div>
                             <div  class="r_text3">4次转化率：<span  class="num">{{funnelObj.oldCustomerData.fourthTimeBuyRate}}</span>%</div>
-                            <div  class="r_text4">5次及以上转化率：<span  class="num">{{funnelObj.oldCustomerData.fifthTimeOrMoreBuyRate}}</span>%</div>
+                            <div  class="r_text4">5次及以上转化率：<span  class="num">{{funnelObj.oldCustomerData.fifthTimeOrMoreBuyRate}}</span>%</div> -->
                             <div  class="r_text5">复购率：<span  class="num">{{funnelObj.oldCustomerData.buyRate}}</span>%</div>
                         </div>
                     </div>
@@ -311,8 +311,8 @@ position: absolute
 
 .right_old{
     position: absolute;
-    right: 0%;
-    top: 24%;
+    right: 13%;
+    top: 50%;
 }
 .r_text1{
     margin-top: -33px;
@@ -332,8 +332,8 @@ position: absolute
     width: 180px;
 }
 .r_text5{
-    margin-left: 39%;
-    margin-top: -109%;
-    width: 160px;
+    // margin-left: 39%;
+    // margin-top: -109%;
+    // width: 160px;
 }
 </style>

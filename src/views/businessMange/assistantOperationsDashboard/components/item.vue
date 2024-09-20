@@ -3,7 +3,7 @@
     <div class="center_content">
           <div class="center_item">
             <div class="item1" >
-              <div class="h2">新客业绩 <span>{{assistantPerformanceObj.newCustomerPerformance ? assistantPerformanceObj.newCustomerPerformance : 0 }}</span></div>
+              <div class="h2">新客业绩：<span>{{assistantPerformanceObj.newCustomerPerformance ? assistantPerformanceObj.newCustomerPerformance : 0 }}</span></div>
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：{{assistantPerformanceObj.todayNewCustomerPerformance}}</div>
@@ -17,17 +17,17 @@
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceTargetSchedule)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceTargetSchedule) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                       </div>
-                    <div>同比：
+                    <div>去年同比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                       </div>
-                    <div>环比：
+                    <div>上月环比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceChain)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceChain) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceChain)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceChain) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>目标达成率：
+                    <div>目标达成：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
@@ -36,7 +36,7 @@
               </div>
             </div>
             <div class="item2" >
-              <div class="h2">老客业绩 <span>{{assistantPerformanceObj.oldCustomerPerformance ? assistantPerformanceObj.oldCustomerPerformance : 0 }}</span></div>
+              <div class="h2">老客业绩：<span>{{assistantPerformanceObj.oldCustomerPerformance ? assistantPerformanceObj.oldCustomerPerformance : 0 }}</span></div>
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：{{assistantPerformanceObj.todayOldCustomerPerformance}}</div>
@@ -50,17 +50,17 @@
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceTargetSchedule)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceTargetSchedule) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                       </div>
-                    <div>同比：
+                    <div>去年同比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                       </div>
-                    <div>环比：
+                    <div>上月环比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceChain)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceChain) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceChain)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceChain) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>目标达成率：
+                    <div>目标达成：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
@@ -69,7 +69,7 @@
               </div>
             </div>
             <div class="item3" >
-              <div class="h2">总业绩 <span>{{assistantPerformanceObj.totalPerformance ? assistantPerformanceObj.totalPerformance : 0 }}</span></div>
+              <div class="h2">总业绩：<span>{{assistantPerformanceObj.totalPerformance ? assistantPerformanceObj.totalPerformance : 0 }}</span></div>
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：{{assistantPerformanceObj.todayTotalPerformance}}</div>
@@ -78,22 +78,22 @@
                     <div >目标业绩：{{assistantPerformanceObj.totalPerformanceTarget}}</div>
                 </div>
                 <div class="item_right">
-                    <div>超出进度：：
+                    <div>超出进度：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.totalPerformanceTargetSchedule)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceTargetSchedule) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.totalPerformanceTargetSchedule)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceTargetSchedule) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                       </div>
-                    <div>同比：
+                    <div>去年同比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.totalPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.totalPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                       </div>
-                    <div>环比：
+                    <div>上月环比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.totalPerformanceChain)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceChain) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.totalPerformanceChain)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceChain) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>目标达成率：
+                    <div>目标达成：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.totalPerformanceTargetCompleteRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceTargetCompleteRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.totalPerformanceTargetCompleteRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceTargetCompleteRate) + '%'}}</span>
                       <span class="h5"  v-else>-</span>

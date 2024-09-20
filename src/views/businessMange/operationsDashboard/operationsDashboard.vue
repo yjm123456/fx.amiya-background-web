@@ -206,6 +206,19 @@
         </Card>
         <!-- 助理 -->
         <Card  class="m_b ">
+          <!-- 平台切换 -->
+          <div class="tab" >
+            <div
+              class="tab_item"
+              v-for="(item, index) in platformList2"
+              :key="index"
+              @click="checkTab2(index, item)"
+              :class="{ active2: item.isSelected }"
+            >
+              <i class="iconfont  icons" :class="item.icon"></i>
+              <span>{{ item.name }}</span>
+            </div>
+          </div>
           <div class="customer_bar_content">
             <Card class="customer_bar">
               <div class="h3">助理线索分析</div>
@@ -221,12 +234,8 @@
               <barItem :barItemData="customerObj"/>
             </Card>
           </div>
-        </Card>
-        
-        <!-- 机构 -->
-        <Card  class="m_b ">
-          <div class="customer_bar_content">
-            
+          <!-- 机构 -->
+          <div class="customer_bar_content mr">
             <Card class="customer_bar">
               <div class="h3">机构线索分析</div>
               <div class="x_title">
@@ -242,6 +251,7 @@
             </Card>
           </div>
         </Card>
+        
       </div>
      
       <!-- 转化 -->
@@ -475,6 +485,19 @@ export default {
           isSelected: true,
         },
       ],
+      platformList2:[
+        {
+          name: "当月",
+          id: 1,
+          isSelected: true,
+        },
+        {
+          name: "历史",
+          id: 2,
+          isSelected: false,
+        },
+       
+      ],
       // 详情model
       detailModel:false,
       titles:"",
@@ -557,6 +580,10 @@ export default {
     checkTab(index, value) {
       this.platformList[index].isSelected = !this.platformList[index].isSelected;
       this.getData()
+    },
+    checkTab2(index, value) {
+      this.platformList2[index].isSelected = !this.platformList2[index].isSelected;
+      this.getCustomerFlowRateByEmployeeAndHospital()
     },
     selectTab(index, value) {
       this.selected = value
@@ -1012,6 +1039,8 @@ export default {
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+        currentMonth:this.platformList2.find((item) => item.id == 1).isSelected,
+        history:this.platformList2.find((item) => item.id == 2).isSelected,
       };
       api.getCustomerFlowRateByEmployeeAndHospital(data).then((res) => {
         if (res.code == 0) {
@@ -1062,6 +1091,10 @@ export default {
 }
 .tab,.tab2 {
   display: flex;
+}
+.tab{
+  text-align: start;
+  padding-left: 10px;
 }
 .tab_item {
   background: #f0f0f0;
@@ -1189,5 +1222,8 @@ export default {
   padding-left: 20px;
   font-weight: bold;
   color: #000;
+}
+.mr{
+  margin-top: 10px;
 }
 </style>

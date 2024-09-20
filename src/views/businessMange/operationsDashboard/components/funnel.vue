@@ -59,7 +59,7 @@
                             <!-- <div class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[1].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[1].value}}</span> 个</div> -->
                             <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[1].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[1].value}}</span> 个</div>
                             <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[2].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[2].value}}</span> 人</div>
-                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[3].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[3].value}}</span> 单</div>
+                            <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[3].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[3].value}}</span> 人</div>
                             <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[4].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[4].value}}</span> 人</div>
                             <div  class="c_text"><span>{{performance.newCustomerData.newCustomerOperationDataDetails[5].name}}</span> <span class="num">{{performance.newCustomerData.newCustomerOperationDataDetails[5].value}}</span> 人</div>
                         </div>
@@ -74,27 +74,27 @@
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.refundCardRateHealthValueThisMonth}}</span>%</span>
                             </div> -->
                             <div  class="r_content">
-                                <span class="r_t2" >线索有效率：<span class="num">{{performance.newCustomerData.clueEffictiveRate}}</span>%</span>
+                                <span class="r_t2" >线索有效率：<span class="num" :style="{color:performance.newCustomerData.clueEffictiveRate < performance.newCustomerData.clueEffictiveRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.clueEffictiveRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.addWeChatRateHealthValueSum}}%</span> -->
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.clueEffictiveRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content2">
-                                <span class="r_t2" >加v率：<span class="num">{{performance.newCustomerData.addWeChatRate}}</span>%</span>
+                                <span class="r_t2" >加v率：<span class="num" :style="{color:performance.newCustomerData.addWeChatRate < performance.newCustomerData.addWeChatRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.addWeChatRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.addWeChatRateHealthValueSum}}%</span> -->
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.addWeChatRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content3">
-                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num">{{performance.newCustomerData.sendOrderRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:performance.newCustomerData.sendOrderRate < performance.newCustomerData.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.sendOrderRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.sendOrderRateHealthValueSum}}%</span> -->
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.newCustomerData.sendOrderRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num">{{performance.newCustomerData.toHospitalRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:performance.newCustomerData.toHospitalRate < performance.newCustomerData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.toHospitalRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.toHospitalRateHealthValueSum}}%</span> -->
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.newCustomerData.toHospitalRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content5">
-                                <span class="r_t2" style="margin-top:14%">成交率：<span class="num">{{performance.newCustomerData.dealRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">成交率：<span class="num" :style="{color:performance.newCustomerData.dealRate < performance.newCustomerData.dealRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.dealRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.dealRateHealthValueSum}}%</span> -->
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.newCustomerData.dealRateHealthValueThisMonth}}</span>%</span>
                             </div>
@@ -105,10 +105,10 @@
                     <div class="h3">老客业绩</div>
                     <div class="old_customer">
                         <div class="left_old">
-                            <div class="proportion2">2次复购占比：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion2">3次复购占比：<span  class="num">{{performance.oldCustomerData.thirdTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion2">4次复购占比：<span  class="num">{{performance.oldCustomerData.fourthTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion2">5次及以上复购占比：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">2次复购率：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">3次复购率：<span  class="num">{{performance.oldCustomerData.thirdTimeBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">4次复购率：<span  class="num">{{performance.oldCustomerData.fourthTimeBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">5次及以上复购率：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
                         </div>
                         <div class="center_old">
                             <div class="people">总成交<div><span  class="num">{{performance.oldCustomerData.totalDealPeople}}</span>人</div></div>
@@ -118,10 +118,10 @@
                             <div  class="people4">5次及以上复购<div><span  class="num">{{performance.oldCustomerData.fifThOrMoreOrMoreDealCustomer}}</span>人</div></div>
                         </div>
                         <div class="right_old">
-                            <div class="r_text1">2次转化率：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRate}}</span>%</div>
+                            <!-- <div class="r_text1">2次转化率：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRate}}</span>%</div>
                             <div class="r_text2">3次转化率：<span  class="num">{{performance.oldCustomerData.thirdTimeBuyRate}}</span>%</div>
                             <div  class="r_text3">4次转化率：<span  class="num">{{performance.oldCustomerData.fourthTimeBuyRate}}</span>%</div>
-                            <div  class="r_text4">5次及以上转化率：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRate}}</span>%</div>
+                            <div  class="r_text4">5次及以上转化率：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRate}}</span>%</div> -->
                             <div  class="r_text5">复购率：<span  class="num">{{performance.oldCustomerData.buyRate}}</span>%</div>
                         </div>
                     </div>
@@ -388,8 +388,8 @@ position: absolute
 
 .right_old{
     position: absolute;
-    right: 0%;
-    top: 24%;
+    right: 13%;
+    top: 50%;
 }
 .r_text1{
     margin-top: -33px;
@@ -409,8 +409,8 @@ position: absolute
     width: 180px;
 }
 .r_text5{
-    margin-left: 39%;
-    margin-top: -109%;
-    width: 160px;
+    // margin-left: 39%;
+    // margin-top: -109%;
+    // width: 160px;
 }
 </style>

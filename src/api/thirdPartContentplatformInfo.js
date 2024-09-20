@@ -46,6 +46,14 @@ export const ValidKeyAndValue = (params) => {
         params
     });
 };
+// 根据医院获取有效的三方平台信息 下拉框
+export const HospitalContentplatformCodeValidKeyAndValue = (params) => {
+    return http({
+        url: "/amiyabg/HospitalContentplatformCode/ValidKeyAndValue",
+        method: "get",
+        params
+    });
+};
 // 管理端根据医院id和三方平台id进行查重-朗姿
 export const getIsRepeateByHospitalIdAndThirdPartIdToLangZi = (params) => {
     return http({

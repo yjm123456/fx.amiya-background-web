@@ -12,7 +12,7 @@ echarts.registerTheme("tdTheme", tdTheme);
 export default {
   props: {
     pieData: Array,
-   
+    title:String
   },
   data() {
     return {
@@ -35,11 +35,13 @@ export default {
                 for (let i = 0; i < value.length; i++) {
                   if(params.value == value[i].value){
                     list.push(
-                        '<span style="display:inline-block;">' +
+                        "<div style='text-align:left;line-height: 1px;'>" + 
+                        '<span style="display:inline-block">' +
                         value[i].name +
-                        '</span><span style="display:inline-block;">&nbsp&nbsp' +
+                        '</span><span style="display:inline-block">&nbsp&nbsp' +
                         value[i].rate  +'%' +
-                        '</span>'
+                        '</span>' + 
+                        "</div>"
                     )
                   }
                 }
@@ -50,7 +52,7 @@ export default {
         legend: {
           orient: "vertical",
           left: "left",
-          formatter: function (name) {
+          formatter: this.title == '分诊量'  ?  function (name) {
             var total = 0;
             var data = option.series[0].data;
             for (var i = 0, l = data.length; i < l; i++) {
@@ -62,6 +64,21 @@ export default {
                     var percentage = data[i].value == 0 ? '0人' : data[i].value  + '人'
                     var rate = data[i].rate == 0 ? '0' : data[i].rate 
                     return percentage == 0 ?  name + '(' + ' ' + percentage + ')'+ ' ' +  '0%' :  name + '(' + ' ' + percentage + ')'+ ' ' +  rate +'%';
+                }
+            }
+            return name ;
+        }:function (name) {
+            var total = 0;
+            var data = option.series[0].data;
+            for (var i = 0, l = data.length; i < l; i++) {
+                total += data[i].value;
+            }
+            for (var i = 0, l = data.length; i < l; i++) {
+                if (data[i].name == name) {
+                    // var percentage = data[i].value == 0 ? '0%' : ((data[i].value / total) * 100).toFixed(2) + '%';
+                    var percentage = data[i].value == 0 ? '0人' : data[i].value  + '人'
+                    var rate = data[i].rate == 0 ? '0' : data[i].rate 
+                    return percentage == 0 ?  name + '(' + ' ' + percentage + ')'+ ' ' +  '0%' :  name + ' ' +  rate +'%';
                 }
             }
             return name ;
@@ -122,5 +139,6 @@ export default {
   left: 33px;
   font-size: 11.5px;
   color: #999;
+  
 }
 </style>

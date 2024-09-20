@@ -200,6 +200,27 @@
             >
           </Select>
         </FormItem>
+        <FormItem label="是否选择推单平台" key="是否选择推单平台">
+          <i-switch v-model="form.isPushOrderPlatform"/>
+          <div style="font-size:14px;color:red" >若未找到推单平台则需手动关闭此按钮</div>
+        </FormItem>
+        <FormItem
+          label="推单平台"
+          prop="thirdPartContentplatformInfoId"
+          key="推单平台"
+          v-if="form.isPushOrderPlatform == true"
+          
+        >
+          <Select v-model="form.thirdPartContentplatformInfoId" placeholder="请选择推单平台" filterable  >
+            <Option
+              v-for="item in thirdPartContentplatformInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <div style="font-size:14px;color:red" v-if="!form.hospitalId">请选择已参与项目医院或主派医院！</div>
+        </FormItem>
         <FormItem label="是否指定医生账号" key="是否指定医生账号">
           <i-switch v-model="form.isSpecifyHospitalEmployee" @on-change="isSpecifyHospitalEmployeeChange(form.isSpecifyHospitalEmployee)" :disabled="!form.hospitalId"/>
         </FormItem>
@@ -320,7 +341,7 @@ import * as contentPlatForm from "@/api/baseDataMaintenance";
 import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhotos.vue"
 import detail from "@/components/contentDetail/detail.vue"
 import verificationForm from "./verificationForm";
-
+import * as asthirdPartContentplatformInfoApi from "@/api/thirdPartContentplatformInfo";
 export default {
   // props: ["activeName"],
   props:{
@@ -335,6 +356,8 @@ export default {
   },
   data() {
     return {
+      // 推单平台
+      thirdPartContentplatformInfo:[],
       // 查重参数
       verificationFormParams:{
         id:'',
@@ -774,7 +797,13 @@ export default {
         // 是否指定医生账号
         isSpecifyHospitalEmployee:false,
         // 医生账号
-        hospitalEmployeeId:null
+        hospitalEmployeeId:null,
+        // 是否选择推单平台
+        isPushOrderPlatform:true,
+        // 推单平台
+        thirdPartContentplatformInfoId:'',
+        // 派单编号
+        dispatchId:null
       },
 
       // 医院列表
@@ -845,6 +874,19 @@ export default {
     };
   },
   methods: {
+    // 根据主派医院查询推单平台
+    getValidKeyAndValue() {
+      const data = {
+        hospitalId:this.form.hospitalId
+      }
+      asthirdPartContentplatformInfoApi.HospitalContentplatformCodeValidKeyAndValue(data).then((res) => {
+        if (res.code == 0) {
+          const {thirdPartContentplatformInfo} = res.data
+          this.thirdPartContentplatformInfo = thirdPartContentplatformInfo;
+          this.form.thirdPartContentplatformInfoId = thirdPartContentplatformInfo ==  [] ||  thirdPartContentplatformInfo.length == 0 ? '' : thirdPartContentplatformInfo[0].id 
+        }
+      });
+    },
     // 特定账户Switch isSpecifyHospitalEmployee
     isSpecifyHospitalEmployeeChange(value){
       if(value == true){
@@ -853,6 +895,71 @@ export default {
         this.form.hospitalEmployeeId = null
         this.form.isSpecifyHospitalEmployee == false
       }
+      // 是否选择推单平台
+      if(this.form.hospitalId){
+        this.getValidKeyAndValue()
+      }
+    },
+    // 根据订单号获取派单编号
+    getsendOrderInfoList(){
+      const data = {
+        contentPlatformId:this.form.orderId,
+        pageNum:1,
+        pageSize:10
+      }
+      api.sendOrderInfoList(data).then(res=>{
+        if(res.code === 0){
+          const {list} =res.data.sendOrderInfoList
+          this.form.dispatchId = list.length == 0 || list == [] ? null :  list[0].id
+          // 是否为推单打开时 调用推单接口 
+          if(this.form.isPushOrderPlatform == true) {
+            this.pushOrders()
+          }else{
+            this.cancel("form");
+            this.flag = false;
+            this.getUnSendOrderList();
+            this.$Message.success({
+              content: "派单成功",
+              duration: 3,
+            });
+          }
+        }
+      })
+    },
+    // 推单
+    pushOrders() {
+      const {thirdPartContentplatformInfoId, dispatchId,orderId,hospitalId,} = this.form
+      const data = {
+        thirdPartContentplatformInfoId: thirdPartContentplatformInfoId,
+        hospitalId: hospitalId,
+        orderId: orderId,
+        sendOrderId: dispatchId,
+        YWLX: 'P',
+      };
+      if (!thirdPartContentplatformInfoId) {
+        this.$Message.warning("请选择三方平台");
+        return;
+      }
+      this.flag = true;
+      asthirdPartContentplatformInfoApi.getIsRepeateByHospitalIdAndThirdPartIdToLangZi(data).then((res) => {
+        if (res.code == 0) {
+          this.cancel("form");
+          this.$Message.success({
+            content: res.data.hospitalContentplatformCode.remsg,
+            duration: 3,
+          });
+          this.flag = false;
+          this.getUnSendOrderList();
+          this.$Message.success({
+            content: "派单成功",
+            duration: 3,
+          });
+        } else {
+          setTimeout(() => {
+            this.flag = false;
+          }, 3000);
+        }
+      });
     },
     // 根据医院查询医院账户
     getByHospitalIdList(){
@@ -1062,12 +1169,14 @@ export default {
       this.hospitalIdList = []
       this.$refs[name].resetFields();
       this.form.remark = "";
+      this.thirdPartContentplatformInfo = []
       
     },
-
+    
     submit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
+        
           const {
             orderId,
             hospitalId,
@@ -1078,7 +1187,9 @@ export default {
             sendBy,
             otherHospitalId,
             isSpecifyHospitalEmployee,
-            hospitalEmployeeId
+            hospitalEmployeeId,
+            thirdPartContentplatformInfoId,
+            isPushOrderPlatform
           } = this.form;
           const data = {
             orderId,
@@ -1096,17 +1207,17 @@ export default {
             isSpecifyHospitalEmployee,
             hospitalEmployeeId:isSpecifyHospitalEmployee == true  ? hospitalEmployeeId : 0
           };
+          if(isPushOrderPlatform == true && !thirdPartContentplatformInfoId){
+            this.$Message.warning('请选择推单平台')
+            return
+          }
           if(otherHospitalId == [] || otherHospitalId.length == 0){
-              this.flag = true;
+              // this.flag = true;
               api.AddContentPlateFormSendOrder(data).then((res) => {
                 if (res.code === 0) {
-                  this.flag = false;
-                  this.cancel("form");
-                  this.getUnSendOrderList();
-                  this.$Message.success({
-                    content: "派单成功",
-                    duration: 3,
-                  });
+                  this.getsendOrderInfoList()
+                  
+                  // this.cancel("form");
                 }else {
                   setTimeout(() => {
                     this.flag = false;
@@ -1125,13 +1236,14 @@ export default {
                     this.flag = true;
                     api.AddContentPlateFormSendOrder(data).then((res) => {
                       if (res.code === 0) {
-                        this.flag = false;
-                        this.cancel("form");
-                        this.getUnSendOrderList();
-                        this.$Message.success({
-                          content: "派单成功",
-                          duration: 3,
-                        });
+                        this.getsendOrderInfoList()
+                        // this.flag = false;
+                        // this.getUnSendOrderList();
+                        // this.$Message.success({
+                        //   content: "派单成功",
+                        //   duration: 3,
+                        // });
+                          // this.cancel("form");
                       } else {
                         setTimeout(() => {
                           this.flag = false;

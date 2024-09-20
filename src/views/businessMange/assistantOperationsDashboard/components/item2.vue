@@ -2,20 +2,33 @@
     <div class="center_content">
           <div class="center_item">
             <div class="item1" >
-              <div class="h2">一类客资</div>
+              <div class="h2">
+                一级线索
+                <Tooltip placement="top-start" >
+                  <i
+                    class="iconfont icon-info info"
+                    style="color:#fff;font-size:18px;"
+                  ></i>
+                  <template #content>
+                    <p>1、直播间下单199（199面诊卡，199</p>
+                    <p>面膜），视频号下单未付款的顾客</p>
+                    <p>2、直播间公屏捞客顾客</p>
+                  </template>
+                </Tooltip>
+              </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日：{{assistantPerformanceObj.firstTypeCurrentDay}}</div>
-                    <span >累计：</span>
+                    <div>当日线索：{{assistantPerformanceObj.firstTypeCurrentDay}}</div>
+                    <span >累计线索：</span>
                     <span >{{assistantPerformanceObj.firstTypeTotal}}</span>
                 </div>
                 <div class="item_right">
-                    <div>当月同比：
+                    <div>去年同比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.firstTypeYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.firstTypeYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.firstTypeYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.firstTypeYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                       </div>
-                    <div>当月环比：
+                    <div>上月环比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.firstTypeChainRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.firstTypeChainRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.firstTypeChainRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.firstTypeChainRate) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
@@ -24,20 +37,33 @@
               </div>
             </div>
             <div class="item2" >
-              <div class="h2">二类客资</div>
+              <div class="h2">
+                二级线索
+                <Tooltip placement="top-start" >
+                  <i
+                    class="iconfont icon-info info"
+                    style="color:#fff;font-size:18px;"
+                  ></i>
+                  <template #content >
+                    <p>1、来源渠道直播前/中/后，主动私信</p>
+                    <p>的顾客</p>
+                    <p>2、直播后各平台的粉丝群顾客</p>
+                  </template>
+                </Tooltip>
+              </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日：{{assistantPerformanceObj.secondTypeCurrentDay}}</div>
-                    <span >累计：</span>
+                    <div>当日线索：{{assistantPerformanceObj.secondTypeCurrentDay}}</div>
+                    <span >累计线索：</span>
                     <span >{{assistantPerformanceObj.secondTypeTotal}}</span>
                 </div>
                 <div class="item_right">
-                    <div>当月同比：
+                    <div>去年同比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.secondTypeYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.secondTypeYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.secondTypeYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.secondTypeYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月环比：
+                    <div>上月环比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.secondTypeChainRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.secondTypeChainRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.secondTypeChainRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.secondTypeChainRate) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
@@ -46,20 +72,32 @@
               </div>
             </div>
             <div class="item3" >
-              <div class="h2">三类客资</div>
+              <div class="h2">
+                三级线索
+                <Tooltip placement="top-start" >
+                  <i
+                    class="iconfont icon-info info"
+                    style="color:#fff;font-size:18px;"
+                  ></i>
+                  <template #content>
+                    <p>小风车/短视频/福袋/产品转化/其他，</p>
+                    <p>获取的顾客资源</p>
+                  </template>
+                </Tooltip>
+              </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日：{{assistantPerformanceObj.thirdTypeCurrentDay}}</div>
-                    <span >累计：</span>
+                    <div>当日线索：{{assistantPerformanceObj.thirdTypeCurrentDay}}</div>
+                    <span >累计线索：</span>
                     <span >{{assistantPerformanceObj.thirdTypeTotal}}</span>
                 </div>
                 <div class="item_right">
-                    <div>当月同比：
+                    <div>去年同比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.thirdTypeYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.thirdTypeYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.thirdTypeYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.thirdTypeYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月环比：
+                    <div>上月环比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.thirdTypeChainRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.thirdTypeChainRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.thirdTypeChainRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.thirdTypeChainRate) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
@@ -68,20 +106,20 @@
               </div>
             </div>
             <div class="item4" >
-              <div class="h2">总客资</div>
+              <div class="h2">总线索</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日：{{assistantPerformanceObj.totalTypeCurrentDay}}</div>
-                    <span >累计：</span>
+                    <div>当日线索：{{assistantPerformanceObj.totalTypeCurrentDay}}</div>
+                    <span >累计线索：</span>
                     <span >{{assistantPerformanceObj.totalTypeTotal}}</span>
                 </div>
                 <div class="item_right">
-                    <div>当月同比：
+                    <div>去年同比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.totalTypeYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.totalTypeYearOnYear) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.totalTypeYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.totalTypeYearOnYear) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>当月环比：
+                    <div>上月环比：
                       <span  class="h5" v-if="Math.sign(assistantPerformanceObj.totalTypeChainRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.totalTypeChainRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.totalTypeChainRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.totalTypeChainRate) + '%'}}</span>
                       <span class="h5"  v-else>-</span>

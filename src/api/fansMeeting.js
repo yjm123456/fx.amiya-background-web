@@ -38,9 +38,10 @@ export const deleteFansMeeting = (id) => {
     });
 };
 // 获取有效的粉丝见面会信息 下拉框
-export const getValidKeyAndValue = () => {
+export const getValidKeyAndValue = (params) => {
     return http({
         url: `/amiyabg/FansMeeting/ValidKeyAndValue`,
         method: "get",
+        params
     });
 };

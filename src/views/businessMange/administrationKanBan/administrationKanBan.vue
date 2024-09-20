@@ -49,41 +49,57 @@
       <Button type="primary" @click="getData">查询</Button>
     </div>
     <Card style="margin-top:10px">
-      <items ref="items" :params="params" title="当前组"/>
-      <items ref="items2" :params="params" title="个人加v"/>
+      <items ref="items" :params="params" title="部门"/>
+      <items ref="items2" :params="params" title="个人"/>
     </Card>
     <Card style="margin-top:10px">
-      <div class="h3">客资趋势</div>
+      <div class="h3">部门线索趋势</div>
       <monthLine :params="params" :adminCustomerServiceCustomerTypeBrokenLineDataObj="adminCustomerServiceCustomerTypeBrokenLineDataObj"/>
     </Card>
     <Card style="margin-top:10px">
-      <div class="h3">漏斗图--当前组&个人加v</div>
+      <div class="h3">部门&个人-线索转化漏斗图</div>
       <funnel :params="params" :adminCustomerFilterDataObj="adminCustomerFilterDataObj" :isFlag="isFlag"/>
     </Card>
-    <!-- <Card style="margin-top:10px">
+    <!-- 饼图 -->
+    <Card style="margin-top:10px">
       <div class="h3">分诊量&加v率</div>
       <div  class="list h3">
         <Card class="item">
           <div class="h2">分诊量</div>
-          <pieItem :pieData="adminCustomerAnalysisDataObj.distributeConsulationDataList" />
+          <pieItem :pieData="adminCustomerAnalysisDataObj.distributeConsulationDataList" title="分诊量"/>
         </Card>
         <Card  class="item">
           <div class="h2">加v率</div>
-          <pieItem :pieData="adminCustomerAnalysisDataObj.distributeConsulationAddWechatDataList" />
+          <pieItem :pieData="adminCustomerAnalysisDataObj.distributeConsulationAddWechatDataList" title="加v率"/>
         </Card>
       </div>
       <div  class="list h3">
         <Card class="item">
           <div class="h2">分诊量</div>
-          <pieItem :pieData="adminCustomerAnalysisDataObj.effAndPotDataList" />
+          <pieItem :pieData="adminCustomerAnalysisDataObj.effAndPotDataList" title="分诊量"/>
         </Card>
         <Card  class="item">
           <div class="h2">加v率</div>
-          <pieItem :pieData="adminCustomerAnalysisDataObj.effAndPotAddWechatDataList" />
+          <pieItem :pieData="adminCustomerAnalysisDataObj.effAndPotAddWechatDataList" title="加v率"/>
         </Card>
       </div>
     </Card>
-     -->
+    <!-- 柱形图 -->
+    <Card style="margin-top:10px">
+      <div class="h3">分诊量&加v率</div>
+      <div  class="list h3">
+        <Card class="item">
+          <div class="por"><span class="h2">分诊量</span> <span @click="detailModel = true;title='分诊量'"><i class="iconfont icon-qiehuan-xue qiehuan"></i><span>详情</span></span></div>
+          <barItem :barItemData="adminCustomerAssistantDisAndAddVDataObj.assistantDistributeData" title="分诊量"/>
+        </Card>
+        <Card  class="item">
+          <div class="por"><span class="h2">加v率</span> <span @click="detailModel = true;title='加v率'"><i class="iconfont icon-qiehuan-xue qiehuan"></i><span>详情</span></span></div>
+          <barItem :barItemData="adminCustomerAssistantDisAndAddVDataObj.assistantAddWechatData" title="加v率"/>
+        </Card>
+      </div>
+    </Card>
+    <!-- 详情 -->
+    <barDetail :detailModel.sync="detailModel" :detailData="this.title == '分诊量' ? adminCustomerAssistantDisAndAddVDataObj.assistantDistributeDataDetail : this.title == '加v率' ? adminCustomerAssistantDisAndAddVDataObj.assistantAddWechatDataDetail : []" :title="title"/>
   </Card>
 </template>
 <script>
@@ -93,15 +109,22 @@ import items from "./components/item2.vue"
 import monthLine from "./components/monthLine.vue"
 import funnel from "./components/funnel.vue"
 import pieItem from "./components/pieItem.vue"
+import barItem from "./components/barItem.vue"
+import barDetail from "./components/barDetail.vue"
 export default {
   components:{
     items,
     monthLine,
     funnel,
-    pieItem
+    pieItem,
+    barItem,
+    barDetail
   },
   data() {
     return {
+      title:'',
+      // 详情model
+      detailModel:false,
       // 用于漏斗图加载
       isFlag:false,
       // 时间进度
@@ -126,7 +149,9 @@ export default {
       // 漏斗图
       adminCustomerFilterDataObj:{},
       // 饼图数据
-      adminCustomerAnalysisDataObj:{}
+      adminCustomerAnalysisDataObj:{},
+      // 柱形图数据
+      adminCustomerAssistantDisAndAddVDataObj:{}
     };
   },
   methods: {
@@ -135,6 +160,7 @@ export default {
       this.getadminCustomerServiceCustomerTypeBrokenLineData()
       this.getadminCustomerFilterData()
       this.getadminCustomerAnalysisData()
+      this.getadminCustomerAssistantDisAndAddVData()
       this.$nextTick(()=>{
         this.$refs.items.getadminCustomerServiceCustomerTypeData()
         this.$refs.items2.getadminCustomerServiceCustomerTypeAddWechatData()
@@ -214,6 +240,20 @@ export default {
         }
       })
     },
+    // 行政客服分诊加v率柱形图
+    getadminCustomerAssistantDisAndAddVData(){
+      const { startDate, endDate, assistantId } = this.params;
+      const data = {
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        assistantId: assistantId,
+      };
+      api.adminCustomerAssistantDisAndAddVData(data).then(res=>{
+        if(res.code == 0){
+          this.adminCustomerAssistantDisAndAddVDataObj = res.data.data
+        }
+      })
+    },
   },
   created() {
     this.getEmployeeByPositionIdAdmin();
@@ -223,7 +263,17 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style scoped lang="less">
+.completeRateSize{
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 5px;
+}
+/* 添加边框样式 */
+/deep/ .ivu-progress-inner {
+  border: 3px solid dodgerblue;
+  border-radius: 10px;
+}
 .title {
   font-size: 22px;
   font-weight: bold;
@@ -252,5 +302,13 @@ export default {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+}
+.qiehuan{
+  font-size: 14px;
+  margin-right: 2px;
+  color: rgb(21, 142, 241);
+}
+.por{
+  cursor: pointer;
 }
 </style>

@@ -561,11 +561,13 @@ export default {
             title: "未派单原因",
             key: "unSendReason",
             minWidth: 400,
+            tooltip:true
           },
           {
             title: "备注",
             key: "remark",
             minWidth: 400,
+            tooltip:true
           },
           {
             title: "操作",
@@ -905,7 +907,8 @@ export default {
       const data = {
         contentPlatformId:this.form.orderId,
         pageNum:1,
-        pageSize:10
+        pageSize:1,
+        isMainHospital:true
       }
       api.sendOrderInfoList(data).then(res=>{
         if(res.code === 0){

@@ -162,6 +162,29 @@
                 ></Input>
               </FormItem>
             </Col>
+            <Col span="8" >
+            <FormItem
+              label="上门奖励金额"
+              prop="specialHospitalVisitPrice"
+              :rules="[
+                {
+                  required: true,
+                  message: '上门奖励金额(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.specialHospitalVisitPrice"
+                placeholder="上门奖励金额(最小是0)"
+                type="number"
+                number
+                @on-change="amountChange"
+              ></Input>
+            </FormItem>
+          </Col>
             <Col span="8">
               <FormItem label="合计" prop="totalPrice">
                 <Input
@@ -184,6 +207,7 @@
               </FormItem>
             </Col>
           </Row>
+          
         </div>
         <div class="bor" v-if="form.positionId == 30">
           <Row :gutter="30">
@@ -601,6 +625,8 @@ export default {
         addClueCompletePrice: 0,
         // 老带新提成
         oldTakeNewCustomerPrice: null,
+        // 奖励金额
+        specialHospitalVisitPrice:0
       },
 
       ruleValidate: {
@@ -747,6 +773,7 @@ export default {
     };
   },
   methods: {
+    
     // 根据id查询详情
     getDetail(value) {
       api.byIdCustomerServiceCompensation(this.params.id).then((res) => {
@@ -778,6 +805,7 @@ export default {
             addWechatCompletePrice,
             addClueCompletePrice,
             oldTakeNewCustomerPrice,
+            specialHospitalVisitPrice
           } = res.data.customerServiceCompensation;
           this.form.name = name;
           this.form.belongEmpId = belongEmpId;
@@ -805,6 +833,7 @@ export default {
           this.form.addWechatCompletePrice = addWechatCompletePrice;
           this.form.addClueCompletePrice = addClueCompletePrice;
           this.form.oldTakeNewCustomerPrice = oldTakeNewCustomerPrice;
+          this.form.specialHospitalVisitPrice = specialHospitalVisitPrice;
           this.checkBelongEmpIdChange();
         }
       });
@@ -928,6 +957,7 @@ export default {
         addWechatCompletePrice,
         addClueCompletePrice,
         oldTakeNewCustomerPrice,
+        specialHospitalVisitPrice
       } = this.form;
       if (positionId != 30) {
         let price =
@@ -940,6 +970,7 @@ export default {
           Number(targetFinishReword) +
           Number(otherPrice) -
           Number(otherChargebacks) +
+          Number(specialHospitalVisitPrice) +
           Number(oldTakeNewCustomerPrice);
         this.form.totalPrice = Math.round(price * 100) / 100;
       } else {
@@ -956,6 +987,7 @@ export default {
           Number(otherChargebacks) +
           Number(addWechatCompletePrice) +
           Number(addClueCompletePrice) +
+          Number(specialHospitalVisitPrice) +
           Number(oldTakeNewCustomerPrice);
         this.form.totalPrice = Math.round(price * 100) / 100;
       }
@@ -987,6 +1019,7 @@ export default {
       this.$emit("update:controlModal", false);
       // this.$emit("getListWithPageByCustomerCompensation");
       this.$refs["form"].resetFields();
+      this.form.hospitalIdList = []
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -994,6 +1027,7 @@ export default {
         this.$emit("update:controlModal", false);
         // this.$emit("getListWithPageByCustomerCompensation");
         this.$refs["form"].resetFields();
+        this.form.hospitalIdList = []
       }
     },
   },

@@ -103,7 +103,7 @@ export default {
       // 查询
       query: {
         // 归属客服
-        belongEmpId: sessionStorage.getItem('isDirector') == 'false' && sessionStorage.getItem('isCustomerService') == 'true' ? Number(sessionStorage.getItem('employeeId')): -1,
+        belongEmpId:null,
         // 是否有效
         valid: "true",
         // 开始时间
@@ -226,6 +226,13 @@ export default {
             key: "otherPrice",
             align:'center',
             minWidth:150,
+            tooltip:true
+          },
+          {
+            title: "上门奖励金额",
+            key: "specialHospitalVisitPrice",
+            align:'center',
+            minWidth:170,
             tooltip:true
           },
           {
@@ -513,7 +520,7 @@ export default {
         return
       }else{
         this.isButton = true
-        this.query.belongEmpId = -1
+        this.query.belongEmpId = null
       }
     },
     // 获取客服列表
@@ -544,7 +551,7 @@ export default {
         pageNum,
         pageSize,
         keyWord,
-        belongEmpId: this.isButton == false ? Number(sessionStorage.getItem('employeeId')) : belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId,
         valid,
         startDate: startDate
           ? this.$moment(new Date(startDate)).format("YYYY-MM-DD")
@@ -576,7 +583,7 @@ export default {
         pageNum,
         pageSize,
         keyWord,
-        belongEmpId: this.isButton == false ? Number(sessionStorage.getItem('employeeId')) : belongEmpId == -1 ? null : belongEmpId,
+        belongEmpId,
         valid,
         startDate: startDate
           ? this.$moment(new Date(startDate)).format("YYYY-MM-DD")
@@ -594,10 +601,15 @@ export default {
       });
     },
   },
+  mounted(){
+    
+  },
   created() {
-    this.getContractListClick();
-    this.getCustomerServiceList();
     this.isAuthority()
+    setTimeout(()=>{
+      this.getContractListClick();
+    },1000)
+    this.getCustomerServiceList();
   },
 };
 </script>

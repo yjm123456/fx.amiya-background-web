@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    
     <div ref="dom" :style="{ width: '100%', height: '800px' }"></div>
   </div>
 </template>
@@ -9,6 +10,7 @@ import { on, off } from "@/utils/util";
 import tdTheme from "./theme.json";
 import * as echarts from "echarts";
 echarts.registerTheme("tdTheme", tdTheme);
+
 export default {
   props: {
     assiatantTargetCompleteAndPerformanceRateData: Array,
@@ -35,7 +37,7 @@ export default {
             axisPointer: {
                 type: 'shadow'
             },
-            formatter:this.title == '目标完成率' ? (params) => {
+            formatter: this.title == '目标完成率' ? (params) => {
                 let list = []
                 let listItem = ''
                 let axisValueLabel = params[0].axisValueLabel 

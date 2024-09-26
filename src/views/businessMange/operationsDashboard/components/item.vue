@@ -6,8 +6,8 @@
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：<span class="b_w">{{totalAchievementAndDateSchedule.todayNewCustomerPerformance}}</span></div>
-                    <div class="item_left">累计业绩</div>
-                    <div class="h3 b_w">{{totalAchievementAndDateSchedule.newCustomerPerformance}}</div>
+                    <div class="item_left">累计业绩：<span class="b_w">{{totalAchievementAndDateSchedule.newCustomerPerformance}}</span></div>
+                    
                 </div>
                 <div class="item_right">
                     <div>
@@ -31,8 +31,8 @@
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：<span class="b_w">{{totalAchievementAndDateSchedule.todayOldCustomerPerformance}}</span></div>
-                    <div class="item_left">累计业绩</div>
-                    <div class="h3 b_w">{{totalAchievementAndDateSchedule.oldCustomerPerformance}}</div>
+                    <div class="item_left">累计业绩：<span class=" b_w">{{totalAchievementAndDateSchedule.oldCustomerPerformance}}</span></div>
+                    
                 </div>
                 <div class="item_right">
                     <div>
@@ -57,8 +57,7 @@
               <div class="item">
                 <div class="item_left">
                     <div>当日业绩：<span class="b_w">{{totalAchievementAndDateSchedule.todayTotalPerformance}}</span></div>
-                    <div class="item_left">累计业绩</div>
-                    <div class="h3 b_w">{{totalAchievementAndDateSchedule.totalPerformance}}</div>
+                    <div class="item_left">累计业绩：<span class="b_w">{{totalAchievementAndDateSchedule.totalPerformance}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>

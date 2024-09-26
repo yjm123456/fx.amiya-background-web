@@ -350,3 +350,19 @@ export const adminCustomerAssistantDisAndAddVData = (params) => {
         params
     });
 };
+//  周期转化
+export const getAssistantTransformCycleData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getAssistantTransformCycleData",
+        method: "get",
+        params
+    });
+};
+//  运营看板周期转化
+export const getTransformCycleData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getTransformCycleData",
+        method: "get",
+        params
+    });
+};

@@ -1896,16 +1896,16 @@ export default {
                           }
                         });
                       }
-                      // else if (name == "verificationForm") {
-                      //   // 推单
-                      //   const { id,orderId,sendHospitalId } = params.row;
-                      //   this.verificationFormParams.id=id
-                      //   this.verificationFormParams.orderId=orderId
-                      //   this.verificationFormParams.sendHospitalId=sendHospitalId
-                      //   this.verificationFormParams.title = '推单'
-                      //   this.verificationFormParams.YWLX='P'
-                      //   this.verificationFormModel = true
-                      // }
+                       else if (name == "verificationForm") {
+                          // 推单
+                         const { id,orderId,sendHospitalId } = params.row;
+                         this.verificationFormParams.id=id
+                         this.verificationFormParams.orderId=orderId
+                         this.verificationFormParams.sendHospitalId=sendHospitalId
+                         this.verificationFormParams.title = '推单'
+                         this.verificationFormParams.YWLX='P'
+                         this.verificationFormModel = true
+                       }
                        else if (name == "reassignment") {
                         // this.$Message.warning('系统正在维护中，请稍后！')
                         // return
@@ -2053,15 +2053,15 @@ export default {
                         },
                         "订单详情"
                       ),
-                      // h(
-                      //   "DropdownItem",
-                      //   {
-                      //     props: {
-                      //       name: "verificationForm",
-                      //     },
-                      //   },
-                      //   "推单"
-                      // ),
+                      h(
+                        "DropdownItem",
+                        {
+                          props: {
+                            name: "verificationForm",
+                          },
+                        },
+                        "推单"
+                      ),
                       h(
                         "DropdownItem",
                         {

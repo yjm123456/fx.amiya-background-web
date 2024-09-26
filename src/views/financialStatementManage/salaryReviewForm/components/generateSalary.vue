@@ -12,7 +12,7 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="120"
+        :label-width="110"
       >
         <Row :gutter="30">
           <Col span="8">
@@ -363,6 +363,68 @@
             </FormItem>
           </Col>
         </Row>
+        <Row :gutter="30">
+          <Col span="4">
+            <FormItem label="特定医院上门奖励" prop="valid">
+              <i-switch v-model="form.valid" />
+            </FormItem>
+          </Col>
+          <Select
+            v-model="form.hospitalIdList"
+            placeholder="请选择医院"
+            filterable
+            multiple
+            style="width:200px"
+             v-if="form.valid == true"
+          >
+            <Option
+              v-for="item in params.hospitalInfo"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+            >
+          </Select>
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="getQuery()"
+             v-if="form.valid == true"
+            >查询</Button
+          >
+          <Col span="8" v-if="form.valid == true">
+            <FormItem
+              label="奖励金额"
+              prop="specialHospitalVisitPrice"
+              :rules="[
+                {
+                  required: true,
+                  message: '奖励金额(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+            >
+              <Input
+                v-model="form.specialHospitalVisitPrice"
+                placeholder="奖励金额(最小是0)"
+                type="number"
+                number
+                @on-change="amountChange"
+                style="width:86%"
+              ></Input>
+              <Tooltip
+                :content="rewardAmountPeople"
+                placement="top-start"
+              >
+                <i
+                  class="iconfont icon-info"
+                  style="color:rgb(58 143 233);margin-left:10px;font-size:22px;"
+                ></i>
+              </Tooltip>
+            </FormItem>
+          </Col>
+        </Row>
         <Spin fix v-if="isLoading == true">
           <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
           <div>加载中...</div>
@@ -393,6 +455,8 @@ export default {
   },
   data() {
     return {
+      // 奖励金额
+      rewardAmountPeople:'当前助理在选中医院上门顾客 0 人',
       // 新客奖励人数
       newCustomerToHospitalRewordPeople: "新客上门 0 人",
       // 目标完成率
@@ -448,6 +512,12 @@ export default {
         cooperationLiveAnchorToHospitalPrice: 0,
         // 老带新提成
         oldTakeNewCustomerPrice: null,
+        // 特定医院上门奖励
+        valid:false,
+        // 医院
+        hospitalIdList:[],
+        // 奖励金额
+        specialHospitalVisitPrice:0
       },
 
       ruleValidate: {
@@ -545,6 +615,37 @@ export default {
     };
   },
   methods: {
+    // 查询
+    getQuery(){
+      const {belongEmpId,hospitalIdList,valid} = this.form
+      const data = {
+        startDate:this.$moment(new Date(this.startDate)).format("YYYY-MM-DD"),
+        endDate:this.$moment(new Date(this.endDate)).format("YYYY-MM-DD"),
+        assistantId:belongEmpId,
+        hospitalIdList:String(hospitalIdList),
+      }
+      if (!belongEmpId) {
+        this.$Message.warning("请先选择助理！");
+        return;
+      }
+      if(valid == true && hospitalIdList == [] || hospitalIdList.length == 0){
+        this.$Message.warning('请选择医院')
+        return
+      }
+      if (this.$moment(new Date(this.startDate)).format("YYYY-MM") != this.$moment(new Date(this.endDate)).format("YYYY-MM") ) {
+        this.$Message.warning("列表开始时间和结束时间必须是同年月！");
+        return;
+      }
+      api.getToHospitalCount(data).then(res=>{
+        if(res.code == 0){
+          const {toHospitalCount} = res.data.data
+          this.rewardAmountPeople = '当前助理在选中医院上门顾客 ' +  toHospitalCount + ' 人'
+          this.form.specialHospitalVisitPrice =  Math.round(toHospitalCount * 100 * 100) / 100
+          this.amountChange()
+        }
+      })
+      
+    },
     // 自动填写
     automaticFilling() {
       if (!this.form.belongEmpId) {
@@ -618,6 +719,7 @@ export default {
         otherPrice,
         otherChargebacks,
         oldTakeNewCustomerPrice,
+        specialHospitalVisitPrice
       } = this.form;
       let price =
         Number(salary) + 
@@ -629,7 +731,8 @@ export default {
         Number(targetFinishReword) +
         Number(otherPrice) +
         Number(oldTakeNewCustomerPrice) -
-        Number(otherChargebacks);
+        Number(otherChargebacks) + 
+        Number(specialHospitalVisitPrice) 
       this.form.totalPrice = Math.round(price * 100) / 100;
     },
 
@@ -660,10 +763,12 @@ export default {
       this.$emit("getListWithPageByCustomerCompensation");
       this.$refs["form"].resetFields();
       this.newCustomerToHospitalRewordPeople = "新客上门 0 人";
+      this.rewardAmountPeople = '当前助理在选中医院上门顾客 0 人'
       // 目标完成率
       this.targetCompletionRate = "总业绩目标完成率 0%";
       // 老带新
       this.oldTakeNewCustomerNum = "老带新0人";
+      this.form.hospitalIdList = []
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -671,6 +776,7 @@ export default {
         this.$emit("update:generateSalaryModel", false);
         this.$emit("getListWithPageByCustomerCompensation");
         this.$refs["form"].resetFields();
+        this.form.hospitalIdList = []
       }
     },
   },
@@ -714,5 +820,9 @@ export default {
   to {
     transform: rotate(360deg);
   }
+}
+.icon-info{
+  position: relative;
+  top: 4px;
 }
 </style>

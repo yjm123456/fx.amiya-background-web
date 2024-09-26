@@ -70,3 +70,11 @@ export const copyCompensation = (data) => {
         data,
     });
 };
+// 获取到院人数
+export const getToHospitalCount = (params) => {
+    return http({
+        url: `/amiyabg/ReconciliationDocumentsSettle/getToHospitalCount`,
+        method: "get",
+        params,
+    });
+};

@@ -192,6 +192,71 @@
               </FormItem>
             </Col>
           </Row>
+          <Row :gutter="30">
+            <Col span="4">
+              <FormItem label="特定医院上门奖励" prop="valid">
+                <i-switch v-model="form.valid" />
+              </FormItem>
+            </Col>
+            <Select
+              v-model="form.hospitalIdList"
+              placeholder="请选择医院"
+              filterable
+              multiple
+              style="width:200px"
+              v-if="form.valid == true"
+            >
+              <Option
+                v-for="item in params.hospitalInfo"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Button
+              type="primary"
+              style="margin-left: 10px"
+              @click="getQuery()"
+              v-if="form.valid == true"
+              >查询</Button
+            >
+            <Col span="8" v-if="form.valid == true">
+              <FormItem
+                label="奖励金额"
+                prop="specialHospitalVisitPrice"
+                :rules="[
+                {
+                  required: true,
+                  message: '奖励金额(最小是0)',
+                  trigger: 'change',
+                  type: 'number',
+                  min: 0,
+                },
+              ]"
+              >
+                <Input
+                  v-model="form.specialHospitalVisitPrice"
+                  placeholder="奖励金额(最小是0)"
+                  type="number"
+                  number
+                  @on-change="amountChange"
+                  style="width:85%;"
+                ></Input>
+
+                <Tooltip placement="top-start">
+                  <i
+                    class="iconfont icon-info"
+                    style="color:rgb(58 143 233);margin-left:10px;font-size:22px"
+                  ></i>
+                  <template #content>
+                    <p>{{ rewardAmountPeople }}</p>
+                  </template>
+                </Tooltip>
+              </FormItem>
+            </Col>
+            
+            
+          </Row>
         </div>
         <div class="bor" v-if="form.positionId == 30">
           <Row :gutter="30">
@@ -584,7 +649,9 @@
               </FormItem>
             </Col>
           </Row>
+          
         </div>
+        
 
         <Spin fix v-if="isLoading == true">
           <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
@@ -625,6 +692,8 @@ export default {
   },
   data() {
     return {
+      // 奖励金额
+      rewardAmountPeople:'当前助理在选中医院上门顾客 0 人',
       isLoading: false,
       control: false,
       form: {
@@ -681,6 +750,12 @@ export default {
         addClueCompletePrice: 0,
         // 老带新提成
         oldTakeNewCustomerPrice: 0,
+        // 特定医院上门奖励
+        valid:false,
+        // 医院
+        hospitalIdList:[],
+        // 奖励金额
+        specialHospitalVisitPrice:0
       },
 
       ruleValidate: {
@@ -845,6 +920,37 @@ export default {
     };
   },
   methods: {
+    // 查询
+    getQuery(){
+      const {belongEmpId,hospitalIdList,valid} = this.form
+      const data = {
+        startDate:this.$moment(new Date(this.filterCriteria.startDate)).format("YYYY-MM-DD"),
+        endDate:this.$moment(new Date(this.filterCriteria.endDate)).format("YYYY-MM-DD"),
+        assistantId:belongEmpId,
+        hospitalIdList:String(hospitalIdList),
+      }
+      if (!belongEmpId) {
+        this.$Message.warning("请先选择助理！");
+        return;
+      }
+      if(valid == true && hospitalIdList == [] || hospitalIdList.length == 0){
+        this.$Message.warning('请选择医院')
+        return
+      }
+      if (this.$moment(new Date(this.filterCriteria.startDate)).format("YYYY-MM") != this.$moment(new Date(this.filterCriteria.endDate)).format("YYYY-MM") ) {
+        this.$Message.warning("列表开始时间和结束时间必须是同年月！");
+        return;
+      }
+      api.getToHospitalCount(data).then(res=>{
+        if(res.code == 0){
+          const {toHospitalCount} = res.data.data
+          this.rewardAmountPeople = '当前助理在选中医院上门顾客 ' +  toHospitalCount + ' 人'
+          this.form.specialHospitalVisitPrice =  Math.round(toHospitalCount * 100 * 100) / 100
+          this.amountChange()
+        }
+      })
+      
+    },
     // 获取当月获客情况数据
     getHealthValueLists() {
       healthValueApi.getHealthValid().then((res) => {
@@ -1053,6 +1159,8 @@ export default {
         addWechatCompletePrice,
         addClueCompletePrice,
         oldTakeNewCustomerPrice,
+        specialHospitalVisitPrice
+
       } = this.form;
       if (positionId != 30) {
         let price =
@@ -1064,6 +1172,7 @@ export default {
           Number(oldCustomerToHospitalReword) +
           Number(targetFinishReword) +
           Number(otherPrice) +
+          Number(specialHospitalVisitPrice) +
           Number(oldTakeNewCustomerPrice) -
           Number(otherChargebacks);
         this.form.totalPrice = Math.round(price * 100) / 100;
@@ -1081,6 +1190,7 @@ export default {
           Number(otherChargebacks) +
           Number(addWechatCompletePrice) +
           Number(oldTakeNewCustomerPrice) +
+          Number(specialHospitalVisitPrice) +
           Number(addClueCompletePrice);
         this.form.totalPrice = Math.round(price * 100) / 100;
       }
@@ -1121,6 +1231,8 @@ export default {
       this.centent7 = "当前助理线索登记目标：0";
       this.centent8 = "当前助理线索登记完成率：0%";
       this.oldTakeNewCustomerNum = "老带新0人";
+      this.form.hospitalIdList = []
+      this.rewardAmountPeople = '当前助理在选中医院上门顾客 0 人'
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -1138,6 +1250,8 @@ export default {
         this.centent7 = "当前助理线索登记目标：0";
         this.centent8 = "当前助理线索登记完成率：0%";
         this.oldTakeNewCustomerNum = "老带新0人";
+        this.form.hospitalIdList = []
+        this.rewardAmountPeople = '当前助理在选中医院上门顾客 0 人'
       }
     },
   },
@@ -1195,5 +1309,9 @@ export default {
   padding: 20px 10px 0px 10px;
   box-sizing: border-box;
   margin-bottom: 10px;
+}
+.icon-info{
+  position: relative;
+  top: 4px;
 }
 </style>

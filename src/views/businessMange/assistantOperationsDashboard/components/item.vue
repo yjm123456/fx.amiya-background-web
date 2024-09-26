@@ -3,13 +3,13 @@
     <div class="center_content">
           <div class="center_item">
             <div class="item1" >
-              <div class="h2">新客业绩：<span>{{assistantPerformanceObj.newCustomerPerformance ? assistantPerformanceObj.newCustomerPerformance : 0 }}</span></div>
+              <div class="h2">新客业绩：<span class="f_w">{{assistantPerformanceObj.newCustomerPerformance ? assistantPerformanceObj.newCustomerPerformance : 0 }}</span></div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日业绩：{{assistantPerformanceObj.todayNewCustomerPerformance}}</div>
-                    <div >上期业绩：{{assistantPerformanceObj.lastMonthNewCustomerPerformance}}</div>
-                    <div >同期业绩：{{assistantPerformanceObj.lastYearNewCustomerPerformance}}</div>
-                    <div >目标业绩：{{assistantPerformanceObj.newCustomerPerformanceTarget}}</div>
+                    <div>当日业绩：<span  class="f_w">{{assistantPerformanceObj.todayNewCustomerPerformance}}</span></div>
+                    <div >上期业绩：<span  class="f_w">{{assistantPerformanceObj.lastMonthNewCustomerPerformance}}</span></div>
+                    <div >同期业绩：<span  class="f_w">{{assistantPerformanceObj.lastYearNewCustomerPerformance}}</span></div>
+                    <div >目标业绩：<span  class="f_w">{{assistantPerformanceObj.newCustomerPerformanceTarget}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>超出进度：
@@ -36,13 +36,13 @@
               </div>
             </div>
             <div class="item2" >
-              <div class="h2">老客业绩：<span>{{assistantPerformanceObj.oldCustomerPerformance ? assistantPerformanceObj.oldCustomerPerformance : 0 }}</span></div>
+              <div class="h2">老客业绩：<span class="f_w">{{assistantPerformanceObj.oldCustomerPerformance ? assistantPerformanceObj.oldCustomerPerformance : 0 }}</span></div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日业绩：{{assistantPerformanceObj.todayOldCustomerPerformance}}</div>
-                    <div >上期业绩：{{assistantPerformanceObj.lastMonthOldCustomerPerformance}}</div>
-                    <div >同期业绩：{{assistantPerformanceObj.lastYearOldCustomerPerformance}}</div>
-                    <div >目标业绩：{{assistantPerformanceObj.oldCustomerPerformanceTarget}}</div>
+                    <div>当日业绩：<span  class="f_w">{{assistantPerformanceObj.todayOldCustomerPerformance}}</span></div>
+                    <div >上期业绩：<span  class="f_w">{{assistantPerformanceObj.lastMonthOldCustomerPerformance}}</span></div>
+                    <div >同期业绩：<span  class="f_w">{{assistantPerformanceObj.lastYearOldCustomerPerformance}}</span></div>
+                    <div >目标业绩：<span  class="f_w">{{assistantPerformanceObj.oldCustomerPerformanceTarget}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>超出进度：
@@ -72,10 +72,10 @@
               <div class="h2">总业绩：<span>{{assistantPerformanceObj.totalPerformance ? assistantPerformanceObj.totalPerformance : 0 }}</span></div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日业绩：{{assistantPerformanceObj.todayTotalPerformance}}</div>
-                    <div >上期业绩：{{assistantPerformanceObj.lastMonthTotalPerformance}}</div>
-                    <div >同期业绩：{{assistantPerformanceObj.lastYearTotalPerformance}}</div>
-                    <div >目标业绩：{{assistantPerformanceObj.totalPerformanceTarget}}</div>
+                    <div>当日业绩：<span  class="f_w">{{assistantPerformanceObj.todayTotalPerformance}}</span></div>
+                    <div >上期业绩：<span  class="f_w">{{assistantPerformanceObj.lastMonthTotalPerformance}}</span></div>
+                    <div >同期业绩：<span  class="f_w">{{assistantPerformanceObj.lastYearTotalPerformance}}</span></div>
+                    <div >目标业绩：<span  class="f_w">{{assistantPerformanceObj.totalPerformanceTarget}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>超出进度：
@@ -185,7 +185,7 @@ export default{
 }
 .h5{
   font-size: 14px;
-  /* font-weight: bold; */
+  font-weight: bold;
 }
 .red{
   color: green;

@@ -18,9 +18,8 @@
               </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日线索：{{assistantPerformanceObj.firstTypeCurrentDay}}</div>
-                    <span >累计线索：</span>
-                    <span >{{assistantPerformanceObj.firstTypeTotal}}</span>
+                    <div>当日线索：<span class="f_w">{{assistantPerformanceObj.firstTypeCurrentDay}}</span></div>
+                    <span >累计线索：<span class="f_w">{{assistantPerformanceObj.firstTypeTotal}}</span></span>
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -53,9 +52,8 @@
               </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日线索：{{assistantPerformanceObj.secondTypeCurrentDay}}</div>
-                    <span >累计线索：</span>
-                    <span >{{assistantPerformanceObj.secondTypeTotal}}</span>
+                    <div>当日线索：<span class="f_w">{{assistantPerformanceObj.secondTypeCurrentDay}}</span></div>
+                    <span >累计线索：<span class="f_w">{{assistantPerformanceObj.secondTypeTotal}}</span></span>
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -87,9 +85,8 @@
               </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日线索：{{assistantPerformanceObj.thirdTypeCurrentDay}}</div>
-                    <span >累计线索：</span>
-                    <span >{{assistantPerformanceObj.thirdTypeTotal}}</span>
+                    <div>当日线索：<span class="f_w">{{assistantPerformanceObj.thirdTypeCurrentDay}}</span></div>
+                    <span >累计线索：<span class="f_w">{{assistantPerformanceObj.thirdTypeTotal}}</span></span>
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -109,9 +106,8 @@
               <div class="h2">总线索</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日线索：{{assistantPerformanceObj.totalTypeCurrentDay}}</div>
-                    <span >累计线索：</span>
-                    <span >{{assistantPerformanceObj.totalTypeTotal}}</span>
+                    <div>当日线索：<span class="f_w">{{assistantPerformanceObj.totalTypeCurrentDay}}</span></div>
+                    <span >累计线索：<span class="f_w">{{assistantPerformanceObj.totalTypeTotal}}</span></span>
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -211,7 +207,7 @@ export default{
 }
 .h5{
   font-size: 14px;
-  /* font-weight: bold; */
+  font-weight: bold;
 }
 .red{
   color: green;

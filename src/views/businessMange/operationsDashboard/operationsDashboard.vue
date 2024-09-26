@@ -94,7 +94,7 @@
 
         <!-- 漏斗图 -->
         <Card  class="m_b">
-          <div class="h3">新老客业绩转化漏斗</div>
+          <div class="h3">新老客转化周期漏斗</div>
           <!-- <Tabs type="card" v-model="active"  style="width:100%" >
               <TabPane label="整体" name="whole">
                 <div>
@@ -130,9 +130,39 @@
             :params="params"
             :selected4="selected4"
             :liveAnchorBaseInfos="liveAnchorBaseInfos"
+            :conversionCycleObj="conversionCycleObj"
           ></funnel>
         </Card>
-
+        <Card class="m_b">
+          <div class="list3">
+            <Card class="item3">
+              <div class="h3 t_c">主播分诊派单转化周期</div>
+              <cycleBar :barData="conversionCycleObj.sendCycleData" />
+            </Card>
+            <Card class="item3">
+              <div class="h3 t_c">主播分诊上门转化周期</div>
+              <cycleBar :barData="conversionCycleObj.toHospitalCycleData"/>
+            </Card>
+            <Card class="item3">
+              <div class="h3 t_c">当月老客复购率</div>
+              <cycleBar :barData="conversionCycleObj.oldCustomerRePurcheData" title="复购率"/>
+            </Card>
+          </div>
+      </Card>  
+        <!-- 面诊类型 -->
+        <Card  class="m_b">
+          <div class="h3">面诊类型--派单&业绩</div>
+          <div class="pie_list">
+            <Card  class="pie_item">
+              <div class="pie_title">派单量</div>
+              <pieItem3 :pieData="totalConsulationTypeNumber" :total="totalConsulationTypeNumberAll" title="总线索"/>
+            </Card>
+            <Card  class="pie_item">
+              <div class="pie_title">业绩</div>
+              <pieItem3 :pieData="totalConsulationType" :total="totalConsulationTypeAll" title="总业绩"/>
+            </Card>
+          </div>
+        </Card>
         <!-- 平台线索分析 -->
         <Card  class="m_b">
           <div class="h3">平台线索&业绩分析</div>
@@ -207,7 +237,7 @@
         <!-- 助理 -->
         <Card  class="m_b ">
           <!-- 平台切换 -->
-          <div class="tab" >
+          <!-- <div class="tab" >
             <div
               class="tab_item"
               v-for="(item, index) in platformList2"
@@ -218,9 +248,9 @@
               <i class="iconfont  icons" :class="item.icon"></i>
               <span>{{ item.name }}</span>
             </div>
-          </div>
+          </div> -->
           <div class="customer_bar_content">
-            <Card class="customer_bar">
+            <!-- <Card class="customer_bar">
               <div class="h3">助理线索分析</div>
               <div class="x_title">
                 <div>总分诊：{{CustomerFlowRateByEmployeeAndHospital.totalDistributeConsulationByEmployee}}</div>
@@ -228,15 +258,19 @@
                 <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByEmployee}}</div>
               </div>
               <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.employeeFlowRate" title="助理"/>
-            </Card>
+            </Card> -->
             <Card class="customer_bar">
-              <div class="h3">助理业绩分析</div>
-              <barItem :barItemData="customerObj"/>
+              <div class="h3">助理目标完成率</div>
+              <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData"  title="目标完成率" :completeRate="completeRate"/>
+            </Card>
+            <Card  class="customer_bar">
+              <div class="h3">助理业绩贡献</div>
+              <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData"  />
             </Card>
           </div>
           <!-- 机构 -->
           <div class="customer_bar_content mr">
-            <Card class="customer_bar">
+            <!-- <Card class="customer_bar">
               <div class="h3">机构线索分析</div>
               <div class="x_title">
                 <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByHospital}}</div>
@@ -244,7 +278,12 @@
                 <div>总成交：{{CustomerFlowRateByEmployeeAndHospital.totalDealByHospital}}</div>
               </div>
               <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.hospitalFlowRate" title="机构"/>
+            </Card> -->
+            <Card class="customer_bar">
+              <div class="h3">助理业绩分析</div>
+              <barItem :barItemData="customerObj"/>
             </Card>
+            
             <Card class="customer_bar">
               <div class="h3">机构业绩分析</div>
               <barItem :barItemData="hospitalObj"/>
@@ -312,6 +351,7 @@ import monthLine from "./components/monthLine.vue"
 import monthLine2 from "./components/monthLine2.vue"
 import pieItem from "./components/pieItem.vue"
 import pieItem2 from "./components/pieItem.vue"
+import pieItem3 from "./components/pieItem3.vue"
 import barItem from "./components/barItem.vue"
 import flowBarItem from "./components/3dBarItem.vue"
 import trafficConversionTable from "./components/trafficConversionTable.vue"
@@ -323,6 +363,8 @@ import customerAndHospital from "./components/customerAndHospital.vue"
 import funnel from "./components/funnel.vue"
 import tiktok from "./components/tiktok.vue"
 import vedio from "./components/vedio.vue"
+import customerBar from "./components/customerBar.vue"
+import cycleBar from "./components/cycleBar.vue"
 
 export default {
   components:{
@@ -342,7 +384,10 @@ export default {
     funnel,
     tiktok,
     vedio,
-    assistantTargetCompleteDataTable
+    assistantTargetCompleteDataTable,
+    customerBar,
+    pieItem3,
+    cycleBar
   },
   data() {
     return {
@@ -485,19 +530,19 @@ export default {
           isSelected: true,
         },
       ],
-      platformList2:[
-        {
-          name: "当月",
-          id: 1,
-          isSelected: true,
-        },
-        {
-          name: "历史",
-          id: 2,
-          isSelected: false,
-        },
+      // platformList2:[
+      //   {
+      //     name: "当月",
+      //     id: 1,
+      //     isSelected: true,
+      //   },
+      //   {
+      //     name: "历史",
+      //     id: 2,
+      //     isSelected: false,
+      //   },
        
-      ],
+      // ],
       // 详情model
       detailModel:false,
       titles:"",
@@ -527,7 +572,7 @@ export default {
       // 主播基础
       liveAnchorBaseInfos:[],
       // 线索 助理和机构
-      CustomerFlowRateByEmployeeAndHospital:{},
+      // CustomerFlowRateByEmployeeAndHospital:{},
       // 业绩饼图数据
       NewOrOldCustomerCompare:{},
       totalFlowRateByContentPlatFormTotalFlowRateNumber : 0,
@@ -541,7 +586,17 @@ export default {
       totalNewOrOldCustomerNumAchievement2:0,
       // 当月历史 总业绩
       totalIsHistoryPerformanceNumAchievement:[],
-      totalIsHistoryPerformanceNumAchievement2:0
+      totalIsHistoryPerformanceNumAchievement2:0,
+      // 助理目标完成率和助理业绩贡献柱状图
+      assiatantTargetCompleteAndPerformanceRateDataObj:{},
+      // 面诊类型人数
+      totalConsulationTypeNumber:[],
+      totalConsulationTypeNumberAll:0,
+      // 面诊类型业绩
+      totalConsulationType:[],
+      totalConsulationTypeAll:0,
+      // 转化周期
+      conversionCycleObj:{}
     };
   },
   methods: {
@@ -556,6 +611,7 @@ export default {
         if (res.code === 0) {
           // const { contentPalteForms } = res.data;
           this.completeRate = res.data.data;
+          sessionStorage.setItem('completeRate',res.data.data)
         }
       });
     },
@@ -581,10 +637,10 @@ export default {
       this.platformList[index].isSelected = !this.platformList[index].isSelected;
       this.getData()
     },
-    checkTab2(index, value) {
-      this.platformList2[index].isSelected = !this.platformList2[index].isSelected;
-      this.getCustomerFlowRateByEmployeeAndHospital()
-    },
+    // checkTab2(index, value) {
+    //   this.platformList2[index].isSelected = !this.platformList2[index].isSelected;
+    //   this.getCustomerFlowRateByEmployeeAndHospital()
+    // },
     selectTab(index, value) {
       this.selected = value
       // this.list[index].isSelected = !this.list[index].isSelected;
@@ -613,6 +669,7 @@ export default {
       this.getTotalAchievementAndDateSchedule()
       this.getGroupFlowRateCompare()
       this.getNewOrOldCustomerCompare()
+      this.getTransformCycleDataClick()
       this.$nextTick(()=>{
 
         this.$refs.whole.getPerformanceOperationData()
@@ -641,7 +698,9 @@ export default {
         this.getTotalFlowRateAndDateSchedule();
         this.getGroupFlowRateCompare();
         this.getFlowRateByContentPlatform();
-        this.getCustomerFlowRateByEmployeeAndHospital()
+        // this.getCustomerFlowRateByEmployeeAndHospital()
+        this.getassiatantTargetCompleteAndPerformanceRateData()
+        this.getTransformCycleDataClick()
         this.$nextTick(()=>{
           
           if(this.active == 'whole'){
@@ -686,7 +745,7 @@ export default {
       };
       api.getNewOrOldCustomerCompare(data).then((res) => {
         if (res.code == 0) {
-          const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer,totalBelongChannelPerformance,groupDaoDaoBelongChannelPerformance,groupJiNaBelongChannelPerformance,totalIsEffictivePerformance,groupDaoDaoIsEffictivePerformance,groupJiNaIsEffictivePerformance,totalIsHistoryPerformance,groupDaoDaoIsHistoryPerformance,groupJiNaIsHistoryPerformance,totalFlowRateByContentPlatForm,totalNewOrOldCustomerNum,totalIsHistoryPerformanceNum} = res.data.data
+          const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer,totalBelongChannelPerformance,groupDaoDaoBelongChannelPerformance,groupJiNaBelongChannelPerformance,totalIsEffictivePerformance,groupDaoDaoIsEffictivePerformance,groupJiNaIsEffictivePerformance,totalIsHistoryPerformance,groupDaoDaoIsHistoryPerformance,groupJiNaIsHistoryPerformance,totalFlowRateByContentPlatForm,totalNewOrOldCustomerNum,totalIsHistoryPerformanceNum,totalConsulationTypeNumber,totalConsulationType} = res.data.data
           // 平台业绩
           this.totalFlowRateByContentPlatFormAchievement =  totalFlowRateByContentPlatForm ? [
             {value:totalFlowRateByContentPlatForm.douYinNumber,name:'抖音',rate:totalFlowRateByContentPlatForm.douYinRate},
@@ -778,8 +837,24 @@ export default {
           this.totalIsHistoryPerformance2 = totalIsHistoryPerformance
           this.groupDaoDaoIsHistoryPerformance2 = groupDaoDaoIsHistoryPerformance
           this.groupJiNaIsHistoryPerformance2 = groupJiNaIsHistoryPerformance
-          
-        
+          // 面诊类型人数
+          this.totalConsulationTypeNumber = [
+            {value:totalConsulationTypeNumber.otherNumber,name:'其他',rate:totalConsulationTypeNumber.otherRate},
+            {value:totalConsulationTypeNumber.unConsulationNumber,name:'未面诊',rate:totalConsulationTypeNumber.unConsulationRate},
+            {value:totalConsulationTypeNumber.pictureConsulationNumber,name:'（助理）照片面诊',rate:totalConsulationTypeNumber.pictureConsulationRate},
+            {value:totalConsulationTypeNumber.videoConsulationNumber,name:'（主播）视频面诊',rate:totalConsulationTypeNumber.videoConsulationRate},
+            {value:totalConsulationTypeNumber.audioConsulationNumber,name:'（主播）语音面诊',rate:totalConsulationTypeNumber.audioConsulationRate},
+          ]
+          this.totalConsulationTypeNumberAll = totalConsulationTypeNumber.totalPerformanceNumber ? totalConsulationTypeNumber.totalPerformanceNumber : 0
+          // 面诊类型业绩
+          this.totalConsulationType = [
+            {value:totalConsulationType.otherNumber,name:'其他',rate:totalConsulationType.otherRate},
+            {value:totalConsulationType.unConsulationNumber,name:'未面诊',rate:totalConsulationType.unConsulationRate},
+            {value:totalConsulationType.pictureConsulationNumber,name:'（助理）照片面诊',rate:totalConsulationType.pictureConsulationRate},
+            {value:totalConsulationType.videoConsulationNumber,name:'（主播）视频面诊',rate:totalConsulationType.videoConsulationRate},
+            {value:totalConsulationType.audioConsulationNumber,name:'（主播）语音面诊',rate:totalConsulationType.audioConsulationRate},
+          ]
+          this.totalConsulationTypeAll = totalConsulationType.totalPerformanceNumber ? totalConsulationType.totalPerformanceNumber : 0
         }
       });
     },
@@ -1034,21 +1109,48 @@ export default {
       });
     },
     // 获取线索柱形图
-    getCustomerFlowRateByEmployeeAndHospital() {
+    // getCustomerFlowRateByEmployeeAndHospital() {
+    //   const {startDate,endDate} = this.params
+    //   const data = {
+    //     startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+    //     endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+    //     // currentMonth:this.platformList2.find((item) => item.id == 1).isSelected,
+    //     // history:this.platformList2.find((item) => item.id == 2).isSelected,
+    //   };
+    //   api.getCustomerFlowRateByEmployeeAndHospital(data).then((res) => {
+    //     if (res.code == 0) {
+    //       this.CustomerFlowRateByEmployeeAndHospital= res.data.data
+    //     }
+    //   });
+    // },
+    // 获取助理目标完成率和业绩占比  
+    getassiatantTargetCompleteAndPerformanceRateData(){
+        const {startDate,endDate,assistantId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            // assistantId:assistantId,
+        }
+        api.assiatantTargetCompleteAndPerformanceRateData(data).then(res=>{
+            if(res.code === 0){
+                this.assiatantTargetCompleteAndPerformanceRateDataObj =  res.data.data
+            }
+        })
+    },
+    // 根据条件获取平台线索分析
+    getTransformCycleDataClick(){
       const {startDate,endDate} = this.params
       const data = {
         startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
         endDate: this.$moment(endDate).format("YYYY-MM-DD"),
-        currentMonth:this.platformList2.find((item) => item.id == 1).isSelected,
-        history:this.platformList2.find((item) => item.id == 2).isSelected,
+        liveAnchorBaseId:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : this.selected4 == '璐璐' ? this.liveAnchorBaseInfos.find(item=>item.name == '璐璐').id :  ''
       };
-      api.getCustomerFlowRateByEmployeeAndHospital(data).then((res) => {
+      api.getTransformCycleData(data).then((res) => {
         if (res.code == 0) {
-          this.CustomerFlowRateByEmployeeAndHospital= res.data.data
+          this.conversionCycleObj = res.data.data
         }
-      });
-    },
-    
+      })
+    }
   },
 
   created(){
@@ -1124,6 +1226,7 @@ export default {
   font-weight: bold;
   padding: 0 10px;
   box-sizing: border-box;
+  
 }
 .m_b{
   margin-bottom: 10px;
@@ -1225,5 +1328,17 @@ export default {
 }
 .mr{
   margin-top: 10px;
+}
+.list3{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+.item3{
+  width: 33%;
+}
+.t_c{
+  text-align: center;
 }
 </style>

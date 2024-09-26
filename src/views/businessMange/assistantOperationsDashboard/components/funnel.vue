@@ -2,10 +2,10 @@
    
     <div class="center" v-if="isFlag == true">
             <Card class="content">
-                    <div class="h3">新客业绩</div>
-                    <div class="left_customer">
+                    <div class="h3">新客</div>
+                    <!-- <div class="left_customer">
                         <div class="r_content2">
-                            <span class="r_t2">成交能效</span>
+                            <span class="r_t2">转化周期</span>
                         </div>
                         <div  class="r_content2">
                             <span class="r_t2" style="margin-top:14%"><span class="num">{{funnelObj.newCustomerData.allocationConsulationToDealPrice}}</span>元</span>
@@ -22,6 +22,21 @@
                         <div  class="r_content5">
                             <span class="r_t2" style="margin-top:12%"><span class="num">{{funnelObj.newCustomerData.dealToPrice}}</span>元</span>
                         </div>
+                    </div> -->
+                    <div class="left_customer" v-if="selected == '整体'">
+                        <span class="r_t4">转化周期</span>
+                        <div class="r_t4" style="margin-top:312%"><span class="num" >{{assistantTransformCycleDataObj.totalSendCycle}}</span>天</div>
+                        <div class="r_t4" style="margin-top:84%"><span class="num">{{assistantTransformCycleDataObj.totalToHospitalCycle}}</span>天</div>
+                    </div>
+                    <div class="left_customer" v-else-if="selected == '有效'">
+                        <span class="r_t4">转化周期</span>
+                        <div class="r_t4" style="margin-top:312%"><span class="num" >{{assistantTransformCycleDataObj.effectiveSendCycle}}</span>天</div>
+                        <div class="r_t4" style="margin-top:84%"><span class="num">{{assistantTransformCycleDataObj.effectiveToHospitalCycle}}</span>天</div>
+                    </div>
+                    <div class="left_customer" v-else-if="selected == '潜在'">
+                        <span class="r_t4">转化周期</span>
+                        <div class="r_t4" style="margin-top:312%"><span class="num" >{{assistantTransformCycleDataObj.potionelSendCycle}}</span>天</div>
+                        <div class="r_t4" style="margin-top:84%"><span class="num">{{assistantTransformCycleDataObj.potionelToHospitalCycle}}</span>天</div>
                     </div>
                     <div class="new_customer">
                         <div class="center_data">
@@ -57,20 +72,20 @@
                     </div>
             </Card>
             <Card class="content2">
-                    <div class="h3">老客业绩</div>
+                    <div class="h3">老客</div>
                     <div class="old_customer">
                         <div class="left_old">
                             <div class="proportion2">2次复购率：<span  class="num">{{funnelObj.oldCustomerData.secondTimeBuyRateProportion}}</span>%</div>
                             <div class="proportion2">3次复购率：<span  class="num">{{funnelObj.oldCustomerData.thirdTimeBuyRateProportion}}</span>%</div>
                             <div class="proportion2">4次复购率：<span  class="num">{{funnelObj.oldCustomerData.fourthTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion2">5次及以上复购率：<span  class="num">{{funnelObj.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">5次复购率：<span  class="num">{{funnelObj.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
                         </div>
                         <div class="center_old">
                             <div class="people">总成交<div><span  class="num">{{funnelObj.oldCustomerData.totalDealPeople}}</span>人</div></div>
                             <div  class="people2">2次复购<div><span  class="num">{{funnelObj.oldCustomerData.secondDealPeople}}</span>人</div></div>
                             <div  class="people3">3次复购<div><span  class="num">{{funnelObj.oldCustomerData.thirdDealPeople}}</span>人</div></div>
                             <div  class="people4">4次复购<div><span  class="num">{{funnelObj.oldCustomerData.fourthDealCustomer}}</span>人</div></div>
-                            <div  class="people4">5次及以上复购<div><span  class="num">{{funnelObj.oldCustomerData.fifThOrMoreOrMoreDealCustomer}}</span>人</div></div>
+                            <div  class="people4">5次复购<div><span  class="num">{{funnelObj.oldCustomerData.fifThOrMoreOrMoreDealCustomer}}</span>人</div></div>
                         </div>
                         <div class="right_old">
                             <!-- <div class="r_text1">2次转化率：<span  class="num">{{funnelObj.oldCustomerData.secondTimeBuyRate}}</span>%</div>
@@ -78,6 +93,24 @@
                             <div  class="r_text3">4次转化率：<span  class="num">{{funnelObj.oldCustomerData.fourthTimeBuyRate}}</span>%</div>
                             <div  class="r_text4">5次及以上转化率：<span  class="num">{{funnelObj.oldCustomerData.fifthTimeOrMoreBuyRate}}</span>%</div> -->
                             <div  class="r_text5">复购率：<span  class="num">{{funnelObj.oldCustomerData.buyRate}}</span>%</div>
+                        </div>
+                        <div class="right_customer">
+                            <div class="r_content6">
+                                <span class="r_t2">转化周期</span>
+                            </div>
+                            <div  class="r_content2"  style="margin-top:-18px">
+                                <span class="r_t2"  style="margin-top:2%"><span class="num" >{{funnelObj.oldCustomerData.secondDealCycle}}</span>天</span>
+                            </div>
+                            <div  class="r_content4">
+                                <span class="r_t2" style="margin-top:29%"><span class="num">{{funnelObj.oldCustomerData.thirdDealCycle}}</span>天</span>
+                            </div>
+                            <div  class="r_content5">
+                                <span class="r_t2" style="margin-top:29%"><span class="num">{{funnelObj.oldCustomerData.fourthDealCycle}}</span>天</span>
+                            </div>
+                            <div  class="r_content5">
+                                <span class="r_t2" style="margin-top:25%"><span class="num">{{funnelObj.oldCustomerData.fifthDealCycle}}</span>天</span>
+                            </div>
+                            
                         </div>
                     </div>
             </Card>
@@ -92,7 +125,9 @@ import * as api from "@/api/amiyaAchievement";
 export default {
     props:{
         funnelObj:Object,
-        isFlag:Boolean
+        isFlag:Boolean,
+        assistantTransformCycleDataObj:Object,
+        selected:String
 
     },
   data() {
@@ -167,6 +202,7 @@ export default {
 }
 .content2{
      width:100%;
+     position: relative;
 //     height: 500px;
 //     background-image: url(../../../../assets/images/old.png) ;
 //     background-size: 100% 100%;
@@ -206,8 +242,8 @@ export default {
 }
 .left_customer{
     position: absolute;
-    left: -3%;
-    top:12%;
+    left: 7%;
+    top:14%;
 }
 .r_content,.r_content2,.r_content3,.r_content4,.r_content5,.r_content6{
     width: 200px;
@@ -291,22 +327,22 @@ position: absolute
 .center_old{
     position: absolute;
     top: 8%;
-    left: 48%;
+    left: 50%;
     text-align: center;
 }
 .people{
     /* width:140px; */
 }
 .people2{
-    margin-top: 54%;
+    margin-top: 110%;
     /* width:100px; */
 }
 .people3{
-    margin-top: 57%;
+    margin-top: 102%;
     /* width:80px; */
 }
 .people4{
-    margin-top: 50%;
+    margin-top: 92%;
 }
 
 .right_old{
@@ -335,5 +371,10 @@ position: absolute
     // margin-left: 39%;
     // margin-top: -109%;
     // width: 160px;
+}
+.right_customer{
+    position: absolute;
+    right: -8%;
+    top:12%;
 }
 </style>

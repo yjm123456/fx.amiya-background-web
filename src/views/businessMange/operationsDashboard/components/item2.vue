@@ -6,9 +6,8 @@
               <div class="h2">直播前</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日线索：{{totalFlowRateAndDateSchedule.todayBeforeLivingClue}}</div>
-                    <div class="item_left">累计线索</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalBeforeLivingClue}}</div>
+                    <div>当日线索：<span class="f_w">{{totalFlowRateAndDateSchedule.todayBeforeLivingClue}}</span></div>
+                    <div class="item_left">累计线索：<span class="f_w">{{totalFlowRateAndDateSchedule.totalBeforeLivingClue}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -29,9 +28,9 @@
               <div class="h2">直播中</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日线索：{{totalFlowRateAndDateSchedule.todayLivingClue}}</div>
-                    <div class="item_left">累计线索</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalLivingClue}}</div>
+                    <div>当日线索：<span  class="f_w">{{totalFlowRateAndDateSchedule.todayLivingClue}}</span></div>
+                    <div class="item_left">累计线索：<span class="f_w">{{totalFlowRateAndDateSchedule.totalLivingClue}}</span></div>
+                    
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -52,9 +51,9 @@
               <div class="h2">直播后</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日线索：{{totalFlowRateAndDateSchedule.todayTotalAfterLivingClue}}</div>
-                    <div class="item_left">累计线索</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalAfterLivingClue}}</div>
+                    <div>当日线索：<span  class="f_w">{{totalFlowRateAndDateSchedule.todayTotalAfterLivingClue}}</span></div>
+                    <div class="item_left">累计线索：<span class="f_w">{{totalFlowRateAndDateSchedule.totalAfterLivingClue}}</span></div>
+                    
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -75,9 +74,9 @@
               <div class="h2">总线索</div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日线索：{{totalFlowRateAndDateSchedule.todayClue}}</div>
-                    <div class="item_left">累计线索</div>
-                    <div class="h3">{{totalFlowRateAndDateSchedule.totalClue}}</div>
+                    <div>当日线索：<span  class="f_w">{{totalFlowRateAndDateSchedule.todayClue}}</span></div>
+                    <div class="item_left">累计线索：<span class="f_w">{{totalFlowRateAndDateSchedule.totalClue}}</span></div>
+                    
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -176,4 +175,5 @@ export default{
 .f_w{
   font-weight: bold;
 }
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div ref="dom" :style="{ width: '100%', height: '800px' }"></div>
+    <div ref="dom" :style="{ width: '100%', height: '200px' }"></div>
   </div>
 </template>
 
@@ -11,9 +11,8 @@ import * as echarts from "echarts";
 echarts.registerTheme("tdTheme", tdTheme);
 export default {
   props: {
-    assiatantTargetCompleteAndPerformanceRateData: Array,
-    title:String,
-    completeRate:Number
+    barData: Array,
+    title:String
   },
   data() {
     return {
@@ -26,8 +25,8 @@ export default {
       let name = [];
       let list1 = [];
       value.map((item) => {
-        name.unshift(item.id);
-        list1.unshift(item.name);
+        name.unshift(item.key);
+        list1.unshift(item.value);
       });
       let option = {
         tooltip: {
@@ -35,30 +34,20 @@ export default {
             axisPointer: {
                 type: 'shadow'
             },
-            formatter:this.title == '目标完成率' ? (params) => {
+            formatter: this.title == '复购率' ? (params) => {
                 let list = []
                 let listItem = ''
                 let axisValueLabel = params[0].axisValueLabel 
-                
                 for (let i = 0; i < params.length; i++) {
-                   this.completeRate > params[i].data ?    list.push(
+                   list.push(
                         '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
                         params[i].color +
                         ';margin-right: 5px;border-radius: 50%;}"></i>' +
                         '<span style="display:inline-block;">' +
                         params[i].name +
-                       '</span><span style="display:inline-block;color:red">&nbsp&nbsp' +
-                        params[i].data  +   '%'  +
-                        '</span>' 
-                    )  : list.push(
-                        '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
-                        params[i].color +
-                        ';margin-right: 5px;border-radius: 50%;}"></i>' +
-                        '<span style="display:inline-block;">' +
-                        params[i].name +
-                       '</span><span style="display:inline-block;">&nbsp&nbsp' +
-                        params[i].data  +   '%'  +
-                        '</span>' 
+                        '</span><span style="display:inline-block;">&nbsp&nbsp' +
+                        params[i].value  +   '%'  +
+                        '</span>'
                     ) 
 
                 }
@@ -69,7 +58,6 @@ export default {
                 let list = []
                 let listItem = ''
                 let axisValueLabel = params[0].axisValueLabel 
-                
                 for (let i = 0; i < params.length; i++) {
                    list.push(
                         '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
@@ -78,7 +66,7 @@ export default {
                         '<span style="display:inline-block;">' +
                         params[i].name +
                         '</span><span style="display:inline-block;">&nbsp&nbsp' +
-                        params[i].data  +   '%'  +
+                        params[i].value  +   '天'  +
                         '</span>'
                     ) 
 
@@ -100,14 +88,16 @@ export default {
           },
         ],
         grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
+            top:'1%',
+            left: '1%',
+            right: '8%',
+            bottom: '2%',
             containLabel: true
         },
         xAxis: {
             type: 'value',
-            boundaryGap: [0, 0.01]
+            boundaryGap: [0, 0.01],
+            name: '天',
         },
         series: [
           {
@@ -127,7 +117,7 @@ export default {
     off(window, "resize", this.myChart.resize);
   },
   watch: {
-    assiatantTargetCompleteAndPerformanceRateData(value) {
+    barData(value) {
       // this.$nextTick(() => {
       this.myEcharts(value);
       // });
@@ -137,8 +127,8 @@ export default {
 </script>
 <style lang="less" scoped>
 .wrapper {
-  width: 100%;
-  height: 800px;
+  width: 95%;
+  height: 200px;
   // margin-left: 5%;
 }
 </style>

@@ -73,7 +73,7 @@
     </Card>
     <!-- 漏斗图 -->
     <Card class="mr">
-      <div class="h2">新老客业绩转化漏斗</div>
+      <div class="h2">新老客转化周期漏斗</div>
       <!-- tab切换 -->
       <div class="tab_content">
         <div class="tab">
@@ -98,16 +98,91 @@
           <div class="h2">老客业绩</div>
           <funnel :funnelData="funnelObj.oldCustomerData"/>
         </Card> -->
-        <funnel :funnelObj="funnelObj" :isFlag="isFlag"/>
+        <!-- 新客转化周期根据助理分诊派单转化周期接口获取 -->
+        <funnel :funnelObj="funnelObj" :isFlag="isFlag" :assistantTransformCycleDataObj="assistantTransformCycleDataObj" :selected="selected"/>
+      </div>
+    </Card>
+    <Card class="mr ">
+      <div class="list3">
+        <Card class="item3">
+          <div class="h2 h3">助理分诊派单转化周期</div>
+          <cycleBar :barData="assistantTransformCycleDataObj.sendCycleData"/>
+        </Card>
+        <Card class="item3">
+          <div class="h2 h3">助理分诊上门转化周期</div>
+          <cycleBar :barData="assistantTransformCycleDataObj.toHospitalCycleData"/>
+        </Card>
+        <Card class="item3">
+          <div class="h2 h3">当月老客复购率</div>
+          <cycleBar :barData="assistantTransformCycleDataObj.oldCustomerRePurcheData" title="复购率"/>
+        </Card>
+      </div>
+    </Card>  
+    <!-- 助理目标完成率和业绩占比 -->
+    <Card class="mr">
+      <div class="h2 h3">助理--目标完成率&业绩贡献</div>
+      
+      <div  class="list ">
+        <Card class="item">
+          <div class="h2">助理目标完成率</div>
+          <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData"  title="目标完成率" :completeRate="completeRate"/>
+        </Card>
+        <Card  class="item">
+          <div class="h2">助理业绩贡献</div>
+          <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData"  />
+        </Card>
+      </div>
+    </Card>
+    <!-- 机构线索分析和机构业绩分析 -->
+    <Card class="mr">
+      <div class="h2 h3">机构--线索&业绩</div>
+      <!-- 平台切换 -->
+      <div class="tab2" >
+        <div
+          class="tab_item2"
+          v-for="(item, index) in platformList2"
+          :key="index"
+          @click="checkTab2(index, item)"
+          :class="{ active2: item.isSelected }"
+        >
+          <span>{{ item.name }}</span>
+        </div>
+      </div>
+      <div class="list">
+        <Card class="item">
+          <div class="h2">机构线索分析</div>
+          <div class="x_title">
+            <div>总派单：{{assistantHospitalCluesDataObj.totalSendOrderCount}}</div>
+            <div>总上门：{{assistantHospitalCluesDataObj.totalVisitCount}}</div>
+            <div>总成交：{{assistantHospitalCluesDataObj.totalDealCount}}</div>
+          </div>
+          <hospitalBar :hospitalBarData="assistantHospitalCluesDataObj.items" />
+        </Card>
+        <Card class="item">
+          <div class="h2">机构业绩分析</div>
+          <barItem :barItemData="assistantHospitalPerformanceData"/>
+        </Card>
       </div>
     </Card>
     <!-- 饼图 -->
     <Card class="mr">
+      <div class="h2 h3">面诊类型--派单&业绩</div>
+      <div  class="list h3">
+        <Card class="item">
+          <div class="h2">派单量</div>
+          <pieItem3 :pieData="consulation.data" :total="consulation.total" title="总线索"/>
+        </Card>
+        <Card  class="item">
+          <div class="h2">业绩</div>
+          <pieItem3 :pieData="consulationPerformance.data" :total="consulationPerformance.total" title="总业绩"/>
+        </Card>
+      </div>
+
       <div class="h2 h3">线索分类--线索&业绩</div>
       <div  class="list h3">
         <Card class="item">
           <div class="h2">线索人数</div>
-          <pieItem2 :pieData="typeCount.data" :total="typeCount.total" title="总线索"/>
+          <pieItem2 :pieData="typeCount.data" :total="typeCount.total" title="总派单"/>
         </Card>
         <Card  class="item">
           <div class="h2">线索业绩</div>
@@ -149,52 +224,7 @@
         </Card>
       </div>
     </Card>
-    <!-- 助理目标完成率和业绩占比 -->
-    <Card class="mr">
-      <div class="h2 h3">助理--目标完成率&业绩贡献</div>
-      
-      <div  class="list ">
-        <Card class="item">
-          <div class="h2">助理目标完成率</div>
-          <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData"  />
-        </Card>
-        <Card  class="item">
-          <div class="h2">助理业绩贡献</div>
-          <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData"  />
-        </Card>
-      </div>
-    </Card>
-    <!-- 机构线索分析和机构业绩分析 -->
-    <Card class="mr">
-      <div class="h2 h3">机构--线索&业绩</div>
-      <!-- 平台切换 -->
-      <div class="tab2" >
-        <div
-          class="tab_item2"
-          v-for="(item, index) in platformList2"
-          :key="index"
-          @click="checkTab2(index, item)"
-          :class="{ active2: item.isSelected }"
-        >
-          <span>{{ item.name }}</span>
-        </div>
-      </div>
-      <div class="list">
-        <Card class="item">
-          <div class="h2">助理线索分析</div>
-          <div class="x_title">
-            <div>总派单：{{assistantHospitalCluesDataObj.totalSendOrderCount}}</div>
-            <div>总上门：{{assistantHospitalCluesDataObj.totalVisitCount}}</div>
-            <div>总成交：{{assistantHospitalCluesDataObj.totalDealCount}}</div>
-          </div>
-          <hospitalBar :hospitalBarData="assistantHospitalCluesDataObj.items" />
-        </Card>
-        <Card class="item">
-          <div class="h2">助理业绩分析</div>
-          <barItem :barItemData="assistantHospitalPerformanceData"/>
-        </Card>
-      </div>
-    </Card>
+    
    
     
   </Card>
@@ -212,7 +242,9 @@ import monthLine2 from "./components/monthLine2.vue"
 import funnel from "./components/funnel.vue"
 import pieItem from "./components/pieItem.vue"
 import pieItem2 from "./components/pieItem2.vue"
+import pieItem3 from "./components/pieItem3.vue"
 import customerBar from "./components/customerBar.vue"
+import cycleBar from "./components/cycleBar.vue"
 import barItem from "./components/barItem.vue"
 import hospitalBar from "./components/hospitalBar.vue"
 export default {
@@ -226,13 +258,15 @@ export default {
     barItem,
     hospitalBar,
     items2,
-    pieItem2
+    pieItem2,
+    pieItem3,
+    cycleBar
   },
   data() {
     return {
-      list: ["全部业绩","有效业绩", "潜在业绩"],
+      list: ["整体","有效", "潜在"],
       list2: ["业绩","线索"],
-      selected:'全部业绩',
+      selected:'整体',
       selected2:'业绩',
       // 时间进度
       completeRate: 0,
@@ -287,6 +321,10 @@ export default {
       typeCount:[],
       // 客资业绩
       typePerformance:[],
+      // 客户面诊类型派单量
+      consulation:[],
+      // 客户面诊类型业绩
+      consulationPerformance:[],
       platformList2:[
         {
           name: "当月",
@@ -298,8 +336,9 @@ export default {
           id: 2,
           isSelected: false,
         },
-       
       ],
+      // 转化周期
+      assistantTransformCycleDataObj:{}
     };
   },
   methods: {
@@ -318,6 +357,7 @@ export default {
         if (res.code === 0) {
           // const { contentPalteForms } = res.data;
           this.completeRate = res.data.data;
+          // sessionStorage.setItem('completeRate',res.data.data)
         }
       });
     },
@@ -335,6 +375,7 @@ export default {
       this.getassiatantTargetCompleteAndPerformanceRateData()
       this.getassistantHospitalCluesData()
       this.getassistantHospitalPerformanceData()
+      this.getAssistantTransformCycleDataClick()
     },
     // 根据职位id获取员工
     getEmployeeByPositionIdAdmin(){
@@ -387,7 +428,7 @@ export default {
             startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
             endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
             assistantId:assistantId,
-            isEffectiveCustomerData:this.selected == '全部业绩' ? null : this.selected == '有效业绩' ? true : false,
+            isEffectiveCustomerData:this.selected == '整体' ? null : this.selected == '有效' ? true : false,
         }
         api.assistantPerformanceFilterData(data).then(res=>{
             if(res.code === 0){
@@ -406,7 +447,7 @@ export default {
         }
         api.analysisData(data).then(res=>{
             if(res.code === 0){
-                const {distributeConsulationData ,performanceEffictiveOrNoData,sendOrderData,performanceHistoryOrNoData,customerDealData,performanceNewCustonerOrNoData,typeCount,typePerformance} = res.data.data
+                const {distributeConsulationData ,performanceEffictiveOrNoData,sendOrderData,performanceHistoryOrNoData,customerDealData,performanceNewCustonerOrNoData,typeCount,typePerformance,consulation,consulationPerformance} = res.data.data
                 // 有效/潜在分诊量
                 this.distributeConsulationData = [
                   {name:'有效',value:distributeConsulationData.effictiveNumber,rate:distributeConsulationData.effictiveRate},
@@ -447,6 +488,10 @@ export default {
                 this.typeCount = typeCount 
                 // 客资业绩
                 this.typePerformance = typePerformance
+                // 客户面诊类型派单量
+                this.consulation = consulation 
+                // 客户面诊类型业绩
+                this.consulationPerformance = consulationPerformance
                 
                 
 
@@ -497,6 +542,21 @@ export default {
             }
         })
     },
+    // 转化周期
+    getAssistantTransformCycleDataClick(){
+        const {startDate,endDate,assistantId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            assistantId:assistantId,
+        }
+        api.getAssistantTransformCycleData(data).then(res=>{
+            if(res.code === 0){
+                this.assistantTransformCycleDataObj =  res.data.data
+
+            }
+        })
+    },
     // 漏斗图 有效潜在切换
     selectTab(index, value) {
       this.selected = value;
@@ -516,7 +576,6 @@ export default {
   created() {
     this.getEmployeeByPositionIdAdmin();
     setTimeout(()=>{
-
         this.getData();
     },1000)
   },
@@ -613,5 +672,13 @@ export default {
   position: absolute;
   right: 12%;
   top:20px;
+}
+.list3{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.item3{
+  width: 33%;
 }
 </style>

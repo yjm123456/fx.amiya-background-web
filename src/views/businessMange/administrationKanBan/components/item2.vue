@@ -379,6 +379,7 @@ export default {
 }
 .h1{
   font-size: 20px;
+  font-weight: bold;
 }
 .h2 {
   font-size: 16px;
@@ -389,7 +390,7 @@ export default {
 }
 .h5 {
   font-size: 14px;
-  /* font-weight: bold; */
+  font-weight: bold;
 }
 .red {
   color: green;

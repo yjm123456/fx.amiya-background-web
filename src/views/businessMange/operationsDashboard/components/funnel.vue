@@ -17,7 +17,7 @@
 
     <div class="center" v-if="isFlag == true">
             <Card class="content">
-                    <div class="h3">新客业绩</div>
+                    <div class="h3">新客</div>
                     <!-- <div class="new_left">
                         <div >
                             <div>
@@ -30,9 +30,9 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="left_customer">
+                    <!-- <div class="left_customer">
                         <div class="r_content6">
-                            <span class="r_t2">成交能效</span>
+                            <span class="r_t2">转化周期</span>
                         </div>
                         <div  class="r_content2" style="margin-top:-18px">
                             <span class="r_t2" ><span class="num">{{performance.newCustomerData.flowClueToDealPrice}}</span>元</span>
@@ -52,6 +52,21 @@
                         <div  class="r_content5">
                             <span class="r_t2" style="margin-top:12%"><span class="num">{{performance.newCustomerData.dealToPrice}}</span>元</span>
                         </div>
+                    </div> -->
+                    <div class="left_customer" v-if="selected == '整体'">
+                        <div>转化周期</div>
+                        <div style="margin-top:357%"><span class="num" >{{conversionCycleObj.totalSendCycle}}</span>天</div>
+                        <div style="margin-top:70%"><span class="num">{{conversionCycleObj.totalToHospitalCycle}}</span>天</div>
+                    </div>
+                    <div class="left_customer" v-else-if="selected == '有效'">
+                        <div>转化周期</div>
+                        <div style="margin-top:357%"><span class="num" >{{conversionCycleObj.effectiveSendCycle}}</span>天</div>
+                        <div style="margin-top:70%"><span class="num">{{conversionCycleObj.effectiveToHospitalCycle}}</span>天</div>
+                    </div>
+                    <div class="left_customer"  v-else-if="selected == '潜在'">
+                        <div>转化周期</div>
+                        <div style="margin-top:357%"><span class="num" >{{conversionCycleObj.potionelSendCycle}}</span>天</div>
+                        <div style="margin-top:70%"><span class="num">{{conversionCycleObj.potionelToHospitalCycle}}</span>天</div>
                     </div>
                     <div class="new_customer">
                         <div class="center_data">
@@ -67,14 +82,14 @@
                             <div class="r_content6">
                                 <span class="r_t2">实际值</span>
                                 <!-- <span  class="r_t">累计健康值</span> -->
-                                <span class="r_t3">当月健康值</span>
+                                <span class="r_t3">健康值</span>
                             </div>
                             <!-- <div  class="r_content">
                                 <span class="r_t2">退卡率：<span class="num">{{performance.newCustomerData.refundCardRate}}</span>%</span>
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.refundCardRateHealthValueThisMonth}}</span>%</span>
                             </div> -->
                             <div  class="r_content">
-                                <span class="r_t2" >线索有效率：<span class="num" :style="{color:performance.newCustomerData.clueEffictiveRate < performance.newCustomerData.clueEffictiveRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.clueEffictiveRate}}</span>%</span>
+                                <span class="r_t2" >有效率：<span class="num" :style="{color:performance.newCustomerData.clueEffictiveRate < performance.newCustomerData.clueEffictiveRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.clueEffictiveRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.addWeChatRateHealthValueSum}}%</span> -->
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.clueEffictiveRateHealthValueThisMonth}}</span>%</span>
                             </div>
@@ -84,14 +99,14 @@
                                 <span  class="r_t3"><span class="num">{{performance.newCustomerData.addWeChatRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content3">
-                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:performance.newCustomerData.sendOrderRate < performance.newCustomerData.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.sendOrderRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:17%">派单率：<span class="num" :style="{color:performance.newCustomerData.sendOrderRate < performance.newCustomerData.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.sendOrderRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.sendOrderRateHealthValueSum}}%</span> -->
-                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.newCustomerData.sendOrderRateHealthValueThisMonth}}</span>%</span>
+                                <span  class="r_t3" style="margin-top:17%"><span class="num">{{performance.newCustomerData.sendOrderRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:performance.newCustomerData.toHospitalRate < performance.newCustomerData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.toHospitalRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:12%">上门率：<span class="num" :style="{color:performance.newCustomerData.toHospitalRate < performance.newCustomerData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.toHospitalRate}}</span>%</span>
                                 <!-- <span  class="r_t">{{performance.newCustomerData.toHospitalRateHealthValueSum}}%</span> -->
-                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.newCustomerData.toHospitalRateHealthValueThisMonth}}</span>%</span>
+                                <span  class="r_t3" style="margin-top:12%"><span class="num">{{performance.newCustomerData.toHospitalRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content5">
                                 <span class="r_t2" style="margin-top:14%">成交率：<span class="num" :style="{color:performance.newCustomerData.dealRate < performance.newCustomerData.dealRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.newCustomerData.dealRate}}</span>%</span>
@@ -102,20 +117,20 @@
                     </div>
             </Card>
             <Card class="content2">
-                    <div class="h3">老客业绩</div>
+                    <div class="h3">老客</div>
                     <div class="old_customer">
                         <div class="left_old">
                             <div class="proportion2">2次复购率：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRateProportion}}</span>%</div>
                             <div class="proportion2">3次复购率：<span  class="num">{{performance.oldCustomerData.thirdTimeBuyRateProportion}}</span>%</div>
                             <div class="proportion2">4次复购率：<span  class="num">{{performance.oldCustomerData.fourthTimeBuyRateProportion}}</span>%</div>
-                            <div class="proportion2">5次及以上复购率：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
+                            <div class="proportion2">5次复购率：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRateProportion}}</span>%</div>
                         </div>
                         <div class="center_old">
                             <div class="people">总成交<div><span  class="num">{{performance.oldCustomerData.totalDealPeople}}</span>人</div></div>
                             <div  class="people2">2次复购<div><span  class="num">{{performance.oldCustomerData.secondDealPeople}}</span>人</div></div>
                             <div  class="people3">3次复购<div><span  class="num">{{performance.oldCustomerData.thirdDealPeople}}</span>人</div></div>
                             <div  class="people4">4次复购<div><span  class="num">{{performance.oldCustomerData.fourthDealCustomer}}</span>人</div></div>
-                            <div  class="people4">5次及以上复购<div><span  class="num">{{performance.oldCustomerData.fifThOrMoreOrMoreDealCustomer}}</span>人</div></div>
+                            <div  class="people4">5次复购<div><span  class="num">{{performance.oldCustomerData.fifThOrMoreOrMoreDealCustomer}}</span>人</div></div>
                         </div>
                         <div class="right_old">
                             <!-- <div class="r_text1">2次转化率：<span  class="num">{{performance.oldCustomerData.secondTimeBuyRate}}</span>%</div>
@@ -123,6 +138,23 @@
                             <div  class="r_text3">4次转化率：<span  class="num">{{performance.oldCustomerData.fourthTimeBuyRate}}</span>%</div>
                             <div  class="r_text4">5次及以上转化率：<span  class="num">{{performance.oldCustomerData.fifthTimeOrMoreBuyRate}}</span>%</div> -->
                             <div  class="r_text5">复购率：<span  class="num">{{performance.oldCustomerData.buyRate}}</span>%</div>
+                        </div>
+                        <div class="right_customer">
+                            <div class="r_content6">
+                                <span class="r_t2">转化周期</span>
+                            </div>
+                            <div  class="r_content2" style="margin-top:-32px">
+                                <span class="r_t2" ><span class="num">{{performance.oldCustomerData.secondDealCycle}}</span>天</span>
+                            </div>
+                            <div  class="r_content3">
+                                <span class="r_t2" style="margin-top:29%"><span class="num">{{performance.oldCustomerData.thirdDealCycle}}</span>天</span>
+                            </div>
+                            <div  class="r_content4">
+                                <span class="r_t2" style="margin-top:29%"><span class="num">{{performance.oldCustomerData.fourthDealCycle}}</span>天</span>
+                            </div>
+                            <div  class="r_content5">
+                                <span class="r_t2" style="margin-top:29%"><span class="num">{{performance.oldCustomerData.fifthDealCycle}}</span>天</span>
+                            </div>
                         </div>
                     </div>
             </Card>
@@ -139,13 +171,14 @@ export default {
         active:String,
         selected4:String,
         params:Object,
-        liveAnchorBaseInfos:Array
+        liveAnchorBaseInfos:Array,
+        conversionCycleObj:Object
 
     },
   data() {
     return {
-      selected: "全部业绩",
-      list: ["全部业绩","有效业绩", "潜在业绩"],
+      selected: "整体",
+      list: ["整体","有效", "潜在"],
       isFlag:false,
       performance:{}
     };
@@ -162,7 +195,7 @@ export default {
             year:this.$moment(this.params.endDate).format("YYYY")? this.$moment(this.params.endDate).format("YYYY") : null,
             month:Number(this.$moment(this.params.endDate).format("MM")) >= 10 ? this.$moment(this.params.endDate).format("MM") : this.$moment(this.params.endDate).format("MM"),
             // contentPlatFormId:this.active == 'tiktok' ? this.params.contentPalteForms.find(item=>item.contentPlatformName == '抖音').id : this.active == 'vedio' ?  this.params.contentPalteForms.find(item=>item.contentPlatformName == '视频号').id : '',
-            isEffectiveCustomerData:this.selected == '全部业绩' ? null : this.selected == '有效业绩' ? true : false,
+            isEffectiveCustomerData:this.selected == '整体' ? null : this.selected == '有效' ? true : false,
             contentPlatFormId:'',
             liveAnchorBaseId:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : this.selected4 == '璐璐' ? this.liveAnchorBaseInfos.find(item=>item.name == '璐璐').id :  ''
 
@@ -230,6 +263,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    overflow-x: hidden;
 }
 .content{
    width:100%;
@@ -244,6 +278,7 @@ export default {
 }
 .content2{
      width:100%;
+     position: relative;
 //     height: 500px;
 //     background-image: url(../../../../assets/images/old.png) ;
 //     background-size: 100% 100%;
@@ -283,8 +318,13 @@ export default {
 }
 .left_customer{
     position: absolute;
-    left: -3%;
-    top:12%;
+    left: 10%;
+    top:14%;
+}
+.right_customer{
+    position: absolute;
+    right: -8%;
+    top:18%;
 }
 .r_content,.r_content2,.r_content3,.r_content4,.r_content5,.r_content6{
     width: 200px;
@@ -296,20 +336,21 @@ export default {
     margin-top: 8%;
 }
 .r_content2{
-    margin-top: 6%;
+    margin-top: 15%;
 }
 .r_content3{
-    margin-top: 8%;
+    margin-top: 3%;
 }
 .r_content4{
-    margin-top: 5%;
+    margin-top: 8%;
 }
 .r_content5{
-    margin-top: 5%;
+    margin-top: 6%;
 }
 .r_content6{
     margin-bottom: 23%;
 }
+
 .new_left{
 position: absolute
 }
@@ -324,6 +365,7 @@ position: absolute
     text-align: center;
     margin-top: 4%;
 }
+
 .r_t3{
     width: 160px;
     /* margin-right: 6%; */
@@ -368,22 +410,22 @@ position: absolute
 .center_old{
     position: absolute;
     top: 8%;
-    left: 48%;
+    left: 50%;
     text-align: center;
 }
 .people{
     /* width:140px; */
 }
 .people2{
-    margin-top: 54%;
+    margin-top: 105%;
     /* width:100px; */
 }
 .people3{
-    margin-top: 57%;
+    margin-top: 101%;
     /* width:80px; */
 }
 .people4{
-    margin-top: 50%;
+    margin-top: 97%;
 }
 
 .right_old{

@@ -840,7 +840,6 @@ export default {
           // 面诊类型人数
           this.totalConsulationTypeNumber = [
             {value:totalConsulationTypeNumber.otherNumber,name:'其他',rate:totalConsulationTypeNumber.otherRate},
-            {value:totalConsulationTypeNumber.unConsulationNumber,name:'未面诊',rate:totalConsulationTypeNumber.unConsulationRate},
             {value:totalConsulationTypeNumber.pictureConsulationNumber,name:'（助理）照片面诊',rate:totalConsulationTypeNumber.pictureConsulationRate},
             {value:totalConsulationTypeNumber.videoConsulationNumber,name:'（主播）视频面诊',rate:totalConsulationTypeNumber.videoConsulationRate},
             {value:totalConsulationTypeNumber.audioConsulationNumber,name:'（主播）语音面诊',rate:totalConsulationTypeNumber.audioConsulationRate},
@@ -849,7 +848,6 @@ export default {
           // 面诊类型业绩
           this.totalConsulationType = [
             {value:totalConsulationType.otherNumber,name:'其他',rate:totalConsulationType.otherRate},
-            {value:totalConsulationType.unConsulationNumber,name:'未面诊',rate:totalConsulationType.unConsulationRate},
             {value:totalConsulationType.pictureConsulationNumber,name:'（助理）照片面诊',rate:totalConsulationType.pictureConsulationRate},
             {value:totalConsulationType.videoConsulationNumber,name:'（主播）视频面诊',rate:totalConsulationType.videoConsulationRate},
             {value:totalConsulationType.audioConsulationNumber,name:'（主播）语音面诊',rate:totalConsulationType.audioConsulationRate},

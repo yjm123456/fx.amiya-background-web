@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="allNum" :style="{top: '118px'}" v-if="title">{{title}}
+    <div class="allNum" :style="{top: '92px'}" v-if="title">{{title}}
       <span style="font-size:14px;">
       ({{total}} {{title == '总线索' ? '人' : 'w'}})
       </span>

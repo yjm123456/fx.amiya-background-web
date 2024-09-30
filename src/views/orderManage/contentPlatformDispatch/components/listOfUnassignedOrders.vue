@@ -730,7 +730,8 @@ export default {
             if (res.code === 0) {
               this.editLoading = false;
               this.cancel("form");
-              this.getOnlyMainHospitalOrderClick();
+              // this.getOnlyMainHospitalOrderClick();
+              this.handlePageChange(this.$refs.pages.currentPage);
               this.$Message.success({
                 content: "修改成功",
                 duration: 3,

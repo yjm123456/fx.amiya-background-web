@@ -2627,7 +2627,8 @@ export default {
                 if (res.code === 0) {
                   this.isLoading = false;
                   this.cancel("confirmForm");
-                  this.getSendOrderInfo();
+                  // this.getSendOrderInfo();
+                  this.handlePageChange(this.$refs.pages.currentPage);
                   this.$Message.success({
                     content: "确认成功",
                     duration: 3,
@@ -2646,7 +2647,8 @@ export default {
             if (res.code === 0) {
               this.isLoading = false;
               this.cancel("confirmForm");
-              this.getSendOrderInfo();
+              // this.getSendOrderInfo();
+              this.handlePageChange(this.$refs.pages.currentPage);
               this.$Message.success({
                 content: "确认成功",
                 duration: 3,
@@ -2928,7 +2930,8 @@ export default {
             if (res.code === 0) {
               this.editLoading = false;
               this.cancel("form");
-              this.getSendOrderInfo();
+              // this.getSendOrderInfo();
+              this.handlePageChange(this.$refs.pages.currentPage);
               this.$Message.success({
                 content: "修改成功",
                 duration: 3,

@@ -708,8 +708,8 @@
               <i-switch v-model="form.IsAddWeChat" @on-change="IsAddWeChatChange()"/>
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="加v截图" prop="addWechatPicture" key="addWechatPicture" v-if="form.IsAddWeChat == true">
+          <Col span="8" v-if="form.IsAddWeChat == true">
+            <FormItem label="加v截图" prop="addWechatPicture" key="addWechatPicture" >
               <upload :uploadObj="uploadObj2" @uploadChange="handleUploadChange2" />
             </FormItem>
           </Col>

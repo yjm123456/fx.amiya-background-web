@@ -366,3 +366,19 @@ export const getTransformCycleData = (params) => {
         params
     });
 };
+//  助理看板有效/潜在线索
+export const effOrPotDistributeConsulationData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/effOrPotDistributeConsulationData",
+        method: "get",
+        params
+    });
+};
+//  助理看板有效潜在折线图
+export const assistantEffOrPotBrokenLineData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantEffOrPotBrokenLineData",
+        method: "get",
+        params
+    });
+};

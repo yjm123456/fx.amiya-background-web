@@ -3,6 +3,11 @@
     <div class="center" v-if="isFlag == true">
             <Card class="content">
                     <div class="h3">部门</div>
+                    <div class="left_customer" >
+                        <span class="r_t4">转化周期</span>
+                        <div class="r_t4" style="margin-top:394%"><span class="num" >{{adminCustomerFilterDataObj.groupData.sendCycle}}</span>天</div>
+                        <div class="r_t4" style="margin-top:145%"><span class="num">{{adminCustomerFilterDataObj.groupData.hospitalCycle}}</span>天</div>
+                    </div>
                     <div class="new_customer">
                         <div class="center_data">
                             <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[0].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[0].value}}</span> 个</div>
@@ -33,6 +38,11 @@
             </Card>
             <Card class="content2">
                     <div class="h3">个人</div>
+                    <div class="left_customer" >
+                        <span class="r_t4">转化周期</span>
+                        <div class="r_t4" style="margin-top:398%"><span class="num" >{{adminCustomerFilterDataObj.addwechatData.sendCycle}}</span>天</div>
+                        <div class="r_t4" style="margin-top:145%"><span class="num">{{adminCustomerFilterDataObj.addwechatData.hospitalCycle}}</span>天</div>
+                    </div>
                     <div class="new_customer">
                         <div class="center_data">
                             <div  class="c_text"><span>{{adminCustomerFilterDataObj.addwechatData.dataList[0].name}}</span> <span class="num">{{adminCustomerFilterDataObj.addwechatData.dataList[0].value}}</span> 个</div>
@@ -159,7 +169,7 @@ export default {
 .new_customer{
      width:100%;
     height:400px;
-    background-image: url(../../../../assets/images/new3.png)  ;
+    background-image: url(../../../../assets/images/ldt.png)  ;
     min-width:600px;
     background-size: 100% 100%;
     position: relative;
@@ -169,7 +179,7 @@ export default {
 .old_customer{
      width:100%;
     height: 500px;
-    background-image: url(../../../../assets/images/new3.png) ;
+    background-image: url(../../../../assets/images/ldt.png) ;
     background-size: 100% 100%;
     position: relative;
     min-width:600px; 
@@ -188,8 +198,8 @@ export default {
 }
 .left_customer{
     position: absolute;
-    left: -3%;
-    top:12%;
+    left: 8%;
+    top:15%;
 }
 .r_content,.r_content2,.r_content3,.r_content4,.r_content5,.r_content6{
     width: 200px;
@@ -238,7 +248,7 @@ position: absolute
 .center_data{
     position: absolute;
     top: -7%;
-    left: 45%;
+    left: 48%;
 }
 .c_text{
     margin-top: 63%;

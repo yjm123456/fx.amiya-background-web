@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card style="overflow-x:hidden">
     <div class="title">啊美雅（医美）助理数据运营看板</div>
     <!-- 时间进度及筛选 -->
     <div class="time">
@@ -49,8 +49,8 @@
       <Button type="primary" @click="getData">查询</Button>
     </div>
     <!-- 卡片 -->
-    <item ref="items" :params="params"/>
-    <items2 ref="items2" :params="params"/>
+    <item ref="items" :params="params" :completeRate="completeRate"/>
+    <items2 ref="items2" :params="params" :completeRate="completeRate"/>
     <!-- 折线图 -->
     <Card >
       <div class="h2">当月业绩&线索趋势</div>
@@ -415,7 +415,7 @@ export default {
             endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
             assistantId:assistantId 
         }
-        api.assistantDistributeConsulationBrokenLineData(data).then(res=>{
+        api.assistantEffOrPotBrokenLineData(data).then(res=>{
             if(res.code === 0){
                 this.assistantDistributeConsulationBrokenLineDataObj =  res.data.data
             }

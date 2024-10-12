@@ -24,16 +24,56 @@
           v-model="query.endDate"
           transfer
         ></DatePicker>
+        <Select
+          v-model="query.orderStatus"
+          style="width: 160px;margin-left: 10px"
+          placeholder="请选择订单状态"
+          filterable
+        >
+          <Option
+            v-for="(item,index) in statusCodeList"
+            :value="item.orderStatus"
+            :key="index"
+            >{{ item.orderStatusText }}</Option
+          >
+        </Select>
+        <Select
+          v-model="query.hospitalId"
+          style="width: 240px;margin-left: 10px"
+          placeholder="请选择医院"
+          filterable
+          transfer
+        >
+          <Option
+            v-for="(item2,index2) in hospitallist"
+            :value="item2.id"
+            :key="index2"
+            >{{ item2.name }}</Option
+          >
+        </Select>
         <Button
           type="primary"
           @click="getOnlyMainHospitalOrderClick()"
           style="margin-left: 10px"
           >查询</Button
         >
+        <Button
+            type="primary"
+            @click="batchReassignmentClick()"
+            style="margin-left: 10px"
+            >批量改派</Button
+          >
       </div>
 
       <div style="margin-top:10px">
-        <Table border :columns="query.columns" :data="query.data"></Table>
+        <Table 
+          border 
+          :columns="query.columns" 
+          :data="query.data"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancels"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"></Table>
       </div>
       <div class="pages">
         <Page
@@ -141,23 +181,30 @@
         <Button type="primary" @click="submit('form')">确定</Button>
       </div>
     </Modal>
+    <!-- 批量改派 -->
+    <batchReassignment :batchReassignmentModel.sync ="batchReassignmentModel" :batchReassignmentParams="batchReassignmentParams"/>
   </div>
 </template>
 
 <script>
 import * as api from "@/api/orderManage";
 import * as hospitalManage from "@/api/hospitalManage";
+import batchReassignment from "./batchReassignment.vue"
 export default {
+  components:{
+    batchReassignment
+  },
   props: {
     activeName: String,
   },
-  components: {},
   data() {
     return {
       // 开启所有医院
       openAllHospital: false,
       editLoading: false,
       query: {
+        orderStatus:-1,
+        hospitalId:0,
         startDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         keyWord: "",
@@ -165,6 +212,12 @@ export default {
         pageSize: 10,
         totalCount: 0,
         columns: [
+          {
+            type: "selection",
+            key: "_checked",
+            align: "center",
+            minWidth: 80,
+          },
           {
             title: "派单编号",
             key: "id",
@@ -176,6 +229,13 @@ export default {
             title: "订单编号",
             key: "orderId",
             minWidth: 170,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "归属部门",
+            key: "belongChannelText",
+            minWidth: 100,
             align: "center",
             tooltip: true,
           },
@@ -487,6 +547,42 @@ export default {
             align: "center",
           },
           {
+            title: "是否指定医生账号",
+            key: "isSpecifyHospitalEmployee",
+            minWidth: 150,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isSpecifyHospitalEmployee == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "医生账号",
+            key: "hospitalEmployeeName",
+            minWidth: 150,
+            align: "center",
+            tooltip: true,
+          },
+          {
             title: "订单备注",
             minWidth: 400,
             key: "orderRemark",
@@ -645,21 +741,75 @@ export default {
           },
         ],
       },
+      // 订单状态
+      statusCodeList:[{ orderStatus: -1, orderStatusText: "全部订单状态" }],
+      // 改派
+      batchReassignmentParams:{
+        // 派单id
+        sendInfoIdList:new Set(),
+        // 医院
+        hospitalList:[],
+        // 用于保留当前页面
+        pageNum:1,
+      },
+      // 改派model
+      batchReassignmentModel:false,
     };
   },
   methods: {
+    // 批量改派
+   batchReassignmentClick(){
+      if (![...this.batchReassignmentParams.sendInfoIdList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.batchReassignmentModel = true
+    }, 
+   handleSelect(selection, row) {
+      // 批量改派
+      this.batchReassignmentParams.sendInfoIdList.add(row.id);
+    },
+
+    handleCancels(selection, row) {
+      // 批量改派
+      this.batchReassignmentParams.sendInfoIdList.delete(row.id);
+    },
+
+    handleSelectAll(selection) {
+      if (selection && selection.length === 0) {
+        this.batchReassignmentParams.sendInfoIdList.clear();
+      } else {
+        selection.forEach((item) => {
+          this.batchReassignmentParams.sendInfoIdList.add(item.id);
+        });
+      }
+    },
+    // 订单状态
+    getContentPlateFormOrderStatusList() {
+      api.contentPlateFormOrderStatusList().then((res) => {
+        if (res.code === 0) {
+          const { orderStatus } = res.data;
+          this.statusCodeList = [...this.statusCodeList, ...orderStatus];
+        }
+      });
+    },
     // 获取派单信息列表
     getOnlyMainHospitalOrderClick() {
       this.$nextTick(() => {
         this.$refs["pages"].currentPage = 1;
       });
-      const { startDate, endDate, keyWord, pageNum, pageSize } = this.query;
+      const { startDate, endDate, keyWord, pageNum, pageSize ,orderStatus,hospitalId} = this.query;
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         keyWord,
         pageNum,
         pageSize,
+        orderStatus:orderStatus == -1 ? null :orderStatus,
+        hospitalId:hospitalId == 0 ? null :hospitalId,
       };
       api.getOnlyMainHospitalOrder(data).then((res) => {
         if (res.code === 0) {
@@ -672,19 +822,22 @@ export default {
 
     // 获取派单信息列表分页
     handlePageChange(pageNum) {
-      const { startDate, endDate, keyWord, pageSize } = this.query;
+      const { startDate, endDate, keyWord, pageSize,orderStatus,hospitalId } = this.query;
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
         endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
         keyWord,
         pageNum,
         pageSize,
+        orderStatus:orderStatus == -1 ? null :orderStatus,
+        hospitalId:hospitalId == 0 ? null :hospitalId,
       };
       api.getOnlyMainHospitalOrder(data).then((res) => {
         if (res.code === 0) {
           const { list, totalCount } = res.data.data;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          this.batchReassignmentParams.pageNum = pageNum
         }
       });
     },
@@ -694,6 +847,7 @@ export default {
         if (res.code === 0) {
           this.hospitalInfo = res.data.hospitalInfo;
           this.hospitallist = [...this.hospitallist, ...res.data.hospitalInfo];
+          this.batchReassignmentParams.hospitalList = res.data.hospitalInfo
         }
       });
     },
@@ -769,6 +923,7 @@ export default {
       handler(value) {
         if (value === "listOfUnassignedOrders") {
           this.getOnlyMainHospitalOrderClick();
+          this.getContentPlateFormOrderStatusList()
         }
       },
       immediate: true,

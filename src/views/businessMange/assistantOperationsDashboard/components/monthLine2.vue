@@ -22,26 +22,24 @@ export default {
   methods: {
     // 业绩
     myEcharts(value) {
-      const {firstType,sencondType,thirdType,totalType} = value
+      const {effective,potential,total} = value
       let date =[]
-      let firstTypes =[]
-      let sencondTypes =[]
-      let thirdTypes =[]
+      let effectives =[]
+      let potentials =[]
+      let totals =[]
       let totalTypes =[]
      
-      firstType ? firstType.map(item=>{
+      effective ? effective.map(item=>{
         date.push(item.date)
-        firstTypes.push(item.performance)
+        effectives.push(item.performance)
       }) : []
-      sencondType ? sencondType.map(item=>{
-        sencondTypes.push(item.performance)
+      potential ? potential.map(item=>{
+        potentials.push(item.performance)
       }):[]
-      thirdType ? thirdType.map(item=>{
-        thirdTypes.push(item.performance)
+      total ? total.map(item=>{
+        totals.push(item.performance)
       }):[]
-      totalType ? totalType.map(item=>{
-        totalTypes.push(item.performance)
-      }):[]
+     
       let option = {
         
         xAxis: {
@@ -91,11 +89,10 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['一级线索','二级线索','三级线索','总线索'],
+          data: ['有效线索','潜在线索','总线索'],
           selected:{
-            '一级线索':true,
-            '二级线索':true,
-            '三级线索':true,
+            '有效线索':true,
+            '潜在线索':true,
             '总线索':true,
           },
           textStyle:{
@@ -104,9 +101,9 @@ export default {
         },
         series: [
             {
-                name: '一级线索',
+                name: '有效线索',
                 type: 'line',
-                data: firstTypes,
+                data: effectives,
                 itemStyle: { 
                     normal: { 
                         
@@ -115,9 +112,9 @@ export default {
                 },
             },
             {
-                name: '二级线索',
+                name: '潜在线索',
                 type: 'line',
-                data: sencondTypes,
+                data: potentials,
                 itemStyle: { 
                     normal: { 
                         color: '#7381FB'  // 折线的颜⾊
@@ -126,26 +123,15 @@ export default {
             },
             
             {
-                name: '三级线索',
+                name: '总线索',
                 type: 'line',
-                data: thirdTypes,
+                data: totals,
                 itemStyle: { 
                     normal: { 
                         color: '#BB5DF9'  // 折线的颜⾊
                     } 
                 },
             },
-            {
-                name: '总线索',
-                type: 'line',
-                data: totalTypes,
-                itemStyle: { 
-                    normal: { 
-                        color: '#F37F51'  // 折线的颜⾊
-                    } 
-                },
-            },
-            
         ]
       };
       this.myChart = echarts.init(this.$refs.dom, "tdTheme");

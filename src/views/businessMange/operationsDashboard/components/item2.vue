@@ -20,7 +20,7 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.beforeLivingClueChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.beforeLivingClueChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div  >目标达成：<span class="f_w">{{totalFlowRateAndDateSchedule.beforeLivingClueCompleteRate ? totalFlowRateAndDateSchedule.beforeLivingClueCompleteRate + '%' : '0%'}}</span></div>
+                    <div  >目标达成：<span class="f_w" :style="{color:totalFlowRateAndDateSchedule.beforeLivingClueCompleteRate < completeRate ? 'red' :'green'}">{{totalFlowRateAndDateSchedule.beforeLivingClueCompleteRate ? totalFlowRateAndDateSchedule.beforeLivingClueCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>
@@ -43,7 +43,7 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.livingClueChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.livingClueChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div >目标达成：<span class="f_w">{{totalFlowRateAndDateSchedule.livingClueCompleteRate ? totalFlowRateAndDateSchedule.livingClueCompleteRate + '%' : '0%'}}</span></div>
+                    <div >目标达成：<span class="f_w" :style="{color:totalFlowRateAndDateSchedule.livingClueCompleteRate < completeRate ? 'red' :'green'}">{{totalFlowRateAndDateSchedule.livingClueCompleteRate ? totalFlowRateAndDateSchedule.livingClueCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.totalAfterLivingClueChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.totalAfterLivingClueChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>目标达成：<span class="f_w">{{totalFlowRateAndDateSchedule.totalAfterLivingClueCompleteRate ? totalFlowRateAndDateSchedule.totalAfterLivingClueCompleteRate + '%' : '0%'}}</span></div>
+                    <div>目标达成：<span class="f_w" :style="{color:totalFlowRateAndDateSchedule.totalAfterLivingClueCompleteRate < completeRate ? 'red' :'green'}">{{totalFlowRateAndDateSchedule.totalAfterLivingClueCompleteRate ? totalFlowRateAndDateSchedule.totalAfterLivingClueCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>
@@ -89,7 +89,7 @@
                       <span class="h5" v-else-if="Math.sign(totalFlowRateAndDateSchedule.clueChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalFlowRateAndDateSchedule.clueChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div >目标达成：<span class="f_w">{{totalFlowRateAndDateSchedule.clueCompleteRate ? totalFlowRateAndDateSchedule.clueCompleteRate + '%' : '0%'}}</span></div>
+                    <div >目标达成：<span class="f_w" :style="{color:totalFlowRateAndDateSchedule.clueCompleteRate < completeRate ? 'red' :'green'}">{{totalFlowRateAndDateSchedule.clueCompleteRate ? totalFlowRateAndDateSchedule.clueCompleteRate + '%' : '0%'}}</span></div>
                 </div>
               </div>
             </div>
@@ -101,7 +101,8 @@
 export default{
     props:{
         params:Object,
-        totalFlowRateAndDateSchedule:Object
+        totalFlowRateAndDateSchedule:Object,
+        completeRate:Number
     },
     data(){
         return{

@@ -25,16 +25,76 @@ export default {
       let list1 = [];
       let list2 = [];
       let list3 = [];
+      let list4 = [];
+      let list5 = [];
       value.map((item) => {
         name.unshift(item.name);
         list1.unshift(item.sendOrderCount);
         list2.unshift(item.visitCount);
         list3.unshift(item.dealCount);
+        list4.unshift(item.toHospitalRate);
+        list5.unshift(item.dealRate);
       });
       let option = {
         tooltip: {
-          trigger: "axis",
-        },
+            trigger: 'axis',
+            formatter: (params) => {
+                let list = []
+                let listItem = ''
+                let axisValueLabel = params[0].axisValueLabel
+                let toHospitalRate = 0
+                let dealRate = 0
+                for (let i = 0; i < params.length; i++) {
+                  let seriesName = params[i].seriesName
+                  // 因柱形图不显示柱子 tooltip需要显示  取上门率和成交率的值
+                  value.map((item,index)=>{
+                    params.map(item2=>{
+                      if(item.name == item2.axisValueLabel){
+                        toHospitalRate =  item.toHospitalRate
+                        dealRate =  item.dealRate
+                      }
+                    })
+                  })
+                  seriesName == '上门量' ?  list.push(
+                        '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
+                        params[i].color +
+                        ';margin-right: 5px;border-radius: 50%;}"></i>' +
+                        '<span style="display:inline-block;">' +
+                        params[i].seriesName +
+                        '</span><span style="display:inline-block;">&nbsp' +
+                        params[i].data  +
+                        '</span><span style="display:inline-block;margin-left:10px">&nbsp' +
+                        '上门率 ' +  toHospitalRate + '%' +
+                        '</span>'
+                    )
+                  : seriesName == '成交量' ?  list.push(
+                        '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
+                        params[i].color +
+                        ';margin-right: 5px;border-radius: 50%;}"></i>' +
+                        '<span style="display:inline-block;">' +
+                        params[i].seriesName +
+                        '</span><span style="display:inline-block;">&nbsp' +
+                        params[i].data   +
+                        '</span><span style="display:inline-block;margin-left:10px">&nbsp' +
+                        '成交率 ' +  dealRate + '%'  +
+                        '</span>'
+                    )
+                  : list.push(
+                        '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
+                        params[i].color +
+                        ';margin-right: 5px;border-radius: 50%;}"></i>' +
+                        '<span style="display:inline-block;">' +
+                        params[i].seriesName +
+                        '</span><span style="display:inline-block;">&nbsp&nbsp' +
+                        params[i].data  +
+                        '</span>'
+                    )
+                  
+                }
+                listItem = list.join('<br>')
+                return axisValueLabel + '<br>' + listItem
+            }
+          },
         calculable: true,
         xAxis: [
           {
@@ -65,11 +125,26 @@ export default {
             type: "bar",
             data: list2,
           },
+          
+          // {
+          //   name:  "上门率",
+          //   type: "bar",
+          //   data: list4,
+          //   label:{
+          //     show:false
+          //   }
+          // },
           {
             name:  "成交量",
             type: "bar",
             data: list3,
+            
           },
+          // {
+          //   name:  "成交率",
+          //   type: "bar",
+          //   data: list5,
+          // },
         ],
       };
       this.myChart = echarts.init(this.$refs.dom, "tdTheme");

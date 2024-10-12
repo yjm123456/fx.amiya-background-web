@@ -1614,3 +1614,11 @@ export const byPhoneAndLiveAnchorId = (params) => {
         params
     });
 };
+// 未辅派订单批量派单
+export const batchEditSendInfo = (data) => {
+    return http({
+        url: `/amiyabg/ContentPlateFormOrder/batchEditSendInfo`,
+        method: "post",
+        data
+    });
+};

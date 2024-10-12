@@ -28,9 +28,7 @@
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>目标达成：
-                      <span  class="h5" v-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate) + '%'}}</span>
-                      <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate) + '%'}}</span>
-                      <span class="h5"  v-else>-</span>
+                      <span  class="h5" :style="{color:assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate < completeRate ? 'red' :'green'}">{{ assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate ? assistantPerformanceObj.newCustomerPerformanceTargetCompleteRate : 0}}%</span>
                     </div>
                 </div>
               </div>
@@ -61,9 +59,10 @@
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>目标达成：
-                      <span  class="h5" v-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate) + '%'}}</span>
+                      <span  class="h5" :style="{color:assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate < completeRate ? 'red' :'green'}">{{ assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate ? assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate : 0}}%</span>
+                      <!-- <span  class="h5" v-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.oldCustomerPerformanceTargetCompleteRate) + '%'}}</span>
-                      <span class="h5"  v-else>-</span>
+                      <span class="h5"  v-else>-</span> -->
                     </div>
                 </div>
               </div>
@@ -94,9 +93,10 @@
                       <span class="h5"  v-else>-</span>
                     </div>
                     <div>目标达成：
-                      <span  class="h5" v-if="Math.sign(assistantPerformanceObj.totalPerformanceTargetCompleteRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceTargetCompleteRate) + '%'}}</span>
+                      <span  class="h5" :style="{color:assistantPerformanceObj.totalPerformanceTargetCompleteRate < completeRate ? 'red' :'green'}">{{ assistantPerformanceObj.totalPerformanceTargetCompleteRate ? assistantPerformanceObj.totalPerformanceTargetCompleteRate : 0}}%</span>
+                      <!-- <span  class="h5" v-if="Math.sign(assistantPerformanceObj.totalPerformanceTargetCompleteRate)== 1"> <span  class="red ">增长</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceTargetCompleteRate) + '%'}}</span>
                       <span class="h5" v-else-if="Math.sign(assistantPerformanceObj.totalPerformanceTargetCompleteRate)== -1"><span  class="green">下降</span>{{ Math.abs(assistantPerformanceObj.totalPerformanceTargetCompleteRate) + '%'}}</span>
-                      <span class="h5"  v-else>-</span>
+                      <span class="h5"  v-else>-</span> -->
                     </div>
                 </div>
               </div>
@@ -110,7 +110,8 @@ import * as api from "@/api/amiyaOperationsBoard";
 
 export default{
     props:{
-        params:Object
+        params:Object,
+        completeRate:Number
     },
     data(){
         return{

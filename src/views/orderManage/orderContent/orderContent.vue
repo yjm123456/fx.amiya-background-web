@@ -342,7 +342,7 @@
       v-model="adjustCustomerServiceModal"
       title="调整归属客服"
       :mask-closable="false"
-      @on-visible-change="handleModalVisibleChange"
+      :closable="false"
     >
       <Form
         ref="adjustCustomerServiceForm"
@@ -366,7 +366,7 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="cancelSubmit('adjustCustomerServiceForm')">取消</Button>
+        <Button @click="cancelSubmit2('adjustCustomerServiceForm')">取消</Button>
         <Button
           type="primary"
           @click="adjustCustomerServiceSubmit('adjustCustomerServiceForm')"
@@ -616,6 +616,12 @@ export default {
             align: "center",
           },
           {
+            title: "归属部门",
+            key: "belongChannelText",
+            minWidth: 100,
+            align: "center",
+          },
+          {
             title: "客户昵称",
             key: "customerName",
             minWidth: 150,
@@ -853,12 +859,7 @@ export default {
             minWidth: 100,
             align: "center",
           },
-          {
-            title: "归属部门",
-            key: "belongChannelText",
-            minWidth: 100,
-            align: "center",
-          },
+          
           {
             title: "操作",
             align: "center",
@@ -1262,8 +1263,8 @@ export default {
           };
           api.BelongEmployeeContentPlatFormOrder(data).then((res) => {
             if (res.code === 0) {
-              this.cancelSubmit("adjustCustomerServiceForm");
-              this.getOrderInfo();
+              this.cancelSubmit2("adjustCustomerServiceForm");
+              // this.getOrderInfo();
               this.$Message.success({
                 content: "已绑成功",
                 duration: 3,
@@ -1674,10 +1675,17 @@ export default {
       this.isEdit = false;
       this.title = "录单";
       this.recordingModal = false;
-      this.adjustCustomerServiceModal = false;
+      // this.adjustCustomerServiceModal = false;
       this.customerUploadObj.uploadList = [];
+      // this.adjustCustomerServiceForm.orderId.clear();
+      this.$refs[name].resetFields();
+    },
+    // 调整绑定客服关闭弹窗
+    cancelSubmit2(name){
+      this.adjustCustomerServiceModal = false;
       this.adjustCustomerServiceForm.orderId.clear();
       this.$refs[name].resetFields();
+      this.getOrderInfo();
     },
     // 获取下单平台列表
     getAppTypeList() {

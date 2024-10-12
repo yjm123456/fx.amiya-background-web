@@ -1366,6 +1366,18 @@ const baseDataMaintenance = [{
         component: () =>
             import ("@/views/baseDataMaintenance/threePlatformMessage/threePlatformMessage.vue"),
     },
+    {
+        path: "/assistantPerformanceImprovementLadder",
+        name: "assistantPerformanceImprovementLadder",
+        meta: {
+            title: "助理业绩提点阶梯",
+            keepAlive: false,
+            isTag: true,
+            openName: ['基础数据维护'],
+        },
+        component: () =>
+            import ("@/views/baseDataMaintenance/assistantPerformanceImprovementLadder/assistantPerformanceImprovementLadder.vue"),
+    },
 ];
 
 /**

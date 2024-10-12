@@ -1183,6 +1183,13 @@ export default {
           //   },
           // },
           {
+            title: "归属部门",
+            key: "belongChannelText",
+            minWidth: 100,
+            align: "center",
+            tooltip: true,
+          },
+          {
             title: "客户昵称",
             key: "customerName",
             minWidth: 150,

@@ -63,11 +63,11 @@
       <div v-if="selected == '图表'">
         <Card class="m_b ">
           <div class="name">线索</div>
-          <item2 ref="item2" :params="params" :totalFlowRateAndDateSchedule="totalFlowRateAndDateSchedule" />
+          <item2 ref="item2" :params="params" :totalFlowRateAndDateSchedule="totalFlowRateAndDateSchedule" :completeRate="completeRate"/>
         </Card>
         <Card class="m_b ">
           <div class="name">业绩</div>
-          <items :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule"/>
+          <items :totalAchievementAndDateSchedule="totalAchievementAndDateSchedule" :completeRate="completeRate"/>
         </Card>
         <!-- 当月业绩趋势 -->
         <Card  class="m_b">

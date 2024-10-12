@@ -22,7 +22,7 @@
                       <span class="h5" v-else-if="Math.sign(totalAchievementAndDateSchedule.newCustomerPerformanceChainRatio)== -1"><span  class="green">下降</span>{{ Math.abs(totalAchievementAndDateSchedule.newCustomerPerformanceChainRatio) + '%'}}</span>
                       <span class="h5"  v-else>-</span>
                     </div>
-                    <div>目标达成：<span class="h5">{{totalAchievementAndDateSchedule.newCustomerPerformanceCompleteRate}}</span>%</div>
+                    <div>目标达成：<span class="h5" :style="{color:totalAchievementAndDateSchedule.newCustomerPerformanceCompleteRate < completeRate ? 'red' :'green'}">{{totalAchievementAndDateSchedule.newCustomerPerformanceCompleteRate}}%</span></div>
                 </div>
               </div>
             </div>
@@ -48,7 +48,7 @@
                       <span class="h5"  v-else>-</span>
 
                     </div>
-                    <div>目标达成：<span class="h5">{{totalAchievementAndDateSchedule.oldCustomerPerformanceCompleteRate}}</span>%</div>
+                    <div>目标达成：<span class="h5" :style="{color:totalAchievementAndDateSchedule.oldCustomerPerformanceCompleteRate < completeRate ? 'red' :'green'}">{{totalAchievementAndDateSchedule.oldCustomerPerformanceCompleteRate}}%</span></div>
                 </div>
               </div>
             </div>
@@ -73,7 +73,7 @@
                       <span class="h5"  v-else>-</span>
 
                     </div>
-                    <div>目标达成：<span class="h5">{{totalAchievementAndDateSchedule.totalPerformanceCompleteRate}}</span>%</div>
+                    <div>目标达成：<span class="h5" :style="{color:totalAchievementAndDateSchedule.totalPerformanceCompleteRate < completeRate ? 'red' :'green'}">{{totalAchievementAndDateSchedule.totalPerformanceCompleteRate}}%</span></div>
                 </div>
               </div>
             </div>
@@ -84,6 +84,7 @@
 export default{
     props:{
         totalAchievementAndDateSchedule:Object,
+        completeRate:Number
     },
     data(){
         return{

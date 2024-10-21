@@ -169,61 +169,64 @@
               <span>{{ detailObj.appointmentHospitalName }} </span>
             </div>
             <div class="items">
-              <span class="title_bold">派单时间：</span>
-              <span
-                >{{
-                  detailObj.sendDate
-                    ? this.$moment(detailObj.sendDate).format(
-                        "YYYY-MM-DD HH:mm:ss"
-                      )
-                    : "未预约时间"
-                }}
-              </span>
+              <span class="title_bold">医院预约时间：</span>
+              <span>{{ detailObj.appointmentDate ? this.$moment(detailObj.appointmentDate).format("YYYY-MM-DD") : "未预约时间"}}</span>
+              
             </div>
           </div>
           <div  class="item_list">
             <div class="mr_top items">
               <!-- <span class="title_bold">派单医院：</span>
               <span>{{ detailObj.sendHospitalName }} </span> -->
+              <span class="title_bold">派单时间：</span>
+              <span>{{ detailObj.sendDate ? this.$moment(detailObj.sendDate).format("YYYY-MM-DD HH:mm:ss") : "未预约时间"}}</span>
+              
+            </div>
+            <div class="mr_top items">
               <span class="title_bold">是否到院：</span>
               <i-switch v-model="detailObj.isToHospital" disabled />
             </div>
-            <div class="mr_top">
+            
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
               <span class="title_bold">到院类型：</span>
               <span>{{ detailObj.toHospitalTypeText }} </span>
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">到院时间：</span>
               <span
                 >{{
                   detailObj.toHospitalDate
                     ? this.$moment(detailObj.toHospitalDate).format(
-                        "YYYY-MM-DD HH:mm:ss"
+                        "YYYY-MM-DD"
                       )
                     : ""
                 }}
               </span>
             </div>
-            <div class="mr_top">
+            
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
               <span class="title_bold">到院医院：</span>
               <span>{{ detailObj.lastDealHospitalName }} </span>
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">成交时间：</span>
               <span
                 >{{
                   detailObj.dealDate
                     ? this.$moment(detailObj.dealDate).format(
-                        "YYYY-MM-DD HH:mm:ss"
+                        "YYYY-MM-DD"
                       )
                     : ""
                 }}
               </span>
             </div>
+            
+          </div>
+          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">医院网咨人员：</span>
               <span
@@ -232,27 +235,28 @@
                 }}
               </span>
             </div>
-          </div>
-          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">医院现场咨询人员：</span>
               <span>{{ detailObj.sceneConsulationName }} </span>
             </div>
+            
+          </div>
+          <div  class="item_list">
             <div class="mr_top items">
               <span class="title_bold">是否生成过预约日程：</span>
               <i-switch v-model="customerAppointmentScheduleInfo.isCustomerAppointmentSchedule" disabled />
             </div>
+            <div class="mr_top items">
+              <span class="title_bold">院方接诊人员：</span>
+              <span>{{ detailObj.acceptConsulting }}</span>
+            </div>
+            
           </div>
           <div  class="item_list">
             <div class="mr_top items">
-            <span class="title_bold">院方接诊人员：</span>
-            <span>{{ detailObj.acceptConsulting }}</span>
-          </div>
-            <div class="mr_top items">
-              <span class="title_bold">预约日期：</span>
-              <span>{{ customerAppointmentScheduleInfo.appointmentDate }} </span>
+              <span class="title_bold">日程预约日期：</span>
+              <span>{{ customerAppointmentScheduleInfo.appointmentDate ? this.$moment(customerAppointmentScheduleInfo.appointmentDate).format("YYYY-MM-DD  HH:mm:ss") : ''}} </span>
             </div>
-           
           </div>
           <div class="appoint"  style="display:flex;justify-content:flex-end;margin-top:10px;margin-right:-5px">
             <Button type="primary" @click="dispatchClick(detailObj.id)" style="margin-right:10px">派单情况</Button>
@@ -936,10 +940,7 @@ export default {
               
             }else{
               this.customerAppointmentScheduleInfo.isCustomerAppointmentSchedule = true
-              this.customerAppointmentScheduleInfo.appointmentDate = appointmentDate ?  this.$moment(appointmentDate).format(
-                    'YYYY-MM-DD HH:mm:ss'
-                  ) 
-                  : ''
+              this.customerAppointmentScheduleInfo.appointmentDate = appointmentDate ?  this.$moment(appointmentDate).format('YYYY-MM-DD HH:mm:ss') : ''
             }
             
           }

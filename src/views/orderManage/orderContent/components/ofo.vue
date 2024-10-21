@@ -19,7 +19,7 @@
           </div>
            <div  class="item_list">
             <div class="mr_top items">
-              <span class="title_bold">抖音昵称：</span>
+              <span class="title_bold">客户昵称：</span>
               <span>{{ shoppingCartRegistrationInfo.customerNickName }} </span>
             </div>
             <div class="mr_top items">
@@ -145,8 +145,16 @@
               <i-switch v-model="shoppingCartRegistrationInfo.isRiBuLuoLiving" disabled />
             </div>
             <div class="mr_top items">
-             
+              <span class="title_bold">微信号：</span>
+              <span>{{ shoppingCartRegistrationInfo.customerWechatNo }}</span>
             </div>
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">词条：</span>
+              <span>{{ shoppingCartRegistrationInfo.fromTitle }}</span>
+            </div>
+            
           </div>
           <div class="mr_top">
             <span class="title_bold">退款原因：</span>

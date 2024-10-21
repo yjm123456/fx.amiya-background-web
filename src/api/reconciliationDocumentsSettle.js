@@ -87,3 +87,18 @@ export const batchCheckConsumptionRracking = (data) => {
         data
     });
 };
+// 薪资审核表 助理业绩（新）
+export const getAssistantDealInfoList = (params) => {
+    return http({
+        url: "/amiyabg/CustomerServiceCompensation/getAssistantDealInfoList",
+        method: "get",
+        params
+    });
+};
+// 薪资业绩类型
+export const PerformanceType = () => {
+    return http({
+        url: "/amiyabg/CustomerServiceCompensation/PerformanceType",
+        method: "get",
+    });
+};

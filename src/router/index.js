@@ -1907,6 +1907,18 @@ const financialStatementManage = [{
             import ("@/views/financialStatementManage/salaryReviewForm/salaryReviewForm.vue"),
     },
     {
+        path: "/salaryReviewForms",
+        name: "salaryReviewForms",
+        meta: {
+            title: "薪资审核表(新)",
+            keepAlive: false,
+            isTag: true,
+            openName: ['财务管理'],
+        },
+        component: () =>
+            import ("@/views/financialStatementManage/salaryReviewForms/salaryReviewForms.vue"),
+    },
+    {
         path: "/assistantSalary",
         name: "assistantSalary",
         meta: {

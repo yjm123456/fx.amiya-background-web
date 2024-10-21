@@ -220,6 +220,22 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+              <FormItem label="负责人" prop="ownerId">
+                <Select
+                  v-model="form.ownerId"
+                  placeholder="请选择负责人"
+                  filterable
+                >
+                  <Option
+                    v-for="item in employee"
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+              </FormItem>
+            </Col>
           </Row>
         </div>
         <div class="bor">
@@ -918,9 +934,13 @@
 import * as api from "@/api/operationManage";
 import * as orderApi from "@/api/orderManage";
 import * as contentPlatForm from "@/api/baseDataMaintenance";
+import { processEnv } from "@/http/baseUrl";
+import * as employeeManageApi from "@/api/employeeManage";
+
 export default {
   data() {
     return {
+      processEnv,
       isflag: false,
       positionId: sessionStorage.getItem("positionId"),
       // 查询
@@ -1641,6 +1661,12 @@ export default {
             },
           },
           {
+            title: "负责人",
+            key: "ownerName",
+            minWidth: 170,
+            align: "center",
+          },
+          {
             title: "创建日期",
             key: "createDate",
             minWidth: 170,
@@ -1751,6 +1777,7 @@ export default {
                                 videoShowCaseFeeTarget,
                                 // 抖音橱窗付费
                                 tikTokShowCaseFeeTarget,
+                                ownerId
         
 
                               } = res.data.liveAnchorMonthlyTargetBeforeLivingInfo;
@@ -1759,6 +1786,7 @@ export default {
                               this.isEdit = true;
                               this.form.year = String(year);
                               this.form.month = month;
+                              this.form.ownerId = ownerId;
                               this.form.monthlyTargetName = monthlyTargetName;
                               this.form.tikTokShowcaseIncomeTarget = tikTokShowcaseIncomeTarget;
                               this.form.contentPlatFormId = contentPlatFormId;
@@ -1978,9 +2006,17 @@ export default {
         videoShowcaseIncomeTarget: 1,
         // 视频号橱窗付费
         videoShowCaseFeeTarget: 1,
+        // 负责人
+        ownerId:null
       },
 
       ruleValidate: {
+        ownerId: [
+          {
+            required: true,
+            message: "请选择负责人",
+          },
+        ],
         year: [
           {
             required: true,
@@ -2019,9 +2055,26 @@ export default {
           },
         ],
       },
+      // 直播前运营
+      employee:[]
     };
   },
   methods: {
+    // 根据职位id获取员工
+    getEmployeeByPositionIdAdmin(){
+      const data = {
+        // （直播前运营)线上和测试id 都为19 
+        positionId:19
+        
+      }
+      employeeManageApi.getEmployeeByPositionId(data).then((res) => {
+        if (res.code === 0) {
+          const {employee} =res.data
+          this.employee = employee
+          
+        }
+      });
+    },
     // 计算运营渠道投流费用目标
     zhihuFlowinvestmentTargetChange() {
       this.form.flowInvestmentTarget =
@@ -2128,9 +2181,7 @@ export default {
           if (this.isEdit) {
             this.isflag = true;
             // 修改
-            api
-              .editLiveAnchorMonthlyTargetBeforeLiving(this.form)
-              .then((res) => {
+            api.editLiveAnchorMonthlyTargetBeforeLiving(this.form).then((res) => {
                 if (res.code === 0) {
                   this.isflag = false;
                   this.isEdit = false;
@@ -2182,6 +2233,7 @@ export default {
               xiaoHongShuShowCaseFeeTarget,
               videoShowCaseFeeTarget,
               tikTokShowCaseFeeTarget,
+              ownerId
             } = this.form;
             const data = {
               year: Number(this.$moment(new Date(year)).format("yyyy")),
@@ -2218,6 +2270,7 @@ export default {
               xiaoHongShuShowCaseFeeTarget,
               videoShowCaseFeeTarget,
               tikTokShowCaseFeeTarget,
+              ownerId
             };
             this.isflag = true;
             // 添加
@@ -2261,6 +2314,7 @@ export default {
     this.getContentValidList();
     this.tikTokReleaseTargetChange();
     this.zhihuFlowinvestmentTargetChange();
+    this.getEmployeeByPositionIdAdmin()
   },
 };
 </script>

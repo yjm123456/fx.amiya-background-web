@@ -213,7 +213,7 @@
               
               <Select
                 v-model="query.appointmentHospital"
-                style="width: 180px;margin-left: 10px"
+                style="width: 160px;margin-left: 10px"
                 placeholder="请选择医院"
                 filterable
                 transfer
@@ -225,6 +225,21 @@
                   >{{ item.name }}</Option
                 >
             </Select>
+            <DatePicker
+              type="date"
+              placeholder="预约开始日期"
+              style="width: 160px;margin-left: .625rem"
+              :value="query.appointmentStartDate"
+              v-model="query.appointmentStartDate"
+            ></DatePicker>
+            <!-- <span style="margin-left:.625rem;color:#ccc">—</span> -->
+            <DatePicker
+              type="date"
+              placeholder="预约结束日期"
+              style="width: 170px; margin-left: .625rem"
+              :value="query.appointmentEndDate"
+              v-model="query.appointmentEndDate"
+            ></DatePicker>
             
           </div>
         </div>
@@ -553,6 +568,8 @@ export default {
         uploadList: [],
       },
       query: {
+        appointmentStartDate:'',
+        appointmentEndDate:'',
         // 获客方式
         getCustomerType:-1,
         baseLiveAnchorId:-1,
@@ -600,7 +617,7 @@ export default {
           {
             title: "归属客服",
             key: "belongEmpName",
-            minWidth: 110,
+            minWidth: 150,
             align: "center",
           },
           {
@@ -730,6 +747,19 @@ export default {
             minWidth: 220,
             align: "center",
             tooltip:true
+          },
+          {
+            title: "预约时间",
+            key: "appointmentDate",
+            minWidth: 150,
+            align: "center",
+            tooltip:true,
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.appointmentDate == '未预约时间' ? params.row.appointmentDate : this.$moment(params.row.appointmentDate).format("YYYY-MM-DD")
+              );
+            },
           },
 
           {
@@ -1305,7 +1335,9 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         baseLiveAnchorId,
-        contentPlatFormId
+        contentPlatFormId,
+        appointmentStartDate,
+        appointmentEndDate
       } = this.query;
       const data = {
         keyword,
@@ -1328,6 +1360,8 @@ export default {
         minAddOrderPrice,
         maxAddOrderPrice,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
+        appointmentEndDate: appointmentEndDate ? this.$moment(appointmentEndDate).format("YYYY-MM-DD") : null,
+        appointmentStartDate: appointmentStartDate ? this.$moment(appointmentStartDate).format("YYYY-MM-DD") : null,
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1724,7 +1758,9 @@ export default {
         liveAnchorWechatId,
         baseLiveAnchorId,
         getCustomerType,
-        contentPlatFormId
+        contentPlatFormId,
+        appointmentEndDate,
+        appointmentStartDate
       } = this.query;
       const data = {
         keyword,
@@ -1749,6 +1785,8 @@ export default {
         liveAnchorWechatId: liveAnchorWechatId == -1 ? null : liveAnchorWechatId,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
         getCustomerType: getCustomerType == -1 ? null : getCustomerType,
+        appointmentEndDate: appointmentEndDate ? this.$moment(appointmentEndDate).format("YYYY-MM-DD") : null,
+        appointmentStartDate: appointmentStartDate ? this.$moment(appointmentStartDate).format("YYYY-MM-DD") : null,
 
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
@@ -1781,7 +1819,9 @@ export default {
         liveAnchorWechatId,
         baseLiveAnchorId,
         getCustomerType,
-        contentPlatFormId
+        contentPlatFormId,
+        appointmentStartDate,
+        appointmentEndDate
       } = this.query;
       const data = {
         keyword,
@@ -1806,6 +1846,8 @@ export default {
         liveAnchorWechatId: liveAnchorWechatId == -1 ? null : liveAnchorWechatId,
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
         getCustomerType: getCustomerType == -1 ? null : getCustomerType,
+        appointmentEndDate: appointmentEndDate ? this.$moment(appointmentEndDate).format("YYYY-MM-DD") : null,
+        appointmentStartDate: appointmentStartDate ? this.$moment(appointmentStartDate).format("YYYY-MM-DD") : null,
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {

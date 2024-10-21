@@ -199,6 +199,16 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="预约日期" prop="appointmentDate">
+              <DatePicker
+                type="date"
+                placeholder="预约日期"
+                :value="form.appointmentDate"
+                v-model="form.appointmentDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="订单来源" prop="orderSource">
               <Select
                 v-model="form.orderSource"

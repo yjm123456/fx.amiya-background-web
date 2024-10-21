@@ -197,7 +197,7 @@
               </Select>
             </FormItem>
           </Col>
-          <!-- <Col span="8">
+          <Col span="8">
             <FormItem label="预约日期" prop="appointmentDate">
               <DatePicker
                 type="date"
@@ -206,7 +206,7 @@
                 v-model="form.appointmentDate"
               ></DatePicker>
             </FormItem>
-          </Col> -->
+          </Col>
           <Col span="8">
             <FormItem label="订单来源" prop="orderSource">
               <Select
@@ -1285,6 +1285,7 @@ export default {
         this.form.customerSource = this.shoppingCartRegistrationInfo.source
         this.form.customerType = this.shoppingCartRegistrationInfo.shoppingCartRegistrationCustomerType
         this.form.isRiBuLuoLiving = this.shoppingCartRegistrationInfo.isRiBuLuoLiving
+        this.form.wechatNumber = this.shoppingCartRegistrationInfo.customerWechatNo
         this.form.belongChannel = this.shoppingCartRegistrationInfo.belongChannel != 0 ? this.shoppingCartRegistrationInfo.belongChannel : null
         if(this.form.belongChannel !=null && this.form.contentPlateFormId){
           this.getcustomerSourceList()

@@ -541,9 +541,29 @@
               ></Input>
             </FormItem>
           </Col>
-
           <Col span="8">
-            <FormItem label="下单金额" prop="price">
+            <FormItem label="微信号" prop="customerWechatNo">
+              <Input
+                v-model="form.customerWechatNo"
+                placeholder="请输入微信号"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.contentPlatFormId == '317c03b8-aff9-4961-8392-fc44d04b1725'">
+            <FormItem label="词条" prop="fromTitle" :rules="[
+                {
+                  required:  false,
+                  message: '请输入词条',
+                },
+              ]">
+              <Input
+                v-model="form.fromTitle"
+                placeholder="请输入词条"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.contentPlatFormId != '317c03b8-aff9-4961-8392-fc44d04b1725' || form.contentPlatFormId == ''">
+            <FormItem label="下单金额" prop="price" >
               <Input
                 v-model="form.price"
                 placeholder="请输入下单金额"
@@ -858,6 +878,36 @@
               <i-switch
                 v-model="form.isRiBuLuoLiving"
               />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="title == '修改'">
+            <FormItem label="是否为历史顾客激活" prop="isHistoryCustomerActive">
+              <i-switch v-model="form.isHistoryCustomerActive"/>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isHistoryCustomerActive == true">
+            <FormItem
+              label="激活人"
+              prop="activeEmployeeId"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入激活人',
+                },
+              ]"
+            >
+              <Select
+                v-model="form.activeEmployeeId"
+                placeholder="请选择激活人"
+                filterable
+              >
+                <Option
+                  v-for="(item1,index1) in employeeLists"
+                  :value="item1.id"
+                  :key="index1"
+                  >{{ item1.name }}</Option
+                >
+              </Select>
             </FormItem>
           </Col>
           <Col span="16">
@@ -1278,6 +1328,18 @@ export default {
             align: "center",
           },
           {
+            title: "微信号",
+            key: "customerWechatNo",
+            minWidth: 130,
+            align: "center",
+          },
+          {
+            title: "词条",
+            key: "fromTitle",
+            minWidth: 130,
+            align: "center",
+          },
+          {
             title: "下单金额",
             key: "price",
             minWidth: 130,
@@ -1694,6 +1756,41 @@ export default {
             },
           },
           {
+            title: "是否为历史顾客激活",
+            key: "isHistoryCustomerActive",
+            minWidth: 180,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isHistoryCustomerActive == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "激活人",
+            key: "activeEmployeeName",
+            minWidth: 150,
+            align: "center",
+          },
+          {
             title: "备注",
             key: "remark",
             minWidth: 200,
@@ -1834,7 +1931,11 @@ export default {
                               belongChannel,
                               cluePicture,
                               addWechatPicture,
-                              isRiBuLuoLiving
+                              isRiBuLuoLiving,
+                              isHistoryCustomerActive,
+                              activeEmployeeId,
+                              customerWechatNo,
+                              fromTitle
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1858,6 +1959,10 @@ export default {
                               }
                             }
                             this.isEdit = true;
+                            this.form.customerWechatNo = customerWechatNo;
+                            this.form.fromTitle = fromTitle;
+                            this.form.isHistoryCustomerActive = isHistoryCustomerActive;
+                            this.form.activeEmployeeId = activeEmployeeId;
                             this.form.recordDate = recordDate;
                             this.form.createBy = createByEmpId;
                             this.form.contentPlatFormId = contentPlatFormId;
@@ -2027,7 +2132,7 @@ export default {
         // 客户手机号
         phone: "",
         // 下单金额
-        price: null,
+        price: 0,
         // 面诊方式
         consultationType: null,
         // 是否加V
@@ -2091,7 +2196,16 @@ export default {
         // 加v截图
         addWechatPicture:'',
         // 是否为日不落直播
-        isRiBuLuoLiving:false
+        isRiBuLuoLiving:false,
+        // 是否为历史顾客激活
+        isHistoryCustomerActive:false,
+        // 激活人
+        activeEmployeeId:null,
+        // 微信号
+        customerWechatNo:'',
+        // 词条
+        fromTitle:''
+
       },
 
       ruleValidate: {
@@ -2769,6 +2883,10 @@ export default {
       }
       this.getLiveValidList(value);
       this.isTitleClick()
+      // this.form.price = 0
+      // this.form.customerWechatNo = ''
+      // this.form.fromTitle = ''
+
     },
     // 根据平台id去获取IP账号
     getLiveValidList(value) {
@@ -3056,7 +3174,11 @@ export default {
         belongChannel,
         cluePicture,
         addWechatPicture,
-        isRiBuLuoLiving
+        isRiBuLuoLiving,
+        isHistoryCustomerActive,
+        activeEmployeeId,
+        customerWechatNo,
+        fromTitle
       } = this.form;
       const data = {
         recordDate: time
@@ -3067,7 +3189,6 @@ export default {
         liveAnchorWechatNo: this.form.liveAnchorWeChatNo,
         customerNickName,
         phone,
-        price,
         consultationType: 4,
         isWriteOff,
         isConsultation,
@@ -3102,7 +3223,12 @@ export default {
         belongChannel,
         cluePicture,
         addWechatPicture:IsAddWeChat == true ? addWechatPicture : '',
-        isRiBuLuoLiving
+        isRiBuLuoLiving,
+        isHistoryCustomerActive,
+        activeEmployeeId:isHistoryCustomerActive == true ? activeEmployeeId : null,
+        price:contentPlatFormId != '317c03b8-aff9-4961-8392-fc44d04b1725' ? price : 0,
+        customerWechatNo ,
+        fromTitle:contentPlatFormId == '317c03b8-aff9-4961-8392-fc44d04b1725' ? fromTitle : '' ,
       };
       // 归属地 国内是1 国外是2
       if (belongingPlace == 1) {
@@ -3229,7 +3355,9 @@ export default {
               belongChannel,
               cluePicture,
               addWechatPicture,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              customerWechatNo,
+              fromTitle
             } = this.form;
             const data = {
               recordDate: time
@@ -3242,7 +3370,6 @@ export default {
               liveAnchorWechatNo: this.form.liveAnchorWeChatNo,
               customerNickName,
               phone,
-              price,
               consultationType: 4,
               isWriteOff,
               isConsultation,
@@ -3268,7 +3395,10 @@ export default {
               belongChannel,
               cluePicture,
               addWechatPicture:IsAddWeChat == true ? addWechatPicture : '',
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              price:contentPlatFormId != '317c03b8-aff9-4961-8392-fc44d04b1725' ? price : 0,
+              customerWechatNo ,
+              fromTitle:contentPlatFormId == '317c03b8-aff9-4961-8392-fc44d04b1725' ? fromTitle : '' ,
             };
 
             // 归属地 国内是1 国外是2

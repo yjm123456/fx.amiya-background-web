@@ -951,7 +951,7 @@ export default {
         month: Number(this.$moment(new Date()).format("MM")),
         keyword: "",
         pageNum: 1,
-        pageSize: 10,
+        pageSize:10,
 
         // 运营咨询（直播前）
         columns: [
@@ -1846,7 +1846,7 @@ export default {
                               .deleteLiveAnchorMonthlyTargetBeforeLiving(id)
                               .then((res) => {
                                 if (res.code === 0) {
-                                  this.getLiveAnchorMonthlyTargetInfo();
+                                  this.handlePageChange(this.$refs.pages.currentPage)
                                   this.$Message.success({
                                     content: "删除成功",
                                     duration: 3,
@@ -2186,7 +2186,7 @@ export default {
                   this.isflag = false;
                   this.isEdit = false;
                   this.cancelSubmit("form");
-                  this.getLiveAnchorMonthlyTargetInfo();
+                  this.handlePageChange(this.$refs.pages.currentPage)
                   this.$Message.success({
                     content: "修改成功",
                     duration: 3,

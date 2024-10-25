@@ -12,7 +12,7 @@
         :model="form"
         :rules="ruleValidates"
         label-position="left"
-        :label-width="130"
+        :label-width="110"
       >
         <Row :gutter="30">
           <Col span="8">
@@ -56,6 +56,7 @@
                 v-model="form.checkBelongEmpId"
                 placeholder="请选择归属客服"
                 filterable
+                @on-change="getByDealIdAndEmployeeClick()"
               >
                 <Option
                   v-for="item in params.employeeList"
@@ -68,15 +69,14 @@
           </Col>
           <Col span="8">
             <FormItem 
-                label="总提点" 
+                label="总提点(%)" 
                 prop="remind" 
                 :rules="[
                     {
                     required: true,
-                    message: '总提点(最小是1)',
+                    message: '请输入总提点',
                     trigger: 'change',
                     type: 'number',
-                    min: 1,
                     },
                 ]">
               <Input
@@ -90,7 +90,7 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="助理提点" prop="customerRemind">
+            <FormItem label="助理提点(%)" prop="customerRemind">
               <Input
                 v-model="form.customerRemind"
                 placeholder="请输入助理提点"
@@ -100,13 +100,23 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="16">
+          <Col span="8">
+            <FormItem label="助理提成" prop="customerNumber">
+              <Input
+                v-model="form.customerNumber"
+                placeholder="请输入助理提成"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="提取备注" prop="remark">
               <Input
                 v-model="form.remark"
                 placeholder="请输入提取备注"
                 type="textarea"
-                :rows="2"
+                :rows="3"
               ></Input>
             </FormItem>
           </Col>
@@ -136,13 +146,23 @@
             </FormItem>
           </Col>
             <Col span="8" v-if="form.isInspection == true"> 
-            <FormItem label="稽查提点" prop="customerRemind">
+            <FormItem label="稽查提点(%)" prop="customerRemind">
               <Input
                 v-model="form.customerRemind"
                 placeholder="请输入稽查提点"
                 type="number"
                 number
                 disabled
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.isInspection == true">
+            <FormItem label="稽查提成" prop="inspectionNumber">
+              <Input
+                v-model="form.inspectionNumber"
+                placeholder="请输入稽查提成"
+                type="number"
+                number
               ></Input>
             </FormItem>
           </Col>
@@ -161,7 +181,7 @@
 </template>
 
 <script>
-import * as api from "@/api/reconciliationDocumentsSettle";
+import * as api from "@/api/customerServiceCheckPerformance";
 
 export default {
   components: {},
@@ -189,15 +209,31 @@ export default {
         remind: null,
         // 助理提点
         customerRemind:null,
+        // 助理提成
+        customerNumber:null,
         // 是否为稽查
         isInspection:false,
         // 稽查人员
         inspectionCustomer:null,
         // 稽查提点
         inspectionRemind:null,
+        // 稽查提成
+        inspectionNumber:null,
 
       },
       ruleValidates: {
+        customerNumber: [
+          {
+            required: true,
+            message: "请输入助理提成",
+          },
+        ],
+        inspectionNumber: [
+          {
+            required: true,
+            message: "请输入稽查提成",
+          },
+        ],
         orderId: [
           {
             required: true,
@@ -238,14 +274,47 @@ export default {
     };
   },
   methods: {
+    // // 业绩提点变化时计算助理提成
+    // remindChange(){
+    //   let price = this.form.orderAmount * (this.form.remind /100)
+    //   this.form.customerNumber =  Math.round( price *1000 / 10 ) / 100
+    // },
+    // 获取提点
+    getByDealIdAndEmployeeClick(){
+      const {dealId,checkBelongEmpId} = this.form
+      const data = {
+        dealId:dealId,
+        employeeId:checkBelongEmpId
+      }
+      if(!checkBelongEmpId){
+        this.form.remind = null
+        return
+      }
+      api.getByDealIdAndEmployee(data).then(res=>{
+        if(res.code == 0){
+          this.form.remind = res.data.point
+          this.remindChange()
+        }
+      })
+    },
     // 计算助理提点和稽查提点
     remindChange(){
         if(this.form.isInspection == true){
             let remind = this.form.remind / 2
             this.form.customerRemind = Math.round( remind *1000 / 10 ) / 100
+            // 计算稽查提成
+            let price = this.form.orderAmount * (this.form.customerRemind / 100)
+            this.form.inspectionNumber =  Math.round( price *1000 / 10 ) / 100
+            // 如为稽查订单 助理提成 = 总成交金额 * 助理提点
+            this.form.customerNumber =  Math.round( price *1000 / 10 ) / 100
         }else{
             this.form.customerRemind = this.form.remind
+            // 计算助理提成
+            let price = this.form.orderAmount * (this.form.remind /100)
+            this.form.customerNumber =  Math.round( price *1000 / 10 ) / 100
+            
         }
+        
         
     },
     handleSubmit(name) {

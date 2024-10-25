@@ -32,6 +32,7 @@
                 v-model="form.checkBelongEmpId"
                 placeholder="请选择归属客服"
                 filterable
+                @on-change="getEmployeePerformanceLadder()"
               >
                 <Option
                   v-for="item in params.employeeList"
@@ -47,6 +48,17 @@
               <Input
                 v-model="form.remind"
                 placeholder="请输入业绩提点"
+                type="number"
+                number
+                @on-change="remindChange()"
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="助理提成" prop="customerNumber1">
+              <Input
+                v-model="form.customerNumber1"
+                placeholder="请输入助理提成"
                 type="number"
                 number
               ></Input>
@@ -79,7 +91,7 @@
 </template>
 
 <script>
-import * as api from "@/api/reconciliationDocumentsSettle";
+import * as api from "@/api/customerServiceCheckPerformance";
 
 export default {
   components: {},
@@ -101,12 +113,20 @@ export default {
         remark: "",
         // 业绩提点
         remind: 0,
+        // 助理提成
+        customerNumber1:null
       },
       ruleValidates: {
+        customerNumber1: [
+          {
+            required: true,
+            message: "请输入助理提成",
+          },
+        ],
         orderAmount: [
           {
             required: true,
-            message: "请选择总成交金额",
+            message: "请输入总成交金额",
           },
         ],
         checkBelongEmpId: [
@@ -125,6 +145,29 @@ export default {
     };
   },
   methods: {
+    // 业绩提点变化时计算助理提成
+    remindChange(){
+      let price = this.form.orderAmount * (this.form.remind /100)
+      this.form.customerNumber1 =  Math.round( price *1000 / 10 ) / 100
+    },
+    // 获取提点
+    getEmployeePerformanceLadder(){
+      const {orderAmount,checkBelongEmpId} = this.form
+      const data = {
+        totalPerformance:orderAmount,
+        employeeId:checkBelongEmpId
+      }
+      if(!checkBelongEmpId){
+        this.form.remind = null
+        return
+      }
+      api.getByDealPriceAndEmployee(data).then(res=>{
+        if(res.code == 0){
+          this.form.remind = res.data.point
+          this.remindChange()
+        }
+      })
+    },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
@@ -132,13 +175,15 @@ export default {
             orderAmount,
             checkBelongEmpId,
             remark,
-            remind
+            remind,
+            customerNumber1
           } = this.form;
           const data = {
             orderAmount,
             checkBelongEmpId,
             remark,
             remind,
+            customerNumber1,
             list:this.batchExtractionParams.list
           };
           console.log(data)
@@ -167,6 +212,7 @@ export default {
       this.$refs[name].resetFields();
       this.$parent.getListWithPageByCustomerCompensation()
       this.$parent.batchExtractionParams.list = []
+      this.form.remind = null
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
@@ -178,11 +224,13 @@ export default {
   watch: {
     batchExtractionModel(value) {
       this.control = value;
+      // 计算所选中的总成交基恩
       let price = 0
       this.batchExtractionParams.list.map(item=>{
         price += item.dealPrice
       })
       this.form.orderAmount = Math.round( price *1000 / 10 ) / 100
+      
     },
   },
 };

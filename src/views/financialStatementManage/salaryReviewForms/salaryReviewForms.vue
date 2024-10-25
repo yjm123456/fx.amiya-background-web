@@ -17,6 +17,14 @@
           ></assistantPerformanceExtracted>
         </div>
       </TabPane>
+      <TabPane label="行政客服-已提取" name="administration">
+        <div>
+          <administration
+            :activeName="activeName"
+            :params="params"
+          ></administration>
+        </div>
+      </TabPane>
       
     </Tabs>
   </div>
@@ -29,12 +37,14 @@ import * as reconciliationDocumentsSettleApi from "@/api/reconciliationDocuments
 import * as employeeManageApi from "@/api/employeeManage";
 import assistantPerformance from "./views/assistantPerformance.vue"
 import assistantPerformanceExtracted from "./views/assistantPerformanceExtracted.vue"
+import administration from "./views/administration.vue"
 import {processEnv} from "@/http/baseUrl";
 
 export default {
   components:{
     assistantPerformance,
     assistantPerformanceExtracted,
+    administration
   },
   data(){
     return {
@@ -54,6 +64,7 @@ export default {
         employeePosition:[],
         // 薪资业绩类型
         PerformanceTypeList:[],
+        performanceTypeListAll:[{id:-1,name:'全部业绩类型'}]
 
       }
     }
@@ -93,6 +104,7 @@ export default {
         if (res.code === 0) {
           const {PerformanceTypeList} =res.data
           this.params.PerformanceTypeList = PerformanceTypeList
+          this.params.performanceTypeListAll = [...this.params.performanceTypeListAll,...PerformanceTypeList]
         }
       });
     },

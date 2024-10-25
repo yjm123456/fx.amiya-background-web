@@ -2885,7 +2885,7 @@ export default {
       this.isTitleClick()
       // this.form.price = 0
       // this.form.customerWechatNo = ''
-      // this.form.fromTitle = ''
+      this.form.fromTitle = ''
 
     },
     // 根据平台id去获取IP账号
@@ -3477,6 +3477,7 @@ export default {
       this.uploadObj.uploadList = [];
       this.uploadObj2.uploadList = [];
       this.$refs[name].resetFields();
+      this.form.fromTitle = ''
     },
 
     // modal 显示状态发生变化时触发

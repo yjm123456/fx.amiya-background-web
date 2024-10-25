@@ -247,7 +247,7 @@
             </Select>
             <Select
               v-model="query.hospitalIds"
-              style="width: 240px;margin-left: 10px"
+              style="width: 150px;margin-left: 10px"
               placeholder="请选择医院"
               filterable
               transfer
@@ -262,7 +262,7 @@
             </Select>
             <Select
               v-model="query.hospitalEmpId"
-              style="width: 240px;margin-left: 10px"
+              style="width: 150px;margin-left: 10px"
               placeholder="请选择指定账号"
               filterable
               transfer
@@ -270,6 +270,20 @@
             >
               <Option
                 v-for="item in hospitalIdList2"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+            <Select
+              v-model="query.belongChannel"
+              style="width: 160px;margin-left: 10px"
+              placeholder="请选择部门"
+              filterable
+              transfer
+            >
+              <Option
+                v-for="item in belongChannelList"
                 :value="item.id"
                 :key="item.id"
                 >{{ item.name }}</Option
@@ -1053,6 +1067,7 @@ export default {
       employee: [{ name: "全部归属客服", id: -1 }],
       dispatchEmployee: [{ name: "全部派单客服", id: -1 }],
       query: {
+        belongChannel:-1,
         hospitalEmpId:null,
         isMainHospital: null,
         baseLiveAnchorId: -1,
@@ -2265,10 +2280,21 @@ export default {
         YWLX:''
       },
       // 验单model
-      verificationFormModel:false
+      verificationFormModel:false,
+      // 部门
+      belongChannelList:[{id:-1,name:'全部部门'}]
     };
   },
   methods: {
+    // 获取归属部门
+    getshoppingCartGetBelongChannelList() {
+      shoppingCartRegistrationApi.shoppingCartGetBelongChannelList().then((res) => {
+        if (res.code === 0) {
+          const { belongChannelList } = res.data;
+          this.belongChannelList = [...this.belongChannelList,...belongChannelList];
+        }
+      });
+    },
     // 特定账户Switch isSpecifyHospitalEmployee
     isSpecifyHospitalEmployeeChange(value,value2){
       if(value == true){
@@ -2778,7 +2804,8 @@ export default {
         commissionRatio,
         baseLiveAnchorId,
         isMainHospital,
-        hospitalEmpId
+        hospitalEmpId,
+        belongChannel
       } = this.query;
       const data = {
         startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
@@ -2806,7 +2833,8 @@ export default {
         baseLiveAnchorId: baseLiveAnchorId == -1 ? "" : baseLiveAnchorId,
         commissionRatio,
         isMainHospital,
-        hospitalEmpId:hospitalIds ==  0  ? null : hospitalEmpId
+        hospitalEmpId:hospitalIds ==  0  ? null : hospitalEmpId,
+        belongChannel:belongChannel == -1 ? null : belongChannel
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -2841,7 +2869,8 @@ export default {
         commissionRatio,
         baseLiveAnchorId,
         isMainHospital,
-        hospitalEmpId
+        hospitalEmpId,
+        belongChannel
       } = this.query;
       
       const data = {
@@ -2868,7 +2897,8 @@ export default {
         baseLiveAnchorId: baseLiveAnchorId == -1 ? "" : baseLiveAnchorId,
         commissionRatio,
         isMainHospital,
-        hospitalEmpId:hospitalIds ==  0  ? null : hospitalEmpId
+        hospitalEmpId:hospitalIds ==  0  ? null : hospitalEmpId,
+        belongChannel:belongChannel == -1 ? null : belongChannel
       };
       api.getContentPlateFormSendOrder(data).then((res) => {
         if (res.code === 0) {
@@ -2993,6 +3023,7 @@ export default {
           this.getSendOrderInfo();
           this.getContentValidList();
           this.getContentPlateFormOrderStatusList();
+          this.getshoppingCartGetBelongChannelList()
         }
       },
       immediate: true,
@@ -3013,6 +3044,7 @@ export default {
     this.getHospitalConsumptionTypeList();
     this.getHospitalRefundTypeList();
     this.getValidKeyAndValues();
+    
   },
 };
 </script>

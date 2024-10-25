@@ -382,3 +382,77 @@ export const assistantEffOrPotBrokenLineData = (params) => {
         params
     });
 };
+
+
+// 获取直播前客资和业绩数据
+export const getBeforeLiveClueAndPerformanceData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLiveClueAndPerformanceData",
+        method: "get",
+        params
+    });
+};
+// 获取直播前线索和业绩折线图数据
+export const getBeforeLiveClueAndPerformanceBrokenData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLiveClueAndPerformanceBrokenData",
+        method: "get",
+        params
+    });
+};
+// 获取直播前漏斗图数据
+export const getBeforeLiveFilterData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLiveFilterData",
+        method: "get",
+        params
+    });
+};
+// 获取直播前转化周期
+export const getBeforeLiveTransformCycleData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLiveTransformCycleData",
+        method: "get",
+        params
+    });
+};
+// 获取直播前业绩占比数据
+export const getBeforeLivePerformanceRate = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLivePerformanceRate",
+        method: "get",
+        params
+    });
+};
+// 获取直播前线索目标完成率数据
+export const getBeforeLiveTargetCompleteRate = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLiveTargetCompleteRate",
+        method: "get",
+        params
+    });
+};
+// 获取直播前部门平台线索占比数据
+export const getBeforeLiveDepartmentContentPlatformClueRate = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLiveDepartmentContentPlatformClueRate",
+        method: "get",
+        params
+    });
+};
+// 获取直播前部门平台业绩占比数据
+export const getBeforeLiveDepartmentContentPlatformPerformanceRate = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLiveDepartmentContentPlatformPerformanceRate",
+        method: "get",
+        params
+    });
+};
+// 获取部门详情 
+export const getBeforeLiveLiveanchorIPData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getBeforeLiveLiveanchorIPData",
+        method: "get",
+        params
+    });
+};

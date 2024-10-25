@@ -36,6 +36,33 @@
               >{{ item.name }}</Option
             >
           </Select>
+          <Select
+            v-model="query.belongEmpId"
+            placeholder="请选择归属客服"
+            filterable
+            style="width: 140px;margin-left:10px"
+          >
+            <Option
+              v-for="(item2,index2) in params.employeeAll"
+              :value="item2.id"
+              :key="index2"
+              >{{ item2.name }}</Option
+            >
+          </Select>
+          <Select
+            v-model="query.performanceTypeList"
+            placeholder="请选择业绩类型"
+            filterable
+            style="width: 230px;margin-left:10px"
+            multiple
+          >
+            <Option
+              v-for="(item2,index2) in params.PerformanceTypeList"
+              :value="item2.id"
+              :key="index2"
+              >{{ item2.name }}</Option
+            >
+          </Select>
           <Button
             type="primary"
             style="margin-left: 10px"
@@ -95,15 +122,22 @@ export default {
     return {
       // 查询
       query: {
+        belongEmpId:-1,
+        performanceTypeList:[1,3],
         keyWord: "",
-        startDate: this.$moment()
-          .startOf("month")
-          .format("YYYY-MM-DD"),
+        startDate: this.$moment().startOf("month").format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
         pageNum: 1,
         pageSize: 10,
         valid:'true',
         columns: [
+          {
+            type: "selection",
+            key: "_checked",
+            align: "center",
+            minWidth: 80,
+            fixed:'left'
+          },
           {
             title: "成交编号",
             key: "dealInfoId",
@@ -122,7 +156,7 @@ export default {
             title: "订单来源",
             key: "orderFromText",
             align: "center",
-            minWidth: 110,
+            minWidth: 100,
             tooltip: true,
           },
           {
@@ -148,23 +182,37 @@ export default {
           {
             title: "业绩类型",
             key: "performanceTypeText",
-            minWidth: 110,
+            minWidth: 100,
             align: "center",
             tooltip: true,
           },
           {
             title: "归属客服",
             key: "belongEmpName",
-            minWidth: 140,
+            minWidth: 120,
             align: "center",
             tooltip: true,
           },
           {
-            title: "薪资点数",
+            title: "助理提点",
             key: "point",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             tooltip: true,
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '助理提点'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
             render: (h, params) => {
               return h(
                 "div",
@@ -173,16 +221,29 @@ export default {
             },
           },
           {
-            title: "稽查人员",
-            key: "checkEmpName",
+            title: "助理提成",
+            key: "performanceCommision",
             minWidth: 140,
-            align: "center",
-            tooltip: true,
+            align:'center',
+            renderHeader: (h, { column }) => {
+                return h('span', [
+                //   column.title,
+                    h('span', {
+                    style: {
+                        color: 'orange',
+                    },
+                    domProps: {
+                        innerHTML: '助理提成'
+                    //   + ' *',
+                    },
+                    }),
+                ]);
+            },
           },
           {
             title: "备注",
             key: "remark",
-            minWidth: 220,
+            minWidth: 200,
             align: "center",
             tooltip: true,
           },
@@ -283,7 +344,9 @@ export default {
         keyWord,
         startDate,
         endDate,
-        valid
+        valid,
+        belongEmpId,
+        performanceTypeList
         
       } = this.query;
       const data = {
@@ -296,7 +359,9 @@ export default {
         endDate: endDate
           ? this.$moment(new Date(endDate)).format("YYYY-MM-DD")
           : null,
-        valid
+        valid,
+        belongEmpId:belongEmpId == -1 ? null : belongEmpId,
+        performanceTypeList:performanceTypeList ? String(performanceTypeList) : '',
         
       };
       api.getCustomerServiceCheckPerformance(data).then((res) => {
@@ -318,7 +383,9 @@ export default {
         keyWord,
         startDate,
         endDate,
-        valid
+        valid,
+        belongEmpId,
+        performanceTypeList
       } = this.query;
       const data = {
         pageNum,
@@ -330,7 +397,9 @@ export default {
         endDate: endDate
           ? this.$moment(new Date(endDate)).format("YYYY-MM-DD")
           : null,
-        valid
+        valid,
+        belongEmpId:belongEmpId == -1 ? null : belongEmpId,
+        performanceTypeList:performanceTypeList ? String(performanceTypeList) : '',
       };
       api.getCustomerServiceCheckPerformance(data).then((res) => {
         if (res.code === 0) {

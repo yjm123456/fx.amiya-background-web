@@ -39,3 +39,19 @@ export const deleteCustomerServiceCheckPerformance = (id) => {
         method: "delete",
     });
 };
+// 获取有效的助理业绩提点阶梯信息 
+export const getByDealPriceAndEmployee = (params) => {
+    return http({
+        url: "/amiyabg/EmployeePerformanceLadder/getByDealPriceAndEmployee",
+        method: "get",
+        params,
+    });
+};
+// 根据总成交额和归属客服获取业绩提点
+export const getByDealIdAndEmployee = (params) => {
+    return http({
+        url: "/amiyabg/EmployeePerformanceLadder/getByDealIdAndEmployee",
+        method: "get",
+        params,
+    });
+};

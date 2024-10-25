@@ -191,7 +191,7 @@ export default {
           {
             title: "业绩类型",
             key: "performanceTypeText",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             tooltip: true,
           },
@@ -227,7 +227,7 @@ export default {
           {
             title: "创建时间",
             key: "createDate",
-            minWidth: 180,
+            minWidth: 170,
             align: "center",
             render: (h, params) => {
               return h(
@@ -245,7 +245,7 @@ export default {
           {
             title: "归属客服",
             key: "belongEmpName",
-            minWidth: 150,
+            minWidth: 140,
             align: "center",
             tooltip: true,
           },
@@ -281,7 +281,7 @@ export default {
           {
             title: "辅助客服",
             key: "supportEmpName",
-            minWidth: 180,
+            minWidth: 110,
             align: "center",
           },
           

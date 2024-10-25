@@ -54,6 +54,7 @@
                 placeholder="请输入成交金额"
                 type="number"
                 number
+                @on-change="pointChange()"
               ></Input>
             </FormItem>
           </Col>
@@ -74,6 +75,7 @@
                 v-model="form.performanceType"
                 placeholder="请选择业绩类型"
                 filterable
+                @on-change="form.checkEmpId = null"
               >
                 <Option
                   v-for="item in params.PerformanceTypeList"
@@ -107,11 +109,33 @@
                 placeholder="请输入薪资点数"
                 type="number"
                 number
+                @on-change="pointChange()"
               ></Input>
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="稽查人员" prop="checkEmpId">
+            <FormItem label="助理提成" prop="performanceCommision">
+              <Input
+                v-model="form.performanceCommision"
+                placeholder="请输入助理提成"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.performanceType == 3">
+            <FormItem label="稽查提成" prop="performanceCommisionCheck">
+              <Input
+                v-model="form.performanceCommisionCheck"
+                placeholder="请输入稽查提成"
+                type="number"
+                number
+              ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="form.performanceType == 3">
+            <FormItem label="稽查人员" prop="checkEmpId"
+            >
               <Select
                 v-model="form.checkEmpId"
                 placeholder="请选择稽查人员"
@@ -191,7 +215,12 @@ export default {
         // // 助理薪资id
         // billId: '',
         // // 稽查人员薪资id
-        // checkBillId:null
+        // checkBillId:null,
+        // 助理提成
+        performanceCommision:null,
+        // 稽查提成
+        performanceCommisionCheck:null,
+
       },
       ruleValidates: {
         dealInfoId: [
@@ -248,10 +277,30 @@ export default {
             message: "请输入薪资点数",
           },
         ],
+        performanceCommision: [
+          {
+            required: true,
+            message: "请输入助理提成",
+          },
+        ],
+        performanceCommisionCheck: [
+          {
+            required: true,
+            message: "请输入稽查提成",
+          },
+        ],
       }
     };
   },
   methods: {
+   
+    // 计算助理提成和稽查提成
+    pointChange(){
+      const {dealPrice,point} = this.form
+      let price = dealPrice * point /100
+      this.form.performanceCommision = Math.round( price *1000 / 10 ) / 100
+      this.form.performanceCommisionCheck = Math.round( price *1000 / 10 ) / 100
+    },
     // 根据id获取订单信息
     getbyIdCustomerServiceCheckPerformance(value){
       api.byIdCustomerServiceCheckPerformance(value).then(res=>{
@@ -267,6 +316,8 @@ export default {
           this.form.point = customerServiceCheckPerformance.point
           this.form.checkEmpId = customerServiceCheckPerformance.checkEmpId
           this.form.remark = customerServiceCheckPerformance.remark
+          this.form.performanceCommision = customerServiceCheckPerformance.performanceCommision
+          this.form.performanceCommisionCheck = customerServiceCheckPerformance.performanceCommisionCheck
         }
       })
     },
@@ -284,6 +335,8 @@ export default {
                     point,
                     checkEmpId,
                     remark,
+                    performanceCommision,
+                    performanceCommisionCheck
                 } = this.form;
                 const data = {
                     dealInfoId,
@@ -294,9 +347,11 @@ export default {
                     performanceType,
                     belongEmpId,
                     point,
-                    checkEmpId,
+                    checkEmpId:performanceType == 3 ? checkEmpId : null,
                     remark,
-                    id:this.extractPerformanceParams.id
+                    id:this.extractPerformanceParams.id,
+                    performanceCommision,
+                    performanceCommisionCheck:performanceType == 3 ? performanceCommisionCheck : 0
                 };
             if(this.extractPerformanceParams.title == '编辑'){
                 this.isLoading = true;

@@ -73,17 +73,17 @@
         :label-width="110"
       >
         <Row :gutter="30">
-          
           <Col span="8">
-            <FormItem label="业绩阶梯上限" prop="performanceUpperLimit">
-              <Input v-model="form.performanceUpperLimit" placeholder="请输入业绩阶梯上限" type="number" number></Input>
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem label="业绩阶梯下限" prop="performanceLowerLimit">
+            <FormItem label="业绩阶梯下限(包含)" prop="performanceLowerLimit">
               <Input v-model="form.performanceLowerLimit" placeholder="请输入业绩阶梯下限" type="number" number></Input>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="业绩阶梯上限(不包含)" prop="performanceUpperLimit">
+              <Input v-model="form.performanceUpperLimit" placeholder="请输入业绩阶梯上限" type="number" number></Input>
+            </FormItem>
+          </Col>
+          
           <Col span="8">
             <FormItem label="提成点数(%)" prop="point">
               <Input v-model="form.point" placeholder="请输入提成点数" type="number" number></Input>
@@ -162,20 +162,20 @@ export default {
         pageNum: 1,
         pageSize: 10,
         columns: [
-          
           {
-            title: "业绩阶梯上限",
-            key: "performanceUpperLimit",
-            minWidth: 120,
-            align: "center",
-            
-          },
-          {
-            title: "业绩阶梯下限",
+            title: "业绩阶梯下限(包含)",
             key: "performanceLowerLimit",
             minWidth: 120,
             align: "center",
           },
+          {
+            title: "业绩阶梯上限(不包含)",
+            key: "performanceUpperLimit",
+            minWidth: 130,
+            align: "center",
+            
+          },
+          
           {
             title: "提成点数",
             key: "point",

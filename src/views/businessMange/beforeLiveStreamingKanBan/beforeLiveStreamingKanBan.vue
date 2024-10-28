@@ -224,13 +224,28 @@ export default {
 
   },
   methods:{
+    //   获取时间进度
+    getTimeSpanClick() {
+      const data = {
+        startDate: null,
+        endDate: this.$moment(this.params.endDate).format("YYYY-MM-DD"),
+        keyWord: "",
+      };
+      api.getTimeSpan(data).then((res) => {
+        if (res.code === 0) {
+          // const { contentPalteForms } = res.data;
+          this.completeRate = res.data.data;
+          // sessionStorage.setItem('completeRate',res.data.data)
+        }
+      });
+    },
     // 根据职位id获取员工
     getEmployeeByPositionIdAdmin() {
-      const data = {
-        // （直播前)线上和测试id都是19
-        positionId: 19,
-      };
-      employeeManageApi.getEmployeeByPositionId(data).then((res) => {
+      // const data = {
+      //   // （直播前)线上和测试id都是19
+      //   positionId: 19,
+      // };
+      api.operatingConsultingNameList().then((res) => {
         if (res.code === 0) {
           const { employee } = res.data;
           this.params.employee = employee;
@@ -338,6 +353,7 @@ export default {
       this.getBeforeLiveDepartmentContentPlatformPerformanceRateClick()
     },
     getData(){
+        this.getTimeSpanClick()
         this.$nextTick(()=>{
             this.$refs.items.getBeforeLiveClueAndPerformanceData()
             this.$refs.items2.getBeforeLiveClueAndPerformanceData()
@@ -349,6 +365,7 @@ export default {
         this.getBeforeLiveTargetCompleteRateClick()
         this.getBeforeLiveDepartmentContentPlatformClueRateClick()
         this.getBeforeLiveDepartmentContentPlatformPerformanceRateClick()
+        
     }
   },
   mounted(){

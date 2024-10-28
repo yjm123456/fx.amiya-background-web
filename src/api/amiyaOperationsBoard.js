@@ -456,3 +456,10 @@ export const getBeforeLiveLiveanchorIPData = (params) => {
         params
     });
 };
+// 获取部门详情 
+export const operatingConsultingNameList = () => {
+    return http({
+        url: "/amiyabg/AmiyaEmployee/operatingConsultingNameList",
+        method: "get",
+    });
+};

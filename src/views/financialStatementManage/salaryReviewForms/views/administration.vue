@@ -69,22 +69,15 @@
             @click="getListData()"
             >查询</Button
           >
-          
-        </div>
-        <!-- <div class="right">
-          <Button
-            type="primary"
-            style="margin-left: 10px"
-            @click="getListData()"
-            >查询</Button
-          >
           <Button
             type="primary"
             style="margin-left: 10px"
             @click="invoiceClick()"
             >生成薪资</Button
           >
-        </div> -->
+          
+        </div>
+        
       </div>
     </Card>
     <div class="card_content">
@@ -104,23 +97,23 @@
       </Card>
     </div>
     <!-- 生成薪资 -->
-    <!-- <administrationGenerateSalary
+    <administrationGenerateSalary
       :params="params"
       :filterCriteria="filterCriteria"
       :administrationGenerateSalaryModel.sync="administrationGenerateSalaryModel"
       @getListData="getListData"
-    /> -->
+    />
   </div>
 </template>
 <script>
 import assistantPerformance from "../components/assistantPerformance.vue";
 import auditPerformance from "../components/auditPerformance.vue";
-// import administrationGenerateSalary from "../components/administrationGenerateSalary";
+import administrationGenerateSalary from "../components/administrationGenerateSalary";
 export default {
   components: {
     assistantPerformance,
     auditPerformance,
-    // administrationGenerateSalary,
+    administrationGenerateSalary,
   },
   props: {
     params: Object,
@@ -135,7 +128,11 @@ export default {
         keyWord: "",
         startDate: this.$moment().startOf("month").format("YYYY-MM-DD"),
         endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
-        valid:'true'
+        valid:'true',
+        // 助理业绩
+        assistantPerformanceList: [],
+        // 稽查业绩
+        auditPerformanceList: [],
       },
       isGenerateSalryList: [
         {

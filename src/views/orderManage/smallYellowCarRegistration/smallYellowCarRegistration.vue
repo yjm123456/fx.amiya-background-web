@@ -1173,8 +1173,9 @@ export default {
           {
             title: "创建人",
             key: "createBy",
-            minWidth: 120,
+            minWidth: 160,
             align: "center",
+            tooltip:true
           },
           {
             title: "主播",
@@ -1817,7 +1818,7 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 250,
+            width: 200,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -2023,39 +2024,39 @@ export default {
                   "修改"
                 ),
                 
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "error",
-                      size: "small",
-                    },
-                    on: {
-                      click: () => {
-                        this.$Modal.confirm({
-                          title: "删除提示",
-                          content: "是否确认删除？",
-                          onOk: () => {
-                            const { id } = params.row;
-                            api
-                              .detelShoppingCartRegistration(id)
-                              .then((res) => {
-                                if (res.code === 0) {
-                                  this.getSmallCar();
-                                  this.$Message.success({
-                                    content: "删除成功",
-                                    duration: 3,
-                                  });
-                                }
-                              });
-                          },
-                          onCancel: () => {},
-                        });
-                      },
-                    },
-                  },
-                  "删除"
-                ),
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "error",
+                //       size: "small",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         this.$Modal.confirm({
+                //           title: "删除提示",
+                //           content: "是否确认删除？",
+                //           onOk: () => {
+                //             const { id } = params.row;
+                //             api
+                //               .detelShoppingCartRegistration(id)
+                //               .then((res) => {
+                //                 if (res.code === 0) {
+                //                   this.getSmallCar();
+                //                   this.$Message.success({
+                //                     content: "删除成功",
+                //                     duration: 3,
+                //                   });
+                //                 }
+                //               });
+                //           },
+                //           onCancel: () => {},
+                //         });
+                //       },
+                //     },
+                //   },
+                //   "删除"
+                // ),
               ]);
             },
           },

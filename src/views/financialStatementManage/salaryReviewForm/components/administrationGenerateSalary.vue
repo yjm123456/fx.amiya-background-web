@@ -191,6 +191,15 @@
                 ></Input>
               </FormItem>
             </Col>
+            <Col span="8">
+              <FormItem label="版本号" prop="verison">
+                <Input
+                  v-model="form.verison"
+                  placeholder="请输入版本号"
+                  disabled
+                ></Input>
+              </FormItem>
+            </Col>
           </Row>
           <Row :gutter="30">
             <Col span="4">
@@ -755,7 +764,9 @@ export default {
         // 医院
         hospitalIdList:[],
         // 奖励金额
-        specialHospitalVisitPrice:0
+        specialHospitalVisitPrice:0,
+        // 版本号
+        verison:'1.0'
       },
 
       ruleValidate: {

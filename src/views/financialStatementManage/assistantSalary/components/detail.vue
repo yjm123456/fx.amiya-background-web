@@ -35,6 +35,11 @@
           <span class="title"
             >合计：<span class="num">{{ form.totalPrice }}</span>
           </span>
+          <span class="title"
+            >版本号：<span class="num">{{
+              form.verison
+            }}</span>
+          </span>
         </div>
       </div>
       <div v-if="form.positionId == 30" class="m_r">
@@ -114,16 +119,25 @@
               form.targetFinishReword
             }}</span>
           </span>
+          
         </div>
       </div>
       <Tabs ref="tabs" v-model="activeName" type="card" style="margin-top:10px">
         <TabPane label="订单业绩" name="orderPerformance">
+          <!-- 1.0和2.0调用接口不一样 -->
           <div>
             <orderPerformance
               :activeName="activeName"
               :detailParams="detailParams"
               ref="orderPerformance"
+              v-if="detailParams.verison == '1.0'"
             ></orderPerformance>
+            <orderPerformance2
+              :activeName="activeName"
+              :detailParams="detailParams"
+              ref="orderPerformance2"
+              v-else-if="detailParams.verison == '2.0'"
+            ></orderPerformance2>
           </div>
         </TabPane>
         <TabPane label="稽查业绩" name="auditPerformance">
@@ -132,7 +146,14 @@
               :activeName="activeName"
               :detailParams="detailParams"
               ref="auditPerformance"
+              v-if="detailParams.verison == '1.0'"
             ></auditPerformance>
+            <auditPerformance2
+              :activeName="activeName"
+              :detailParams="detailParams"
+              ref="auditPerformance2"
+              v-else-if="detailParams.verison == '2.0'"
+            ></auditPerformance2>
           </div>
         </TabPane>
       </Tabs>
@@ -146,6 +167,8 @@
 <script>
 import orderPerformance from "./orderPerformance.vue";
 import auditPerformance from "./auditPerformance.vue";
+import orderPerformance2 from "./assistantPerformance.vue";
+import auditPerformance2 from "./auditPerformance2.vue";
 import * as employeeManageApi from "@/api/employeeManage";
 import * as api from "@/api/customerServiceCompensation";
 
@@ -153,6 +176,8 @@ export default {
   components: {
     orderPerformance,
     auditPerformance,
+    orderPerformance2,
+    auditPerformance2,
   },
   props: {
     detailParams: Object,
@@ -215,6 +240,8 @@ export default {
         addWechatCompletePrice: 0,
         // 线索登记完成率
         addClueCompletePrice: 0,
+        // 版本号
+        verison:''
       },
     };
   },
@@ -251,6 +278,7 @@ export default {
             addWechatCompletePrice,
             addClueCompletePrice,
             belongEmpId,
+            verison
           } = res.data.customerServiceCompensation;
           
           this.form.name = name;
@@ -279,6 +307,7 @@ export default {
           this.form.cooperationLiveAnchorToHospitalPrice = cooperationLiveAnchorToHospitalPrice;
           this.form.addWechatCompletePrice = addWechatCompletePrice;
           this.form.addClueCompletePrice = addClueCompletePrice;
+          this.form.verison = verison;
           this.getPositon();
         }
       });
@@ -299,10 +328,12 @@ export default {
     handleModalVisibleChange(value) {
       if (!value) {
         this.$emit("update:detailModal", false);
+        this.activeName = 'orderPerformance'
       }
     },
     cancel(value) {
       this.$emit("update:detailModal", false);
+      this.activeName = 'orderPerformance'
     },
   },
   watch: {
@@ -311,13 +342,26 @@ export default {
       if (value == true) {
         this.getDetail();
         if (this.activeName == "orderPerformance") {
-          this.$nextTick(() => {
-            this.$refs.orderPerformance.getDetail();
-          });
+          // 如果是2.0版本调用新接口  1.0版本调用老接口
+          if(this.detailParams.verison == '2.0'){
+            this.$nextTick(() => {
+              this.$refs.orderPerformance2.getListWithPageByCustomerCompensation();
+            });
+          }else{
+            this.$nextTick(() => {
+              this.$refs.orderPerformance.getDetail();
+            });
+          }
         } else if (this.activeName == "auditPerformance") {
-          this.$nextTick(() => {
-            this.$refs.auditPerformance.getListWithPageByCustomerInspectDatas();
-          });
+          if(this.detailParams.verison == '2.0'){
+            this.$nextTick(() => {
+              this.$refs.auditPerformance2.getListWithPageByCustomerInspectData();
+            });
+          }else{
+            this.$nextTick(() => {
+              this.$refs.auditPerformance.getListWithPageByCustomerInspectDatas();
+            });
+          }
         }
       }
     },

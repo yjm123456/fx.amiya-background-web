@@ -55,3 +55,11 @@ export const getByDealIdAndEmployee = (params) => {
         params,
     });
 };
+// 批量添加助理提取业绩
+export const addListCustomerServiceCheckPerformance = (data) => {
+    return http({
+        url: "/amiyabg/CustomerServiceCheckPerformance/addList",
+        method: "post",
+        data,
+    });
+};

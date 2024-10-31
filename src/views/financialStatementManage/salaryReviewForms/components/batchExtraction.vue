@@ -27,9 +27,9 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="归属客服" prop="checkBelongEmpId">
+            <FormItem label="归属客服" prop="belongEmpId">
               <Select
-                v-model="form.checkBelongEmpId"
+                v-model="form.belongEmpId"
                 placeholder="请选择归属客服"
                 filterable
                 @on-change="getEmployeePerformanceLadder()"
@@ -44,13 +44,13 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="业绩提点" prop="remind">
+            <FormItem label="业绩提点" prop="point">
               <Input
-                v-model="form.remind"
+                v-model="form.point"
                 placeholder="请输入业绩提点"
                 type="number"
                 number
-                @on-change="remindChange()"
+                @on-change="pointChange()"
               ></Input>
             </FormItem>
           </Col>
@@ -108,11 +108,11 @@ export default {
         // 总成交金额
         orderAmount: null,
         // 归属客服
-        checkBelongEmpId: null,
+        belongEmpId: null,
         // 提取备注
         remark: "",
         // 业绩提点
-        remind: 0,
+        point: 0,
         // 助理提成
         customerNumber1:null
       },
@@ -129,13 +129,13 @@ export default {
             message: "请输入总成交金额",
           },
         ],
-        checkBelongEmpId: [
+        belongEmpId: [
           {
             required: true,
             message: "请选择归属客服",
           },
         ],
-        remind: [
+        point: [
           {
             required: true,
             message: "请输入业绩提点",
@@ -146,63 +146,57 @@ export default {
   },
   methods: {
     // 业绩提点变化时计算助理提成
-    remindChange(){
-      let price = this.form.orderAmount * (this.form.remind /100)
+    pointChange(){
+      let price = this.form.orderAmount * (this.form.point /100)
       this.form.customerNumber1 =  Math.round( price *1000 / 10 ) / 100
     },
     // 获取提点
     getEmployeePerformanceLadder(){
-      const {orderAmount,checkBelongEmpId} = this.form
+      const {orderAmount,belongEmpId} = this.form
       const data = {
         totalPerformance:orderAmount,
-        employeeId:checkBelongEmpId
+        employeeId:belongEmpId
       }
-      if(!checkBelongEmpId){
-        this.form.remind = null
+      if(!belongEmpId){
+        this.form.point = null
         return
       }
       api.getByDealPriceAndEmployee(data).then(res=>{
         if(res.code == 0){
-          this.form.remind = res.data.point
-          this.remindChange()
+          this.form.point = res.data.point
+          this.pointChange()
         }
       })
     },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const {
-            orderAmount,
-            checkBelongEmpId,
-            remark,
-            remind,
-            customerNumber1
-          } = this.form;
-          const data = {
-            orderAmount,
-            checkBelongEmpId,
-            remark,
-            remind,
-            customerNumber1,
-            list:this.batchExtractionParams.list
-          };
-          console.log(data)
-          // this.isLoading = true;
-          // api.checkReconciliationDocumentsSettle(data).then((res) => {
-          //   if (res.code === 0) {
-          //     this.isLoading = false;
-          //     this.handleCancel("form");
-          //     this.$emit("getListWithPageByCustomerCompensation");
-          //     this.$Message.success({
-          //       content: "提交成功",
-          //       duration: 3,
-          //     });
-          //   } else {
-          //     setTimeout(() => {
-          //       this.isLoading = false;
-          //     }, 3000);
-          //   }
-          // });
+          const { belongEmpId,point,remark } = this.form
+          let list = this.batchExtractionParams.list.map(item=>{
+            return {
+              ...item,
+              belongEmpId:belongEmpId,
+              point:point,
+              remark:remark
+
+            }
+          })
+          this.isLoading = true;
+          api.addListCustomerServiceCheckPerformance(list).then((res) => {
+            if (res.code === 0) {
+              this.isLoading = false;
+              this.handleCancel("form");
+              this.$emit("getListWithPageByCustomerCompensation");
+              this.$Message.success({
+                content: "提交成功",
+                duration: 3,
+              });
+            } else {
+              setTimeout(() => {
+                this.isLoading = false;
+              }, 3000);
+            }
+          });
         }
       });
     },
@@ -212,7 +206,7 @@ export default {
       this.$refs[name].resetFields();
       this.$parent.getListWithPageByCustomerCompensation()
       this.$parent.batchExtractionParams.list = []
-      this.form.remind = null
+      this.form.point = null
     },
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {

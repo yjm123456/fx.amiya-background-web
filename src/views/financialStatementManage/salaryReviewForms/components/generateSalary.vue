@@ -528,7 +528,7 @@ export default {
         // 奖励金额
         specialHospitalVisitPrice:0,
         // 版本号
-        verison:'1.0'
+        verison:'2.0'
       },
 
       ruleValidate: {
@@ -802,7 +802,7 @@ export default {
         // 合计提成金额
         this.generateSalaryParams.generateSalaryList.map((item) => {
           orderId.push(item.id);
-          price += item.customerServicePerformance;
+          price += item.performanceCommision;
           return price;
         });
         this.form.recommandDocumentSettleIdList = orderId;

@@ -131,6 +131,13 @@ export default {
             tooltip:true
           },
           {
+            title: "版本号",
+            key: "verison",
+            minWidth:100,
+            tooltip:true,
+            align:'center',
+          },
+          {
             title: "助理",
             key: "belongEmpName",
             align:'center',
@@ -391,9 +398,10 @@ export default {
                     },
                     on: {
                       click: () => {
-                        const { id,belongEmpId } = params.row;
+                        const { id,belongEmpId,verison } = params.row;
                         this.detailParams.id=id
                         this.detailParams.belongEmpId=belongEmpId
+                        this.detailParams.verison=verison
                         this.detailModal = true
                       },
                     },
@@ -506,7 +514,8 @@ export default {
       
       detailParams:{
         id:'',
-        belongEmpId:null
+        belongEmpId:null,
+        verison:''
       },
       isButton:false,
     };

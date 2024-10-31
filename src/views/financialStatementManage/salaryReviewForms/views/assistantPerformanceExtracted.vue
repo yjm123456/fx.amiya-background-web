@@ -69,6 +69,12 @@
             @click="getCustomerServiceCheckPerformanceClick()"
             >查询</Button
           >
+          <Button
+            type="primary"
+            style="margin-left: 10px"
+            @click="invoiceClick()"
+            >生成薪资</Button
+          >
           
         </div>
         <div class="right">
@@ -88,6 +94,11 @@
           border
           :columns="query.columns"
           :data="query.data"
+          @on-select="handleSelect"
+          @on-select-cancel="handleCancels"
+          @on-select-all="handleSelectAll"
+          @on-select-all-cancel="handleSelectAll"
+
         ></Table>
       </div>
       <div class="page_wrap">
@@ -104,15 +115,21 @@
         />
       </div>
     </Card>
+    <!-- 添加/编辑 -->
     <assistantPerformanceExtracted :controlModel.sync="controlModel" :extractPerformanceParams="extractPerformanceParams" :params="params" ref="assistantPerformanceExtracted"/>
+    <!-- 生成薪资 -->
+    <generateSalary :generateSalaryModel.sync="generateSalaryModel" :generateSalaryParams="generateSalaryParams" :params="params" @getListWithPageByCustomerCompensation="getCustomerServiceCheckPerformanceClick" :startDate="this.$moment(new Date(query.startDate)).format('YYYY-MM-DD')" :endDate="this.$moment(new Date(query.endDate)).format('YYYY-MM-DD')"/>
   </div>
 </template>
 <script>
 import * as api from "@/api/customerServiceCheckPerformance";
 import assistantPerformanceExtracted from "../components/extractPerformanceAddEdit.vue"
+import generateSalary from "../components/generateSalary.vue";
+
 export default {
   components: {
-   assistantPerformanceExtracted
+   assistantPerformanceExtracted,
+   generateSalary
   },
   props: {
     activeName: String,
@@ -328,10 +345,73 @@ export default {
         // 用于修改保留在当前页面
         pageNum:1
       },
-      validList:[{type:'true',name:'有效'},{type:'false',name:'无效'}]
+      validList:[{type:'true',name:'有效'},{type:'false',name:'无效'}],
+      // 生成薪资参数
+      generateSalaryParams:{
+        generateSalaryList: new Set(),
+        // 
+        returnBackPrice:0
+      },
+      // 生成薪资model
+      generateSalaryModel:false,
     };
   },
   methods: {
+    handleSelect(selection, row) {
+      // 生成薪资单
+      this.generateSalaryParams.generateSalaryList = selection
+      // 提成金额合计
+      this.commissionPrice+=row.performanceCommision
+      // 审核客服业绩合计
+      this.checkedPrice += row.customerServiceSettlePrice
+    },
+    handleCancels(selection, row) {
+      // 生成薪资单
+      this.generateSalaryParams.generateSalaryList = selection
+      // 提成金额合计
+      this.commissionPrice = this.commissionPrice - row.performanceCommision;
+      // 审核客服业绩合计
+      this.checkedPrice = this.checkedPrice - row.customerServiceSettlePrice;
+    },
+
+    handleSelectAll(selection) {
+      if (selection && selection.length === 0) {
+        // 生成薪资单
+        this.generateSalaryParams.generateSalaryList = []
+        // 提成金额合计
+        this.commissionPrice = 0;
+        // 审核客服业绩合计
+        this.checkedPrice = 0;
+
+      } else {
+        this.generateSalaryParams.generateSalaryList = selection
+        selection.forEach((item) => {
+          // 提成金额合计
+          this.commissionPrice += item.performanceCommision;
+          // 审核客服业绩合计
+          this.checkedPrice += item.customerServiceSettlePrice;
+        });
+      }
+    },
+    // 生成薪资
+    invoiceClick() {
+      if (!this.generateSalaryParams.generateSalaryList.length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      let belongEmpName = this.generateSalaryParams.generateSalaryList.map(item=>item.belongEmpName)
+      let firstValue = belongEmpName[0]
+      let isFlag = belongEmpName.every(value => value === firstValue)
+      if(isFlag == true){
+        this.generateSalaryModel = true
+      }else{
+        this.$Message.warning('生成薪资存在多名助理数据，请核对后重新选择！')
+      }
+      
+    },
     // 获取助理提取业绩
     getCustomerServiceCheckPerformanceClick() {
       this.$nextTick(() => {

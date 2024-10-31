@@ -27,9 +27,9 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="成交编号" prop="dealId">
+            <FormItem label="成交编号" prop="dealInfoId">
               <Input
-                v-model="form.dealId"
+                v-model="form.dealInfoId"
                 placeholder="请输入成交编号"
                 type="number"
                 number
@@ -40,9 +40,9 @@
         </Row>
         <Row :gutter="30">
           <Col span="8">
-            <FormItem label="总成交金额" prop="orderAmount">
+            <FormItem label="总成交金额" prop="dealPrice">
               <Input
-                v-model="form.orderAmount"
+                v-model="form.dealPrice"
                 placeholder="请输入总成交金额"
                 type="number"
                 number
@@ -51,9 +51,9 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="归属客服" prop="checkBelongEmpId">
+            <FormItem label="归属客服" prop="belongEmpId">
               <Select
-                v-model="form.checkBelongEmpId"
+                v-model="form.belongEmpId"
                 placeholder="请选择归属客服"
                 filterable
                 @on-change="getByDealIdAndEmployeeClick()"
@@ -70,7 +70,7 @@
           <Col span="8">
             <FormItem 
                 label="总提点(%)" 
-                prop="remind" 
+                prop="point" 
                 :rules="[
                     {
                     required: true,
@@ -80,11 +80,11 @@
                     },
                 ]">
               <Input
-                v-model="form.remind"
+                v-model="form.point"
                 placeholder="请输入总提点"
                 type="number"
                 number
-                @on-change="remindChange"
+                @on-change="pointChange"
                 
               ></Input>
             </FormItem>
@@ -101,9 +101,9 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="助理提成" prop="customerNumber">
+            <FormItem label="助理提成" prop="performanceCommision">
               <Input
-                v-model="form.customerNumber"
+                v-model="form.performanceCommision"
                 placeholder="请输入助理提成"
                 type="number"
                 number
@@ -124,15 +124,15 @@
               <FormItem label="是否为稽查订单" prop="isInspection">
                 <i-switch
                   v-model="form.isInspection"
-                  :disabled="!form.remind"
-                  @on-change="remindChange"
+                  :disabled="!form.point"
+                  @on-change="pointChange"
                 />
               </FormItem>
           </Col>
           <Col span="8" v-if="form.isInspection == true">
-            <FormItem label="稽查人员" prop="inspectionCustomer">
+            <FormItem label="稽查人员" prop="checkEmpId">
               <Select
-                v-model="form.inspectionCustomer"
+                v-model="form.checkEmpId"
                 placeholder="请选择稽查人员"
                 filterable
               >
@@ -157,9 +157,9 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="form.isInspection == true">
-            <FormItem label="稽查提成" prop="inspectionNumber">
+            <FormItem label="稽查提成" prop="performanceCommisionCheck">
               <Input
-                v-model="form.inspectionNumber"
+                v-model="form.performanceCommisionCheck"
                 placeholder="请输入稽查提成"
                 type="number"
                 number
@@ -198,37 +198,37 @@ export default {
         // 订单id
         orderId:'',
         // 成交id
-        dealId:'',
+        dealInfoId:'',
         // 总成交金额
-        orderAmount: null,
+        dealPrice: null,
         // 归属客服
-        checkBelongEmpId: null,
+        belongEmpId: null,
         // 提取备注
         remark: "",
         // 总提点
-        remind: null,
+        point: null,
         // 助理提点
         customerRemind:null,
         // 助理提成
-        customerNumber:null,
+        performanceCommision:null,
         // 是否为稽查
         isInspection:false,
         // 稽查人员
-        inspectionCustomer:null,
+        checkEmpId:null,
         // 稽查提点
         inspectionRemind:null,
         // 稽查提成
-        inspectionNumber:null,
+        performanceCommisionCheck:null,
 
       },
       ruleValidates: {
-        customerNumber: [
+        performanceCommision: [
           {
             required: true,
             message: "请输入助理提成",
           },
         ],
-        inspectionNumber: [
+        performanceCommisionCheck: [
           {
             required: true,
             message: "请输入稽查提成",
@@ -240,31 +240,31 @@ export default {
             message: "请输入订单号",
           },
         ],
-        dealId: [
+        dealInfoId: [
           {
             required: true,
             message: "请输入成交编号",
           },
         ],
-        orderAmount: [
+        dealPrice: [
           {
             required: true,
             message: "请输入总成交金额",
           },
         ],
-        checkBelongEmpId: [
+        belongEmpId: [
           {
             required: true,
             message: "请选择归属客服",
           },
         ],
-        inspectionCustomer: [
+        checkEmpId: [
           {
             required: true,
             message: "请选择稽查人员",
           },
         ],
-        remind: [
+        point: [
           {
             required: true,
             message: "请输入业绩提点",
@@ -275,43 +275,44 @@ export default {
   },
   methods: {
     // // 业绩提点变化时计算助理提成
-    // remindChange(){
-    //   let price = this.form.orderAmount * (this.form.remind /100)
-    //   this.form.customerNumber =  Math.round( price *1000 / 10 ) / 100
+    // pointChange(){
+    //   let price = this.form.dealPrice * (this.form.point /100)
+    //   this.form.performanceCommision =  Math.round( price *1000 / 10 ) / 100
     // },
     // 获取提点
     getByDealIdAndEmployeeClick(){
-      const {dealId,checkBelongEmpId} = this.form
+      const {dealInfoId,belongEmpId} = this.form
       const data = {
-        dealId:dealId,
-        employeeId:checkBelongEmpId
+        dealId:dealInfoId,
+        employeeId:belongEmpId
       }
-      if(!checkBelongEmpId){
-        this.form.remind = null
+      if(!belongEmpId){
+        this.form.point = null
         return
       }
       api.getByDealIdAndEmployee(data).then(res=>{
         if(res.code == 0){
-          this.form.remind = res.data.point
-          this.remindChange()
+          this.form.point = res.data.point
+          this.pointChange()
         }
       })
     },
     // 计算助理提点和稽查提点
-    remindChange(){
+    pointChange(){
         if(this.form.isInspection == true){
-            let remind = this.form.remind / 2
-            this.form.customerRemind = Math.round( remind *1000 / 10 ) / 100
+            let point = this.form.point / 2
+            this.form.customerRemind = Math.round( point *1000 / 10 ) / 100
             // 计算稽查提成
-            let price = this.form.orderAmount * (this.form.customerRemind / 100)
-            this.form.inspectionNumber =  Math.round( price *1000 / 10 ) / 100
+            let price = this.form.dealPrice * (this.form.customerRemind / 100)
+            this.form.performanceCommisionCheck =  Math.round( price *1000 / 10 ) / 100
             // 如为稽查订单 助理提成 = 总成交金额 * 助理提点
-            this.form.customerNumber =  Math.round( price *1000 / 10 ) / 100
+            this.form.performanceCommision =  Math.round( price *1000 / 10 ) / 100
         }else{
-            this.form.customerRemind = this.form.remind
+            this.form.customerRemind = this.form.point
             // 计算助理提成
-            let price = this.form.orderAmount * (this.form.remind /100)
-            this.form.customerNumber =  Math.round( price *1000 / 10 ) / 100
+            let price = this.form.dealPrice * (this.form.point /100)
+            this.form.performanceCommision =  Math.round( price *1000 / 10 ) / 100
+            this.form.checkEmpId = null
             
         }
         
@@ -321,46 +322,47 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           const {
-            orderId,
-            dealId,
-            orderAmount,
-            checkBelongEmpId,
-            remind,
-            customerRemind,
-            isInspection,
-            inspectionCustomer,
-            remark
-
+              orderId,
+              dealInfoId,
+              dealPrice,
+              belongEmpId,
+              remark,
+              customerRemind,
+              performanceCommision,
+              isInspection,
+              checkEmpId,
+              performanceCommisionCheck,
           } = this.form;
           const data = {
+            dealInfoId,
             orderId,
-            dealId,
-            orderAmount,
-            checkBelongEmpId,
-            remind,
-            customerRemind,
-            isInspection,
-            inspectionCustomer:isInspection == true ? inspectionCustomer : null,
+            orderFrom:2,
+            dealPrice,
+            dealCreateDate:this.extractionParams.dealCreateDate,
+            performanceType:isInspection == true ? 3 : 1,
+            belongEmpId,
+            point:customerRemind,
+            performanceCommision: performanceCommision ? performanceCommision : 0,
+            performanceCommisionCheck: performanceCommisionCheck ? performanceCommisionCheck : 0,
+            checkEmpId:isInspection == false ? null : checkEmpId,
             remark
           };
-          console.log(data)
-          
-          // this.isLoading = true;
-          // api.checkReconciliationDocumentsSettle(data).then((res) => {
-          //   if (res.code === 0) {
-          //     this.isLoading = false;
-          //     this.handleCancel("form");
-          //     this.$emit("getListWithPageByCustomerCompensation");
-          //     this.$Message.success({
-          //       content: "提交成功",
-          //       duration: 3,
-          //     });
-          //   } else {
-          //     setTimeout(() => {
-          //       this.isLoading = false;
-          //     }, 3000);
-          //   }
-          // });
+          this.isLoading = true;
+          api.addCustomerServiceCheckPerformance(data).then((res) => {
+            if (res.code === 0) {
+              this.isLoading = false;
+              this.handleCancel("form");
+              this.$emit("getListWithPageByCustomerCompensation");
+              this.$Message.success({
+                content: "提交成功",
+                duration: 3,
+              });
+            } else {
+              setTimeout(() => {
+                this.isLoading = false;
+              }, 3000);
+            }
+          });
         }
       });
     },
@@ -383,8 +385,8 @@ export default {
     extractionModel(value) {
       this.control = value;
       this.form.orderId = this.extractionParams.contentPaltformOrderId
-      this.form.dealId = this.extractionParams.dealId
-      this.form.orderAmount = this.extractionParams.dealPrice
+      this.form.dealInfoId = this.extractionParams.dealId
+      this.form.dealPrice = this.extractionParams.dealPrice
     },
   },
 };

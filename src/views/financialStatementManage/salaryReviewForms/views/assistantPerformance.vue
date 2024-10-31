@@ -309,12 +309,13 @@ export default {
                           dealId,
                           contentPaltformOrderId,
                           dealPrice,
-                         
+                          createDate
                         } = params.row;
                         this.extractionModel = true;
                         this.extractionParams.dealId = dealId;
                         this.extractionParams.contentPaltformOrderId = contentPaltformOrderId;
                         this.extractionParams.dealPrice = dealPrice;
+                        this.extractionParams.dealCreateDate = createDate
                       },
                     },
                   },
@@ -384,7 +385,11 @@ export default {
   methods: {
     // 批量提取
     batchReviewClick(){
-      console.log(this.batchExtractionParams.list)
+      let performanceType = this.batchExtractionParams.list.map(item=>{return item.performanceType})
+      // 4（助理稽查） 稽查业绩不能批量提取
+      let type1 = performanceType.find(item=>item == 4)
+      // 5（财务稽查）
+      let type2 = performanceType.find(item=>item == 5)
       if (this.batchExtractionParams.list.length == 0 || this.batchExtractionParams.list == []) {
         this.$Message.warning({
           content: "请选择订单",
@@ -392,16 +397,26 @@ export default {
         });
         return;
       }
+      if(type1 || type2){
+        this.$Message.warning('稽查数据不能批量提取，请重新核对后提交！')
+        return
+      }
+
       this.batchExtractionModel = true;
     },
     handleSelect(selection, row) {
       // 批量提取
       // this.checkedParams.idList.add(row.id);
       this.batchExtractionParams.list.push({
-        dealId:row.dealId,
+        dealInfoId:row.dealId,
         orderId:row.contentPaltformOrderId,
         dealPrice:row.dealPrice,
-        performanceType:row.performanceType
+        performanceType:row.performanceType,
+        orderFrom:2,
+        dealCreateDate:row.createDate,
+        performanceCommision:0,
+        performanceCommisionCheck:0
+
       })
     },
 
@@ -420,10 +435,14 @@ export default {
         selection.forEach((item) => {
           // this.checkedParams.idList.add(item.id);
           this.batchExtractionParams.list.push({
-            dealId:item.dealId,
+            dealInfoId:item.dealId,
             orderId:item.contentPaltformOrderId,
             dealPrice:item.dealPrice,
-            performanceType:item.performanceType
+            performanceType:item.performanceType,
+            orderFrom:2,
+            dealCreateDate:item.createDate,
+            performanceCommision:0,
+            performanceCommisionCheck:0
           })
         });
       }

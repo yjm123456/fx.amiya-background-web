@@ -386,10 +386,7 @@ export default {
     // 批量提取
     batchReviewClick(){
       let performanceType = this.batchExtractionParams.list.map(item=>{return item.performanceType})
-      // 4（助理稽查） 稽查业绩不能批量提取
-      let type1 = performanceType.find(item=>item == 4)
-      // 5（财务稽查）
-      let type2 = performanceType.find(item=>item == 5)
+      
       if (this.batchExtractionParams.list.length == 0 || this.batchExtractionParams.list == []) {
         this.$Message.warning({
           content: "请选择订单",
@@ -397,11 +394,12 @@ export default {
         });
         return;
       }
-      if(type1 || type2){
+      //4（助理稽查）  5（财务稽查） 稽查业绩不能批量提取
+      if(performanceType.find(item=>item == 4) == 4 || performanceType.find(item=>item == 5) == 5){
         this.$Message.warning('稽查数据不能批量提取，请重新核对后提交！')
+        this.batchExtractionParams.list = []
         return
       }
-
       this.batchExtractionModel = true;
     },
     handleSelect(selection, row) {
@@ -487,6 +485,7 @@ export default {
           } = res.data.data;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          this.batchExtractionParams.list = []
         }
       });
     },
@@ -524,6 +523,7 @@ export default {
           } = res.data.data;
           this.query.data = list;
           this.query.totalCount = totalCount;
+          this.batchExtractionParams.list = []
         }
       });
     },

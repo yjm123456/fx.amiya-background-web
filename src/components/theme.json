@@ -7,7 +7,10 @@
         "#3d92f3",
         "#7330fc",
         "#ff7070",
-        "#7fd3ce"
+        "#7cc51c",
+        "#ffff01",
+        "#32e6ff",
+        "#ffb497"
     ],
     "backgroundColor": "rgba(0,0,0,0)",
     "textStyle": {},
@@ -177,9 +180,13 @@
             "#7381FB",
             "#BB5DF9",
             "#F37F51",
+            "#3d92f3",
             "#7330fc",
             "#ff7070",
-            "#7fd3ce"
+            "#7cc51c",
+            "#ffff01",
+            "#32e6ff",
+            "#ffb497"
         ],
         "label": {
             "normal": {

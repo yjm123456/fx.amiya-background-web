@@ -111,6 +111,23 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="业绩类型" prop="performanceType">
+              <Select
+                v-model="form.performanceType"
+                placeholder="请选择业绩类型"
+                filterable
+                disabled
+              >
+                <Option
+                  v-for="item in params.PerformanceTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="提取备注" prop="remark">
               <Input
                 v-model="form.remark"
@@ -219,9 +236,17 @@ export default {
         inspectionRemind:null,
         // 稽查提成
         performanceCommisionCheck:null,
+        // 业绩类型
+        performanceType:1
 
       },
       ruleValidates: {
+        performanceType: [
+          {
+            required: true,
+            message: "请业绩类型",
+          },
+        ],
         performanceCommision: [
           {
             required: true,
@@ -300,6 +325,7 @@ export default {
     // 计算助理提点和稽查提点
     pointChange(){
         if(this.form.isInspection == true){
+            this.form.performanceType = 3
             let point = this.form.point / 2
             this.form.customerRemind = Math.round( point *1000 / 10 ) / 100
             // 计算稽查提成
@@ -313,6 +339,7 @@ export default {
             let price = this.form.dealPrice * (this.form.point /100)
             this.form.performanceCommision =  Math.round( price *1000 / 10 ) / 100
             this.form.checkEmpId = null
+            this.form.performanceType = 1
             
         }
         
@@ -352,7 +379,8 @@ export default {
             if (res.code === 0) {
               this.isLoading = false;
               this.handleCancel("form");
-              this.$emit("getListWithPageByCustomerCompensation");
+              // this.$emit("getListWithPageByCustomerCompensation");
+              this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
               this.$Message.success({
                 content: "提交成功",
                 duration: 3,
@@ -370,7 +398,8 @@ export default {
     handleCancel(name) {
       this.$emit("update:extractionModel", false);
       this.$refs[name].resetFields();
-      this.$parent.getListWithPageByCustomerCompensation()
+      // this.$parent.getListWithPageByCustomerCompensation()
+      this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
       this.$parent.batchExtractionParams.list = []
       this.form.customerRemind = null
     },

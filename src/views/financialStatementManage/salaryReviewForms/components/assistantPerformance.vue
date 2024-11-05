@@ -39,7 +39,7 @@ export default {
       // 查询
       query: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize:10,
         columns: [
           {
             type: "selection",

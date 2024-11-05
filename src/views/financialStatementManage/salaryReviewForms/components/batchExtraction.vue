@@ -64,13 +64,30 @@
               ></Input>
             </FormItem>
           </Col>
-          <Col span="16">
+          <Col span="8">
+            <FormItem label="业绩类型" prop="performanceType">
+              <Select
+                v-model="form.performanceType"
+                placeholder="请选择业绩类型"
+                filterable
+                disabled
+              >
+                <Option
+                  v-for="item in params.PerformanceTypeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="提取备注" prop="remark">
               <Input
                 v-model="form.remark"
                 placeholder="请输入提取备注"
                 type="textarea"
-                :rows="2"
+                :rows="3"
               ></Input>
             </FormItem>
           </Col>
@@ -114,9 +131,17 @@ export default {
         // 业绩提点
         point: 0,
         // 助理提成
-        customerNumber1:null
+        customerNumber1:null,
+        // 业绩类型
+        performanceType:1
       },
       ruleValidates: {
+        performanceType: [
+          {
+            required: true,
+            message: "请选择业绩类型",
+          },
+        ],
         customerNumber1: [
           {
             required: true,
@@ -171,14 +196,14 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          const { belongEmpId,point,remark } = this.form
+          const { belongEmpId,point,remark ,performanceType} = this.form
           let list = this.batchExtractionParams.list.map(item=>{
             return {
               ...item,
               belongEmpId:belongEmpId,
               point:point,
-              remark:remark
-
+              remark:remark,
+              performanceType:performanceType
             }
           })
           this.isLoading = true;
@@ -186,7 +211,8 @@ export default {
             if (res.code === 0) {
               this.isLoading = false;
               this.handleCancel("form");
-              this.$emit("getListWithPageByCustomerCompensation");
+              // this.$emit("getListWithPageByCustomerCompensation");
+              this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
               this.$Message.success({
                 content: "提交成功",
                 duration: 3,
@@ -204,7 +230,8 @@ export default {
     handleCancel(name) {
       this.$emit("update:batchExtractionModel", false);
       this.$refs[name].resetFields();
-      this.$parent.getListWithPageByCustomerCompensation()
+      // this.$parent.getListWithPageByCustomerCompensation()
+      this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
       this.$parent.batchExtractionParams.list = []
       this.form.point = null
     },

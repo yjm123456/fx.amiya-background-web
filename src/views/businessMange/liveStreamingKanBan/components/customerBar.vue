@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div ref="dom" :style="{ width: '100%', height: '500px' }"></div>
+    <div ref="dom" :style="{ width: '100%', height: '400px' }"></div>
   </div>
 </template>
 
@@ -12,7 +12,7 @@ echarts.registerTheme("tdTheme", tdTheme);
 
 export default {
   props: {
-    beforeLiveTransformCycleData: Array,
+    liveStreamingData: Array,
     title:String,
     // completeRate:Number
   },
@@ -106,7 +106,7 @@ export default {
     off(window, "resize", this.myChart.resize);
   },
   watch: {
-    beforeLiveTransformCycleData(value) {
+    liveStreamingData(value) {
       // this.$nextTick(() => {
       this.myEcharts(value);
       // });
@@ -117,7 +117,7 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   width: 100%;
-  height: 500px;
+  height: 400px;
   // margin-left: 5%;
 }
 </style>

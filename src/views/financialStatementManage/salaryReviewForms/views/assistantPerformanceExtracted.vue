@@ -315,7 +315,8 @@ export default {
                             const { id } = params.row;
                             api.deleteCustomerServiceCheckPerformance(id).then((res) => {
                               if (res.code === 0) {
-                                this.getCustomerServiceCheckPerformanceClick();
+                                // this.getCustomerServiceCheckPerformanceClick();
+                                this.handlePageChange(this.$refs.pages.currentPage)
                                 this.$Message.success({
                                   content: "删除成功",
                                   duration: 3,
@@ -496,56 +497,6 @@ export default {
     handlePageSizeChange(pageSize) {
       this.query.pageSize = pageSize;
       this.getCustomerServiceCheckPerformanceClick();
-    },
-    // 确认
-    handleSubmit(name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          if (this.isEdit) {
-            // 修改
-            api.editExpressManage(this.form).then((res) => {
-              if (res.code === 0) {
-                this.isEdit = false;
-                this.cancelSubmit("form");
-                this.getCustomerServiceCheckPerformanceClick();
-                this.$Message.success({
-                  content: "修改成功",
-                  duration: 3,
-                });
-              }
-            });
-          } else {
-            const { expressName, valid, expressCode } = this.form;
-            const data = { expressName, valid, expressCode };
-            // 添加
-            api.addExpressManage(data).then((res) => {
-              if (res.code === 0) {
-                this.cancelSubmit("form");
-                this.getCustomerServiceCheckPerformanceClick();
-                this.$Message.success({
-                  content: "添加成功",
-                  duration: 3,
-                });
-              }
-            });
-          }
-        }
-      });
-    },
-
-    // 取消
-    cancelSubmit(name) {
-      this.isEdit = false;
-      this.controlModel = false;
-      this.$refs[name].resetFields();
-    },
-
-    // modal 显示状态发生变化时触发
-    handleModalVisibleChange(value) {
-      if (!value) {
-        this.isEdit = false;
-        this.$refs["form"].resetFields();
-      }
     },
   },
   created() {},

@@ -101,14 +101,14 @@ export default {
           {
             title: "归属客服",
             key: "belongEmpName",
-            minWidth: 140,
+            minWidth: 120,
             align: "center",
             tooltip: true,
           },
           {
             title: "助理提点",
             key: "point",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             tooltip: true,
             renderHeader: (h, { column }) => {
@@ -135,7 +135,7 @@ export default {
           {
             title: "助理提成",
             key: "performanceCommision",
-            minWidth: 140,
+            minWidth: 120,
             align:'center',
             renderHeader: (h, { column }) => {
                 return h('span', [

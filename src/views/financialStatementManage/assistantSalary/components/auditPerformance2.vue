@@ -104,14 +104,14 @@ export default {
           {
             title: "归属客服",
             key: "belongEmpName",
-            minWidth: 140,
+            minWidth: 120,
             align: "center",
             tooltip: true,
           },
           {
             title: "稽查提点",
             key: "point",
-            minWidth: 120,
+            minWidth: 100,
             align: "center",
             tooltip: true,
             renderHeader: (h, { column }) => {

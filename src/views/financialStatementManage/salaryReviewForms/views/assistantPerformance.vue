@@ -237,22 +237,62 @@ export default {
             },
           },
           {
+            title: "提取状态",
+            key: "isCheckPerformance",
+            minWidth: 100,
+            align: "center",
+            tooltip: true,
+            render: (h, params) => {
+              if (params.row.isCheckPerformance == "已提取") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#04B05D",
+                    },
+                  },
+                  params.row.isCheckPerformance
+                );
+              } else if (params.row.isCheckPerformance == "未提取") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                  params.row.isCheckPerformance
+                );
+              }  else {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#515a6e",
+                    },
+                  },
+                  params.row.isCheckPerformance
+                );
+              }
+            },
+          },
+          {
             title: "上传人",
             key: "createByName",
-            minWidth: 140,
+            minWidth: 100,
             align: "center",
           },
           {
             title: "归属客服",
             key: "belongEmpName",
-            minWidth: 140,
+            minWidth: 100,
             align: "center",
             tooltip: true,
           },
           {
-            title: "是否是辅助订单",
+            title: "辅助订单",
             key: "isSupportOrder",
-            minWidth: 140,
+            minWidth: 100,
             align: "center",
             render: (h, params) => {
               if (params.row.isSupportOrder == true) {

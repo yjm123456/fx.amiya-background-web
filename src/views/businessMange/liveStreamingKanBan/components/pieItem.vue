@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="allNum" :style="{top: pieLength == 0 ? 0 : pieLength == 1 ?  '22px' : pieLength == 2 ?   '45px' : pieLength == 3 ? '68px' :pieLength == 4 ? '92px' : pieLength == 5 ? '118px' : pieLength == 6 ? '140px' : pieLength == 7 ? '164px' : pieLength == 8 ? '164px' : pieLength == 9 ? '164px' : pieLength == 10 ? '164px' : pieLength == 11 ? '164px' :  pieLength == 12 ? '164px'  : '0px' }" v-if="pieLength">{{title}}<span style="font-size:14px;"> {{total}}{{title == '总线索' ? '人' : 'w'}}</span></div>
+    <div class="allNum" :style="{top: pieLength == 0 ? 0 : pieLength == 1 ?  '22px' : pieLength == 2 ?   '45px' : pieLength == 3 ? '68px' :pieLength == 4 ? '92px' : pieLength == 5 ? '118px' : pieLength == 6 ? '140px' : pieLength >=7 ? '164px' : '0px' }" v-if="pieLength">{{title}}<span style="font-size:14px;"> {{total}}{{title == '总线索' ? '人' : 'w'}}</span></div>
     <div ref="dom" :style="{ width: '100%', height: '180px' }"></div>
     
   </div>

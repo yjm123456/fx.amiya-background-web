@@ -215,6 +215,7 @@ export default {
             title: "操作",
             key: "",
             width: 150,
+            align:'center',
             render: (h, params) => {
               return h("div", [
                 h(

@@ -50,7 +50,7 @@
     <!-- 卡片 -->
     <div class="card_list">
       <Card class="card_item2"> 
-        <items :params="params" ref="items"/>
+        <items :params="params" ref="items" :completeRate="completeRate"/>
       </Card>
     </div>
     <!-- 折线图 -->
@@ -104,64 +104,40 @@
         </div>
     </Card>
    
-    <!-- 账号获客占比和业绩占比 -->
+    <!-- 获客占比和业绩占比 -->
     <Card  class="m_b">
         <div class="card_list">
             <Card class="card_item"> 
-                <div class="m_b m_t line">
+                <div class="m_b m_t ">
                   <div class="h3">平台获客占比</div>
                   <pieItem :pieData="LivingContentplatformClueDataObj.contentPlatformClueRate" title="总线索" :total="LivingContentplatformClueDataObj.contentPlatformTotalClue"/>
                 </div>
                 <div class="m_b">
-                  <div class="h3">账号获客占比</div>
-                  <pieItem :pieData="LivingContentplatformClueDataObj.accountClueRate" title="总线索" :total="LivingContentplatformClueDataObj.accountTotalClue"/>
+                  <div class="h3">抖音-获客占比</div>
+                  <pieItem :pieData="LivingContentplatformClueDataObj.tikTokClueRate" title="总线索" :total="LivingContentplatformClueDataObj.tikTokTotalClue"/>
+                </div>
+                <div class="m_b">
+                  <div class="h3">视频号-获客占比</div>
+                  <pieItem :pieData="LivingContentplatformClueDataObj.wechatVideoClueRate" title="总线索" :total="LivingContentplatformClueDataObj.wechatVideoTotalClue"/>
                 </div>
             </Card>
             <Card class="card_item">
-              <div class="m_b m_t line">
+              <div class="m_b m_t ">
                 <div class="h3">平台业绩占比</div>
                 <pieItem :pieData="LivingContentplatformPerformanceDataObj.contentPlatformPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.contentPlatformTotalPerformance"/>
-                
               </div>
-              <div class="m_b">
-                <div class="h3">账号业绩占比</div>
-                <pieItem :pieData="LivingContentplatformPerformanceDataObj.accountPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.accountTotalPerformance"/>
+              <div class="m_b m_t ">
+                <div class="h3">抖音-业绩占比</div>
+                <pieItem :pieData="LivingContentplatformPerformanceDataObj.tikTokAccountPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.tikTokAccountTotalPerformance"/>
               </div>
+              <div class="m_b m_t ">
+                <div class="h3">视频号-业绩占比</div>
+                <pieItem :pieData="LivingContentplatformPerformanceDataObj.wechatVideoAccountPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.wechatVideoAccountTotalPerformance"/>
+              </div>
+             
             </Card>
             
         </div>
-    </Card>
-    <Card  class="m_b">
-      <div class="card_list">
-        <Card class="card_item">
-          <div class="m_b">
-            <div class="h3">抖音-账号获客占比</div>
-            <pieItem :pieData="LivingContentplatformClueDataObj.tikTokClueRate" title="总线索" :total="LivingContentplatformClueDataObj.tikTokTotalClue"/>
-          </div>
-          
-        </Card>
-        <Card class="card_item">
-          <div class="m_b">
-            <div class="h3">视频号-账号获客占比</div>
-            <pieItem :pieData="LivingContentplatformClueDataObj.wechatVideoClueRate" title="总线索" :total="LivingContentplatformClueDataObj.wechatVideoTotalClue"/>
-          </div>
-        </Card>
-        
-      </div>
-      <div class="card_list">
-        <Card class="card_item">
-            <div class="m_b">
-            <div class="h3">小红书-账号获客占比</div>
-            <pieItem :pieData="LivingContentplatformClueDataObj.xiaoHongShuClueRate" title="总线索" :total="LivingContentplatformClueDataObj.xiaoHongShuTotalClue"/>
-          </div>
-        </Card>
-        <Card class="card_item">
-          <div class="m_b">
-            <div class="h3">日不落-账号获客占比</div>
-            <pieItem :pieData="LivingContentplatformClueDataObj.riBuLuoClueRate" title="总线索" :total="LivingContentplatformClueDataObj.riBuLuoTotalClue"/>
-          </div>
-        </Card>
-      </div>
     </Card>
   </div>
 </template>
@@ -265,12 +241,9 @@ export default {
       employeeManageApi.byIdGetAmiyaEmployee(value).then(res=>{
         if(res.code == 0){
           const {liveAnchorBaseId} = res.data.employeeInfo
-          console.log(this.isCustomerService,liveAnchorBaseId)
           if(this.isCustomerService == 'true' && liveAnchorBaseId != ''){
             this.params.baseLiveAnchorId = liveAnchorBaseId
-            console.log(1)
           }else{
-            console.log(2,this.liveAnchorBaseInfos )
             this.params.baseLiveAnchorId = this.liveAnchorBaseInfos ? this.liveAnchorBaseInfos[0].id : '' 
           }
         }

@@ -146,7 +146,7 @@
           :total="query.totalCount"
           show-total
           show-sizer
-          :page-size-opts="[10, 50, 100, 200]"
+          :page-size-opts="[10, 50, 100, 200,500]"
           @on-change="handlePageChange"
           @on-page-size-change="handlePageSizeChange"
           transfer
@@ -277,6 +277,7 @@ export default {
             title: "医院",
             key: "hospitalName",
             width: 220,
+            tooltip:true
           },
           {
             title: "客户姓名",
@@ -377,6 +378,7 @@ export default {
             title: "备注",
             key: "remark",
             width: 220,
+            tooltip:true
           },
           {
             title: "创建时间",

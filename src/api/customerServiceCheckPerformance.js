@@ -63,3 +63,11 @@ export const addListCustomerServiceCheckPerformance = (data) => {
         data,
     });
 };
+// 批量删除
+export const deleteList = (data) => {
+    return http({
+        url: "/amiyabg/CustomerServiceCheckPerformance/deleteList",
+        method: "put",
+        data,
+    });
+};

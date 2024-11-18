@@ -103,6 +103,20 @@
       </div>
     </Card>
     <Card class="mr ">
+      <!-- tab切换 -->
+      <div class="tab_content">
+        <div class="tab">
+          <div
+            class="tab_item"
+            v-for="(item, index) in list4"
+            :key="index"
+            @click="selectTab4(index, item)"
+            :class="{ active: selected4 == item }"
+          >
+            <span>{{ item }}</span>
+          </div>
+        </div>
+      </div>
       <div class="list3">
         <Card class="item3">
           <div class="h2 h3">助理分诊派单转化周期</div>
@@ -266,8 +280,10 @@ export default {
     return {
       list: ["整体","有效", "潜在"],
       list2: ["业绩","线索"],
+      list4: ["当月","历史"],
       selected:'整体',
       selected2:'业绩',
+      selected4:'当月',
       // 时间进度
       completeRate: 0,
       params: {
@@ -545,10 +561,13 @@ export default {
     // 转化周期
     getAssistantTransformCycleDataClick(){
         const {startDate,endDate,assistantId} = this.params
+        // console.log(this.selected4)
         const data = {
             startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
             endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
             assistantId:assistantId,
+            isCurrent:this.selected4 == '当月' ? true : false
+
         }
         api.getAssistantTransformCycleData(data).then(res=>{
             if(res.code === 0){
@@ -572,6 +591,11 @@ export default {
 
       }
     },
+    // 
+    selectTab4(index,value){
+      this.selected4 = value;
+      this.getAssistantTransformCycleDataClick()
+    }
   },
   created() {
     this.getEmployeeByPositionIdAdmin();

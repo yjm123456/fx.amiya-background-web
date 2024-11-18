@@ -109,15 +109,15 @@
         <div class="card_list">
             <Card class="card_item"> 
                 <div class="m_b m_t ">
-                  <div class="h3">平台获客占比</div>
+                  <div class="h3">平台线索占比</div>
                   <pieItem :pieData="LivingContentplatformClueDataObj.contentPlatformClueRate" title="总线索" :total="LivingContentplatformClueDataObj.contentPlatformTotalClue"/>
                 </div>
                 <div class="m_b">
-                  <div class="h3">抖音-获客占比</div>
+                  <div class="h3">抖音-线索占比</div>
                   <pieItem :pieData="LivingContentplatformClueDataObj.tikTokClueRate" title="总线索" :total="LivingContentplatformClueDataObj.tikTokTotalClue"/>
                 </div>
                 <div class="m_b">
-                  <div class="h3">视频号-获客占比</div>
+                  <div class="h3">视频号-线索占比</div>
                   <pieItem :pieData="LivingContentplatformClueDataObj.wechatVideoClueRate" title="总线索" :total="LivingContentplatformClueDataObj.wechatVideoTotalClue"/>
                 </div>
             </Card>

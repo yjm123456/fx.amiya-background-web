@@ -910,8 +910,10 @@ export default {
         pageSize:1,
         isMainHospital:true
       }
+      this.flag = true
       api.sendOrderInfoList(data).then(res=>{
         if(res.code === 0){
+          this.flag = false
           const {list} =res.data.sendOrderInfoList
           this.form.dispatchId = list.length == 0 || list == [] ? null :  list[0].id
           // 是否为推单打开时 调用推单接口 
@@ -1215,9 +1217,10 @@ export default {
             return
           }
           if(otherHospitalId == [] || otherHospitalId.length == 0){
-              // this.flag = true;
+              this.flag = true;
               api.AddContentPlateFormSendOrder(data).then((res) => {
                 if (res.code === 0) {
+                  this.flag = false
                   this.getsendOrderInfoList()
                   
                   // this.cancel("form");
@@ -1239,8 +1242,8 @@ export default {
                     this.flag = true;
                     api.AddContentPlateFormSendOrder(data).then((res) => {
                       if (res.code === 0) {
+                        this.flag = false;
                         this.getsendOrderInfoList()
-                        // this.flag = false;
                         // this.getUnSendOrderList();
                         // this.$Message.success({
                         //   content: "派单成功",

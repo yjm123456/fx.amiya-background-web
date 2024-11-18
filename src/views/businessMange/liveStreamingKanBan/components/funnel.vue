@@ -17,7 +17,7 @@
 
     <div class="center" v-if="isFlag == true">
             <Card class="content">
-                    <div class="h3">个人</div>
+                    <div class="h3">{{title}}</div>
                     <div class="left_customer" >
                         <span class="r_t4">转化周期</span>
                         <div class="r_t4" style="margin-top:310%"><span class="num" >{{performance.currentGroup.sendCycle}}</span>天</div>
@@ -57,7 +57,7 @@
                     </div>
             </Card>
             <Card class="content2">
-                    <div class="h3">部门</div>
+                    <div class="h3">啊美雅达人</div>
                     <div class="left_customer" >
                         <span class="r_t4">转化周期</span>
                         <div class="r_t4" style="margin-top:308%"><span class="num" >{{performance.company.sendCycle}}</span>天</div>
@@ -78,19 +78,19 @@
                             </div>
                           
                             <div  class="r_content2">
-                                <span class="r_t2" >加v率：<span class="num" :style="{color:performance.currentGroup.addWeChatRate < performance.currentGroup.addWeChatRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.company.addWeChatRate}}</span>%</span>
+                                <span class="r_t2" >加v率：<span class="num" :style="{color:performance.company.addWeChatRate < performance.company.addWeChatRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.company.addWeChatRate}}</span>%</span>
                                 <span  class="r_t3"><span class="num">{{performance.company.addWeChatRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content3">
-                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:performance.currentGroup.sendOrderRate < performance.currentGroup.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.company.sendOrderRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:performance.company.sendOrderRate < performance.company.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.company.sendOrderRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.company.sendOrderRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:performance.currentGroup.toHospitalRate < performance.currentGroup.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.company.toHospitalRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:performance.company.toHospitalRate < performance.company.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.company.toHospitalRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.company.toHospitalRateHealthValueThisMonth}}</span>%</span>
                             </div>
                             <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:14%">成交率：<span class="num" :style="{color:performance.currentGroup.dealRate < performance.currentGroup.dealRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.company.dealRate}}</span>%</span>
+                                <span class="r_t2" style="margin-top:14%">成交率：<span class="num" :style="{color:performance.company.dealRate < performance.company.dealRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{performance.company.dealRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{performance.company.dealRateHealthValueThisMonth}}</span>%</span>
                             </div>
                         </div>
@@ -114,7 +114,9 @@ export default {
       selected: "当月",
       list: ["当月","历史"],
       isFlag:false,
-      performance:{}
+      performance:{},
+    //   标题展示当前所选的主播
+      title:''
     };
   },
   methods: {
@@ -125,7 +127,8 @@ export default {
     },
     // 直播前漏斗图
     getLivingFilterDatas(){
-        const { startDate, endDate, assistantId,baseLiveAnchorId } = this.params;
+        const { startDate, endDate, assistantId,baseLiveAnchorId , liveAnchorBaseInfos} = this.params;
+        this.title = liveAnchorBaseInfos.find(item=>item.id == baseLiveAnchorId).name
         const data ={
             startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
             endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,

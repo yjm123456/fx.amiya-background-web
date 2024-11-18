@@ -6,20 +6,20 @@
             <Input
             v-model="query.keyWord"
             placeholder="请输入关键字"
-            style="width: 200px; "
+            style="width: 170px; "
             @keyup.enter.native="getCustomerServiceCheckPerformanceClick()"
           />
           <DatePicker
             type="date"
             placeholder="开始日期"
-            style="width: 140px;margin-left: .625rem"
+            style="width: 120px;margin-left: .625rem"
             :value="query.startDate"
             v-model="query.startDate"
           ></DatePicker>
           <DatePicker
             type="date"
             placeholder="结束日期"
-            style="width: 140px; margin-left: .625rem"
+            style="width: 120px; margin-left: .625rem"
             :value="query.endDate"
             v-model="query.endDate"
           ></DatePicker>
@@ -74,6 +74,12 @@
             style="margin-left: 10px"
             @click="invoiceClick()"
             >生成薪资</Button
+          >
+          <Button
+            type="error"
+            @click="deleteClick"
+            style="margin-left: 10px"
+            >批量删除</Button
           >
           
         </div>
@@ -358,6 +364,36 @@ export default {
     };
   },
   methods: {
+    // 删除
+    deleteClick() {
+      let idList = [...this.generateSalaryParams.generateSalaryList].map(item=>{
+        return item.id
+      })
+      if (!idList.length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.$Modal.confirm({
+        title: "删除提示",
+        content: "是否确认删除？",
+        onOk: () => {
+          api.deleteList(idList).then((res) => {
+            if (res.code === 0) {
+              this.getCustomerServiceCheckPerformanceClick();
+              this.$Message.success({
+                content: "删除成功",
+                duration: 3,
+              });
+              this.generateSalaryParams.generateSalaryList.clear();
+            }
+          });
+        },
+        onCancel: () => {},
+      });
+    },
     handleSelect(selection, row) {
       // 生成薪资单
       this.generateSalaryParams.generateSalaryList = selection

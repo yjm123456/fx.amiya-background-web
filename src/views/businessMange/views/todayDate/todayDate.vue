@@ -63,7 +63,7 @@ export default {
             title: "新客成交率",
             key: "newCustomerDealRate",
             align:'center',
-            wdith:110,
+            width:110,
             render: (h, params) => {
               return h(
                     "div",
@@ -146,7 +146,7 @@ export default {
           {
             title: "新老客占比",
             key: "newOrOldCustomerRate",
-            wdith:110,
+            width:110,
             align:'center',
           },
           

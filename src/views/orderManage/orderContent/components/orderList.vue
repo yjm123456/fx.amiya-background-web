@@ -15,14 +15,20 @@
         @on-change="handlePageChange"
       />
     </div>
+    <!-- 派单详情 -->
+    <dispatch :dispatchModel.sync="dispatchModel"  :id="id"/>
   </div>
 </template>
 <script>
 import * as api from "@/api/orderManage";
+import dispatch from "./dispatch.vue"
 
 export default {
   props:{
     isOrder:Boolean
+  },
+  components:{
+    dispatch
   },
   data() {
     return {
@@ -43,20 +49,20 @@ export default {
           {
             title: "预约医院",
             key: "appointmentHospital",
-            minWidth:300,
+            minWidth:280,
             align:'center',
             tooltip:true
           },
           {
             title: "派单医院",
             key: "sendHospital",
-            minWidth:300,
+            minWidth:280,
             tooltip:true
           },
           {
             title: "订单状态",
             key: "orderStatus",
-            minWidth:80,
+            minWidth:100,
             align:'center',
             tooltip:true
           },
@@ -82,11 +88,47 @@ export default {
               );
             },
           },
+          {
+            title: "操作",
+            align: "center",
+            minWidth: 100,
+            fixed: "right",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                      // disabled:params.row.statusText != '交易成功'
+                    },
+                    style: {
+                      marginRight: ".3125rem",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.dispatchModel = true
+                        this.id = id
+                      },
+                    },
+                  },
+                  "派单详情"
+                ),
+               
+              ]);
+            },
+          },
           
         ],
         data: [],
         totalCount: 0,
       },
+      // 订单号
+      id:'',
+      // 派单model
+      dispatchModel:false,
       
     };
   },

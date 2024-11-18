@@ -37,6 +37,7 @@
         <div class="item">
           <div class="item_left">
               <div>当日业绩：<span class="f_w">{{liveStreamingObj.currentPerformance}}</span></div>
+              <div>当月业绩：<span class="f_w">{{liveStreamingObj.currentMontPerformance}}</span></div>
               <div class="item_left ">累计业绩：<span class="f_w">{{liveStreamingObj.performance}}</span></div>
           </div>
           <div class="item_right">

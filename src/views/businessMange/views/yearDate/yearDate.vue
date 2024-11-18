@@ -96,7 +96,7 @@ export default {
           {
             title: "医院",
             key: "hospitalName",
-            width:180,
+            width:150,
             tooltip:true
           },
           {
@@ -248,7 +248,7 @@ export default {
             title: "新客成交率",
             key: "newCustomerDealRate",
             align:'center',
-            wdith:100,
+            width:110,
             render: (h, params) => {
               return h("div", [
                     h(
@@ -507,7 +507,7 @@ export default {
           {
             title: "新老客占比",
             key: "newOrOldCustomerRate",
-            wdith:110,
+            width:110,
             align:'center',
           },
           
@@ -522,7 +522,7 @@ export default {
           {
             title: "医院",
             key: "hospitalName",
-            width:180,
+            width:150,
             tooltip:true
           },
           {
@@ -665,7 +665,7 @@ export default {
             title: "新客成交率",
             key: "newCustomerDealRate",
             align:'center',
-            wdith:100,
+            width:110,
             render: (h, params) => {
               return h("div", [
                     h(
@@ -910,7 +910,7 @@ export default {
           {
             title: "新老客占比",
             key: "newOrOldCustomerRate",
-            wdith:110,
+            width:110,
             align:'center',
           },
           
@@ -925,7 +925,7 @@ export default {
           {
             title: "医院",
             key: "hospitalName",
-            width:180,
+            width:150,
             tooltip:true
           },
           {
@@ -964,7 +964,7 @@ export default {
             title: "新客成交率",
             key: "newCustomerDealRate",
             align:'center',
-            wdith:100,
+            width:110,
             render: (h, params) => {
               return h(
                     "div",
@@ -1047,7 +1047,7 @@ export default {
           {
             title: "新老客占比",
             key: "newOrOldCustomerRate",
-            wdith:110,
+            width:110,
             align:'center',
           },
           

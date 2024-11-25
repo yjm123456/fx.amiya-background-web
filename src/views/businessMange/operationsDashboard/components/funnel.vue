@@ -197,7 +197,7 @@ export default {
             // contentPlatFormId:this.active == 'tiktok' ? this.params.contentPalteForms.find(item=>item.contentPlatformName == '抖音').id : this.active == 'vedio' ?  this.params.contentPalteForms.find(item=>item.contentPlatformName == '视频号').id : '',
             isEffectiveCustomerData:this.selected == '整体' ? null : this.selected == '有效' ? true : false,
             contentPlatFormId:'',
-            liveAnchorBaseId:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id : this.selected4 == '璐璐' ? this.liveAnchorBaseInfos.find(item=>item.name == '璐璐').id :  ''
+            liveAnchorBaseId:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id :   ''
 
         }
         api.performanceOperationData(data).then(res=>{
@@ -375,7 +375,7 @@ position: absolute
 .center_data{
     position: absolute;
     top: 8%;
-    left: 44%;
+    left: 45%;
 }
 .c_text{
     margin-top: 33%;

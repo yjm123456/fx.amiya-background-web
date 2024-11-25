@@ -1,0 +1,131 @@
+<template>
+  <div class="wrapper">
+    <div ref="dom" :style="{ width: '100%', height: '300px' }"></div>
+  </div>
+</template>
+
+<script>
+import { on, off } from "@/utils/util";
+import tdTheme from "@/components/theme.json";
+import * as echarts from "echarts";
+echarts.registerTheme("tdTheme", tdTheme);
+
+export default {
+  props: {
+    liveStreamingData: Array,
+    title:String,
+    // completeRate:Number
+  },
+  data() {
+    return {
+      myChart: "",
+    };
+  },
+  methods: {
+    // 业绩
+    myEcharts(value) {
+      let name = [];
+      let list1 = [];
+      let title = this.title
+      value ? value.map((item) => {
+        if(title == '医生'){
+          name.unshift(item.id);
+          list1.unshift(item.name);
+        }else{
+          name.unshift(item.key);
+          list1.unshift(item.value);
+        }
+        
+        
+      }): [];
+      let option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            },
+            formatter: (params) => {
+                let list = []
+                let listItem = ''
+                let axisValueLabel = params[0].axisValueLabel 
+                
+                for (let i = 0; i < params.length; i++) {
+                   this.title == '周期' ? list.push(
+                        '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
+                        params[i].color +
+                        ';margin-right: 5px;border-radius: 50%;}"></i>' +
+                        '<span style="display:inline-block;">' +
+                        params[i].name +
+                        '</span><span style="display:inline-block;">&nbsp&nbsp' +
+                        params[i].data  +   '天'  +
+                        '</span>'
+                    ) : list.push(
+                        '<i style="display: inline-block;width: 10px;height: 10px;background: ' +
+                        params[i].color +
+                        ';margin-right: 5px;border-radius: 50%;}"></i>' +
+                        '<span style="display:inline-block;">' +
+                        params[i].name +
+                        '</span><span style="display:inline-block;">&nbsp&nbsp' +
+                        params[i].data  +   '%'  +
+                        '</span>'
+                    )
+                }
+                listItem = list.join('<br>')
+                return listItem
+            }
+        },
+        calculable: true,
+        yAxis: [
+          {
+            type: "category",
+            data: name,
+            axisLabel: {
+              formatter: function(value) {
+                return value.length > 5 ? value.slice(0, 5) + "..." : value ;
+              },
+            },
+          },
+        ],
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        series: [
+          {
+            type: "bar",
+            data: list1,
+            barWidth:'30'
+          },
+        ],
+      };
+      this.myChart = echarts.init(this.$refs.dom, "tdTheme");
+      this.myChart.clear();
+      this.myChart.setOption(option);
+      on(window, "resize", this.myChart.resize);
+    },
+  },
+  beforeDestroy() {
+    off(window, "resize", this.myChart.resize);
+  },
+  watch: {
+    liveStreamingData(value) {
+      // this.$nextTick(() => {
+      this.myEcharts(value);
+      // });
+    },
+  },
+};
+</script>
+<style lang="less" scoped>
+.wrapper {
+  width: 100%;
+  height: 300px;
+  // margin-left: 5%;
+}
+</style>

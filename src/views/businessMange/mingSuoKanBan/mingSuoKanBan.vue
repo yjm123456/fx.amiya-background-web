@@ -1,0 +1,452 @@
+<template>
+  <div>
+    
+    <Card>
+      <div class="content_title">
+        
+        <div class="h2">啊美雅名索运营看板</div>
+      </div>
+      <div class="content">
+        <div class="left">
+          <!-- tab切换 -->
+          <div class="tab_content">
+            <div class="tab">
+              <div
+                class="tab_item"
+                v-for="(item, index) in list2"
+                :key="index"
+                @click="selectTab2(index, item)"
+                :class="{ active: selected2 == item }"
+              >
+                <span>{{ item }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <span>
+            <span class="completeRateSize">时间进度：</span>
+            <Progress
+              :percent="completeRate > 100 ? 100 : completeRate"
+              hide-info
+              style="width:180px;"
+              stroke-color="dodgerblue"
+              :stroke-width="13"
+              border
+            >
+            </Progress>
+            <span class="completeRateSize"> {{ completeRate }}%</span>
+          </span>
+
+          <DatePicker
+            type="date"
+            placeholder="请选择开始时间"
+            style="width: 160px;margin-left:30px"
+            transfer
+            :value="params.startDate"
+            v-model="params.startDate"
+          ></DatePicker>
+          <DatePicker
+            type="date"
+            placeholder="请选择结束时间"
+            style="width: 160px;margin:0 10px"
+            transfer
+            :value="params.endDate"
+            v-model="params.endDate"
+          ></DatePicker>
+          <!-- <Select
+              v-model="params.assistantId"
+              placeholder="请选择主播IP"
+              filterable
+              style="width:180px;margin-right:10px;text-align: start;"
+          >
+              <Option
+              v-for="item in params.assistantIdList"
+              :value="item.id"
+              :key="item.id"
+              >{{ item.name }}</Option
+              >
+          </Select> -->
+          <Button type="primary" @click="getData">查询</Button>
+        </div>
+      </div>
+      <Card class="m_b ">
+        <item2 ref="item2" :params="params"  :completeRate="completeRate" :mingSuoObj="mingSuoObj"/>
+      </Card>
+      <Card class="m_b ">
+        <div class="h3">当月线索&业绩趋势</div>
+        <monthLine :mingSuoObj="mingSuoObj" />
+      </Card>
+      <!-- 漏斗图 -->
+      <Card  class="m_b">
+        <div class="h3">新老客转化周期漏斗</div>
+        <funnel
+            ref="whole"
+            :params="params"
+            :selected2="selected2"
+            :cycleDataObj="cycleDataObj"
+        ></funnel>
+      </Card>
+      <Card  class="m_b">
+        <div class=" card_list">
+          <Card class="card_item"> 
+              <div class="h3">医美IP登记派单周期</div>
+              <customerBar :liveStreamingData="cycleDataObj.sendCycleData" title="周期"/>
+          </Card>
+          <Card class="card_item"> 
+          <div class="h3">医美IP登记上门/成交周期</div>
+              <customerBar :liveStreamingData="cycleDataObj.toHospitalCycleData" title="周期"/>
+          </Card>
+        </div>
+      </Card>
+      <Card  class="m_b">
+        <div class=" card_list">
+          <Card class="card_item"> 
+              <div class="h3">医生线索目标完成率</div>
+              <customerBar :liveStreamingData="clueTargetData" />
+          </Card>
+          <Card class="card_item"> 
+          <div class="h3">医生业绩目标完成率</div>
+              <customerBar :liveStreamingData="performanceTargetData" title="医生"/>
+          </Card>
+        </div>
+      </Card>
+      <Card  class="m_b">
+        <!-- tab切换 -->
+        <!-- <div class="tab_content">
+          <div class="tab">
+            <div
+              class="tab_item"
+              v-for="(item, index) in list"
+              :key="index"
+              @click="selectTab(index, item)"
+              :class="{ active: selected == item }"
+            >
+              <span>{{ item }}</span>
+            </div>
+          </div>
+        </div> -->
+        <div class=" card_list">
+          <Card class="card_item"> 
+              <div class="h3">助理业绩目标完成率</div>
+              <customerBar :liveStreamingData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData" title="医生"/>
+          </Card>
+          <Card class="card_item"> 
+          <div class="h3">助理业绩贡献占比</div>
+              <customerBar :liveStreamingData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData" title="医生"/>
+          </Card>
+        </div>
+      </Card>
+      <Card  class="m_b">
+        <div class=" card_list">
+          <Card class="card_item"> 
+              <div class="h3">IP线索占比</div>
+              <pieItem :pieData="platformClueDataList.contentPlatformClueRate" title="总线索" :total="platformClueDataList.contentPlatformTotalClue"/>
+          </Card>
+          <Card class="card_item"> 
+          <div class="h3">IP业绩占比</div>
+              <pieItem :pieData="platformPerformanceDataList.contentPlatformPerformanceRate" title="总业绩" :total="platformPerformanceDataList.contentPlatformTotalPerformance"/>
+          </Card>
+        </div>
+      </Card>
+        
+    </Card>
+  </div>
+</template>
+<script>
+import * as amiyaOperationsBoardApi from "@/api/amiyaOperationsBoard";
+import * as api from "@/api/amiyaMingSuoOperationBoard";
+
+import item2 from "./components/item2.vue"
+import monthLine from "./components/monthLine.vue"
+import funnel from "./components/funnel.vue"
+import customerBar from "./components/customerBar.vue"
+import pieItem from "./components/pieItem.vue"
+
+
+export default {
+  components: {
+    item2,
+    monthLine,
+    funnel,
+    customerBar,
+    pieItem,
+   
+  },
+  data() {
+    return {
+      selected: "当月",
+      list: ["当月","历史"],
+      list2:["全部","林合晟","马瑶","李芬"],
+      selected2: "全部",
+      completeRate: 0,
+      params: {
+        // 当年
+        // startDate: this.$moment().startOf("month").format("YYYY-MM-DD"),
+        startDate: this.$moment()
+          .startOf("month")
+          .format("YYYY-MM-DD"),
+        endDate: this.$moment(new Date()).format("YYYY-MM-DD"),
+        assistantId:'',
+        // 平台
+        assistantIdList: [
+            {
+                id:'34cc49b9-485d-4fa5-95dd-9dbf642faf1d',
+                name:'林合晟'
+            },
+            {
+                id:'c0ef9fb6-124b-4e7a-8f3c-3c503cd2dd5a',
+                name:'马瑶'
+            },
+            {
+                id:'166d81e3-6921-4ecb-8bf3-70be8ac2eefa',
+                name:'李芬'
+            },
+            
+        ],
+      },
+    // 卡片和折线图数据
+    mingSuoObj:{},
+    // 转化周期数据
+    cycleDataObj:{},
+    // 线索目标完成率
+    clueTargetData:[],
+    // 业绩目标完成率
+    performanceTargetData:[],
+    // 助理目标完成率和助理业绩占比
+    assiatantTargetCompleteAndPerformanceRateDataObj:{},
+    // IP线索占比
+    platformClueDataList:{},
+    // IP业绩占比
+    platformPerformanceDataList:{}
+    
+    };
+  },
+  methods: {
+    
+    //   获取时间进度
+    getTimeSpanClick() {
+      const data = {
+        startDate: null,
+        endDate: this.$moment(this.params.endDate).format("YYYY-MM-DD"),
+        keyWord: "",
+      };
+      amiyaOperationsBoardApi.getTimeSpan(data).then((res) => {
+        if (res.code === 0) {
+          // const { contentPalteForms } = res.data;
+          this.completeRate = res.data.data;
+          sessionStorage.setItem("completeRate", res.data.data);
+        }
+      });
+    },
+    // 卡片和折线图数据
+    getgetMingSuoAchievementAndDateSchedule(){
+        const {startDate,endDate,assistantId} = this.params
+        const data = {
+          startDate: this.$moment(startDate).format("YYYY-MM-DD"),
+          endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+          keyWord: this.selected2 == '马瑶' ? this.params.assistantIdList.find(item=>item.name == '马瑶').id : this.selected2 == '李芬' ? this.params.assistantIdList.find(item=>item.name == '李芬').id : this.selected2 == '林合晟' ? this.params.assistantIdList.find(item=>item.name == '林合晟').id  :   ''
+        }
+        api.getMingSuoAchievementAndDateSchedule(data).then(res=>{
+          if(res.code == 0){
+            this.mingSuoObj = res.data.data
+          }
+        })
+    },
+    // 登记派单周期和登记上门/成交周期
+    getMingSuoTransformCycleDataClick(){
+      const { startDate, endDate, assistantId } = this.params;
+      const data = {
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        baseLiveAnchorId: this.selected2 == '马瑶' ? this.params.assistantIdList.find(item=>item.name == '马瑶').id : this.selected2 == '李芬' ? this.params.assistantIdList.find(item=>item.name == '李芬').id : this.selected2 == '林合晟' ? this.params.assistantIdList.find(item=>item.name == '林合晟').id  :   '',
+      }
+      api.getMingSuoTransformCycleData(data).then((res) => {
+        if (res.code === 0) {
+          this.cycleDataObj = res.data.data
+        }
+      });
+    },
+    // 线索目标完成率
+    getMingSuoClueTargetDataClick(){
+      const { startDate, endDate, assistantId } = this.params;
+      const data = {
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        baseLiveAnchorId: this.selected2 == '马瑶' ? this.params.assistantIdList.find(item=>item.name == '马瑶').id : this.selected2 == '李芬' ? this.params.assistantIdList.find(item=>item.name == '李芬').id : this.selected2 == '林合晟' ? this.params.assistantIdList.find(item=>item.name == '林合晟').id  :   '',
+      }
+      api.getMingSuoClueTargetData(data).then((res) => {
+        if (res.code === 0) {
+          const {clueTargetComplete,performanceTargetComplete} = res.data.data
+          this.clueTargetData = clueTargetComplete
+          this.performanceTargetData = performanceTargetComplete
+        }
+      });
+    },
+    // 业绩目标完成率
+    // getMingSuoPerformanceTargetDataClick(){
+    //   const { startDate, endDate, assistantId } = this.params;
+    //   const data = {
+    //     startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+    //     endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+    //     baseLiveAnchorId: this.selected2 == '马瑶' ? this.params.assistantIdList.find(item=>item.name == '马瑶').id : this.selected2 == '李芬' ? this.params.assistantIdList.find(item=>item.name == '李芬').id : this.selected2 == '林合晟' ? this.params.assistantIdList.find(item=>item.name == '林合晟').id  :   '',
+    //   }
+    //   api.getMingSuoPerformanceTargetData(data).then((res) => {
+    //     if (res.code === 0) {
+    //       this.performanceTargetData = res.data.data.clueTargetComplete
+    //     }
+    //   });
+    // },
+    // 助理目标完成率和助理业绩占比柱形图
+    mingsuoAssiatantTargetCompleteAndPerformanceRateDataClick(){
+      const { startDate, endDate, assistantId } = this.params;
+      const data = {
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        baseLiveAnchorId: this.selected2 == '马瑶' ? this.params.assistantIdList.find(item=>item.name == '马瑶').id : this.selected2 == '李芬' ? this.params.assistantIdList.find(item=>item.name == '李芬').id : this.selected2 == '林合晟' ? this.params.assistantIdList.find(item=>item.name == '林合晟').id  :   '',
+        // isCurrent:this.selected == '当月' ? true : false
+      }
+      api.mingsuoAssiatantTargetCompleteAndPerformanceRateData(data).then((res) => {
+        if (res.code === 0) {
+          this.assiatantTargetCompleteAndPerformanceRateDataObj = res.data.data
+        }
+      });
+    },
+    selectTab(index, value) {
+      this.selected = value;
+      this.mingsuoAssiatantTargetCompleteAndPerformanceRateDataClick()
+    },
+    // 主播筛选
+    selectTab2(index, value) {
+      this.selected2 = value;
+      // this.list[index].isSelected = !this.list[index].isSelected;
+      this.getData()
+    },
+    // 账号线索占比
+    getMingSuoContentplatformClueDataClick(){
+      const { startDate, endDate, assistantId } = this.params;
+      const data = {
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        baseLiveAnchorId: this.selected2 == '马瑶' ? this.params.assistantIdList.find(item=>item.name == '马瑶').id : this.selected2 == '李芬' ? this.params.assistantIdList.find(item=>item.name == '李芬').id : this.selected2 == '林合晟' ? this.params.assistantIdList.find(item=>item.name == '林合晟').id  :   '',
+      }
+      api.getMingSuoContentplatformClueData(data).then((res) => {
+        if (res.code === 0) {
+          this.platformClueDataList = res.data.data
+        }
+      });
+    },
+    // 账号业绩占比
+    getMingSuoContentplatformPerformanceDataClick(){
+      const { startDate, endDate, assistantId } = this.params;
+      const data = {
+        startDate: startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null,
+        endDate: endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+        baseLiveAnchorId: this.selected2 == '马瑶' ? this.params.assistantIdList.find(item=>item.name == '马瑶').id : this.selected2 == '李芬' ? this.params.assistantIdList.find(item=>item.name == '李芬').id : this.selected2 == '林合晟' ? this.params.assistantIdList.find(item=>item.name == '林合晟').id  :   '',
+      }
+      api.getMingSuoContentplatformPerformanceData(data).then((res) => {
+        if (res.code === 0) {
+          this.platformPerformanceDataList = res.data.data
+        }
+      });
+    },
+     
+    getData(){
+        this.getgetMingSuoAchievementAndDateSchedule()
+        this.getMingSuoTransformCycleDataClick()
+        this.getMingSuoClueTargetDataClick()
+        // this.getMingSuoPerformanceTargetDataClick()
+        this.mingsuoAssiatantTargetCompleteAndPerformanceRateDataClick()
+        this.getMingSuoContentplatformClueDataClick()
+        this.getMingSuoContentplatformPerformanceDataClick()
+        this.$nextTick(()=>{
+            this.$refs.whole.getMingSuoFilterDataClick()
+        })
+    }
+    
+  },
+
+  created() {
+    this.getTimeSpanClick();
+    
+    this.getData()
+  },
+};
+</script>
+
+<style scoped lang="less">
+.content_title {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+.h2 {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  width: 280px;
+}
+.right{
+    text-align: end;
+}
+.completeRateSize{
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 5px;
+}
+/* 添加边框样式 */
+/deep/ .ivu-progress-inner {
+  border: 3px solid dodgerblue;
+  border-radius: 10px;
+}
+.m_b{
+    margin-top: 10px;
+}
+.h3{
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.card_item {
+  width: 49.5%;
+}
+.card_list{
+    display: flex;
+    justify-content: space-between;
+}
+.tab_content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 15px 0;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+.tab{
+  display: flex;
+}
+.tab_item {
+  background: #f0f0f0;
+  padding: 1px 15px;
+  box-sizing: border-box;
+  margin-right: 30px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.active {
+  color: #fff;
+  border: 1px solid #2f8cf0;
+  background: #2f8cf0;
+}
+.content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>

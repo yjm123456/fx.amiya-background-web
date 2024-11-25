@@ -377,7 +377,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .container {
   background: #fff;
   padding: 0 10px;
@@ -450,5 +450,10 @@ export default {
 .position_re{
   position: absolute;
   top: 0px;
+}
+/* 添加边框样式 */
+/deep/ .ivu-progress-inner {
+  border: 3px solid dodgerblue;
+  border-radius: 10px;
 }
 </style>

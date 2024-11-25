@@ -1,6 +1,15 @@
 <!-- 订单 -->
 <template>
   <div>
+    <!-- <Collapse simple v-model="collapseValue" >
+          <Panel name="1" >
+              {{collapseValue.length == 1 ? '收起' : '展开全部筛选项'}}
+              <template #content>
+                <div>1</div>
+                <div>2</div>
+              </template>
+          </Panel>
+      </Collapse> -->
     <Card :dis-hover="true">
       <div class="head">
         <div class="content1">
@@ -433,6 +442,8 @@ export default {
   },
   data() {
     return {
+      // 搜索栏展开收起
+      collapseValue:[],
       // 生成粉丝见面会名单
       fanMeetingModel:false,
       fanMeetingParams:{

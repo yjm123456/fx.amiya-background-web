@@ -1,7 +1,7 @@
 
 <template>
   <div class="wrapper">
-    <div ref="dom" :style="{ width: '100%', height: '350px',marginTop:'10px' }" ></div>
+    <div ref="dom" :style="{ width: '100%', height: '280px',marginTop:'10px' }" ></div>
   </div>
 </template>
 
@@ -147,7 +147,7 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   width: 100%;
-  height: 300px;
+  height: 220px;
   // margin-left: 5%;
 }
 </style>

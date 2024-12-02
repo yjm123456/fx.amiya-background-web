@@ -7,7 +7,7 @@
             <Input
               v-model="query.keyword"
               placeholder="请输入关键词"
-              style="width:200px;"
+              style="width:180px;"
               @keyup.enter.native="getSendOrderInfo()"
             />
             <!-- <Input
@@ -21,7 +21,7 @@
             <DatePicker
               type="date"
               placeholder="派单开始日期"
-              style="width: 160px;margin-left: 10px"
+              style="width: 150px;margin-left: 10px"
               :value="query.startDate"
               v-model="query.startDate"
               transfer
@@ -29,14 +29,14 @@
             <DatePicker
               type="date"
               placeholder="派单结束日期"
-              style="width: 160px; margin-left: 10px"
+              style="width: 150px; margin-left: 10px"
               :value="query.endDate"
               v-model="query.endDate"
               transfer
             ></DatePicker>
             <Select
               v-model="query.IsToHospital"
-              style="width: 160px;margin-left: 10px"
+              style="width: 150px;margin-left: 10px"
               placeholder="请选择到院状态"
             >
               <Option
@@ -66,7 +66,7 @@
             ></DatePicker>
             <Select
               v-model="query.toHospitalType"
-              style="width: 160px;margin-left: 10px"
+              style="width: 150px;margin-left: 10px"
               placeholder="请选择到院类型"
               :disabled="query.IsToHospital != 'true'"
               clearable
@@ -80,223 +80,229 @@
               >
             </Select>
           </div>
-          <div>
-            <Select
-              v-model="query.contentPlatFormId"
-              style="width: 200px;"
-              placeholder="请选择(订单)下单平台"
-              filterable
-            >
-              <Option
-                v-for="item in query.contentPalteForms"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.contentPlatformName }}</Option
+          <transition name="collapse">
+          <div v-show="isOpen" class="panel">
+            <div style="margin-bottom:10px">
+                <Select
+                v-model="query.contentPlatFormId"
+                style="width: 180px;"
+                placeholder="请选择(订单)下单平台"
+                filterable
               >
-            </Select>
-            <Select
-              v-model="query.orderStatus"
-              style="width: 160px;margin-left: 10px"
-              placeholder="请选择订单状态"
-              filterable
-            >
-              <Option
-                v-for="item in query.statusCodeList"
-                :value="item.orderStatus"
-                :key="item.orderStatus"
-                >{{ item.orderStatusText }}</Option
+                <Option
+                  v-for="item in query.contentPalteForms"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.contentPlatformName }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.orderStatus"
+                style="width: 150px;margin-left: 10px"
+                placeholder="请选择订单状态"
+                filterable
               >
-            </Select>
-            <Select
-              v-model="query.orderSource"
-              style="width: 160px;margin-left: 10px"
-            >
-              <Option
-                v-for="item in orderSourcesListAll"
-                :value="item.orderSource"
-                :key="item.orderSource"
-                >{{ item.orderSourceText }}</Option
+                <Option
+                  v-for="item in query.statusCodeList"
+                  :value="item.orderStatus"
+                  :key="item.orderStatus"
+                  >{{ item.orderStatusText }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.orderSource"
+                style="width: 150px;margin-left: 10px"
               >
-            </Select>
-            <Select
-              v-model="query.liveAnchorPlatform"
-              placeholder="请选择主播平台"
-              @on-change="contentPlateChange(query.liveAnchorPlatform)"
-              style="width: 160px; margin-left: 10px"
-              filterable
-            >
-              <Option
-                v-for="item in query.contentPalteForms"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.contentPlatformName }}</Option
+                <Option
+                  v-for="item in orderSourcesListAll"
+                  :value="item.orderSource"
+                  :key="item.orderSource"
+                  >{{ item.orderSourceText }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.liveAnchorPlatform"
+                placeholder="请选择主播平台"
+                @on-change="contentPlateChange(query.liveAnchorPlatform)"
+                style="width: 150px; margin-left: 10px"
+                filterable
               >
-            </Select>
-            <Select
-              v-model="query.liveAnchorId"
-              placeholder="请选择主播IP账号"
-              style="width: 150px; margin-left: 10px"
-              :disabled="query.liveAnchorPlatform === null"
-              filterable
-            >
-              <Option
-                v-for="item in liveAnchors"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.hostAccountName }}</Option
+                <Option
+                  v-for="item in query.contentPalteForms"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.contentPlatformName }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.liveAnchorId"
+                placeholder="请选择主播IP账号"
+                style="width: 150px; margin-left: 10px"
+                :disabled="query.liveAnchorPlatform === null"
+                filterable
               >
-            </Select>
+                <Option
+                  v-for="item in liveAnchors"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.hostAccountName }}</Option
+                >
+              </Select>
 
-            <!-- <Select
-              v-model="query.consultationEmpId"
-              placeholder="请选择面诊员"
-              style="width: 150px;margin-left: 10px"
-              filterable
-            >
-              <Option
-                v-for="item in consultationNameList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
+              <!-- <Select
+                v-model="query.consultationEmpId"
+                placeholder="请选择面诊员"
+                style="width: 150px;margin-left: 10px"
+                filterable
               >
-            </Select> -->
-            <Select
-              v-model="query.isAcompanying"
-              style="width:150px;margin-left:10px"
-              placeholder="请选择陪诊状态"
-            >
-              <Option
-                v-for="item in query.isAcompanyingList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
+                <Option
+                  v-for="item in consultationNameList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select> -->
+              <Select
+                v-model="query.isAcompanying"
+                style="width:150px;margin-left:10px"
+                placeholder="请选择陪诊状态"
               >
-            </Select>
+                <Option
+                  v-for="item in query.isAcompanyingList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
 
-            <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
-            <Select
-              v-model="query.employeeId"
-              style="width: 160px;margin-left: 10px"
-              placeholder="请选择归属客服"
-              filterable
-              transfer
-              :disabled="isDirector == 'false' && isCustomerService == 'true'"
-            >
-              <Option
-                v-for="item in employee"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
+              <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
+              <Select
+                v-model="query.employeeId"
+                style="width: 150px;margin-left: 10px"
+                placeholder="请选择归属客服"
+                filterable
+                transfer
+                :disabled="isDirector == 'false' && isCustomerService == 'true'"
               >
-            </Select>
+                <Option
+                  v-for="item in employee"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </div>
+            <div>
+                <Select
+                v-model="query.isOldCustomer"
+                style="width: 180px;"
+                placeholder="请选择新老客业绩状态"
+              >
+                <Option
+                  v-for="item in query.isOldCustomerList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.sendBy"
+                style="width: 150px;margin-left: 10px"
+                placeholder="请选择派单客服"
+                filterable
+                transfer
+              >
+                <Option
+                  v-for="item in dispatchEmployee"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.baseLiveAnchorId"
+                style="width: 150px;margin-left: 10px"
+                placeholder="请选择基础主播"
+                filterable
+                transfer
+              >
+                <Option
+                  v-for="item in liveAnchorBaseInfos"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.isMainHospital"
+                style="width: 150px;margin-left: 10px"
+                placeholder="请选择是否是主派医院"
+                filterable
+                transfer
+              >
+                <Option
+                  v-for="item in isMainHospitalList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.hospitalIds"
+                style="width: 150px;margin-left: 10px"
+                placeholder="请选择医院"
+                filterable
+                transfer
+                @on-change="getQueryByHospitalIdList()"
+              >
+                <Option
+                  v-for="item in hospitallist"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.hospitalEmpId"
+                style="width: 150px;margin-left: 10px"
+                placeholder="请选择指定账号"
+                filterable
+                transfer
+                :disabled="query.hospitalIds == '全部医院' || !query.hospitalIds"
+              >
+                <Option
+                  v-for="item in hospitalIdList2"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                v-model="query.belongChannel"
+                style="width: 150px;margin-left: 10px"
+                placeholder="请选择部门"
+                filterable
+                transfer
+              >
+                <Option
+                  v-for="item in belongChannelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </div>
           </div>
-          <div style="margin-top:10px">
-            <Select
-              v-model="query.isOldCustomer"
-              style="width: 200px;"
-              placeholder="请选择新老客业绩状态"
-            >
-              <Option
-                v-for="item in query.isOldCustomerList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
+        </transition>
+          <div  class="search">
+              <Button
+                type="primary"
+                @click="getSendOrderInfo()"
+                >查询</Button
               >
-            </Select>
-            <Select
-              v-model="query.sendBy"
-              style="width: 160px;margin-left: 10px"
-              placeholder="请选择派单客服"
-              filterable
-              transfer
-            >
-              <Option
-                v-for="item in dispatchEmployee"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.baseLiveAnchorId"
-              style="width: 160px;margin-left: 10px"
-              placeholder="请选择基础主播"
-              filterable
-              transfer
-            >
-              <Option
-                v-for="item in liveAnchorBaseInfos"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.isMainHospital"
-              style="width: 160px;margin-left: 10px"
-              placeholder="请选择是否是主派医院"
-              filterable
-              transfer
-            >
-              <Option
-                v-for="item in isMainHospitalList"
-                :value="item.type"
-                :key="item.type"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.hospitalIds"
-              style="width: 150px;margin-left: 10px"
-              placeholder="请选择医院"
-              filterable
-              transfer
-              @on-change="getQueryByHospitalIdList()"
-            >
-              <Option
-                v-for="item in hospitallist"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.hospitalEmpId"
-              style="width: 150px;margin-left: 10px"
-              placeholder="请选择指定账号"
-              filterable
-              transfer
-              :disabled="query.hospitalIds == '全部医院' || !query.hospitalIds"
-            >
-              <Option
-                v-for="item in hospitalIdList2"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.belongChannel"
-              style="width: 160px;margin-left: 10px"
-              placeholder="请选择部门"
-              filterable
-              transfer
-            >
-              <Option
-                v-for="item in belongChannelList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
+            <div @click="toggle" class="open">{{isOpen ==  false ? '展开全部筛选项' : '收起全部筛选项'}}</div>
           </div>
         </div>
-        <Button
-          type="primary"
-          @click="getSendOrderInfo()"
-          style="margin-left: 10px"
-          >查询</Button
-        >
       </div>
 
       <div style="margin-top:10px">
@@ -866,6 +872,7 @@ export default {
   },
   data() {
     return {
+      isOpen: false,
       // 修改订单信息
       editRecordingModel: false,
       //编辑录单参数
@@ -2286,6 +2293,9 @@ export default {
     };
   },
   methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
     // 获取归属部门
     getshoppingCartGetBelongChannelList() {
       shoppingCartRegistrationApi.shoppingCartGetBelongChannelList().then((res) => {
@@ -3049,6 +3059,27 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+
+.panel {
+  /* 可以添加一些样式，比如边框、背景色等 */
+  // background-color: #f0f0f0;
+  // border: 1px solid #ddd;
+  // padding: 10px;
+  margin-top: 10px;
+}
+.open{
+  cursor: pointer;
+  color: #2f8cf0;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 10px 0 0 10px;
+
+}
+.search{
+  display:flex;
+  algin-items:center;
+  margin:10px 10px 0  0
+}
 .pages {
   margin-top: 16px;
   text-align: right;

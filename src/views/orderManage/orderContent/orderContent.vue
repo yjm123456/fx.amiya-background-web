@@ -1,6 +1,14 @@
 <!-- 订单 -->
 <template>
   <div>
+    <!-- <div id="app">
+      <button @click="toggle">{{isOpen ==  false ? '展开' : '收起'}}</button>
+      <transition name="collapse">
+        <div v-show="isOpen" class="panel">
+          <p>这里是折叠面板的内容</p>
+        </div>
+      </transition>
+    </div> -->
     <!-- <Collapse simple v-model="collapseValue" >
           <Panel name="1" >
               {{collapseValue.length == 1 ? '收起' : '展开全部筛选项'}}
@@ -11,10 +19,9 @@
           </Panel>
       </Collapse> -->
     <Card :dis-hover="true">
-      <div class="head">
-        <div class="content1">
-          <div class="left_top">
-            <Input
+      <div id="app">
+        <div>
+          <Input
               v-model="query.keyword"
               style="width:170px;"
               placeholder="请输入订单号或商品名称"
@@ -74,38 +81,12 @@
                   >{{ item.name }}</Option
                 >
             </Select>
-            <!-- <Select
-              v-model="query.contentPlateFormId"
-              placeholder="请选择(订单)下单平台"
-              style="width: 170px;margin-left: .625rem"
-              filterable
-            >
-              <Option
-                v-for="item in contentPalteForms"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.contentPlatformName }}</Option
-              >
-            </Select> -->
-            <!-- <Select
-              v-model="query.consultationEmpId"
-              placeholder="请选择面诊员"
-              style="width: 180px;margin-left: 10px"
-              filterable
-            >
-              <Option
-                v-for="item in consultationNameListAll"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select> -->
             
-          </div>
-          <!-- 一个是订单平台筛选 一个是主播平台筛选 -->
-          <div>
-            
-            <Select
+        </div>
+        <transition name="collapse">
+          <div v-show="isOpen" class="panel">
+            <div style="margin-bottom:10px">
+                <Select
               v-model="query.belongEmpId"
               style="width: 170px;"
               placeholder="请选择归属客服"
@@ -187,87 +168,93 @@
                   >{{ item.name }}</Option
                 >
               </Select>
-          </div>
-          <div style="margin-top:10px">
-            
-            <Select
-                v-model="query.baseLiveAnchorId"
-                style="width: 170px;"
-                placeholder="请选择基础主播"
-                filterable
-                transfer
-              >
-                <Option
-                  v-for="item in liveAnchorBaseInfos"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
+            </div>
+            <div>
+                <Select
+                  v-model="query.baseLiveAnchorId"
+                  style="width: 170px;"
+                  placeholder="请选择基础主播"
+                  filterable
+                  transfer
                 >
-            </Select>
-              <Input
-                v-model="query.minAddOrderPrice"
-                placeholder="最小下单金额"
-                style="width: 130px;margin-left: 10px"
-                type="number"
-                namber
-              />
-              <span> — </span>
-              <Input
-                v-model="query.maxAddOrderPrice"
-                placeholder="最大下单金额"
-                style="width: 140px;"
-                type="number"
-                namber
-              />
-              
-              <Select
-                v-model="query.appointmentHospital"
-                style="width: 160px;margin-left: 10px"
-                placeholder="请选择医院"
-                filterable
-                transfer
-              >
-                <Option
-                  v-for="item in hospitallist"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
+                  <Option
+                    v-for="item in liveAnchorBaseInfos"
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.name }}</Option
+                  >
+              </Select>
+                <Input
+                  v-model="query.minAddOrderPrice"
+                  placeholder="最小下单金额"
+                  style="width: 130px;margin-left: 10px"
+                  type="number"
+                  namber
+                />
+                <span> — </span>
+                <Input
+                  v-model="query.maxAddOrderPrice"
+                  placeholder="最大下单金额"
+                  style="width: 140px;"
+                  type="number"
+                  namber
+                />
+                
+                <Select
+                  v-model="query.appointmentHospital"
+                  style="width: 160px;margin-left: 10px"
+                  placeholder="请选择医院"
+                  filterable
+                  transfer
                 >
-            </Select>
-            <DatePicker
-              type="date"
-              placeholder="预约开始日期"
-              style="width: 160px;margin-left: .625rem"
-              :value="query.appointmentStartDate"
-              v-model="query.appointmentStartDate"
-            ></DatePicker>
-            <!-- <span style="margin-left:.625rem;color:#ccc">—</span> -->
-            <DatePicker
-              type="date"
-              placeholder="预约结束日期"
-              style="width: 170px; margin-left: .625rem"
-              :value="query.appointmentEndDate"
-              v-model="query.appointmentEndDate"
-            ></DatePicker>
-            
+                  <Option
+                    v-for="item in hospitallist"
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.name }}</Option
+                  >
+              </Select>
+              <DatePicker
+                type="date"
+                placeholder="预约开始日期"
+                style="width: 160px;margin-left: .625rem"
+                :value="query.appointmentStartDate"
+                v-model="query.appointmentStartDate"
+              ></DatePicker>
+              <!-- <span style="margin-left:.625rem;color:#ccc">—</span> -->
+              <DatePicker
+                type="date"
+                placeholder="预约结束日期"
+                style="width: 170px; margin-left: .625rem"
+                :value="query.appointmentEndDate"
+                v-model="query.appointmentEndDate"
+              ></DatePicker>
+            </div>
           </div>
+        </transition>
+        <div  class="search">
+            <Button
+              type="primary"
+              @click="getOrderInfo()"
+              >查询</Button
+            >
+          <div @click="toggle" class="open">{{isOpen ==  false ? '展开全部筛选项' : '收起全部筛选项'}}</div>
         </div>
-        <div class="button_con">
-          <Button
+        
+      </div>
+      
+    </Card>
+    <Card class="container">
+      <div>
+        <Button
             type="primary"
-            style="margin-left: .625rem"
-            @click="getOrderInfo()"
-            >查询</Button
-          >
-          <Button
-            type="primary"
-            style="margin-left: .625rem"
+            style="margin-bottom:10px"
             @click="duplicateModel = true"
             >录单</Button
           >
           <Button
             type="primary"
-            style="margin-left: .625rem"
+            style="margin-left: .625rem;margin-bottom:10px"
             @click="handleExportClick()"
             v-has="{ role: ['fx.amiya.permission.EXPORT'] }"
             >导出</Button
@@ -275,21 +262,16 @@
           <Button
             type="primary"
             @click="adjustCustomerService()"
-            style="margin-left: 10px"
+            style="margin-left: 10px;margin-bottom:10px"
             v-has="{ role: ['fx.amiya.permission.CHANGE_BIND_SERVICE'] }"
             >调整绑定客服</Button
           >
           <Button
             type="primary"
             @click="fanMeetingClick()"
-            style="margin-left: 10px"
+            style="margin-left: 10px;margin-bottom:10px"
             >生成粉丝见面会名单</Button
           >
-        </div>
-      </div>
-    </Card>
-    <Card class="container">
-      <div>
         <Table
           border
           :columns="query.columns"
@@ -442,6 +424,7 @@ export default {
   },
   data() {
     return {
+      isOpen: false,
       // 搜索栏展开收起
       collapseValue:[],
       // 生成粉丝见面会名单
@@ -1120,7 +1103,9 @@ export default {
     };
   },
   methods: {
-    
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
     // 生成粉丝见面会名单
     fanMeetingClick(){
       if (![...this.fanMeetingParams.orderId].length) {
@@ -1914,6 +1899,27 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+
+.panel {
+  /* 可以添加一些样式，比如边框、背景色等 */
+  // background-color: #f0f0f0;
+  // border: 1px solid #ddd;
+  // padding: 10px;
+  margin-top: 10px;
+}
+.open{
+  cursor: pointer;
+  color: #2f8cf0;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 10px 0 0 10px;
+
+}
+.search{
+  display:flex;
+  algin-items:center;
+  margin:10px 10px 0  0
+}
 .demo-spin-icon-load {
   animation: ani-demo-spin 1s linear infinite;
 }

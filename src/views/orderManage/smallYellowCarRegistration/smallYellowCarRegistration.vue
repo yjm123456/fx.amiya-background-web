@@ -82,251 +82,236 @@
                 >
               </Select>
             </div>
-            <div style="margin:10px 0 ">
-              
-              <Select
-                v-model="query.isConsultation"
-                placeholder="请选择面诊类型"
-                filterable
-                style="width: 180px;"
-              >
-                <Option
-                  v-for="item in isConsultationList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
+            <transition name="collapse">
+              <div v-show="isOpen" class="panel">
+                <div style="margin-bottom:10px">
+                  <Select
+                    v-model="query.isConsultation"
+                    placeholder="请选择面诊类型"
+                    filterable
+                    style="width: 180px;"
+                  >
+                    <Option
+                      v-for="item in isConsultationList"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
 
-              <Select
-                v-model="query.assignEmpId"
-                placeholder="请选择指派"
-                filterable
-                style="width: 150px; margin-left: 10px"
+                  <Select
+                    v-model="query.assignEmpId"
+                    placeholder="请选择指派"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in employee"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.isCreateOrder"
+                    placeholder="请选择录单触达"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in query.isCreateOrderList"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.isSendOrder"
+                    placeholder="请选择派单触达"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in query.isSendOrderList"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.emergencyLevel"
+                    placeholder="请选择重要程度"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in query.emergencyLevelListAll"
+                      :value="item.emergencyLevel"
+                      :key="item.emergencyLevel"
+                      >{{ item.emergencyLevelText }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.baseLiveAnchorId"
+                    placeholder="请选择主播"
+                    filterable
+                    style="width: 150px;margin-left: 10px"
+                    :disabled="query.baseLiveAnchorId != -1 && isliveAnchorBaseId == true"
+                  >
+                    <Option
+                      v-for="item in liveAnchorBaseInfos"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.shoppingCartRegistrationCustomerType"
+                    placeholder="请选择客户类型"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in shoppingCartRegistrationCustomerTypeListAll"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                </div>
+                <div style="margin-bottom:10px">
+                  <Input
+                    v-model="query.minPrice"
+                    placeholder="最小下单金额"
+                    style="width: 160px;"
+                    type="number"
+                    namber
+                  />
+                  <span> — </span>
+                  <Input
+                    v-model="query.maxPrice"
+                    placeholder="最大下单金额"
+                    style="width: 160px;"
+                    type="number"
+                    namber
+                  />
+                  <Select
+                    v-model="query.isReturnBackPrice"
+                    placeholder="请选择退款状态"
+                    filterable
+                    style="width: 150px;margin-left:10px"
+                  >
+                    <Option
+                      v-for="item in isReturnBackPriceList"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <DatePicker
+                    type="date"
+                    placeholder="退款开始时间"
+                    :value="query.startRefundTime"
+                    v-model="query.startRefundTime"
+                    style="width: 150px; margin-left: 10px"
+                    :disabled="query.isReturnBackPrice != 'true'"
+                  ></DatePicker>
+                  <DatePicker
+                    type="date"
+                    placeholder="退款结束时间"
+                    :value="query.endRefundTime"
+                    v-model="query.endRefundTime"
+                    style="width: 150px; margin-left: 10px"
+                    :disabled="query.isReturnBackPrice != 'true'"
+                  ></DatePicker>
+                  
+                  <Select
+                    v-model="query.createBy"
+                    placeholder="请选择创建人"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in employeeCreat"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.isWriteOff"
+                    placeholder="请选择核销状态"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in isWriteOffList"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                </div>
+                <div >
+                  <Select
+                    v-model="query.isBadReview"
+                    placeholder="请选择差评状态"
+                    filterable
+                    style="width: 180px;"
+                  >
+                    <Option
+                      v-for="item in isBadReviewList"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <DatePicker
+                    type="date"
+                    placeholder="差评开始时间"
+                    :value="query.startBadReviewTime"
+                    v-model="query.startBadReviewTime"
+                    style="width: 150px; margin-left: 10px"
+                    :disabled="query.isBadReview != 'true'"
+                  ></DatePicker>
+                  <DatePicker
+                    type="date"
+                    placeholder="差评结束时间"
+                    :value="query.endBadReviewTime"
+                    v-model="query.endBadReviewTime"
+                    style="width: 150px; margin-left: 10px"
+                    :disabled="query.isBadReview != 'true'"
+                  ></DatePicker>
+                  <Select
+                    v-model="query.isAddWechat"
+                    placeholder="请选择加v状态"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in isAddWeChatList"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                </div>
+              </div>
+            </transition>
+            <div  class="search">
+              <Button
+                type="primary"
+                @click="getSmallCar()"
+                >查询</Button
               >
-                <Option
-                  v-for="item in employee"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.isCreateOrder"
-                placeholder="请选择录单触达"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in query.isCreateOrderList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.isSendOrder"
-                placeholder="请选择派单触达"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in query.isSendOrderList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.emergencyLevel"
-                placeholder="请选择重要程度"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in query.emergencyLevelListAll"
-                  :value="item.emergencyLevel"
-                  :key="item.emergencyLevel"
-                  >{{ item.emergencyLevelText }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.baseLiveAnchorId"
-                placeholder="请选择主播"
-                filterable
-                style="width: 150px;margin-left: 10px"
-                :disabled="query.baseLiveAnchorId != -1 && isliveAnchorBaseId == true"
-              >
-                <Option
-                  v-for="item in liveAnchorBaseInfos"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.shoppingCartRegistrationCustomerType"
-                placeholder="请选择客户类型"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in shoppingCartRegistrationCustomerTypeListAll"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </div>
-            <div>
-              <Input
-                v-model="query.minPrice"
-                placeholder="最小下单金额"
-                style="width: 160px;"
-                type="number"
-                namber
-              />
-              <span> — </span>
-              <Input
-                v-model="query.maxPrice"
-                placeholder="最大下单金额"
-                style="width: 160px;"
-                type="number"
-                namber
-              />
-              <Select
-                v-model="query.isReturnBackPrice"
-                placeholder="请选择退款状态"
-                filterable
-                style="width: 150px;margin-left:10px"
-              >
-                <Option
-                  v-for="item in isReturnBackPriceList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <DatePicker
-                type="date"
-                placeholder="退款开始时间"
-                :value="query.startRefundTime"
-                v-model="query.startRefundTime"
-                style="width: 150px; margin-left: 10px"
-                :disabled="query.isReturnBackPrice != 'true'"
-              ></DatePicker>
-              <DatePicker
-                type="date"
-                placeholder="退款结束时间"
-                :value="query.endRefundTime"
-                v-model="query.endRefundTime"
-                style="width: 150px; margin-left: 10px"
-                :disabled="query.isReturnBackPrice != 'true'"
-              ></DatePicker>
-              
-              <Select
-                v-model="query.createBy"
-                placeholder="请选择创建人"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in employeeCreat"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.isWriteOff"
-                placeholder="请选择核销状态"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in isWriteOffList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </div>
-            <div style="margin-top:10px">
-              <Select
-                v-model="query.isBadReview"
-                placeholder="请选择差评状态"
-                filterable
-                style="width: 180px;"
-              >
-                <Option
-                  v-for="item in isBadReviewList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <DatePicker
-                type="date"
-                placeholder="差评开始时间"
-                :value="query.startBadReviewTime"
-                v-model="query.startBadReviewTime"
-                style="width: 150px; margin-left: 10px"
-                :disabled="query.isBadReview != 'true'"
-              ></DatePicker>
-              <DatePicker
-                type="date"
-                placeholder="差评结束时间"
-                :value="query.endBadReviewTime"
-                v-model="query.endBadReviewTime"
-                style="width: 150px; margin-left: 10px"
-                :disabled="query.isBadReview != 'true'"
-              ></DatePicker>
-              <Select
-                v-model="query.isAddWechat"
-                placeholder="请选择加v状态"
-                filterable
-                style="width: 150px; margin-left: 10px"
-              >
-                <Option
-                  v-for="item in isAddWeChatList"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              
-              
-            </div>
+            <div @click="toggle" class="open">{{isOpen ==  false ? '展开全部筛选项' : '收起全部筛选项'}}</div>
+          </div>
+           
             
           </div>
-          <div>
-            <Button type="primary" style="margin:0 10px" @click="getSmallCar()"
-              >查询</Button
-            >
-            <Button
-              type="primary"
-              @click="
-                controlModal = true;
-                title = '添加';
-              "
-              >添加</Button
-            >
-            <Button
-              type="primary"
-              @click="batchAssignmentClick"
-              style="margin-left:10px"
-              >批量指派</Button
-            >
-            <Button
-              type="primary"
-              style="margin-left: 10px"
-              @click="importControlModal = true"
-              >导入</Button
-            >
-          </div>
+          
         </div>
-        <div class="right"></div>
-        <div class="containers"></div>
+       
       </div>
     </Card>
 
@@ -348,6 +333,24 @@
     </Card> -->
     <Card class="container">
       <div>
+        <Button
+          type="primary"
+          @click=" controlModal = true; title = '添加';"
+          style="margin-bottom:10px"
+          >添加</Button
+        >
+        <Button
+          type="primary"
+          @click="batchAssignmentClick"
+          style="margin-left:10px;margin-bottom:10px"
+          >批量指派</Button
+        >
+        <Button
+          type="primary"
+          style="margin-left: 10px;margin-bottom:10px"
+          @click="importControlModal = true"
+          >导入</Button
+        >
         <Table
           border
           :columns="query.columns"
@@ -880,6 +883,13 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="是否重复下单" prop="isRepeateCreateOrder">
+              <i-switch
+                v-model="form.isRepeateCreateOrder"
+              />
+            </FormItem>
+          </Col>
           <Col span="8" v-if="title == '修改'">
             <FormItem label="是否为历史顾客激活" prop="isHistoryCustomerActive">
               <i-switch v-model="form.isHistoryCustomerActive"/>
@@ -1003,6 +1013,7 @@ export default {
   components: { assign, batchAssignment, importFile ,trackReturnVisit,upload},
   data() {
     return {
+      isOpen: false,
       uploadObj: {
         // 是否开启多图
         multiple: false,
@@ -1757,6 +1768,35 @@ export default {
             },
           },
           {
+            title: "是否重复下单",
+            key: "isRepeateCreateOrder",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              if (params.row.isRepeateCreateOrder == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
             title: "是否为历史顾客激活",
             key: "isHistoryCustomerActive",
             minWidth: 180,
@@ -1936,7 +1976,8 @@ export default {
                               isHistoryCustomerActive,
                               activeEmployeeId,
                               customerWechatNo,
-                              fromTitle
+                              fromTitle,
+                              isRepeateCreateOrder
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -1991,6 +2032,7 @@ export default {
                             this.form.badReviewReason = badReviewReason;
                             this.form.isReContent = isReContent;
                             this.form.isRiBuLuoLiving = isRiBuLuoLiving;
+                            this.form.isRepeateCreateOrder = isRepeateCreateOrder;
                             this.form.reContent = reContent;
                             this.form.isBadReview = isBadReview;
                             this.form.badReviewContent = badReviewContent;
@@ -2206,7 +2248,9 @@ export default {
         // 微信号
         customerWechatNo:'',
         // 词条
-        fromTitle:''
+        fromTitle:'',
+        // 是否重复下单
+        isRepeateCreateOrder:false
 
       },
 
@@ -2522,6 +2566,9 @@ export default {
     };
   },
   methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
     //是否加v为false 清空加v截图
     IsAddWeChatChange(){
       if(this.form.IsAddWeChat == false){
@@ -3180,7 +3227,8 @@ export default {
         isHistoryCustomerActive,
         activeEmployeeId,
         customerWechatNo,
-        fromTitle
+        fromTitle,
+        isRepeateCreateOrder
       } = this.form;
       const data = {
         recordDate: time
@@ -3231,6 +3279,7 @@ export default {
         price:contentPlatFormId != '317c03b8-aff9-4961-8392-fc44d04b1725' ? price : 0,
         customerWechatNo ,
         fromTitle:contentPlatFormId == '317c03b8-aff9-4961-8392-fc44d04b1725' ? fromTitle : '' ,
+        isRepeateCreateOrder
       };
       // 归属地 国内是1 国外是2
       if (belongingPlace == 1) {
@@ -3359,7 +3408,8 @@ export default {
               addWechatPicture,
               isRiBuLuoLiving,
               customerWechatNo,
-              fromTitle
+              fromTitle,
+              isRepeateCreateOrder
             } = this.form;
             const data = {
               recordDate: time
@@ -3401,6 +3451,7 @@ export default {
               price:contentPlatFormId != '317c03b8-aff9-4961-8392-fc44d04b1725' ? price : 0,
               customerWechatNo ,
               fromTitle:contentPlatFormId == '317c03b8-aff9-4961-8392-fc44d04b1725' ? fromTitle : '' ,
+              isRepeateCreateOrder
             };
 
             // 归属地 国内是1 国外是2
@@ -3518,6 +3569,27 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+
+.panel {
+  /* 可以添加一些样式，比如边框、背景色等 */
+  // background-color: #f0f0f0;
+  // border: 1px solid #ddd;
+  // padding: 10px;
+  margin-top: 10px;
+}
+.open{
+  cursor: pointer;
+  color: #2f8cf0;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 10px 0 0 10px;
+
+}
+.search{
+  display:flex;
+  algin-items:center;
+  margin:10px 10px 0  0
+}
 .header_wrap {
   display: flex;
   align-items: center;

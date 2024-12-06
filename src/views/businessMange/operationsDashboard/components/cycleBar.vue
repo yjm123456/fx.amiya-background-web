@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div ref="dom" :style="{ width: '100%', height: '200px' }"></div>
+    <div ref="dom" :style="{ width: '100%', height: '160px' }"></div>
   </div>
 </template>
 
@@ -103,7 +103,7 @@ export default {
           {
             type: "bar",
             data: list1,
-            // barWidth:'50'
+            barWidth:'30'
           },
         ],
       };

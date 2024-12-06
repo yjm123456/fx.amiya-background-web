@@ -460,9 +460,11 @@ export default {
 
     handleCancels(selection, row) {
       // 批量提取
-      const findIndex = this.batchExtractionParams.list.findIndex(item=> item.dealId === row.dealId);
-      this.batchExtractionParams.list.splice(findIndex,1)
+      // const findIndex = this.batchExtractionParams.list.findIndex(item=> item.dealId === row.dealId);
+      // this.batchExtractionParams.list.splice(findIndex,1)
       // this.checkedParams.idList.delete(row.id);
+      let list = this.batchExtractionParams.list.filter(item=> item.dealInfoId != row.dealId);
+      this.batchExtractionParams.list = list
     },
 
     handleSelectAll(selection) {

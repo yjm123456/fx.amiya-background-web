@@ -463,3 +463,11 @@ export const operatingConsultingNameList = () => {
         method: "get",
     });
 };
+//医美业绩趋势
+export const getTotalAchievementByYear = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getTotalAchievementByYear",
+        method: "get",
+        params
+    });
+};

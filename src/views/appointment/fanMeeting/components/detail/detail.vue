@@ -1722,7 +1722,8 @@ export default {
               if (res.code == 0) {
                 this.$Message.success("编辑成功");
                 this.cancel2("form");
-                this.getFansMeetingDetailsInfo();
+                this.handlePageChange(this.$refs.pages.currentPage)
+                // this.getFansMeetingDetailsInfo();
               }
             });
           } else {
@@ -1803,12 +1804,14 @@ export default {
     // 取消
     cancel(name) {
       this.$emit("update:detailModel", false);
+      this.query.keyWord = ''
     },
     cancel2(name) {
       this.fansMeetingDetailModel = false;
       this.$refs[name].resetFields();
       this.uploadObj.uploadList = [];
       this.title = "添加";
+      this.query.keyWord = ''
       if (this.title == "添加") {
         this.form.fansMeetingId = this.detailParams.id;
       }

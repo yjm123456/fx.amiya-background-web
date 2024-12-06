@@ -414,6 +414,7 @@ export default {
   padding: 0 10px;
   box-sizing: border-box;
   text-align: center;
+  color: #000;
 }
 .m_b{
     margin-bottom: 10px;

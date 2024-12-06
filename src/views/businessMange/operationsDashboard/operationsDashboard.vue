@@ -2,22 +2,10 @@
   <div>
     <Card>
       <div class="content_title">
-        <div class="h2">{{selected == '图表' ? '啊美雅线索&业绩运营看板'  : '啊美雅医美转化运营分析'}}</div>
+        <div class="h2">{{selected == '图表' ? '啊美雅线索&业绩运营看板'  : selected == '转化' ? '啊美雅医美转化运营分析' : '啊美雅年度业绩趋势'}}</div>
       </div>
       <!-- tab切换 -->
-      <div class="tab_content" >
-        <div class="tab" v-if="selected == '图表'">
-          <div
-            class="tab_item"
-            v-for="(item, index) in list5"
-            :key="index"
-            @click="selectTab4(index, item)"
-            :class="{ active: selected4 == item}"
-          >
-            <span>{{ item }}</span>
-          </div>
-        </div>
-        <div class="tab" v-else></div>
+      <div class="tab_content fl_end" >
         <div class="date_con">
           <!-- tab切换 -->
           <div class="tab_content2">
@@ -57,6 +45,18 @@
             v-model="params.endDate"
           ></DatePicker>
           <Button type="primary" @click="getData">查询</Button>
+        </div>
+      </div>
+      <!-- 主播筛选 -->
+      <div class="tab" v-if="selected == '图表'">
+        <div
+          class="tab_item"
+          v-for="(item, index) in list5"
+          :key="index"
+          @click="selectTab4(index, item)"
+          :class="{ active: selected4 == item}"
+        >
+          <span>{{ item }}</span>
         </div>
       </div>
       <!-- 业绩 -->
@@ -294,7 +294,7 @@
       </div>
      
       <!-- 转化 -->
-      <div v-else-if="selected == '转化'">
+      <div v-else-if="selected == '年度趋势'">
         <!-- 平台切换 -->
         <div class="tab2" >
           <div
@@ -334,6 +334,54 @@
           <hospitalTable :params="params" :platformList="platformList" ref="hospitalTable"/>
         </div>
       </div>
+      <!-- 年度趋势 -->
+      <div v-else-if="selected == '转化'">
+          <!-- 新老客筛选 -->
+          <div class="tab" >
+            <div
+              class="tab_item"
+              v-for="(item, index) in params.list6"
+              :key="index"
+              @click="selectTab6(index, item)"
+              :class="{ active: params.selected6 == item}"
+            >
+              <span>{{ item }}</span>
+            </div>
+        </div>
+        <!-- 医美业绩趋势 -->
+        <totalAchievementByYear :params="params" ref="totalAchievementByYear"/>
+        <!-- 业绩贡献占比 -->
+        <Card  class="m_b">
+          <div class="pie_list">
+            <div  class="pie_item">
+              <div class="h3">刀刀组</div>
+              <Card  style="margin-top:10px">
+                <div class="pie_title">平台业绩</div>
+                <pieItem :pieItemData="totalFlowRateByContentPlatFormAchievement" :pieItemData2="totalFlowRateByContentPlatFormAchievement2" selected="平台总业绩" />
+                <div class="pie_title">部门业绩</div>
+                <pieItem :pieItemData="totalBelongChannelPerformance" :pieItemData2="totalBelongChannelPerformance2" selected="业绩" title="部门业绩分析"/>
+                <div class="pie_title">有效/潜在</div>
+                <pieItem :pieItemData="totalIsEffictivePerformance" :pieItemData2="totalIsEffictivePerformance2" selected="业绩" />
+                <div class="pie_title">当月/历史</div>
+                <pieItem :pieItemData="totalIsHistoryPerformance" :pieItemData2="totalIsHistoryPerformance2" selected="业绩" />
+              </Card>
+            </div>
+            <div  class="pie_item">
+              <div class="h3">吉娜组</div>
+              <Card  style="margin-top:10px">
+                <div class="pie_title">平台业绩</div>
+                <pieItem :pieItemData="jinatotalFlowRateByContentPlatFormAchievement" :pieItemData2="jinatotalFlowRateByContentPlatFormAchievement2" selected="平台总业绩" />
+                <div class="pie_title">部门业绩</div>
+                <pieItem :pieItemData="jinatotalBelongChannelPerformance" :pieItemData2="jinatotalBelongChannelPerformance2" selected="业绩" title="部门业绩分析"/>
+                <div class="pie_title">有效/潜在</div>
+                <pieItem :pieItemData="jinatotalIsEffictivePerformance" :pieItemData2="jinatotalIsEffictivePerformance2" selected="业绩" />
+                <div class="pie_title">当月/历史</div>
+                <pieItem :pieItemData="jinatotalIsHistoryPerformance" :pieItemData2="jinatotalIsHistoryPerformance2" selected="业绩" />
+              </Card>
+            </div>
+          </div>
+        </Card>
+      </div>
       <!-- 详情 -->
       <detail :detailModel.sync="detailModel" :detailFlowBarItemData="detailFlowBarItemData" :title="titles"/>
     </Card>
@@ -365,6 +413,7 @@ import tiktok from "./components/tiktok.vue"
 import vedio from "./components/vedio.vue"
 import customerBar from "./components/customerBar.vue"
 import cycleBar from "./components/cycleBar.vue"
+import totalAchievementByYear from "./components/totalAchievementByYear.vue"
 
 export default {
   components:{
@@ -387,7 +436,8 @@ export default {
     assistantTargetCompleteDataTable,
     customerBar,
     pieItem3,
-    cycleBar
+    cycleBar,
+    totalAchievementByYear
   },
   data() {
     return {
@@ -419,8 +469,11 @@ export default {
           // 助理客户转化成交率健康值
         AssistantCustomerFlowTransformDealRate:'',
         // 助理流量转化派单率健康值
-        AssistantFlowTransformSendOrderRate:''
+        AssistantFlowTransformSendOrderRate:'',
+        selected6:"全部",
+        list6:["全部","新客","老客"],
       },
+      // list: ["图表","转化","年度趋势"],
       list: ["图表","转化"],
       list2: ["线索","业绩"],
       list4: ["全部","刀刀","吉娜"],
@@ -596,7 +649,21 @@ export default {
       totalConsulationType:[],
       totalConsulationTypeAll:0,
       // 转化周期
-      conversionCycleObj:{}
+      conversionCycleObj:{},
+
+      // 年度趋势 
+      // 平台业绩吉娜组
+      jinatotalFlowRateByContentPlatFormAchievement:[],
+      jinatotalFlowRateByContentPlatFormAchievement2:{},
+      // 当月历史
+      jinatotalIsHistoryPerformance:[],
+      jinatotalIsHistoryPerformance2:{},
+      // 部门业绩
+      jinatotalBelongChannelPerformance:[],
+      jinatotalBelongChannelPerformance2:{},
+      // 有效潜在
+      jinatotalIsEffictivePerformance:[],
+      jinatotalIsEffictivePerformance2:{},
     };
   },
   methods: {
@@ -684,6 +751,11 @@ export default {
           this.$refs.assistantTargetCompleteDataTable.getassistantTargetCompleteData();
         })
     },
+    // 年度趋势
+    selectTab6(index,value){
+      this.params.selected6 = value
+      this.$refs.totalAchievementByYear.getTotalAchievementByYearClick()
+    },
     getData() {
       const {startDate,endDate} = this.params
       if (!startDate || !endDate) {
@@ -702,7 +774,6 @@ export default {
         this.getassiatantTargetCompleteAndPerformanceRateData()
         this.getTransformCycleDataClick()
         this.$nextTick(()=>{
-          
           if(this.active == 'whole'){
             this.$refs.whole.getPerformanceOperationData()
           }else if(this.active == 'tiktok'){
@@ -714,11 +785,23 @@ export default {
         
       }else if(this.selected == '转化'){
         this.$nextTick(()=>{
-          this.$refs.trafficConversionTable.getCompanyTransformData();
-          this.$refs.assistantTable.getAssistantTransformData();
-          this.$refs.assistantTargetCompleteDataTable.getassistantTargetCompleteData();
-          this.$refs.hospitalTable.getData();
+          // 老版本转化
+          // this.$refs.trafficConversionTable.getCompanyTransformData();
+          // this.$refs.assistantTable.getAssistantTransformData();
+          // this.$refs.assistantTargetCompleteDataTable.getassistantTargetCompleteData();
+          // this.$refs.hospitalTable.getData();
+          this.$nextTick(()=>{
+            this.$refs.totalAchievementByYear.getTotalAchievementByYearClick()
+          })
+          this.getYearNewOrOldCustomerCompare('刀刀')
+          this.getYearNewOrOldCustomerCompare2('吉娜')
         })
+      }else if(this.selected == '年度趋势'){
+        this.$nextTick(()=>{
+          this.$refs.totalAchievementByYear.getTotalAchievementByYearClick()
+        })
+        this.getYearNewOrOldCustomerCompare('刀刀')
+        this.getYearNewOrOldCustomerCompare2('吉娜')
       }
     },
     // 获取业绩数据和折线图数据
@@ -1148,7 +1231,94 @@ export default {
           this.conversionCycleObj = res.data.data
         }
       })
-    }
+    },
+    // 年度趋势 刀刀组业绩饼图占比
+    getYearNewOrOldCustomerCompare(value) {
+      const {startDate,endDate} = this.params
+      const data = {
+        startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+        endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+        keyWord:value == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : value == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id :  ''
+      };
+      api.getNewOrOldCustomerCompare(data).then((res) => {
+        if (res.code == 0) {
+          const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer,totalBelongChannelPerformance,groupDaoDaoBelongChannelPerformance,groupJiNaBelongChannelPerformance,totalIsEffictivePerformance,groupDaoDaoIsEffictivePerformance,groupJiNaIsEffictivePerformance,totalIsHistoryPerformance,groupDaoDaoIsHistoryPerformance,groupJiNaIsHistoryPerformance,totalFlowRateByContentPlatForm,totalNewOrOldCustomerNum,totalIsHistoryPerformanceNum,totalConsulationTypeNumber,totalConsulationType} = res.data.data
+          // 刀刀组
+          // 平台业绩
+          this.totalFlowRateByContentPlatFormAchievement =  totalFlowRateByContentPlatForm ? [
+            {value:totalFlowRateByContentPlatForm.douYinNumber,name:'抖音',rate:totalFlowRateByContentPlatForm.douYinRate},
+            {value:totalFlowRateByContentPlatForm.videoNumberNumber,name:'视频号',rate:totalFlowRateByContentPlatForm.videoNumberRate},
+            {value:totalFlowRateByContentPlatForm.xiaoHongShuNumber,name:'小红书',rate:totalFlowRateByContentPlatForm.xiaoHongShuRate},
+            {value:totalFlowRateByContentPlatForm.privateDataNumber,name:'私域',rate:totalFlowRateByContentPlatForm.privateDataRate},
+          ] : []
+          this.totalFlowRateByContentPlatFormAchievement2 = totalFlowRateByContentPlatForm
+          // 部门业绩占比
+          this.totalBelongChannelPerformance = [
+            {value:totalBelongChannelPerformance.beforeLivingNumber,name:'直播前',rate:totalBelongChannelPerformance.beforeLivingRate},
+            {value:totalBelongChannelPerformance.livingNumber,name:'直播中',rate:totalBelongChannelPerformance.livingRate},
+            {value:totalBelongChannelPerformance.afterLivingNumber,name:'直播后',rate:totalBelongChannelPerformance.afterLivingRate},
+            {value:totalBelongChannelPerformance.otherNumber,name:'其他',rate:totalBelongChannelPerformance.otherRate},
+          ]
+          this.totalBelongChannelPerformance2 = totalBelongChannelPerformance
+
+          // 有效潜在
+          this.totalIsEffictivePerformance = [
+            {value:totalIsEffictivePerformance.effictivePerformanceNumber,name:'有效',rate:totalIsEffictivePerformance.effictivePerformanceRate},
+            {value:totalIsEffictivePerformance.notEffictivePerformanceNumber,name:'潜在',rate:totalIsEffictivePerformance.notEffictivePerformanceRate},
+          ]
+          this.totalIsEffictivePerformance2 = totalIsEffictivePerformance
+          // 当月/历史占比
+          this.totalIsHistoryPerformance = [
+            {value:totalIsHistoryPerformance.thisMonthPerformanceNumber,name:'当月',rate:totalIsHistoryPerformance.thisMonthPerformanceRate},
+            {value:totalIsHistoryPerformance.historyPerformanceNumber,name:'历史',rate:totalIsHistoryPerformance.historyPerformanceRate},
+          ]
+          this.totalIsHistoryPerformance2 = totalIsHistoryPerformance
+        }
+      });
+    },
+    getYearNewOrOldCustomerCompare2(value) {
+      const {startDate,endDate} = this.params
+      const data = {
+        startDate: this.$moment(startDate).format("YYYY-MM-DD") ,
+        endDate: this.$moment(endDate).format("YYYY-MM-DD"),
+        keyWord:value == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : value == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id :  ''
+      };
+      api.getNewOrOldCustomerCompare(data).then((res) => {
+        if (res.code == 0) {
+          const {totalNewOrOldCustomer,groupDaoDaoNewOrOldCustomer,groupJiNaNewOrOldCustomer,totalBelongChannelPerformance,groupDaoDaoBelongChannelPerformance,groupJiNaBelongChannelPerformance,totalIsEffictivePerformance,groupDaoDaoIsEffictivePerformance,groupJiNaIsEffictivePerformance,totalIsHistoryPerformance,groupDaoDaoIsHistoryPerformance,groupJiNaIsHistoryPerformance,totalFlowRateByContentPlatForm,totalNewOrOldCustomerNum,totalIsHistoryPerformanceNum,totalConsulationTypeNumber,totalConsulationType} = res.data.data
+          // 吉娜组
+          // 平台业绩
+          this.jinatotalFlowRateByContentPlatFormAchievement =  totalFlowRateByContentPlatForm ? [
+            {value:totalFlowRateByContentPlatForm.douYinNumber,name:'抖音',rate:totalFlowRateByContentPlatForm.douYinRate},
+            {value:totalFlowRateByContentPlatForm.videoNumberNumber,name:'视频号',rate:totalFlowRateByContentPlatForm.videoNumberRate},
+            {value:totalFlowRateByContentPlatForm.xiaoHongShuNumber,name:'小红书',rate:totalFlowRateByContentPlatForm.xiaoHongShuRate},
+            {value:totalFlowRateByContentPlatForm.privateDataNumber,name:'私域',rate:totalFlowRateByContentPlatForm.privateDataRate},
+          ] : []
+          this.jinatotalFlowRateByContentPlatFormAchievement2 = totalFlowRateByContentPlatForm
+          // 部门业绩占比
+          this.jinatotalBelongChannelPerformance = [
+            {value:totalBelongChannelPerformance.beforeLivingNumber,name:'直播前',rate:totalBelongChannelPerformance.beforeLivingRate},
+            {value:totalBelongChannelPerformance.livingNumber,name:'直播中',rate:totalBelongChannelPerformance.livingRate},
+            {value:totalBelongChannelPerformance.afterLivingNumber,name:'直播后',rate:totalBelongChannelPerformance.afterLivingRate},
+            {value:totalBelongChannelPerformance.otherNumber,name:'其他',rate:totalBelongChannelPerformance.otherRate},
+          ]
+          this.jinatotalBelongChannelPerformance2 = totalBelongChannelPerformance
+
+          // 有效潜在
+          this.jinatotalIsEffictivePerformance = [
+            {value:totalIsEffictivePerformance.effictivePerformanceNumber,name:'有效',rate:totalIsEffictivePerformance.effictivePerformanceRate},
+            {value:totalIsEffictivePerformance.notEffictivePerformanceNumber,name:'潜在',rate:totalIsEffictivePerformance.notEffictivePerformanceRate},
+          ]
+          this.jinatotalIsEffictivePerformance2 = totalIsEffictivePerformance
+          // 当月/历史占比
+          this.jinatotalIsHistoryPerformance = [
+            {value:totalIsHistoryPerformance.thisMonthPerformanceNumber,name:'当月',rate:totalIsHistoryPerformance.thisMonthPerformanceRate},
+            {value:totalIsHistoryPerformance.historyPerformanceNumber,name:'历史',rate:totalIsHistoryPerformance.historyPerformanceRate},
+          ]
+          this.jinatotalIsHistoryPerformance2 = totalIsHistoryPerformance
+        }
+      });
+    },
   },
 
   created(){
@@ -1176,6 +1346,7 @@ export default {
   font-weight: bold;
   text-align: center;
   width: 280px;
+  color: #000;
 }
 .tab_content2{
   padding-top: 6px;
@@ -1191,6 +1362,10 @@ export default {
 }
 .tab,.tab2 {
   display: flex;
+}
+.fl_end{
+  display: flex;
+  justify-content: flex-end;
 }
 .tab{
   text-align: start;
@@ -1224,6 +1399,7 @@ export default {
   font-weight: bold;
   padding: 0 10px;
   box-sizing: border-box;
+  color: #000;
   
 }
 .m_b{
@@ -1244,6 +1420,7 @@ export default {
 .pie_item{
   width: 49%;
   margin-top: 10px;
+  color: #000;
 }
 .pie_title,.bar_title{
   font-size: 15px;
@@ -1338,5 +1515,13 @@ export default {
 }
 .t_c{
   text-align: center;
+}
+.per_list{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.per_item{
+  flex:1
 }
 </style>

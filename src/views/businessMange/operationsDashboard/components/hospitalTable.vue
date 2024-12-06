@@ -367,6 +367,7 @@ export default {
   padding: 0 10px;
   box-sizing: border-box;
   text-align: center;
+  color: #000;
 }
 /deep/.ivu-table-border td:nth-child(1){
     background: #fff9e6;

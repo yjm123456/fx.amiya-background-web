@@ -293,7 +293,7 @@
         
       </div>
      
-      <!-- 转化 -->
+      <!-- 年度趋势 -->
       <div v-else-if="selected == '年度趋势'">
         <!-- 平台切换 -->
         <div class="tab2" >
@@ -334,22 +334,43 @@
           <hospitalTable :params="params" :platformList="platformList" ref="hospitalTable"/>
         </div>
       </div>
-      <!-- 年度趋势 -->
+      <!-- 转化 -->
       <div v-else-if="selected == '转化'">
+          
+        <!-- 医美业绩趋势 -->
+        <Card  class="m_b">
           <!-- 新老客筛选 -->
+          <div class="tab" >
+              <div
+                class="tab_item"
+                v-for="(item, index) in params.list6"
+                :key="index"
+                @click="selectTab6(index, item)"
+                :class="{ active: params.selected6 == item}"
+              >
+                <span>{{ item }}</span>
+              </div>
+          </div>
+          <totalAchievementByYear :params="params" ref="totalAchievementByYear"/>
+        </Card>
+        <!-- 医美（线索）获客分析 -->
+        <Card  class="m_b">
+          <!-- 部门筛选 -->
           <div class="tab" >
             <div
               class="tab_item"
-              v-for="(item, index) in params.list6"
+              v-for="(item, index) in params.list7"
               :key="index"
-              @click="selectTab6(index, item)"
-              :class="{ active: params.selected6 == item}"
+              @click="selectTab7(index, item)"
+              :class="{ active: params.selected7 == item}"
             >
               <span>{{ item }}</span>
             </div>
-        </div>
-        <!-- 医美业绩趋势 -->
-        <totalAchievementByYear :params="params" ref="totalAchievementByYear"/>
+          </div>
+          <medicalBeautyClues :params="params" ref="medicalBeautyClues"/>
+        </Card>
+        <!-- 机构转化情况 -->
+        <hospitalTable :params="params" :platformList="platformList" ref="hospitalTable"/>
         <!-- 业绩贡献占比 -->
         <Card  class="m_b">
           <div class="pie_list">
@@ -414,6 +435,7 @@ import vedio from "./components/vedio.vue"
 import customerBar from "./components/customerBar.vue"
 import cycleBar from "./components/cycleBar.vue"
 import totalAchievementByYear from "./components/totalAchievementByYear.vue"
+import medicalBeautyClues from "./components/medicalBeautyClues.vue"
 
 export default {
   components:{
@@ -437,7 +459,8 @@ export default {
     customerBar,
     pieItem3,
     cycleBar,
-    totalAchievementByYear
+    totalAchievementByYear,
+    medicalBeautyClues
   },
   data() {
     return {
@@ -471,7 +494,10 @@ export default {
         // 助理流量转化派单率健康值
         AssistantFlowTransformSendOrderRate:'',
         selected6:"全部",
+        selected7:"直播前",
         list6:["全部","新客","老客"],
+        list7:["直播前","直播中","直播后"],
+        
       },
       // list: ["图表","转化","年度趋势"],
       list: ["图表","转化"],
@@ -667,6 +693,7 @@ export default {
     };
   },
   methods: {
+    
   //   获取时间进度
     getTimeSpanClick() {
       const data = { 
@@ -756,6 +783,11 @@ export default {
       this.params.selected6 = value
       this.$refs.totalAchievementByYear.getTotalAchievementByYearClick()
     },
+    // 年度趋势 部门筛选
+    selectTab7(index,value){
+      this.params.selected7 = value
+      this.$refs.medicalBeautyClues.getTotalCluesByYearClick()
+    },
     getData() {
       const {startDate,endDate} = this.params
       if (!startDate || !endDate) {
@@ -792,16 +824,19 @@ export default {
           // this.$refs.hospitalTable.getData();
           this.$nextTick(()=>{
             this.$refs.totalAchievementByYear.getTotalAchievementByYearClick()
+            this.$refs.medicalBeautyClues.getTotalCluesByYearClick()
+            this.$refs.hospitalTable.getData();
           })
           this.getYearNewOrOldCustomerCompare('刀刀')
           this.getYearNewOrOldCustomerCompare2('吉娜')
+          
         })
       }else if(this.selected == '年度趋势'){
-        this.$nextTick(()=>{
-          this.$refs.totalAchievementByYear.getTotalAchievementByYearClick()
-        })
-        this.getYearNewOrOldCustomerCompare('刀刀')
-        this.getYearNewOrOldCustomerCompare2('吉娜')
+        // this.$nextTick(()=>{
+        //   this.$refs.totalAchievementByYear.getTotalAchievementByYearClick()
+        // })
+        // this.getYearNewOrOldCustomerCompare('刀刀')
+        // this.getYearNewOrOldCustomerCompare2('吉娜')
       }
     },
     // 获取业绩数据和折线图数据
@@ -1400,11 +1435,13 @@ export default {
   padding: 0 10px;
   box-sizing: border-box;
   color: #000;
+  text-align: center;
   
 }
 .m_b{
   margin-bottom: 10px;
   position: relative;
+  margin-top: 10px;
 }
 .m_t{
   margin-top: 10px;

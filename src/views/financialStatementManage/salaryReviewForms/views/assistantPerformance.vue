@@ -53,7 +53,8 @@
             v-model="query.performanceType"
             placeholder="请选择薪资业绩类型"
             filterable
-            style="width: 140px;margin-left:10px"
+            multiple
+            style="width: 230px;margin-left:10px"
           >
             <Option
               v-for="(item3,index3) in params.PerformanceTypeList"
@@ -158,7 +159,7 @@ export default {
         pageSize: 10,
         createBy:-1,
         belongEmpId:-1,
-        performanceType:1,
+        performanceType:[1,3],
         columns: [
           {
             type: "selection",
@@ -516,7 +517,7 @@ export default {
           : null,
         createBy:createBy == -1 ? null :createBy,
         belongEmpId:belongEmpId == -1 ? null :belongEmpId,
-        performanceType
+        performanceType:performanceType ? String(performanceType) : '',
         
       };
       api.getAssistantDealInfoList(data).then((res) => {
@@ -555,7 +556,7 @@ export default {
           : null,
         createBy:createBy == -1 ? null :createBy,
         belongEmpId:belongEmpId == -1 ? null :belongEmpId,
-        performanceType
+        performanceType:performanceType ? String(performanceType) : '',
       };
       api.getAssistantDealInfoList(data).then((res) => {
         if (res.code === 0) {

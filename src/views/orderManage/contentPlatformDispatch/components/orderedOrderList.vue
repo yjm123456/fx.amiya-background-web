@@ -637,9 +637,9 @@
           </Col>
           <Col span="8" v-if="confirmForm.isFansMeeting === true">
             <FormItem
-              label="是否需要机构再次邀约"
+              label="是否需要机构再次跟进"
               prop="isNeedHospitalHelp"
-              key="是否需要机构再次邀约"
+              key="是否需要机构再次跟进"
             >
               <i-switch v-model="confirmForm.isNeedHospitalHelp" />
             </FormItem>
@@ -658,6 +658,51 @@
                 v-model="confirmForm.isFinish"
                 @on-change="switchChange"
               />
+            </FormItem>
+          </Col>
+          <Col span="8" v-if="confirmForm.isToHospital === true">
+            <FormItem
+              label="业绩类型"
+              prop="dealPerformanceType"
+              key="业绩类型"
+            >
+              <Select
+                v-model="confirmForm.dealPerformanceType"
+                placeholder="请选择业绩类型"
+                clearable
+                filterable
+              >
+                <Option
+                  v-for="item in contentPlateFormOrderDealPerformanceType"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <!-- 8助理补单 -->
+          <Col span="8" v-if="confirmForm.dealPerformanceType == 8">
+            <Button type="primary" @click="submitDealParams.transactionStatusModel = true">成交情况</Button>
+          </Col>
+          <Col span="8" v-if="confirmForm.dealPerformanceType == 8">
+            <FormItem
+              label="上一条成交编号"
+              prop="dealOrder"
+              key="上一条成交编号"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入上一条成交编号',
+                  trigger: 'change',
+                },
+              ]"
+            >
+              <Input
+                v-model="confirmForm.dealOrder"
+                placeholder="请输入上一条成交编号"
+                disabled
+              ></Input>
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFinish === true">
@@ -748,27 +793,8 @@
             </FormItem>
           </Col>
 
-          <Col span="8" v-if="confirmForm.isToHospital === true">
-            <FormItem
-              label="业绩类型"
-              prop="dealPerformanceType"
-              key="业绩类型"
-            >
-              <Select
-                v-model="confirmForm.dealPerformanceType"
-                placeholder="请选择业绩类型"
-                clearable
-                filterable
-              >
-                <Option
-                  v-for="item in contentPlateFormOrderDealPerformanceType"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
+          
+          
         </Row>
         <Divider style="margin-top:-6px" />
         <!-- 成交明细 -->
@@ -832,6 +858,8 @@
     />
     <!-- 验单 -->
     <verificationForm :verificationFormModel.sync="verificationFormModel" :verificationFormParams="verificationFormParams"/>
+    <!-- 确认成交弹窗的成交情况组件 -->
+    <contentTransactionStatus :submitDealParams="submitDealParams" @handlerChange="handlerChange"/>
   </div>
 </template>
 
@@ -853,6 +881,7 @@ import detail from "@/components/contentDetail/detail.vue";
 import detailTable from "@/components/dealDetailTable/dealDetailTable.vue";
 import editRecording from "@/components/recording/editRecording";
 import verificationForm from "./verificationForm";
+import contentTransactionStatus from "./contentTransactionStatus"
 
 export default {
   props: {
@@ -868,10 +897,16 @@ export default {
     detail,
     detailTable,
     editRecording,
-    verificationForm
+    verificationForm,
+    contentTransactionStatus
   },
   data() {
     return {
+      // 确认成交弹窗的成交情况参数
+      submitDealParams:{
+        transactionStatusModel:false,
+        orderId:''
+      },
       isOpen: false,
       // 修改订单信息
       editRecordingModel: false,
@@ -961,6 +996,8 @@ export default {
       },
       contentConfirmOrderModel: false,
       confirmForm: {
+        // 成交编号
+        dealOrder:'',
         id: null,
         // 是否成交
         isFinish: false,
@@ -1891,6 +1928,7 @@ export default {
                       this.confirmForm.consultatioType = consultatioType;
                       this.confirmForm.sendId = id;
                       this.confirmForm.lastDealHospitalId = sendHospitalId;
+                      this.submitDealParams.orderId = orderId
                       const data = {
                         encryptPhone: encryptPhone,
                       };
@@ -2293,6 +2331,18 @@ export default {
     };
   },
   methods: {
+    // 获取子组件成交情况勾选的数据
+    handlerChange(value){
+      this.confirmForm.dealOrder = value[0].id
+      this.confirmForm.dealAmount = value[0].price
+      // this.confirmForm.consultatioType = value[0].consultationTypeText
+      // this.confirmForm.isToHospital = value[0].isToHospital
+      // this.confirmForm.lastDealHospitalId = value[0].lastDealHospitalId
+      // this.confirmForm.toHospitalType = value[0].toHospitalType
+      // this.confirmForm.toHospitalDate = value[0].toHospitalDate
+      // this.confirmForm.isAcompanying = value[0].isAcompanying
+      // this.confirmForm.DealDate = value[0].dealDate
+    },
     toggle() {
       this.isOpen = !this.isOpen;
     },
@@ -2541,6 +2591,7 @@ export default {
         this.confirmForm.unDealReason = "";
         this.confirmForm.isToHospital = true;
         this.confirmForm.dealAmount = "";
+        this.confirmForm.dealOrder = ''
         this.confirmForm.lastProjectStage = "";
         this.uploadObj.uploadList = [];
         this.confirmForm.DealDate = null;
@@ -2548,6 +2599,7 @@ export default {
         // this.confirmForm.consumptionType = null;
       } else {
         this.confirmForm.dealAmount = null;
+        this.confirmForm.dealOrder = ''
         this.confirmForm.lastProjectStage = "";
         this.confirmForm.isToHospital = false;
         this.confirmForm.unDealReason = "";
@@ -2599,6 +2651,7 @@ export default {
             nextAppointmentDate,
             isNeedHospitalHelp,
             sendId,
+            dealOrder
           } = this.confirmForm;
           const data = {
             id,
@@ -2626,6 +2679,7 @@ export default {
             nextAppointmentDate:isFansMeeting == true ? nextAppointmentDate ? this.$moment(nextAppointmentDate).format("YYYY-MM-DD") : null : null,
             isNeedHospitalHelp: isFansMeeting == true ? isNeedHospitalHelp : false,
             sendOrderId: sendId,
+            lastDealInfoId:dealOrder
           };
           if (isFinish == true) {
             if (dealAmount == 0) {
@@ -3009,6 +3063,7 @@ export default {
       this.invitationDocumentsUploadObj.uploadList = [];
       this.confirmForm.lastProjectStage = "";
       this.confirmForm.dealAmount = null;
+      this.confirmForm.dealOrder = ''
       this.confirmForm.DealDate = null;
       this.query.doubleOrderModel = false;
       this.confirmForm.isFinish = false;

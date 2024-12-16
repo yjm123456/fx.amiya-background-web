@@ -183,7 +183,7 @@ export default {
         customerServiceCompensationId:id,
         valid:true,
         belongEmpId:belongEmpId,
-        performanceTypeList:'1',
+        performanceTypeList:'1,3',
       };
       this.isLoading = true;
       api.getCustomerServiceCheckPerformance(data).then((res) => {

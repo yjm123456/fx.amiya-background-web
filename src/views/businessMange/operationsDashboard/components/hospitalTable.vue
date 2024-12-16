@@ -57,43 +57,41 @@ export default {
       // 查询
       query: {
         columns: [
-          {
-            title: "城市",
-            key: "city",
-            width:100,
-            align:'center',
-            fixed:'left',
-            className: 'test-name',
-            render: (h, params) => {
-                return h('div', { 
-                    style: { 
-                        // padding:'10px',backgroundColor: '#fff9e6',
-                        color:'#000',
-                        fontSize:'15px',
-                        fontWeight:'bold',
-                      } 
-                },
-                      params.row.city );
-            }
-          },
+          // {
+          //   title: "城市",
+          //   key: "city",
+          //   width:100,
+          //   align:'center',
+          //   className: 'test-name',
+          //   // render: (h, params) => {
+          //   //     return h('div', { 
+          //   //         style: { 
+          //   //             // padding:'10px',backgroundColor: '#fff9e6',
+          //   //             color:'#000',
+          //   //             fontSize:'14px',
+          //   //             fontWeight:'bold',
+          //   //           } 
+          //   //     },
+          //   //           params.row.city );
+          //   // }
+          // },
           {
             title: "医院",
             key: "hospitalName",
             width:180,
-            fixed:'left',
             tooltip:true,
             className: 'test-name',
-            render: (h, params) => {
-                return h('div', { 
-                    style: { 
-                        // padding:'10px',backgroundColor: '#fff9e6',
-                        color:'#000',
-                        fontSize:'15px',
-                        fontWeight:'bold',
-                      } 
-                },
-                      params.row.hospitalName );
-            }
+            // render: (h, params) => {
+            //     return h('div', { 
+            //         style: { 
+            //             // padding:'10px',backgroundColor: '#fff9e6',
+            //             color:'#000',
+            //             fontSize:'14px',
+            //             fontWeight:'bold',
+            //           } 
+            //     },
+            //           params.row.hospitalName );
+            // }
           },
           {
             title: "派单量",
@@ -101,6 +99,14 @@ export default {
             width:90,
             align:'center',
             className: 'test-name',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.sendNum );
+            }
           },
           {
             title: "上门数",
@@ -108,6 +114,14 @@ export default {
             width:90,
             align:'center',
             className: 'test-name',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.visitNum );
+            }
           },
           {
             title: "上门率",
@@ -116,12 +130,13 @@ export default {
             className: 'test-name',
             width:110,
             render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.visitRate ? params.row.visitRate + '%' : 0
-                  )
-                
-            },
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                     params.row.visitRate ? params.row.visitRate + '%' : 0);
+            }
           },
           {
             title: "新客成交",
@@ -129,6 +144,14 @@ export default {
             width:140,
             className: 'test-name',
             align:'center',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.newCustomerDealNum );
+            }
           },
           {
             title: "新客成交率",
@@ -137,12 +160,13 @@ export default {
             width:110,
             className: 'test-name',
             render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.newCustomerDealRate ? params.row.newCustomerDealRate + '%' : 0
-                  )
-                
-            },
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                     params.row.newCustomerDealRate ? params.row.newCustomerDealRate + '%' : 0 );
+            }
           },
           {
             title: "新客业绩",
@@ -151,12 +175,13 @@ export default {
             align:'center',
             className: 'test-name',
             render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.newCustomerAchievement ? (params.row.newCustomerAchievement).toFixed(2) : 0
-                  )
-                
-            },
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.newCustomerAchievement ? (params.row.newCustomerAchievement).toFixed(2) : 0);
+            }
           },
           
           {
@@ -165,6 +190,14 @@ export default {
             width:140,
             align:'center',
             className: 'test-name',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.oldCustomerDealNum );
+            }
           },
           {
             title: "老客业绩",
@@ -173,12 +206,13 @@ export default {
             align:'center',
             className: 'test-name',
             render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.oldCustomerAchievement ? (params.row.oldCustomerAchievement).toFixed(2) : 0
-                  )
-                
-            },
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.oldCustomerAchievement ? (params.row.oldCustomerAchievement).toFixed(2) : 0 );
+            }
           },
           
           {
@@ -188,12 +222,13 @@ export default {
             className: 'test-name',
             key: "totalAchievement",
             render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
-                  )
-                
-            },
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0 );
+            }
           },
           {
             title: "新客客单价",
@@ -202,12 +237,13 @@ export default {
             width:110,
             align:'center',
             render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.newCustomerUnitPrice ? (params.row.newCustomerUnitPrice).toFixed(2) : 0
-                  )
-                
-            },
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.newCustomerUnitPrice ? (params.row.newCustomerUnitPrice).toFixed(2) : 0 );
+            }
           },
           {
             title: "老客客单价",
@@ -216,12 +252,13 @@ export default {
             width:110,
             align:'center',
             render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.oldCustomerUnitPrice ? (params.row.oldCustomerUnitPrice).toFixed(2) : 0
-                  )
-                
-            },
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.oldCustomerUnitPrice ? (params.row.oldCustomerUnitPrice).toFixed(2) : 0 );
+            }
           },
           {
             title: "新老客占比",
@@ -229,6 +266,14 @@ export default {
             width:110,
             align:'center',
             className: 'test-name',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.newOrOldCustomerRate );
+            }
           },
           {
             title: "贡献",
@@ -237,12 +282,13 @@ export default {
             align:'center',
             className: 'test-name',
             render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.rate + '%'
-                  )
-                
-            },
+                return h('div', { 
+                    style: { 
+                        color:params.index == 0 ? 'red' : params.index == 1 ? '#ff6600' : params.index == 2 ?  'orange':  '#000'
+                      } 
+                },
+                      params.row.rate + '%' );
+            }
           },
           
         ],
@@ -293,23 +339,44 @@ export default {
 };
 </script>
 <style scoped lang="less">
-/deep/.ivu-table th.test-name,.ivu-table-header thead tr th,.thead {
-    background: #f7e8b1;
+// /deep/.ivu-table-fixed-header{
+//   border-bottom: 2px solid #000 !important;
+//   border-top: 1px solid #000 !important;
+//   border-left: 1px solid #000 !important;
+//   border-right: 1px solid #000 !important;
+// }
+
+/deep/ .ivu-table .ivu-table-body tr td, 
+.ivu-table .ivu-table-header th {
+  border: 1px solid #000 !important;
+  color: #000;
 }
 /deep/.ivu-table th.test-name {
-    background: #f7e8b1;
-    border: 1px solid rgb(221, 220, 220);
+    background: #ffc000;
+    color: #000;
+    border: 1px solid #000 !important;
+}
+/deep/.ivu-table th.test-name,.ivu-table-header thead tr th,.thead {
+    background: #ffc000;
+    color: #000;
+}
+/deep/.ivu-table th.test-name {
+    background: #ffc000;
+    border: 1px solid #000 !important;
+    color: #000;
 }
 /deep/.ivu-table-border td:nth-child(1){
-    background: #fff9e6;
+    background: #ffc000;
+     border: 1px solid #000 !important;
+     color: #000;
+     font-weight: bold;
 }
-/deep/.ivu-table-border td:nth-child(2){
-    background: #fff9e6;
-}
-
-</style>
-<style lang="less" >
-
+// /deep/.ivu-table-border td:nth-child(2){
+//     background: #ffc000;
+//      border: 1px solid #000 !important;
+//      color: #000;
+//      font-weight: bold;
+// }
 .header_wrap {
   display: flex;
   align-items: center;
@@ -369,10 +436,12 @@ export default {
   text-align: center;
   color: #000;
 }
-/deep/.ivu-table-border td:nth-child(1){
-    background: #fff9e6;
-}
-/deep/.ivu-table-border td:nth-child(2){
-    background: #fff9e6;
-}
+// /deep/.ivu-table-border td:nth-child(1){
+//     background: #ffc000;
+//     border: 1px solid #000 !important;
+// }
+// /deep/.ivu-table-border td:nth-child(2){
+//     background: #ffc000;
+//     border: 1px solid #000 !important;
+// }
 </style>

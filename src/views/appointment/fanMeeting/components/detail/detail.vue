@@ -454,9 +454,9 @@
             </Col>
             <Col span="8" v-if="title == '编辑'">
               <FormItem
-                label="是否需要机构再次邀约"
+                label="是否需要机构再次跟进"
                 prop="isNeedHospitalHelp"
-                key="是否需要机构再次邀约"
+                key="是否需要机构再次跟进"
               >
                 <i-switch v-model="form.isNeedHospitalHelp" />
               </FormItem>
@@ -1458,6 +1458,7 @@ export default {
                               isDeal,
                               cumulativeDealPrice,
                               hospitalMemberCardId,
+                              unDealReason
                             } = res.data.fansMeetingDetails;
                             this.form.id = id;
                             this.form.fansMeetingId = fansMeetingId;
@@ -1487,6 +1488,7 @@ export default {
                             this.form.hotelPlan = hotelPlan;
                             this.form.planConsumption = planConsumption;
                             this.form.remark = remark;
+                            this.form.unDealReason = unDealReason;
                             this.form.customerPictureUrl = customerPictureUrl;
                             this.uploadObj.uploadList = customerPictureUrl
                               ? [this.form.customerPictureUrl]

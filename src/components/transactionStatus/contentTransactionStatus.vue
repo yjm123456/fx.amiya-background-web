@@ -271,7 +271,7 @@
             </FormItem>
           </Col>
           <Col span="8" v-if="confirmForm.isFansMeeting === true">
-            <FormItem label="是否需要机构再次邀约" prop="isNeedHospitalHelp" key="是否需要机构再次邀约">
+            <FormItem label="是否需要机构再次跟进" prop="isNeedHospitalHelp" key="是否需要机构再次跟进">
               <i-switch
                 v-model="confirmForm.isNeedHospitalHelp"
                 
@@ -898,102 +898,102 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 150,
+            width: 100,
             align: "center",
             fixed: "right",
             render: (h, params) => {
               const { statusText } = params.row;
               return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "primary",
-                      size: "small",
-                      // 审核通过不可编辑
-                      disabled: params.row.checkState == 2 || !params.row.dealHospital,
-                    },
-                    style: {
-                      marginRight: "5px",
-                    },
-                    on: {
-                      click: () => {
-                        // this.$Message.warning('系统正在维护中，请稍后！')
-                        // return
-                        const { id ,contentPlatFormOrderId,encryptPhone } = params.row;
-                        this.getcontentPlateFormOrderToHospitalTypeList();
-                        this.getdealDetail(id,contentPlatFormOrderId)
-                        api.ContentPlatFormOrderDealInfo(id).then((res) => {
-                          if (res.code === 0) {
-                            const {
-                              id,
-                              contentPlatFormOrderId,
-                              isToHospital,
-                              tohospitalDate,
-                              isDeal,
-                              lastDealHospitalId,
-                              dealPicture,
-                              price,
-                              remark,
-                              otherOrderId,
-                              dealDate,
-                              toHospitalType,
-                              isAcompanying,
-                              commissionRatio,
-                              invitationDocuments,
-                              dealPerformanceType,
-                              consumptionType,
-                              customerPhone,
-                            } = res.data.contentPlatFormOrderDealInfoInfo;
-                            this.isEdit = true;
-                            this.confirmForm.toHospitalDate = tohospitalDate
-                              ? this.$moment(tohospitalDate).format(
-                                  "YYYY-MM-DD"
-                                )
-                              : "";
-                            this.confirmForm.isToHospital = isToHospital;
-                            this.confirmForm.dealId = id;
-                            this.confirmForm.isFinish = isDeal;
-                            this.confirmForm.lastDealHospitalId = lastDealHospitalId;
-                            this.confirmForm.dealPicture = dealPicture;
-                            this.confirmForm.isAcompanying = isAcompanying;
-                            this.confirmForm.commissionRatio = commissionRatio;
-                            this.confirmForm.consumptionType = consumptionType;
-                            this.confirmForm.dealPerformanceType = String(
-                              dealPerformanceType
-                            );
-                            this.uploadObj.uploadList = this.confirmForm
-                              .dealPicture
-                              ? [this.confirmForm.dealPicture]
-                              : [];
-                            this.noDealuploadObj.uploadList = this.confirmForm
-                              .dealPicture
-                              ? [this.confirmForm.dealPicture]
-                              : [];
-                            this.confirmForm.dealAmount = price;
-                            this.confirmForm.remark = remark;
-                            this.confirmForm.unDealReason = remark;
-                            this.confirmForm.lastProjectStage = remark;
-                            this.confirmForm.otherContentPlatFormOrderId = otherOrderId;
-                            this.confirmForm.toHospitalType = toHospitalType;
-                            this.confirmForm.invitationDocuments = invitationDocuments;
-                            this.confirmParams.phone = customerPhone;
-                            this.invitationDocumentsUploadObj.uploadList = this
-                              .confirmForm.invitationDocuments
-                              ? this.confirmForm.invitationDocuments
-                              : [];
-                            this.confirmForm.DealDate = dealDate
-                              ? this.$moment(dealDate).format("YYYY-MM-DD")
-                              : "";
-                            this.confirmForm.id = contentPlatFormOrderId;
-                            this.editModel = true;
-                          }
-                        });
-                      },
-                    },
-                  },
-                  "编辑"
-                ),
+                // h(
+                //   "Button",
+                //   {
+                //     props: {
+                //       type: "primary",
+                //       size: "small",
+                //       // 审核通过不可编辑
+                //       disabled: params.row.checkState == 2 || !params.row.dealHospital,
+                //     },
+                //     style: {
+                //       marginRight: "5px",
+                //     },
+                //     on: {
+                //       click: () => {
+                //         // this.$Message.warning('系统正在维护中，请稍后！')
+                //         // return
+                //         const { id ,contentPlatFormOrderId,encryptPhone } = params.row;
+                //         this.getcontentPlateFormOrderToHospitalTypeList();
+                //         this.getdealDetail(id,contentPlatFormOrderId)
+                //         api.ContentPlatFormOrderDealInfo(id).then((res) => {
+                //           if (res.code === 0) {
+                //             const {
+                //               id,
+                //               contentPlatFormOrderId,
+                //               isToHospital,
+                //               tohospitalDate,
+                //               isDeal,
+                //               lastDealHospitalId,
+                //               dealPicture,
+                //               price,
+                //               remark,
+                //               otherOrderId,
+                //               dealDate,
+                //               toHospitalType,
+                //               isAcompanying,
+                //               commissionRatio,
+                //               invitationDocuments,
+                //               dealPerformanceType,
+                //               consumptionType,
+                //               customerPhone,
+                //             } = res.data.contentPlatFormOrderDealInfoInfo;
+                //             this.isEdit = true;
+                //             this.confirmForm.toHospitalDate = tohospitalDate
+                //               ? this.$moment(tohospitalDate).format(
+                //                   "YYYY-MM-DD"
+                //                 )
+                //               : "";
+                //             this.confirmForm.isToHospital = isToHospital;
+                //             this.confirmForm.dealId = id;
+                //             this.confirmForm.isFinish = isDeal;
+                //             this.confirmForm.lastDealHospitalId = lastDealHospitalId;
+                //             this.confirmForm.dealPicture = dealPicture;
+                //             this.confirmForm.isAcompanying = isAcompanying;
+                //             this.confirmForm.commissionRatio = commissionRatio;
+                //             this.confirmForm.consumptionType = consumptionType;
+                //             this.confirmForm.dealPerformanceType = String(
+                //               dealPerformanceType
+                //             );
+                //             this.uploadObj.uploadList = this.confirmForm
+                //               .dealPicture
+                //               ? [this.confirmForm.dealPicture]
+                //               : [];
+                //             this.noDealuploadObj.uploadList = this.confirmForm
+                //               .dealPicture
+                //               ? [this.confirmForm.dealPicture]
+                //               : [];
+                //             this.confirmForm.dealAmount = price;
+                //             this.confirmForm.remark = remark;
+                //             this.confirmForm.unDealReason = remark;
+                //             this.confirmForm.lastProjectStage = remark;
+                //             this.confirmForm.otherContentPlatFormOrderId = otherOrderId;
+                //             this.confirmForm.toHospitalType = toHospitalType;
+                //             this.confirmForm.invitationDocuments = invitationDocuments;
+                //             this.confirmParams.phone = customerPhone;
+                //             this.invitationDocumentsUploadObj.uploadList = this
+                //               .confirmForm.invitationDocuments
+                //               ? this.confirmForm.invitationDocuments
+                //               : [];
+                //             this.confirmForm.DealDate = dealDate
+                //               ? this.$moment(dealDate).format("YYYY-MM-DD")
+                //               : "";
+                //             this.confirmForm.id = contentPlatFormOrderId;
+                //             this.editModel = true;
+                //           }
+                //         });
+                //       },
+                //     },
+                //   },
+                //   "编辑"
+                // ),
                 h(
                   "Button",
                   {

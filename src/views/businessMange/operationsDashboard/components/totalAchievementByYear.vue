@@ -49,7 +49,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.januaryPerformance == 0 ? '#000' : params.index == 3 && params.row.januaryPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.januaryPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.januaryPerformance == 0 || params.index == 4 && params.row.januaryPerformance == 0 || params.index == 5 && params.row.januaryPerformance == 0 ? 'red' : params.index == 3 && params.row.januaryPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.januaryPerformance < 100 ? "red" :
                                   params.index == 4  && params.row.januaryPerformance < 0 ? "red" :   params.index == 4  &&  params.row.januaryPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5  && params.row.januaryPerformance < 0 ? "red" :   params.index == 5  &&  params.row.januaryPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -75,7 +75,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.februaryPerformance == 0 ? '#000' :params.index == 3 && params.row.februaryPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.februaryPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.februaryPerformance == 0 || params.index == 4 && params.row.februaryPerformance == 0 || params.index == 5 && params.row.februaryPerformance == 0 ? 'red' :params.index == 3 && params.row.februaryPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.februaryPerformance < 100 ? "red" :
                                   params.index == 4  && params.row.februaryPerformance < 0 ? "red" :   params.index == 4  &&  params.row.februaryPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5  && params.row.februaryPerformance < 0 ? "red" :   params.index == 5  &&  params.row.februaryPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -104,7 +104,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.marchPerformance == 0 ? '#000' :params.index == 3 && params.row.marchPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.marchPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.marchPerformance == 0 || params.index == 4 && params.row.marchPerformance == 0 || params.index == 5 && params.row.marchPerformance == 0 ? 'red' :params.index == 3 && params.row.marchPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.marchPerformance < 100 ? "red" :
                                   params.index == 4  && params.row.marchPerformance < 0 ? "red" :   params.index == 4  &&  params.row.marchPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5  && params.row.marchPerformance < 0 ? "red" :   params.index == 5  &&  params.row.marchPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -133,7 +133,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.aprilPerformance == 0 ? '#000' :params.index == 3 && params.row.aprilPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.aprilPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.aprilPerformance == 0 || params.index == 4 && params.row.aprilPerformance == 0 || params.index == 5 && params.row.aprilPerformance == 0 ? 'red' :params.index == 3 && params.row.aprilPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.aprilPerformance < 100 ? "red" :
                                   params.index == 4  && params.row.aprilPerformance < 0 ? "red" :   params.index == 4  &&  params.row.aprilPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5  && params.row.aprilPerformance < 0 ? "red" :   params.index == 5  &&  params.row.aprilPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -160,7 +160,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.mayPerformance == 0 ? '#000' :params.index == 3 && params.row.mayPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.mayPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.mayPerformance == 0 || params.index == 4 && params.row.mayPerformance == 0 || params.index == 5 && params.row.mayPerformance == 0 ? 'red' :params.index == 3 && params.row.mayPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.mayPerformance < 100 ? "red" :
                                   params.index == 4 && params.row.mayPerformance < 0 ? "red" :   params.index == 4 &&  params.row.mayPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.mayPerformance < 0 ? "red" :   params.index == 5 &&  params.row.mayPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -187,7 +187,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.junePerformance == 0 ? '#000' :params.index == 3 && params.row.junePerformance > 100 ? "#04B05D" : params.index == 3 && params.row.junePerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.junePerformance == 0 || params.index == 4 && params.row.junePerformance == 0 || params.index == 5 && params.row.junePerformance == 0 ? 'red' :params.index == 3 && params.row.junePerformance > 100 ? "#04B05D" : params.index == 3 && params.row.junePerformance < 100 ? "red" :
                                   params.index == 4 && params.row.junePerformance < 0 ? "red" :   params.index == 4 &&  params.row.junePerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.junePerformance < 0 ? "red" :   params.index == 5 &&  params.row.junePerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -214,7 +214,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.julyPerformance == 0 ? '#000' :params.index == 3 && params.row.julyPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.julyPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.julyPerformance == 0 || params.index == 4 && params.row.julyPerformance == 0 || params.index == 5 && params.row.julyPerformance == 0 ? 'red' :params.index == 3 && params.row.julyPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.julyPerformance < 100 ? "red" :
                                   params.index == 4 && params.row.julyPerformance < 0 ? "red" :   params.index == 4 &&  params.row.julyPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.julyPerformance < 0 ? "red" :   params.index == 5 &&  params.row.julyPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -241,7 +241,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.augustPerformance == 0 ? '#000' :params.index == 3 && params.row.augustPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.augustPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.augustPerformance == 0 || params.index == 4 && params.row.augustPerformance == 0 || params.index == 5 && params.row.augustPerformance == 0 ? 'red' :params.index == 3 && params.row.augustPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.augustPerformance < 100 ? "red" :
                                   params.index == 4 && params.row.augustPerformance < 0 ? "red" :   params.index == 4 &&  params.row.augustPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.augustPerformance < 0 ? "red" :   params.index == 5 &&  params.row.augustPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -268,7 +268,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.septemberPerformance == 0 ? '#000' :params.index == 3 && params.row.septemberPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.septemberPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.septemberPerformance == 0 || params.index == 4 && params.row.septemberPerformance == 0 || params.index == 5 && params.row.septemberPerformance == 0 ? 'red' :params.index == 3 && params.row.septemberPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.septemberPerformance < 100 ? "red" :
                                   params.index == 4 && params.row.septemberPerformance < 0 ? "red" :   params.index == 4 &&  params.row.septemberPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.septemberPerformance < 0 ? "red" :   params.index == 5 &&  params.row.septemberPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -295,7 +295,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.octoberPerformance == 0 ? '#000' :params.index == 3 && params.row.octoberPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.octoberPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.octoberPerformance == 0 || params.index == 4 && params.row.octoberPerformance == 0 || params.index == 5 && params.row.octoberPerformance == 0 ? 'red' :params.index == 3 && params.row.octoberPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.octoberPerformance < 100 ? "red" :
                                   params.index == 4 && params.row.octoberPerformance < 0 ? "red" :   params.index == 4 &&  params.row.octoberPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.octoberPerformance < 0 ? "red" :   params.index == 5 &&  params.row.octoberPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -322,7 +322,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.novemberPerformance == 0 ? '#000' :params.index == 3 && params.row.novemberPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.novemberPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.novemberPerformance == 0 || params.index == 4 && params.row.novemberPerformance == 0 || params.index == 5 && params.row.novemberPerformance == 0? 'red' :params.index == 3 && params.row.novemberPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.novemberPerformance < 100 ? "red" :
                                   params.index == 4 && params.row.novemberPerformance < 0 ? "red" :   params.index == 4 &&  params.row.novemberPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.novemberPerformance < 0 ? "red" :   params.index == 5 &&  params.row.novemberPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -349,7 +349,8 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 3 && params.row.decemberPerformance == 0 ? '#000' :params.index == 3 && params.row.decemberPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.decemberPerformance < 100 ? "red" :
+                            color:params.index == 3 && params.row.decemberPerformance == 0 || params.index == 4 && params.row.decemberPerformance == 0  || params.index == 5 && params.row.decemberPerformance == 0 ? 'red'  : 
+                            params.index == 3 && params.row.decemberPerformance > 100 ? "#04B05D" : params.index == 3 && params.row.decemberPerformance < 100 ? "red" :
                                   params.index == 4 && params.row.decemberPerformance < 0 ? "red" :   params.index == 4 &&  params.row.decemberPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.decemberPerformance < 0 ? "red" :   params.index == 5 &&  params.row.decemberPerformance > 0 ?  "#04B05D" : 
                                   '#000',
@@ -459,9 +460,9 @@ export default {
           this.query.data1 = totalPerformanceData
           this.query.data2 = daoDaoPerformanceData;
           this.query.data3 = jiNaPerformanceData;
-          this.title1 = totalPerformanceData ? totalPerformanceData[0].groupName : ''
-          this.title2 = daoDaoPerformanceData ? daoDaoPerformanceData[0].groupName : ''
-          this.title3 = jiNaPerformanceData ? jiNaPerformanceData[0].groupName : ''
+          this.title1 = totalPerformanceData ? totalPerformanceData[0].groupName : '啊美雅（总业绩）'
+          this.title2 = daoDaoPerformanceData ? daoDaoPerformanceData[0].groupName : '刀刀（总业绩）'
+          this.title3 = jiNaPerformanceData ? jiNaPerformanceData[0].groupName : '吉娜（总业绩）'
         }
       });
     },

@@ -471,3 +471,11 @@ export const getTotalAchievementByYear = (params) => {
         params
     });
 };
+//医美流量趋势
+export const getTotalCluesByYear = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getTotalCluesByYear",
+        method: "get",
+        params
+    });
+};

@@ -172,7 +172,7 @@ export default {
             title: "成交情况编号",
             key: "dealId",
             align: "center",
-            minWidth: 170,
+            minWidth: 190,
           },
 
           {
@@ -186,6 +186,49 @@ export default {
             title: "成交金额",
             key: "dealPrice",
             minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "补单前金额",
+            key: "beforeReplenishmentPrice",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
+          {
+            title: "补单前是否生成薪资",
+            key: "beforeReplenishmentIsCreateBill",
+            minWidth: 180,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.beforeReplenishmentIsCreateBill == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
+            title: "确认成交金额",
+            key: "confirmDealPrice",
+            minWidth: 140,
             align: "center",
             tooltip: true,
           },
@@ -350,12 +393,13 @@ export default {
                           dealId,
                           contentPaltformOrderId,
                           dealPrice,
-                          createDate
+                          createDate,
+                          confirmDealPrice
                         } = params.row;
                         this.extractionModel = true;
                         this.extractionParams.dealId = dealId;
                         this.extractionParams.contentPaltformOrderId = contentPaltformOrderId;
-                        this.extractionParams.dealPrice = dealPrice;
+                        this.extractionParams.dealPrice = confirmDealPrice;
                         this.extractionParams.dealCreateDate = createDate
                       },
                     },
@@ -449,7 +493,7 @@ export default {
       this.batchExtractionParams.list.push({
         dealInfoId:row.dealId,
         orderId:row.contentPaltformOrderId,
-        dealPrice:row.dealPrice,
+        dealPrice:row.confirmDealPrice,
         performanceType:row.performanceType,
         orderFrom:2,
         dealCreateDate:row.createDate,
@@ -478,7 +522,7 @@ export default {
           this.batchExtractionParams.list.push({
             dealInfoId:item.dealId,
             orderId:item.contentPaltformOrderId,
-            dealPrice:item.dealPrice,
+            dealPrice:item.confirmDealPrice,
             performanceType:item.performanceType,
             orderFrom:2,
             dealCreateDate:item.createDate,

@@ -1622,3 +1622,19 @@ export const batchEditSendInfo = (data) => {
         data
     });
 };
+// 拆单
+export const splitDealInfo = (data) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderDealInfo/splitDealInfo`,
+        method: "put",
+        data
+    });
+};
+// 修改成交情况截图
+export const updateDealPicture = (data) => {
+    return http({
+        url: `/amiyabg/ContentPlatFormOrderDealInfo/updateDealPicture`,
+        method: "put",
+        data
+    });
+};

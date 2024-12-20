@@ -465,6 +465,14 @@
               span="8"
               v-if="employeeType == 'hospitalEmployee' && title == '编辑'"
             >
+              <FormItem label="是否需要助理协助" prop="isNeedCustomerServiceHelp">
+                <i-switch v-model="form.isNeedCustomerServiceHelp" />
+              </FormItem>
+            </Col>
+            <Col
+              span="8"
+              v-if="employeeType == 'hospitalEmployee' && title == '编辑'"
+            >
               <FormItem label="会员卡号" prop="hospitalMemberCardId">
                 <Input
                   v-model="form.hospitalMemberCardId"
@@ -659,6 +667,8 @@ export default {
         amiyaConsulationName: "",
         // 会员卡号
         hospitalMemberCardId: "",
+        // 是否需要助理协助
+        isNeedCustomerServiceHelp:false
       },
       //添加model
       fansMeetingDetailModel: false,
@@ -953,7 +963,7 @@ export default {
             },
           },
           {
-            title: "是否需要机构协助邀约",
+            title: "是否需要机构协助",
             key: "isNeedHospitalHelp",
             minWidth: 180,
             align: "center",
@@ -961,6 +971,18 @@ export default {
               return h(
                 "div",
                 params.row.isNeedHospitalHelp == true ? "需要" : "不需要"
+              );
+            },
+          },
+          {
+            title: "是否需要助理协助",
+            key: "isNeedCustomerServiceHelp	",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isNeedCustomerServiceHelp == true ?  "需要" : "不需要"
               );
             },
           },
@@ -1391,7 +1413,7 @@ export default {
             },
           },
           {
-            title: "是否需要机构协助邀约",
+            title: "是否需要机构协助",
             key: "isNeedHospitalHelp",
             minWidth: 180,
             align: "center",
@@ -1399,6 +1421,18 @@ export default {
               return h(
                 "div",
                 params.row.isNeedHospitalHelp == true ? "需要" : "不需要"
+              );
+            },
+          },
+          {
+            title: "是否需要助理协助",
+            key: "isNeedCustomerServiceHelp	",
+            minWidth: 160,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.isNeedCustomerServiceHelp == true ?  "需要" : "不需要"
               );
             },
           },
@@ -1458,7 +1492,8 @@ export default {
                               isDeal,
                               cumulativeDealPrice,
                               hospitalMemberCardId,
-                              unDealReason
+                              unDealReason,
+                              isNeedCustomerServiceHelp
                             } = res.data.fansMeetingDetails;
                             this.form.id = id;
                             this.form.fansMeetingId = fansMeetingId;
@@ -1489,6 +1524,7 @@ export default {
                             this.form.planConsumption = planConsumption;
                             this.form.remark = remark;
                             this.form.unDealReason = unDealReason;
+                            this.form.isNeedCustomerServiceHelp = isNeedCustomerServiceHelp;
                             this.form.customerPictureUrl = customerPictureUrl;
                             this.uploadObj.uploadList = customerPictureUrl
                               ? [this.form.customerPictureUrl]
@@ -1683,6 +1719,7 @@ export default {
               isNeedHospitalHelp,
               unDealReason,
               hospitalMemberCardId,
+              isNeedCustomerServiceHelp
             } = this.form;
             const data = {
               fansMeetingId,
@@ -1719,6 +1756,7 @@ export default {
               isNeedHospitalHelp,
               unDealReason,
               hospitalMemberCardId,
+              isNeedCustomerServiceHelp
             };
             api.editFansMeetingDetails(data).then((res) => {
               if (res.code == 0) {

@@ -1,10 +1,8 @@
 <template>
   <div>
     <Card :dis-hover="true">
-      <div class="header_wrap">
-        <div class="left">
-          <div>
-            <Input
+       <div>
+          <Input
               v-model="query.keyword"
               placeholder="请输入关键字"
               style="width: 180px; "
@@ -91,6 +89,324 @@
                 >{{ item.name }}</Option
               >
             </Select>
+       </div>
+       <transition name="collapse">
+          <div v-show="isOpen" class="panel">
+            <div style="margin-bottom:10px">
+              <DatePicker
+                type="date"
+                placeholder="到院开始日期"
+                style="width: 180px;"
+                :value="query.tohospitalStartDate"
+                v-model="query.tohospitalStartDate"
+                transfer
+                :disabled="query.isToHospital!='true'"
+                
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="到院结束日期"
+                style="width: 140px; margin-left: 10px"
+                :value="query.toHospitalEndDate"
+                v-model="query.toHospitalEndDate"
+                transfer
+                :disabled="query.isToHospital!='true'"
+              ></DatePicker>
+              <Select
+                v-model="query.toHospitalType"
+                style="width: 140px;margin-left: 10px"
+                placeholder="请选择到院类型"
+                :disabled="query.isToHospital!='true'"
+                clearable
+                filterable
+              >
+                <Option
+                  v-for="item in toHospitalTypeList"
+                  :value="item.orderType"
+                  :key="item.orderType"
+                  >{{ item.orderTypeText }}</Option
+                >
+              </Select>
+              
+              
+              <!-- <Select
+                v-model="query.ReturnBackPriceState"
+                placeholder="回款状态"
+                style="width: 140px;margin-left:10px"
+              >
+                <Option
+                  v-for="item in query.ReturnBackPriceStateList"
+                  :value="item.status"
+                  :key="item.status"
+                  >{{ item.name }}</Option
+                >
+              </Select> -->
+              <Select
+                v-model="query.isDeal"
+                style="width: 140px;margin-left: 10px"
+                placeholder="请选择成交状态"
+              >
+                <Option
+                  v-for="item in query.dealList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <DatePicker
+                type="date"
+                placeholder="成交开始日期"
+                style="width: 140px;margin-left: 10px"
+                :value="query.dealStartDate"
+                v-model="query.dealStartDate"
+                :disabled="query.isDeal!='true'"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="成交结束日期"
+                style="width: 170px; margin-left: .625rem"
+                :value="query.dealEndDate"
+                v-model="query.dealEndDate"
+                :disabled="query.isDeal!='true'"
+              ></DatePicker>
+            </div>
+            <div style="margin-bottom:10px">
+              <Select
+                v-model="query.checkState"
+                placeholder="审核状态"
+                style="width: 180px;"
+              >
+                <Option
+                  v-for="item in checkStateListAll"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <Select
+                  v-model="query.isCreateBill"
+                  style="width: 140px;margin-left: .625rem"
+                  placeholder="是否开票"
+                >
+                  <Option
+                    v-for="item in isCreateBillList"
+                    :value="item.type"
+                    :key="item.type"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+                <Select
+                  v-model="query.belongCompanyId"
+                  style="width: 140px;margin-left: .625rem"
+                  placeholder="请选择开票公司"
+                >
+                  <Option
+                    v-for="item in companyNameAllList"
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+                <Select
+                v-model="query.isReturnBakcPrice"
+                style="width: 140px;margin-left:10px"
+                placeholder="是否回款"
+              >
+                <Option
+                  v-for="item in query.isReturnBakcPriceList"
+                  :value="item.type"
+                  :key="item.type"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <DatePicker
+                type="date"
+                placeholder="回款开始时间"
+                style="width: 140px;margin-left:10px"
+                :value="query.returnBackPriceStartDate"
+                v-model="query.returnBackPriceStartDate"
+                :disabled="query.isReturnBakcPrice!='true'"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="回款结束时间"
+                style="width: 170px; margin-left: .625rem"
+                :value="query.returnBackPriceEndDate"
+                v-model="query.returnBackPriceEndDate"
+                :disabled="query.isReturnBakcPrice!='true'"
+              ></DatePicker>
+            
+              <!-- <Select
+                v-model="query.hospitalId"
+                style="width: 180px; margin-left: 10px"
+                placeholder="请选择医院"
+                filterable
+              >
+                <Option
+                  v-for="item in query.hospitalList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select> -->
+            
+            </div>
+            <div style="margin-bottom:10px">
+                <Select
+                  v-model="query.lastDealHospitalId"
+                  style="width: 180px;"
+                  placeholder="请选择到院医院"
+                  filterable
+                >
+                  <Option
+                    v-for="item in query.lastDealHospitalList"
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+                <Select
+                  v-model="query.isAccompanying"
+                  style="width: 140px; margin-left: 10px"
+                  placeholder="是否陪诊"
+                >
+                  <Option
+                    v-for="item in query.isAccompanyingList"
+                    :value="item.type"
+                    :key="item.type"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+                <Select
+                  v-model="query.consultationType"
+                  style="width: 140px;margin-left:10px"
+                  placeholder="请选择完成情况"
+                  filterable
+                >
+                  <Option
+                    v-for="item in consultationTypeList"
+                    :value="item.orderType"
+                    :key="item.orderType"
+                    >{{ item.orderTypeText }}</Option
+                  >
+                </Select>
+                <Select
+                  v-model="query.isOldCustomer"
+                  style="width: 140px; margin-left: 10px"
+                  placeholder="新老客业绩"
+                >
+                  <Option
+                    v-for="item in query.isOldCustomerList"
+                    :value="item.type"
+                    :key="item.type"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+                <Select
+                  v-model="query.customerServiceId"
+                  style="width: 140px;margin-left:10px"
+                  placeholder="请选择归属客服"
+                  filterable
+                >
+                  <Option
+                    v-for="item in employee"
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+                <Select
+                  v-model="query.consumptionType"
+                  style="width: 170px;margin-left:10px"
+                  placeholder="请选择消费类型"
+                  filterable
+                >
+                  <Option
+                    v-for="item in typeList"
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+            </div>
+            <div style="margin-bottom:10px">
+              <Input
+                v-model="query.minAddOrderPrice"
+                placeholder="请输入最小下单金额"
+                style="width: 170px;"
+                type="number"
+                namber
+              />
+              <span> — </span>
+              <Input
+                v-model="query.maxAddOrderPrice"
+                placeholder="请输入最大下单金额"
+                style="width: 170px;"
+                type="number"
+                namber
+              />
+            </div>
+          </div>
+       </transition>
+       <div  class="search">
+            <Button
+              type="primary"
+              @click="getContentPlatFormOrderDealInfo()"
+              >查询</Button
+            >
+          <div @click="toggle" class="open">{{isOpen ==  false ? '展开全部筛选项' : '收起全部筛选项'}}</div>
+        </div>
+      </Card>
+    <!-- <Card :dis-hover="true">
+      <div class="header_wrap">
+        <div class="left">
+          <div>
+            <Input
+              v-model="query.keyword"
+              placeholder="请输入关键字"
+              style="width: 180px; "
+              @keyup.enter.native="getContentPlatFormOrderDealInfo()"
+            />
+            <DatePicker
+              type="date"
+              placeholder="登记开始日期"
+              style="width: 140px;margin-left: 10px"
+              :value="query.startDate"
+              v-model="query.startDate"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="登记结束日期"
+              style="width: 140px; margin-left: .625rem"
+              :value="query.endDate"
+              v-model="query.endDate"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="派单开始日期"
+              style="width: 140px;margin-left: 10px"
+              :value="query.sendStartDate"
+              v-model="query.sendStartDate"
+            ></DatePicker>
+            <DatePicker
+              type="date"
+              placeholder="派单结束日期"
+              style="width: 140px; margin-left: .625rem"
+              :value="query.sendEndDate"
+              v-model="query.sendEndDate"
+            ></DatePicker>
+            <Select
+              v-model="query.isToHospital"
+              style="width: 170px; margin-left: 10px"
+              placeholder="请选择到院状态"
+            >
+              <Option
+                v-for="item in query.toTheHospitalList"
+                :value="item.type"
+                :key="item.type"
+                >{{ item.name }}</Option
+              >
+            </Select>
             <DatePicker
               type="date"
               placeholder="到院开始日期"
@@ -125,21 +441,6 @@
                 >{{ item.orderTypeText }}</Option
               >
             </Select>
-            
-            
-            <!-- <Select
-              v-model="query.ReturnBackPriceState"
-              placeholder="回款状态"
-              style="width: 140px;margin-left:10px"
-            >
-              <Option
-                v-for="item in query.ReturnBackPriceStateList"
-                :value="item.status"
-                :key="item.status"
-                >{{ item.name }}</Option
-              >
-            </Select> -->
-            
           </div>
           <div style="margin:10px 0">
             
@@ -235,52 +536,7 @@
               v-model="query.returnBackPriceEndDate"
               :disabled="query.isReturnBakcPrice!='true'"
             ></DatePicker>
-           
-            <!-- <Select
-              v-model="query.hospitalId"
-              style="width: 180px; margin-left: 10px"
-              placeholder="请选择医院"
-              filterable
-            >
-              <Option
-                v-for="item in query.hospitalList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select> -->
-            
           </div>
-          <!-- <div>
-            <Select
-              v-model="query.contentPlatFormId"
-              placeholder="请选择主播平台"
-              @on-change="contentPlateChange(query.contentPlatFormId)"
-              style="width: 180px;"
-              filterable
-            >
-              <Option
-                v-for="item in contentPalteForms"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.contentPlatformName }}</Option
-              >
-            </Select>
-            <Select
-              v-model="query.liveAnchorId"
-              placeholder="请选择主播IP账号"
-              style="width: 180px; margin-left: 10px"
-              :disabled="query.contentPlatFormId === null"
-              filterable
-            >
-              <Option
-                v-for="item in liveAnchors"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.hostAccountName }}</Option
-              >
-            </Select>
-          </div> -->
           <div>
             <Select
               v-model="query.lastDealHospitalId"
@@ -384,7 +640,7 @@
           >
         </div>
       </div>
-    </Card>
+    </Card> -->
 
     <Card class="container">
       <div>
@@ -469,6 +725,10 @@
     <detail :detailModel.sync ="detailModel" :detailList ="detailList"></detail>
      <!-- 明细 -->
     <viewImg :viewCustomerPhotosModel.sync="viewCustomerPhotosModel" :viewImgParams="viewImgParams"></viewImg>
+    <!-- 拆单 -->
+    <splitTheOrder :splitTheOrderModel.sync="splitTheOrderModel" :splitTheOrderParams="splitTheOrderParams" @getContentPlatFormOrderDealInfo="getContentPlatFormOrderDealInfo"/>
+    <!-- 编辑截图 -->
+    <editImg :editImgModel.sync="editImgModel" :editImgParams="editImgParams" />
   </div>
 </template>
 <script>
@@ -480,12 +740,17 @@ import upload from "@/components/upload/upload";
 import paymentCollection from "@/components/paymentCollection/paymentCollection"
 import detail from "@/components/contentDetail/detail.vue"
 import viewImg from "@/components/transactionStatus/viewImg";
+import splitTheOrder from "./components/splitTheOrder"
+import editImg from "./components/editImg"
+
 export default {
   components: {
     upload,
     paymentCollection,
     detail,
-    viewImg
+    viewImg,
+    splitTheOrder,
+    editImg
   },
   props:{
     activeName:String,
@@ -495,6 +760,19 @@ export default {
   },
   data() {
     return {
+      // 编辑截图
+      editImgModel:false,
+      editImgParams:{
+        dealId:''
+      },
+      // 拆单model
+      splitTheOrderModel:false,
+      splitTheOrderParams:{
+        dealId:'',
+        dealPrice:0
+      },
+      // 搜索栏展开收起
+      isOpen: false,
       // 是否展示服务费金额
       isShow:false,
       isCreateBillList:[
@@ -609,7 +887,7 @@ export default {
           {
             title: "编号",
             key: "id",
-            minWidth: 170,
+            minWidth: 190,
             align:'center'
           },
           {
@@ -716,40 +994,7 @@ export default {
             minWidth: 200,
             align:'center'
           },
-          {
-            title: "截图",
-            key: "dealPicture",
-            minWidth: 140,
-            render: (h, params) => {
-              return params.row.dealPicture
-                ? h(
-                    "viewer",
-                    {
-                      props: {
-                        zoomable: false,
-                      },
-                      style: {
-                        display: "flex",
-                      },
-                    },
-                    [
-                      h("img", {
-                        style: {
-                          width: "50px",
-                          height: "50px",
-                          margin: "5px 15px 5px 5px",
-                          verticalAlign: "middle",
-                        },
-                        attrs: {
-                          src: params.row.dealPicture,
-                        },
-                      }),
-                      //   h("div", params.row.goodsName,)
-                    ]
-                  )
-                : "";
-            },
-          },
+          
           {
             title: "备注",
             key: "remark",
@@ -820,6 +1065,40 @@ export default {
             key: "price",
             minWidth: 120,
             align:'center'
+          },
+          {
+            title: "截图",
+            key: "dealPicture",
+            minWidth: 140,
+            render: (h, params) => {
+              return params.row.dealPicture
+                ? h(
+                    "viewer",
+                    {
+                      props: {
+                        zoomable: false,
+                      },
+                      style: {
+                        display: "flex",
+                      },
+                    },
+                    [
+                      h("img", {
+                        style: {
+                          width: "50px",
+                          height: "50px",
+                          margin: "5px 15px 5px 5px",
+                          verticalAlign: "middle",
+                        },
+                        attrs: {
+                          src: params.row.dealPicture,
+                        },
+                      }),
+                      //   h("div", params.row.goodsName,)
+                    ]
+                  )
+                : "";
+            },
           },
           {
             title: "三方单号",
@@ -1007,7 +1286,7 @@ export default {
           {
             title: "操作",
             align: "center",
-            minWidth: 200,
+            minWidth: 320,
             fixed: "right",
             render: (h, params) => {
               const currentRole = JSON.parse(
@@ -1172,6 +1451,47 @@ export default {
                   },
                   "明细"
                 ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id,price } = params.row;
+                        this.splitTheOrderModel = true
+                        this.splitTheOrderParams.dealId = id
+                        this.splitTheOrderParams.dealPrice = price
+                       }
+                    },
+                  },
+                  "拆单"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id,price } = params.row;
+                        this.editImgModel = true
+                        this.editImgParams.dealId = id
+                       }
+                    },
+                  },
+                  "编辑截图"
+                ),
               ]);
             },
           },
@@ -1319,6 +1639,9 @@ export default {
     };
   },
   methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
      // 消费类型列表
     getContentPlatFormOrderDealInfotypeList() {
       api.ContentPlatFormOrderDealInfotypeList().then((res) => {
@@ -1685,5 +2008,25 @@ export default {
 }
 .container {
   margin-top: 16px;
+}
+.panel {
+  /* 可以添加一些样式，比如边框、背景色等 */
+  // background-color: #f0f0f0;
+  // border: 1px solid #ddd;
+  // padding: 10px;
+  margin-top: 10px;
+}
+.open{
+  cursor: pointer;
+  color: #2f8cf0;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 10px 0 0 10px;
+
+}
+.search{
+  display:flex;
+  algin-items:center;
+  margin:10px 10px 0  0
 }
 </style>

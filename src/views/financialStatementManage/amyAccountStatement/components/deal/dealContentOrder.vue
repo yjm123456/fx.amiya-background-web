@@ -147,7 +147,17 @@ data() {
                   },
                   params.row.checkStateText
                 );
-              } else if (params.row.checkStateText == "未审核") {
+              }else if (params.row.checkStateText == "审核中") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#fccc02",
+                    },
+                  },
+                  params.row.checkStateText
+                );
+              }  else if (params.row.checkStateText == "未审核") {
                 return h(
                   "div",
                   {

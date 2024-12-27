@@ -183,6 +183,13 @@ export default {
             tooltip: true,
           },
           {
+            title: "主播IP",
+            key: "liveAnchorName",
+            align: "center",
+            minWidth: 130,
+            tooltip: true,
+          },
+          {
             title: "成交金额",
             key: "dealPrice",
             minWidth: 120,

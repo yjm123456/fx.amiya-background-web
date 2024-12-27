@@ -1383,9 +1383,9 @@ export default {
   width: 280px;
   color: #000;
 }
-.tab_content2{
-  padding-top: 6px;
-}
+// .tab_content2{
+//   padding-top: 6px;
+// }
 .tab_content {
   display: flex;
   justify-content: space-between;

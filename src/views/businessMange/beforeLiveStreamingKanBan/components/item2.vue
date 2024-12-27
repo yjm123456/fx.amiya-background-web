@@ -1,18 +1,18 @@
 <template>
   <div class="center_content">
     <div class="title">{{title}}</div>
-    <div class="center_item">
+    <div class="center_item" v-if="title == '个人'">
       <div class="item1">
         <div class="h2">直播前线索 <span v-if="title == '部门'" > <span @click="detailModel = true"><i class="iconfont icon-qiehuan-xue qiehuan f_s"></i><span class="f_s">详情</span> </span></span></div>
         <div class="item">
           <div class="item_left">
             <div>
-                <span>当日：<span class="b_w">{{ employeeData.currentDayCustomerCount ? title == '个人' ? employeeData.currentDayCustomerCount : departmentData.currentDayCustomerCount : 0}}</span></span>
+                <span>当日：<span class="b_w">{{ employeeData.currentDayCustomerCount ? employeeData.currentDayCustomerCount: 0}}</span></span>
             </div>
           </div>
           <div class="item_right">
             <div>
-              <span>累计：<span  class="b_w">{{departmentData.customerCount ? title == '部门' ? departmentData.customerCount : employeeData.customerCount : 0}}</span></span>
+              <span>累计：<span  class="b_w">{{employeeData.customerCount ? employeeData.customerCount : 0}}</span></span>
             </div>
           </div>
         </div>
@@ -22,12 +22,44 @@
         <div class="item">
           <div class="item_left">
             <div>
-                <span>当日：<span  class="b_w">{{employeeData.currentDayPerformance ? title == '个人' ? employeeData.currentDayPerformance : departmentData.currentDayPerformance : 0}}</span></span>
+                <span>当日：<span  class="b_w">{{employeeData.currentDayPerformance ? employeeData.currentDayPerformance  : 0}}</span></span>
             </div>
           </div>
           <div class="item_right">
             <div>
-              <span>累计：<span  class="b_w">{{departmentData.performance ? title == '部门' ? departmentData.performance : employeeData.performance : 0}}</span></span>
+              <span>累计：<span  class="b_w">{{employeeData.performance ? employeeData.performance : 0}}</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="center_item" v-if="title == '部门'">
+      <div class="item1">
+        <div class="h2">直播前线索 <span v-if="title == '部门'" > <span @click="detailModel = true"><i class="iconfont icon-qiehuan-xue qiehuan f_s"></i><span class="f_s">详情</span> </span></span></div>
+        <div class="item">
+          <div class="item_left">
+            <div>
+                <span>当日：<span class="b_w">{{ departmentData.currentDayCustomerCount ?  departmentData.currentDayCustomerCount : 0}}</span></span>
+            </div>
+          </div>
+          <div class="item_right">
+            <div>
+              <span>累计：<span  class="b_w">{{departmentData.customerCount ? departmentData.customerCount  : 0}}</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="item2">
+        <div class="h2"> 医美业绩</div>
+        <div class="item">
+          <div class="item_left">
+            <div>
+                <span>当日：<span  class="b_w">{{departmentData.currentDayPerformance ? departmentData.currentDayPerformance : 0}}</span></span>
+            </div>
+          </div>
+          <div class="item_right">
+            <div>
+              <span>累计：<span  class="b_w">{{departmentData.performance ?  departmentData.performance  : 0}}</span></span>
             </div>
           </div>
         </div>

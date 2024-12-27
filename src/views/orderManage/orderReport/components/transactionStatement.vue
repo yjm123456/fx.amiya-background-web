@@ -710,6 +710,12 @@ export default {
             align: "center",
           },
           {
+            title: "业绩类型",
+            key: "dealPerformanceTypeText",
+            minWidth: 120,
+            align: "center",
+          },
+          {
             title: "成交时间",
             key: "dealDate",
             minWidth: 120,

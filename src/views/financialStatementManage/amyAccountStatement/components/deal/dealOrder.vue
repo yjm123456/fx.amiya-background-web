@@ -72,6 +72,16 @@ data() {
                   },
                   params.row.checkState
                 );
+              } else if (params.row.checkState == "审核中") {
+                return h(
+                  "div",
+                  {
+                    style: {
+                      color: "#fccc02",
+                    },
+                  },
+                  params.row.checkState
+                );
               } else if (params.row.checkState == "未审核") {
                 return h(
                   "div",

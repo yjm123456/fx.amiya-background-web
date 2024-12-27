@@ -60,7 +60,7 @@ export default {
           // {
           //   title: "城市",
           //   key: "city",
-          //   width:100,
+          //   minWidth:100,
           //   align:'center',
           //   className: 'test-name',
           //   // render: (h, params) => {
@@ -78,7 +78,7 @@ export default {
           {
             title: "医院",
             key: "hospitalName",
-            width:180,
+            minWidth:180,
             tooltip:true,
             className: 'test-name',
             // render: (h, params) => {
@@ -96,7 +96,7 @@ export default {
           {
             title: "派单量",
             key: "sendNum",
-            width:90,
+            minWidth:90,
             align:'center',
             className: 'test-name',
             render: (h, params) => {
@@ -111,7 +111,7 @@ export default {
           {
             title: "上门数",
             key: "visitNum",
-            width:90,
+            minWidth:90,
             align:'center',
             className: 'test-name',
             render: (h, params) => {
@@ -128,7 +128,7 @@ export default {
             key: "visitRate",
             align:'center',
             className: 'test-name',
-            width:110,
+            minWidth:110,
             render: (h, params) => {
                 return h('div', { 
                     style: { 
@@ -141,7 +141,7 @@ export default {
           {
             title: "新客成交",
             key: "newCustomerDealNum",
-            width:140,
+            minWidth:140,
             className: 'test-name',
             align:'center',
             render: (h, params) => {
@@ -157,7 +157,7 @@ export default {
             title: "新客成交率",
             key: "newCustomerDealRate",
             align:'center',
-            width:110,
+            minWidth:110,
             className: 'test-name',
             render: (h, params) => {
                 return h('div', { 
@@ -171,7 +171,7 @@ export default {
           {
             title: "新客业绩",
             key: "newCustomerAchievement",
-            width:140,
+            minWidth:140,
             align:'center',
             className: 'test-name',
             render: (h, params) => {
@@ -187,7 +187,7 @@ export default {
           {
             title: "老客成交",
             key: "oldCustomerDealNum",
-            width:140,
+            minWidth:140,
             align:'center',
             className: 'test-name',
             render: (h, params) => {
@@ -202,7 +202,7 @@ export default {
           {
             title: "老客业绩",
             key: "oldCustomerAchievement",
-            width:140,
+            minWidth:140,
             align:'center',
             className: 'test-name',
             render: (h, params) => {
@@ -217,7 +217,7 @@ export default {
           
           {
             title: "总业绩",
-            width:150,
+            minWidth:150,
             align:'center',
             className: 'test-name',
             key: "totalAchievement",
@@ -234,7 +234,7 @@ export default {
             title: "新客客单价",
             className: 'test-name',
             key: "newCustomerUnitPrice",
-            width:110,
+            minWidth:110,
             align:'center',
             render: (h, params) => {
                 return h('div', { 
@@ -249,7 +249,7 @@ export default {
             title: "老客客单价",
             className: 'test-name',
             key: "oldCustomerUnitPrice",
-            width:110,
+            minWidth:110,
             align:'center',
             render: (h, params) => {
                 return h('div', { 
@@ -263,7 +263,7 @@ export default {
           {
             title: "新老客占比",
             key: "newOrOldCustomerRate",
-            width:110,
+            minWidth:110,
             align:'center',
             className: 'test-name',
             render: (h, params) => {
@@ -278,7 +278,7 @@ export default {
           {
             title: "贡献",
             key: "rate",
-            width:110,
+            minWidth:110,
             align:'center',
             className: 'test-name',
             render: (h, params) => {

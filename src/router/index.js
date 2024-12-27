@@ -2193,6 +2193,18 @@ const businessMange = [{
         },
         component: () =>
             import ("@/views/businessMange/mingSuoKanBan/mingSuoKanBan.vue"),
+    },
+    {
+        path: "/customerServiceSupervisorKanBan",
+        name: "customerServiceSupervisorKanBan",
+        meta: {
+            title: "客服主管看板",
+            keepAlive: false,
+            isTag: true,
+            openName: ['经营看板'],
+        },
+        component: () =>
+            import ("@/views/businessMange/customerServiceSupervisorKanBan/customerServiceSupervisorKanBan.vue"),
     }
 ];
 

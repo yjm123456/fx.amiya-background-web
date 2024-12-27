@@ -7,14 +7,14 @@
             <DatePicker
               type="date"
               placeholder="成交日期（始）"
-              style="width: 180px;"
+              style="width: 160px;"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="成交日期（末）"
-              style="width: 180px; margin-left: .625rem"
+              style="width: 160px; margin-left: .625rem"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
@@ -27,7 +27,7 @@
             <Select
               v-model="query.contentPlateFormId"
               placeholder="请选择(订单)下单平台"
-              style="width: 180px;margin-left: .625rem"
+              style="width: 160px;margin-left: .625rem"
               filterable
             >
               <Option
@@ -54,7 +54,7 @@
               v-model="query.toHospitalType"
               placeholder="请选择到院类型"
               clearable
-              style="width: 200px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               filterable
             >
               <Option
@@ -69,7 +69,7 @@
             <Select
               v-model="query.checkState"
               placeholder="审核状态"
-              style="width: 180px;"
+              style="width: 160px;"
             >
               <Option
                 v-for="item in checkStateListAll"
@@ -82,7 +82,7 @@
             <Select
               v-model="query.ReturnBackPriceState"
               placeholder="回款状态"
-              style="width: 180px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
             >
               <Option
                 v-for="item in query.ReturnBackPriceStateList"
@@ -108,7 +108,7 @@
             <Select
               v-model="query.liveAnchorId"
               placeholder="请选择主播IP账号"
-              style="width: 180px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               :disabled="query.contentPlatFormId === null"
               filterable
             >
@@ -122,7 +122,7 @@
             
             <Select
               v-model="query.hospitalId"
-              style="width: 220px; margin-left: 10px"
+              style="width: 160px; margin-left: 10px"
               placeholder="请选择医院"
               filterable
             >

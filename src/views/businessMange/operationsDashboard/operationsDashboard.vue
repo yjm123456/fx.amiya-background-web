@@ -149,6 +149,63 @@
             </Card>
           </div>
       </Card>  
+        
+        <!-- 助理 -->
+        <Card  class="m_b ">
+          <!-- 平台切换 -->
+          <!-- <div class="tab" >
+            <div
+              class="tab_item"
+              v-for="(item, index) in platformList2"
+              :key="index"
+              @click="checkTab2(index, item)"
+              :class="{ active2: item.isSelected }"
+            >
+              <i class="iconfont  icons" :class="item.icon"></i>
+              <span>{{ item.name }}</span>
+            </div>
+          </div> -->
+          <div class="customer_bar_content">
+            <!-- <Card class="customer_bar">
+              <div class="h3">助理线索分析</div>
+              <div class="x_title">
+                <div>总分诊：{{CustomerFlowRateByEmployeeAndHospital.totalDistributeConsulationByEmployee}}</div>
+                <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByEmployee}}</div>
+                <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByEmployee}}</div>
+              </div>
+              <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.employeeFlowRate" title="助理"/>
+            </Card> -->
+            <Card class="customer_bar">
+              <div class="h3">助理目标完成率</div>
+              <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData"  title="目标完成率" :completeRate="completeRate"/>
+            </Card>
+            <Card  class="customer_bar">
+              <div class="h3">助理业绩贡献</div>
+              <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData"  />
+            </Card>
+          </div>
+          <!-- 机构 -->
+          <div class="customer_bar_content mr">
+            <!-- <Card class="customer_bar">
+              <div class="h3">机构线索分析</div>
+              <div class="x_title">
+                <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByHospital}}</div>
+                <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByHospital}}</div>
+                <div>总成交：{{CustomerFlowRateByEmployeeAndHospital.totalDealByHospital}}</div>
+              </div>
+              <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.hospitalFlowRate" title="机构"/>
+            </Card> -->
+            <Card class="customer_bar">
+              <div class="h3">助理业绩分析</div>
+              <barItem :barItemData="customerObj"/>
+            </Card>
+            
+            <Card class="customer_bar">
+              <div class="h3">机构业绩分析</div>
+              <barItem :barItemData="hospitalObj"/>
+            </Card>
+          </div>
+        </Card>
         <!-- 面诊类型 -->
         <Card  class="m_b">
           <div class="h3">面诊类型--派单&业绩</div>
@@ -231,62 +288,6 @@
             <Card class="pie_item">
               <div class="pie_title">总业绩分析</div>
               <pieItem :pieItemData="totalIsHistoryPerformance" :pieItemData2="totalIsHistoryPerformance2" selected="业绩" />
-            </Card>
-          </div>
-        </Card>
-        <!-- 助理 -->
-        <Card  class="m_b ">
-          <!-- 平台切换 -->
-          <!-- <div class="tab" >
-            <div
-              class="tab_item"
-              v-for="(item, index) in platformList2"
-              :key="index"
-              @click="checkTab2(index, item)"
-              :class="{ active2: item.isSelected }"
-            >
-              <i class="iconfont  icons" :class="item.icon"></i>
-              <span>{{ item.name }}</span>
-            </div>
-          </div> -->
-          <div class="customer_bar_content">
-            <!-- <Card class="customer_bar">
-              <div class="h3">助理线索分析</div>
-              <div class="x_title">
-                <div>总分诊：{{CustomerFlowRateByEmployeeAndHospital.totalDistributeConsulationByEmployee}}</div>
-                <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByEmployee}}</div>
-                <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByEmployee}}</div>
-              </div>
-              <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.employeeFlowRate" title="助理"/>
-            </Card> -->
-            <Card class="customer_bar">
-              <div class="h3">助理目标完成率</div>
-              <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData"  title="目标完成率" :completeRate="completeRate"/>
-            </Card>
-            <Card  class="customer_bar">
-              <div class="h3">助理业绩贡献</div>
-              <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData"  />
-            </Card>
-          </div>
-          <!-- 机构 -->
-          <div class="customer_bar_content mr">
-            <!-- <Card class="customer_bar">
-              <div class="h3">机构线索分析</div>
-              <div class="x_title">
-                <div>总派单：{{CustomerFlowRateByEmployeeAndHospital.totalSendOrderByHospital}}</div>
-                <div>总上门：{{CustomerFlowRateByEmployeeAndHospital.totalVisitByHospital}}</div>
-                <div>总成交：{{CustomerFlowRateByEmployeeAndHospital.totalDealByHospital}}</div>
-              </div>
-              <customerAndHospital :CustomerFlowRateByEmployeeAndHospital="CustomerFlowRateByEmployeeAndHospital.hospitalFlowRate" title="机构"/>
-            </Card> -->
-            <Card class="customer_bar">
-              <div class="h3">助理业绩分析</div>
-              <barItem :barItemData="customerObj"/>
-            </Card>
-            
-            <Card class="customer_bar">
-              <div class="h3">机构业绩分析</div>
-              <barItem :barItemData="hospitalObj"/>
             </Card>
           </div>
         </Card>

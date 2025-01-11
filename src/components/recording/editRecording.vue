@@ -371,6 +371,18 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="归属公司" prop="belongCompanyEnumId">
+              <Select v-model="form.belongCompanyEnumId" placeholder="请选择归属公司">
+                <Option
+                  v-for="item in belongCompanyList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           
           
         </Row>
@@ -564,6 +576,8 @@ export default {
   },
   data() {
     return {
+      // 归属公司
+      belongCompanyList:[],
       flag:false,
       // 按钮权限
       buttonFlag:false,
@@ -644,9 +658,17 @@ export default {
         // 归属部门
         belongChannel:null,
         // 是否为日不落直播
-        isRiBuLuoLiving:false
+        isRiBuLuoLiving:false,
+        // 归属公司
+        belongCompanyEnumId:null,
       },
       ruleValidates: {
+        belongCompanyEnumId: [
+          {
+            required: true,
+            message: "请选择归属公司",
+          },
+        ],
         belongChannel: [
           {
             required: true,
@@ -823,6 +845,15 @@ export default {
     };
   },
   methods: {
+    // 获取归属公司
+    getBelongCompanyListClick() {
+      shoppingCartRegistrationApi.getBelongCompanyList().then((res) => {
+        if (res.code === 0) {
+          const {belongCompanyList} = res.data
+          this.belongCompanyList =belongCompanyList
+        }
+      });
+    },
      // 客户来源文字提示
     isTitleClick(){
       if(this.form.belongChannel != null && this.form.contentPlateFormId){
@@ -971,7 +1002,8 @@ export default {
               customerSource,
               customerType,
               belongChannel,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId
             } = this.form;
             const data = {
               orderType,
@@ -1011,7 +1043,8 @@ export default {
               customerSource,
               customerType,
               belongChannel,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1129,7 +1162,8 @@ export default {
               customerSource,
               customerType,
               belongChannel,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId
             } = this.form;
             const data = {
               orderType,
@@ -1169,7 +1203,8 @@ export default {
               customerSource,
               customerType,
               belongChannel,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1220,7 +1255,7 @@ export default {
     editRecordingModel(value) {
       this.control = value;
       if(value == true){
-        
+        this.getBelongCompanyListClick()
         this.getshoppingCartGetBelongChannelList()
       const {info} = this.recordingParams
         this.contentPlateChange(info.contentPlateFormId);
@@ -1269,6 +1304,7 @@ export default {
         this.form.customerType = info.customerType
         this.form.belongChannel = info.belongChannel
         this.form.isRiBuLuoLiving = info.isRiBuLuoLiving
+        this.form.belongCompanyEnumId = info.belongCompanyEnumId
         this.getcustomerSourceList()
 }
       const currentRole = JSON.parse(sessionStorage.getItem("permissions"));

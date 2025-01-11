@@ -169,7 +169,7 @@
                 >
               </Select>
             </div>
-            <div>
+            <div style="margin-bottom:10px">
                 <Select
                   v-model="query.baseLiveAnchorId"
                   style="width: 170px;"
@@ -229,6 +229,16 @@
                 :value="query.appointmentEndDate"
                 v-model="query.appointmentEndDate"
               ></DatePicker>
+            </div>
+            <div>
+              <Select v-model="query.belongCompany" placeholder="请选择归属公司" style="width:170px">
+                <Option
+                  v-for="item in belongCompanyList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </div>
           </div>
         </transition>
@@ -424,6 +434,7 @@ export default {
   },
   data() {
     return {
+      
       isOpen: false,
       // 搜索栏展开收起
       collapseValue:[],
@@ -432,6 +443,8 @@ export default {
       fanMeetingParams:{
         orderId:new Set()
       },
+      // 归属公司
+      belongCompanyList:[{id:-1,name:'全部归属公司'}],
       // 录单(待查重)
       duplicateModel:false,
       //编辑录单参数
@@ -562,6 +575,7 @@ export default {
         uploadList: [],
       },
       query: {
+        belongCompany:-1,
         appointmentStartDate:'',
         appointmentEndDate:'',
         // 获客方式
@@ -883,6 +897,12 @@ export default {
             minWidth: 100,
             align: "center",
           },
+          {
+            title: "归属公司",
+            key: "orderBelongCompany",
+            minWidth: 100,
+            align: "center",
+          },
           
           {
             title: "操作",
@@ -1105,6 +1125,15 @@ export default {
   methods: {
     toggle() {
       this.isOpen = !this.isOpen;
+    },
+    // 获取归属公司
+    getBelongCompanyListClick() {
+      shoppingCartRegistrationApi.getBelongCompanyList().then((res) => {
+        if (res.code === 0) {
+          const {belongCompanyList} = res.data
+          this.belongCompanyList =[...this.belongCompanyList,...belongCompanyList]
+        }
+      });
     },
     // 生成粉丝见面会名单
     fanMeetingClick(){
@@ -1333,7 +1362,8 @@ export default {
         baseLiveAnchorId,
         contentPlatFormId,
         appointmentStartDate,
-        appointmentEndDate
+        appointmentEndDate,
+        belongCompany
       } = this.query;
       const data = {
         keyword,
@@ -1358,6 +1388,7 @@ export default {
         baseLiveAnchorId: baseLiveAnchorId == -1 ? null : baseLiveAnchorId,
         appointmentEndDate: appointmentEndDate ? this.$moment(appointmentEndDate).format("YYYY-MM-DD") : null,
         appointmentStartDate: appointmentStartDate ? this.$moment(appointmentStartDate).format("YYYY-MM-DD") : null,
+        belongCompany:belongCompany == -1 ? null : belongCompany
       };
       if (!startDate || !endDate) {
         this.$Message.error("请选择日期");
@@ -1756,7 +1787,8 @@ export default {
         getCustomerType,
         contentPlatFormId,
         appointmentEndDate,
-        appointmentStartDate
+        appointmentStartDate,
+        belongCompany
       } = this.query;
       const data = {
         keyword,
@@ -1783,6 +1815,7 @@ export default {
         getCustomerType: getCustomerType == -1 ? null : getCustomerType,
         appointmentEndDate: appointmentEndDate ? this.$moment(appointmentEndDate).format("YYYY-MM-DD") : null,
         appointmentStartDate: appointmentStartDate ? this.$moment(appointmentStartDate).format("YYYY-MM-DD") : null,
+        belongCompany:belongCompany == -1 ? null : belongCompany
 
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
@@ -1817,7 +1850,8 @@ export default {
         getCustomerType,
         contentPlatFormId,
         appointmentStartDate,
-        appointmentEndDate
+        appointmentEndDate,
+        belongCompany
       } = this.query;
       const data = {
         keyword,
@@ -1844,6 +1878,7 @@ export default {
         getCustomerType: getCustomerType == -1 ? null : getCustomerType,
         appointmentEndDate: appointmentEndDate ? this.$moment(appointmentEndDate).format("YYYY-MM-DD") : null,
         appointmentStartDate: appointmentStartDate ? this.$moment(appointmentStartDate).format("YYYY-MM-DD") : null,
+        belongCompany: belongCompany == -1 ? null : belongCompany
       };
       api.getContentPlateFormOrderLlistWithPage(data).then((res) => {
         if (res.code === 0) {
@@ -1880,6 +1915,7 @@ export default {
     this.getshoppingCartGetCustomerTypeList();
     this.getcustomerTypeList();
     this.getcustomerSourceList()
+    this.getBelongCompanyListClick()
     
 
     const amiyaPositionId = JSON.parse(

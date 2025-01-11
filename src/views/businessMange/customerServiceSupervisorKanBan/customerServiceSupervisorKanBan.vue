@@ -2,7 +2,7 @@
   <div>
     <Card>
       <div class="content_title">
-        <div class="h2">{{selected == '整体' ? '啊美雅运营看板'  : selected == '助理' ?  '啊美雅助理运营看板' : '啊美雅运营看板'}}</div>
+        <div class="h2">{{selected == '整体' ? '啊美雅运营看板'  : selected == '助理' ?  '啊美雅助理运营看板' : '啊美雅转化看板'}}</div>
       </div>
       <!-- tab切换 -->
       <div class="tab_content fl_end" >
@@ -161,7 +161,7 @@
         
       </div>
       <!-- 助理板块 -->
-      <div v-else>
+      <div v-else-if="selected == '助理'">
         <!-- 卡片 -->
         <item3 ref="item3" :params="params" :completeRate="completeRate"/>
         <item4 ref="item4" :params="params" :completeRate="completeRate"/>
@@ -295,6 +295,19 @@
             </div>
         </Card>
       </div>
+      <!-- 转化板块 -->
+      <div v-else>
+        <!-- 刀刀组助理（年度）总业绩趋势 -->
+        <totalAchievementByYear :params="params" ref="totalAchievementByYear"/>
+        <!--助理（月度）业绩达成分析 -->
+        <assistantTargetCompleteDataTable :params="params"  ref="assistantTargetCompleteDataTable" />
+        <!-- 主播（月度）业绩转化分析-->
+        <trafficConversionTable :params="params" ref="trafficConversionTable" />
+        <!-- 助理（月度）业绩转化分析-->
+        <customerTable :params="params" ref="customerTable" :liveAnchorBaseInfos="liveAnchorBaseInfos"/>
+        
+        
+      </div>
     </Card>
   </div>
 </template>
@@ -324,6 +337,11 @@ import cycleBar2 from "./components/cycleBar2.vue"
 import customerBar2 from "./components/customerBar2.vue"
 import hospitalBar2 from "./components/hospitalBar2.vue"
 import barItem2 from "./components/barItem2.vue"
+// 转化
+import assistantTargetCompleteDataTable from "./components/assistantTargetCompleteDataTable.vue"
+import totalAchievementByYear from "./components/totalAchievementByYear.vue"
+import trafficConversionTable from "./components/trafficConversionTable.vue"
+import customerTable from "./components/customerTable.vue"
 
 
 export default {
@@ -344,7 +362,11 @@ export default {
     cycleBar2,
     customerBar2,
     hospitalBar2,
-    barItem2
+    barItem2,
+    assistantTargetCompleteDataTable,
+    totalAchievementByYear,
+    trafficConversionTable,
+    customerTable
   },
   data() {
     return {
@@ -371,7 +393,7 @@ export default {
         
       },
       // list: ["图表","转化","年度趋势"],
-      list: ["整体","助理"],
+      list: ["整体","助理","转化"],
       list2: ["线索","业绩"],
       list4: ["全部","刀刀","吉娜"],
       selected:"整体",
@@ -645,6 +667,13 @@ export default {
         this.getassiatantTargetCompleteAndPerformanceRateData2()
         this.getassistantHospitalCluesData()
         this.getassistantHospitalPerformanceData()
+      }else if(this.selected == '转化'){
+        this.$nextTick(()=>{
+          this.$refs.assistantTargetCompleteDataTable.getassistantTargetCompleteData();
+          this.$refs.totalAchievementByYear.getTotalAchievementByYearClick()
+          this.$refs.trafficConversionTable.getCompanyTransformData();
+          this.$refs.customerTable.getAmiyaOperationsBoardassistantTransformData()
+        })
       }
     },
 

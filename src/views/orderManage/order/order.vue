@@ -61,42 +61,54 @@
                   >
                 </Select>
             </div>
-            <div class="head_bottom">
-              <DatePicker
-                  type="date"
-                  placeholder="下单开始日期"
-                  style="width: 180px;"
-                  :value="query.startDate"
-                  v-model="query.startDate"
-                ></DatePicker>
+            <transition name="collapse">
+              <div v-show="isOpen" class="panel">
                 <DatePicker
-                  type="date"
-                  placeholder="下单结束日期"
-                  style="width: 180px; margin-left: .625rem"
-                  :value="query.endDate"
-                  v-model="query.endDate"
-                ></DatePicker>
-                <DatePicker
-                  type="date"
-                  placeholder="核销开始时间"
-                  style="width: 180px;margin-left: .625rem;margin-top:1.25rem"
-                  :value="query.writeOffStartDate"
-                  v-model="query.writeOffStartDate"
-                ></DatePicker>
-                <DatePicker
-                  type="date"
-                  placeholder="核销结束时间"
-                  style="width: 180px; margin-left: .625rem;margin-top:1.25rem"
-                  :value="query.writeOffEndDate"
-                  v-model="query.writeOffEndDate"
-                ></DatePicker>
+                    type="date"
+                    placeholder="下单开始日期"
+                    style="width: 180px;"
+                    :value="query.startDate"
+                    v-model="query.startDate"
+                  ></DatePicker>
+                  <DatePicker
+                    type="date"
+                    placeholder="下单结束日期"
+                    style="width: 180px; margin-left: .625rem"
+                    :value="query.endDate"
+                    v-model="query.endDate"
+                  ></DatePicker>
+                  <DatePicker
+                    type="date"
+                    placeholder="核销开始时间"
+                    style="width: 140px;margin-left: .625rem"
+                    :value="query.writeOffStartDate"
+                    v-model="query.writeOffStartDate"
+                  ></DatePicker>
+                  <DatePicker
+                    type="date"
+                    placeholder="核销结束时间"
+                    style="width: 140px; margin-left: .625rem"
+                    :value="query.writeOffEndDate"
+                    v-model="query.writeOffEndDate"
+                  ></DatePicker>
             </div>
+        </transition>
+        <div  class="search">
+          <Button type="primary" @click="getOrderInfo()">查询</Button>
+          <div @click="toggle" class="open">{{isOpen ==  false ? '展开全部筛选项' : '收起全部筛选项'}}</div>
         </div>
-        <div class="head_right">
+        </div>
+        <!-- <div class="head_right">
           <Button type="primary" style="margin-left: .625rem" @click="getOrderInfo()">查询</Button>
+        </div> -->
+      </div>
+    </Card>
+    <Card class="container">
+
+      <div>
+        <div class="m_b">
           <Button
             type="primary"
-            style="margin-left: 10px"
             @click="importControlModal = true"
             >导入</Button
           >
@@ -126,10 +138,6 @@
             >调整绑定客服</Button
           >
         </div>
-      </div>
-    </Card>
-    <Card class="container">
-      <div>
         <Table 
           border 
           :columns="query.columns" 
@@ -594,6 +602,7 @@ export default {
   data() {
     
     return {
+      isOpen: false,
       importControlModal: false,
       addtitle:'录单',
       detailList:[],
@@ -1454,6 +1463,9 @@ export default {
     };
   },
   methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
     // 获取客服列表
     getCustomerServiceList() {
       api.getCustomerServiceList().then((res) => {
@@ -2156,5 +2168,28 @@ export default {
   font-size: 10px;
   margin-top: -10px;
   border-radius: 4px;
+}
+.m_b{
+  margin-bottom: 10px;
+}
+.panel {
+  /* 可以添加一些样式，比如边框、背景色等 */
+  // background-color: #f0f0f0;
+  // border: 1px solid #ddd;
+  // padding: 10px;
+  margin-top: 10px;
+}
+.open{
+  cursor: pointer;
+  color: #2f8cf0;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 10px 0 0 10px;
+
+}
+.search{
+  display:flex;
+  algin-items:center;
+  margin:10px 10px 0  0
 }
 </style>

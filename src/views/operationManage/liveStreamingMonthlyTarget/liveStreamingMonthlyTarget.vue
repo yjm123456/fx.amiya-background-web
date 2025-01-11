@@ -1016,8 +1016,12 @@ export default {
         if (valid) {
           if (this.isEdit) {
             this.isflag = true
+            const data = {
+              ...this.form
+            }
+            data.year = Number(this.$moment(new Date(this.form.year)).format("yyyy"))
             // 修改
-            api.editLiveAnchorMonthlyTargetLiving(this.form).then((res) => {
+            api.editLiveAnchorMonthlyTargetLiving(data).then((res) => {
               if (res.code === 0) {
                 this.isflag = false
                 this.isEdit = false;

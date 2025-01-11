@@ -295,6 +295,32 @@
                       >{{ item.name }}</Option
                     >
                   </Select>
+                  <Select
+                    v-model="query.belongCompany"
+                    placeholder="请选择归属公司"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in belongCompanyListAll"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.isRibuluoLiving"
+                    placeholder="请选择是否为日不落"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in isRibuluoLivingList"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
                 </div>
               </div>
             </transition>
@@ -726,6 +752,7 @@
               </Select>
             </FormItem>
           </Col>
+          
           <Col span="8">
             <FormItem label="是否加V" prop="IsAddWeChat">
               <i-switch v-model="form.IsAddWeChat" @on-change="IsAddWeChatChange()"/>
@@ -920,6 +947,22 @@
               </Select>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="归属公司" prop="belongCompany">
+              <Select
+                v-model="form.belongCompany"
+                placeholder="请选择归属公司"
+                
+              >
+                <Option
+                  v-for="item in belongCompanyList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           <Col span="16">
             <FormItem label="备注" prop="remark">
               <Input
@@ -1067,8 +1110,11 @@ export default {
         idList: new Set(),
       },
       phoneCopy: "00000000000",
+      isRibuluoLivingList:[{type:-1,name:'全部日不落状态'},{type:'true',name:'是'},{type:'false',name:'否'}],
       // 查询
       query: {
+        isRibuluoLiving:-1,
+        belongCompany:-1,
         // 归属部门
         belongChannel:null,
         shoppingCartRegistrationCustomerType: -1,
@@ -1838,6 +1884,13 @@ export default {
             align: "center",
             tooltip: true,
           },
+          {
+            title: "归属公司",
+            key: "belongCompany",
+            minWidth: 120,
+            align: "center",
+            tooltip: true,
+          },
 
           {
             title: "创建日期",
@@ -1977,7 +2030,8 @@ export default {
                               activeEmployeeId,
                               customerWechatNo,
                               fromTitle,
-                              isRepeateCreateOrder
+                              isRepeateCreateOrder,
+                              belongCompanyEnumId
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -2001,6 +2055,7 @@ export default {
                               }
                             }
                             this.isEdit = true;
+                            this.form.belongCompany = belongCompanyEnumId;
                             this.form.customerWechatNo = customerWechatNo;
                             this.form.fromTitle = fromTitle;
                             this.form.isHistoryCustomerActive = isHistoryCustomerActive;
@@ -2250,11 +2305,19 @@ export default {
         // 词条
         fromTitle:'',
         // 是否重复下单
-        isRepeateCreateOrder:false
+        isRepeateCreateOrder:false,
+        // 归属公司
+        belongCompany:null,
 
       },
 
       ruleValidate: {
+        belongCompany: [
+          {
+            required: true,
+            message: "请选择归属公司",
+          },
+        ],
         belongChannel: [
           {
             required: true,
@@ -2371,6 +2434,9 @@ export default {
           },
         ],
       },
+      // 归属公司
+      belongCompanyList:[],
+      belongCompanyListAll:[{id:-1,name:'全部归属公司'}],
       // 平台
       contentPalteForms: [],
       // ip账号
@@ -2658,6 +2724,16 @@ export default {
         if (res.code === 0) {
           const { sourceList } = res.data;
           this.sourceListAll = sourceList
+        }
+      });
+    },
+    // 获取归属公司
+    getBelongCompanyListClick() {
+      api.getBelongCompanyList().then((res) => {
+        if (res.code === 0) {
+          const {belongCompanyList} = res.data
+          this.belongCompanyList =belongCompanyList
+          this.belongCompanyListAll = [...this.belongCompanyListAll,...belongCompanyList]
         }
       });
     },
@@ -2990,7 +3066,9 @@ export default {
         source,
         createBy,
         shoppingCartRegistrationCustomerType,
-        belongChannel
+        belongChannel,
+        belongCompany,
+        isRibuluoLiving
       } = this.query;
       const data = {
         pageNum,
@@ -3045,6 +3123,8 @@ export default {
         source: source == -1 ? null : source,
         createBy: createBy == -1 ? null : createBy,
         belongChannel: belongChannel == -1 ? null : belongChannel,
+        belongCompany:belongCompany == -1 ? null : belongCompany,
+        isRibuluoLiving:isRibuluoLiving == -1 ? null : isRibuluoLiving
       };
       if (!startDate || !endDate) {
         this.$Message.warning("请选择日期");
@@ -3108,7 +3188,9 @@ export default {
         source,
         createBy,
         shoppingCartRegistrationCustomerType,
-        belongChannel
+        belongChannel,
+        belongCompany,
+        isRibuluoLiving
       } = this.query;
       const data = {
         pageNum,
@@ -3163,6 +3245,8 @@ export default {
         source: source == -1 ? null : source,
         createBy: createBy == -1 ? null : createBy,
         belongChannel: belongChannel == -1 ? null : belongChannel,
+        belongCompany: belongCompany == -1 ? null : belongCompany,
+        isRibuluoLiving:isRibuluoLiving == -1 ? null : isRibuluoLiving
       };
       if (!startDate || !endDate) {
         this.$Message.warning("请选择日期");
@@ -3228,7 +3312,8 @@ export default {
         activeEmployeeId,
         customerWechatNo,
         fromTitle,
-        isRepeateCreateOrder
+        isRepeateCreateOrder,
+        belongCompany
       } = this.form;
       const data = {
         recordDate: time
@@ -3279,7 +3364,8 @@ export default {
         price:contentPlatFormId != '317c03b8-aff9-4961-8392-fc44d04b1725' ? price : 0,
         customerWechatNo ,
         fromTitle:contentPlatFormId == '317c03b8-aff9-4961-8392-fc44d04b1725' ? fromTitle : '' ,
-        isRepeateCreateOrder
+        isRepeateCreateOrder,
+        belongCompany
       };
       // 归属地 国内是1 国外是2
       if (belongingPlace == 1) {
@@ -3409,7 +3495,8 @@ export default {
               isRiBuLuoLiving,
               customerWechatNo,
               fromTitle,
-              isRepeateCreateOrder
+              isRepeateCreateOrder,
+              belongCompany
             } = this.form;
             const data = {
               recordDate: time
@@ -3451,7 +3538,8 @@ export default {
               price:contentPlatFormId != '317c03b8-aff9-4961-8392-fc44d04b1725' ? price : 0,
               customerWechatNo ,
               fromTitle:contentPlatFormId == '317c03b8-aff9-4961-8392-fc44d04b1725' ? fromTitle : '' ,
-              isRepeateCreateOrder
+              isRepeateCreateOrder,
+              belongCompany
             };
 
             // 归属地 国内是1 国外是2
@@ -3558,6 +3646,7 @@ export default {
     this.getshoppingCartGetBelongChannelList()
     this.getLiveAnchorBaseInfoValid();
     this.getbyIdGetAmiyaEmployee()
+    this.getBelongCompanyListClick()
     
     
   },

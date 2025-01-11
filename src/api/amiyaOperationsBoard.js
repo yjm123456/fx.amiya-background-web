@@ -479,3 +479,27 @@ export const getTotalCluesByYear = (params) => {
         params
     });
 };
+//客服主管看板-转化-助理业绩趋势
+export const getTotalAssistantAchievementByYear = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getTotalAssistantAchievementByYear",
+        method: "get",
+        params
+    });
+};
+//客服主管看板-转化-流量和客户转化情况
+export const companyTransformNewData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/companyTransformNewData",
+        method: "get",
+        params
+    });
+};
+//客服主管看板-转化-助理流量和客户转化情况
+export const AmiyaOperationsBoardassistantTransformData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantTransformData",
+        method: "get",
+        params
+    });
+};

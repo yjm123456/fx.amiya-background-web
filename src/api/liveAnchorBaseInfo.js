@@ -50,3 +50,10 @@ export const getLiveAnchorBaseInfoValid = (params) => {
         params,
     });
 };
+// 获取所有主播基础信息列表
+export const getLiveAnchorBaseInfototal = () => {
+    return http({
+        url: "/amiyabg/LiveAnchorBaseInfo/total",
+        method: "get",
+    });
+};

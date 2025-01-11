@@ -398,6 +398,18 @@
               <div style="font-size:12px;color:red" v-if="isTitle == true">请先选择归属部门和主播平台！</div>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="归属公司" prop="belongCompanyEnumId">
+              <Select v-model="form.belongCompanyEnumId" placeholder="请选择归属公司">
+                <Option
+                  v-for="item in belongCompanyList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           
           
         </Row>
@@ -673,9 +685,17 @@ export default {
         // 归属部门
         belongChannel:null,
         // 是否为日不落直播
-        isRiBuLuoLiving:false
+        isRiBuLuoLiving:false,
+        // 归属公司
+        belongCompanyEnumId:null
       },
       ruleValidates: {
+        belongCompanyEnumId: [
+          {
+            required: true,
+            message: "请选择归属公司",
+          },
+        ],
         belongChannel: [
           {
             required: true,
@@ -848,10 +868,22 @@ export default {
       //客户来源文字提示
       isTitle:true,
       // 根据手机号和主播IP获取小黄车金额
-      isPrice:false
+      isPrice:false,
+      // 归属公司
+      belongCompanyList:[],
     };
+    
   },
   methods: {
+    // 获取归属公司
+    getBelongCompanyListClick() {
+      shoppingCartRegistrationApi.getBelongCompanyList().then((res) => {
+        if (res.code === 0) {
+          const {belongCompanyList} = res.data
+          this.belongCompanyList =belongCompanyList
+        }
+      });
+    },
     // 客户来源文字提示
     isTitleClick(){
       if(this.form.belongChannel != null && this.form.contentPlateFormId){
@@ -1016,7 +1048,8 @@ export default {
               customerSource,
               customerType,
               belongChannel,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId
             } = this.form;
             const data = {
               orderType,
@@ -1056,7 +1089,8 @@ export default {
               customerSource,
               customerType,
               belongChannel,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1121,7 +1155,8 @@ export default {
               customerSource,
               customerType,
               belongChannel,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId
             } = this.form;
             const data = {
               orderType,
@@ -1161,7 +1196,8 @@ export default {
               customerSource,
               customerType,
               belongChannel,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId
             };
             if (phone) {
               // 归属地 1是国内 2是国外
@@ -1271,6 +1307,7 @@ export default {
      });
      this.buttonFlag = flag
      if(value == true){
+      this.getBelongCompanyListClick()
       this.isTitleClick()
       this.getshoppingCartGetBelongChannelList()
       //  客资登记信息赋值
@@ -1279,6 +1316,7 @@ export default {
         
         this.form.liveAnchorId = this.shoppingCartRegistrationInfo.liveAnchorId
         // this.form.liveAnchorWeChatNo =  this.shoppingCartRegistrationInfo.liveAnchorWechatNo ? this.recordingParams.weChatList.find(item=>this.shoppingCartRegistrationInfo.liveAnchorWechatNo == item.weChatNo).id : ''
+        console.log(this.shoppingCartRegistrationInfo)
         this.form.addOrderPrice = this.shoppingCartRegistrationInfo.price
         this.form.customerName = this.shoppingCartRegistrationInfo.customerNickName
         this.form.getCustomerType = this.shoppingCartRegistrationInfo.getCustomerType
@@ -1286,6 +1324,7 @@ export default {
         this.form.customerType = this.shoppingCartRegistrationInfo.shoppingCartRegistrationCustomerType
         this.form.isRiBuLuoLiving = this.shoppingCartRegistrationInfo.isRiBuLuoLiving
         this.form.wechatNumber = this.shoppingCartRegistrationInfo.customerWechatNo
+        this.form.belongCompanyEnumId = this.shoppingCartRegistrationInfo.belongCompanyEnumId
         this.form.belongChannel = this.shoppingCartRegistrationInfo.belongChannel != 0 ? this.shoppingCartRegistrationInfo.belongChannel : null
         if(this.form.belongChannel !=null && this.form.contentPlateFormId){
           this.getcustomerSourceList()

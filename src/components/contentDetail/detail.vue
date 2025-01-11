@@ -358,10 +358,10 @@
               <span class="title_bold">业绩类型：</span>
             <span>{{ detailObj.dealPerformanceTypeText }}</span>
             </div>
-            <!-- <div class="mr_top items">
-              <span class="title_bold">获客方式：</span>
-              <span>{{ detailObj.getCustomerTypeText }}</span>
-            </div> -->
+            <div class="mr_top items">
+              <span class="title_bold">归属公司：</span>
+              <span>{{ detailObj.belongCompany }}</span>
+            </div>
           </div>
          
           <div class="mr_top">

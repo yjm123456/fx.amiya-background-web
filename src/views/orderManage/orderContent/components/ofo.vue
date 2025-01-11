@@ -154,6 +154,13 @@
               <span class="title_bold">词条：</span>
               <span>{{ shoppingCartRegistrationInfo.fromTitle }}</span>
             </div>
+            <div class="mr_top items">
+              <span class="title_bold">归属公司：</span>
+              <span>{{ shoppingCartRegistrationInfo.belongCompany }}</span>
+            </div>
+            <div class="mr_top items">
+              
+            </div>
             
           </div>
           <div class="mr_top">

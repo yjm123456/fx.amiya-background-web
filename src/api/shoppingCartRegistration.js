@@ -132,3 +132,10 @@ export const shoppingCartGetBelongChannelList = () => {
         method: "get",
     });
 };
+// 获客归属公司 下拉框
+export const getBelongCompanyList = () => {
+    return http({
+        url: "/amiyabg/ShoppingCartRegistration/getBelongCompanyList",
+        method: "get",
+    });
+};

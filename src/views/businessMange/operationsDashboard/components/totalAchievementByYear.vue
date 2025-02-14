@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="title" >{{title1}}</div>
-    <!-- :span-method="handleSpan"  -->
     <Table border :columns="query.columns" :data="query.data1"  :row-class-name="rowClassName" style="margin-bottom:10px"></Table>
     <div class="title" >{{title2}}</div>
     <Table border :columns="query.columns" :data="query.data2" :row-class-name="rowClassName" style="margin-bottom:10px"></Table>
@@ -53,8 +52,6 @@ export default {
                                   params.index == 4  && params.row.januaryPerformance < 0 ? "red" :   params.index == 4  &&  params.row.januaryPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5  && params.row.januaryPerformance < 0 ? "red" :   params.index == 5  &&  params.row.januaryPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color: params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.januaryPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.januaryPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
                     params.row.januaryPerformance ? 
@@ -79,13 +76,8 @@ export default {
                                   params.index == 4  && params.row.februaryPerformance < 0 ? "red" :   params.index == 4  &&  params.row.februaryPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5  && params.row.februaryPerformance < 0 ? "red" :   params.index == 5  &&  params.row.februaryPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.februaryPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.februaryPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.februaryPerformance ? 
-                    // params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.februaryPerformance + '%': params.row.februaryPerformance 
-                    // : 0
                     params.row.februaryPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.februaryPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.februaryPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.februaryPerformance
@@ -108,13 +100,8 @@ export default {
                                   params.index == 4  && params.row.marchPerformance < 0 ? "red" :   params.index == 4  &&  params.row.marchPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5  && params.row.marchPerformance < 0 ? "red" :   params.index == 5  &&  params.row.marchPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.marchPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.marchPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.marchPerformance ? 
-                    // params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.marchPerformance + '%': params.row.marchPerformance 
-                    // : 0
                     params.row.marchPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.marchPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.marchPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.marchPerformance
@@ -137,11 +124,8 @@ export default {
                                   params.index == 4  && params.row.aprilPerformance < 0 ? "red" :   params.index == 4  &&  params.row.aprilPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5  && params.row.aprilPerformance < 0 ? "red" :   params.index == 5  &&  params.row.aprilPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.aprilPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.aprilPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.aprilPerformance ?  params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.aprilPerformance + '%': params.row.aprilPerformance  : 0
                     params.row.aprilPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.aprilPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.aprilPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.aprilPerformance
@@ -164,11 +148,8 @@ export default {
                                   params.index == 4 && params.row.mayPerformance < 0 ? "red" :   params.index == 4 &&  params.row.mayPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.mayPerformance < 0 ? "red" :   params.index == 5 &&  params.row.mayPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.mayPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.mayPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.mayPerformance ?  params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.mayPerformance + '%': params.row.mayPerformance  : 0
                     params.row.mayPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.mayPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.mayPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.mayPerformance
@@ -191,11 +172,8 @@ export default {
                                   params.index == 4 && params.row.junePerformance < 0 ? "red" :   params.index == 4 &&  params.row.junePerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.junePerformance < 0 ? "red" :   params.index == 5 &&  params.row.junePerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.junePerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.junePerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.junePerformance ?  params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.junePerformance + '%': params.row.junePerformance  : 0
                     params.row.junePerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.junePerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.junePerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.junePerformance
@@ -218,11 +196,8 @@ export default {
                                   params.index == 4 && params.row.julyPerformance < 0 ? "red" :   params.index == 4 &&  params.row.julyPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.julyPerformance < 0 ? "red" :   params.index == 5 &&  params.row.julyPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.julyPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.julyPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.julyPerformance ? params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.julyPerformance + '%': params.row.julyPerformance : 0
                     params.row.julyPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.julyPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.julyPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.julyPerformance
@@ -245,11 +220,8 @@ export default {
                                   params.index == 4 && params.row.augustPerformance < 0 ? "red" :   params.index == 4 &&  params.row.augustPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.augustPerformance < 0 ? "red" :   params.index == 5 &&  params.row.augustPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.augustPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.augustPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.augustPerformance ? params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.augustPerformance + '%': params.row.augustPerformance : 0
                     params.row.augustPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.augustPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.augustPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.augustPerformance
@@ -272,11 +244,8 @@ export default {
                                   params.index == 4 && params.row.septemberPerformance < 0 ? "red" :   params.index == 4 &&  params.row.septemberPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.septemberPerformance < 0 ? "red" :   params.index == 5 &&  params.row.septemberPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.septemberPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.septemberPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.septemberPerformance ? params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.septemberPerformance + '%': params.row.septemberPerformance : 0
                     params.row.septemberPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.septemberPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.septemberPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.septemberPerformance
@@ -299,11 +268,8 @@ export default {
                                   params.index == 4 && params.row.octoberPerformance < 0 ? "red" :   params.index == 4 &&  params.row.octoberPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.octoberPerformance < 0 ? "red" :   params.index == 5 &&  params.row.octoberPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.octoberPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.octoberPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.octoberPerformance ? params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.octoberPerformance + '%': params.row.octoberPerformance : 0
                     params.row.octoberPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.octoberPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.octoberPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.octoberPerformance
@@ -326,11 +292,8 @@ export default {
                                   params.index == 4 && params.row.novemberPerformance < 0 ? "red" :   params.index == 4 &&  params.row.novemberPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.novemberPerformance < 0 ? "red" :   params.index == 5 &&  params.row.novemberPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.novemberPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.novemberPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.novemberPerformance ? params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.novemberPerformance + '%': params.row.novemberPerformance  : 0
                     params.row.novemberPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.novemberPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.novemberPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.novemberPerformance
@@ -354,13 +317,8 @@ export default {
                                   params.index == 4 && params.row.decemberPerformance < 0 ? "red" :   params.index == 4 &&  params.row.decemberPerformance > 0 ?  "#04B05D" : 
                                   params.index == 5 && params.row.decemberPerformance < 0 ? "red" :   params.index == 5 &&  params.row.decemberPerformance > 0 ?  "#04B05D" : 
                                   '#000',
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.decemberPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.decemberPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.decemberPerformance ? 
-                    // params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.decemberPerformance + '%': params.row.decemberPerformance 
-                    // : 0
                     params.row.decemberPerformance ? 
                     params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.decemberPerformance + '%' :
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.decemberPerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.decemberPerformance
@@ -380,11 +338,8 @@ export default {
                     {
                         style: {
                             color:'#000'
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.sumPerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.sumPerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.sumPerformance  ?  params.index == 3 ?  params.row.sumPerformance + '%': params.row.sumPerformance   : 0
                     params.row.sumPerformance ?  
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.sumPerformance/10000 *1000 / 10 ) / 100 + 'w':  
                     params.index == 3 ? params.row.sumPerformance + '%':  
@@ -404,17 +359,11 @@ export default {
                     {
                         style: {
                             color:'#000'
-                            // color:  params.index == 3 ||  params.index == 4 || params.index == 5 && params.row.averagePerformance < 0 ? "red" :  params.index == 3 ||  params.index == 4 || params.index == 5 &&  params.row.averagePerformance > 0 ?  "#04B05D" : '#000',
-                            // fontWeight:'bold'
                         },
                     },
-                    // params.row.averagePerformance 
                     params.row.averagePerformance ? 
                     params.index == 0 ||  params.index == 1 || params.index == 2 ?   Math.round( params.row.averagePerformance/10000 *1000 / 10 ) / 100 + 'w': params.row.averagePerformance
                     : '/'
-                    // ? 
-                    // params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.averagePerformance + '%': params.row.averagePerformance 
-                    // : 0
                 );
             },
           },
@@ -436,16 +385,6 @@ export default {
         } 
         return '';
        
-    },
-    handleSpan({ row, column, rowIndex, columnIndex }) {
-        // 合并第一列
-        // if(columnIndex == 0){
-        //     if(rowIndex === 0){
-        //         return [7,1]
-        //     }else if(rowIndex  >= 1){
-        //         return [0,0]
-        //     }
-        // }
     },
     // 医美业绩趋势
     getTotalAchievementByYearClick() {
@@ -470,20 +409,6 @@ export default {
 };
 </script>
 <style scoped lang="less">
-// /deep/ .ivu-table-wrapper-with-border{
-//     border: none;
-// }
-/* 确保没有全局样式覆盖 */
-// /deep/ .ivu-table {
-//   border-collapse: separate;
-//   border-spacing: 0;
-//   border-right: 1px solid #000;
-//   border-bottom: 1px solid #000;
-// }
- 
-// /deep/ .ivu-table-wrapper {
-//   overflow: auto; 
-// }
 /deep/ .ivu-table .ivu-table-body tr td, 
 .ivu-table .ivu-table-header th {
   border: 1px solid #000 !important;

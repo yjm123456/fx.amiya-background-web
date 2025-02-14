@@ -38,22 +38,7 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
-                <DatePicker
-                  type="date"
-                  placeholder="升单开始日期"
-                  style="width: 160px; margin-left: 10px"
-                  :value="query.consumeStartDate"
-                  v-model="query.consumeStartDate"
-                  :disabled="query.isConfirmOrder!='true'"
-                ></DatePicker>
-                <DatePicker
-                  type="date"
-                  placeholder="升单结束日期"
-                  style="width: 160px; margin-left: 10px"
-                  :value="query.consumeEndDate"
-                  v-model="query.consumeEndDate"
-                  :disabled="query.isConfirmOrder!='true'"
-                ></DatePicker>
+                
                 <Select
                   v-model="query.checkState"
                   placeholder="审核状态"
@@ -67,107 +52,134 @@
                   >
                 </Select>
             </div>
-            <div style="margin-top:10px">
-              
-                <Select
-                  v-model="query.consumeType"
-                  style="width: 160px;"
-                  placeholder="消费类型"
-                >
-                  <Option
-                    v-for="item in query.consumeTypeList"
-                    :value="item.value"
-                    :key="item.value"
-                    >{{ item.name }}</Option
+            <transition name="collapse">
+              <div v-show="isOpen" class="panel">
+                <div>
+                  <DatePicker
+                    type="date"
+                    placeholder="升单开始日期"
+                    style="width: 180px; "
+                    :value="query.consumeStartDate"
+                    v-model="query.consumeStartDate"
+                    :disabled="query.isConfirmOrder!='true'"
+                  ></DatePicker>
+                  <DatePicker
+                    type="date"
+                    placeholder="升单结束日期"
+                    style="width: 160px; margin-left: 10px"
+                    :value="query.consumeEndDate"
+                    v-model="query.consumeEndDate"
+                    :disabled="query.isConfirmOrder!='true'"
+                  ></DatePicker>
+                  <Select
+                      v-model="query.consumeType"
+                      style="width: 160px;margin-left: 10px"
+                      placeholder="消费类型"
+                    >
+                      <Option
+                        v-for="item in query.consumeTypeList"
+                        :value="item.value"
+                        :key="item.value"
+                        >{{ item.name }}</Option
+                      >
+                    </Select>
+                  <Select
+                    v-model="query.buyAgainType"
+                    style="width: 160px; margin-left: 10px"
+                    placeholder="升单类型"
+                    filterable
                   >
-                </Select>
-              <Select
-                v-model="query.buyAgainType"
-                style="width: 180px; margin-left: 10px"
-                placeholder="升单类型"
-                filterable
-              >
-                <Option
-                  v-for="item in buyAgainType"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.typeText }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.channel"
-                style="width: 160px; margin-left: 10px"
-                placeholder="升单渠道"
-                filterable
-              >
-                <Option
-                  v-for="item in channelType"
-                  :value="item.type"
-                  :key="item.type"
-                  >{{ item.typeText }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.addedBy"
-                style="width: 160px; margin-left: 10px"
-                placeholder="跟进人员"
-                filterable
-                :disabled="isDirector == 'false' && isCustomerService == 'true'"
-              >
-                <Option
-                  v-for="item in query.employee"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.liveAnchorId"
-                placeholder="请选择主播IP账号"
-                style="width: 160px; margin-left: 10px"
-                filterable
-                >
-                <Option
-                    v-for="item in liveAnchors"
-                    :value="item.id"
-                    :key="item.id"
-                    >{{ item.name }}</Option
-                >
-              </Select>
-              <Select
-                v-model="query.hospitalId"
-                style="width: 250px; margin-left: 10px"
-                placeholder="医院"
-                filterable
-              >
-                <Option
-                  v-for="item in query.hospitalInfo"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.name }}</Option
-                >
-              </Select>
-            </div>
-          </div>
-          <div class="right_button">
+                    <Option
+                      v-for="item in buyAgainType"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.typeText }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.channel"
+                    style="width: 160px; margin-left: 10px"
+                    placeholder="升单渠道"
+                    filterable
+                  >
+                    <Option
+                      v-for="item in channelType"
+                      :value="item.type"
+                      :key="item.type"
+                      >{{ item.typeText }}</Option
+                    >
+                  </Select>
+                </div>
+                <div style="margin-top:10px">
+                  <Select
+                    v-model="query.addedBy"
+                    style="width: 180px; "
+                    placeholder="跟进人员"
+                    filterable
+                    :disabled="isDirector == 'false' && isCustomerService == 'true'"
+                  >
+                    <Option
+                      v-for="item in query.employee"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.liveAnchorId"
+                    placeholder="请选择主播IP账号"
+                    style="width: 160px; margin-left: 10px"
+                    filterable
+                    >
+                    <Option
+                        v-for="item in liveAnchors"
+                        :value="item.id"
+                        :key="item.id"
+                        >{{ item.name }}</Option
+                    >
+                  </Select>
+                  <Select
+                    v-model="query.hospitalId"
+                    style="width: 330px; margin-left: 10px"
+                    placeholder="医院"
+                    filterable
+                  >
+                    <Option
+                      v-for="item in query.hospitalInfo"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
+                </div>
+              </div>
+            </transition>
+            <div class="search">
               <Button
                   type="primary"
-                  style="margin-left: 10px"
                   @click="getCustomerHospitalConsume()"
                   >查询</Button
                 >
-                <Button
-                  type="primary"
-                  style="margin-left: 10px"
-                  @click="
-                  importControlModal = true;
-                  "
-                  v-if="positionId == 1 || positionId == 13 || positionId == 16"
-                  >导入</Button
-                >
+                <div @click="toggle" class="open">{{isOpen ==  false ? '展开全部筛选项' : '收起全部筛选项'}}</div>
+                
+          </div>
           </div>
         </div>
-        <div class="right">
+      </div>
+    </Card>
+
+    <Card class="container">
+      <div>
+        <div style="margin-bottom:10px">
+          <Button
+            type="primary"
+            style="margin-right:10px"
+            @click="
+            importControlModal = true;
+            "
+            v-if="positionId == 1 || positionId == 13 || positionId == 16"
+            >导入</Button
+          >
           <Button
             type="primary"
             @click="
@@ -177,11 +189,6 @@
             >添加</Button
           >
         </div>
-      </div>
-    </Card>
-
-    <Card class="container">
-      <div>
         <Table border :columns="query.columns" :data="query.data"></Table>
       </div>
       <div class="page_wrap">
@@ -455,6 +462,9 @@ export default {
   },
   data() {
     return {
+      isOpen: false,
+      // 搜索栏展开收起
+      collapseValue:[],
       // 是否为客服
       isCustomerService:sessionStorage.getItem('isCustomerService'),
       // 是否为管理员
@@ -1532,6 +1542,9 @@ export default {
     };
   },
   methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
     //   获取主播
     getContentValidList(){
         api.LiveAnchorValid().then((res) => {
@@ -1854,6 +1867,27 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+.panel {
+  /* 可以添加一些样式，比如边框、背景色等 */
+  // background-color: #f0f0f0;
+  // border: 1px solid #ddd;
+  // padding: 10px;
+  margin-top: 10px;
+}
+.open{
+  cursor: pointer;
+  color: #2f8cf0;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 10px 0 0 10px;
+
+}
+.search{
+  display:flex;
+  algin-items:center;
+  margin:10px 10px 0  0
+}
 .header_wrap {
   display: flex;
   align-items: center;

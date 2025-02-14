@@ -503,3 +503,19 @@ export const AmiyaOperationsBoardassistantTransformData = (params) => {
         params
     });
 };
+//助理运营看板-转化-助理月度业绩目标达成情况（助理看板转化）
+export const getAssistantTotalAchievementByYear = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/getAssistantTotalAchievementByYear",
+        method: "get",
+        params
+    });
+};
+//助理运营看板-转化-助理月度线索转化情况（助理看板转化）
+export const assistantYearTransformData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/assistantYearTransformData",
+        method: "get",
+        params
+    });
+};

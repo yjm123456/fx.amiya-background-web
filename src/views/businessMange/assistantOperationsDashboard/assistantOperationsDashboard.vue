@@ -1,243 +1,268 @@
 <template>
   <Card style="overflow-x:hidden">
-    <div class="title">啊美雅（医美）助理数据运营看板</div>
-    <!-- 时间进度及筛选 -->
-    <div class="time">
-      <span>
-        <span class="completeRateSize">时间进度：</span>
-        <Progress
-          :percent="completeRate > 100 ? 100 : completeRate"
-          hide-info
-          style="width:180px;"
-          stroke-color="dodgerblue"
-          :stroke-width="13"
-          border
+    <!-- 啊美雅（医美）助理数据运营看板 -->
+    <div class="title">{{this.selected5 == '整体' ? '啊美雅（医美）助理整体数据运营看板' : '啊美雅（医美）助理转化数据运营看板'}}</div>
+    <div class="d_p">
+      <!-- 时间进度及筛选 -->
+      <div class="time">
+        <!-- tab切换 -->
+        <div class="tab_content2">
+          <div class="tab">
+            <div
+              class="tab_item"
+              v-for="(item, index) in list5"
+              :key="index"
+              @click="selectTab5(item)"
+              :class="{ active: selected5 == item }"
+            >
+              <span>{{ item }}</span>
+            </div>
+          </div>
+        </div>
+        <span>
+          <span class="completeRateSize">时间进度：</span>
+          <Progress
+            :percent="completeRate > 100 ? 100 : completeRate"
+            hide-info
+            style="width:180px;"
+            stroke-color="dodgerblue"
+            :stroke-width="13"
+            border
+          >
+          </Progress>
+          <span class="completeRateSize"> {{ completeRate }}%</span>
+        </span>
+        <DatePicker
+          type="date"
+          placeholder="请选择开始时间"
+          style="width: 160px;margin-left:30px"
+          transfer
+          :value="params.startDate"
+          v-model="params.startDate"
+        ></DatePicker>
+        <DatePicker
+          type="date"
+          placeholder="请选择结束时间"
+          style="width: 160px;margin:0 10px"
+          transfer
+          :value="params.endDate"
+          v-model="params.endDate"
+        ></DatePicker>
+        <Select
+          v-model="params.assistantId"
+          placeholder="请选择助理"
+          filterable
+          style="width:180px;margin-right:10px;text-align: start;"
+          :disabled="isDirector == 'false' && isCustomerService == 'true'"
         >
-        </Progress>
-        <span class="completeRateSize"> {{ completeRate }}%</span>
-      </span>
-      <DatePicker
-        type="date"
-        placeholder="请选择开始时间"
-        style="width: 160px;margin-left:30px"
-        transfer
-        :value="params.startDate"
-        v-model="params.startDate"
-      ></DatePicker>
-      <DatePicker
-        type="date"
-        placeholder="请选择结束时间"
-        style="width: 160px;margin:0 10px"
-        transfer
-        :value="params.endDate"
-        v-model="params.endDate"
-      ></DatePicker>
-      <Select
-        v-model="params.assistantId"
-        placeholder="请选择助理"
-        filterable
-        style="width:180px;margin-right:10px;text-align: start;"
-        :disabled="isDirector == 'false' && isCustomerService == 'true'"
-      >
-        <Option
-          v-for="item in params.employee"
-          :value="item.id"
-          :key="item.id"
-          >{{ item.name }}</Option
-        >
-      </Select>
-      <Button type="primary" @click="getData">查询</Button>
+          <Option
+            v-for="item in params.employee"
+            :value="item.id"
+            :key="item.id"
+            >{{ item.name }}</Option
+          >
+        </Select>
+        <Button type="primary" @click="getData">查询</Button>
+      </div>
     </div>
-    <!-- 卡片 -->
-    <item ref="items" :params="params" :completeRate="completeRate"/>
-    <items2 ref="items2" :params="params" :completeRate="completeRate"/>
-    <!-- 折线图 -->
-    <Card >
-      <div class="h2">当月业绩&线索趋势</div>
-      <!-- tab切换 -->
-      <div class="tab_content">
-        <div class="tab">
+    <div v-if="selected5 == '整体'">
+      <!-- 卡片 -->
+      <item ref="items" :params="params" :completeRate="completeRate"/>
+      <items2 ref="items2" :params="params" :completeRate="completeRate"/>
+      <!-- 折线图 -->
+      <Card >
+        <div class="h2">当月业绩&线索趋势</div>
+        <!-- tab切换 -->
+        <div class="tab_content">
+          <div class="tab">
+            <div
+              class="tab_item"
+              v-for="(item, index) in list2"
+              :key="index"
+              @click="selectTab2(index, item)"
+              :class="{ active: selected2 == item }"
+            >
+              <span>{{ item }}</span>
+            </div>
+          </div>
+        </div>
+        <monthLine  :brokenLineDataObj="brokenLineDataObj" v-if="selected2 == '业绩'"/>
+        <monthLine2  :brokenLineDataObj="assistantDistributeConsulationBrokenLineDataObj" v-if="selected2 == '线索'"/>
+      </Card>
+      <!-- 漏斗图 -->
+      <Card class="mr">
+        <div class="h2">新老客转化周期漏斗</div>
+        <!-- tab切换 -->
+        <div class="tab_content">
+          <div class="tab">
+            <div
+              class="tab_item"
+              v-for="(item, index) in list"
+              :key="index"
+              @click="selectTab(index, item)"
+              :class="{ active: selected == item }"
+            >
+              <span>{{ item }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div  class="list">
+          <!-- <Card class="item">
+            <div class="h2">新客业绩</div>
+            <funnel :funnelData="funnelObj.newCustomerData"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">老客业绩</div>
+            <funnel :funnelData="funnelObj.oldCustomerData"/>
+          </Card> -->
+          <!-- 新客转化周期根据助理分诊派单转化周期接口获取 -->
+          <funnel :funnelObj="funnelObj" :isFlag="isFlag" :assistantTransformCycleDataObj="assistantTransformCycleDataObj" :selected="selected"/>
+        </div>
+      </Card>
+      <Card class="mr ">
+        <!-- tab切换 -->
+        <div class="tab_content">
+          <div class="tab">
+            <div
+              class="tab_item"
+              v-for="(item, index) in list4"
+              :key="index"
+              @click="selectTab4(index, item)"
+              :class="{ active: selected4 == item }"
+            >
+              <span>{{ item }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="list3">
+          <Card class="item3">
+            <div class="h2 h3">助理分诊派单转化周期</div>
+            <cycleBar :barData="assistantTransformCycleDataObj.sendCycleData"/>
+          </Card>
+          <Card class="item3">
+            <div class="h2 h3">助理分诊上门转化周期</div>
+            <cycleBar :barData="assistantTransformCycleDataObj.toHospitalCycleData"/>
+          </Card>
+          <Card class="item3">
+            <div class="h2 h3">当月老客复购率</div>
+            <cycleBar :barData="assistantTransformCycleDataObj.oldCustomerRePurcheData" title="复购率"/>
+          </Card>
+        </div>
+      </Card>  
+      <!-- 助理目标完成率和业绩占比 -->
+      <Card class="mr">
+        <div class="h2 h3">助理--目标完成率&业绩贡献</div>
+        
+        <div  class="list ">
+          <Card class="item">
+            <div class="h2">助理目标完成率</div>
+            <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData"  title="目标完成率" :completeRate="completeRate"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">助理业绩贡献</div>
+            <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData"  />
+          </Card>
+        </div>
+      </Card>
+      <!-- 机构线索分析和机构业绩分析 -->
+      <Card class="mr">
+        <div class="h2 h3">机构--线索&业绩</div>
+        <!-- 平台切换 -->
+        <div class="tab2" >
           <div
-            class="tab_item"
-            v-for="(item, index) in list2"
+            class="tab_item2"
+            v-for="(item, index) in platformList2"
             :key="index"
-            @click="selectTab2(index, item)"
-            :class="{ active: selected2 == item }"
+            @click="checkTab2(index, item)"
+            :class="{ active2: item.isSelected }"
           >
-            <span>{{ item }}</span>
+            <span>{{ item.name }}</span>
           </div>
         </div>
-      </div>
-      <monthLine  :brokenLineDataObj="brokenLineDataObj" v-if="selected2 == '业绩'"/>
-      <monthLine2  :brokenLineDataObj="assistantDistributeConsulationBrokenLineDataObj" v-if="selected2 == '线索'"/>
-    </Card>
-    <!-- 漏斗图 -->
-    <Card class="mr">
-      <div class="h2">新老客转化周期漏斗</div>
-      <!-- tab切换 -->
-      <div class="tab_content">
-        <div class="tab">
-          <div
-            class="tab_item"
-            v-for="(item, index) in list"
-            :key="index"
-            @click="selectTab(index, item)"
-            :class="{ active: selected == item }"
-          >
-            <span>{{ item }}</span>
-          </div>
+        <div class="list">
+          <Card class="item">
+            <div class="h2">机构线索分析</div>
+            <div class="x_title">
+              <div>总派单：{{assistantHospitalCluesDataObj.totalSendOrderCount}}</div>
+              <div>总上门：{{assistantHospitalCluesDataObj.totalVisitCount}}</div>
+              <div>总成交：{{assistantHospitalCluesDataObj.totalDealCount}}</div>
+            </div>
+            <hospitalBar :hospitalBarData="assistantHospitalCluesDataObj.items" />
+          </Card>
+          <Card class="item">
+            <div class="h2">机构业绩分析</div>
+            <barItem :barItemData="assistantHospitalPerformanceData"/>
+          </Card>
         </div>
-      </div>
-      
-      <div  class="list">
-        <!-- <Card class="item">
-          <div class="h2">新客业绩</div>
-          <funnel :funnelData="funnelObj.newCustomerData"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">老客业绩</div>
-          <funnel :funnelData="funnelObj.oldCustomerData"/>
-        </Card> -->
-        <!-- 新客转化周期根据助理分诊派单转化周期接口获取 -->
-        <funnel :funnelObj="funnelObj" :isFlag="isFlag" :assistantTransformCycleDataObj="assistantTransformCycleDataObj" :selected="selected"/>
-      </div>
-    </Card>
-    <Card class="mr ">
-      <!-- tab切换 -->
-      <div class="tab_content">
-        <div class="tab">
-          <div
-            class="tab_item"
-            v-for="(item, index) in list4"
-            :key="index"
-            @click="selectTab4(index, item)"
-            :class="{ active: selected4 == item }"
-          >
-            <span>{{ item }}</span>
-          </div>
+      </Card>
+      <!-- 饼图 -->
+      <Card class="mr">
+        <div class="h2 h3">面诊类型--派单&业绩</div>
+        <div  class="list h3">
+          <Card class="item">
+            <div class="h2">派单量</div>
+            <pieItem3 :pieData="consulation.data" :total="consulation.total" title="总线索"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">业绩</div>
+            <pieItem3 :pieData="consulationPerformance.data" :total="consulationPerformance.total" title="总业绩"/>
+          </Card>
         </div>
-      </div>
-      <div class="list3">
-        <Card class="item3">
-          <div class="h2 h3">助理分诊派单转化周期</div>
-          <cycleBar :barData="assistantTransformCycleDataObj.sendCycleData"/>
-        </Card>
-        <Card class="item3">
-          <div class="h2 h3">助理分诊上门转化周期</div>
-          <cycleBar :barData="assistantTransformCycleDataObj.toHospitalCycleData"/>
-        </Card>
-        <Card class="item3">
-          <div class="h2 h3">当月老客复购率</div>
-          <cycleBar :barData="assistantTransformCycleDataObj.oldCustomerRePurcheData" title="复购率"/>
-        </Card>
-      </div>
-    </Card>  
-    <!-- 助理目标完成率和业绩占比 -->
-    <Card class="mr">
-      <div class="h2 h3">助理--目标完成率&业绩贡献</div>
-      
-      <div  class="list ">
-        <Card class="item">
-          <div class="h2">助理目标完成率</div>
-          <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.targetCompleteData"  title="目标完成率" :completeRate="completeRate"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">助理业绩贡献</div>
-          <customerBar :assiatantTargetCompleteAndPerformanceRateData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData"  />
-        </Card>
-      </div>
-    </Card>
-    <!-- 机构线索分析和机构业绩分析 -->
-    <Card class="mr">
-      <div class="h2 h3">机构--线索&业绩</div>
-      <!-- 平台切换 -->
-      <div class="tab2" >
-        <div
-          class="tab_item2"
-          v-for="(item, index) in platformList2"
-          :key="index"
-          @click="checkTab2(index, item)"
-          :class="{ active2: item.isSelected }"
-        >
-          <span>{{ item.name }}</span>
-        </div>
-      </div>
-      <div class="list">
-        <Card class="item">
-          <div class="h2">机构线索分析</div>
-          <div class="x_title">
-            <div>总派单：{{assistantHospitalCluesDataObj.totalSendOrderCount}}</div>
-            <div>总上门：{{assistantHospitalCluesDataObj.totalVisitCount}}</div>
-            <div>总成交：{{assistantHospitalCluesDataObj.totalDealCount}}</div>
-          </div>
-          <hospitalBar :hospitalBarData="assistantHospitalCluesDataObj.items" />
-        </Card>
-        <Card class="item">
-          <div class="h2">机构业绩分析</div>
-          <barItem :barItemData="assistantHospitalPerformanceData"/>
-        </Card>
-      </div>
-    </Card>
-    <!-- 饼图 -->
-    <Card class="mr">
-      <div class="h2 h3">面诊类型--派单&业绩</div>
-      <div  class="list h3">
-        <Card class="item">
-          <div class="h2">派单量</div>
-          <pieItem3 :pieData="consulation.data" :total="consulation.total" title="总线索"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">业绩</div>
-          <pieItem3 :pieData="consulationPerformance.data" :total="consulationPerformance.total" title="总业绩"/>
-        </Card>
-      </div>
 
-      <div class="h2 h3">线索分类--线索&业绩</div>
-      <div  class="list h3">
-        <Card class="item">
-          <div class="h2">线索人数</div>
-          <pieItem2 :pieData="typeCount.data" :total="typeCount.total" title="总派单"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">线索业绩</div>
-          <pieItem2 :pieData="typePerformance.data" :total="typePerformance.total" title="总业绩"/>
-        </Card>
-      </div>
+        <div class="h2 h3">线索分类--线索&业绩</div>
+        <div  class="list h3">
+          <Card class="item">
+            <div class="h2">线索人数</div>
+            <pieItem2 :pieData="typeCount.data" :total="typeCount.total" title="总派单"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">线索业绩</div>
+            <pieItem2 :pieData="typePerformance.data" :total="typePerformance.total" title="总业绩"/>
+          </Card>
+        </div>
 
-      <div class="h2 h3">有效/潜在--线索&业绩</div>
-      <div  class="list h3">
-        <Card class="item">
-          <div class="h2">有效/潜在分诊量</div>
-          <pieItem :pieData="distributeConsulationData" :totalNumber="totalFlowRateNumber" title="总线索"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">有效/潜在业绩</div>
-          <pieItem :pieData="performanceEffictiveOrNoData" :totalNumber="totalPerformanceNumber" title="总业绩"/>
-        </Card>
-      </div>
-      <div class="h2 h3">当月/历史--派单量&业绩</div>
-      <div  class="list h3">
-        <Card class="item">
-          <div class="h2">当月/历史派单量</div>
-          <pieItem :pieData="sendOrderData" :totalNumber="totalPerformanceNumber2" title="总线索"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">当月/历史业绩</div>
-          <pieItem :pieData="performanceHistoryOrNoData" :totalNumber="totalPerformanceNumber3" title="总业绩"/>
-        </Card>
-      </div>
-      <div class="h2 h3">新老客--成交量&业绩占比</div>
-      <div  class="list ">
-        <Card class="item">
-          <div class="h2">新老客成交占比</div>
-          <pieItem :pieData="customerDealData" :totalNumber="totalPerformanceNumber4" title="总线索"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">新老客业绩占比</div>
-          <pieItem :pieData="performanceNewCustonerOrNoData" :totalNumber="totalPerformanceNumber5" title="总业绩"/>
-        </Card>
-      </div>
-    </Card>
+        <div class="h2 h3">有效/潜在--线索&业绩</div>
+        <div  class="list h3">
+          <Card class="item">
+            <div class="h2">有效/潜在分诊量</div>
+            <pieItem :pieData="distributeConsulationData" :totalNumber="totalFlowRateNumber" title="总线索"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">有效/潜在业绩</div>
+            <pieItem :pieData="performanceEffictiveOrNoData" :totalNumber="totalPerformanceNumber" title="总业绩"/>
+          </Card>
+        </div>
+        <div class="h2 h3">当月/历史--派单量&业绩</div>
+        <div  class="list h3">
+          <Card class="item">
+            <div class="h2">当月/历史派单量</div>
+            <pieItem :pieData="sendOrderData" :totalNumber="totalPerformanceNumber2" title="总线索"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">当月/历史业绩</div>
+            <pieItem :pieData="performanceHistoryOrNoData" :totalNumber="totalPerformanceNumber3" title="总业绩"/>
+          </Card>
+        </div>
+        <div class="h2 h3">新老客--成交量&业绩占比</div>
+        <div  class="list ">
+          <Card class="item">
+            <div class="h2">新老客成交占比</div>
+            <pieItem :pieData="customerDealData" :totalNumber="totalPerformanceNumber4" title="总线索"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">新老客业绩占比</div>
+            <pieItem :pieData="performanceNewCustonerOrNoData" :totalNumber="totalPerformanceNumber5" title="总业绩"/>
+          </Card>
+        </div>
+      </Card>
+    </div>
+    <div v-else>
+      <!-- 月度业绩目标达成情况  -->
+      <monthlyTargetAchievementStatus ref="monthlyTargetAchievementStatus" :params="params"/>
+      <!-- 月度线索转化情况 -->
+      <monthlyLeadConversionStatus ref="monthlyLeadConversionStatus" :params="params"/>
+    </div>
     
    
     
@@ -261,6 +286,8 @@ import customerBar from "./components/customerBar.vue"
 import cycleBar from "./components/cycleBar.vue"
 import barItem from "./components/barItem.vue"
 import hospitalBar from "./components/hospitalBar.vue"
+import monthlyTargetAchievementStatus from "./components/monthlyTargetAchievementStatus.vue"
+import monthlyLeadConversionStatus from "./components/monthlyLeadConversionStatus.vue"
 export default {
   components: {
     item,
@@ -274,16 +301,20 @@ export default {
     items2,
     pieItem2,
     pieItem3,
-    cycleBar
+    cycleBar,
+    monthlyTargetAchievementStatus,
+    monthlyLeadConversionStatus
   },
   data() {
     return {
       list: ["整体","有效", "潜在"],
       list2: ["业绩","线索"],
       list4: ["当月","历史"],
+      list5:["整体","转化"],
       selected:'整体',
       selected2:'业绩',
       selected4:'当月',
+      selected5:'整体',
       // 时间进度
       completeRate: 0,
       params: {
@@ -358,6 +389,10 @@ export default {
     };
   },
   methods: {
+    selectTab5(value){
+      this.selected5 = value;
+      this.getData()
+    },
     checkTab2(index, value) {
       this.platformList2[index].isSelected = !this.platformList2[index].isSelected;
       this.getassistantHospitalCluesData()
@@ -380,18 +415,26 @@ export default {
     // 查询
     getData() {
       this.getTimeSpanClick();
-      this.$nextTick(()=>{
-          this.$refs.items.getAssistantPerformance()
-          this.$refs.items2.getdistributeConsulationData()
-      })
-      this.getbrokenLineData()
-      this.getassistantDistributeConsulationBrokenLineData()
-      this.getassistantPerformanceFilterData()
-      this.getanalysisData()
-      this.getassiatantTargetCompleteAndPerformanceRateData()
-      this.getassistantHospitalCluesData()
-      this.getassistantHospitalPerformanceData()
-      this.getAssistantTransformCycleDataClick()
+      if(this.selected5 == '整体'){
+        this.$nextTick(()=>{
+            this.$refs.items.getAssistantPerformance()
+            this.$refs.items2.getdistributeConsulationData()
+        })
+        this.getbrokenLineData()
+        this.getassistantDistributeConsulationBrokenLineData()
+        this.getassistantPerformanceFilterData()
+        this.getanalysisData()
+        this.getassiatantTargetCompleteAndPerformanceRateData()
+        this.getassistantHospitalCluesData()
+        this.getassistantHospitalPerformanceData()
+        this.getAssistantTransformCycleDataClick()
+      }else if(this.selected5 == '转化'){
+        this.$nextTick(()=>{
+            this.$refs.monthlyTargetAchievementStatus.getAssistantTotalAchievementByYearClick()
+            this.$refs.monthlyLeadConversionStatus.assistantYearTransformDataClick()
+        })
+      }
+      
     },
     // 根据职位id获取员工
     getEmployeeByPositionIdAdmin(){
@@ -606,7 +649,10 @@ export default {
 };
 </script>
 <style scoped lang="less">
-
+.d_p{
+  width: 100%;
+  // display: flex;
+}
 .tab2{
   text-align: start;
   padding-left: 10px;
@@ -641,9 +687,13 @@ export default {
   font-weight: bold;
   text-align: center;
   width: 100%;
+  color: #000;
 }
 .time {
   text-align: end;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 .list{
   width: 100%;
@@ -658,12 +708,14 @@ export default {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+  color: #000;
   
 }
 .h3{
   margin-bottom: 10px;
+  color: #000;
 }
-.tab_content {
+.tab_content ,.tab_content2{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -671,6 +723,9 @@ export default {
   width: 100%;
   padding: 0 10px;
   box-sizing: border-box;
+}
+.tab_content2{
+  width: 202px;
 }
 .tab{
   display: flex;

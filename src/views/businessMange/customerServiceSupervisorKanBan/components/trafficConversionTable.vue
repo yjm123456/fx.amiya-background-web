@@ -2,7 +2,7 @@
     <div>
         <Card  class="m_b">
             <div class="h3">主播（月度）业绩转化分析</div>
-            <Table border :columns="query.columns" :data="query.data" style="margin-top:10px" ></Table>
+            <Table border :columns="query.columns" :data="query.data" style="margin-top:10px" :row-class-name="rowClassName"></Table>
         </Card>
     </div>
 </template>
@@ -345,6 +345,13 @@ export default {
         }
     },
     methods:{
+        rowClassName: function (row, index) {
+            if (index % 2 === 0) {
+                return 'ivu-table-stripe-even';
+            } else {
+                return 'ivu-table-stripe-odd';
+            }
+        },
         // 根据条件获取新老客业绩占比（助理与机构）
         getCompanyTransformData() {
             const {startDate,endDate} = this.params
@@ -369,6 +376,14 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+
+/deep/.ivu-table-stripe-even td {
+  background-color: #fff;
+}
+
+/deep/.ivu-table-stripe-odd td {
+  background-color: #f0f8fa;
+}
 .h3{
   font-size: 18px;
   font-weight: bold;

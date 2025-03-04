@@ -297,15 +297,22 @@ export default {
     };
   },
   methods: {
-    rowClassName (row, index) {
-        if (index === 0) {
-            return 'one';
-        }else if (index === 1) {
-            return 'two';
-        }else if (index === 2) {
-            return 'three';
-        }
-        return '';
+    // rowClassName (row, index) {
+    //     if (index === 0) {
+    //         return 'one';
+    //     }else if (index === 1) {
+    //         return 'two';
+    //     }else if (index === 2) {
+    //         return 'three';
+    //     }
+    //     return '';
+    // },
+    rowClassName: function (row, index) {
+      if (index % 2 === 0) {
+        return 'ivu-table-stripe-even';
+      } else {
+        return 'ivu-table-stripe-odd';
+      }
     },
     checkTab(index, value) {
       this.selected = value.name
@@ -338,16 +345,16 @@ export default {
   
 };
 </script>
-<style scoped lang="less">
-// /deep/.ivu-table-fixed-header{
-//   border-bottom: 2px solid #000 !important;
-//   border-top: 1px solid #000 !important;
-//   border-left: 1px solid #000 !important;
-//   border-right: 1px solid #000 !important;
-// }
+<style scoped lang="less" >
 
-/deep/ .ivu-table .ivu-table-body tr td, 
-.ivu-table .ivu-table-header th {
+/deep/.ivu-table-stripe-even td {
+  background-color: #fff;
+}
+
+/deep/.ivu-table-stripe-odd td {
+  background-color: #f0f8fa;
+}
+/deep/ .ivu-table .ivu-table-body tr td, .ivu-table .ivu-table-header th {
   border: 1px solid #000 !important;
   color: #000;
 }
@@ -371,12 +378,12 @@ export default {
      color: #000;
      font-weight: bold;
 }
-// /deep/.ivu-table-border td:nth-child(2){
-//     background: #ffc000;
-//      border: 1px solid #000 !important;
-//      color: #000;
-//      font-weight: bold;
-// }
+ /* .ivu-table-border td:nth-child(2){
+     background: #ffc000;
+      border: 1px solid #000 !important;
+      color: #000;
+      font-weight: bold;
+ } */
 .header_wrap {
   display: flex;
   align-items: center;
@@ -436,12 +443,12 @@ export default {
   text-align: center;
   color: #000;
 }
-// /deep/.ivu-table-border td:nth-child(1){
-//     background: #ffc000;
-//     border: 1px solid #000 !important;
-// }
-// /deep/.ivu-table-border td:nth-child(2){
-//     background: #ffc000;
-//     border: 1px solid #000 !important;
-// }
+ /* .ivu-table-border td:nth-child(1){
+     background: #ffc000;
+     border: 1px solid #000 !important;
+ }
+ .ivu-table-border td:nth-child(2){
+     background: #ffc000;
+     border: 1px solid #000 !important;
+ } */
 </style>

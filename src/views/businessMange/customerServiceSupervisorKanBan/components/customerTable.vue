@@ -19,7 +19,7 @@
             <!-- <div v-for="(item,index) in query.data" :key="index">
                 <Table border :columns="query.columns" :data="item" style="margin-top:10px"></Table>
             </div> -->
-            <Table border :columns="query.columns" :data="query.data" style="margin-top:10px" height="500"></Table>
+            <Table border :columns="query.columns" :data="query.data" style="margin-top:10px" height="500" :row-class-name="rowClassName"></Table>
         </Card>
     </div>
 </template>
@@ -371,7 +371,13 @@ export default {
         }
     },
     methods:{
-        
+        rowClassName: function (row, index) {
+            if (index % 2 === 0) {
+                return 'ivu-table-stripe-even';
+            } else {
+                return 'ivu-table-stripe-odd';
+            }
+        },
         selectTab(index, value) {
             this.selected = value
             this.getAmiyaOperationsBoardassistantTransformData()
@@ -395,6 +401,13 @@ export default {
 }
 </script>
 <style scoped lang="less">
+/deep/.ivu-table-stripe-even td {
+  background-color: #fff;
+}
+
+/deep/.ivu-table-stripe-odd td {
+  background-color: #f0f8fa;
+}
 .h3{
   font-size: 18px;
   font-weight: bold;

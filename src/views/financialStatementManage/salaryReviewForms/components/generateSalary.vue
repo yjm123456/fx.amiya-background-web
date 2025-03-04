@@ -12,8 +12,33 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="110"
+        :label-width="130"
       >
+        <Row :gutter="30">
+          <Col span="8">
+            <FormItem label="薪资单周期（起）" prop="startDate">
+              <DatePicker
+                type="date"
+                placeholder="薪资单周期（起）"
+                style="width:100%"
+                :value="form.startDate"
+                v-model="form.startDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="薪资单周期（止）" prop="endDate">
+              <DatePicker
+                type="date"
+                placeholder="薪资单周期（止）"
+                style="width:100%"
+                :value="form.endDate"
+                v-model="form.endDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+        </Row>
+        <Divider style="margin-top:-10px"/>
         <Row :gutter="30">
           <Col span="8">
             <FormItem label="薪资名称" prop="name">
@@ -192,7 +217,7 @@
                 type="number"
                 number
                 @on-change="amountChange"
-                style="width:86%"
+                style="width:85%"
               ></Input>
               <Tooltip
                 :content="newCustomerToHospitalRewordPeople"
@@ -271,7 +296,7 @@
                 type="number"
                 number
                 @on-change="amountChange"
-                style="width:86%"
+                style="width:85%"
               ></Input>
               <Tooltip :content="oldTakeNewCustomerNum" placement="top-start">
                 <i
@@ -301,7 +326,7 @@
                 type="number"
                 number
                 @on-change="amountChange"
-                style="width:86%"
+                style="width:85%"
               ></Input>
               <Tooltip :content="targetCompletionRate" placement="top-start">
                 <i
@@ -331,7 +356,7 @@
                 type="number"
                 number
                 @on-change="amountChange"
-                style="width:86%"
+                style="width:85%"
               ></Input>
               <Tooltip :content="targetCompletionRate" placement="top-start">
                 <i
@@ -420,7 +445,7 @@
                 type="number"
                 number
                 @on-change="amountChange"
-                style="width:86%"
+                style="width:85%"
               ></Input>
               <Tooltip
                 :content="rewardAmountPeople"
@@ -528,7 +553,9 @@ export default {
         // 奖励金额
         specialHospitalVisitPrice:0,
         // 版本号
-        verison:'2.0'
+        verison:'2.0',
+        startDate: this.$moment().subtract(1, 'months').startOf('month').format("YYYY-MM-DD"),
+        endDate: this.$moment().subtract(1, 'months').endOf('month').format("YYYY-MM-DD"),
       },
 
       ruleValidate: {
@@ -628,10 +655,10 @@ export default {
   methods: {
     // 查询
     getQuery(){
-      const {belongEmpId,hospitalIdList,valid} = this.form
+      const {belongEmpId,hospitalIdList,valid,startDate,endDate} = this.form
       const data = {
-        startDate:this.$moment(new Date(this.startDate)).format("YYYY-MM-DD"),
-        endDate:this.$moment(new Date(this.endDate)).format("YYYY-MM-DD"),
+        startDate:this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
+        endDate:this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
         assistantId:belongEmpId,
         hospitalIdList:String(hospitalIdList),
       }
@@ -643,8 +670,8 @@ export default {
         this.$Message.warning('请选择医院')
         return
       }
-      if (this.$moment(new Date(this.startDate)).format("YYYY-MM") != this.$moment(new Date(this.endDate)).format("YYYY-MM") ) {
-        this.$Message.warning("列表开始时间和结束时间必须是同年月！");
+      if (this.$moment(new Date(startDate)).format("YYYY-MM") != this.$moment(new Date(endDate)).format("YYYY-MM") ) {
+        this.$Message.warning("薪资单周期（起）和薪资单周期（止）必须是同年月！");
         return;
       }
       api.getToHospitalCount(data).then(res=>{
@@ -664,15 +691,15 @@ export default {
         return;
       }
       if (
-        this.$moment(new Date(this.startDate)).format("YYYY-MM") !=
-        this.$moment(new Date(this.endDate)).format("YYYY-MM")
+        this.$moment(new Date(this.form.startDate)).format("YYYY-MM") !=
+        this.$moment(new Date(this.form.endDate)).format("YYYY-MM")
       ) {
-        this.$Message.warning("列表开始时间和结束时间必须是同年月！");
+        this.$Message.warning("薪资单周期（起）和薪资单周期（止）必须是同年月！");
         return;
       }
       const data = {
-        startDate: this.startDate,
-        endDate: this.endDate,
+        startDate: this.$moment(new Date(this.form.startDate)).format("YYYY-MM-DD"),
+        endDate: this.$moment(new Date(this.form.endDate)).format("YYYY-MM-DD"),
         empId: this.form.belongEmpId,
       };
 

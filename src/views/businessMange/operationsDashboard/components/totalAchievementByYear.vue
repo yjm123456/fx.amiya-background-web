@@ -375,16 +375,23 @@ export default {
     };
   },
   methods: {
-    rowClassName(row, index) {
-        // 根据条件设置特定行的类名，例如这里根据key值设置背景色
-        if (index === 0) {
-            return 'bg-color-row';
-        }
-        if (index === 1) {
-            return 'demo-table-info-row';
-        } 
-        return '';
+    // rowClassName(row, index) {
+    //     // 根据条件设置特定行的类名，例如这里根据key值设置背景色
+    //     if (index === 0) {
+    //         return 'bg-color-row';
+    //     }
+    //     if (index === 1) {
+    //         return 'demo-table-info-row';
+    //     } 
+    //     return '';
        
+    // },
+    rowClassName: function (row, index) {
+      if (index % 2 === 0) {
+        return 'ivu-table-stripe-even';
+      } else {
+        return 'ivu-table-stripe-odd';
+      }
     },
     // 医美业绩趋势
     getTotalAchievementByYearClick() {
@@ -408,7 +415,14 @@ export default {
   },
 };
 </script>
-<style scoped lang="less">
+<style scoped lang="less" >
+/deep/.ivu-table-stripe-even td {
+  background-color: #fff!important;
+}
+
+/deep/.ivu-table-stripe-odd td {
+  background-color: #f0f8fa!important;
+}
 /deep/ .ivu-table .ivu-table-body tr td, 
 .ivu-table .ivu-table-header th {
   border: 1px solid #000 !important;
@@ -427,21 +441,22 @@ export default {
 /deep/.bg-color-row{
     background: #ffc000 !important;
     color: #000;
-    // font-weight: bold;
+    /* font-weight: bold; */
 }
-.first-column-bg td:first-child {
+/deep/.first-column-bg td:first-child {
   background-color: #f2f2f2; /* 设置你想要的背景颜色 */
 }
-/deep/ .ivu-table .demo-table-info-row td{
+ /deep/.ivu-table .demo-table-info-row td{
         background-color: #7edafb;
         color: #000;
         background: skyblue;
 }
-// /deep/.ivu-table-border td:nth-child(2){
-//     background: #ffc000;
-//     color: #000;
-//     font-weight: bold;
-// }
+
+ /* .ivu-table-border td:nth-child(2){
+     background: #ffc000;
+     color: #000;
+     font-weight: bold;
+ } */
 .title{
     font-size: 18px;
     font-weight: bold;

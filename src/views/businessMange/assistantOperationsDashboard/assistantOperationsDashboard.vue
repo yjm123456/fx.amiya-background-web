@@ -197,7 +197,7 @@
         </div>
       </Card>
       <!-- 饼图 -->
-      <Card class="mr">
+      <!-- <Card class="mr">
         <div class="h2 h3">面诊类型--派单&业绩</div>
         <div  class="list h3">
           <Card class="item">
@@ -255,7 +255,7 @@
             <pieItem :pieData="performanceNewCustonerOrNoData" :totalNumber="totalPerformanceNumber5" title="总业绩"/>
           </Card>
         </div>
-      </Card>
+      </Card> -->
     </div>
     <div v-else>
       <!-- 月度业绩目标达成情况  -->

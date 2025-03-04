@@ -2,7 +2,7 @@
     <div>
         <Card  class="m_b">
             <div class="h3">助理（月度）业绩达成分析</div>
-            <Table border :columns="query.columns" :data="query.data" style="margin-top:10px" height="500"></Table>
+            <Table border :columns="query.columns" :data="query.data" style="margin-top:10px" height="500" :row-class-name="rowClassName"></Table>
         </Card>
     </div>
 </template>
@@ -394,6 +394,13 @@ export default {
         }
     },
     methods:{
+        rowClassName: function (row, index) {
+            if (index % 2 === 0) {
+                return 'ivu-table-stripe-even';
+            } else {
+                return 'ivu-table-stripe-odd';
+            }
+        },
         // 获取助理业绩目标达成情况
         getassistantTargetCompleteData() {
             const {startDate,endDate} = this.params
@@ -416,6 +423,13 @@ export default {
 }
 </script>
 <style scoped lang="less">
+/deep/.ivu-table-stripe-even td {
+  background-color: #fff;
+}
+
+/deep/.ivu-table-stripe-odd td {
+  background-color: #f0f8fa;
+}
 .h3{
   font-size: 18px;
   font-weight: bold;

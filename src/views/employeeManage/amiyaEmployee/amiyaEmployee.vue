@@ -414,26 +414,32 @@ export default {
           {
             title: "员工编号",
             key: "id",
+            align:'center'
           },
           {
             title: "姓名",
             key: "name",
+            align:'center'
           },
           {
             title: "用户名",
             key: "userName",
+            align:'center'
           },
           {
             title: "邮箱",
             key: "email",
+            align:'center'
           },
           {
             title: "职位名称",
             key: "positionName",
+            align:'center'
           },
           {
             title: "是否有效",
             key: "valid",
+            align:'center',
             render: (h, params) => {
               if (params.row.valid == true) {
                 return h("Icon", {

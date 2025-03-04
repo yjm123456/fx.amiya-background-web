@@ -170,22 +170,27 @@ export default {
           {
             title: "员工编号",
             key: "id",
+            align:'center',
           },
           {
             title: "姓名",
             key: "name",
+            align:'center',
           },
           {
             title: "用户名",
             key: "userName",
+            align:'center',
           },
           {
             title: "医院名称",
             key: "hospitalName",
+            align:'center',
           },
           {
             title: "是否有效",
             key: "valid",
+            align:'center',
             render: (h, params) => {
               if (params.row.valid == true) {
                 return h("Icon", {
@@ -213,6 +218,7 @@ export default {
           {
             title: "创建子账户",
             key: "isCreateSubAccount",
+            align:'center',
             render: (h, params) => {
               if (params.row.isCreateSubAccount == true) {
                 return h("Icon", {

@@ -358,16 +358,23 @@ export default {
     };
   },
   methods: {
-    rowClassName(row, index) {
-        // 根据条件设置特定行的类名，例如这里根据key值设置背景色
-        if (index === 0) {
-            return 'bg-color-row';
-        }
-        if (index === 1) {
-            return 'demo-table-info-row';
-        } 
-        return '';
+    // rowClassName(row, index) {
+    //     // 根据条件设置特定行的类名，例如这里根据key值设置背景色
+    //     if (index === 0) {
+    //         return 'bg-color-row';
+    //     }
+    //     if (index === 1) {
+    //         return 'demo-table-info-row';
+    //     } 
+    //     return '';
        
+    // },
+    rowClassName: function (row, index) {
+      if (index % 2 === 0) {
+        return 'ivu-table-stripe-even';
+      } else {
+        return 'ivu-table-stripe-odd';
+      }
     },
     handleSpan({ row, column, rowIndex, columnIndex }) {
         // 合并第一列
@@ -401,22 +408,15 @@ export default {
   },
 };
 </script>
-<style scoped lang="less">
-// /deep/ .ivu-table-wrapper-with-border{
-//     border: none;
-// }
-/* 确保没有全局样式覆盖 */
-// /deep/ .ivu-table {
-//   border-collapse: separate;
-//   border-spacing: 0;
-//   border-right: 1px solid #000;
-//   border-bottom: 1px solid #000;
-// }
- 
-// /deep/ .ivu-table-wrapper {
-//   overflow: auto; 
-// }
-/deep/ .ivu-table .ivu-table-body tr td, 
+<style  lang="less" scoped>
+/deep/.ivu-table-stripe-even td {
+  background-color: #fff!important;
+}
+
+/deep/.ivu-table-stripe-odd td {
+  background-color: #f0f8fa!important;
+}
+ /deep/.ivu-table .ivu-table-body tr td, 
 .ivu-table .ivu-table-header th {
   border: 1px solid #000 !important;
 }
@@ -434,9 +434,9 @@ export default {
 /deep/.bg-color-row{
     background: #ffc000 !important;
     color: #000;
-    // font-weight: bold;
+     /* font-weight: bold; */
 }
-.first-column-bg td:first-child {
+/deep/.first-column-bg td:first-child {
   background-color: #f2f2f2; /* 设置你想要的背景颜色 */
 }
 

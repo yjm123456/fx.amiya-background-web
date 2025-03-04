@@ -8,7 +8,7 @@
             <Input
               v-model="query.keyword"
               placeholder="请输入客户名称和手机尾号"
-              style="width: 220px; margin-right: 10px"
+              style="width: 200px; margin-right: 10px"
               @keyup.enter.native="CustomerTrackServerList()"
             />
             <Select v-model="query.isUnTrack" style="width: 200px; margin-right: 10px" placeholder="请选择回访状态">
@@ -22,21 +22,21 @@
             <DatePicker
               type="date"
               placeholder="开始日期"
-              style="width: 200px;margin-right: 10px"
+              style="width: 180px;margin-right: 10px"
               :value="query.startDate"
               v-model="query.startDate"
             ></DatePicker>
             <DatePicker
               type="date"
               placeholder="结束日期"
-              style="width: 200px;;margin-right: 10px"
+              style="width: 180px;;margin-right: 10px"
               :value="query.endDate"
               v-model="query.endDate"
             ></DatePicker>
             <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
             <Select
               v-model="query.employeeId"
-              style="width: 200px; margin-right: 10px"
+              style="width: 180px; margin-right: 10px"
               placeholder="请选择客服"
               filterable
               :disabled="isDirector == 'false' && isCustomerService == 'true'"
@@ -48,7 +48,7 @@
                 >{{ item.name }}</Option
               >
             </Select>
-            <Select v-model="query.type" style="width: 200px; margin-right: 10px" placeholder="请选择是否注册小程序">
+            <Select v-model="query.type" style="width: 180px; margin-right: 10px" placeholder="请选择是否注册小程序">
               <Option
                 v-for="item in query.typeList"
                 :value="item.value"

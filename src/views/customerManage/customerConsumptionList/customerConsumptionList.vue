@@ -3,73 +3,80 @@
   <div>
     <Card :dis-hover="true">
       <div class="content">
-        <div class="conter">
-          <div>
-            <Input
-              v-model="query.orderId"
-              placeholder="请输入订单号"
-              style="width: 180px; margin-right: 10px"
-              @keyup.enter.native="bindCustomerConsumptionServerList()"
-            />
-            <Input
-              v-model="query.keyword"
-              placeholder="请输入客户名称和手机尾号"
-              style="width: 200px; margin-right: 10px"
-              @keyup.enter.native="bindCustomerConsumptionServerList()"
-              :disabled="query.orderId !== ''"
-            />
-            <DatePicker
-              type="date"
-              placeholder="开始日期"
-              style="width: 140px;margin-right: 10px"
-              :value="query.startDate"
-              v-model="query.startDate"
-            ></DatePicker>
-            <DatePicker
-              type="date"
-              placeholder="结束日期"
-              style="width: 140px;;margin-right: 10px"
-              :value="query.endDate"
-              v-model="query.endDate"
-            ></DatePicker>
-            <Select v-model="query.channel" style="width: 140px; margin-right: 10px"  placeholder="请选择下单渠道">
-              <Option
-                v-for="item in query.channelList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
-            <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
-            <!-- :disabled ="query.positionName == '客服'" -->
-            <Select
+            <div>
+              <Input
+                v-model="query.orderId"
+                placeholder="请输入订单号"
+                style="width: 180px; margin-right: 10px"
+                @keyup.enter.native="bindCustomerConsumptionServerList()"
+              />
+              <Input
+                v-model="query.keyword"
+                placeholder="请输入客户名称和手机尾号"
+                style="width: 200px; margin-right: 10px"
+                @keyup.enter.native="bindCustomerConsumptionServerList()"
+                :disabled="query.orderId !== ''"
+              />
+              <DatePicker
+                type="date"
+                placeholder="开始日期"
+                style="width: 160px;margin-right: 10px"
+                :value="query.startDate"
+                v-model="query.startDate"
+              ></DatePicker>
+              <DatePicker
+                type="date"
+                placeholder="结束日期"
+                style="width: 160px;;margin-right: 10px"
+                :value="query.endDate"
+                v-model="query.endDate"
+              ></DatePicker>
               
-              v-model="query.employeeId"
-              style="width: 140px; margin-right: 10px"
-              placeholder="请选择客服"
-              filterable
-              :disabled="isDirector == 'false' && isCustomerService == 'true'"
-            >
-              <Option
-                v-for="item in query.employee"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
+            </div>
+            <transition name="collapse">
+              <div v-show="isOpen" class="panel">
+                <Select v-model="query.channel" style="width: 180px;"  placeholder="请选择消费平台">
+                <Option
+                  v-for="item in query.channelList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+              <!-- v-has="{ role: ['fx.amiya.permission.LIST_BY_CUSTOMER_SERVICE'] }" -->
+              <!-- :disabled ="query.positionName == '客服'" -->
+              <Select
+                
+                v-model="query.employeeId"
+                style="width: 200px; margin-left: 10px"
+                placeholder="请选择客服"
+                filterable
+                :disabled="isDirector == 'false' && isCustomerService == 'true'"
               >
-            </Select>
-            <Select v-model="query.cconsumptionLevelId" style="width: 160px; margin-right: 10px"  placeholder="请选择消费等级" >
-              <Option
-                v-for="item in query.consumptionLevelList"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
-            </Select>
+                <Option
+                  v-for="item in query.employee"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+                <Select v-model="query.cconsumptionLevelId" style="width: 160px; margin-left: 10px"  placeholder="请选择消费等级" >
+                  <Option
+                    v-for="item in query.consumptionLevelList"
+                    :value="item.id"
+                    :key="item.id"
+                    >{{ item.name }}</Option
+                  >
+                </Select>
+              </div>
+            </transition>
+            <div  class="search">
+                <Button type="primary" @click="bindCustomerConsumptionServerList()" >查询</Button>
+              <div @click="toggle" class="open">{{isOpen ==  false ? '展开全部筛选项' : '收起全部筛选项'}}</div>
+            </div>
           </div>
-        </div>
         <div>
-          <Button type="primary" @click="bindCustomerConsumptionServerList()" style="margin-left:20px">查询</Button>
-        </div>
+          
       </div>
     </Card>
 
@@ -114,6 +121,7 @@ export default {
   },
   data() {
     return {
+      isOpen: false,
       // 是否为客服
       isCustomerService:sessionStorage.getItem('isCustomerService'),
       // 是否为管理员
@@ -351,6 +359,9 @@ export default {
     };
   },
   methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
     // 获取礼品分类（下拉框）
     getGiftCategoryNameList() {
       giftCategoryApi.getGiftCategoryNameList().then((res) => {
@@ -461,6 +472,27 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+
+.panel {
+  /* 可以添加一些样式，比如边框、背景色等 */
+  // background-color: #f0f0f0;
+  // border: 1px solid #ddd;
+  // padding: 10px;
+  margin-top: 10px;
+}
+.open{
+  cursor: pointer;
+  color: #2f8cf0;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 10px 0 0 10px;
+
+}
+.search{
+  display:flex;
+  algin-items:center;
+  margin:10px 10px 0  0
+}
 .header_wrap {
   display: flex;
   align-items: center;
@@ -473,8 +505,7 @@ export default {
   text-align: right;
 }
 .content{
-  display: flex;
-  align-items: center;
+ 
 }
 .conter{
   display: flex;

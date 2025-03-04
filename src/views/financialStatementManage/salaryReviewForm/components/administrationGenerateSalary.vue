@@ -12,8 +12,35 @@
         :model="form"
         :rules="ruleValidate"
         label-position="left"
-        :label-width="120"
+        :label-width="130"
       >
+        <div class="bor">
+          <Row :gutter="30">
+            <Col span="8">
+              <FormItem label="薪资单周期（起）" prop="startDate">
+                <DatePicker
+                  type="date"
+                  placeholder="薪资单周期（起）"
+                  style="width:100%"
+                  :value="form.startDate"
+                  v-model="form.startDate"
+                ></DatePicker>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="薪资单周期（止）" prop="endDate">
+                <DatePicker
+                  type="date"
+                  placeholder="薪资单周期（止）"
+                  style="width:100%"
+                  :value="form.endDate"
+                  v-model="form.endDate"
+                ></DatePicker>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+       
         <div class="bor">
           <Row :gutter="30">
             <Col span="8">
@@ -212,7 +239,7 @@
               placeholder="请选择医院"
               filterable
               multiple
-              style="width:200px"
+              style="width:200px;margin-left:10px"
               v-if="form.valid == true"
             >
               <Option
@@ -249,7 +276,7 @@
                   type="number"
                   number
                   @on-change="amountChange"
-                  style="width:85%;"
+                  style="width:84%;"
                 ></Input>
 
                 <Tooltip placement="top-start">
@@ -280,7 +307,7 @@
                   type="number"
                   number
                   @on-change="amountChange"
-                  style="width:85%;"
+                  style="width:84%;"
                 ></Input>
 
                 <Tooltip placement="top-start">
@@ -305,7 +332,7 @@
                   type="number"
                   number
                   @on-change="amountChange"
-                  style="width:85%;"
+                  style="width:84%;"
                 ></Input>
 
                 <Tooltip placement="top-start">
@@ -342,7 +369,7 @@
                   type="number"
                   number
                   @on-change="amountChange"
-                  style="width:85%;"
+                  style="width:84%;"
                 ></Input>
 
                 <Tooltip :content="centent1" placement="top-start">
@@ -374,7 +401,7 @@
                   type="number"
                   number
                   @on-change="amountChange"
-                  style="width:85%;"
+                  style="width:84%;"
                 ></Input>
                 <Tooltip :content="centent2" placement="top-start">
                   <i
@@ -453,7 +480,7 @@
                   type="number"
                   number
                   @on-change="amountChange"
-                  style="width:85%;"
+                  style="width:84%;"
                 ></Input>
                 <Tooltip :content="centent3" placement="top-start">
                   <i
@@ -484,7 +511,7 @@
                   type="number"
                   number
                   @on-change="amountChange"
-                  style="width:85%;"
+                  style="width:84%;"
                 ></Input>
                 <Tooltip :content="centent4" placement="top-start">
                   <i
@@ -766,7 +793,9 @@ export default {
         // 奖励金额
         specialHospitalVisitPrice:0,
         // 版本号
-        verison:'1.0'
+        verison:'1.0',
+        startDate: this.$moment().subtract(1, 'months').startOf('month').format("YYYY-MM-DD"),
+        endDate: this.$moment().subtract(1, 'months').endOf('month').format("YYYY-MM-DD"),
       },
 
       ruleValidate: {
@@ -933,10 +962,10 @@ export default {
   methods: {
     // 查询
     getQuery(){
-      const {belongEmpId,hospitalIdList,valid} = this.form
+      const {belongEmpId,hospitalIdList,valid,startDate,endDate} = this.form
       const data = {
-        startDate:this.$moment(new Date(this.filterCriteria.startDate)).format("YYYY-MM-DD"),
-        endDate:this.$moment(new Date(this.filterCriteria.endDate)).format("YYYY-MM-DD"),
+        startDate:this.$moment(new Date(startDate)).format("YYYY-MM-DD"),
+        endDate:this.$moment(new Date(endDate)).format("YYYY-MM-DD"),
         assistantId:belongEmpId,
         hospitalIdList:String(hospitalIdList),
       }
@@ -948,8 +977,8 @@ export default {
         this.$Message.warning('请选择医院')
         return
       }
-      if (this.$moment(new Date(this.filterCriteria.startDate)).format("YYYY-MM") != this.$moment(new Date(this.filterCriteria.endDate)).format("YYYY-MM") ) {
-        this.$Message.warning("列表开始时间和结束时间必须是同年月！");
+      if (this.$moment(new Date(startDate)).format("YYYY-MM") != this.$moment(new Date(endDate)).format("YYYY-MM") ) {
+        this.$Message.warning("薪资单周期（起）和薪资单周期（止）必须是同年月！");
         return;
       }
       api.getToHospitalCount(data).then(res=>{
@@ -978,11 +1007,15 @@ export default {
     JiaVHandleSubmit() {
       const data = {
         employeeId: this.form.belongEmpId,
-        sartDate: this.$moment(this.filterCriteria.startDate).format(
+        sartDate: this.$moment(this.form.startDate).format(
           "YYYY-MM-DD"
         ),
-        endDate: this.$moment(this.filterCriteria.endDate).format("YYYY-MM-DD"),
+        endDate: this.$moment(this.form.endDate).format("YYYY-MM-DD"),
       };
+      if (this.$moment(new Date(this.form.startDate)).format("YYYY-MM") != this.$moment(new Date(this.form.endDate)).format("YYYY-MM") ) {
+        this.$Message.warning("薪资单周期（起）和薪资单周期（止）必须是同年月！");
+        return;
+      }
       api.getAddWechatNumByCreateEmpInfoAndDate(data).then((res) => {
         if (res.code == 0) {
           const {
@@ -998,9 +1031,9 @@ export default {
           this.form.takeGoodsAddWechatPrice =
             Math.round((takeGoodsCustomerAddWechatNum * 5 * 1000) / 10) / 100;
           this.centent1 =
-            "当前组医美客资加V：" + beautyCustomerAddWechatNum + "个";
+            "当前组医美客资加V：" + beautyCustomerAddWechatNum + "个"+ ' * 15元';
           this.centent2 =
-            "当前组带货客资加V：" + takeGoodsCustomerAddWechatNum + "个";
+            "当前组带货客资加V：" + takeGoodsCustomerAddWechatNum + "个"+ ' * 5元';
           // 加v达成业绩
           this.centent5 = "当前组加v率：" + addWeChatRate + "%";
           // 当前组加v率 大于 当月加v健康值的话是0 小于扣除300
@@ -1030,14 +1063,18 @@ export default {
     // 自动获取
     visitHandleSubmit() {
       const data = {
-        sendStartDate: this.$moment(this.filterCriteria.startDate).format(
+        sendStartDate: this.$moment(this.form.startDate).format(
           "YYYY-MM-DD"
         ),
-        sendEndDate: this.$moment(this.filterCriteria.endDate).format(
+        sendEndDate: this.$moment(this.form.endDate).format(
           "YYYY-MM-DD"
         ),
         employeeId: this.form.belongEmpId,
       };
+      if (this.$moment(new Date(this.form.startDate)).format("YYYY-MM") != this.$moment(new Date(this.form.endDate)).format("YYYY-MM") ) {
+        this.$Message.warning("薪资单周期（起）和薪资单周期（止）必须是同年月！");
+        return;
+      }
       api.getCooperationLiveAnchorSendAndVisitNum(data).then((res) => {
         if (res.code == 0) {
           const {

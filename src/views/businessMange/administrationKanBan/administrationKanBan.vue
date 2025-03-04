@@ -57,7 +57,7 @@
       <monthLine :params="params" :adminCustomerServiceCustomerTypeBrokenLineDataObj="adminCustomerServiceCustomerTypeBrokenLineDataObj"/>
     </Card>
     <Card style="margin-top:10px">
-      <div class="h3">部门&个人-线索转化漏斗图</div>
+      <div class="h3">当月部门&个人-线索转化漏斗图</div>
       <funnel :params="params" :adminCustomerFilterDataObj="adminCustomerFilterDataObj" :isFlag="isFlag"/>
     </Card>
     <!-- 饼图 -->

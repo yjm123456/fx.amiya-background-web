@@ -3,10 +3,10 @@
     <div class="center_content">
           <div class="center_item">
             <div class="item1" >
-              <div class="h2">新客业绩：<span class="f_w">{{assistantPerformanceObj.newCustomerPerformance ? assistantPerformanceObj.newCustomerPerformance : 0 }}</span></div>
+              <div class="h2">新客业绩：<span class="f_w">{{assistantPerformanceObj.todayNewCustomerPerformance}}</span></div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日业绩：<span  class="f_w">{{assistantPerformanceObj.todayNewCustomerPerformance}}</span></div>
+                    <div>累计业绩：<span  class="f_w">{{assistantPerformanceObj.newCustomerPerformance ? assistantPerformanceObj.newCustomerPerformance : 0 }}</span></div>
                     <div >上期业绩：<span  class="f_w">{{assistantPerformanceObj.lastMonthNewCustomerPerformance}}</span></div>
                     <div >同期业绩：<span  class="f_w">{{assistantPerformanceObj.lastYearNewCustomerPerformance}}</span></div>
                     <div >目标业绩：<span  class="f_w">{{assistantPerformanceObj.newCustomerPerformanceTarget}}</span></div>
@@ -34,10 +34,10 @@
               </div>
             </div>
             <div class="item2" >
-              <div class="h2">老客业绩：<span class="f_w">{{assistantPerformanceObj.oldCustomerPerformance ? assistantPerformanceObj.oldCustomerPerformance : 0 }}</span></div>
+              <div class="h2">老客业绩：<span class="f_w">{{assistantPerformanceObj.todayOldCustomerPerformance}}</span></div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日业绩：<span  class="f_w">{{assistantPerformanceObj.todayOldCustomerPerformance}}</span></div>
+                    <div>累计业绩：<span  class="f_w">{{assistantPerformanceObj.oldCustomerPerformance ? assistantPerformanceObj.oldCustomerPerformance : 0 }}</span></div>
                     <div >上期业绩：<span  class="f_w">{{assistantPerformanceObj.lastMonthOldCustomerPerformance}}</span></div>
                     <div >同期业绩：<span  class="f_w">{{assistantPerformanceObj.lastYearOldCustomerPerformance}}</span></div>
                     <div >目标业绩：<span  class="f_w">{{assistantPerformanceObj.oldCustomerPerformanceTarget}}</span></div>
@@ -68,13 +68,13 @@
               </div>
             </div>
             <div class="item3" >
-              <div class="h2">总业绩：<span>{{assistantPerformanceObj.totalPerformance ? assistantPerformanceObj.totalPerformance : 0 }}</span></div>
+              <div class="h2">总业绩：<span>{{assistantPerformanceObj.todayTotalPerformance}}</span></div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日业绩：<span  class="f_w">{{assistantPerformanceObj.todayTotalPerformance}}</span></div>
-                    <div >上期业绩：<span  class="f_w">{{assistantPerformanceObj.lastMonthTotalPerformance}}</span></div>
-                    <div >同期业绩：<span  class="f_w">{{assistantPerformanceObj.lastYearTotalPerformance}}</span></div>
-                    <div >目标业绩：<span  class="f_w">{{assistantPerformanceObj.totalPerformanceTarget}}</span></div>
+                    <div>累计业绩：<span  class="f_w">{{assistantPerformanceObj.totalPerformance ? assistantPerformanceObj.totalPerformance : 0 }}</span></div>
+                    <div>上期业绩：<span  class="f_w">{{assistantPerformanceObj.lastMonthTotalPerformance}}</span></div>
+                    <div>同期业绩：<span  class="f_w">{{assistantPerformanceObj.lastYearTotalPerformance}}</span></div>
+                    <div>目标业绩：<span  class="f_w">{{assistantPerformanceObj.totalPerformanceTarget}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>超出进度：

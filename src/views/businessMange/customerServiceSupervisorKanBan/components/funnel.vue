@@ -177,8 +177,8 @@ export default {
     },
   data() {
     return {
-      selected: "整体",
-      list: ["整体","有效", "潜在"],
+      selected: "当月",
+      list: ["当月","历史"],
       isFlag:false,
       performance:{}
     };
@@ -195,7 +195,7 @@ export default {
             year:this.$moment(this.params.endDate).format("YYYY")? this.$moment(this.params.endDate).format("YYYY") : null,
             month:Number(this.$moment(this.params.endDate).format("MM")) >= 10 ? this.$moment(this.params.endDate).format("MM") : this.$moment(this.params.endDate).format("MM"),
             // contentPlatFormId:this.active == 'tiktok' ? this.params.contentPalteForms.find(item=>item.contentPlatformName == '抖音').id : this.active == 'vedio' ?  this.params.contentPalteForms.find(item=>item.contentPlatformName == '视频号').id : '',
-            isEffectiveCustomerData:this.selected == '整体' ? null : this.selected == '有效' ? true : false,
+            isEffectiveCustomerData:this.selected == '当月' ? true : false,
             contentPlatFormId:'',
             liveAnchorBaseId:this.selected4 == '刀刀' ? this.liveAnchorBaseInfos.find(item=>item.name == '刀刀').id : this.selected4 == '吉娜' ? this.liveAnchorBaseInfos.find(item=>item.name == '吉娜').id :   ''
 

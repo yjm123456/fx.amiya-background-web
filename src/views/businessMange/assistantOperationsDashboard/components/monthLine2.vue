@@ -22,19 +22,23 @@ export default {
   methods: {
     // 业绩
     myEcharts(value) {
-      const {effective,potential,total} = value
+      const {beforeLivingData,livingData,afterLivingData,total} = value
       let date =[]
-      let effectives =[]
-      let potentials =[]
+      let beforeLivingDatas =[]
+      let livingDatas =[]
+      let afterLivingDatas =[]
       let totals =[]
       let totalTypes =[]
      
-      effective ? effective.map(item=>{
+      beforeLivingData ? beforeLivingData.map(item=>{
         date.push(item.date)
-        effectives.push(item.performance)
+        beforeLivingDatas.push(item.performance)
       }) : []
-      potential ? potential.map(item=>{
-        potentials.push(item.performance)
+      livingData ? livingData.map(item=>{
+        livingDatas.push(item.performance)
+      }):[]
+      afterLivingData ? afterLivingData.map(item=>{
+        afterLivingDatas.push(item.performance)
       }):[]
       total ? total.map(item=>{
         totals.push(item.performance)
@@ -89,10 +93,11 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['有效线索','潜在线索','总线索'],
+          data: ['直播前','直播中','直播后','总线索'],
           selected:{
-            '有效线索':true,
-            '潜在线索':true,
+            '直播前':true,
+            '直播中':true,
+            '直播后':true,
             '总线索':true,
           },
           textStyle:{
@@ -101,9 +106,9 @@ export default {
         },
         series: [
             {
-                name: '有效线索',
+                name: '直播前',
                 type: 'line',
-                data: effectives,
+                data: beforeLivingDatas,
                 itemStyle: { 
                     normal: { 
                         
@@ -112,9 +117,9 @@ export default {
                 },
             },
             {
-                name: '潜在线索',
+                name: '直播中',
                 type: 'line',
-                data: potentials,
+                data: livingDatas,
                 itemStyle: { 
                     normal: { 
                         color: '#7381FB'  // 折线的颜⾊
@@ -123,12 +128,22 @@ export default {
             },
             
             {
+                name: '直播后',
+                type: 'line',
+                data: afterLivingDatas,
+                itemStyle: { 
+                    normal: { 
+                        color: '#BB5DF9'  // 折线的颜⾊
+                    } 
+                },
+            },
+            {
                 name: '总线索',
                 type: 'line',
                 data: totals,
                 itemStyle: { 
                     normal: { 
-                        color: '#BB5DF9'  // 折线的颜⾊
+                        color: '#F37F51'  // 折线的颜⾊
                     } 
                 },
             },

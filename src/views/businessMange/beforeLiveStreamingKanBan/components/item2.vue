@@ -8,11 +8,13 @@
           <div class="item_left">
             <div>
                 <span>当日：<span class="b_w">{{ employeeData.currentDayCustomerCount ? employeeData.currentDayCustomerCount: 0}}</span></span>
+                <div style="min-height:20px"></div>
             </div>
           </div>
           <div class="item_right">
             <div>
               <span>累计：<span  class="b_w">{{employeeData.customerCount ? employeeData.customerCount : 0}}</span></span>
+              <div style="min-height:20px"></div>
             </div>
           </div>
         </div>
@@ -40,11 +42,18 @@
           <div class="item_left">
             <div>
                 <span>当日：<span class="b_w">{{ departmentData.currentDayCustomerCount ?  departmentData.currentDayCustomerCount : 0}}</span></span>
+                <div>目标：<span class="b_w">{{ departmentData.customerCountTarget ? departmentData.customerCountTarget: 0}}</span></div>
             </div>
           </div>
           <div class="item_right">
             <div>
               <span>累计：<span  class="b_w">{{departmentData.customerCount ? departmentData.customerCount  : 0}}</span></span>
+              <div  >
+                达成率：
+                <span class="b_w" :style="{color:departmentData.customerCountTargetComplete	 < completeRate ? 'red' :'green'}">
+                  {{departmentData.customerCountTargetComplete	 ? departmentData.customerCountTargetComplete	 + '%' : '0%'}}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -78,7 +87,8 @@ export default {
   },
   props: {
     params: Object,
-    title:String
+    title:String,
+    completeRate:Number
   },
   data() {
     return {

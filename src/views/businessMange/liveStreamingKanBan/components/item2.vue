@@ -11,6 +11,7 @@
           <div class="item_left">
               <div>当日线索：<span class="f_w">{{liveStreamingObj.currentClueCount}}</span></div>
               <div class="item_left">累计线索：<span class="f_w">{{liveStreamingObj.clueCount}}</span></div>
+              <div class="item_left">线索目标：<span class="f_w">{{liveStreamingObj.clueTarget}}</span></div>
           </div>
           <div class="item_right">
               <div>去年同比：
@@ -36,6 +37,7 @@
         <div class="h2">新客业绩</div>
         <div class="item">
           <div class="item_left">
+              <div>业绩目标：<span class="f_w">{{liveStreamingObj.performanceTarget}}</span></div>
               <div>当日业绩：<span class="f_w">{{liveStreamingObj.currentPerformance}}</span></div>
               <div>当月业绩：<span class="f_w">{{liveStreamingObj.currentMontPerformance}}</span></div>
               <div class="item_left ">累计业绩：<span class="f_w">{{liveStreamingObj.performance}}</span></div>
@@ -51,8 +53,16 @@
                 <span class="h5" v-else-if="Math.sign(liveStreamingObj.performanceChain)== -1"><span  class="green">下降</span>{{ Math.abs(liveStreamingObj.performanceChain) + '%'}}</span>
                 <span class="h5"  v-else>-</span>
               </div>
+              <div  >
+              目标达成：
+              <span class="f_w" :style="{color:liveStreamingObj.performanceTargetCompleteRate	 < completeRate ? 'red' :'green'}">
+                {{liveStreamingObj.performanceTargetCompleteRate	 ? liveStreamingObj.performanceTargetCompleteRate	 + '%' : '0%'}}
+              </span>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="item3">
       </div>
     </div>
   </div>
@@ -121,7 +131,7 @@ export default {
 }
 .item1{
   background-image:   linear-gradient(to right,#8ED6E5, #0AABBD);
-  margin-right: 7%;
+  /* margin-right: 7%; */
 }
 .item2{
   background: linear-gradient(to right,#AEB5F3, #7381FB);

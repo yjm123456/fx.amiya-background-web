@@ -15,6 +15,7 @@ import * as api from "@/api/amiyaOperationsBoard";
 export default {
   props: {
     params: Object,
+    completeRate:Number
   },
   data() {
     return {
@@ -47,8 +48,8 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
-                        },
+                           color:params.index == 2  ? params.row.januaryPerformance > this.completeRate ? 'green' : 'red' : '#000'
+                        }
                     },
                     params.index == 2 && params.row.januaryPerformance ? params.row.januaryPerformance + '%' : params.index == 3 ? params.row.januaryPerformance : params.row.januaryPerformance ?  Math.round( params.row.januaryPerformance/10000 *1000 / 10 ) / 100 : 0
                 );
@@ -65,7 +66,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2  ? params.row.februaryPerformance > this.completeRate ? 'green' : 'red' : '#000'
                         },
                     },
                     
@@ -84,7 +85,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:'#000'
+                            color:params.index == 2  ? params.row.marchPerformance > this.completeRate ? 'green' : 'red' : '#000'
                         },
                     },
                    
@@ -103,7 +104,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2  ? (params.row.aprilPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                    
@@ -122,7 +123,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2  ? (params.row.mayPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                     // params.row.mayPerformance ?  params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.mayPerformance + '%': params.row.mayPerformance  : 0
@@ -141,7 +142,7 @@ export default {
                     "div",
                     {
                         style: {
-                            color:'#000'
+                            color:params.index == 2  ? (params.row.junePerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                     // params.row.junePerformance ?  params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.junePerformance + '%': params.row.junePerformance  : 0
@@ -160,7 +161,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2  ? (params.row.julyPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                     // params.row.julyPerformance ? params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.julyPerformance + '%': params.row.julyPerformance : 0
@@ -179,7 +180,7 @@ export default {
                     "div",
                     {
                         style: {
-                          color:'#000'
+                          color:params.index == 2  ? (params.row.augustPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                    
@@ -198,7 +199,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2  ? (params.row.septemberPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                     params.index == 2 ? params.row.septemberPerformance + '%' : params.index == 3 ? params.row.septemberPerformance : params.row.septemberPerformance ?  Math.round( params.row.septemberPerformance/10000 *1000 / 10 ) / 100 : 0
@@ -216,7 +217,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2  ? (params.row.octoberPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                    
@@ -235,7 +236,7 @@ export default {
                     "div",
                     {
                         style: {
-                          color:'#000'
+                          color:params.index == 2  ? (params.row.novemberPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                     params.index == 2 ? params.row.novemberPerformance + '%' : params.index == 3 ? params.row.novemberPerformance : params.row.novemberPerformance ?  Math.round( params.row.novemberPerformance/10000 *1000 / 10 ) / 100 : 0
@@ -253,7 +254,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2  ? (params.row.decemberPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                    
@@ -272,7 +273,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2 && params.row.sumPerformance == null || params.row.sumPerformance == '/' ? '#000'  : params.row.sumPerformance > this.completeRate ? 'green' : 'red'
                         },
                     },
                     params.index == 2 && params.row.sumPerformance == null || params.row.sumPerformance == '/' ? '/'  : params.index == 2 && params.row.sumPerformance ?  params.row.sumPerformance + '%' :  params.index == 3  || params.row.sumPerformance == '/' ? params.row.sumPerformance : params.row.sumPerformance ?  Math.round( params.row.sumPerformance/10000 *1000 / 10 ) / 100 : 0
@@ -290,7 +291,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.index == 2 && params.row.averagePerformance == null || params.row.averagePerformance == '/' ? '#000'  : params.row.averagePerformance > this.completeRate ? 'green' : 'red'
                         },
                     },
                     params.index == 2 && params.row.averagePerformance == null || params.row.averagePerformance == '/' ? '/'  : params.index == 2 && params.row.averagePerformance ?  params.row.averagePerformance + '%' : params.index == 3 || params.row.averagePerformance == '/'  ? params.row.averagePerformance : params.row.averagePerformance ?  Math.round( params.row.averagePerformance/10000 *1000 / 10 ) / 100 : 0

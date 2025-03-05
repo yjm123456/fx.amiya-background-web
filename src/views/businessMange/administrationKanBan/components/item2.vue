@@ -4,8 +4,8 @@
     <div class="center_item">
       <div class="item1">
         <div class="h2">
-          一级线索
-          <Tooltip placement="top-start" v-if="title=='部门'">
+          直播前
+          <!-- <Tooltip placement="top-start" v-if="title=='部门'">
             <i
               class="iconfont icon-info info"
               style="color:#fff;font-size:18px;"
@@ -15,11 +15,24 @@
               <p>面膜），视频号下单未付款的顾客</p>
               <p>2、直播间公屏捞客顾客</p>
             </template>
-          </Tooltip>
+          </Tooltip> -->
         </div>
-        <div class="h1">{{assistantPerformanceObj.firstTypeTotal ? assistantPerformanceObj.firstTypeTotal : 0}}</div>
+        <!-- <div class="h1">{{assistantPerformanceObj.firstTypeTotal ? assistantPerformanceObj.firstTypeTotal : 0}}</div> -->
         <div class="item">
           <div class="item_left">
+            <div>
+              当日线索：<span class="h5">{{assistantPerformanceObj.firstTypeToday ? assistantPerformanceObj.firstTypeToday : 0}}</span>
+            </div>
+            <div>
+              累计线索：<span class="h5">{{assistantPerformanceObj.firstTypeTotal ? assistantPerformanceObj.firstTypeTotal : 0}}</span>
+            </div>
+            <div v-if="title == '部门'">
+              当月目标：<span class="h5">{{assistantPerformanceObj.firstTypeCustomerTarget ? assistantPerformanceObj.firstTypeCustomerTarget : 0}}</span>
+            </div>
+              
+          </div>
+          
+          <div class="item_right">
             <div>
               去年同比：
               <span class="h5"
@@ -42,8 +55,6 @@
               >
               <span class="h5" v-else>-</span>
             </div>
-          </div>
-          <div class="item_right">
             <div>
               上月环比：
               <span
@@ -69,13 +80,20 @@
               >
               <span class="h5" v-else>-</span>
             </div>
+            <div  v-if="title == '部门'">
+              目标达成：
+              <span class="f_w" :style="{color:assistantPerformanceObj.firstTypeCustomerComplete	 < completeRate ? 'red' :'green'}">
+                {{assistantPerformanceObj.firstTypeCustomerComplete	 ? assistantPerformanceObj.firstTypeCustomerComplete	 + '%' : '0%'}}
+              </span>
+            </div>
+              
           </div>
         </div>
       </div>
       <div class="item2">
         <div class="h2">
-          二级线索
-          <Tooltip placement="top-start" v-if="title=='部门'">
+          直播中
+          <!-- <Tooltip placement="top-start" v-if="title=='部门'">
             <i
               class="iconfont icon-info info"
               style="color:#fff;font-size:18px;"
@@ -85,11 +103,22 @@
               <p>的顾客</p>
               <p>2、直播后各平台的粉丝群顾客</p>
             </template>
-          </Tooltip>
+          </Tooltip> -->
         </div>
-        <div class="h1">{{assistantPerformanceObj.secondTypeTotal ? assistantPerformanceObj.secondTypeTotal : 0}}</div>
+        <!-- <div class="h1">{{assistantPerformanceObj.secondTypeTotal ? assistantPerformanceObj.secondTypeTotal : 0}}</div> -->
         <div class="item">
           <div class="item_left">
+            <div>
+              当日线索：<span class="h5">{{assistantPerformanceObj.secondTypeToday ? assistantPerformanceObj.secondTypeToday : 0}}</span>
+            </div>
+            <div>
+              累计线索：<span class="h5">{{assistantPerformanceObj.secondTypeTotal ? assistantPerformanceObj.secondTypeTotal : 0}}</span>
+            </div>
+            <div v-if="title == '部门'">
+              当月目标：<span class="h5">{{assistantPerformanceObj.secondTypeCustomerTarget ? assistantPerformanceObj.secondTypeCustomerTarget : 0}}</span>
+            </div>
+          </div>
+          <div class="item_right">
             <div>
               去年同比：
               <span
@@ -115,8 +144,6 @@
               >
               <span class="h5" v-else>-</span>
             </div>
-          </div>
-          <div class="item_right">
             <div>
               上月环比：
               <span
@@ -142,13 +169,19 @@
               >
               <span class="h5" v-else>-</span>
             </div>
+            <div  v-if="title == '部门'">
+              目标达成：
+              <span class="f_w" :style="{color:assistantPerformanceObj.secondTypeCustomerComplete	 < completeRate ? 'red' :'green'}">
+                {{assistantPerformanceObj.secondTypeCustomerComplete	 ? assistantPerformanceObj.secondTypeCustomerComplete	 + '%' : '0%'}}
+              </span>
+            </div>
           </div>
         </div>
       </div>
       <div class="item3">
         <div class="h2">
-          三级线索
-          <Tooltip placement="top-start" v-if="title=='部门'">
+          直播后
+          <!-- <Tooltip placement="top-start" v-if="title=='部门'">
             <i
               class="iconfont icon-info info"
               style="color:#fff;font-size:18px;"
@@ -157,11 +190,22 @@
               <p>小风车/短视频/福袋/产品转化/其他，</p>
               <p>获取的顾客资源</p>
             </template>
-          </Tooltip>
+          </Tooltip> -->
         </div>
-        <div class="h1">{{assistantPerformanceObj.thirdTypeTotal ? assistantPerformanceObj.thirdTypeTotal : 0}}</div>
+        <!-- <div class="h1">{{assistantPerformanceObj.thirdTypeTotal ? assistantPerformanceObj.thirdTypeTotal : 0}}</div> -->
         <div class="item">
           <div class="item_left">
+            <div>
+              当日线索：<span class="h5">{{assistantPerformanceObj.thirdTypeToday ? assistantPerformanceObj.thirdTypeToday : 0}}</span>
+            </div> 
+            <div>
+              累计线索：<span class="h5">{{assistantPerformanceObj.thirdTypeTotal ? assistantPerformanceObj.thirdTypeTotal : 0}}</span>
+            </div>
+            <div v-if="title == '部门'">
+              当月目标：<span class="h5">{{assistantPerformanceObj.thirdTypeCustomerTarget ? assistantPerformanceObj.thirdTypeCustomerTarget : 0}}</span>
+            </div>
+          </div>
+          <div class="item_right">
             <div>
               去年同比：
               <span
@@ -187,8 +231,6 @@
               >
               <span class="h5" v-else>-</span>
             </div>
-          </div>
-          <div class="item_right">
             <div>
               上月环比：
               <span
@@ -214,14 +256,31 @@
               >
               <span class="h5" v-else>-</span>
             </div>
+            <div  v-if="title == '部门'">
+              目标达成：
+              <span class="f_w" :style="{color:assistantPerformanceObj.thirdTypeCustomerComplete	 < completeRate ? 'red' :'green'}">
+                {{assistantPerformanceObj.thirdTypeCustomerComplete	 ? assistantPerformanceObj.thirdTypeCustomerComplete	 + '%' : '0%'}}
+              </span>
+            </div>
           </div>
         </div>
       </div>
       <div class="item4">
         <div class="h2">总线索</div>
-        <div class="h1">{{assistantPerformanceObj.totalTypeTotal ? assistantPerformanceObj.totalTypeTotal : 0}}</div>
+        <!-- <div class="h1">{{assistantPerformanceObj.totalTypeTotal ? assistantPerformanceObj.totalTypeTotal : 0}}</div> -->
         <div class="item">
           <div class="item_left">
+            <div>
+              当日线索：<span class="h5">{{assistantPerformanceObj.totalTypeToday ? assistantPerformanceObj.totalTypeToday : 0}}</span>
+            </div>
+            <div>
+              累计线索：<span class="h5">{{assistantPerformanceObj.totalTypeTotal ? assistantPerformanceObj.totalTypeTotal : 0}}</span>
+            </div>
+            <div v-if="title == '部门'">
+              当月目标：<span class="h5">{{assistantPerformanceObj.totalCustomerTarget ? assistantPerformanceObj.totalCustomerTarget : 0}}</span>
+            </div>
+          </div>
+          <div class="item_right">
             <div>
               去年同比：
               <span
@@ -247,8 +306,6 @@
               >
               <span class="h5" v-else>-</span>
             </div>
-          </div>
-          <div class="item_right">
             <div>
               上月环比：
               <span
@@ -274,6 +331,12 @@
               >
               <span class="h5" v-else>-</span>
             </div>
+            <div  v-if="title == '部门'">
+              目标达成：
+              <span class="f_w" :style="{color:assistantPerformanceObj.totalCustomerComplete	 < completeRate ? 'red' :'green'}">
+                {{assistantPerformanceObj.totalCustomerComplete	 ? assistantPerformanceObj.totalCustomerComplete	 + '%' : '0%'}}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -286,7 +349,8 @@ import * as api from "@/api/amiyaOperationsBoard";
 export default {
   props: {
     params: Object,
-    title:String
+    title:String,
+    completeRate:Number
   },
   data() {
     return {
@@ -360,9 +424,9 @@ export default {
 }
 .item {
   display: flex;
-  justify-content: space-around;
   align-items: center;
   text-align: start;
+  justify-content: space-around;
   /* font-weight: bold; */
 }
 .item1 {
@@ -383,6 +447,8 @@ export default {
 }
 .h2 {
   font-size: 16px;
+  text-align: center;
+  margin-bottom: 7px;
 }
 .h3 {
   font-size: 16px;

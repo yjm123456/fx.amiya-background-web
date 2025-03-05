@@ -259,9 +259,9 @@
     </div>
     <div v-else>
       <!-- 月度业绩目标达成情况  -->
-      <monthlyTargetAchievementStatus ref="monthlyTargetAchievementStatus" :params="params"/>
+      <monthlyTargetAchievementStatus ref="monthlyTargetAchievementStatus" :params="params" :completeRate="completeRate"/>
       <!-- 月度线索转化情况 -->
-      <monthlyLeadConversionStatus ref="monthlyLeadConversionStatus" :params="params"/>
+      <monthlyLeadConversionStatus ref="monthlyLeadConversionStatus" :params="params" :completeRate="completeRate"/>
     </div>
     
    
@@ -307,11 +307,11 @@ export default {
   },
   data() {
     return {
-      list: ["整体","有效", "潜在"],
+      list: ["当月","历史"],
       list2: ["业绩","线索"],
       list4: ["当月","历史"],
       list5:["整体","转化"],
-      selected:'整体',
+      selected:'当月',
       selected2:'业绩',
       selected4:'当月',
       selected5:'整体',
@@ -432,6 +432,7 @@ export default {
         this.$nextTick(()=>{
             this.$refs.monthlyTargetAchievementStatus.getAssistantTotalAchievementByYearClick()
             this.$refs.monthlyLeadConversionStatus.assistantYearTransformDataClick()
+            this.$refs.monthlyLeadConversionStatus.getHealthValueLists()
         })
       }
       
@@ -487,7 +488,7 @@ export default {
             startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
             endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
             assistantId:assistantId,
-            isEffectiveCustomerData:this.selected == '整体' ? null : this.selected == '有效' ? true : false,
+            isEffectiveCustomerData: this.selected == '当月' ? true : false,
         }
         api.assistantPerformanceFilterData(data).then(res=>{
             if(res.code === 0){

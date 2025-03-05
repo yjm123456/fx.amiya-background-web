@@ -49,15 +49,15 @@
       <Button type="primary" @click="getData">查询</Button>
     </div>
     <Card style="margin-top:10px">
-      <items ref="items" :params="params" title="部门"/>
-      <items ref="items2" :params="params" title="个人"/>
+      <items ref="items" :params="params" title="部门" :completeRate="completeRate"/>
+      <items ref="items2" :params="params" title="个人" :completeRate="completeRate"/>
     </Card>
     <Card style="margin-top:10px">
       <div class="h3">部门线索趋势</div>
       <monthLine :params="params" :adminCustomerServiceCustomerTypeBrokenLineDataObj="adminCustomerServiceCustomerTypeBrokenLineDataObj"/>
     </Card>
     <Card style="margin-top:10px">
-      <div class="h3">当月部门&个人-线索转化漏斗图</div>
+      <div class="h3">当月个人&部门-线索转化漏斗图</div>
       <funnel :params="params" :adminCustomerFilterDataObj="adminCustomerFilterDataObj" :isFlag="isFlag"/>
     </Card>
     <!-- 饼图 -->

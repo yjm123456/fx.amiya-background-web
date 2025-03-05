@@ -50,10 +50,10 @@
     <!-- 卡片 -->
     <div class="card_list">
       <Card class="card_item"> 
-        <items :params="params" ref="items" title="个人" />
+        <items :params="params" ref="items" title="个人" :completeRate="completeRate"/>
       </Card>
       <Card class="card_item"> 
-        <items :params="params" ref="items2" title="部门" />
+        <items :params="params" ref="items2" title="部门" :completeRate="completeRate"/>
       </Card>
     </div>
     <!-- 折线图 -->

@@ -1,41 +1,7 @@
 <template>
    
     <div class="center" v-if="isFlag == true">
-            <Card class="content">
-                    <div class="h3">部门</div>
-                    <div class="left_customer" >
-                        <span class="r_t4">转化周期</span>
-                        <div class="r_t4" style="margin-top:394%"><span class="num" >{{adminCustomerFilterDataObj.groupData.sendCycle}}</span>天</div>
-                        <div class="r_t4" style="margin-top:145%"><span class="num">{{adminCustomerFilterDataObj.groupData.hospitalCycle}}</span>天</div>
-                    </div>
-                    <div class="new_customer">
-                        <div class="center_data">
-                            <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[0].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[0].value}}</span> 个</div>
-                            <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[1].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[1].value}}</span> 人</div>
-                            <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[2].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[2].value}}</span> 单</div>
-                            <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[3].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[3].value}}</span> 人</div>
-                        </div>
-                        <div class="right_data">
-                            <div class="r_content6">
-                                <span class="r_t2">实际值</span>
-                                <span class="r_t3">当月健康值</span>
-                            </div>
-                          
-                            <div  class="r_content2">
-                                <span class="r_t2" >加v率：<span class="num"  :style="{color:adminCustomerFilterDataObj.groupData.addWeChatRate < adminCustomerFilterDataObj.groupData.addWeChatRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.addWeChatRate}}</span>%</span>
-                                <span  class="r_t3"><span class="num">{{adminCustomerFilterDataObj.groupData.addWeChatRateHealthValueThisMonth}}</span>%</span>
-                            </div>
-                            <div  class="r_content3">
-                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.sendOrderRate < adminCustomerFilterDataObj.groupData.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.sendOrderRate}}</span>%</span>
-                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.groupData.sendOrderRateHealthValueThisMonth}}</span>%</span>
-                            </div>
-                            <div  class="r_content4">
-                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.toHospitalRate < adminCustomerFilterDataObj.groupData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.toHospitalRate}}</span>%</span>
-                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.groupData.toHospitalRateHealthValueThisMonth}}</span>%</span>
-                            </div>
-                        </div>
-                    </div>
-            </Card>
+            
             <Card class="content2">
                     <div class="h3">个人</div>
                     <div class="left_customer" >
@@ -67,6 +33,41 @@
                             <div  class="r_content4">
                                 <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.toHospitalRate < adminCustomerFilterDataObj.groupData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.addwechatData.toHospitalRate}}</span>%</span>
                                 <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.addwechatData.toHospitalRateHealthValueThisMonth}}</span>%</span>
+                            </div>
+                        </div>
+                    </div>
+            </Card>
+            <Card class="content">
+                    <div class="h3">部门</div>
+                    <div class="left_customer" >
+                        <span class="r_t4">转化周期</span>
+                        <div class="r_t4" style="margin-top:394%"><span class="num" >{{adminCustomerFilterDataObj.groupData.sendCycle}}</span>天</div>
+                        <div class="r_t4" style="margin-top:145%"><span class="num">{{adminCustomerFilterDataObj.groupData.hospitalCycle}}</span>天</div>
+                    </div>
+                    <div class="new_customer">
+                        <div class="center_data">
+                            <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[0].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[0].value}}</span> 个</div>
+                            <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[1].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[1].value}}</span> 人</div>
+                            <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[2].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[2].value}}</span> 单</div>
+                            <div  class="c_text"><span>{{adminCustomerFilterDataObj.groupData.dataList[3].name}}</span> <span class="num">{{adminCustomerFilterDataObj.groupData.dataList[3].value}}</span> 人</div>
+                        </div>
+                        <div class="right_data">
+                            <div class="r_content6">
+                                <span class="r_t2">实际值</span>
+                                <span class="r_t3">当月健康值</span>
+                            </div>
+                          
+                            <div  class="r_content2">
+                                <span class="r_t2" >加v率：<span class="num"  :style="{color:adminCustomerFilterDataObj.groupData.addWeChatRate < adminCustomerFilterDataObj.groupData.addWeChatRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.addWeChatRate}}</span>%</span>
+                                <span  class="r_t3"><span class="num">{{adminCustomerFilterDataObj.groupData.addWeChatRateHealthValueThisMonth}}</span>%</span>
+                            </div>
+                            <div  class="r_content3">
+                                <span class="r_t2" style="margin-top:14%">派单率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.sendOrderRate < adminCustomerFilterDataObj.groupData.sendOrderRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.sendOrderRate}}</span>%</span>
+                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.groupData.sendOrderRateHealthValueThisMonth}}</span>%</span>
+                            </div>
+                            <div  class="r_content4">
+                                <span class="r_t2" style="margin-top:14%">上门率：<span class="num" :style="{color:adminCustomerFilterDataObj.groupData.toHospitalRate < adminCustomerFilterDataObj.groupData.toHospitalRateHealthValueThisMonth ? 'red' : '#2f8cf0'}">{{adminCustomerFilterDataObj.groupData.toHospitalRate}}</span>%</span>
+                                <span  class="r_t3" style="margin-top:14%"><span class="num">{{adminCustomerFilterDataObj.groupData.toHospitalRateHealthValueThisMonth}}</span>%</span>
                             </div>
                         </div>
                     </div>
@@ -146,7 +147,7 @@ export default {
 }
 .content{
    width:100%;
-   margin: 10px 10px 0 0;
+   margin: 10px 0px 0 10px;
 //     height:500px;
 //     background-image: url(../../../../assets/images/new.png)  ;
 //     min-width:200px;

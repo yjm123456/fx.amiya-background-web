@@ -6,6 +6,7 @@
 </template>
 <script>
 import * as api from "@/api/amiyaOperationsBoard";
+import * as healthValueApi from "@/api/healthValue";
 
 export default {
   props: {
@@ -84,12 +85,26 @@ export default {
             align: "center",
             minWidth: 90,
             className: 'test-name',
+            // renderHeader: (h, { column }) => {
+            //     return h('span', [
+            //     //   column.title,
+            //         h('span', {
+            //         style: {
+            //             // color: 'red',
+            //         },
+            //         domProps: {
+            //             innerHTML: '加v率' +'（' +this.healthValueParams.AddWeChatHealthValueThisMonth + '%）'
+            //         //   + ' *',
+            //         },
+            //         }),
+            //     ]);
+            // },
             render: (h, params) => {
                 return h(
                     "div",
                     {
                         style: {
-                            color:'#000'
+                            color: params.row.addWechatRate > this.healthValueParams.AddWeChatHealthValueThisMonth ? 'green' : 'red'
                         },
                     },
                    
@@ -127,7 +142,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.row.sendOrderRate > this.healthValueParams.SendOrderRateHealthValueThisMonth ? 'green' : 'red'
                         },
                     },
                     params.row.sendOrderRate+'%'
@@ -163,7 +178,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.row.toHospitalRate > this.healthValueParams.ToHospitalRateHealthValueThisMonth ? 'green' : 'red'
                         },
                     },
                     params.row.toHospitalRate + '%'
@@ -200,7 +215,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.row.dealRate > this.healthValueParams.DealRateHealthValueThisMonth ? 'green' : 'red'
                         },
                     },
                     params.row.dealRate+'%'
@@ -273,7 +288,7 @@ export default {
                     "div",
                     {
                         style: {
-                           color:'#000'
+                           color:params.row.oldCustomerBuyRate > this.healthValueParams.ThisMonthRepeateBuyRate ? 'green' : 'red'
                         },
                     },
                     params.row.oldCustomerBuyRate + '%'
@@ -355,9 +370,40 @@ export default {
         ],
         data: [],
       },
+      healthValueParams:{
+        // 当月加v率健康值
+        AddWeChatHealthValueThisMonth:0,
+        // 当月派单率健康值
+        SendOrderRateHealthValueThisMonth:0,
+        // 当月上门率健康值
+        ToHospitalRateHealthValueThisMonth:0,
+        // 当月成交率健康值
+        DealRateHealthValueThisMonth:0,
+        // 当月复购率健康值
+        ThisMonthRepeateBuyRate:0,
+      }
     };
   },
   methods: {
+    // 获取当月获客情况数据
+    getHealthValueLists() {
+      healthValueApi.getHealthValid().then((res) => {
+        if (res.code == 0) {
+          const {list} = res.data
+          // 当月加v率健康值
+          this.healthValueParams.AddWeChatHealthValueThisMonth = list.find(item=>item.id == 'AddWeChatHealthValueThisMonth').rate
+          // 当月派单率健康值
+          this.healthValueParams.SendOrderRateHealthValueThisMonth = list.find(item=>item.id == 'SendOrderRateHealthValueThisMonth').rate
+          // 当月上门率健康值
+          this.healthValueParams.ToHospitalRateHealthValueThisMonth = list.find(item=>item.id == 'ToHospitalRateHealthValueThisMonth').rate
+           // 当月成交率健康值
+          this.healthValueParams.DealRateHealthValueThisMonth = list.find(item=>item.id == 'DealRateHealthValueThisMonth').rate
+          // 当月复购率健康值
+          this.healthValueParams.ThisMonthRepeateBuyRate = list.find(item=>item.id == 'ThisMonthRepeateBuyRate').rate
+         
+        }
+      });
+    },
     // rowClassName(row, index) {
     //     // 根据条件设置特定行的类名，例如这里根据key值设置背景色
     //     if (index === 0) {

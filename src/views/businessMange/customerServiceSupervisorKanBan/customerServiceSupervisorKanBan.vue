@@ -478,10 +478,10 @@ export default {
       // 转化周期
       assistantTransformCycleDataObj:{},
       list5:["业绩","线索"],
-      list6: ["整体","有效", "潜在"],
+      list6: ["当月","历史"],
       list7: ["当月","历史"],
       selected5:"业绩",
-      selected6:'整体',
+      selected6:'当月',
       selected7:'当月',
       // 助理目标完成率和助理业绩贡献柱状图
       assiatantTargetCompleteAndPerformanceRateDataObj2:{},
@@ -723,7 +723,7 @@ export default {
             startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
             endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
             assistantId:assistantId,
-            isEffectiveCustomerData:this.selected6 == '整体' ? null : this.selected6 == '有效' ? true : false,
+            isEffectiveCustomerData:this.selected6 == '当月' ? true : false,
         }
         api.assistantPerformanceFilterData(data).then(res=>{
             if(res.code === 0){

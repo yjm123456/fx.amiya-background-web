@@ -94,11 +94,11 @@ export default {
         legend: {
           x:'center',
           y:'top',
-          data: ['一级线索','二级线索','三级线索','总线索'],
+          data: ['直播前','直播中','直播后','总线索'],
           selected:{
-            '一级线索':true,
-            '二级线索':true,
-            '三级线索':true,
+            '直播前':true,
+            '直播中':true,
+            '直播后':true,
             '总线索':true,
           },
           textStyle:{
@@ -107,7 +107,7 @@ export default {
         },
         series: [
             {
-                name: '一级线索',
+                name: '直播前',
                 type: 'line',
                 data: firstTypes,
                 itemStyle: { 
@@ -118,7 +118,7 @@ export default {
                 },
             },
             {
-                name: '二级线索',
+                name: '直播中',
                 type: 'line',
                 data: sencondTypes,
                 itemStyle: { 
@@ -129,7 +129,7 @@ export default {
             },
             
             {
-                name: '三级线索',
+                name: '直播后',
                 type: 'line',
                 data: thirdTypes,
                 itemStyle: { 

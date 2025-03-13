@@ -519,3 +519,27 @@ export const assistantYearTransformData = (params) => {
         params
     });
 };
+//名索看板-转化-名索医美业绩趋势
+export const AmiyaMingSuoOperationBoardgetTotalAchievementByYear = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaMingSuoOperationBoard/getTotalAchievementByYear",
+        method: "get",
+        params
+    });
+};
+//名索看板-转化-名索医美线索趋势
+export const getMingSuoTotalCluesByYear = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaMingSuoOperationBoard/getMingSuoTotalCluesByYear",
+        method: "get",
+        params
+    });
+};
+//名索看板-转化-机构转化情况
+export const AmiyaMingSuoOperationBoardMingSuoHospitalTransformData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaMingSuoOperationBoard/mingSuoHospitalTransformData",
+        method: "get",
+        params
+    });
+};

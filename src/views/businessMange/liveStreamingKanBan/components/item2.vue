@@ -42,7 +42,7 @@
               <div>当月业绩：<span class="f_w">{{liveStreamingObj.currentMontPerformance}}</span></div>
               <div class="item_left ">累计业绩：<span class="f_w">{{liveStreamingObj.performance}}</span></div>
           </div>
-          <div class="item_right">
+          <div class="item_right2">
               <div>去年同比：
                 <span  class="h5" v-if="Math.sign(liveStreamingObj.performanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(liveStreamingObj.performanceYearOnYear) + '%'}}</span>
                 <span class="h5" v-else-if="Math.sign(liveStreamingObj.performanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(liveStreamingObj.performanceYearOnYear) + '%'}}</span>
@@ -141,6 +141,9 @@ export default {
 }
 .item4{
   background:  linear-gradient(to right,#F69A56, #F37F51);
+}
+.item_right2{
+  margin-top:20px;
 }
 .h2{
     font-size: 16px;

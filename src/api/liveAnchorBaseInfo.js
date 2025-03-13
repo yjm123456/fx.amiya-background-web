@@ -57,3 +57,10 @@ export const getLiveAnchorBaseInfototal = () => {
         method: "get",
     });
 };
+//医生下拉框
+export const getDoctorList = () => {
+    return http({
+        url: "/amiyabg/LiveAnchorBaseInfo/getDoctorList",
+        method: "get",
+    });
+};

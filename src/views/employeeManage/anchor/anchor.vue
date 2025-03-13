@@ -158,12 +158,17 @@
         </Row>
         <Row :gutter="30">
           
-          <Col span="12">
+          <Col span="8">
             <FormItem label="是否为自播达人" prop="isSelfLivevAnchor">
             <i-switch v-model="form.isSelfLivevAnchor" />
           </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
+            <FormItem label="是否为医生" prop="isDoctor">
+            <i-switch v-model="form.isDoctor" />
+          </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
             <i-switch v-model="form.valid" />
           </FormItem>
@@ -200,13 +205,13 @@ export default {
           {
             title: "主播",
             key: "liveAnchorName",
-            width:120
+            minWidth:120
           },
           {
             title: "头像",
             key: "thumbPicture",
             align: "center",
-            width:120,
+            minWidth:120,
             render: (h, params) => {
               return h("viewer", {}, [
                 h("img", {
@@ -227,7 +232,7 @@ export default {
             title: "详情图",
             key: "detailPicture",
             align: "center",
-            width:'120',
+            minWidth:120,
             render: (h, params) => {
               return h("viewer", {}, [
                 h("img", {
@@ -247,15 +252,19 @@ export default {
           {
             title: "昵称",
             key: "nickName",
-            width:120
+            minWidth:120
           },
           {
             title: "个性签名",
             key: "individualitySignature",
+            minWidth:180,
+            tooltip:true,
           },
           {
             title: "简介",
             key: "description",
+            tooltip:true,
+            minWidth:220
           },
           
           // {
@@ -282,7 +291,7 @@ export default {
           {
             title: "是否为自播达人",
             key: "isSelfLivevAnchor",
-            width:150,
+            minWidth:150,
             align:'center',
             render: (h, params) => {
               if (params.row.isSelfLivevAnchor == true) {
@@ -311,7 +320,7 @@ export default {
           {
             title: "是否有效",
             key: "valid",
-            width:100,
+            minWidth:100,
             align:'center',
             render: (h, params) => {
               if (params.row.valid == true) {
@@ -338,9 +347,38 @@ export default {
             },
           },
           {
+            title: "是否为医生",
+            key: "isDoctor",
+            minWidth:120,
+            align:'center',
+            render: (h, params) => {
+              if (params.row.isDoctor == true) {
+                return h("Icon", {
+                  props: {
+                    type: "md-checkmark",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "#559DF9",
+                  },
+                });
+              } else {
+                return h("Icon", {
+                  props: {
+                    type: "md-close",
+                  },
+                  style: {
+                    fontSize: "18px",
+                    color: "red",
+                  },
+                });
+              }
+            },
+          },
+          {
             title: "操作",
             key: "",
-            width: 300,
+            minWidth: 300,
             align:'center',
             render: (h, params) => {
               return h("div", [
@@ -427,7 +465,8 @@ export default {
                               nickName,
                               videoUrl,
                               thumbPicture,
-                              isSelfLivevAnchor
+                              isSelfLivevAnchor,
+                              isDoctor
                             } = res.data.liveAnchorBaseInfo;
                             this.isEdit = true;
                             this.form.valid = valid;
@@ -447,6 +486,7 @@ export default {
                             this.uploadFileObj.uploadList = this.form.contractUrl ? [this.form.contractUrl] : [];
                             this.form.isSelfLivevAnchor = isSelfLivevAnchor;
                             this.form.id = id;
+                            this.form.isDoctor = isDoctor;
                             this.controlModal = true;
                           }
                         });
@@ -575,7 +615,9 @@ export default {
         // 是否主推
         isMain:0,
         // 是否为自播达人
-        isSelfLivevAnchor:false
+        isSelfLivevAnchor:false,
+        // 是否为医生
+        isDoctor:false
       },
 
       ruleValidate: {
@@ -685,7 +727,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.isEdit) {
-            const { liveAnchorName, nickName, thumbPicture ,individualitySignature,description,detailPicture,contractUrl,videoUrl,dueTime,isMain ,id,valid,isSelfLivevAnchor} = this.form;
+            const { liveAnchorName, nickName, thumbPicture ,individualitySignature,description,detailPicture,contractUrl,videoUrl,dueTime,isMain ,id,valid,isSelfLivevAnchor,isDoctor} = this.form;
             const  data = { 
               id,
               valid,
@@ -699,7 +741,8 @@ export default {
               videoUrl:videoUrl ? videoUrl : '',
               dueTime:dueTime ? this.$moment(new Date(dueTime)).format("YYYY-MM-DD") : null,
               isMain,
-              isSelfLivevAnchor
+              isSelfLivevAnchor,
+              isDoctor
             } 
             // 修改
             api.editLiveAnchorBaseInfo(data).then((res) => {
@@ -714,7 +757,7 @@ export default {
               }
             });
           } else {
-            const { liveAnchorName, nickName, thumbPicture ,individualitySignature,description,detailPicture,contractUrl,videoUrl,dueTime,isMain,isSelfLivevAnchor } = this.form;
+            const { liveAnchorName, nickName, thumbPicture ,individualitySignature,description,detailPicture,contractUrl,videoUrl,dueTime,isMain,isSelfLivevAnchor,isDoctor } = this.form;
             const  data = { 
               liveAnchorName ,
               nickName,
@@ -726,7 +769,8 @@ export default {
               videoUrl,
               dueTime:dueTime ? this.$moment(new Date(dueTime)).format("YYYY-MM-DD") : null,
               isMain,
-              isSelfLivevAnchor
+              isSelfLivevAnchor,
+              isDoctor
             } 
             // 添加
             api.addLiveAnchorBaseInfo(data).then((res) => {

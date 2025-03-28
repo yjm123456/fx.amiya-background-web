@@ -170,7 +170,7 @@
             </div>
             <div class="items">
               <span class="title_bold">医院预约时间：</span>
-              <span>{{ detailObj.appointmentDate ? this.$moment(detailObj.appointmentDate).format("YYYY-MM-DD") : "未预约时间"}}</span>
+              <span>{{ detailObj.appointmentDate ? this.$moment(detailObj.appointmentDate).format("YYYY-MM-DD") : ""}} <span> </span>{{  detailObj.appointmentDetailDate ? detailObj.appointmentDetailDate :  "" }}</span>
               
             </div>
           </div>
@@ -249,6 +249,18 @@
             <div class="mr_top items">
               <span class="title_bold">院方接诊人员：</span>
               <span>{{ detailObj.acceptConsulting }}</span>
+            </div>
+            
+          </div>
+          <div  class="item_list">
+            <div class="mr_top items">
+              <span class="title_bold">咨询师（卖手）：</span>
+              <span>{{ detailObj.consultEmpName}}</span>
+              
+            </div>
+            <div class="mr_top items">
+              <span class="title_bold">是否为医生订单：</span>
+              <i-switch v-model="detailObj.isDoctorOrder" disabled />
             </div>
             
           </div>

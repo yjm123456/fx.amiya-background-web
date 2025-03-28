@@ -247,6 +247,26 @@
               />
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem label="小红书今日私信开口量" prop="xiaoHongShuPrivateMessageOpen">
+              <Input
+                v-model="form.xiaoHongShuPrivateMessageOpen"
+                placeholder="请输入小红书今日私信开口量"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="小红书今日名片发送" prop="xiaoHongShuCallingCardSendNum">
+              <Input
+                v-model="form.xiaoHongShuCallingCardSendNum"
+                placeholder="请输入小红书今日名片发送"
+                type="number"
+                number
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -355,6 +375,18 @@ export default {
             align: "center",
           },
           {
+            title: "小红书今日私信开口量",
+            key: "xiaoHongShuPrivateMessageOpen",
+            minWidth: 190,
+            align: "center",
+          },
+          {
+            title: "小红书今日名片发送",
+            key: "xiaoHongShuCallingCardSendNum",
+            minWidth: 180,
+            align: "center",
+          },
+          {
             title: "今日线索量",
             key: "clues",
             minWidth: 170,
@@ -436,7 +468,9 @@ export default {
                               xiaoHongShuIncreaseFansFees,
                               xiaoHongShuClues,
                               xiaoHongShuShowcaseIncome,
-                              xiaoHongShuShowcaseFee
+                              xiaoHongShuShowcaseFee,
+                              xiaoHongShuCallingCardSendNum,
+                              xiaoHongShuPrivateMessageOpen,
 
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
@@ -452,6 +486,8 @@ export default {
                             this.form.xiaoHongShuOperationEmployeeId = xiaoHongShuOperationEmployeeId==0 ?  null : xiaoHongShuOperationEmployeeId ;
                             this.form.xiaoHongShuSendNum = xiaoHongShuSendNum;
                             this.form.xiaoHongShuFlowInvestmentNum = xiaoHongShuFlowInvestmentNum;
+                            this.form.xiaoHongShuCallingCardSendNum = xiaoHongShuCallingCardSendNum;
+                            this.form.xiaoHongShuPrivateMessageOpen = xiaoHongShuPrivateMessageOpen;
                             this.form.alltodaySendNum = Number(tikTokSendNum)+Number(zhihuSendNum)+Number(sinaWeiBoSendNum)+Number(videoSendNum)
                             this.form.allflowInvestmentNum = Math.floor((Number(tikTokFlowInvestmentNum)+Number(sinaWeiBoFlowInvestmentNum)
                             +Number(videoFlowInvestmentNum) + Number(zhihuFlowInvestmentNum)) * 100) / 100;
@@ -607,10 +643,26 @@ export default {
         // 涨粉成本
         xiaoHongShuIncreaseFansFeescost:null,
         // 小红书橱窗付费
-        xiaoHongShuShowcaseFee:null
+        xiaoHongShuShowcaseFee:null,
+        // 小红书今日名片发送
+        xiaoHongShuCallingCardSendNum:null,
+        // 小红书今日私信开口量
+        xiaoHongShuPrivateMessageOpen:null,
       },
 
       ruleValidate: {
+        xiaoHongShuCallingCardSendNum: [
+          {
+            required: true,
+            message: "请输入小红书今日名片发送",
+          },
+        ],
+        xiaoHongShuPrivateMessageOpen: [
+          {
+            required: true,
+            message: "请输入小红书今日私信开口量",
+          },
+        ],
         xiaoHongShuShowcaseFee: [
           {
             required: true,
@@ -875,7 +927,9 @@ export default {
               xiaoHongShuIncreaseFansFees,
               xiaoHongShuClues,
               xiaoHongShuShowcaseIncome,
-              xiaoHongShuShowcaseFee
+              xiaoHongShuShowcaseFee,
+              xiaoHongShuCallingCardSendNum,
+              xiaoHongShuPrivateMessageOpen,
             } = this.form;
             const data = {
               id,
@@ -894,7 +948,9 @@ export default {
               xiaoHongShuIncreaseFansFees,
               xiaoHongShuClues,
               xiaoHongShuShowcaseIncome,
-              xiaoHongShuShowcaseFee
+              xiaoHongShuShowcaseFee,
+              xiaoHongShuCallingCardSendNum,
+              xiaoHongShuPrivateMessageOpen,
             };
             this.isflag=true
             api.BeforeLivingXiaoHongShuUpdate(data).then((res) => {
@@ -926,7 +982,9 @@ export default {
               xiaoHongShuIncreaseFansFees,
               xiaoHongShuClues,
               xiaoHongShuShowcaseIncome,
-              xiaoHongShuShowcaseFee
+              xiaoHongShuShowcaseFee,
+              xiaoHongShuCallingCardSendNum,
+              xiaoHongShuPrivateMessageOpen,
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -942,7 +1000,9 @@ export default {
               xiaoHongShuIncreaseFansFees,
               xiaoHongShuClues,
               xiaoHongShuShowcaseIncome,
-              xiaoHongShuShowcaseFee
+              xiaoHongShuShowcaseFee,
+              xiaoHongShuCallingCardSendNum,
+              xiaoHongShuPrivateMessageOpen,
             };
             this.isflag=true
             // 添加

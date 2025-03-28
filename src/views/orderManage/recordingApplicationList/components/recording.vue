@@ -211,6 +211,20 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="预约时段" prop="appointmentDetailDate">
+              <Time-picker
+                :value="form.appointmentDetailDate"
+                format="HH:mm"
+                type="timerange"
+                placement="bottom-end"
+                placeholder="选择预约时段"
+                style="width: 100%"
+                @on-change="hospitalTime"
+                @on-clear="form.appointmentDetailDate = []"
+              ></Time-picker>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="订单来源" prop="orderSource">
               <Select
                 v-model="form.orderSource"
@@ -400,6 +414,42 @@
                 >
               </Select>
               <div style="font-size:12px;color:red" v-if="isTitle == true">请先选择归属部门和主播平台！</div>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="归属公司" prop="belongCompanyEnumId">
+              <Select v-model="form.belongCompanyEnumId" placeholder="请选择归属公司">
+                <Option
+                  v-for="item in belongCompanyList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="是否为医生订单" prop="isDoctorOrder">
+              <i-switch v-model="form.isDoctorOrder" />
+            </FormItem>
+          </Col>
+          <Col span="8" >
+            <FormItem
+              label="咨询师（卖手）"
+              prop="consultEmpId"
+            >
+              <Select
+                v-model="form.consultEmpId"
+                placeholder="请选择咨询师（卖手）"
+                filterable
+              >
+                <Option
+                  v-for="item in recordingNormalParams.employeeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
             </FormItem>
           </Col>
           
@@ -637,9 +687,23 @@ export default {
         // 归属部门
         belongChannel:null,
         // 是否为日不落直播
-        isRiBuLuoLiving:false
+        isRiBuLuoLiving:false,
+        // 归属公司
+        belongCompanyEnumId:null,
+        // 预约时段
+        appointmentDetailDate:[],
+        // 是否为医生订单
+        isDoctorOrder:false,
+        // 咨询师（卖手）
+        consultEmpId:null
       },
       ruleValidates: {
+        belongCompanyEnumId: [
+          {
+            required: true,
+            message: "请选择归属公司",
+          },
+        ],
         belongChannel: [
           {
             required: true,
@@ -801,10 +865,26 @@ export default {
       // 归属部门
       belongChannelList:[],
       // 录单时根据主播IP账号和手机获取小黄车下单金额（下单金额大于0时禁用，为空或者小于0可更改）
-      isPrice:false
+      isPrice:false,
+      // 归属公司
+      belongCompanyList:[],
     };
   },
   methods: {
+    // 预约时段
+    hospitalTime(data) {
+      if (!data) return;
+      this.form.appointmentDetailDate = data;
+    },
+    // 获取归属公司
+    getBelongCompanyListClick() {
+      shoppingCartRegistrationApi.getBelongCompanyList().then((res) => {
+        if (res.code === 0) {
+          const {belongCompanyList} = res.data
+          this.belongCompanyList =belongCompanyList
+        }
+      });
+    },
     // 客户来源文字提示
     isTitleClick(){
       if(this.form.belongChannel != null && this.form.contentPlateFormId){
@@ -963,7 +1043,11 @@ export default {
               getCustomerType,
               customerSource,
               customerType,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId,
+              appointmentDetailDate,
+              isDoctorOrder,
+              consultEmpId
 
             } = this.form;
             const data = {
@@ -1005,7 +1089,11 @@ export default {
                 getCustomerType,
               customerSource,
               customerType,
-              isRiBuLuoLiving
+              isRiBuLuoLiving,
+              belongCompanyEnumId,
+              appointmentDetailDate : appointmentDetailDate == '' ?  '00:00-00:00' :  this.form.appointmentDetailDate.join("-"),
+              isDoctorOrder,
+              consultEmpId
             };
            
             if (phone) {
@@ -1062,6 +1150,7 @@ export default {
       this.control = value;
       this.isTitleClick()
       this.getshoppingCartGetBelongChannelList()
+      this.getBelongCompanyListClick()
       this.form.belongEmpId = Number(this.recordingNormalParams.belongEmpId);
       this.form.phone = this.recordingNormalParams.phone;
       this.form.isCustomer = this.recordingNormalParams.isCustomer;

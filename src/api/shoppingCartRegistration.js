@@ -62,6 +62,22 @@ export const ShoppingCartRegistrationassignList = (data) => {
         data,
     });
 };
+// 关联人
+export const affiliated = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/affiliated`,
+        method: "put",
+        data,
+    });
+};
+// 批量关联人
+export const affiliatedList = (data) => {
+    return http({
+        url: `/amiyabg/ShoppingCartRegistration/affiliatedList`,
+        method: "put",
+        data,
+    });
+};
 // 客户来源列表
 export const customerSourceList = (params) => {
     return http({

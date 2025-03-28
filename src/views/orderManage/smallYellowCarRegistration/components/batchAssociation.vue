@@ -1,11 +1,12 @@
 <template>
   <div class="content">
     <Modal
-      title="批量指派"
+      title="批量关联"
       footer-hide
-      v-model="batchAssignmentModels"
+      v-model="batchAssociationModels"
       width="25%"
       :closable="false"
+      @click="handleModalVisibleChange"
 
     >
     <Form
@@ -15,14 +16,14 @@
         label-position="left"
         :label-width="110"
       >
-       <FormItem label="指派给" prop="assignBy">
+       <FormItem label="关联人" prop="assignBy">
         <Select
             v-model="form.assignBy"
-            placeholder="请选择指派给"
+            placeholder="请选择关联人"
             filterable
         >
             <Option
-            v-for="item in assignParams.employeeList"
+            v-for="item in associationParams.employeeList"
             :value="item.id"
             :key="item.id"
             >{{ item.name }}</Option
@@ -44,12 +45,12 @@ export default {
       
   },
   props: {
-    batchAssignmentModel: Boolean,
-    assignParams:Object,
+    batchAssociationModel: Boolean,
+    associationParams:Object,
   },
   data() {
     return {
-      batchAssignmentModels:false,
+      batchAssociationModels:false,
       form:{
           assignBy:null,
       },
@@ -57,7 +58,7 @@ export default {
         assignBy: [
           {
             required: true,
-            message: "请选择指派给",
+            message: "请选择关联人",
           },
         ],
       }
@@ -67,16 +68,16 @@ export default {
       handleSubmit(){
           const data = {
               assignBy:Number(this.form.assignBy),
-              idList:[...this.assignParams.idList]
+              idList:[...this.associationParams.idList]
           }
           if(!data.assignBy){
-            this.$Message.warning('请选择指派人员')
+            this.$Message.warning('请选择关联人员')
             return
           }
-          api.ShoppingCartRegistrationassignList(data).then((res) => {
+          api.affiliatedList(data).then((res) => {
               if(res.code == 0){
                   this.form.assignBy = null 
-                  this.$Message.success('批量指派成功')
+                  this.$Message.success('批量关联成功')
                   this.cancel()
                   // this.$emit("getSmallCar")
               }
@@ -84,8 +85,8 @@ export default {
       },
     // 取消
     cancel(name) {
-      this.$emit("update:batchAssignmentModel", false);
-      this.$parent.assignParams.idList.clear()
+      this.$emit("update:batchAssociationModel", false);
+      this.$parent.associationParams.idList.clear()
       this.$emit("getSmallCar")
     },
 
@@ -93,15 +94,15 @@ export default {
     handleModalVisibleChange(value) {
       if (!value) {
         this.cancel();
-        this.$emit("update:batchAssignmentModel", false);
+        this.$emit("update:batchAssociationModel", false);
       }
         
     },
   },
   watch: {
-    batchAssignmentModel: {
-      handler(batchAssignmentModel) {
-        this.batchAssignmentModels = batchAssignmentModel
+    batchAssociationModel: {
+      handler(batchAssociationModel) {
+        this.batchAssociationModels = batchAssociationModel
       },
       deep: true,
     },

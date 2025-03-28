@@ -266,6 +266,15 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="医院类型" prop="hospitalType">
+              <Select v-model="form.hospitalType" placeholder="请选择医院类型" filterable>
+                <Option v-for="item in hospitalTypeList" :value="item.id" :key="item.id">{{
+                  item.name
+                }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="医院logo" prop="thumbPicUrl">
               <upload
                 :uploadObj="uploadObj"
@@ -431,6 +440,13 @@ export default {
             title: "医院简称",
             key: "simpleName",
             minWidth: 220,
+            align:'center',
+            tooltip:true
+          },
+          {
+            title: "医院类型",
+            key: "hospitalTypeText",
+            minWidth: 100,
             align:'center',
             tooltip:true
           },
@@ -1202,10 +1218,18 @@ export default {
         // 年服务费金额
         yearServiceMoney:null,
         // 保证金金额
-        securityDepositMoney:null
+        securityDepositMoney:null,
+        // 医院类型
+        hospitalType:null
       },
 
       ruleValidate: {
+        hospitalType: [
+          {
+            required: true,
+            message: "请选择医院类型",
+          },
+        ],
         simpleName: [
           {
             required: true,
@@ -1356,10 +1380,20 @@ export default {
       // 年费或保证金缴纳状态列表
       payStatusNameList:[],
       // 获取角色
-      positionId:sessionStorage.getItem('positionId')
+      positionId:sessionStorage.getItem('positionId'),
+      // 医院类型
+      hospitalTypeList:[],
     };
   },
   methods: {
+    // 获取医院类型
+    getHospitalTypeList() {
+      api.HospitalTypeList().then((res) => {
+        if (res.code === 0) {
+          this.hospitalTypeList = res.data.nameList
+        }
+      });
+    },
     // 保证金金额
     securityDepositMoneyChange(){
       if( this.form.securityDepositMoney >0){
@@ -1588,7 +1622,8 @@ export default {
     this.getCityList();
     this.getCompanyBaseInfoNameList();
     this.getsendOrderList();
-    this.getpayStatusList()
+    this.getpayStatusList();
+    this.getHospitalTypeList();
   },
 };
 </script>

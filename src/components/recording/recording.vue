@@ -197,6 +197,7 @@
               </Select>
             </FormItem>
           </Col>
+          
           <Col span="8">
             <FormItem label="预约日期" prop="appointmentDate">
               <DatePicker
@@ -205,6 +206,20 @@
                 :value="form.appointmentDate"
                 v-model="form.appointmentDate"
               ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="预约时段" prop="appointmentDetailDate">
+              <Time-picker
+                :value="form.appointmentDetailDate"
+                format="HH:mm"
+                type="timerange"
+                placement="bottom-end"
+                placeholder="选择预约时段"
+                style="width: 100%"
+                @on-change="hospitalTime"
+                @on-clear="form.appointmentDetailDate = []"
+              ></Time-picker>
             </FormItem>
           </Col>
           <Col span="8">
@@ -410,7 +425,30 @@
               </Select>
             </FormItem>
           </Col>
-          
+          <Col span="8">
+            <FormItem label="是否为医生订单" prop="isDoctorOrder">
+              <i-switch v-model="form.isDoctorOrder" />
+            </FormItem>
+          </Col>
+          <Col span="8" >
+            <FormItem
+              label="咨询师（卖手）"
+              prop="consultEmpId"
+            >
+              <Select
+                v-model="form.consultEmpId"
+                placeholder="请选择咨询师（卖手）"
+                filterable
+              >
+                <Option
+                  v-for="item in recordingParams.employeeList"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
           
         </Row>
         <div class="h3">客户信息</div>
@@ -687,7 +725,13 @@ export default {
         // 是否为日不落直播
         isRiBuLuoLiving:false,
         // 归属公司
-        belongCompanyEnumId:null
+        belongCompanyEnumId:null,
+        // 预约时段
+        appointmentDetailDate:[],
+        // 是否为医生订单
+        isDoctorOrder:false,
+        // 咨询师（卖手）
+        consultEmpId:null
       },
       ruleValidates: {
         belongCompanyEnumId: [
@@ -875,6 +919,11 @@ export default {
     
   },
   methods: {
+    // 预约时段
+    hospitalTime(data) {
+      if (!data) return;
+      this.form.appointmentDetailDate = data;
+    },
     // 获取归属公司
     getBelongCompanyListClick() {
       shoppingCartRegistrationApi.getBelongCompanyList().then((res) => {
@@ -1049,7 +1098,10 @@ export default {
               customerType,
               belongChannel,
               isRiBuLuoLiving,
-              belongCompanyEnumId
+              belongCompanyEnumId,
+              appointmentDetailDate,
+              isDoctorOrder,
+              consultEmpId
             } = this.form;
             const data = {
               orderType,
@@ -1090,7 +1142,10 @@ export default {
               customerType,
               belongChannel,
               isRiBuLuoLiving,
-              belongCompanyEnumId
+              belongCompanyEnumId,
+              appointmentDetailDate : appointmentDetailDate == '' ?  '00:00-00:00' :  this.form.appointmentDetailDate.join("-"),
+              isDoctorOrder,
+              consultEmpId
             };
             if (phone) {
               // if (!/^1[3456789]\d{9}$/.test(phone)) {
@@ -1156,7 +1211,10 @@ export default {
               customerType,
               belongChannel,
               isRiBuLuoLiving,
-              belongCompanyEnumId
+              belongCompanyEnumId,
+              appointmentDetailDate,
+              isDoctorOrder,
+              consultEmpId
             } = this.form;
             const data = {
               orderType,
@@ -1197,7 +1255,10 @@ export default {
               customerType,
               belongChannel,
               isRiBuLuoLiving,
-              belongCompanyEnumId
+              belongCompanyEnumId,
+              appointmentDetailDate : appointmentDetailDate == '' ?  '00:00-00:00' :  this.form.appointmentDetailDate.join("-"),
+              isDoctorOrder,
+              consultEmpId
             };
             if (phone) {
               // 归属地 1是国内 2是国外

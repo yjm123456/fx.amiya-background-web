@@ -89,7 +89,7 @@ export default {
           {
             title: "名称",
             key: "name",
-            minWidth: 180,
+            minWidth: 200,
             align: "center",
             tooltip: true,
           },
@@ -97,7 +97,7 @@ export default {
             title: "项目地址",
             key: "projectUrl",
             align: "center",
-            minWidth: 350,
+            minWidth: 400,
             render: (h, params) => {
               return h("div", [
                 h(
@@ -124,7 +124,7 @@ export default {
           {
             title: "操作",
             key: "",
-            minWidth: 150,
+            minWidth: 100,
             align: "center",
             fixed: "right",
             render: (h, params) => {

@@ -184,14 +184,26 @@
             }}</Option>
           </Select>
         </FormItem>
+        <!-- v-if="openAllHospital === true" -->
+        <!-- <FormItem label="是否指派卖手" key="是否指派卖手">
+          <i-switch v-model="form.isSellHands" @on-change="isSellHandsChange(form.isSellHands)"/>
+        </FormItem>
+        <FormItem label="是否同步给机构" key="是否同步给机构">
+          <i-switch v-model="form.isHospital" />
+        </FormItem> -->
         <FormItem
           label="主派医院"
           prop="hospitalId"
-          v-if="openAllHospital === true"
           key="主派医院"
-          
+          v-if="openAllHospital === true"
         >
-          <Select v-model="form.hospitalId" placeholder="请选择医院" filterable @on-change="isSpecifyHospitalEmployeeChange(form.isSpecifyHospitalEmployee)">
+            <!-- :disabled="form.isSellHands == true && form.isHospital == false"   -->
+          <Select 
+            v-model="form.hospitalId" 
+            placeholder="请选择医院" 
+            filterable 
+            @on-change="isSpecifyHospitalEmployeeChange(form.isSpecifyHospitalEmployee)" 
+          >
             <Option
               v-for="item in hospitalInfo"
               :value="item.id"
@@ -342,6 +354,8 @@ import viewCustomerPhotos from "@/components/viewCustomerPhotos/viewCustomerPhot
 import detail from "@/components/contentDetail/detail.vue"
 import verificationForm from "./verificationForm";
 import * as asthirdPartContentplatformInfoApi from "@/api/thirdPartContentplatformInfo";
+import {processEnv} from "@/http/baseUrl";
+
 export default {
   // props: ["activeName"],
   props:{
@@ -356,6 +370,7 @@ export default {
   },
   data() {
     return {
+      processEnv,
       // 推单平台
       thirdPartContentplatformInfo:[],
       // 查重参数
@@ -805,7 +820,11 @@ export default {
         // 推单平台
         thirdPartContentplatformInfoId:'',
         // 派单编号
-        dispatchId:null
+        dispatchId:null,
+        // 是否指派卖手
+        isSellHands:false,
+        // 是否同步给机构
+        isHospital:false
       },
 
       // 医院列表
@@ -876,6 +895,12 @@ export default {
     };
   },
   methods: {
+    // isSellHandsChange(value){
+    //   if(value == true){
+    //     // 线上124 测试
+    //     this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 124 : 39
+    //   }
+    // },
     // 根据主派医院查询推单平台
     getValidKeyAndValue() {
       const data = {
@@ -1162,7 +1187,10 @@ export default {
     getHospitalInfonameList() {
       hospitalManage.HospitalInfonameList().then((res) => {
         if (res.code === 0) {
-          this.hospitalInfo = res.data.hospitalInfo;
+          const {hospitalInfo} = res.data
+          this.hospitalInfo = hospitalInfo;
+          // 线上124 测试
+          // this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 124 : 39
         }
       });
     },
@@ -1175,6 +1203,8 @@ export default {
       this.$refs[name].resetFields();
       this.form.remark = "";
       this.thirdPartContentplatformInfo = []
+      // 线上124 测试
+      // this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 124 : 39
       
     },
     

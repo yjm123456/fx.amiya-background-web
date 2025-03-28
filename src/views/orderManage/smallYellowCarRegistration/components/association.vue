@@ -1,11 +1,12 @@
 <template>
   <div class="content">
     <Modal
-      title="批量指派"
+      title="关联"
       footer-hide
-      v-model="batchAssignmentModels"
+      v-model="associationModels"
       width="25%"
       :closable="false"
+      @click="handleModalVisibleChange"
 
     >
     <Form
@@ -15,14 +16,14 @@
         label-position="left"
         :label-width="110"
       >
-       <FormItem label="指派给" prop="assignBy">
+       <FormItem label="关联" prop="assignBy">
         <Select
             v-model="form.assignBy"
-            placeholder="请选择指派给"
+            placeholder="请选择关联"
             filterable
         >
             <Option
-            v-for="item in assignParams.employeeList"
+            v-for="item in associationParams.employeeList"
             :value="item.id"
             :key="item.id"
             >{{ item.name }}</Option
@@ -44,12 +45,12 @@ export default {
       
   },
   props: {
-    batchAssignmentModel: Boolean,
-    assignParams:Object,
+    associationModel: Boolean,
+    associationParams:Object,
   },
   data() {
     return {
-      batchAssignmentModels:false,
+      associationModels:false,
       form:{
           assignBy:null,
       },
@@ -57,7 +58,7 @@ export default {
         assignBy: [
           {
             required: true,
-            message: "请选择指派给",
+            message: "请选择关联",
           },
         ],
       }
@@ -66,42 +67,41 @@ export default {
   methods: {
       handleSubmit(){
           const data = {
-              assignBy:Number(this.form.assignBy),
-              idList:[...this.assignParams.idList]
+              id:this.associationParams.id,
+              assignBy:Number(this.form.assignBy)
           }
           if(!data.assignBy){
-            this.$Message.warning('请选择指派人员')
+            this.$Message.warning('请选择关联人员')
             return
           }
-          api.ShoppingCartRegistrationassignList(data).then((res) => {
+          api.affiliated(data).then((res) => {
               if(res.code == 0){
                   this.form.assignBy = null 
-                  this.$Message.success('批量指派成功')
+                  this.$Message.success('关联成功')
                   this.cancel()
                   // this.$emit("getSmallCar")
+                  this.$parent.handlePageChange(this.$parent.$refs.pages.currentPage)
               }
           })
       },
     // 取消
     cancel(name) {
-      this.$emit("update:batchAssignmentModel", false);
-      this.$parent.assignParams.idList.clear()
-      this.$emit("getSmallCar")
+      this.$emit("update:associationModel", false);
     },
 
     // modal 显示状态发生变化时触发
     handleModalVisibleChange(value) {
       if (!value) {
         this.cancel();
-        this.$emit("update:batchAssignmentModel", false);
+        this.$emit("update:associationModel", false);
       }
         
     },
   },
   watch: {
-    batchAssignmentModel: {
-      handler(batchAssignmentModel) {
-        this.batchAssignmentModels = batchAssignmentModel
+    associationModel: {
+      handler(associationModel) {
+        this.associationModels = associationModel
       },
       deep: true,
     },

@@ -807,6 +807,52 @@
                 />
               </FormItem>
             </Col>
+            <Col span="8">
+              <FormItem
+                label="小红书私信开口量目标"
+                prop="xiaoHongShuPrivateMessageOpenTarget"
+                :rules="[
+                  {
+                    required: true,
+                    message: '小红书私信开口量目标(最小是1)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 1,
+                  },
+                ]"
+                key="小红书私信开口量目标"
+              >
+                <Input
+                  v-model="form.xiaoHongShuPrivateMessageOpenTarget"
+                  placeholder="请输入小红书私信开口量目标"
+                  type="number"
+                  number
+                />
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem
+                label="小红书名片发送目标"
+                prop="xiaoHongShuCallingCardSendNumTarget"
+                :rules="[
+                  {
+                    required: true,
+                    message: '小红书名片发送目标(最小是1)',
+                    trigger: 'change',
+                    type: 'number',
+                    min: 1,
+                  },
+                ]"
+                key="小红书名片发送目标"
+              >
+                <Input
+                  v-model="form.xiaoHongShuCallingCardSendNumTarget"
+                  placeholder="请输入小红书名片发送目标"
+                  type="number"
+                  number
+                />
+              </FormItem>
+            </Col>
           </Row>
         </div>
         <div class="bor">
@@ -1571,6 +1617,54 @@ export default {
               );
             },
           },
+          {
+            title: "小红书私信开口量目标",
+            key: "xiaoHongShuPrivateMessageOpenTarget",
+            minWidth: 190,
+            align: "center",
+          },
+          {
+            title: "月累计小红书私信开口量",
+            key: "cumulativeXiaoHongShuPrivateMessageOpen",
+            minWidth: 200,
+            align: "center",
+          },
+          {
+            title: "小红书私信开口量目标完成率",
+            key: "xiaoHongShuPrivateMessageOpenCompleteRate",
+            minWidth: 250,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.xiaoHongShuPrivateMessageOpenCompleteRate + "%"
+              );
+            },
+          },
+          {
+            title: "小红书名片发送目标",
+            key: "xiaoHongShuCallingCardSendNumTarget",
+            minWidth: 170,
+            align: "center",
+          },
+          {
+            title: "月累计小红书名片发送",
+            key: "cumulativeXiaoHongShuCallingCardSendNum",
+            minWidth: 180,
+            align: "center",
+          },
+          {
+            title: "小红书名片发送目标完成率",
+            key: "xiaoHongShuCallingCardSendNumCompleteRate",
+            minWidth: 230,
+            align: "center",
+            render: (h, params) => {
+              return h(
+                "div",
+                params.row.xiaoHongShuCallingCardSendNumCompleteRate + "%"
+              );
+            },
+          },
 
           
           {
@@ -1761,6 +1855,10 @@ export default {
                                 xiaoHongShuCluesTarget,
                                 // 小红书橱窗收入目标
                                 xiaoHongShuShowcaseIncomeTarget,
+                                // 小红书私信开口量目标
+                                xiaoHongShuPrivateMessageOpenTarget,
+                                // 小红书名片发送目标
+                                xiaoHongShuCallingCardSendNumTarget,
                                 // 视频号涨粉目标
                                 videoIncreaseFansTarget,
                                 // 视频号涨粉付费预算
@@ -1813,6 +1911,9 @@ export default {
                               // this.form.xiaoHongShuIncreaseFansFeesCostTarget = xiaoHongShuIncreaseFansFeesCostTarget;
                               this.form.xiaoHongShuCluesTarget = xiaoHongShuCluesTarget;
                               this.form.xiaoHongShuShowcaseIncomeTarget = xiaoHongShuShowcaseIncomeTarget;
+                              this.form.xiaoHongShuPrivateMessageOpenTarget = xiaoHongShuPrivateMessageOpenTarget;
+                              this.form.xiaoHongShuCallingCardSendNumTarget = xiaoHongShuCallingCardSendNumTarget;
+                              
                               this.form.videoIncreaseFansTarget = videoIncreaseFansTarget;
                               this.form.videoIncreaseFansFeesTarget = videoIncreaseFansFeesTarget;
                               this.form.xiaoHongShuShowCaseFeeTarget = xiaoHongShuShowCaseFeeTarget;
@@ -1994,6 +2095,10 @@ export default {
         xiaoHongShuShowcaseIncomeTarget: 1,
         // 小红书橱窗付费
         xiaoHongShuShowCaseFeeTarget: 1,
+        // 小红书私信开口量目标
+        xiaoHongShuPrivateMessageOpenTarget:1,
+        // 小红书名片发送目标
+        xiaoHongShuCallingCardSendNumTarget:1,
         // 视频号涨粉目标
         videoIncreaseFansTarget: 1,
         // 视频号涨粉付费预算
@@ -2229,6 +2334,8 @@ export default {
               // xiaoHongShuIncreaseFansFeesCostTarget,
               xiaoHongShuCluesTarget,
               xiaoHongShuShowcaseIncomeTarget,
+              xiaoHongShuPrivateMessageOpenTarget,
+              xiaoHongShuCallingCardSendNumTarget,
               videoIncreaseFansTarget,
               videoIncreaseFansFeesTarget,
               // videoIncreaseFansFeesCostTarget,
@@ -2266,6 +2373,8 @@ export default {
               // xiaoHongShuIncreaseFansFeesCostTarget,
               xiaoHongShuCluesTarget,
               xiaoHongShuShowcaseIncomeTarget,
+              xiaoHongShuPrivateMessageOpenTarget,
+              xiaoHongShuCallingCardSendNumTarget,
               videoIncreaseFansTarget,
               videoIncreaseFansFeesTarget,
               // videoIncreaseFansFeesCostTarget,

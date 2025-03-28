@@ -321,6 +321,19 @@
                       >{{ item.name }}</Option
                     >
                   </Select>
+                  <Select
+                    v-model="query.affiliatedPerson"
+                    placeholder="请选择关联人"
+                    filterable
+                    style="width: 150px; margin-left: 10px"
+                  >
+                    <Option
+                      v-for="item in affiliatedPersonList"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
                 </div>
               </div>
             </transition>
@@ -370,6 +383,12 @@
           @click="batchAssignmentClick"
           style="margin-left:10px;margin-bottom:10px"
           >批量指派</Button
+        >
+        <Button
+          type="primary"
+          @click="batchAssociationModelClick"
+          style="margin-left:10px;margin-bottom:10px"
+          >批量关联</Button
         >
         <Button
           type="primary"
@@ -997,6 +1016,23 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="关联人" prop="affiliatedPerson">
+              <Select
+                v-model="form.affiliatedPerson"
+                placeholder="请选择关联人"
+                filterable
+                :disabled="form.liveAnchorId == null"
+              >
+                <Option
+                  v-for="item in baseEmployee"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.name }}</Option
+                >
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="线索截图" prop="cluePicture" key="cluePicture">
               <upload :uploadObj="uploadObj" @uploadChange="handleUploadChange" />
             </FormItem>
@@ -1020,10 +1056,23 @@
       @getSmallCar="getSmallCar"
       
     />
+    <!-- 关联 -->
+    <association
+      :associationModel.sync="associationModel"
+      :associationParams="associationParams"
+      @getSmallCar="getSmallCar"
+      
+    />
     <!-- 批量指派 -->
     <batchAssignment
       :batchAssignmentModel.sync="batchAssignmentModel"
       :assignParams="assignParams"
+      @getSmallCar="getSmallCar"
+    />
+    <!-- 批量关联 -->
+    <batchAssociation
+      :batchAssociationModel.sync="batchAssociationModel"
+      :associationParams="associationParams"
       @getSmallCar="getSmallCar"
     />
     <!-- 导入 -->
@@ -1046,14 +1095,16 @@ import * as liveAnchorApi from "@/api/liveAnchorWechatInfo";
 import * as liveAnchorBaseInfoApi from "@/api/liveAnchorBaseInfo";
 import * as employeeManageApi from "@/api/employeeManage";
 import assign from "./components/assign.vue";
+import association from "./components/association.vue";
 import batchAssignment from "./components/batchAssignment.vue";
+import batchAssociation from "./components/batchAssociation.vue";
 import importFile from "./components/importModel.vue";
 import trackReturnVisit from "@/components/trackReturnVisit/trackReturnVisit";
 import upload from "@/components/upload/upload";
 
 
 export default {
-  components: { assign, batchAssignment, importFile ,trackReturnVisit,upload},
+  components: { assign, batchAssignment, importFile ,trackReturnVisit,upload,association,batchAssociation},
   data() {
     return {
       isOpen: false,
@@ -1109,10 +1160,22 @@ export default {
         // 批量指派
         idList: new Set(),
       },
+      // 批量关联
+      batchAssociationModel: false,
+      // 关联
+      associationModel: false,
+      associationParams: {
+        id: "",
+        employeeList: [],
+        // 批量关联
+        idList: new Set(),
+      },
       phoneCopy: "00000000000",
       isRibuluoLivingList:[{type:-1,name:'全部日不落状态'},{type:'true',name:'是'},{type:'false',name:'否'}],
       // 查询
       query: {
+        // 关联人
+        affiliatedPerson:0,
         isRibuluoLiving:-1,
         belongCompany:-1,
         // 归属部门
@@ -1224,6 +1287,12 @@ export default {
           {
             title: "指派",
             key: "assignEmpName",
+            minWidth: 120,
+            align: "center",
+          },
+          {
+            title: "关联人",
+            key: "affiliatedPersonEmpName",
             minWidth: 120,
             align: "center",
           },
@@ -1911,7 +1980,7 @@ export default {
           {
             title: "操作",
             key: "",
-            width: 230,
+            width: 300,
             fixed: "right",
             align: "center",
             render: (h, params) => {
@@ -1935,6 +2004,26 @@ export default {
                     },
                   },
                   "指派"
+                ),
+                h(
+                  "Button",
+                  {
+                    props: {
+                      type: "primary",
+                      size: "small",
+                    },
+                    style: {
+                      marginRight: "5px",
+                    },
+                    on: {
+                      click: () => {
+                        const { id } = params.row;
+                        this.associationParams.id = id;
+                        this.associationModel = true;
+                      },
+                    },
+                  },
+                  "关联"
                 ),
                 h(
                   "Button",
@@ -2031,7 +2120,8 @@ export default {
                               customerWechatNo,
                               fromTitle,
                               isRepeateCreateOrder,
-                              belongCompanyEnumId
+                              belongCompanyEnumId,
+                              affiliatedPerson
                             } = res.data.shoppingCartRegistrationInfo;
                             this.contentPlateChange(contentPlatFormId);
                             this.liveAnchorChange(liveAnchorId);
@@ -2077,6 +2167,7 @@ export default {
                             this.form.isReturnBackPrice = isReturnBackPrice;
                             this.form.remark = remark;
                             this.form.assignEmpId = assignEmpId;
+                            this.form.affiliatedPerson = affiliatedPerson;
                             this.form.refundDate = refundDate;
                             this.form.source = source;
                             this.form.productType = productType;
@@ -2272,6 +2363,8 @@ export default {
         reContent: "",
         // 指派
         assignEmpId: null,
+        // 关联人
+        affiliatedPerson:null,
         // 重要程度
         emergencyLevel: 0,
         // 辅助电话
@@ -2599,6 +2692,10 @@ export default {
         { name: "全部指派人员", id: 0 },
         { name: "未指派", id: -1 },
       ],
+      affiliatedPersonList:[
+        { name: "全部关联人员", id: 0 },
+        { name: "未关联", id: -1 },
+      ],
       employeeCreat: [{ name: "全部创建人", id: -1 }],
       // 微信号
       weChatList: [],
@@ -2847,22 +2944,39 @@ export default {
       }
       this.batchAssignmentModel = true;
     },
+    // 批量关联
+    batchAssociationModelClick() {
+      if (![...this.associationParams.idList].length) {
+        this.$Message.warning({
+          content: "请选择订单",
+          duration: 3,
+        });
+        return;
+      }
+      this.batchAssociationModel = true;
+    },
     handleSelect(selection, row) {
       // 批量指派
       this.assignParams.idList.add(row.id);
+      // 批量关联
+      this.associationParams.idList.add(row.id);
     },
 
     handleCancels(selection, row) {
       // 批量指派
       this.assignParams.idList.delete(row.id);
+      // 批量删除
+      this.associationParams.idList.delete(row.id);
     },
 
     handleSelectAll(selection) {
       if (selection && selection.length === 0) {
         this.assignParams.idList.clear();
+        this.associationParams.idList.clear();
       } else {
         selection.forEach((item) => {
           this.assignParams.idList.add(item.id);
+          this.associationParams.idList.add(item.id);
         });
       }
     },
@@ -2990,6 +3104,8 @@ export default {
           this.employeeCreat = [...this.employeeCreat, ...employee];
           this.employeeList = employee;
           this.assignParams.employeeList = employee;
+          this.associationParams.employeeList = employee;
+          this.affiliatedPersonList = [...this.affiliatedPersonList, ...employee];
         }
       });
     },
@@ -3068,7 +3184,8 @@ export default {
         shoppingCartRegistrationCustomerType,
         belongChannel,
         belongCompany,
-        isRibuluoLiving
+        isRibuluoLiving,
+        affiliatedPerson
       } = this.query;
       const data = {
         pageNum,
@@ -3085,6 +3202,7 @@ export default {
         isConsultation: isConsultation == -1 ? null : isConsultation,
         isReturnBackPrice: isReturnBackPrice == -1 ? null : isReturnBackPrice,
         assignEmpId: assignEmpId == -1 ? null : assignEmpId,
+        affiliatedPerson: affiliatedPerson == -1 ? null : affiliatedPerson,
         minPrice,
         maxPrice,
         isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
@@ -3190,7 +3308,8 @@ export default {
         shoppingCartRegistrationCustomerType,
         belongChannel,
         belongCompany,
-        isRibuluoLiving
+        isRibuluoLiving,
+        affiliatedPerson
       } = this.query;
       const data = {
         pageNum,
@@ -3207,6 +3326,7 @@ export default {
         isConsultation: isConsultation == -1 ? null : isConsultation,
         isReturnBackPrice: isReturnBackPrice == -1 ? null : isReturnBackPrice,
         assignEmpId: assignEmpId == -1 ? null : assignEmpId,
+        affiliatedPerson: affiliatedPerson == -1 ? null : affiliatedPerson,
         minPrice,
         maxPrice,
         isCreateOrder: isCreateOrder == -1 ? null : isCreateOrder,
@@ -3294,6 +3414,7 @@ export default {
         isReContent,
         reContent,
         assignEmpId,
+        affiliatedPerson,
         emergencyLevel,
         consultationDate,
         refundType,
@@ -3345,6 +3466,7 @@ export default {
         isReContent,
         reContent,
         assignEmpId,
+        affiliatedPerson,
         emergencyLevel,
         consultationDate: consultationDate
           ? this.$moment(consultationDate).format("YYYY-MM-DD")
@@ -3480,6 +3602,7 @@ export default {
               isReContent,
               reContent,
               assignEmpId,
+              affiliatedPerson,
               emergencyLevel,
               consultationDate,
               refundType,
@@ -3524,6 +3647,7 @@ export default {
               isReContent,
               reContent,
               assignEmpId,
+              affiliatedPerson,
               emergencyLevel,
               consultationDate: consultationDate ? this.$moment(consultationDate).format("YYYY-MM-DD") : null,
               subPhone,

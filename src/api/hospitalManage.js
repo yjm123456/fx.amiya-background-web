@@ -540,3 +540,10 @@ export const getByHospitalIdList = (params) => {
         params
     });
 };
+// 医院类型列表（下拉框）
+export const HospitalTypeList = () => {
+    return http({
+        url: "/amiyabg/HospitalInfo/HospitalTypeList",
+        method: "get",
+    });
+};

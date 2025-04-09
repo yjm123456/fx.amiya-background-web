@@ -107,17 +107,21 @@ export default {
           {
             title: "健康值名称",
             key: "name",
+            align:'center',
           },
           {
             title: "健康值",
+            align:'center',
             key: "value",
           },
           {
             title: "编码",
+            align:'center',
             key: "code",
           },
           {
             title: "是否有效",
+            align:'center',
             key: "valid",
             render: (h, params) => {
               if (params.row.valid == true) {
@@ -145,6 +149,7 @@ export default {
           },
           {
             title: "操作",
+            align:'center',
             key: "",
             width: 150,
             render: (h, params) => {

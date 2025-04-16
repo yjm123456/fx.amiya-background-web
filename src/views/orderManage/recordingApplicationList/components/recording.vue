@@ -505,6 +505,14 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="省份" prop="province">
+              <Input
+                v-model="form.province"
+                placeholder="请输入省份"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="城市" prop="city">
               <Input v-model="form.city" placeholder="请输入城市" />
             </FormItem>
@@ -672,6 +680,8 @@ export default {
         occupation: "",
         // 微信号
         wechatNumber: "",
+        // 省份
+        province:'',
         // 城市
         city: "",
         // 是否为辅助客服
@@ -698,6 +708,12 @@ export default {
         consultEmpId:null
       },
       ruleValidates: {
+        province: [
+          {
+            required: true,
+            message: "请输入省份",
+          },
+        ],
         belongCompanyEnumId: [
           {
             required: true,
@@ -1038,6 +1054,7 @@ export default {
               occupation,
               wechatNumber,
               city,
+              province,
               isCustomer,
               auxiliaryCustomerService,
               getCustomerType,
@@ -1084,6 +1101,7 @@ export default {
               occupation,
               wechatNumber,
               city,
+              province,
               isSupportOrder: isCustomer == "否" ? false : true,
               supportEmpId: isCustomer == '否' ? 0 : ( auxiliaryCustomerService ? auxiliaryCustomerService : 0),
                 getCustomerType,

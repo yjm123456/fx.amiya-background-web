@@ -3756,7 +3756,7 @@ export default {
     },
   },
   created() {
-    this.getSmallCar();
+    
     this.getProvince();
     this.getCustomerServiceLists();
     this.getEmergencyLevels();
@@ -3770,6 +3770,9 @@ export default {
     this.getshoppingCartGetBelongChannelList()
     this.getLiveAnchorBaseInfoValid();
     this.getbyIdGetAmiyaEmployee()
+    setTimeout(()=>{
+      this.getSmallCar();
+    },1000)
     this.getBelongCompanyListClick()
     
     

@@ -507,6 +507,14 @@
             </FormItem>
           </Col>
           <Col span="8">
+            <FormItem label="省份" prop="province">
+              <Input
+                v-model="form.province"
+                placeholder="请输入省份"
+              />
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="城市" prop="city">
               <Input
                 v-model="form.city"
@@ -679,6 +687,8 @@ export default {
         occupation:"",
         // 微信号
         wechatNumber:"",
+        // 省份
+        province:'',
         // 城市
         city:"",
         // 是否为辅助客服
@@ -707,6 +717,12 @@ export default {
         consultEmpId:null
       },
       ruleValidates: {
+        province: [
+          {
+            required: true,
+            message: "请输入省份",
+          },
+        ],
         belongCompanyEnumId: [
           {
             required: true,
@@ -1044,6 +1060,7 @@ export default {
               occupation,
               wechatNumber,
               city,
+              province,
               isCustomer,
               auxiliaryCustomerService,
               belongingPlace,
@@ -1089,6 +1106,7 @@ export default {
               occupation ,
               wechatNumber ,
               city,
+              province,
               isCustomer,
               auxiliaryCustomerService,
               getCustomerType,
@@ -1211,6 +1229,7 @@ export default {
               occupation,
               wechatNumber,
               city,
+              province,
               isCustomer,
               auxiliaryCustomerService,
               getCustomerType,
@@ -1255,6 +1274,7 @@ export default {
               occupation ,
               wechatNumber ,
               city,
+              province,
               isCustomer,
               auxiliaryCustomerService,
               getCustomerType,
@@ -1329,6 +1349,7 @@ export default {
         // this.form.consultingContent = info.consultingContent ? info.consultingContent : '咨询项目：\n既往史：\n方案及报价：\n推荐医生：\n预算及确定治疗项目：\n痛点、禁忌、喜好：\n是否车接车送：\n助理、vip管家：\n备注：'
         this.form.sex = info.sex;
         this.form.city = info.city;
+        this.form.province = info.province;
         this.form.occupation = info.occupation;
         this.form.wechatNumber = info.wechatNumber;
         this.form.birthday = info.birthday;

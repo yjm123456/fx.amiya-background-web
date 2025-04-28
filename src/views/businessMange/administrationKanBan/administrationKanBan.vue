@@ -3,6 +3,20 @@
     <div class="title">啊美雅（行政客服）数据运营看板</div>
     <!-- 时间进度及筛选 -->
     <div class="time">
+      <!-- tab切换 -->
+      <div class="tab_content2">
+          <div class="tab">
+            <div
+              class="tab_item"
+              v-for="(item, index) in list3"
+              :key="index"
+              @click="selectTab3(index, item)"
+              :class="{ active: selected3 == item}"
+            >
+              <span>{{ item }}</span>
+            </div>
+          </div>
+      </div>
       <span>
         <span class="completeRateSize">时间进度：</span>
         <Progress
@@ -48,58 +62,63 @@
       </Select>
       <Button type="primary" @click="getData">查询</Button>
     </div>
-    <Card style="margin-top:10px">
-      <items ref="items" :params="params" title="部门" :completeRate="completeRate"/>
-      <items ref="items2" :params="params" title="个人" :completeRate="completeRate"/>
-    </Card>
-    <Card style="margin-top:10px">
-      <div class="h3">部门线索趋势</div>
-      <monthLine :params="params" :adminCustomerServiceCustomerTypeBrokenLineDataObj="adminCustomerServiceCustomerTypeBrokenLineDataObj"/>
-    </Card>
-    <Card style="margin-top:10px">
-      <div class="h3">当月个人&部门-线索转化漏斗图</div>
-      <funnel :params="params" :adminCustomerFilterDataObj="adminCustomerFilterDataObj" :isFlag="isFlag"/>
-    </Card>
-    <!-- 饼图 -->
-    <Card style="margin-top:10px">
-      <div class="h3">分诊量&加v率</div>
-      <div  class="list h3">
-        <Card class="item">
-          <div class="h2">分诊量</div>
-          <pieItem :pieData="adminCustomerAnalysisDataObj.distributeConsulationDataList" title="分诊量"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">加v率</div>
-          <pieItem :pieData="adminCustomerAnalysisDataObj.distributeConsulationAddWechatDataList" title="加v率"/>
-        </Card>
-      </div>
-      <div  class="list h3">
-        <Card class="item">
-          <div class="h2">分诊量</div>
-          <pieItem :pieData="adminCustomerAnalysisDataObj.effAndPotDataList" title="分诊量"/>
-        </Card>
-        <Card  class="item">
-          <div class="h2">加v率</div>
-          <pieItem :pieData="adminCustomerAnalysisDataObj.effAndPotAddWechatDataList" title="加v率"/>
-        </Card>
-      </div>
-    </Card>
-    <!-- 柱形图 -->
-    <Card style="margin-top:10px">
-      <div class="h3">分诊量&加v率</div>
-      <div  class="list h3">
-        <Card class="item">
-          <div class="por"><span class="h2">分诊量</span> <span @click="detailModel = true;title='分诊量'"><i class="iconfont icon-qiehuan-xue qiehuan"></i><span>详情</span></span></div>
-          <barItem :barItemData="adminCustomerAssistantDisAndAddVDataObj.assistantDistributeData" title="分诊量"/>
-        </Card>
-        <Card  class="item">
-          <div class="por"><span class="h2">加v率</span> <span @click="detailModel = true;title='加v率'"><i class="iconfont icon-qiehuan-xue qiehuan"></i><span>详情</span></span></div>
-          <barItem :barItemData="adminCustomerAssistantDisAndAddVDataObj.assistantAddWechatData" title="加v率"/>
-        </Card>
-      </div>
-    </Card>
-    <!-- 详情 -->
-    <barDetail :detailModel.sync="detailModel" :detailData="this.title == '分诊量' ? adminCustomerAssistantDisAndAddVDataObj.assistantDistributeDataDetail : this.title == '加v率' ? adminCustomerAssistantDisAndAddVDataObj.assistantAddWechatDataDetail : []" :title="title"/>
+    <div v-if="selected3 == '图表'">
+      <Card style="margin-top:10px">
+        <items ref="items" :params="params" title="部门" :completeRate="completeRate"/>
+        <items ref="items2" :params="params" title="个人" :completeRate="completeRate"/>
+      </Card>
+      <Card style="margin-top:10px">
+        <div class="h3">部门线索趋势</div>
+        <monthLine :params="params" :adminCustomerServiceCustomerTypeBrokenLineDataObj="adminCustomerServiceCustomerTypeBrokenLineDataObj"/>
+      </Card>
+      <Card style="margin-top:10px">
+        <div class="h3">当月个人&部门-线索转化漏斗图</div>
+        <funnel :params="params" :adminCustomerFilterDataObj="adminCustomerFilterDataObj" :isFlag="isFlag"/>
+      </Card>
+      <!-- 饼图 -->
+      <Card style="margin-top:10px">
+        <div class="h3">分诊量&加v率</div>
+        <div  class="list h3">
+          <Card class="item">
+            <div class="h2">分诊量</div>
+            <pieItem :pieData="adminCustomerAnalysisDataObj.distributeConsulationDataList" title="分诊量"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">加v率</div>
+            <pieItem :pieData="adminCustomerAnalysisDataObj.distributeConsulationAddWechatDataList" title="加v率"/>
+          </Card>
+        </div>
+        <div  class="list h3">
+          <Card class="item">
+            <div class="h2">分诊量</div>
+            <pieItem :pieData="adminCustomerAnalysisDataObj.effAndPotDataList" title="分诊量"/>
+          </Card>
+          <Card  class="item">
+            <div class="h2">加v率</div>
+            <pieItem :pieData="adminCustomerAnalysisDataObj.effAndPotAddWechatDataList" title="加v率"/>
+          </Card>
+        </div>
+      </Card>
+      <!-- 柱形图 -->
+      <Card style="margin-top:10px">
+        <div class="h3">分诊量&加v率</div>
+        <div  class="list h3">
+          <Card class="item">
+            <div class="por"><span class="h2">分诊量</span> <span @click="detailModel = true;title='分诊量'"><i class="iconfont icon-qiehuan-xue qiehuan"></i><span>详情</span></span></div>
+            <barItem :barItemData="adminCustomerAssistantDisAndAddVDataObj.assistantDistributeData" title="分诊量"/>
+          </Card>
+          <Card  class="item">
+            <div class="por"><span class="h2">加v率</span> <span @click="detailModel = true;title='加v率'"><i class="iconfont icon-qiehuan-xue qiehuan"></i><span>详情</span></span></div>
+            <barItem :barItemData="adminCustomerAssistantDisAndAddVDataObj.assistantAddWechatData" title="加v率"/>
+          </Card>
+        </div>
+      </Card>
+      <!-- 详情 -->
+      <barDetail :detailModel.sync="detailModel" :detailData="this.title == '分诊量' ? adminCustomerAssistantDisAndAddVDataObj.assistantDistributeDataDetail : this.title == '加v率' ? adminCustomerAssistantDisAndAddVDataObj.assistantAddWechatDataDetail : []" :title="title"/>
+    </div>
+    <div v-else>
+      <transform :params="params" ref="transform"/>
+    </div>
   </Card>
 </template>
 <script>
@@ -111,6 +130,7 @@ import funnel from "./components/funnel.vue"
 import pieItem from "./components/pieItem.vue"
 import barItem from "./components/barItem.vue"
 import barDetail from "./components/barDetail.vue"
+import transform from "./components/transform.vue"
 export default {
   components:{
     items,
@@ -118,7 +138,8 @@ export default {
     funnel,
     pieItem,
     barItem,
-    barDetail
+    barDetail,
+    transform
   },
   data() {
     return {
@@ -151,20 +172,34 @@ export default {
       // 饼图数据
       adminCustomerAnalysisDataObj:{},
       // 柱形图数据
-      adminCustomerAssistantDisAndAddVDataObj:{}
+      adminCustomerAssistantDisAndAddVDataObj:{},
+      list3: ["图表","转化"],
+      selected3:'图表',
     };
   },
   methods: {
     getData() {
       this.getTimeSpanClick()
-      this.getadminCustomerServiceCustomerTypeBrokenLineData()
-      this.getadminCustomerFilterData()
-      this.getadminCustomerAnalysisData()
-      this.getadminCustomerAssistantDisAndAddVData()
-      this.$nextTick(()=>{
-        this.$refs.items.getadminCustomerServiceCustomerTypeData()
-        this.$refs.items2.getadminCustomerServiceCustomerTypeAddWechatData()
-      })
+      if(this.selected3 == '图表'){
+        this.getadminCustomerServiceCustomerTypeBrokenLineData()
+        this.getadminCustomerFilterData()
+        this.getadminCustomerAnalysisData()
+        this.getadminCustomerAssistantDisAndAddVData()
+        this.$nextTick(()=>{
+          this.$refs.items.getadminCustomerServiceCustomerTypeData()
+          this.$refs.items2.getadminCustomerServiceCustomerTypeAddWechatData()
+        })
+      }else{
+        this.$nextTick(()=>{
+          this.$refs.transform.adminCustomerMonthTransformDataClick()
+          this.$refs.transform.getHealthValueLists()
+        })
+      }
+      
+    },
+    selectTab3(index, value) {
+      this.selected3 = value
+      this.getData()
     },
     //   获取时间进度
     getTimeSpanClick() {
@@ -279,9 +314,13 @@ export default {
   font-weight: bold;
   text-align: center;
   width: 100%;
+  color: #000;
 }
 .time {
   text-align: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .h3{
   font-size: 18px;
@@ -310,5 +349,39 @@ export default {
 }
 .por{
   cursor: pointer;
+}
+.tab_content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 15px 0;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+.tab{
+  display: flex;
+}
+.tab{
+  text-align: start;
+  padding-left: 10px;
+}
+.tab_item {
+  background: #f0f0f0;
+  padding: 1px 15px;
+  box-sizing: border-box;
+  margin-right: 30px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.icons {
+  font-size: 14px;
+  margin-right: 2px;
+}
+.active {
+  color: #fff;
+  border: 1px solid #2f8cf0;
+  background: #2f8cf0;
 }
 </style>

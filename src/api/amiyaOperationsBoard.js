@@ -543,3 +543,19 @@ export const AmiyaMingSuoOperationBoardMingSuoHospitalTransformData = (params) =
         params
     });
 };
+//直播前月度线索转化情况
+export const BeforeLivingYearTransformDataa = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/BeforeLivingYearTransformData",
+        method: "get",
+        params
+    });
+};
+//行政客服月度线索转化情况
+export const adminCustomerMonthTransformData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaOperationsBoard/adminCustomerMonthTransformData",
+        method: "get",
+        params
+    });
+};

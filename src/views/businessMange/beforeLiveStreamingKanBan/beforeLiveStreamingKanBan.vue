@@ -1,7 +1,22 @@
 <template>
   <div class="container">
     <div class="title">啊美雅（直播前）数据运营看板</div>
+    
     <div class="time">
+      <!-- tab切换 -->
+      <div class="tab_content2">
+          <div class="tab">
+            <div
+              class="tab_item"
+              v-for="(item, index) in list3"
+              :key="index"
+              @click="selectTab3(index, item)"
+              :class="{ active: selected3 == item}"
+            >
+              <span>{{ item }}</span>
+            </div>
+          </div>
+      </div>
       <span>
         <span class="completeRateSize">时间进度：</span>
         <Progress
@@ -47,124 +62,130 @@
       </Select>
       <Button type="primary" @click="getData">查询</Button>
     </div>
-    <!-- 卡片 -->
-    <div class="card_list">
-      <Card class="card_item"> 
-        <items :params="params" ref="items" title="个人" :completeRate="completeRate"/>
-      </Card>
-      <Card class="card_item"> 
-        <items :params="params" ref="items2" title="部门" :completeRate="completeRate"/>
-      </Card>
-    </div>
-    <!-- 折线图 -->
-    <Card  class="m_b">
-        <div class="h3">当月线索&业绩趋势</div>
-        <!-- tab切换 -->
-        <div class="tab_content">
-            <div class="tab">
-                <div
-                class="tab_item"
-                v-for="(item, index) in list"
-                :key="index"
-                @click="selectTab(index, item)"
-                :class="{ active: selected == item}"
-                >
-                <span>{{ item }}</span>
+    <div v-if="selected3 == '图表'">
+      <!-- 卡片 -->
+      <div class="card_list">
+          <Card class="card_item"> 
+            <items :params="params" ref="items" title="个人" :completeRate="completeRate"/>
+          </Card>
+          <Card class="card_item"> 
+            <items :params="params" ref="items2" title="部门" :completeRate="completeRate"/>
+          </Card>
+        </div>
+        <!-- 折线图 -->
+        <Card  class="m_b">
+            <div class="h3">当月线索&业绩趋势</div>
+            <!-- tab切换 -->
+            <div class="tab_content">
+                <div class="tab">
+                    <div
+                    class="tab_item"
+                    v-for="(item, index) in list"
+                    :key="index"
+                    @click="selectTab(index, item)"
+                    :class="{ active: selected == item}"
+                    >
+                    <span>{{ item }}</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <monthLine :totalAchievementAndDateSchedule="beforeLiveClueAndPerformanceBrokenDataObj" />
-    </Card>
-    <!-- 漏斗图 -->
-    <Card  class="m_b">
-        <div class="h3">直播前转化漏斗图</div>
-        <funnel
-        ref="funnel"
-        :params="params"
-        ></funnel>
-    </Card>
-    <!-- 派单/上门/成交转化周期 -->
-    <Card  class="m_b">
-        <div class="card_list">
-            <Card class="card_item"> 
-                <div class="h3">线索派单周期转化</div>
-                <customerBar :beforeLiveTransformCycleData="beforeLiveTransformCycleDataObj.sendCycleData" title="周期"/>
-            </Card>
-            <Card class="card_item"> 
-              <div class="h3">线索上门/成交周期转化</div>
-                <customerBar :beforeLiveTransformCycleData="beforeLiveTransformCycleDataObj.toHospitalCycleData" title="周期"/>
-            </Card>
-        </div>
-    </Card>
-    <!-- 内容运营线索目标达成率和业绩贡献占比 -->
-    <Card  class="m_b">
-        <div class="card_list">
-            <Card class="card_item"> 
-                <div class="h3">线索目标达成率</div>
-                <customerBar :beforeLiveTransformCycleData="getBeforeLiveTargetCompleteRateList" title="百分比"/>
-            </Card>
-            <Card class="card_item"> 
-              <div class="h3">业绩贡献占比</div>
-                <customerBar :beforeLiveTransformCycleData="getBeforeLivePerformanceRateList" title="百分比"/>
-            </Card>
-        </div>
-    </Card>
-    <!-- 部门平台线索占比和新客业绩占比 -->
-    <Card  class="m_b">
-        <div class="card_list">
-            <Card class="card_item"> 
-                <div class="m_b m_t">
-                  <div class="h3">部门平台线索占比</div>
-                  <pieItem :pieData="getBeforeLiveDepartmentContentPlatformClueRateObj.departmentContentPlatformClueRate" title="总线索" :total="getBeforeLiveDepartmentContentPlatformClueRateObj.departmentPerformance"/>
-                </div>
-                <div class="m_b">
-                  <div class="h3">抖音-部门平台线索占比</div>
-                  <pieItem :pieData="getBeforeLiveDepartmentContentPlatformClueRateObj.tikTokClueRate" title="总线索" :total="getBeforeLiveDepartmentContentPlatformClueRateObj.tikTokPerformance"/>
-                </div>
-                <div class="m_b">
-                  <div class="h3">视频号-部门平台线索占比</div>
-                  <pieItem :pieData="getBeforeLiveDepartmentContentPlatformClueRateObj.wechatVideoClueRate" title="总线索" :total="getBeforeLiveDepartmentContentPlatformClueRateObj.wechatVideoPerformance"/>
-                </div>
-                <div class="m_b">
-                  <div class="h3">小红书-部门平台线索占比</div>
-                  <pieItem :pieData="getBeforeLiveDepartmentContentPlatformClueRateObj.xiaohongshuClueRate" title="总线索" :total="getBeforeLiveDepartmentContentPlatformClueRateObj.xiaohongshuPerformance"/>
-                </div>
-                
-            </Card>
-            <Card class="card_item">
-               <!-- tab切换 -->
-              <div class="tab_content position_re">
-                  <div class="tab">
-                      <div
-                      class="tab_item"
-                      v-for="(item, index) in list2"
-                      :key="index"
-                      @click="selectTab2(index, item)"
-                      :class="{ active: selected2 == item}"
-                      >
-                      <span>{{ item }}</span>
+            <monthLine :totalAchievementAndDateSchedule="beforeLiveClueAndPerformanceBrokenDataObj" />
+        </Card>
+        <!-- 漏斗图 -->
+        <Card  class="m_b">
+            <div class="h3">直播前转化漏斗图</div>
+            <funnel
+            ref="funnel"
+            :params="params"
+            ></funnel>
+        </Card>
+        <!-- 派单/上门/成交转化周期 -->
+        <Card  class="m_b">
+            <div class="card_list">
+                <Card class="card_item"> 
+                    <div class="h3">线索派单周期转化</div>
+                    <customerBar :beforeLiveTransformCycleData="beforeLiveTransformCycleDataObj.sendCycleData" title="周期"/>
+                </Card>
+                <Card class="card_item"> 
+                  <div class="h3">线索上门/成交周期转化</div>
+                    <customerBar :beforeLiveTransformCycleData="beforeLiveTransformCycleDataObj.toHospitalCycleData" title="周期"/>
+                </Card>
+            </div>
+        </Card>
+        <!-- 内容运营线索目标达成率和业绩贡献占比 -->
+        <Card  class="m_b">
+            <div class="card_list">
+                <Card class="card_item"> 
+                    <div class="h3">线索目标达成率</div>
+                    <customerBar :beforeLiveTransformCycleData="getBeforeLiveTargetCompleteRateList" title="百分比"/>
+                </Card>
+                <Card class="card_item"> 
+                  <div class="h3">业绩贡献占比</div>
+                    <customerBar :beforeLiveTransformCycleData="getBeforeLivePerformanceRateList" title="百分比"/>
+                </Card>
+            </div>
+        </Card>
+        <!-- 部门平台线索占比和新客业绩占比 -->
+        <Card  class="m_b">
+            <div class="card_list">
+                <Card class="card_item"> 
+                    <div class="m_b m_t">
+                      <div class="h3">部门平台线索占比</div>
+                      <pieItem :pieData="getBeforeLiveDepartmentContentPlatformClueRateObj.departmentContentPlatformClueRate" title="总线索" :total="getBeforeLiveDepartmentContentPlatformClueRateObj.departmentPerformance"/>
+                    </div>
+                    <div class="m_b">
+                      <div class="h3">抖音-部门平台线索占比</div>
+                      <pieItem :pieData="getBeforeLiveDepartmentContentPlatformClueRateObj.tikTokClueRate" title="总线索" :total="getBeforeLiveDepartmentContentPlatformClueRateObj.tikTokPerformance"/>
+                    </div>
+                    <div class="m_b">
+                      <div class="h3">视频号-部门平台线索占比</div>
+                      <pieItem :pieData="getBeforeLiveDepartmentContentPlatformClueRateObj.wechatVideoClueRate" title="总线索" :total="getBeforeLiveDepartmentContentPlatformClueRateObj.wechatVideoPerformance"/>
+                    </div>
+                    <div class="m_b">
+                      <div class="h3">小红书-部门平台线索占比</div>
+                      <pieItem :pieData="getBeforeLiveDepartmentContentPlatformClueRateObj.xiaohongshuClueRate" title="总线索" :total="getBeforeLiveDepartmentContentPlatformClueRateObj.xiaohongshuPerformance"/>
+                    </div>
+                    
+                </Card>
+                <Card class="card_item">
+                  <!-- tab切换 -->
+                  <div class="tab_content position_re">
+                      <div class="tab">
+                          <div
+                          class="tab_item"
+                          v-for="(item, index) in list2"
+                          :key="index"
+                          @click="selectTab2(index, item)"
+                          :class="{ active: selected2 == item}"
+                          >
+                          <span>{{ item }}</span>
+                          </div>
                       </div>
                   </div>
-              </div>
-              <div class="m_b m_t">
-                  <div class="h3">部门平台业绩占比</div>
-                  <pieItem :pieData="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.departmentContentPlatformPerformanceRate" title="总业绩" :total="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.departmentPerformance"/>
-                </div>
-                <div class="m_b">
-                  <div class="h3">抖音-部门平台业绩占比</div>
-                  <pieItem :pieData="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.tikTokPerformanceRate" title="总业绩" :total="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.tikTokPerformance"/>
-                </div>
-                <div class="m_b">
-                  <div class="h3">视频号-部门平台业绩占比</div>
-                  <pieItem :pieData="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.wechatVideoPerformanceRate" title="总业绩" :total="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.wechatVideoPerformance"/>
-                </div>
-                <div class="m_b">
-                  <div class="h3">小红书-部门平台业绩占比</div> 
-                  <pieItem :pieData="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.xiaohongshuPerformanceRate" title="总业绩" :total="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.xiaohongshuPerformance"/>
-                </div>
-            </Card>
-        </div>
-    </Card>
+                  <div class="m_b m_t">
+                      <div class="h3">部门平台业绩占比</div>
+                      <pieItem :pieData="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.departmentContentPlatformPerformanceRate" title="总业绩" :total="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.departmentPerformance"/>
+                    </div>
+                    <div class="m_b">
+                      <div class="h3">抖音-部门平台业绩占比</div>
+                      <pieItem :pieData="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.tikTokPerformanceRate" title="总业绩" :total="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.tikTokPerformance"/>
+                    </div>
+                    <div class="m_b">
+                      <div class="h3">视频号-部门平台业绩占比</div>
+                      <pieItem :pieData="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.wechatVideoPerformanceRate" title="总业绩" :total="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.wechatVideoPerformance"/>
+                    </div>
+                    <div class="m_b">
+                      <div class="h3">小红书-部门平台业绩占比</div> 
+                      <pieItem :pieData="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.xiaohongshuPerformanceRate" title="总业绩" :total="getBeforeLiveDepartmentContentPlatformPerformanceRateObj.xiaohongshuPerformance"/>
+                    </div>
+                </Card>
+            </div>
+        </Card>
+    </div>
+    <div v-else>
+          <trafficConversionTable :params="params" ref="trafficConversionTable" />
+
+    </div>
   </div>
 </template>
 <script>
@@ -175,13 +196,16 @@ import monthLine from "./components/monthLine.vue"
 import funnel from "./components/funnel.vue"
 import customerBar from "./components/customerBar.vue"
 import pieItem from "./components/pieItem.vue"
+import trafficConversionTable from "./components/trafficConversionTable.vue"
+
 export default {
   components:{
     items,
     monthLine,
     funnel,
     customerBar,
-    pieItem
+    pieItem,
+    trafficConversionTable,
   },
   data() {
     return {
@@ -208,6 +232,8 @@ export default {
       selected:'个人',
       list2: ["当月","历史"],
       selected2:'当月',
+      list3: ["图表","转化"],
+      selected3:'图表',
       //   折线图数据
       beforeLiveClueAndPerformanceBrokenDataObj:{},
       //   转化周期
@@ -352,19 +378,31 @@ export default {
       this.selected2 = value
       this.getBeforeLiveDepartmentContentPlatformPerformanceRateClick()
     },
+    selectTab3(index, value) {
+      this.selected3 = value
+      this.getData()
+    },
     getData(){
         this.getTimeSpanClick()
-        this.$nextTick(()=>{
-            this.$refs.items.getBeforeLiveClueAndPerformanceData()
-            this.$refs.items2.getBeforeLiveClueAndPerformanceData()
-            this.$refs.funnel.getBeforeLiveFilterDataClick()
-        })
-        this.getBeforeLiveClueAndPerformanceBrokenDataClick()
-        this.getBeforeLiveTransformCycleDataClick()
-        this.getBeforeLivePerformanceRateClick()
-        this.getBeforeLiveTargetCompleteRateClick()
-        this.getBeforeLiveDepartmentContentPlatformClueRateClick()
-        this.getBeforeLiveDepartmentContentPlatformPerformanceRateClick()
+        if(this.selected3 == '图表'){
+          this.$nextTick(()=>{
+              this.$refs.items.getBeforeLiveClueAndPerformanceData()
+              this.$refs.items2.getBeforeLiveClueAndPerformanceData()
+              this.$refs.funnel.getBeforeLiveFilterDataClick()
+          })
+          this.getBeforeLiveClueAndPerformanceBrokenDataClick()
+          this.getBeforeLiveTransformCycleDataClick()
+          this.getBeforeLivePerformanceRateClick()
+          this.getBeforeLiveTargetCompleteRateClick()
+          this.getBeforeLiveDepartmentContentPlatformClueRateClick()
+          this.getBeforeLiveDepartmentContentPlatformPerformanceRateClick()
+        }else{
+          this.$nextTick(()=>{
+            this.$refs.trafficConversionTable.getHealthValueLists()
+            this.$refs.trafficConversionTable.getTotalAchievementByYearClick()
+          })
+        }
+        
         
     }
   },
@@ -391,6 +429,9 @@ export default {
 }
 .time {
   text-align: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .h3 {
   font-size: 18px;

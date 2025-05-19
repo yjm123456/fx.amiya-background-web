@@ -212,7 +212,7 @@ export default {
         // 测试医院
         // this.form.hospitalId = 39
         // 线上医院
-        this.form.hospitalId =  processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 124 : 39
+        this.form.hospitalId =  processEnv.VUE_APP_BASE_URL == 'https://www.ameiyes.com' ? 124 : 39
       }else{
         this.form.hospitalId = null
       }

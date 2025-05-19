@@ -247,6 +247,16 @@
               />
             </FormItem>
           </Col>
+          <Col span="16">
+            <FormItem label="备注" prop="remark">
+              <Input
+                v-model="form.remark"
+                placeholder="请输入备注"
+                type="textarea"
+                :rows="3"
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -384,6 +394,14 @@ export default {
             align: "center",
           },
           {
+            title: "备注",
+            key: "remark",
+            minWidth: 200,
+            align: "center",
+            tooltip:true
+          },
+          
+          {
             title: "操作",
             key: "",
             width: 120,
@@ -436,13 +454,15 @@ export default {
                               tikTokIncreaseFans,
                               tikTokIncreaseFansFees,
                               tikTokClues,
-                              tikTokShowcaseFee
+                              tikTokShowcaseFee,
+                              remark
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
+                            this.form.remark = remark;
                             this.form.tikTokShowCaseFee = tikTokShowcaseFee;
                             this.form.tikTokIncreaseFans = tikTokIncreaseFans;
                             this.form.tikTokIncreaseFansFees = tikTokIncreaseFansFees;
@@ -609,7 +629,9 @@ export default {
         // 涨粉成本
         tikTokIncreaseFansFeescost:null,
         // 抖音橱窗付费
-        tikTokShowCaseFee:null
+        tikTokShowCaseFee:null,
+        // 备注
+        remark:''
       },
 
       ruleValidate: {
@@ -877,7 +899,8 @@ export default {
               tikTokIncreaseFans,
               tikTokIncreaseFansFees,
               tikTokClues,
-              tikTokShowCaseFee
+              tikTokShowCaseFee,
+              remark
             } = this.form;
             const data = {
               id,
@@ -896,7 +919,8 @@ export default {
               tikTokIncreaseFans,
               tikTokIncreaseFansFees,
               tikTokClues,
-              tikTokShowCaseFee
+              tikTokShowCaseFee,
+              remark
             };
             this.isflag = true;
             api.BeforeLivingTikTokUpdate(data).then((res) => {
@@ -928,7 +952,8 @@ export default {
               tikTokIncreaseFans,
               tikTokIncreaseFansFees,
               tikTokClues,
-              tikTokShowCaseFee
+              tikTokShowCaseFee,
+              remark
              
             } = this.form;
             const data = {
@@ -945,7 +970,8 @@ export default {
               tikTokIncreaseFans,
               tikTokIncreaseFansFees,
               tikTokClues,
-              tikTokShowCaseFee
+              tikTokShowCaseFee,
+              remark
             };
             this.isflag = true;
             // 添加

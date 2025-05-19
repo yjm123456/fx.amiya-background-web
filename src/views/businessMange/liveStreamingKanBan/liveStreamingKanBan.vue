@@ -2,6 +2,20 @@
   <div class="container">
     <div class="title">啊美雅（直播中）数据运营看板</div>
     <div class="time">
+      <!-- tab切换 -->
+      <div class="tab_content2">
+          <div class="tab">
+            <div
+              class="tab_item"
+              v-for="(item, index) in list3"
+              :key="index"
+              @click="selectTab3(index, item)"
+              :class="{ active: selected3 == item}"
+            >
+              <span>{{ item }}</span>
+            </div>
+          </div>
+      </div>
       <span>
         <span class="completeRateSize">时间进度：</span>
         <Progress
@@ -47,98 +61,104 @@
       </Select>
       <Button type="primary" @click="getData">查询</Button>
     </div>
-    <!-- 卡片 -->
-    <div class="card_list">
-      <Card class="card_item2"> 
-        <items :params="params" ref="items" :completeRate="completeRate"/>
+    <div v-if="selected3 == '图表'">
+      <!-- 卡片 -->
+      <div class="card_list">
+        <Card class="card_item2"> 
+          <items :params="params" ref="items" :completeRate="completeRate"/>
+        </Card>
+      </div>
+      <!-- 折线图 -->
+      <Card  class="m_b">
+          <div class="h3">当月线索&业绩趋势</div>
+          <monthLine :totalAchievementAndDateSchedule="liveStreamingDataObj" />
       </Card>
-    </div>
-    <!-- 折线图 -->
-    <Card  class="m_b">
-        <div class="h3">当月线索&业绩趋势</div>
-        <monthLine :totalAchievementAndDateSchedule="liveStreamingDataObj" />
-    </Card>
-    <!-- 漏斗图 -->
-    <Card  class="m_b">
-        <div class="h3">直播中转化漏斗图</div>
-        <funnel
-        ref="funnel"
-        :params="params"
-        ></funnel>
-    </Card>
-    <!-- 派单/上门/成交转化周期 -->
-    <Card  class="m_b">
-        <!-- tab切换 -->
-        <div class="tab_content">
-          <div class="tab">
-            <div
-              class="tab_item"
-              v-for="(item, index) in list"
-              :key="index"
-              @click="selectTab(index, item)"
-              :class="{ active: selected == item }"
-            >
-              <span>{{ item }}</span>
+      <!-- 漏斗图 -->
+      <Card  class="m_b">
+          <div class="h3">直播中转化漏斗图</div>
+          <funnel
+          ref="funnel"
+          :params="params"
+          ></funnel>
+      </Card>
+      <!-- 派单/上门/成交转化周期 -->
+      <Card  class="m_b">
+          <!-- tab切换 -->
+          <div class="tab_content">
+            <div class="tab">
+              <div
+                class="tab_item"
+                v-for="(item, index) in list"
+                :key="index"
+                @click="selectTab(index, item)"
+                :class="{ active: selected == item }"
+              >
+                <span>{{ item }}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="card_list">
-            <Card class="card_item"> 
-                <div class="h3">登记派单周期</div>
-                <customerBar :liveStreamingData="LivingCycleDataObj.sendCycleData" title="周期"/>
-            </Card>
-            <Card class="card_item"> 
-              <div class="h3">登记上门/成交周期</div>
-                <customerBar :liveStreamingData="LivingCycleDataObj.toHospitalCycleData" title="周期"/>
-            </Card>
-        </div>
-        <div class="card_list">
-            <Card class="card_item"> 
-                <div class="h3">线索目标达成率</div>
-                <customerBar :liveStreamingData="LivingClueTargetDataObj.clueTargetComplete" title="百分比"/>
-            </Card>
-            <Card class="card_item"> 
-              <div class="h3">业绩占比</div>
-                <customerBar :liveStreamingData="LivingPerformanceRateObj.performanceRate" title="百分比"/>
-            </Card>
-        </div>
-    </Card>
-   
-    <!-- 获客占比和业绩占比 -->
-    <Card  class="m_b">
-        <div class="card_list">
-            <Card class="card_item"> 
+          <div class="card_list">
+              <Card class="card_item"> 
+                  <div class="h3">登记派单周期</div>
+                  <customerBar :liveStreamingData="LivingCycleDataObj.sendCycleData" title="周期"/>
+              </Card>
+              <Card class="card_item"> 
+                <div class="h3">登记上门/成交周期</div>
+                  <customerBar :liveStreamingData="LivingCycleDataObj.toHospitalCycleData" title="周期"/>
+              </Card>
+          </div>
+          <div class="card_list">
+              <Card class="card_item"> 
+                  <div class="h3">线索目标达成率</div>
+                  <customerBar :liveStreamingData="LivingClueTargetDataObj.clueTargetComplete" title="百分比"/>
+              </Card>
+              <Card class="card_item"> 
+                <div class="h3">业绩占比</div>
+                  <customerBar :liveStreamingData="LivingPerformanceRateObj.performanceRate" title="百分比"/>
+              </Card>
+          </div>
+      </Card>
+    
+      <!-- 获客占比和业绩占比 -->
+      <Card  class="m_b">
+          <div class="card_list">
+              <Card class="card_item"> 
+                  <div class="m_b m_t ">
+                    <div class="h3">平台线索占比</div>
+                    <pieItem :pieData="LivingContentplatformClueDataObj.contentPlatformClueRate" title="总线索" :total="LivingContentplatformClueDataObj.contentPlatformTotalClue"/>
+                  </div>
+                  <div class="m_b">
+                    <div class="h3">抖音-线索占比</div>
+                    <pieItem :pieData="LivingContentplatformClueDataObj.tikTokClueRate" title="总线索" :total="LivingContentplatformClueDataObj.tikTokTotalClue"/>
+                  </div>
+                  <div class="m_b">
+                    <div class="h3">视频号-线索占比</div>
+                    <pieItem :pieData="LivingContentplatformClueDataObj.wechatVideoClueRate" title="总线索" :total="LivingContentplatformClueDataObj.wechatVideoTotalClue"/>
+                  </div>
+              </Card>
+              <Card class="card_item">
                 <div class="m_b m_t ">
-                  <div class="h3">平台线索占比</div>
-                  <pieItem :pieData="LivingContentplatformClueDataObj.contentPlatformClueRate" title="总线索" :total="LivingContentplatformClueDataObj.contentPlatformTotalClue"/>
+                  <div class="h3">平台业绩占比</div>
+                  <pieItem :pieData="LivingContentplatformPerformanceDataObj.contentPlatformPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.contentPlatformTotalPerformance"/>
                 </div>
-                <div class="m_b">
-                  <div class="h3">抖音-线索占比</div>
-                  <pieItem :pieData="LivingContentplatformClueDataObj.tikTokClueRate" title="总线索" :total="LivingContentplatformClueDataObj.tikTokTotalClue"/>
+                <div class="m_b m_t ">
+                  <div class="h3">抖音-业绩占比</div>
+                  <pieItem :pieData="LivingContentplatformPerformanceDataObj.tikTokAccountPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.tikTokAccountTotalPerformance"/>
                 </div>
-                <div class="m_b">
-                  <div class="h3">视频号-线索占比</div>
-                  <pieItem :pieData="LivingContentplatformClueDataObj.wechatVideoClueRate" title="总线索" :total="LivingContentplatformClueDataObj.wechatVideoTotalClue"/>
+                <div class="m_b m_t ">
+                  <div class="h3">视频号-业绩占比</div>
+                  <pieItem :pieData="LivingContentplatformPerformanceDataObj.wechatVideoAccountPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.wechatVideoAccountTotalPerformance"/>
                 </div>
-            </Card>
-            <Card class="card_item">
-              <div class="m_b m_t ">
-                <div class="h3">平台业绩占比</div>
-                <pieItem :pieData="LivingContentplatformPerformanceDataObj.contentPlatformPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.contentPlatformTotalPerformance"/>
-              </div>
-              <div class="m_b m_t ">
-                <div class="h3">抖音-业绩占比</div>
-                <pieItem :pieData="LivingContentplatformPerformanceDataObj.tikTokAccountPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.tikTokAccountTotalPerformance"/>
-              </div>
-              <div class="m_b m_t ">
-                <div class="h3">视频号-业绩占比</div>
-                <pieItem :pieData="LivingContentplatformPerformanceDataObj.wechatVideoAccountPerformanceRate" title="总业绩" :total="LivingContentplatformPerformanceDataObj.wechatVideoAccountTotalPerformance"/>
-              </div>
-             
-            </Card>
-            
-        </div>
-    </Card>
+              
+              </Card>
+              
+          </div>
+      </Card>
+    </div>
+    <div v-else>
+      <medicalBeautyClues :params="params" ref="medicalBeautyClues"/>
+    </div>
+    
   </div>
 </template>
 <script>
@@ -152,13 +172,16 @@ import monthLine from "./components/monthLine.vue"
 import funnel from "./components/funnel.vue"
 import customerBar from "./components/customerBar.vue"
 import pieItem from "./components/pieItem.vue"
+import medicalBeautyClues from "./components/medicalBeautyClues.vue"
+
 export default {
   components:{
     items,
     monthLine,
     funnel,
     customerBar,
-    pieItem
+    pieItem,
+    medicalBeautyClues
   },
   data() {
     return {
@@ -197,6 +220,8 @@ export default {
       LivingContentplatformPerformanceDataObj:{},
       selected: "当月",
       list: ["当月","历史"],
+      list3: ["图表","转化"],
+      selected3:'图表',
     };
 
   },
@@ -339,18 +364,30 @@ export default {
       // this.list[index].isSelected = !this.list[index].isSelected;
       this.getLivingCycleDatas()
     },
+    selectTab3(index, value) {
+      this.selected3 = value
+      this.getData()
+    },
     getData(){
         this.getTimeSpanClick()
-        this.$nextTick(()=>{
-            this.$refs.items.getLivingCustomerAndPerformanceDatas()
-            this.$refs.funnel.getLivingFilterDatas()
-        })
-        this.getLivingCustomerAndPerformanceBrokenLineDatas()
-        this.getLivingCycleDatas()
-        this.getLivingClueTargetDatas()
-        this.getLivingPerformanceRates()
-        this.getLivingContentplatformClueDatas()
-        this.getLivingContentplatformPerformanceDatas()
+        if(this.selected3 == '图表'){
+          this.$nextTick(()=>{
+              this.$refs.items.getLivingCustomerAndPerformanceDatas()
+              this.$refs.funnel.getLivingFilterDatas()
+          })
+          this.getLivingCustomerAndPerformanceBrokenLineDatas()
+          this.getLivingCycleDatas()
+          this.getLivingClueTargetDatas()
+          this.getLivingPerformanceRates()
+          this.getLivingContentplatformClueDatas()
+          this.getLivingContentplatformPerformanceDatas()
+        }else{
+          this.$nextTick(()=>{
+            this.$refs.medicalBeautyClues.getHealthValueLists()
+            this.$refs.medicalBeautyClues.getTotalCluesByYearClick()
+          })
+        }
+        
     }
   },
   mounted(){
@@ -377,6 +414,9 @@ export default {
 }
 .time {
   text-align: end;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
 .h3 {
   font-size: 18px;

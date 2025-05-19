@@ -181,7 +181,7 @@ export default {
       // console.log(processEnv.VUE_APP_BASE_URL)
       // 14是线上职位id 32是测试职位id
       const data = {
-        positionId:processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 14 : 32
+        positionId:processEnv.VUE_APP_BASE_URL == 'https://www.ameiyes.com' ? 14 : 32
       }
       emApi.getEmployeeByPositionId(data).then((res) => {
         if(res.code == 0){

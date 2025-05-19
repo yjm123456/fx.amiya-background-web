@@ -373,7 +373,7 @@
         <!-- 机构转化情况 -->
         <hospitalTable :params="params" :platformList="platformList" ref="hospitalTable"/>
         <!-- 业绩贡献占比 -->
-        <Card  class="m_b">
+        <!-- <Card  class="m_b">
           <div class="pie_list">
             <div  class="pie_item">
               <div class="h3">刀刀组</div>
@@ -402,7 +402,7 @@
               </Card>
             </div>
           </div>
-        </Card>
+        </Card> -->
       </div>
       <!-- 详情 -->
       <detail :detailModel.sync="detailModel" :detailFlowBarItemData="detailFlowBarItemData" :title="titles"/>

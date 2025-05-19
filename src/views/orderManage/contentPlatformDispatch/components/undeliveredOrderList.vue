@@ -898,7 +898,7 @@ export default {
     // isSellHandsChange(value){
     //   if(value == true){
     //     // 线上124 测试
-    //     this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 124 : 39
+    //     this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://www.ameiyes.com' ? 124 : 39
     //   }
     // },
     // 根据主派医院查询推单平台
@@ -1190,7 +1190,7 @@ export default {
           const {hospitalInfo} = res.data
           this.hospitalInfo = hospitalInfo;
           // 线上124 测试
-          // this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 124 : 39
+          // this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://www.ameiyes.com' ? 124 : 39
         }
       });
     },
@@ -1204,7 +1204,7 @@ export default {
       this.form.remark = "";
       this.thirdPartContentplatformInfo = []
       // 线上124 测试
-      // this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 124 : 39
+      // this.form.hospitalId = processEnv.VUE_APP_BASE_URL == 'https://www.ameiyes.com' ? 124 : 39
       
     },
     

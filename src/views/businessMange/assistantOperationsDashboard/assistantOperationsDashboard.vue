@@ -441,7 +441,7 @@ export default {
     getEmployeeByPositionIdAdmin(){
       const data = {
         // （客服管理员)线上id 4 测试5
-        positionId:processEnv.VUE_APP_BASE_URL == 'https://app.ameiyes.com' ? 4 : 5
+        positionId:processEnv.VUE_APP_BASE_URL == 'https://www.ameiyes.com' ? 4 : 5
         
       }
       employeeManageApi.getEmployeeByPositionId(data).then((res) => {

@@ -559,3 +559,11 @@ export const adminCustomerMonthTransformData = (params) => {
         params
     });
 };
+//直播中月度线索转化情况
+export const LivingYearTransformData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaLivingOperationBoard/LivingYearTransformData",
+        method: "get",
+        params
+    });
+};

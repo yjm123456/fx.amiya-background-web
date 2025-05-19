@@ -208,7 +208,7 @@ export default {
         customerServiceCompensationId:id,
         valid:true,
         belongEmpId:belongEmpId,
-        performanceTypeList:'1',
+        performanceTypeList:'1,3',
       };
       api.getCustomerServiceCheckPerformance(data).then((res) => {
         if (res.code === 0) {

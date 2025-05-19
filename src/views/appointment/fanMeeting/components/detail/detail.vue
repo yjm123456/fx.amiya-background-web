@@ -1883,7 +1883,7 @@ export default {
         if (sessionStorage.getItem("employeeType") == "hospitalEmployee") {
           // 线上266 测试193
           this.form.amiyaConsulationId =
-            processEnv.VUE_APP_BASE_URL == "https://app.ameiyes.com"
+            processEnv.VUE_APP_BASE_URL == "https://www.ameiyes.com"
               ? 266
               : 193;
         }

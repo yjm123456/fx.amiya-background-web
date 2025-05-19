@@ -1606,7 +1606,7 @@ const operationManage = [{
         path: "/beforeSinaWeiBoLiving",
         name: "beforeSinaWeiBoLiving",
         meta: {
-            title: "直播前微博数据",
+            title: "直播前快手数据",
             keepAlive: false,
             isTag: true,
             openName: ['运营管理'],
@@ -1745,6 +1745,18 @@ const operationManage = [{
         },
         component: () =>
             import ("@/views/operationManage/assistantPerformanceGoals/assistantPerformanceGoals.vue"),
+    },
+    {
+        path: "/operationalFeedback",
+        name: "operationalFeedback",
+        meta: {
+            title: "润棠运营反馈",
+            keepAlive: false,
+            isTag: true,
+            openName: ['运营管理'],
+        },
+        component: () =>
+            import ("@/views/operationManage/operationalFeedback/operationalFeedback.vue"),
     },
 ];
 /**

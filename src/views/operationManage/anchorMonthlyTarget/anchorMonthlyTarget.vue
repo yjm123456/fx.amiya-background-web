@@ -911,22 +911,22 @@
           <Row :gutter="30">
             <Col span="8">
               <FormItem
-                label="微博发布目标"
+                label="快手发布目标"
                 prop="sinaWeiBoReleaseTarget"
                 :rules="[
                   {
                     required: true,
-                    message: '微博发布目标(最小是1)',
+                    message: '快手发布目标(最小是1)',
                     trigger: 'change',
                     type: 'number',
                     min: 1,
                   },
                 ]"
-                key="微博发布目标"
+                key="快手发布目标"
               >
                 <Input
                   v-model="form.sinaWeiBoReleaseTarget"
-                  placeholder="请输入微博发布目标"
+                  placeholder="请输入快手发布目标"
                   type="number"
                   number
                   @on-change="tikTokReleaseTargetChange"
@@ -935,22 +935,22 @@
             </Col>
             <Col span="8">
               <FormItem
-                label="微博投流费用目标"
+                label="快手投流费用目标"
                 prop="sinaWeiBoFlowinvestmentTarget"
                 :rules="[
                   {
                     required: true,
-                    message: '微博投流费用目标(最小是1)',
+                    message: '快手投流费用目标(最小是1)',
                     trigger: 'change',
                     type: 'number',
                     min: 1,
                   },
                 ]"
-                key="微博投流费用目标"
+                key="快手投流费用目标"
               >
                 <Input
                   v-model="form.sinaWeiBoFlowinvestmentTarget"
-                  placeholder="请输入微博投流费用目标"
+                  placeholder="请输入快手投流费用目标"
                   type="number"
                   number
                   @on-change="zhihuFlowinvestmentTargetChange"
@@ -1710,19 +1710,19 @@ export default {
             },
           },
           {
-            title: "微博发布目标",
+            title: "快手发布目标",
             key: "sinaWeiBoReleaseTarget",
             minWidth: 130,
             align: "center",
           },
           {
-            title: "月累计微博发布条数",
+            title: "月累计快手发布条数",
             key: "cumulativeSinaWeiBoRelease",
             minWidth: 170,
             align: "center",
           },
           {
-            title: "微博发布目标完成率",
+            title: "快手发布目标完成率",
             key: "sinaWeiBoReleaseCompleteRate",
             minWidth: 180,
             align: "center",
@@ -1731,19 +1731,19 @@ export default {
             },
           },
           {
-            title: "微博投流费用目标",
+            title: "快手投流费用目标",
             key: "sinaWeiBoFlowinvestmentTarget",
             minWidth: 150,
             align: "center",
           },
           {
-            title: "累计微博投流费用",
+            title: "累计快手投流费用",
             key: "cumulativeSinaWeiBoFlowinvestment",
             minWidth: 170,
             align: "center",
           },
           {
-            title: "微博投流费用完成率",
+            title: "快手投流费用完成率",
             key: "sinaWeiBoFlowinvestmentCompleteRate",
             minWidth: 180,
             align: "center",
@@ -1827,9 +1827,9 @@ export default {
                                 xiaoHongShuReleaseTarget,
                                 // 小红书投流费用目标
                                 xiaoHongShuFlowinvestmentTarget,
-                                // 微博发布目标
+                                // 快手发布目标
                                 sinaWeiBoReleaseTarget,
-                                // 微博投流费用目标
+                                // 快手投流费用目标
                                 sinaWeiBoFlowinvestmentTarget,
                                 // 月发布目标
                                 releaseTarget,
@@ -2060,9 +2060,9 @@ export default {
         xiaoHongShuReleaseTarget: 1,
         // 小红书投流费用目标
         xiaoHongShuFlowinvestmentTarget: 1,
-        // 微博发布目标
+        // 快手发布目标
         sinaWeiBoReleaseTarget: 1,
-        // 微博投流费用目标
+        // 快手投流费用目标
         sinaWeiBoFlowinvestmentTarget: 1,
         // 月发布目标
         releaseTarget: 1,

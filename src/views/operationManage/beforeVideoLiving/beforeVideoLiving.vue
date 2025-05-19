@@ -247,6 +247,16 @@
               />
             </FormItem>
           </Col>
+          <Col span="16">
+            <FormItem label="备注" prop="remark">
+              <Input
+                v-model="form.remark"
+                placeholder="请输入备注"
+                type="textarea"
+                :rows="3"
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -384,6 +394,12 @@ export default {
             align: "center",
           },
           {
+            title: "备注",
+            key: "remark",
+            minWidth: 200,
+            align: "center",
+          },
+          {
             title: "操作",
             key: "",
             width: 120,
@@ -433,13 +449,15 @@ export default {
                               videoIncreaseFansFees,
                               videoClues,
                               videoShowcaseIncome,
-                              videoShowcaseFee
+                              videoShowcaseFee,
+                              remark
 
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
+                            this.form.remark = remark;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
                             this.form.videoIncreaseFans = videoIncreaseFans;
                             this.form.videoIncreaseFansFees = videoIncreaseFansFees;
@@ -604,7 +622,9 @@ export default {
         // 涨粉成本
         videoIncreaseFansFeescost:null,
         // 视频号橱窗付费
-        videoShowcaseFee:null
+        videoShowcaseFee:null,
+        // 备注
+        remark:''
       },
 
       ruleValidate: {
@@ -871,7 +891,8 @@ export default {
               videoIncreaseFansFees,
               videoClues,
               videoShowcaseIncome,
-              videoShowcaseFee
+              videoShowcaseFee,
+              remark
             } = this.form;
             const data = {
               id,
@@ -890,7 +911,8 @@ export default {
               videoIncreaseFansFees,
               videoClues,
               videoShowcaseIncome,
-              videoShowcaseFee
+              videoShowcaseFee,
+              remark
             };
             this.isflag=true
             api.BeforeLivingVideoUpdate(data).then((res) => {
@@ -922,7 +944,8 @@ export default {
               videoIncreaseFansFees,
               videoClues,
               videoShowcaseIncome,
-              videoShowcaseFee
+              videoShowcaseFee,
+              remark
              
             } = this.form;
             const data = {
@@ -939,7 +962,8 @@ export default {
               videoIncreaseFansFees,
               videoClues,
               videoShowcaseIncome,
-              videoShowcaseFee
+              videoShowcaseFee,
+              remark
             };
             this.isflag=true
             // 添加

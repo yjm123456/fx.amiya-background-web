@@ -137,10 +137,10 @@
         </Row>
         <Row :gutter="30">
           <Col span="8">
-            <FormItem label="微博运营人员" prop="sinaWeiBoOperationEmployeeId">
+            <FormItem label="快手运营人员" prop="sinaWeiBoOperationEmployeeId">
               <Select
                 v-model="form.sinaWeiBoOperationEmployeeId"
-                placeholder="请选择微博运营人员"
+                placeholder="请选择快手运营人员"
                 filterable
               >
                 <Option
@@ -163,10 +163,10 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="微博今日发布量" prop="sinaWeiBoSendNum">
+            <FormItem label="快手今日发布量" prop="sinaWeiBoSendNum">
               <Input
                 v-model="form.sinaWeiBoSendNum"
-                placeholder="请输入微博今日发布量"
+                placeholder="请输入快手今日发布量"
                 type="number"
                 number
                 @on-change="sinaWeiBoSendNumChange"
@@ -174,13 +174,23 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="微博今日投流费用" prop="sinaWeiBoFlowInvestmentNum">
+            <FormItem label="快手今日投流费用" prop="sinaWeiBoFlowInvestmentNum">
               <Input
                 v-model="form.sinaWeiBoFlowInvestmentNum"
-                placeholder="请输入微博今日投流费用"
+                placeholder="请输入快手今日投流费用"
                 type="number"
                 number
                 @on-change="sinaWeiBoFlowInvestmentNumChange"
+              />
+            </FormItem>
+          </Col>
+          <Col span="16">
+            <FormItem label="备注" prop="remark">
+              <Input
+                v-model="form.remark"
+                placeholder="请输入备注"
+                type="textarea"
+                :rows="3"
               />
             </FormItem>
           </Col>
@@ -237,7 +247,7 @@ export default {
             align: "center",
           },
           {
-            title: "微博运营人员",
+            title: "快手运营人员",
             key: "operationEmpName",
             minWidth: 170,
             align: "center",
@@ -255,13 +265,13 @@ export default {
             },
           },
           {
-            title: "微博今日发布量",
+            title: "快手今日发布量",
             key: "sendNum",
             minWidth: 140,
             align: "center",
           },
           {
-            title: "微博今日投流费用",
+            title: "快手今日投流费用",
             key: "flowInvestmentNum",
             minWidth: 170,
             align: "center",
@@ -289,6 +299,13 @@ export default {
             key: "performanceNum",
             minWidth: 120,
             align: "center",
+          },
+          {
+            title: "备注",
+            key: "remark",
+            minWidth: 200,
+            align: "center",
+            tooltip:true
           },
           {
             title: "操作",
@@ -336,13 +353,15 @@ export default {
                               xiaoHongShuFlowInvestmentNum,
                               zhihuFlowInvestmentNum,
                               videoFlowInvestmentNum,
-                              tikTokFlowInvestmentNum
+                              tikTokFlowInvestmentNum,
+                              remark
 
                             } = res.data.liveAnchorDailyTargetInfo;
                             this.getLiveAnchorMonthlyTarget()
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
+                            this.form.remark = remark;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
                             this.form.sinaWeiBoOperationEmployeeId = sinaWeiBoOperationEmployeeId==0 ?  null : sinaWeiBoOperationEmployeeId ;
                             this.form.sinaWeiBoSendNum = sinaWeiBoSendNum;
@@ -473,9 +492,9 @@ export default {
         liveanchorMonthlyTargetId: "",
         // 运营人员Id
         sinaWeiBoOperationEmployeeId: "",
-        // 微博今日发布量
+        // 快手今日发布量
         sinaWeiBoSendNum:null,
-        // 微博今日投流费用
+        // 快手今日投流费用
         sinaWeiBoFlowInvestmentNum:null,
         // 今日发布量
         todaySendNum: null,
@@ -488,7 +507,9 @@ export default {
         // 月度
         month: Number(this.$moment(new Date()).format("MM")),
         allflowInvestmentNum:null,
-        alltodaySendNum:null
+        alltodaySendNum:null,
+        // 备注
+        remark:''
       },
 
       ruleValidate: {
@@ -507,13 +528,13 @@ export default {
         sinaWeiBoSendNum: [
           {
             required: true,
-            message: "请输入微博今日发布量",
+            message: "请输入快手今日发布量",
           },
         ],
         sinaWeiBoFlowInvestmentNum: [
           {
             required: true,
-            message: "请输入微博今日投流费用",
+            message: "请输入快手今日投流费用",
           },
         ],
         todaySendNum: [
@@ -709,7 +730,8 @@ export default {
               flowInvestmentNum,
               recordDate,
               allflowInvestmentNum,
-              alltodaySendNum
+              alltodaySendNum,
+              remark
             } = this.form;
             const data = {
               id,
@@ -721,9 +743,8 @@ export default {
               sinaWeiBoFlowInvestmentNum: sinaWeiBoFlowInvestmentNum ? sinaWeiBoFlowInvestmentNum : 0,
               todaySendNum:Number(alltodaySendNum) + Number(sinaWeiBoSendNum),
               flowInvestmentNum:Math.floor((allflowInvestmentNum + sinaWeiBoFlowInvestmentNum) * 100) /100,
-              recordDate: this.$moment(new Date(recordDate)).format(
-                "YYYY-MM-DD"
-              ),
+              recordDate: this.$moment(new Date(recordDate)).format("YYYY-MM-DD"),
+              remark
             };
             this.isflag=true
             api.BeforeLivingSinaWeiBoUpdate(data).then((res) => {
@@ -751,7 +772,7 @@ export default {
               todaySendNum,
               flowInvestmentNum	,
               recordDate,
-             
+             remark
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -763,6 +784,7 @@ export default {
               recordDate: this.$moment(new Date(recordDate)).format(
                 "YYYY-MM-DD"
               ),
+              remark
             };
             this.isflag=true
             // 添加

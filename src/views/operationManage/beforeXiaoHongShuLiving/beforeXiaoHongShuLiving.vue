@@ -267,6 +267,16 @@
               />
             </FormItem>
           </Col>
+          <Col span="16">
+            <FormItem label="备注" prop="remark">
+              <Input
+                v-model="form.remark"
+                placeholder="请输入备注"
+                type="textarea"
+                :rows="3"
+              />
+            </FormItem>
+          </Col>
           <Spin fix v-if="isflag==true">
               <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
               <div>加载中...</div>
@@ -416,6 +426,12 @@ export default {
             minWidth: 120,
             align: "center",
           },
+          {
+            title: "备注",
+            key: "remark",
+            minWidth: 200,
+            align: "center",
+          },
           
           {
             title: "操作",
@@ -459,6 +475,7 @@ export default {
                               zhihuSendNum,
                               sinaWeiBoSendNum,
                               videoSendNum,
+                              remark,
 
                               zhihuFlowInvestmentNum,
                               sinaWeiBoFlowInvestmentNum,
@@ -477,6 +494,7 @@ export default {
                             this.isEdit = true;
                             this.form.id = id;
                             this.controlModal = true;
+                            this.form.remark = remark;
                             this.form.liveanchorMonthlyTargetId = liveanchorMonthlyTargetId;
                             this.form.xiaoHongShuIncreaseFans = xiaoHongShuIncreaseFans;
                             this.form.xiaoHongShuIncreaseFansFees = xiaoHongShuIncreaseFansFees;
@@ -648,6 +666,8 @@ export default {
         xiaoHongShuCallingCardSendNum:null,
         // 小红书今日私信开口量
         xiaoHongShuPrivateMessageOpen:null,
+        // 备注
+        remark:''
       },
 
       ruleValidate: {
@@ -930,6 +950,7 @@ export default {
               xiaoHongShuShowcaseFee,
               xiaoHongShuCallingCardSendNum,
               xiaoHongShuPrivateMessageOpen,
+              remark
             } = this.form;
             const data = {
               id,
@@ -951,6 +972,7 @@ export default {
               xiaoHongShuShowcaseFee,
               xiaoHongShuCallingCardSendNum,
               xiaoHongShuPrivateMessageOpen,
+              remark
             };
             this.isflag=true
             api.BeforeLivingXiaoHongShuUpdate(data).then((res) => {
@@ -985,6 +1007,7 @@ export default {
               xiaoHongShuShowcaseFee,
               xiaoHongShuCallingCardSendNum,
               xiaoHongShuPrivateMessageOpen,
+              remark
             } = this.form;
             const data = {
               liveanchorMonthlyTargetId,
@@ -1003,6 +1026,7 @@ export default {
               xiaoHongShuShowcaseFee,
               xiaoHongShuCallingCardSendNum,
               xiaoHongShuPrivateMessageOpen,
+              remark
             };
             this.isflag=true
             // 添加

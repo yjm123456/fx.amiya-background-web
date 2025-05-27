@@ -3,7 +3,7 @@
     <Card>
       <div class="content_title">
         
-        <div class="h2">啊美雅名索运营看板</div>
+        <div class="h2">啊美雅美妍运营看板</div>
       </div>
       <div class="content">
         <div class="left">
@@ -136,6 +136,37 @@
                 <customerBar :liveStreamingData="assiatantTargetCompleteAndPerformanceRateDataObj.performanceRateData" title="医生"/>
             </Card>
           </div>
+          <!-- 机构线索分析和机构业绩分析 -->
+          <Card class="m_b">
+            <!-- <div class="h3">机构--线索&业绩</div> -->
+            <!-- 平台切换 -->
+            <div class="tab2" >
+              <div
+                class="tab_item2"
+                v-for="(item, index) in platformList2"
+                :key="index"
+                @click="checkTab2(index, item)"
+                :class="{ active2: item.isSelected }"
+              >
+                <span>{{ item.name }}</span>
+              </div>
+            </div>
+            <div class="card_list">
+              <Card class="card_item">
+                <div class="h3">机构线索分析</div>
+                <div class="x_title">
+                  <div>总派单：{{assistantHospitalCluesDataObj.totalSendOrderCount}}</div>
+                  <div>总上门：{{assistantHospitalCluesDataObj.totalVisitCount}}</div>
+                  <div>总成交：{{assistantHospitalCluesDataObj.totalDealCount}}</div>
+                </div>
+                <hospitalBar :hospitalBarData="assistantHospitalCluesDataObj.items" />
+              </Card>
+              <Card class="card_item">
+                <div class="h3">机构业绩分析</div>
+                <barItem :barItemData="assistantHospitalPerformanceData"/>
+              </Card>
+            </div>
+          </Card>
         </Card>
         <Card  class="m_b">
           <div class=" card_list">
@@ -199,6 +230,8 @@ import monthLine from "./components/monthLine.vue"
 import funnel from "./components/funnel.vue"
 import customerBar from "./components/customerBar.vue"
 import pieItem from "./components/pieItem.vue"
+import hospitalBar from "./components/hospitalBar.vue"
+import barItem from "./components/barItem.vue"
 
 import totalAchievementByYear from "./components/totalAchievementByYear.vue"
 import medicalBeautyClues from "./components/medicalBeautyClues.vue"
@@ -207,6 +240,8 @@ import hospitalTable from "./components/hospitalTable.vue"
 
 export default {
   components: {
+    hospitalBar,
+    barItem,
     item2,
     monthLine,
     funnel,
@@ -270,7 +305,23 @@ export default {
     // IP业绩占比
     platformPerformanceDataList:{},
     // 医生
-    doctorList:[{id:-1,name:'全部医生'}]
+    doctorList:[{id:-1,name:'全部医生'}],
+    platformList2:[
+      {
+        name: "当月",
+        id: 1,
+        isSelected: true,
+      },
+      {
+        name: "历史",
+        id: 2,
+        isSelected: false,
+      },
+    ],
+    // 机构线索分析
+    assistantHospitalCluesDataObj:{},
+    // 机构业绩分析
+    assistantHospitalPerformanceData:[],
     };
   },
   methods: {
@@ -298,6 +349,10 @@ export default {
           sessionStorage.setItem("completeRate", res.data.data);
         }
       });
+    },
+    checkTab2(index, value) {
+      this.platformList2[index].isSelected = !this.platformList2[index].isSelected;
+      this.getassistantHospitalCluesData()
     },
     // 年度趋势
     selectTab6(index,value){
@@ -426,7 +481,36 @@ export default {
         }
       });
     },
-     
+     // 获取机构线索分析
+    getassistantHospitalCluesData(){
+        const {startDate,endDate,assistantId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            baseLiveAnchorId:assistantId == -1 ? null : assistantId,
+            currentMonth:this.platformList2.find((item) => item.id == 1).isSelected,
+            history:this.platformList2.find((item) => item.id == 2).isSelected,
+        }
+        api.getDoctorHospitalCluesData(data).then(res=>{
+            if(res.code === 0){
+                this.assistantHospitalCluesDataObj =  res.data.data
+            }
+        })
+    },
+    // 获取机构业绩 
+    getassistantHospitalPerformanceData(){
+        const {startDate,endDate,assistantId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            liveAnchorBaseId:assistantId == -1 ? null : assistantId,
+        }
+        api.getAssistantHospitalPerformanceData(data).then(res=>{
+            if(res.code === 0){
+                this.assistantHospitalPerformanceData =  res.data.data
+            }
+        })
+    },
     getData(){
       if(this.selected2 == '图表'){
         this.getgetMingSuoAchievementAndDateSchedule()
@@ -436,6 +520,8 @@ export default {
         this.mingsuoAssiatantTargetCompleteAndPerformanceRateDataClick()
         this.getMingSuoContentplatformClueDataClick()
         this.getMingSuoContentplatformPerformanceDataClick()
+        this.getassistantHospitalCluesData()
+        this.getassistantHospitalPerformanceData()
         this.$nextTick(()=>{
             this.$refs.whole.getMingSuoFilterDataClick()
         })
@@ -532,5 +618,29 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+.tab2{
+  text-align: start;
+  padding-left: 10px;
+  display: flex;
+  margin-bottom: 10px;
+}
+.tab_item2 {
+  background: #f0f0f0;
+  padding: 1px 15px;
+  box-sizing: border-box;
+  margin-right: 30px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.active2 {
+  color: red;
+  border: 1px solid red;
+}
+.x_title{
+  position: absolute;
+  right: 12%;
+  top:20px;
 }
 </style>

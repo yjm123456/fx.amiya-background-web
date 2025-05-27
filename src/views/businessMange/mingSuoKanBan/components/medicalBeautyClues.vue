@@ -435,7 +435,7 @@ export default {
         if (res.code === 0) {
           const {  totalPerformanceData} = res.data.data;
           this.query.data2 = totalPerformanceData ? totalPerformanceData : []
-          this.title2 = totalPerformanceData ? totalPerformanceData[0].groupName : '名索（线索）'
+          this.title2 = totalPerformanceData ? totalPerformanceData[0].groupName : '美妍（线索）'
         }
       });
     },

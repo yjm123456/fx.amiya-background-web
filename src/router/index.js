@@ -2198,7 +2198,7 @@ const businessMange = [{
         path: "/mingSuoKanBan",
         name: "mingSuoKanBan",
         meta: {
-            title: "名索运营看板",
+            title: "美妍运营看板",
             keepAlive: false,
             isTag: true,
             openName: ['经营看板'],

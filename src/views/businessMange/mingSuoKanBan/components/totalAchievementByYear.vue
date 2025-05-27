@@ -402,7 +402,7 @@ export default {
         if (res.code === 0) {
           const { totalPerformanceData} = res.data.data;
           this.query.data1 = totalPerformanceData
-          this.title1 = totalPerformanceData ? totalPerformanceData[0].groupName : '名索（总业绩）'
+          this.title1 = totalPerformanceData ? totalPerformanceData[0].groupName : '美妍（总业绩）'
          
         }
       });

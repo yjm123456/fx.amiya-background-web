@@ -63,3 +63,20 @@ export const getMingSuoContentplatformPerformanceData = (params) => {
         params
     });
 };
+
+// 名索机构线索
+export const getDoctorHospitalCluesData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaMingSuoOperationBoard/doctorHospitalCluesData",
+        method: "get",
+        params
+    });
+};
+// 名索机构业绩
+export const getAssistantHospitalPerformanceData = (params) => {
+    return http({
+        url: "/amiyabg/AmiyaMingSuoOperationBoard/assistantHospitalPerformanceData",
+        method: "get",
+        params
+    });
+};

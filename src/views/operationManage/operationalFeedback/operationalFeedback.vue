@@ -180,6 +180,7 @@
                 placeholder="请输入无效客资"
                 type="number"
                 number
+                @on-change="totalAddNumChange()"
               ></Input>
             </FormItem>
           </Col>
@@ -191,6 +192,7 @@
                 type="number"
                 number
                 @on-change="totalAddNumChange()"
+                disabled
               ></Input>
             </FormItem>
           </Col>
@@ -558,12 +560,13 @@ export default {
   },
   methods: {
     totalAddNumChange(value){
-      const {effictiveCommunicationNum,effictiveCustomerNum,customerAddNum,companyAddNum} = this.form
+      const {effictiveCommunicationNum,effictiveCustomerNum,customerAddNum,companyAddNum,invalidCustomerNum,totalAddNum} = this.form
       this.form.totalAddNum = customerAddNum + companyAddNum
       const num1 = (effictiveCommunicationNum / this.form.totalAddNum) * 100
       const num2 = (effictiveCustomerNum / this.form.totalAddNum) * 100
       this.form.effictiveCommunicationRate =  Math.round(num1  * 100) / 100;
       this.form.effictiveCustomerRate =  Math.round(num2 * 100) / 100;
+      this.form.effictiveCustomerNum =  customerAddNum + companyAddNum - invalidCustomerNum
     }, 
     // 主播基础数据列表
     getLiveAnchorBaseInfoValids(){

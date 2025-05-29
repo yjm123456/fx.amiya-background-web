@@ -21,12 +21,39 @@ export default {
           {
             title: "年度",
             key: "yearAndMonth",
-            minWidth:80,
+            minWidth:100,
             tooltip:true,
             className: 'test-name',
             align:'center'
           },
-          
+          {
+            title: "投流目标",
+            key: "flowInvestmentTarget",
+            minWidth:110,
+            align:'center',
+            className: 'test-name',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                      } 
+                },
+                      params.row.flowInvestmentTarget );
+            }
+          },
+          {
+            title: "累计投流",
+            key: "flowInvestmentTotalNum",
+            minWidth:110,
+            align:'center',
+            className: 'test-name',
+            render: (h, params) => {
+                return h('div', { 
+                    style: { 
+                      } 
+                },
+                      params.row.flowInvestmentTotalNum );
+            }
+          },
           {
             title: "线索目标",
             key: "clueTarget",

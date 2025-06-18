@@ -63,6 +63,27 @@
         </div>
       </div>
       <div class="item3">
+        <div class="h2">老客业绩</div>
+        <div class="item">
+          <div class="item_left">
+              <div>当日业绩：<span class="f_w">{{liveStreamingObj.oldCustomerCurrentPerformance}}</span></div>
+              <div>当月业绩：<span class="f_w">{{liveStreamingObj.oldCustomerCurrentMontPerformance}}</span></div>
+              <div class="item_left ">累计业绩：<span class="f_w">{{liveStreamingObj.oldCustomerPerformance}}</span></div>
+          </div>
+          <div class="item_right2">
+              <div>去年同比：
+                <span  class="h5" v-if="Math.sign(liveStreamingObj.oldCustomerPerformanceYearOnYear)== 1"> <span  class="red ">增长</span>{{ Math.abs(liveStreamingObj.oldCustomerPerformanceYearOnYear) + '%'}}</span>
+                <span class="h5" v-else-if="Math.sign(liveStreamingObj.oldCustomerPerformanceYearOnYear)== -1"><span  class="green">下降</span>{{ Math.abs(liveStreamingObj.oldCustomerPerformanceYearOnYear) + '%'}}</span>
+                <span class="h5"  v-else>-</span>
+                </div>
+              <div>上月环比：
+                <span  class="h5" v-if="Math.sign(liveStreamingObj.oldCustomerPerformanceChain)== 1"> <span  class="red ">增长</span>{{ Math.abs(liveStreamingObj.oldCustomerPerformanceChain) + '%'}}</span>
+                <span class="h5" v-else-if="Math.sign(liveStreamingObj.oldCustomerPerformanceChain)== -1"><span  class="green">下降</span>{{ Math.abs(liveStreamingObj.oldCustomerPerformanceChain) + '%'}}</span>
+                <span class="h5"  v-else>-</span>
+              </div>
+             
+          </div>
+        </div>
       </div>
     </div>
   </div>

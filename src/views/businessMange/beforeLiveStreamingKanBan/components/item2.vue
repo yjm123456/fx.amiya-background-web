@@ -24,12 +24,16 @@
         <div class="item">
           <div class="item_left">
             <div>
-                <span>当日：<span  class="b_w">{{employeeData.currentDayPerformance ? employeeData.currentDayPerformance  : 0}}</span></span>
+                <div>当日：<span  class="b_w">{{employeeData.currentDayPerformance ? employeeData.currentDayPerformance  : 0}}</span></div>
+                <div>当日新客：<span  class="b_w">{{employeeData.currentDayNewCustomerPerformance ? employeeData.currentDayNewCustomerPerformance  : 0}}</span></div>
+                <div>当日老客：<span  class="b_w">{{employeeData.currentDayOldCustomerPerformance ? employeeData.currentDayOldCustomerPerformance  : 0}}</span></div>
             </div>
           </div>
           <div class="item_right">
             <div>
-              <span>累计：<span  class="b_w">{{employeeData.performance ? employeeData.performance : 0}}</span></span>
+              <div>累计：<span  class="b_w">{{employeeData.performance ? employeeData.performance : 0}}</span></div>
+              <div>累计新客：<span  class="b_w">{{employeeData.newCustomerPerformance ? employeeData.newCustomerPerformance : 0}}</span></div>
+              <div>累计老客：<span  class="b_w">{{employeeData.oldCustomerPerformance ? employeeData.oldCustomerPerformance : 0}}</span></div>
             </div>
           </div>
         </div>
@@ -63,12 +67,16 @@
         <div class="item">
           <div class="item_left">
             <div>
-                <span>当日：<span  class="b_w">{{departmentData.currentDayPerformance ? departmentData.currentDayPerformance : 0}}</span></span>
+                <div>当日：<span  class="b_w">{{departmentData.currentDayPerformance ? departmentData.currentDayPerformance : 0}}</span></div>
+                <div>当日新客：<span  class="b_w">{{departmentData.currentDayNewCustomerPerformance ? departmentData.currentDayNewCustomerPerformance : 0}}</span></div>
+                <div>当日老客：<span  class="b_w">{{departmentData.currentDayOldCustomerPerformance ? departmentData.currentDayOldCustomerPerformance : 0}}</span></div>
             </div>
           </div>
           <div class="item_right">
             <div>
-              <span>累计：<span  class="b_w">{{departmentData.performance ?  departmentData.performance  : 0}}</span></span>
+              <div>累计：<span  class="b_w">{{departmentData.performance ?  departmentData.performance  : 0}}</span></div>
+              <div>累计新客：<span  class="b_w">{{departmentData.newCustomerPerformance ?  departmentData.newCustomerPerformance  : 0}}</span></div>
+              <div>累计老客：<span  class="b_w">{{departmentData.oldCustomerPerformance ?  departmentData.oldCustomerPerformance  : 0}}</span></div>
             </div>
           </div>
         </div>

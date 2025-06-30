@@ -3,7 +3,7 @@
           <div class="center_item">
             <div class="item1" >
               <div class="h2">
-                新客上门
+                新客上门：{{hospitalPerformanceObj.todayNewCustomerNum}}
                 <!-- <Tooltip placement="top-start" >
                   <i
                     class="iconfont icon-info info"
@@ -18,8 +18,9 @@
               </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日上门：<span class="f_w">{{hospitalPerformanceObj.todayNewCustomerNum}}</span></div>
                     <span >累计上门：<span class="f_w">{{hospitalPerformanceObj.totalNewCustomerNum}}</span></span>
+                    <div>上期上门：<span class="f_w">{{hospitalPerformanceObj.lastMonthNewCustomerNum}}</span></div>
+                    <div>同期上门：<span class="f_w">{{hospitalPerformanceObj.lastYearNewCustomerNum}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -37,7 +38,7 @@
             </div>
             <div class="item2" >
               <div class="h2">
-                老客上门
+                老客上门：{{hospitalPerformanceObj.todayOldCustomerNum}}
                 <!-- <Tooltip placement="top-start" >
                   <i
                     class="iconfont icon-info info"
@@ -52,8 +53,9 @@
               </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日上门：<span class="f_w">{{hospitalPerformanceObj.todayOldCustomerNum}}</span></div>
                     <span >累计上门：<span class="f_w">{{hospitalPerformanceObj.totalOldCustomerNum}}</span></span>
+                    <div>上期上门：<span class="f_w">{{hospitalPerformanceObj.lastMonthOldCustomerNum}}</span></div>
+                    <div>同期上门：<span class="f_w">{{hospitalPerformanceObj.lastYearOldCustomerNum}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>去年同比：
@@ -71,7 +73,7 @@
             </div>
             <div class="item3" >
               <div class="h2">
-                总上门
+                总上门：{{hospitalPerformanceObj.todayTotalCustomerNum}}
                 <!-- <Tooltip placement="top-start" >
                   <i
                     class="iconfont icon-info info"
@@ -85,8 +87,9 @@
               </div>
               <div class="item">
                 <div class="item_left">
-                    <div>当日上门：<span class="f_w">{{hospitalPerformanceObj.todayTotalCustomerNum}}</span></div>
                     <span >累计上门：<span class="f_w">{{hospitalPerformanceObj.totalTotalCustomerNum}}</span></span>
+                    <div>上期上门：<span class="f_w">{{hospitalPerformanceObj.lastMonthTotalCustomerNum}}</span></div>
+                    <div>同期上门：<span class="f_w">{{hospitalPerformanceObj.lastYearTotalCustomerNum}}</span></div>
                 </div>
                 <div class="item_right">
                     <div>去年同比：

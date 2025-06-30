@@ -1,16 +1,16 @@
 <template>
   <Card>
-    <div class="title" >月度业绩目标达成情况（整体）</div>
+    <div class="title" >月度业绩情况（整体）</div>
     <!-- :span-method="handleSpan"  -->
     <Table border :columns="query.columns" :data="query.data1"  :row-class-name="rowClassName" style="margin-bottom:10px"></Table>
-    <div class="title" >月度业绩目标达成情况（新客）</div>
+    <div class="title" >月度业绩情况（新客）</div>
     <Table border :columns="query.columns" :data="query.data2" :row-class-name="rowClassName" style="margin-bottom:10px"></Table>
-    <div class="title" >月度业绩目标达成情况（老客）</div>
+    <div class="title" >月度业绩情况（老客）</div>
     <Table border :columns="query.columns" :data="query.data3"  :row-class-name="rowClassName" style="margin-bottom:10px"></Table>
   </Card>
 </template>
 <script>
-import * as api from "@/api/amiyaOperationsBoard";
+import * as api from "@/api/amiyaHospitalOperationBoard";
 
 export default {
   props: {
@@ -48,10 +48,9 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2  ? params.row.januaryPerformance > this.completeRate ? 'green' : 'red' : '#000'
                         }
                     },
-                    params.index == 2 && params.row.januaryPerformance ? params.row.januaryPerformance + '%' : params.index == 3 ? params.row.januaryPerformance : params.row.januaryPerformance ?  Math.round( params.row.januaryPerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.januaryPerformance ?  Math.round( params.row.januaryPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.januaryPerformance
                 );
             },
           },
@@ -66,11 +65,10 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2  ? params.row.februaryPerformance > this.completeRate ? 'green' : 'red' : '#000'
                         },
                     },
+                    params.index == 0 ?  (params.row.februaryPerformance ?  Math.round( params.row.februaryPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.februaryPerformance
                     
-                    params.index == 2 ? params.row.februaryPerformance + '%' : params.index == 3 ? params.row.februaryPerformance : params.row.februaryPerformance ?  Math.round( params.row.februaryPerformance/10000 *1000 / 10 ) / 100 : 0
                 );
             },
           },
@@ -85,11 +83,10 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 2  ? params.row.marchPerformance > this.completeRate ? 'green' : 'red' : '#000'
                         },
                     },
+                    params.index == 0 ?  (params.row.marchPerformance ?  Math.round( params.row.marchPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.marchPerformance
                    
-                    params.index == 2 ? params.row.marchPerformance + '%' : params.index == 3 ? params.row.marchPerformance : params.row.marchPerformance ?  Math.round( params.row.marchPerformance/10000 *1000 / 10 ) / 100 : 0
                 );
             },
           },
@@ -104,11 +101,10 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2  ? (params.row.aprilPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
+                    params.index == 0 ?  (params.row.aprilPerformance ?  Math.round( params.row.aprilPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.aprilPerformance
                    
-                    params.index == 2 ? params.row.aprilPerformance + '%' : params.index == 3 ? params.row.aprilPerformance : params.row.aprilPerformance ?  Math.round( params.row.aprilPerformance/10000 *1000 / 10 ) / 100 : 0
                 );
             },
           },
@@ -123,11 +119,9 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2  ? (params.row.mayPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
-                    // params.row.mayPerformance ?  params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.mayPerformance + '%': params.row.mayPerformance  : 0
-                    params.index == 2 ? params.row.mayPerformance + '%' : params.index == 3 ? params.row.mayPerformance : params.row.mayPerformance ?  Math.round( params.row.mayPerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.mayPerformance ?  Math.round( params.row.mayPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.mayPerformance
                 );
             },
           },
@@ -142,11 +136,9 @@ export default {
                     "div",
                     {
                         style: {
-                            color:params.index == 2  ? (params.row.junePerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
-                    // params.row.junePerformance ?  params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.junePerformance + '%': params.row.junePerformance  : 0
-                    params.index == 2 ? params.row.junePerformance + '%' : params.index == 3 ? params.row.junePerformance : params.row.junePerformance ?  Math.round( params.row.junePerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.junePerformance ?  Math.round( params.row.junePerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.junePerformance
                 );
             },
           },
@@ -161,11 +153,9 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2  ? (params.row.julyPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
-                    // params.row.julyPerformance ? params.index == 3 ||  params.index == 4 || params.index == 5  ?  params.row.julyPerformance + '%': params.row.julyPerformance : 0
-                    params.index == 2 ? params.row.julyPerformance + '%' : params.index == 3 ? params.row.julyPerformance : params.row.julyPerformance ?  Math.round( params.row.julyPerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.julyPerformance ?  Math.round( params.row.julyPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.julyPerformance
                 );
             },
           },
@@ -180,11 +170,10 @@ export default {
                     "div",
                     {
                         style: {
-                          color:params.index == 2  ? (params.row.augustPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
+                    params.index == 0 ?  (params.row.augustPerformance ?  Math.round( params.row.augustPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.augustPerformance
                    
-                    params.index == 2 ? params.row.augustPerformance + '%' : params.index == 3 ? params.row.augustPerformance : params.row.augustPerformance ?  Math.round( params.row.augustPerformance/10000 *1000 / 10 ) / 100 : 0
                 );
             },
           },
@@ -199,10 +188,9 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2  ? (params.row.septemberPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
-                    params.index == 2 ? params.row.septemberPerformance + '%' : params.index == 3 ? params.row.septemberPerformance : params.row.septemberPerformance ?  Math.round( params.row.septemberPerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.septemberPerformance ?  Math.round( params.row.septemberPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.septemberPerformance
                 );
             },
           },
@@ -217,11 +205,10 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2  ? (params.row.octoberPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
+                    params.index == 0 ?  (params.row.octoberPerformance ?  Math.round( params.row.octoberPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.octoberPerformance
                    
-                    params.index == 2 ? params.row.octoberPerformance + '%' : params.index == 3 ? params.row.octoberPerformance : params.row.octoberPerformance ?  Math.round( params.row.octoberPerformance/10000 *1000 / 10 ) / 100 : 0
                 );
             },
           },
@@ -236,10 +223,9 @@ export default {
                     "div",
                     {
                         style: {
-                          color:params.index == 2  ? (params.row.novemberPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
-                    params.index == 2 ? params.row.novemberPerformance + '%' : params.index == 3 ? params.row.novemberPerformance : params.row.novemberPerformance ?  Math.round( params.row.novemberPerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.novemberPerformance ?  Math.round( params.row.novemberPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.novemberPerformance
                 );
             },
           },
@@ -254,11 +240,11 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2  ? (params.row.decemberPerformance > this.completeRate ? 'green' : 'red' ) :  '#000'
                         },
                     },
                    
-                    params.index == 2 ? params.row.decemberPerformance + '%' : params.index == 3 ? params.row.decemberPerformance : params.row.decemberPerformance ?  Math.round( params.row.decemberPerformance/10000 *1000 / 10 ) / 100 : 0
+                    // params.row.decemberPerformance ?  Math.round( params.row.decemberPerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.decemberPerformance ?  Math.round( params.row.decemberPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.decemberPerformance
                 );
             },
           },
@@ -273,10 +259,12 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2 && params.row.sumPerformance == null || params.row.sumPerformance == '/' ? '#000'  : params.row.sumPerformance > this.completeRate ? 'green' : 'red'
+                          //  color:params.index == 2 && params.row.sumPerformance == null || params.row.sumPerformance == '/' ? '#000'  : params.row.sumPerformance > this.completeRate ? 'green' : 'red'
                         },
                     },
-                    params.index == 2 && params.row.sumPerformance == null || params.row.sumPerformance == '/' ? '/'  : params.index == 2 && params.row.sumPerformance ?  params.row.sumPerformance + '%' :  params.index == 3  || params.row.sumPerformance == '/' ? params.row.sumPerformance : params.row.sumPerformance ?  Math.round( params.row.sumPerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.sumPerformance ?  Math.round( params.row.sumPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.sumPerformance
+                    // params.index == 1 ?  (params.row.sumPerformance ?  Math.round( params.row.sumPerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.sumPerformance
+                    // params.index == 2 && params.row.sumPerformance == null || params.row.sumPerformance == '/' ? '/'  : params.index == 2 && params.row.sumPerformance ?  params.row.sumPerformance + '%' :  params.index == 3  || params.row.sumPerformance == '/' ? params.row.sumPerformance : params.row.sumPerformance ?  Math.round( params.row.sumPerformance/10000 *1000 / 10 ) / 100 : 0
                 );
             },
           },
@@ -291,10 +279,12 @@ export default {
                     "div",
                     {
                         style: {
-                           color:params.index == 2 && params.row.averagePerformance == null || params.row.averagePerformance == '/' ? '#000'  : params.row.averagePerformance > this.completeRate ? 'green' : 'red'
+                          //  color:params.index == 2 && params.row.averagePerformance == null || params.row.averagePerformance == '/' ? '#000'  : params.row.averagePerformance > this.completeRate ? 'green' : 'red'
                         },
                     },
-                    params.index == 2 && params.row.averagePerformance == null || params.row.averagePerformance == '/' ? '/'  : params.index == 2 && params.row.averagePerformance ?  params.row.averagePerformance + '%' : params.index == 3 || params.row.averagePerformance == '/'  ? params.row.averagePerformance : params.row.averagePerformance ?  Math.round( params.row.averagePerformance/10000 *1000 / 10 ) / 100 : 0
+                    // params.row.sumPerformance ?  Math.round( params.row.sumPerformance/10000 *1000 / 10 ) / 100 : 0
+                    params.index == 0 ?  (params.row.averagePerformance ?  Math.round( params.row.averagePerformance/10000 *1000 / 10 ) / 100 : 0) : params.row.averagePerformance
+                    // params.index == 2 && params.row.averagePerformance == null || params.row.averagePerformance == '/' ? '/'  : params.index == 2 && params.row.averagePerformance ?  params.row.averagePerformance + '%' : params.index == 3 || params.row.averagePerformance == '/'  ? params.row.averagePerformance : params.row.averagePerformance ?  Math.round( params.row.averagePerformance/10000 *1000 / 10 ) / 100 : 0
                 );
             },
           },
@@ -336,17 +326,17 @@ export default {
     },
     // 月度业绩目标达成情况
     getAssistantTotalAchievementByYearClick() {
-      const { assistantId, startDate } = this.params;
+      const { hospitalId, endDate } = this.params;
       const data = {
-        year: this.$moment(startDate).format("YYYY"),
-        assistantId:assistantId,
+        year: this.$moment(endDate).format("YYYY"),
+        hospitalId:hospitalId,
       };
-      api.getAssistantTotalAchievementByYear(data).then((res) => {
+      api.getHospitalTotalAchievementByYear(data).then((res) => {
         if (res.code === 0) {
           const { totalPerformanceData , newCustomerPerformanceData ,oldCustomerPerformanceData} = res.data.data;
           this.query.data1 = totalPerformanceData
-          this.query.data2 = newCustomerPerformanceData.slice(0, 3);
-          this.query.data3 = oldCustomerPerformanceData.slice(0, 3);
+          this.query.data2 = newCustomerPerformanceData.slice(0, 1);
+          this.query.data3 = oldCustomerPerformanceData.slice(0, 1);
         }
       });
     },

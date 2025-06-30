@@ -2222,7 +2222,7 @@ const businessMange = [{
         path: "/hospitalKanBan",
         name: "hospitalKanBan",
         meta: {
-            title: "机构运营看板",
+            title: "医院运营看板",
             keepAlive: false,
             isTag: true,
             openName: ['经营看板'],

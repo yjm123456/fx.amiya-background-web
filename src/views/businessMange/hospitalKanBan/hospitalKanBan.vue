@@ -2,11 +2,11 @@
   <Card style="overflow-x:hidden">
     <!-- 啊美雅（医美）助理数据运营看板 -->
     <!-- <div class="title">{{this.selected5 == '整体' ? '啊美雅（医美）助理整体数据运营看板' : '啊美雅（医美）助理转化数据运营看板'}}</div> -->
-    <div class="title">机构看板</div>
+    <div class="title">医院运营看板</div>
     <div class="d_p">
       <!-- 时间进度及筛选 -->
       <div class="time">
-        <!-- <div class="tab_content2">
+        <div class="tab_content2">
           <div class="tab">
             <div
               class="tab_item"
@@ -18,7 +18,7 @@
               <span>{{ item }}</span>
             </div>
           </div>
-        </div> -->
+        </div>
         <span>
           <span class="completeRateSize">时间进度：</span>
           <Progress
@@ -52,7 +52,7 @@
           v-model="params.hospitalId"
           placeholder="请选择医院"
           filterable
-          style="width:250px;margin-right:10px;text-align: start;"
+          style="width:200px;margin-right:10px;text-align: start;"
         >
           <Option
             v-for="item in params.hospitalInfo"
@@ -92,7 +92,7 @@
       </Card>
       <!-- 漏斗图 -->
       <Card class="mr">
-        <div class="h2">机构转化周期漏斗</div>
+        <div class="h2">医院转化周期漏斗</div>
         <!-- tab切换 -->
         <div class="tab_content">
           <div class="tab">
@@ -138,11 +138,11 @@
         </div>
         <div class="list3">
           <Card class="item3">
-            <div class="h2 h3">机构上门转化周期</div>
+            <div class="h2 h3">医院上门转化周期</div>
             <cycleBar :barData="assistantTransformCycleDataObj.toHospitalCycleData"/>
           </Card>
           <Card class="item3">
-            <div class="h2 h3">机构老客复购率</div>
+            <div class="h2 h3">医院老客复购率</div>
             <cycleBar :barData="assistantTransformCycleDataObj.oldCustomerRePurcheData" title="复购率"/>
           </Card>
         </div>
@@ -163,17 +163,17 @@
         </div>
         <div  class="list ">
           <Card class="item">
-            <div class="h2">机构上门人数</div>
+            <div class="h2">医院上门人数</div>
             <div class="x_title">
-              <div>总上门：{{assistantHospitalCluesDataObj.totalVisitCount}}</div>
-              <div>总成交：{{assistantHospitalCluesDataObj.totalDealCount}}</div>
-              <div>总成交率：{{assistantHospitalCluesDataObj.dealRate}}%</div>
+              <div>总上门：{{assistantHospitalCluesDataObj.totalVisitCount ? assistantHospitalCluesDataObj.totalVisitCount : 0}}</div>
+              <div>总成交：{{assistantHospitalCluesDataObj.totalDealCount ? assistantHospitalCluesDataObj.totalDealCount : 0}}</div>
+              <div>总成交率：{{assistantHospitalCluesDataObj.dealRate ? assistantHospitalCluesDataObj.dealRate : 0}}%</div>
 
             </div>
             <customerBar :assiatantTargetCompleteAndPerformanceRateData="assistantHospitalCluesDataObj.items"  title="人数"  :completeRate="completeRate"/>
           </Card>
           <Card  class="item">
-            <div class="h2">机构业绩贡献</div>
+            <div class="h2">医院业绩贡献</div>
             <customerBar :assiatantTargetCompleteAndPerformanceRateData="assistantHospitalPerformanceData"  title="目标完成率"/>
           </Card>
         </div>
@@ -287,9 +287,9 @@ export default {
       totalPerformanceNumber5:0,
       // 助理目标完成率和助理业绩占比柱状图
       assiatantTargetCompleteAndPerformanceRateDataObj:{},
-      // 机构线索分析
+      // 医院线索分析
       assistantHospitalCluesDataObj:{},
-      // 机构业绩分析
+      // 医院业绩分析
       assistantHospitalPerformanceData:[],
       // 用于加载数据
       isFlag:false,
@@ -373,8 +373,7 @@ export default {
       }else if(this.selected5 == '转化'){
         this.$nextTick(()=>{
             this.$refs.monthlyTargetAchievementStatus.getAssistantTotalAchievementByYearClick()
-            this.$refs.monthlyLeadConversionStatus.assistantYearTransformDataClick()
-            this.$refs.monthlyLeadConversionStatus.getHealthValueLists()
+            this.$refs.monthlyLeadConversionStatus.getHospitalOperationYearData()
         })
       }
       
@@ -449,7 +448,7 @@ export default {
             }
         })
     },
-    // 机构上门转化周期和机构老客复购率
+    // 医院上门转化周期和医院老客复购率
     getAssistantTransformCycleDataClick(){
         const {startDate,endDate,hospitalId} = this.params
         // console.log(this.selected4)
@@ -467,7 +466,7 @@ export default {
             }
         })
     },
-    // // 获取机构转化周期 
+    // // 获取医院转化周期 
     // getassiatantTargetCompleteAndPerformanceRateData(){
     //     const {startDate,endDate,hospitalId} = this.params
     //     const data = {
@@ -481,7 +480,7 @@ export default {
     //         }
     //     })
     // },
-    // 获取机构上门人数
+    // 获取医院上门人数
     getassistantHospitalCluesData(){
         const {startDate,endDate,hospitalId} = this.params
         const data = {
@@ -497,7 +496,7 @@ export default {
             }
         })
     },
-    // 获取机构业绩贡献占比
+    // 获取医院业绩贡献占比
     getassistantHospitalPerformanceData(){
         const {startDate,endDate,hospitalId} = this.params
         const data = {

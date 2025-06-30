@@ -57,8 +57,16 @@ export const hospitalHospitalCluesData = (params) => {
     }
     // 机构业绩贡献占比柱形图
 export const hospitalPerformanceRateData = (params) => {
+        return http({
+            url: "/amiyabg/AmiyaHospitalOperationBoard/hospitalPerformanceRateData",
+            method: "get",
+            params
+        });
+    }
+    // 机构月度业绩目标达成情况
+export const getHospitalTotalAchievementByYear = (params) => {
     return http({
-        url: "/amiyabg/AmiyaHospitalOperationBoard/hospitalPerformanceRateData",
+        url: "/amiyabg/AmiyaHospitalOperationBoard/getHospitalTotalAchievementByYear",
         method: "get",
         params
     });

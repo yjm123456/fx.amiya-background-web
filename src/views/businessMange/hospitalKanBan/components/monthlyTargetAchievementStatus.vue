@@ -1,11 +1,11 @@
 <template>
   <Card>
-    <div class="title" >月度业绩情况（整体）</div>
+    <div class="title" >年度业绩情况（整体）</div>
     <!-- :span-method="handleSpan"  -->
     <Table border :columns="query.columns" :data="query.data1"  :row-class-name="rowClassName" style="margin-bottom:10px"></Table>
-    <div class="title" >月度业绩情况（新客）</div>
+    <div class="title" >年度业绩情况（新客）</div>
     <Table border :columns="query.columns" :data="query.data2" :row-class-name="rowClassName" style="margin-bottom:10px"></Table>
-    <div class="title" >月度业绩情况（老客）</div>
+    <div class="title" >年度业绩情况（老客）</div>
     <Table border :columns="query.columns" :data="query.data3"  :row-class-name="rowClassName" style="margin-bottom:10px"></Table>
   </Card>
 </template>

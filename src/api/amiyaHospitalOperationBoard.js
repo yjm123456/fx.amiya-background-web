@@ -65,8 +65,32 @@ export const hospitalPerformanceRateData = (params) => {
     }
     // 机构月度业绩目标达成情况
 export const getHospitalTotalAchievementByYear = (params) => {
+        return http({
+            url: "/amiyabg/AmiyaHospitalOperationBoard/getHospitalTotalAchievementByYear",
+            method: "get",
+            params
+        });
+    }
+    // 机构上门率数据（新客true，老客false）5条数据
+export const hospitalVisitRateData = (params) => {
+        return http({
+            url: "/amiyabg/AmiyaHospitalOperationBoard/hospitalVisitRateData",
+            method: "get",
+            params
+        });
+    }
+    // 机构成交率数据（新客true，老客false）5条数据
+export const hospitalDealRateData = (params) => {
+        return http({
+            url: "/amiyabg/AmiyaHospitalOperationBoard/hospitalDealRateData",
+            method: "get",
+            params
+        });
+    }
+    // 机构新/老客客单价柱形图
+export const hospitalPerCustomerPriceDataData = (params) => {
     return http({
-        url: "/amiyabg/AmiyaHospitalOperationBoard/getHospitalTotalAchievementByYear",
+        url: "/amiyabg/AmiyaHospitalOperationBoard/hospitalPerCustomerPriceDataData",
         method: "get",
         params
     });

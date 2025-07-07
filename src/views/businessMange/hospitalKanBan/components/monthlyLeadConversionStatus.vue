@@ -1,6 +1,6 @@
 <template>
-  <Card>
-    <div class="title" >全国医院年运营情况</div>
+  <Card style="margin-top:10px">
+    <div class="title" >全国医院月度运营情况</div>
     <!--前十机构运营数据（11条数据10条+1条总计）  -->
     <Table :row-class-name="rowClassName" :columns="query.columns" :data="query.data1" border height="400"></Table>
     <!-- 其他机构运营数据 -->
@@ -38,80 +38,80 @@ export default {
             tooltip:true,
             className: 'test-name',
           },
-          {
-            title: "派单量",
-            key: "sendNum",
-            minWidth:90,
-            align:'center',
-            className: 'test-name',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          // {
+          //   title: "派单量",
+          //   key: "sendNum",
+          //   minWidth:90,
+          //   align:'center',
+          //   className: 'test-name',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId,hospitalName} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.dispitalModel = true
-                               this.getHospitalSendOrderBrokenLine(hospitalId)
-                               this.hospital = hospitalName
-                               this.year = String( this.$moment(this.query.year).format("YYYY"))
-                            }
-                        },
-                        },
-                    },
-                    params.row.sendNum
-                ),
-              ])
-             }
-          },
-          {
-            title: "上门数",
-            key: "visitNum",
-            minWidth:90,
-            align:'center',
-            className: 'test-name',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId,hospitalName} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.dispitalModel = true
+          //                      this.getHospitalSendOrderBrokenLine(hospitalId)
+          //                      this.hospital = hospitalName
+          //                      this.year = String( this.$moment(this.query.year).format("YYYY"))
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.sendNum
+          //       ),
+          //     ])
+          //    }
+          // },
+          // {
+          //   title: "上门数",
+          //   key: "visitNum",
+          //   minWidth:90,
+          //   align:'center',
+          //   className: 'test-name',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId,hospitalName} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.doorToDoorModel = true
-                               this.getHospitalVisitBrokenLine(hospitalId)
-                               this.hospital = hospitalName
-                               this.year = String( this.$moment(this.query.year).format("YYYY"))
-                            }
-                        },
-                        },
-                    },
-                    params.row.visitNum
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId,hospitalName} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.doorToDoorModel = true
+          //                      this.getHospitalVisitBrokenLine(hospitalId)
+          //                      this.hospital = hospitalName
+          //                      this.year = String( this.$moment(this.query.year).format("YYYY"))
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.visitNum
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "上门率",
             key: "visitRate",
@@ -150,43 +150,43 @@ export default {
               ])
              }
           },
-          {
-            title: "新客成交",
-            key: "newCustomerDealNum",
-            minWidth:100,
-            align:'center',
-            className: 'test-name',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          // {
+          //   title: "新客成交",
+          //   key: "newCustomerDealNum",
+          //   minWidth:100,
+          //   align:'center',
+          //   className: 'test-name',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId,hospitalName} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.newCustomerDealModel = true
-                               this.getHospitalNewCustomerDealBrokenLine(hospitalId)
-                               this.hospital = hospitalName
-                               this.year = String( this.$moment(this.query.year).format("YYYY"))
-                            }
-                        },
-                        },
-                    },
-                    params.row.newCustomerDealNum ? params.row.newCustomerDealNum  : 0
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId,hospitalName} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.newCustomerDealModel = true
+          //                      this.getHospitalNewCustomerDealBrokenLine(hospitalId)
+          //                      this.hospital = hospitalName
+          //                      this.year = String( this.$moment(this.query.year).format("YYYY"))
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.newCustomerDealNum ? params.row.newCustomerDealNum  : 0
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
@@ -224,43 +224,43 @@ export default {
               ])
              }
           },
-          {
-            title: "新客业绩",
-            key: "newCustomerAchievement",
-            minWidth:120,
-            className: 'test-name',
-            align:'center',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          // {
+          //   title: "新客业绩",
+          //   key: "newCustomerAchievement",
+          //   minWidth:120,
+          //   className: 'test-name',
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId,hospitalName} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.newCustomerPerformanceModel = true
-                               this.getHospitalNewCustomerPerformanceBrokenLine(hospitalId)
-                               this.hospital = hospitalName
-                               this.year = String( this.$moment(this.query.year).format("YYYY"))
-                            }
-                        },
-                        },
-                    },
-                    params.row.newCustomerAchievement ? (params.row.newCustomerAchievement).toFixed(2) : 0
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId,hospitalName} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.newCustomerPerformanceModel = true
+          //                      this.getHospitalNewCustomerPerformanceBrokenLine(hospitalId)
+          //                      this.hospital = hospitalName
+          //                      this.year = String( this.$moment(this.query.year).format("YYYY"))
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.newCustomerAchievement ? (params.row.newCustomerAchievement).toFixed(2) : 0
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
@@ -298,80 +298,80 @@ export default {
               ])
              }
           },
-          {
-            title: "老客成交",
-            key: "oldCustomerDealNum",
-            minWidth:110,
-            align:'center',
-            className: 'test-name',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          // {
+          //   title: "老客成交",
+          //   key: "oldCustomerDealNum",
+          //   minWidth:110,
+          //   align:'center',
+          //   className: 'test-name',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId,hospitalName} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.oldDealModel = true
-                               this.getHospitalOldCustomerDealBrokenLine(hospitalId)
-                               this.hospital = hospitalName
-                               this.year = String( this.$moment(this.query.year).format("YYYY"))
-                            }
-                        },
-                        },
-                    },
-                    params.row.oldCustomerDealNum ? (params.row.oldCustomerDealNum).toFixed(2) : 0
-                ),
-              ])
-             }
-          },
-          {
-            title: "老客业绩",
-            key: "oldCustomerAchievement",
-            minWidth:140,
-            align:'center',
-            className: 'test-name',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId,hospitalName} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.oldDealModel = true
+          //                      this.getHospitalOldCustomerDealBrokenLine(hospitalId)
+          //                      this.hospital = hospitalName
+          //                      this.year = String( this.$moment(this.query.year).format("YYYY"))
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.oldCustomerDealNum ? (params.row.oldCustomerDealNum).toFixed(2) : 0
+          //       ),
+          //     ])
+          //    }
+          // },
+          // {
+          //   title: "老客业绩",
+          //   key: "oldCustomerAchievement",
+          //   minWidth:140,
+          //   align:'center',
+          //   className: 'test-name',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId,hospitalName} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.oldPerformanceModel = true
-                               this.getHospitalOldCustomerPerformanceBrokenLine(hospitalId)
-                               this.hospital = hospitalName
-                               this.year = String( this.$moment(this.query.year).format("YYYY"))
-                            }
-                        },
-                        },
-                    },
-                    params.row.oldCustomerAchievement ? (params.row.oldCustomerAchievement).toFixed(2) : 0
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId,hospitalName} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.oldPerformanceModel = true
+          //                      this.getHospitalOldCustomerPerformanceBrokenLine(hospitalId)
+          //                      this.hospital = hospitalName
+          //                      this.year = String( this.$moment(this.query.year).format("YYYY"))
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.oldCustomerAchievement ? (params.row.oldCustomerAchievement).toFixed(2) : 0
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
@@ -409,50 +409,50 @@ export default {
               ])
              }
           },
-          {
-            title: "总业绩",
-            minWidth:150,
-            align:'center',
-            className: 'test-name',
-            key: "totalAchievement",
-            // render: (h, params) => {
-            //   return h(
-            //         "div",
-            //         params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
-            //       )
+          // {
+          //   title: "总业绩",
+          //   minWidth:150,
+          //   align:'center',
+          //   className: 'test-name',
+          //   key: "totalAchievement",
+          //   // render: (h, params) => {
+          //   //   return h(
+          //   //         "div",
+          //   //         params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
+          //   //       )
                 
-            // },
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          //   // },
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId,hospitalName} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.totalPerformanceModel = true
-                               this.getHospitalTotalPriceBrokenLine(hospitalId)
-                               this.hospital = hospitalName
-                               this.year = String( this.$moment(this.query.year).format("YYYY"))
-                            }
-                        },
-                        },
-                    },
-                    params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId,hospitalName} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.totalPerformanceModel = true
+          //                      this.getHospitalTotalPriceBrokenLine(hospitalId)
+          //                      this.hospital = hospitalName
+          //                      this.year = String( this.$moment(this.query.year).format("YYYY"))
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "新老客占比",
             key: "newOrOldCustomerRate",
@@ -475,74 +475,74 @@ export default {
             minWidth:150,
             tooltip:true
           },
-          {
-            title: "派单量",
-            key: "sendNum",
-            minWidth:90,
-            align:'center',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          // {
+          //   title: "派单量",
+          //   key: "sendNum",
+          //   minWidth:90,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.dispitalModel = true
-                               this.getHospitalSendOrderBrokenLine(hospitalId)
-                            }
-                        },
-                        },
-                    },
-                    params.row.sendNum
-                ),
-              ])
-             }
-          },
-          {
-            title: "上门数",
-            key: "visitNum",
-            minWidth:90,
-            align:'center',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.dispitalModel = true
+          //                      this.getHospitalSendOrderBrokenLine(hospitalId)
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.sendNum
+          //       ),
+          //     ])
+          //    }
+          // },
+          // {
+          //   title: "上门数",
+          //   key: "visitNum",
+          //   minWidth:90,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.doorToDoorModel = true
-                               this.getHospitalVisitBrokenLine(hospitalId)
-                            }
-                        },
-                        },
-                    },
-                    params.row.visitNum
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.doorToDoorModel = true
+          //                      this.getHospitalVisitBrokenLine(hospitalId)
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.visitNum
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "上门率",
             key: "visitRate",
@@ -577,40 +577,40 @@ export default {
               ])
              }
           },
-          {
-            title: "新客成交",
-            key: "newCustomerDealNum",
-            minWidth:100,
-            align:'center',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          // {
+          //   title: "新客成交",
+          //   key: "newCustomerDealNum",
+          //   minWidth:100,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.newCustomerDealModel = true
-                               this.getHospitalNewCustomerDealBrokenLine(hospitalId)
-                            }
-                        },
-                        },
-                    },
-                    params.row.newCustomerDealNum ? params.row.newCustomerDealNum  : 0
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.newCustomerDealModel = true
+          //                      this.getHospitalNewCustomerDealBrokenLine(hospitalId)
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.newCustomerDealNum ? params.row.newCustomerDealNum  : 0
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
@@ -645,40 +645,40 @@ export default {
               ])
              }
           },
-          {
-            title: "新客业绩",
-            key: "newCustomerAchievement",
-            minWidth:120,
-            align:'center',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          // {
+          //   title: "新客业绩",
+          //   key: "newCustomerAchievement",
+          //   minWidth:120,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.newCustomerPerformanceModel = true
-                               this.getHospitalNewCustomerPerformanceBrokenLine(hospitalId)
-                            }
-                        },
-                        },
-                    },
-                    params.row.newCustomerAchievement ? (params.row.newCustomerAchievement).toFixed(2) : 0
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.newCustomerPerformanceModel = true
+          //                      this.getHospitalNewCustomerPerformanceBrokenLine(hospitalId)
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.newCustomerAchievement ? (params.row.newCustomerAchievement).toFixed(2) : 0
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
@@ -714,74 +714,74 @@ export default {
               ])
              }
           },
-          {
-            title: "老客成交",
-            key: "oldCustomerDealNum",
-            minWidth:110,
-            align:'center',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          // {
+          //   title: "老客成交",
+          //   key: "oldCustomerDealNum",
+          //   minWidth:110,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.oldDealModel = true
-                               this.getHospitalOldCustomerDealBrokenLine(hospitalId)
-                            }
-                        },
-                        },
-                    },
-                    params.row.oldCustomerDealNum ? (params.row.oldCustomerDealNum).toFixed(2) : 0
-                ),
-              ])
-             }
-          },
-          {
-            title: "老客业绩",
-            key: "oldCustomerAchievement",
-            minWidth:140,
-            align:'center',
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.oldDealModel = true
+          //                      this.getHospitalOldCustomerDealBrokenLine(hospitalId)
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.oldCustomerDealNum ? (params.row.oldCustomerDealNum).toFixed(2) : 0
+          //       ),
+          //     ])
+          //    }
+          // },
+          // {
+          //   title: "老客业绩",
+          //   key: "oldCustomerAchievement",
+          //   minWidth:140,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.oldPerformanceModel = true
-                               this.getHospitalOldCustomerPerformanceBrokenLine(hospitalId)
-                            }
-                        },
-                        },
-                    },
-                    params.row.oldCustomerAchievement ? (params.row.oldCustomerAchievement).toFixed(2) : 0
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.oldPerformanceModel = true
+          //                      this.getHospitalOldCustomerPerformanceBrokenLine(hospitalId)
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.oldCustomerAchievement ? (params.row.oldCustomerAchievement).toFixed(2) : 0
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
@@ -816,47 +816,47 @@ export default {
               ])
              }
           },
-          {
-            title: "总业绩",
-            minWidth:150,
-            align:'center',
-            key: "totalAchievement",
-            // render: (h, params) => {
-            //   return h(
-            //         "div",
-            //         params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
-            //       )
+          // {
+          //   title: "总业绩",
+          //   minWidth:150,
+          //   align:'center',
+          //   key: "totalAchievement",
+          //   // render: (h, params) => {
+          //   //   return h(
+          //   //         "div",
+          //   //         params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
+          //   //       )
                 
-            // },
-            render: (h, params) => {
-              return h("div", [
-                    h(
-                    "div",
-                    {
-                        props: {
-                        type: "primary",
-                        size: "small",
-                        },
-                        style: {
+          //   // },
+          //   render: (h, params) => {
+          //     return h("div", [
+          //           h(
+          //           "div",
+          //           {
+          //               props: {
+          //               type: "primary",
+          //               size: "small",
+          //               },
+          //               style: {
                         
-                        cursor:'pointer'
-                        },
-                        on: {
-                        click: () => {
-                            const {hospitalId} = params.row
-                            // 判断是最后一行总计的时候不弹窗
-                            if(params.index !== (this.query.rowIndex-1)){
-                               this.totalPerformanceModel = true
-                               this.getHospitalTotalPriceBrokenLine(hospitalId)
-                            }
-                        },
-                        },
-                    },
-                    params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
-                ),
-              ])
-             }
-          },
+          //               cursor:'pointer'
+          //               },
+          //               on: {
+          //               click: () => {
+          //                   const {hospitalId} = params.row
+          //                   // 判断是最后一行总计的时候不弹窗
+          //                   if(params.index !== (this.query.rowIndex-1)){
+          //                      this.totalPerformanceModel = true
+          //                      this.getHospitalTotalPriceBrokenLine(hospitalId)
+          //                   }
+          //               },
+          //               },
+          //           },
+          //           params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
+          //       ),
+          //     ])
+          //    }
+          // },
           {
             title: "新老客占比",
             key: "newOrOldCustomerRate",
@@ -878,19 +878,19 @@ export default {
             minWidth:150,
             tooltip:true
           },
-          {
-            title: "派单量",
-            key: "sendNum",
-            minWidth:90,
-            align:'center',
+          // {
+          //   title: "派单量",
+          //   key: "sendNum",
+          //   minWidth:90,
+          //   align:'center',
             
-          },
-          {
-            title: "上门数",
-            key: "visitNum",
-            minWidth:90,
-            align:'center',
-          },
+          // },
+          // {
+          //   title: "上门数",
+          //   key: "visitNum",
+          //   minWidth:90,
+          //   align:'center',
+          // },
           {
             title: "上门率",
             key: "visitRate",
@@ -904,12 +904,12 @@ export default {
                 
             },
           },
-          {
-            title: "新客成交",
-            key: "newCustomerDealNum",
-            minWidth:100,
-            align:'center',
-          },
+          // {
+          //   title: "新客成交",
+          //   key: "newCustomerDealNum",
+          //   minWidth:100,
+          //   align:'center',
+          // },
           {
             title: "新客成交率",
             key: "newCustomerDealRate",
@@ -923,19 +923,19 @@ export default {
                 
             },
           },
-          {
-            title: "新客业绩",
-            key: "newCustomerAchievement",
-            minWidth:120,
-            align:'center',
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.newCustomerAchievement ? (params.row.newCustomerAchievement).toFixed(2) : 0
-                  )
+          // {
+          //   title: "新客业绩",
+          //   key: "newCustomerAchievement",
+          //   minWidth:120,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.newCustomerAchievement ? (params.row.newCustomerAchievement).toFixed(2) : 0
+          //         )
                 
-            },
-          },
+          //   },
+          // },
           {
             title: "新客客单价",
             key: "newCustomerUnitPrice",
@@ -949,25 +949,25 @@ export default {
                 
             },
           },
-          {
-            title: "老客成交",
-            key: "oldCustomerDealNum",
-            minWidth:110,
-            align:'center',
-          },
-          {
-            title: "老客业绩",
-            key: "oldCustomerAchievement",
-            minWidth:140,
-            align:'center',
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.oldCustomerAchievement ? (params.row.oldCustomerAchievement).toFixed(2) : 0
-                  )
+          // {
+          //   title: "老客成交",
+          //   key: "oldCustomerDealNum",
+          //   minWidth:110,
+          //   align:'center',
+          // },
+          // {
+          //   title: "老客业绩",
+          //   key: "oldCustomerAchievement",
+          //   minWidth:140,
+          //   align:'center',
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.oldCustomerAchievement ? (params.row.oldCustomerAchievement).toFixed(2) : 0
+          //         )
                 
-            },
-          },
+          //   },
+          // },
           {
             title: "老客客单价",
             key: "oldCustomerUnitPrice",
@@ -981,19 +981,19 @@ export default {
                 
             },
           },
-          {
-            title: "总业绩",
-            minWidth:150,
-            align:'center',
-            key: "totalAchievement",
-            render: (h, params) => {
-              return h(
-                    "div",
-                    params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
-                  )
+          // {
+          //   title: "总业绩",
+          //   minWidth:150,
+          //   align:'center',
+          //   key: "totalAchievement",
+          //   render: (h, params) => {
+          //     return h(
+          //           "div",
+          //           params.row.totalAchievement ? (params.row.totalAchievement).toFixed(2) : 0
+          //         )
                 
-            },
-          },
+          //   },
+          // },
           {
             title: "新老客占比",
             key: "newOrOldCustomerRate",

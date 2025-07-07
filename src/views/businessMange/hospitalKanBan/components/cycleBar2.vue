@@ -25,8 +25,13 @@ export default {
       let name = [];
       let list1 = [];
       value.map((item) => {
-        name.unshift(item.key);
-        list1.unshift(item.value);
+        if(this.title == '上门率'){
+          name.unshift(item.name);
+          list1.unshift(item.visitRate);
+        }else{
+          name.unshift(item.name);
+          list1.unshift(item.dealRate);
+        }
       });
       let option = {
         tooltip: {
@@ -34,7 +39,7 @@ export default {
             axisPointer: {
                 type: 'shadow'
             },
-            formatter:this.title == '复购率' ? (params) => {
+            formatter:this.title == '上门率' ? (params) => {
                 let list = []
                 let listItem = ''
                 let axisValueLabel = params[0].axisValueLabel 
@@ -66,7 +71,7 @@ export default {
                         '<span style="display:inline-block;">' +
                         params[i].name +
                         '</span><span style="display:inline-block;">&nbsp&nbsp' +
-                        params[i].value  +   '天'  +
+                        params[i].value  +   '%'  +
                         '</span>'
                     ) 
 
@@ -97,7 +102,7 @@ export default {
         xAxis: {
             type: 'value',
             boundaryGap: [0, 0.01],
-            name: this.title == '复购率' ? '%' : '天',
+            name: '%',
         },
         series: [
           {

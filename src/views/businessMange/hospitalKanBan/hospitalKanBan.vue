@@ -92,7 +92,7 @@
       </Card>
       <!-- 漏斗图 -->
       <Card class="mr">
-        <div class="h2">医院转化周期漏斗</div>
+        <div class="h2">新老客转化周期漏斗</div>
         <!-- tab切换 -->
         <div class="tab_content">
           <div class="tab">
@@ -138,18 +138,41 @@
         </div>
         <div class="list3">
           <Card class="item3">
-            <div class="h2 h3">医院上门转化周期</div>
+            <div class="h2 h3">新客上门转化周期</div>
             <cycleBar :barData="assistantTransformCycleDataObj.toHospitalCycleData"/>
           </Card>
           <Card class="item3">
+            <div class="h2 h3">新客上门率</div>
+            <cycleBar2 :barData="hospitalVisitRateDataObj.items" title="上门率"/>
+          </Card>
+          <!-- <Card class="item3">
             <div class="h2 h3">医院老客复购率</div>
             <cycleBar :barData="assistantTransformCycleDataObj.oldCustomerRePurcheData" title="复购率"/>
+          </Card> -->
+        </div>
+        <div class="list3">
+          <Card class="item3" style="margin:10px 0">
+            <div class="h2 h3">新客成交率</div>
+            <cycleBar2 :barData="hospitalDealRateDataObj.items" title="成交率"/>
+          </Card>
+          <Card class="item3" style="margin:10px 0">
+            <div class="h2 h3">老客复购率</div>
+            <cycleBar :barData="assistantTransformCycleDataObj.oldCustomerRePurcheData" title="复购率"/>
+          </Card>
+        </div>
+        <div class="list3">
+          <Card class="item3">
+            <div class="h2 h3">新客客单价</div>
+            <cycleBar3 :barData="performanceRateDataNew" />
+          </Card>
+          <Card class="item3">
+            <div class="h2 h3">老客客单价</div>
+            <cycleBar3 :barData="performanceRateDataOld" />
           </Card>
         </div>
       </Card>  
       <!-- 助理目标完成率和业绩占比 -->
-      <Card class="mr">
-        <!-- 平台切换 -->
+      <!-- <Card class="mr">
         <div class="tab2" >
           <div
             class="tab_item2"
@@ -177,7 +200,7 @@
             <customerBar :assiatantTargetCompleteAndPerformanceRateData="assistantHospitalPerformanceData"  title="目标完成率"/>
           </Card>
         </div>
-      </Card>
+      </Card> -->
     </div>
     <div v-else>
       <!-- 月度业绩目标达成情况  -->
@@ -208,6 +231,8 @@ import pieItem2 from "./components/pieItem2.vue"
 import pieItem3 from "./components/pieItem3.vue"
 import customerBar from "./components/customerBar.vue"
 import cycleBar from "./components/cycleBar.vue"
+import cycleBar2 from "./components/cycleBar2.vue"
+import cycleBar3 from "./components/cycleBar3.vue"
 import barItem from "./components/barItem.vue"
 import hospitalBar from "./components/hospitalBar.vue"
 import monthlyTargetAchievementStatus from "./components/monthlyTargetAchievementStatus.vue"
@@ -228,6 +253,8 @@ export default {
     cycleBar,
     monthlyTargetAchievementStatus,
     monthlyLeadConversionStatus,
+    cycleBar2,
+    cycleBar3
   },
   data() {
     return {
@@ -327,6 +354,14 @@ export default {
       ],
       // 转化周期
       assistantTransformCycleDataObj:{},
+      // 机构上门率数据
+      hospitalVisitRateDataObj:{},
+      // 机构成交率数据
+      hospitalDealRateDataObj:{},
+      // 机构新客客单价
+      performanceRateDataNew:[],
+      // 机构老客客单价
+      performanceRateDataOld:[]
       
     };
   },
@@ -366,10 +401,12 @@ export default {
         this.getassistantDistributeConsulationBrokenLineData()
         this.getassistantPerformanceFilterData()
         this.getAssistantTransformCycleDataClick() 
-        // this.getassiatantTargetCompleteAndPerformanceRateData()
         this.getassistantHospitalCluesData()
         this.getassistantHospitalPerformanceData()
-        // this.getanalysisData()
+        this.getHospitalVisitRateData()
+        this.getHospitalDealRateData()
+        this.getHospitalDealRateDataNew()
+        this.getHospitalDealRateDataOld()
       }else if(this.selected5 == '转化'){
         this.$nextTick(()=>{
             this.$refs.monthlyTargetAchievementStatus.getAssistantTotalAchievementByYearClick()
@@ -509,6 +546,68 @@ export default {
         api.hospitalPerformanceRateData(data).then(res=>{
             if(res.code === 0){
                 this.assistantHospitalPerformanceData =  res.data.data.performanceRateData
+            }
+        })
+    },
+    // 机构上门率数据
+    getHospitalVisitRateData(){
+        const {startDate,endDate,hospitalId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            hospitalId:hospitalId,
+            newCustomer:true,
+            oldCustomer:false,
+        }
+        api.hospitalVisitRateData(data).then(res=>{
+            if(res.code === 0){
+                this.hospitalVisitRateDataObj =  res.data.data
+            }
+        })
+    },
+    // 机构复购率
+    getHospitalDealRateData(){
+      const {startDate,endDate,hospitalId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            hospitalId:hospitalId,
+            newCustomer:true,
+            oldCustomer:false,
+        }
+        api.hospitalDealRateData(data).then(res=>{
+            if(res.code === 0){
+                this.hospitalDealRateDataObj =  res.data.data
+            }
+        })
+    },
+    // 机构新客客单价
+    getHospitalDealRateDataNew(){
+      const {startDate,endDate,hospitalId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            hospitalId:hospitalId,
+            newCustomer:true,
+        }
+        api.hospitalPerCustomerPriceDataData(data).then(res=>{
+            if(res.code === 0){
+                this.performanceRateDataNew =  res.data.data.performanceRateData
+            }
+        })
+    },
+    // 机构老客客单价
+    getHospitalDealRateDataOld(){
+      const {startDate,endDate,hospitalId} = this.params
+        const data = {
+            startDate:startDate ? this.$moment(startDate).format("YYYY-MM-DD") : null ,
+            endDate:endDate ? this.$moment(endDate).format("YYYY-MM-DD") : null,
+            hospitalId:hospitalId,
+            oldCustomer:false,
+        }
+        api.hospitalPerCustomerPriceDataData(data).then(res=>{
+            if(res.code === 0){
+                this.performanceRateDataOld =  res.data.data.performanceRateData
             }
         })
     },

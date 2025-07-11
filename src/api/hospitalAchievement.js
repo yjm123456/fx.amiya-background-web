@@ -124,3 +124,11 @@ export const getHospitalTotalPriceBrokenLine = (params) => {
         params
     });
 };
+//全部医院排名
+export const getHospitalOperationMonthData = (params) => {
+    return http({
+        url: "/amiyabg/HospitalAchievement/getHospitalOperationMonthData",
+        method: "get",
+        params
+    });
+};

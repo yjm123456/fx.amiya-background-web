@@ -1013,13 +1013,15 @@ export default {
     // 全国机构运营当年数据
     getHospitalOperationYearData() {
         const data = {
-            year: this.$moment(this.params.endDate).format("YYYY")
+            startdate: this.$moment(this.params.startDate).format("YYYY-MM-DD"),
+            endDate: this.$moment(this.params.endDate).format("YYYY-MM-DD"),
+
         }
-        if(this.$moment(this.params.endDate).format("YYYY") > this.$moment().format("YYYY")){
-          this.$Message.warning('不能大于当前年份')
-          return 
-        }
-      api.getHospitalOperationYearData(data).then((res) => {
+        // if(this.$moment(this.params.endDate).format("YYYY-MM-DD") > this.$moment(this.params.startDate).format("YYYY-MM-DD")){
+        //   this.$Message.warning('不能大于当前年份')
+        //   return 
+        // }
+      api.getHospitalOperationMonthData(data).then((res) => {
         if (res.code === 0) {
           const { topTenHospitalOperatingDataVo , otherHospitalOperatingDataVo , totalSum} = res.data.performance;
           this.query.data1 = topTenHospitalOperatingDataVo;

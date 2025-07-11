@@ -152,7 +152,7 @@
       </div>
     </Card>
 
-    <Modal v-model="controlModal" title="修改绑定客服" :mask-closable="false">
+    <Modal v-model="controlModal" title="修改绑定客服" :mask-closable="false" @on-visible-change="handleModalVisibleChange">
       <Form ref="form" :model="form" label-position="left" :label-width="60">
         <FormItem label="客服" prop="hospitalId">
           <Select v-model="form.customerServiceId" placeholder="请选择客服" filterable>
@@ -627,7 +627,7 @@ export default {
           api.ContentPlatFormOrderListBindCustomerService(data).then((res) => {
             if (res.code === 0) {
               this.cancelSubmit("form");
-              this.getbindCustomerServieOrderList();
+              // this.getbindCustomerServieOrderList();
               this.$Message.success({
                 content: "修改成功",
                 duration: 3,
@@ -643,6 +643,13 @@ export default {
       this.controlModal = false;
       this.form.encryptPhoneList.clear();
       this.$refs[name].resetFields();
+      this.getbindCustomerServieOrderList();
+    },
+    // modal 显示状态发生变化时触发
+    handleModalVisibleChange(value) {
+      if (!value) {
+        this.cancelSubmit("form");
+      }
     },
   },
   watch: {

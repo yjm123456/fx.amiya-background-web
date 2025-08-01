@@ -287,14 +287,12 @@
               <i-switch v-model="form.isShareInMiniProgram" />
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem label="是否有效" prop="valid" v-show="isEdit === true">
+          <Col span="8" v-show="isEdit === true">
+            <FormItem label="是否有效" prop="valid" >
               <i-switch v-model="form.valid" />
             </FormItem>
           </Col>
-        </Row>
-        <Row :gutter="30" v-if="title == '添加'">
-          <Col span="13">
+          <Col span="13" v-if="title == '添加'">
             <FormItem label="上传合同" prop="contractUrl">
               <uploadFile
                 :uploadObj="uploadFileObj"
@@ -308,6 +306,14 @@
                   >请点击进入在线转换地址</span
                 >
               </div>
+            </FormItem>
+          </Col>
+          <Col span="3" v-if="title == '添加'">
+            
+          </Col>
+          <Col span="8">
+            <FormItem label="备注" prop="remark">
+              <Input v-model="form.remark" placeholder="请输入备注" type="textarea" ></Input>
             </FormItem>
           </Col>
         </Row>
@@ -1220,7 +1226,9 @@ export default {
         // 保证金金额
         securityDepositMoney:null,
         // 医院类型
-        hospitalType:null
+        hospitalType:null,
+        // 备注
+        remark:''
       },
 
       ruleValidate: {
